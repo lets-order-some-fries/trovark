@@ -19,18 +19,17 @@ export function createHttp(opts: HttpOptions = {}): Http {
     if (githubToken && new URL(url).hostname === 'api.github.com') headers.authorization = `Bearer ${githubToken}`
     let lastErr: unknown
     for (let attempt = 0; attempt <= retries; attempt++) {
+      let res: Response | undefined
       try {
-        const res = await fetchImpl(url, { headers, signal: AbortSignal.timeout(timeoutMs) })
-        if (res.status === 429 || res.status >= 500) {
-          lastErr = new Error(`HTTP ${res.status} for ${url}`)
-        } else if (!res.ok) {
-          throw new Error(`HTTP ${res.status} for ${url}`)
-        } else {
-          return res
-        }
+        res = await fetchImpl(url, { headers, signal: AbortSignal.timeout(timeoutMs) })
       } catch (err) {
-        if (err instanceof Error && /^HTTP 4(?!29)/.test(err.message)) throw err
-        lastErr = err
+        lastErr = err // network / timeout errors are retryable
+      }
+      if (res) {
+        if (res.ok) return res
+        const httpErr = new Error(`HTTP ${res.status} for ${url}`)
+        if (res.status === 429 || res.status >= 500) lastErr = httpErr // retryable
+        else throw httpErr // other non-2xx: fail immediately
       }
       if (attempt < retries) await new Promise(r => setTimeout(r, 250 * 2 ** attempt))
     }
