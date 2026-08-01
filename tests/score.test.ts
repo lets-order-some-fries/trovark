@@ -97,4 +97,19 @@ describe('score()', () => {
     const s = empty(); s.daysSinceLastCommit = 5 // only health has 1 signal; reliability/security/cost empty
     expect(score('x', s, 'T').insufficientData).toBe(true)
   })
+  it('withholds via the dimensions-dropped branch alone (not the <4 clause)', () => {
+    const s = healthy()
+    // drop reliability + cost entirely, keep health(7) + security(3) intact →
+    // availableTotal ~10 (clears <4), tool-surface present (no security-primary trip),
+    // yet 2 dimensions fully dropped → must still withhold.
+    s.specEra = undefined; s.hasCI = undefined; s.hasTests = undefined
+    s.hasLockfile = undefined; s.schemaExtracted = undefined
+    s.schemaTokenEstimate = undefined; s.toolCount = undefined
+    const card = score('x', s, 'T')
+    const reliability = card.dimensions.find(d => d.id === 'reliability')!
+    const cost = card.dimensions.find(d => d.id === 'cost')!
+    expect(reliability.available).toBe(0)
+    expect(cost.available).toBe(0)
+    expect(card.insufficientData).toBe(true)
+  })
 })
