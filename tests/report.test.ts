@@ -39,6 +39,26 @@ describe('renderTerminal', () => {
     // eslint-disable-next-line no-control-regex
     expect(out).not.toMatch(/\x1b\[/)
   })
+  it('color=true (default) emits ANSI paint codes', () => {
+    const painted = renderTerminal(card)
+    expect(painted).toMatch(/\x1b\[3[123]m/)
+    expect(painted).toMatch(/\x1b\[0m/)
+  })
+  it('omits Findings and Notes sections when empty', () => {
+    const bare: Scorecard = { ...card, notes: [], dimensions: card.dimensions.map(d => ({ ...d, findings: [] })) }
+    const output = renderTerminal(bare, { color: false })
+    expect(output).not.toContain('Findings:')
+    expect(output).not.toContain('Notes:')
+  })
+  it('renders full and empty bars at the extremes', () => {
+    const extremes: Scorecard = { ...card, dimensions: [
+      { id: 'health', score: 100, confidence: 'high', available: 7, total: 7, findings: [] },
+      { id: 'cost', score: 0, confidence: 'low', available: 1, total: 2, findings: [] },
+    ] }
+    const output = renderTerminal(extremes, { color: false })
+    expect(output).toContain('█'.repeat(10))
+    expect(output).toContain('░'.repeat(10))
+  })
 })
 
 describe('renderJson', () => {
