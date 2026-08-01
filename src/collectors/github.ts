@@ -20,6 +20,12 @@ const SIZE_CAP = 100_000
 const ALWAYS_FETCH = new Set([
   'package.json', 'pyproject.toml', 'requirements.txt', 'mcp.json', 'server.json', 'smithery.yaml',
   'go.mod', 'Cargo.toml', 'build.gradle', 'build.gradle.kts', 'pom.xml',
+  // Committed lockfiles let assemble() query OSV at exact resolved versions
+  // (incl. transitive deps) instead of manifest-range floors (see P7 /
+  // src/derive/lockfile.ts). These files can be large; SIZE_CAP below already
+  // skips oversized blobs, so a huge lockfile is silently omitted rather than
+  // fetched — acceptable, falls back to floor-based deps for that repo.
+  'package-lock.json', 'uv.lock', 'poetry.lock',
 ])
 const SOURCE_HINT = /(src\/|server|tool|index|main)/
 const SOURCE_EXT = /\.(ts|js|mjs|py)$/
