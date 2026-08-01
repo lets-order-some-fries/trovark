@@ -26,9 +26,23 @@ const RISK_ORDER: Risk[] = ['none', 'low', 'medium', 'high']
 //    an unrelated word ("dropdown").
 // Overall per-tool risk is the max of the two; overall server risk is the
 // max across all tools (unchanged).
+//
+// Fix (P4 review): `run` and `code` as bare standalone HIGH tokens were
+// themselves too ambiguous — they over-tiered zip_code_lookup,
+// area_code_finder, run_report, run_query to HIGH, and tiered benign prose
+// ("status code", "runs in the background") HIGH too. Both are removed from
+// HIGH_TOKENS; the unambiguous HIGH tokens (exec, execute, spawn, eval,
+// shell, bash, terminal, sh, python, interpreter, notebook, command, cmd)
+// stay put. `run`/`code` are re-admitted to HIGH only via the co-occurrence
+// rule below, which requires an execution-shaped token AND a code/script-
+// shaped token inside the SAME token group (i.e. the same compound
+// identifier, like `run_code` or `execute_script`) — not merely present
+// somewhere in a longer sentence. That's what keeps "status code ... of the
+// run" (unrelated words in one sentence) from tripping the rule while still
+// catching `run_code`.
 const HIGH_TOKENS = new Set([
   'exec', 'execute', 'spawn', 'eval', 'shell', 'bash', 'terminal', 'sh',
-  'python', 'run', 'code', 'interpreter', 'notebook', 'command', 'cmd',
+  'python', 'interpreter', 'notebook', 'command', 'cmd',
 ])
 // 'fork' isn't in the plan's literal MEDIUM list, but is required to
 // correctly tier `fork_repository` (forking duplicates/creates a repo — a
@@ -45,30 +59,50 @@ const LOW_TOKENS = new Set([
 // child_process/subprocess are identifiers (module names), not English
 // words a tool-namer would choose — checked directly against the free text
 // rather than folded into HIGH_TOKENS, per the plan's "(+ child_process/
-// subprocess appearing in text)" addendum.
+// subprocess appearing in text)" addendum. Unaffected by the tokenization
+// fix below: these are single compound identifiers with no ambiguous
+// standalone-word reading, so a `\b`-anchored match on the raw text is fine.
 const SHELL_MODULE_RE = /\bchild_process\b|\bsubprocess\b/i
 
-function wordBoundaryRegex(tokens: Set<string>): RegExp {
-  const escaped = [...tokens].map(t => t.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'))
-  return new RegExp(`\\b(?:${escaped.join('|')})\\b`, 'i')
+// Co-occurrence re-admission for the demoted `run`/`code` tokens: both an
+// execution-shaped token and a code/script-shaped token must appear in the
+// SAME token group (the tokens produced by splitting one identifier/word) —
+// e.g. `run_code` → ['run','code'] both present → HIGH; `execute_script` →
+// ['execute','script'] both present → HIGH (redundant with 'execute' already
+// being a direct HIGH token, but harmless). `run_report` → ['run','report']
+// only one side present → no elevation.
+const RUN_LIKE_TOKENS = new Set(['run', 'exec', 'execute', 'eval', 'invoke'])
+const CODE_LIKE_TOKENS = new Set(['code', 'script'])
+function hasRunCodeCoOccurrence(tokens: string[]): boolean {
+  let hasRun = false
+  let hasCode = false
+  for (const tok of tokens) {
+    if (RUN_LIKE_TOKENS.has(tok)) hasRun = true
+    else if (CODE_LIKE_TOKENS.has(tok)) hasCode = true
+    if (hasRun && hasCode) return true
+  }
+  return false
 }
-const HIGH_WORD_RE = wordBoundaryRegex(HIGH_TOKENS)
-const MEDIUM_WORD_RE = wordBoundaryRegex(MEDIUM_TOKENS)
-const LOW_WORD_RE = wordBoundaryRegex(LOW_TOKENS)
 
-// Splits a tool name on `_`/`-`/`.`/whitespace and camelCase boundaries into
-// lowercase tokens, e.g. "runPython" / "run_python" both → ["run","python"].
-function tokenizeName(name: string): string[] {
-  return name
+// Splits text on `_`/`-`/`.`/whitespace/other non-alphanumeric characters and
+// camelCase boundaries into lowercase tokens, e.g. "runPython" / "run_python"
+// both → ["run","python"]. Used for the tool NAME and, per-word, for the
+// free-text channel (description + schemaText) — see riskFromText.
+function tokenize(text: string): string[] {
+  return text
     .replace(/([a-z0-9])([A-Z])/g, '$1_$2')
     .split(/[^a-zA-Z0-9]+/)
     .map(t => t.toLowerCase())
     .filter(Boolean)
 }
 
-function riskFromNameTokens(name: string): Risk {
+// Shared tier logic over an already-tokenized group: the co-occurrence rule
+// first (it can only elevate to 'high'), then plain token-SET membership
+// (exact equality, never substring).
+function riskFromTokens(tokens: string[]): Risk {
+  if (hasRunCodeCoOccurrence(tokens)) return 'high'
   let worst: Risk = 'none'
-  for (const tok of tokenizeName(name)) {
+  for (const tok of tokens) {
     if (HIGH_TOKENS.has(tok)) return 'high' // can't exceed high; short-circuit
     if (MEDIUM_TOKENS.has(tok)) worst = 'medium'
     else if (LOW_TOKENS.has(tok) && worst === 'none') worst = 'low'
@@ -76,19 +110,42 @@ function riskFromNameTokens(name: string): Risk {
   return worst
 }
 
+function riskFromName(name: string): Risk {
+  return riskFromTokens(tokenize(name))
+}
+
+// Fix (P4 review): the previous `\b`-anchored word-regex match on the raw
+// description/schemaText treated `_` as a word character, so `\bshell\b`
+// never matched inside `shell_exec` — a snake_case mention or raw schemaText
+// blob (e.g. `shell_exec(cmd)`) sailed through undetected. Fixed by
+// tokenizing the free text with the SAME tokenizer used for the name (so
+// `_`/camelCase boundaries split it) and matching token-SET membership. The
+// text is walked one whitespace-delimited word at a time (not tokenized as
+// one flat bag) so the co-occurrence rule only fires when run-like and
+// code-like tokens come from the SAME compound word — "shell_exec" (one
+// word) co-occurs; "status code ... of the run" (run/code as separate,
+// unrelated words in a sentence) does not. Single-token HIGH/MEDIUM/LOW
+// matches ("delete", "shell") still work anywhere in the text since every
+// word is checked. `execution`/`dropdown` stay safe: neither is itself a
+// member of any token set.
 function riskFromText(text: string): Risk {
-  if (HIGH_WORD_RE.test(text) || SHELL_MODULE_RE.test(text)) return 'high'
-  if (MEDIUM_WORD_RE.test(text)) return 'medium'
-  if (LOW_WORD_RE.test(text)) return 'low'
-  return 'none'
+  if (SHELL_MODULE_RE.test(text)) return 'high'
+  let worst: Risk = 'none'
+  for (const word of text.split(/\s+/)) {
+    if (!word) continue
+    const risk = riskFromTokens(tokenize(word))
+    if (risk === 'high') return 'high'
+    if (RISK_ORDER.indexOf(risk) > RISK_ORDER.indexOf(worst)) worst = risk
+  }
+  return worst
 }
 
 // NAME is the strong signal (token-set, exact match); description/schemaText
-// is corroborating free text (anchored-word match, so it can't be tricked by
-// a substring inside an unrelated word). Either can independently establish
-// a tier; the tool's overall risk is the higher of the two.
+// is corroborating free text (tokenized the same way, per word). Either can
+// independently establish a tier; the tool's overall risk is the higher of
+// the two.
 function classify(name: string, description: string, schemaText: string): Risk {
-  const nameRisk = riskFromNameTokens(name)
+  const nameRisk = riskFromName(name)
   const textRisk = riskFromText(`${description} ${schemaText}`)
   return RISK_ORDER.indexOf(nameRisk) >= RISK_ORDER.indexOf(textRisk) ? nameRisk : textRisk
 }

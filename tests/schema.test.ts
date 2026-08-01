@@ -226,3 +226,70 @@ describe('classify (P4): token-set matching for the NAME, \\b-anchored words for
     expect(nameOnly('runPython').toolSurfaceRisk).toBe('high')
   })
 })
+
+describe('classify (P4 review fix): bare run/code demoted, co-occurrence rule, tokenized text channel', () => {
+  const nameOnly = (name: string) => extractSchema([{ path: 'mcp.json', content: JSON.stringify({ tools: [{ name }] }) }])
+
+  // Negatives: bare "run"/"code" must not over-tier benign tools.
+  it('zip_code_lookup is not high (bare "code" is ambiguous)', () => {
+    expect(nameOnly('zip_code_lookup').toolSurfaceRisk).not.toBe('high')
+  })
+  it('run_report is not high (bare "run" is ambiguous)', () => {
+    expect(nameOnly('run_report').toolSurfaceRisk).not.toBe('high')
+  })
+  it('area_code_finder is not high (bare "code" is ambiguous)', () => {
+    expect(nameOnly('area_code_finder').toolSurfaceRisk).not.toBe('high')
+  })
+  it('description prose "status code ... run" is not high (run/code far apart, not a co-occurring compound)', () => {
+    const r = extractSchema([{
+      path: 'mcp.json',
+      content: JSON.stringify({ tools: [{ name: 'get_status', description: 'Returns the HTTP status code of the run' }] }),
+    }])
+    expect(r.toolSurfaceRisk).not.toBe('high')
+  })
+
+  // Positives: run/code or run/script co-occurring in one token group → high.
+  it('run_code → high (run+code co-occurrence)', () => {
+    expect(nameOnly('run_code').toolSurfaceRisk).toBe('high')
+  })
+  it('execute_script → high (execute+script co-occurrence)', () => {
+    expect(nameOnly('execute_script').toolSurfaceRisk).toBe('high')
+  })
+  it('shell_exec embedded in description/schemaText is caught (underscore-in-text fix)', () => {
+    const r = extractSchema([{
+      path: 'mcp.json',
+      content: JSON.stringify({ tools: [{
+        name: 'helper',
+        description: 'Internal wrapper around shell_exec',
+        inputSchema: { schemaText: 'shell_exec(cmd)' },
+      }] }),
+    }])
+    expect(r.toolSurfaceRisk).toBe('high')
+  })
+
+  // Regression: must stay exactly as before.
+  it('run_python → high', () => {
+    expect(nameOnly('run_python').toolSurfaceRisk).toBe('high')
+  })
+  it('run_command → high', () => {
+    expect(nameOnly('run_command').toolSurfaceRisk).toBe('high')
+  })
+  it('bash_command → high', () => {
+    expect(nameOnly('bash_command').toolSurfaceRisk).toBe('high')
+  })
+  it('run_notebook → high', () => {
+    expect(nameOnly('run_notebook').toolSurfaceRisk).toBe('high')
+  })
+  it('delete_file → medium', () => {
+    expect(nameOnly('delete_file').toolSurfaceRisk).toBe('medium')
+  })
+  it('fetch_page → low', () => {
+    expect(nameOnly('fetch_page').toolSurfaceRisk).toBe('low')
+  })
+  it('add_numbers → none', () => {
+    expect(nameOnly('add_numbers').toolSurfaceRisk).toBe('none')
+  })
+  it('fork_repository → medium', () => {
+    expect(nameOnly('fork_repository').toolSurfaceRisk).toBe('medium')
+  })
+})
