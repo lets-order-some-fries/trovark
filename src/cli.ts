@@ -35,7 +35,12 @@ export async function main(argv: string[], deps: CliDeps): Promise<number> {
   if (has('--version')) { deps.log('0.1.0'); return 0 }
   const json = has('--json')
   const noColor = has('--no-color')
+  const failUnderPresent = args.includes('--fail-under')
   const failUnderRaw = valueOf('--fail-under')
+  if (failUnderPresent && (failUnderRaw === undefined || failUnderRaw.trim() === '')) {
+    deps.err('--fail-under requires a value: A, B, C, D, or a number.')
+    return 2
+  }
   const ref = args[0]
   if (!ref) { deps.err(USAGE); return 2 }
 
@@ -49,13 +54,18 @@ export async function main(argv: string[], deps: CliDeps): Promise<number> {
   try {
     const identity = await resolve(ref, deps.http)
     const signals = await assemble(identity, deps.http, deps.now, { hasToken: Boolean(process.env.GITHUB_TOKEN) })
-    const parts: string[] = []
-    if (identity.npmPackage) parts.push(`npm:${identity.npmPackage}`)
-    if (identity.pypiPackage) parts.push(`pypi:${identity.pypiPackage}`)
-    if (identity.repo) parts.push(`github.com/${identity.repo.owner}/${identity.repo.name}`)
-    const displayRef = parts.length > 0 ? `${ref}  →  ${parts.join(' · ')}` : ref
-    const card = score(displayRef, signals, deps.now.toISOString())
+    const resolved = {
+      ...(identity.npmPackage ? { npmPackage: identity.npmPackage } : {}),
+      ...(identity.pypiPackage ? { pypiPackage: identity.pypiPackage } : {}),
+      ...(identity.repo ? { repo: identity.repo } : {}),
+    }
+    const card = score(ref, signals, deps.now.toISOString(), Object.keys(resolved).length > 0 ? resolved : undefined)
     deps.log(json ? renderJson(card) : renderTerminal(card, { color: !noColor }))
+    if (card.insufficientData) {
+      deps.err('mcpscore: insufficient data to score this ref')
+      for (const e of signals.errors) deps.err(`  - ${e}`)
+      return 2
+    }
     if (threshold !== undefined && card.overall < threshold) return 1
     return 0
   } catch (err) {

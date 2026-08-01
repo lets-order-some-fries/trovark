@@ -48,6 +48,7 @@ describe('cli main', () => {
     const card = JSON.parse(r.out)
     expect(card.rubricVersion).toBe('1.0.0')
     expect(card.dimensions).toHaveLength(4)
+    expect(card.ref).toBe('acme/foo')
   })
   it('--fail-under A exits 1 when below A', async () => {
     const r = await run(['acme/foo', '--fail-under', 'A'])
@@ -69,6 +70,26 @@ describe('cli main', () => {
   })
   it('report header shows the resolved identity', async () => {
     const r = await run(['acme/foo'])
-    expect(r.out).toContain('acme/foo  →  github.com/acme/foo')
+    expect(r.out).toContain('resolved: github.com/acme/foo')
+  })
+  it('--fail-under without a value errors instead of silently passing', async () => {
+    const r = await run(['acme/foo', '--fail-under'])
+    expect(r.code).toBe(2)
+    expect(r.err).toMatch(/requires a value/)
+  })
+})
+
+describe('cli main — insufficient data', () => {
+  const unfetchable: Http = {
+    async json() { throw new Error('HTTP 403') },
+    async postJson() { throw new Error('HTTP 403') },
+    async text() { throw new Error('HTTP 403') },
+  }
+  it('unfetchable repo → INSUFFICIENT DATA, exit 2', async () => {
+    const logs: string[] = [], errs: string[] = []
+    const code = await main(['acme/foo'], { http: unfetchable, now: NOW, log: s => logs.push(s), err: s => errs.push(s) })
+    expect(code).toBe(2)
+    expect(logs.join('\n')).toContain('INSUFFICIENT DATA')
+    expect(errs.join('\n')).toMatch(/insufficient data/i)
   })
 })

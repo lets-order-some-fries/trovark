@@ -72,4 +72,15 @@ describe('score()', () => {
   it('is deterministic', () => {
     expect(score('x', healthy(), 'T')).toEqual(score('x', healthy(), 'T'))
   })
+  it('flags insufficient data when fewer than 4 signals are available', () => {
+    const s = empty()
+    s.daysSinceLastCommit = 10 // one signal only
+    const card = score('x', s, '2026-07-31T00:00:00Z')
+    expect(card.insufficientData).toBe(true)
+    expect(card.notes.join(' ')).toMatch(/not enough to score/i)
+  })
+  it('healthy fixture has plenty of signals → insufficientData is false', () => {
+    const card = score('x', healthy(), '2026-07-31T00:00:00Z')
+    expect(card.insufficientData).toBe(false)
+  })
 })

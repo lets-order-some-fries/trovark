@@ -25,8 +25,8 @@ function levelOf(vuln: { severity?: Array<{ score?: string }> }): Worst {
 
 const ORDER: Worst[] = ['none', 'low', 'medium', 'high', 'critical']
 
-export async function collectOsv(deps: Dep[], http: Http): Promise<{ cveWorst: Worst; findings: Finding[] }> {
-  if (deps.length === 0) return { cveWorst: 'none', findings: [] }
+export async function collectOsv(deps: Dep[], http: Http): Promise<{ cveWorst: Worst | undefined; findings: Finding[] }> {
+  if (deps.length === 0) return { cveWorst: undefined, findings: [] }
   interface Res { results?: Array<{ vulns?: Array<{ id: string; severity?: Array<{ score?: string }> }> }> }
   const res = await http.postJson<Res>('https://api.osv.dev/v1/querybatch', {
     queries: deps.map(d => ({ package: { name: d.name, ecosystem: d.ecosystem }, version: d.version })),

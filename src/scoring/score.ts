@@ -22,7 +22,10 @@ function confidence(available: number, total: number): Confidence {
   return r >= 0.75 ? 'high' : r >= 0.4 ? 'medium' : 'low'
 }
 
-export function score(ref: string, signals: Signals, generatedAt: string): Scorecard {
+export function score(
+  ref: string, signals: Signals, generatedAt: string,
+  resolved?: Scorecard['resolved'],
+): Scorecard {
   const ids = Object.keys(DIMENSION_WEIGHTS) as DimensionId[]
   const dimensions: DimensionScore[] = ids.map(id => {
     const defs = SIGNALS.filter(d => d.dimension === id)
@@ -44,17 +47,27 @@ export function score(ref: string, signals: Signals, generatedAt: string): Score
     }
   })
 
+  const availableTotal = dimensions.reduce((a, d) => a + d.available, 0)
+  const insufficientData = availableTotal < 4
+
   const notes: string[] = []
   for (const d of dimensions) {
     if (d.available === 0) notes.push(`No ${d.id} signals could be collected; ${d.id} is excluded from the overall score.`)
     else if (d.confidence === 'low') notes.push(`Low confidence in ${d.id}: only ${d.available}/${d.total} signals available.`)
   }
   for (const e of signals.errors) notes.push(`Collector issue: ${e}`)
+  if (insufficientData) {
+    notes.push(`Only ${availableTotal} of ${SIGNALS.length} signals were collectable — not enough to score. Grade withheld.`)
+  }
 
   const scored = dimensions.filter(d => d.available > 0)
   const wTotal = scored.reduce((a, d) => a + DIMENSION_WEIGHTS[d.id], 0)
   const overall = wTotal === 0 ? 0
     : Math.round(scored.reduce((a, d) => a + d.score * DIMENSION_WEIGHTS[d.id], 0) / wTotal)
 
-  return { ref, rubricVersion: RUBRIC_VERSION, overall, grade: grade(overall), dimensions, notes, generatedAt }
+  return {
+    ref, rubricVersion: RUBRIC_VERSION, overall, grade: grade(overall), dimensions, notes, generatedAt,
+    insufficientData,
+    ...(resolved ? { resolved } : {}),
+  }
 }

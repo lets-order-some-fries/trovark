@@ -61,4 +61,6 @@ export interface Scorecard {
   dimensions: DimensionScore[]
   notes: string[]
   generatedAt: string   // ISO string, passed in by caller (determinism)
+  insufficientData: boolean
+  resolved?: { npmPackage?: string; pypiPackage?: string; repo?: { owner: string; name: string } }
 }

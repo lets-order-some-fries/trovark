@@ -74,12 +74,12 @@ describe('collectOsv', () => {
     }
     expect((await collectOsv([{ name: 'a', version: '1', ecosystem: 'npm' }], http)).cveWorst).toBe('none')
   })
-  it('empty deps → none without network', async () => {
+  it('empty deps → undefined (nothing checked), no network', async () => {
     const http: Http = {
       async json() { throw new Error('unused') },
       async text() { throw new Error('unused') },
       async postJson() { throw new Error('should not be called for empty deps') },
     }
-    expect((await collectOsv([], http)).cveWorst).toBe('none')
+    expect((await collectOsv([], http)).cveWorst).toBeUndefined()
   })
 })

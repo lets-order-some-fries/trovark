@@ -30,4 +30,8 @@ describe('scanSecrets', () => {
   it('clean files → zero', () => {
     expect(scanSecrets([{ path: 'src/i.ts', content: 'export const x = 1' }]).count).toBe(0)
   })
+  it('scans files whose names merely contain skip words', () => {
+    const r = scanSecrets([{ path: 'src/inspector.ts', content: 'const k = "AKIAIOSFODNN7EXAMPLE"' }])
+    expect(r.count).toBe(1)
+  })
 })

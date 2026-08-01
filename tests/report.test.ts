@@ -16,6 +16,7 @@ const card: Scorecard = {
   ],
   notes: ['Low confidence in security: only 2/3 signals available.'],
   generatedAt: '2026-07-31T00:00:00Z',
+  insufficientData: false,
 }
 
 describe('renderTerminal', () => {

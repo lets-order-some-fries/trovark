@@ -13,7 +13,18 @@ export function renderTerminal(card: Scorecard, opts: { color?: boolean } = {}):
   const c = opts.color ?? true
   const lines: string[] = []
   lines.push(`mcpscore  ·  ${card.ref}`)
-  lines.push(paint(colorFor(card.overall), `Trust Score: ${card.overall}/100 (${card.grade})`, c) + `   rubric v${card.rubricVersion}`)
+  if (card.resolved) {
+    const parts: string[] = []
+    if (card.resolved.npmPackage) parts.push(`npm:${card.resolved.npmPackage}`)
+    if (card.resolved.pypiPackage) parts.push(`pypi:${card.resolved.pypiPackage}`)
+    if (card.resolved.repo) parts.push(`github.com/${card.resolved.repo.owner}/${card.resolved.repo.name}`)
+    if (parts.length > 0) lines.push(`  resolved: ${parts.join(' · ')}`)
+  }
+  if (card.insufficientData) {
+    lines.push(paint(31, 'Trust Score: INSUFFICIENT DATA', c) + `   rubric v${card.rubricVersion}`)
+  } else {
+    lines.push(paint(colorFor(card.overall), `Trust Score: ${card.overall}/100 (${card.grade})`, c) + `   rubric v${card.rubricVersion}`)
+  }
   lines.push('')
   for (const d of card.dimensions) {
     lines.push(

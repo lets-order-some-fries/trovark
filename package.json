@@ -1,14 +1,11 @@
 {
   "name": "mcpscore",
   "version": "0.1.0",
-  "main": "index.js",
-  "directories": {
-    "doc": "docs"
-  },
   "scripts": {
     "test": "vitest run",
     "build": "tsc",
-    "dev": "tsx src/cli.ts"
+    "dev": "tsx src/cli.ts",
+    "prepublishOnly": "npm run build && npm test"
   },
   "repository": {
     "type": "git",
@@ -26,6 +23,9 @@
   "bin": {
     "mcpscore": "dist/cli.js"
   },
+  "files": [
+    "dist"
+  ],
   "engines": {
     "node": ">=20"
   },

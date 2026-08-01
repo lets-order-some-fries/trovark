@@ -8,7 +8,7 @@ const PATTERNS: Array<[label: string, rx: RegExp]> = [
   ['Private key', /-----BEGIN (?:RSA|EC|OPENSSH|PGP) PRIVATE KEY-----/],
   ['API key assignment', /(?:api[_-]?key|secret|token|password)["']?\s*[:=]\s*["']?[A-Za-z0-9_\-]{16,}/i],
 ]
-const SKIP = /(test|fixture|example|sample|spec)/i
+const SKIP = /(^|\/)(tests?|fixtures?|examples?|samples?|specs?)(\/|[._-]|$)|\.(example|sample)$/i
 
 export function scanSecrets(files: RepoFile[]): { count: number; findings: Finding[] } {
   const findings: Finding[] = []
