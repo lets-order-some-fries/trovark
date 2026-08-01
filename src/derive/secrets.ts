@@ -34,7 +34,7 @@ function looksLikeSecret(v: string): boolean {
   return false
 }
 
-const SKIP = /(^|\/)(tests?|fixtures?|examples?|samples?|specs?)(\/|[._-]|$)|\.(example|sample)$/i
+const SKIP = /(^|\/)(tests?|fixtures?|examples?|samples?|specs?|mocks?|__mocks__)(\/|[._-]|$)|\.(test|spec|example|sample|min)\.|\.(example|sample)$/i
 
 export function scanSecrets(files: RepoFile[]): { count: number; findings: Finding[] } {
   const findings: Finding[] = []
@@ -51,8 +51,8 @@ export function scanSecrets(files: RepoFile[]): { count: number; findings: Findi
     }
     if (label) {
       findings.push({
-        id: 'security/committed-secret', dimension: 'security', severity: 'high',
-        message: `Possible ${label} committed to the repository.`, evidence: f.path,
+        id: 'security/committed-secret', dimension: 'security', severity: 'medium',
+        message: `Possible ${label} — candidate, verify manually.`, evidence: f.path,
       })
     }
   }

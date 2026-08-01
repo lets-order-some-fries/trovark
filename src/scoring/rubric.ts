@@ -1,6 +1,6 @@
 import type { DimensionId, Signals } from '../types.js'
 
-export const RUBRIC_VERSION = '1.0.0'
+export const RUBRIC_VERSION = '1.1.0'
 
 export const DIMENSION_WEIGHTS: Record<DimensionId, number> = {
   health: 0.35,
@@ -66,7 +66,7 @@ export const SIGNALS: SignalDef[] = [
   { key: 'tool-surface', dimension: 'security', weight: 3,
     evaluate: s => s.toolSurfaceRisk === undefined ? undefined
       : ({ none: 1, low: 0.8, medium: 0.5, high: 0.2 } as const)[s.toolSurfaceRisk] },
-  { key: 'no-secrets', dimension: 'security', weight: 3,
+  { key: 'no-secrets', dimension: 'security', weight: 1, // low weight: candidate signal, ~13% true-positive rate (see methodology)
     evaluate: s => s.secretsFound === undefined ? undefined : s.secretsFound === 0 ? 1 : 0 },
   { key: 'dependency-cves', dimension: 'security', weight: 2,
     evaluate: s => s.cveWorst === undefined ? undefined

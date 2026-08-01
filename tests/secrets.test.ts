@@ -5,8 +5,9 @@ describe('scanSecrets — true positives', () => {
   it('flags an AWS access key', () => {
     const r = scanSecrets([{ path: 'src/config.ts', content: 'const k = "AKIAIOSFODNN7EXAMPLE"' }])
     expect(r.count).toBe(1)
-    expect(r.findings[0]).toMatchObject({ id: 'security/committed-secret', severity: 'high', evidence: 'src/config.ts' })
+    expect(r.findings[0]).toMatchObject({ id: 'security/committed-secret', severity: 'medium', evidence: 'src/config.ts' })
     expect(r.findings[0].message).not.toContain('AKIA')
+    expect(r.findings[0].message).toContain('candidate, verify manually')
   })
   it('flags an unquoted key in a committed .env and a private key header', () => {
     const r = scanSecrets([
@@ -43,4 +44,5 @@ describe('scanSecrets — false positives from the live audit must NOT flag', ()
   it('identifier passthrough', () => clean('cli.py', 'client_secret=auth_client_secret'))
   it('angle-bracket placeholder', () => clean('a.ts', 'const api_key = "<your-key-goes-here>"'))
   it('clean source', () => clean('src/i.ts', 'export const x = 1'))
+  it('skips .test. infix files (test-file skip gap closed)', () => clean('foo.test.ts', 'const apiKey = "8Kx9mVq2LpZ7nWfR3tYbQ1c"'))
 })
