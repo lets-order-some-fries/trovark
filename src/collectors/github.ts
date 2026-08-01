@@ -19,6 +19,7 @@ const FILE_CAP = 12
 const SIZE_CAP = 100_000
 const ALWAYS_FETCH = new Set([
   'package.json', 'pyproject.toml', 'requirements.txt', 'mcp.json', 'server.json', 'smithery.yaml',
+  'go.mod', 'Cargo.toml', 'build.gradle', 'build.gradle.kts', 'pom.xml',
 ])
 const SOURCE_HINT = /(src\/|server|tool|index|main)/
 const SOURCE_EXT = /\.(ts|js|mjs|py)$/
@@ -90,12 +91,15 @@ export async function collectGithub(
   const fetchable = (p: { path: string; size?: number }) => (p.size ?? 0) <= SIZE_CAP
   // Basename match (not full-path) so workspace/monorepo manifests nested under
   // e.g. packages/x/package.json are still always-fetched, not just root ones.
+  // .csproj filenames vary (MyServer.csproj), so basename-Set membership can't
+  // catch them — fall back to an extension check for that ecosystem.
   // Manifests are listed ahead of source below and FILE_CAP is unchanged, so
   // they win budget naturally; at the current cap this is fine, but a repo with
   // many nested manifests could start crowding out source files — revisit if
   // that shows up (tracked for P4).
+  const isManifest = (p: string) => ALWAYS_FETCH.has(p.split('/').pop() ?? '') || p.endsWith('.csproj')
   const wanted = [
-    ...blobs.filter(b => fetchable(b) && (ALWAYS_FETCH.has(b.path.split('/').pop() ?? '') || /(^|\/)\.env[^/]*$/.test(b.path))),
+    ...blobs.filter(b => fetchable(b) && (isManifest(b.path) || /(^|\/)\.env[^/]*$/.test(b.path))),
     ...blobs
       .filter(b => fetchable(b) && SOURCE_EXT.test(b.path) && SOURCE_HINT.test(b.path))
       .sort((a, b) => a.path.length - b.path.length),

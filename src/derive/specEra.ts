@@ -19,24 +19,36 @@ export function specEra(files: RepoFile[]): 'modern' | 'legacy' | undefined {
       } catch { /* malformed */ }
     }
     if (f.path.endsWith('pyproject.toml') || f.path.endsWith('requirements.txt')) {
+      // Anchor to dependency lines, not any mention: skip comments and TOML
+      // metadata assignments (keywords/description/etc.) so a package merely
+      // *talking about* fastmcp in its own description doesn't read as a dep.
+      const depLines = f.content
+        .split('\n')
+        .filter(line => !/^\s*#/.test(line) && !/^\s*(keywords|description|name|authors|readme|homepage|documentation|repository|classifiers)\s*=/i.test(line))
+        .join('\n')
       // fastmcp (and the trimmed fastmcp-slim) is a standalone framework whose
       // published line has been 2.x+ since inception — any match is modern,
       // independent of whatever the low-level `mcp` package version says.
-      if (/(^|["'\s])fastmcp(-slim)?(?=[\s["'<>=~,]|$)/.test(f.content)) return 'modern'
-      const m = f.content.match(/(^|["'\s])mcp\s*(?:\[[^\]]*\])?\s*(?:>=|==|~=|>)\s*(\d+)/)
+      if (/(^|["'\s])fastmcp(-slim)?\b/.test(depLines)) return 'modern'
+      const m = depLines.match(/(^|["'\s])mcp\s*(?:\[[^\]]*\])?\s*(?:>=|==|~=|>)\s*(\d+)/)
       if (m) return Number(m[2]) >= 1 ? 'modern' : 'legacy'
     }
     if (f.path.endsWith('go.mod')) {
-      if (/github\.com\/modelcontextprotocol\/go-sdk|github\.com\/mark3labs\/mcp-go/.test(f.content)) return 'modern'
+      const nonComment = f.content.split('\n').filter(line => !/^\s*\/\//.test(line)).join('\n')
+      if (/github\.com\/modelcontextprotocol\/go-sdk|github\.com\/mark3labs\/mcp-go/.test(nonComment)) return 'modern'
     }
     if (f.path.endsWith('Cargo.toml')) {
-      if (/(^|["'\s])rmcp(?=[\s["'=]|$)/m.test(f.content)) return 'modern'
+      // Require an actual dependency-key line (rmcp = "..." or rmcp = { ... }),
+      // not just any mention (e.g. keywords = ["rmcp"] or a comment).
+      if (/^\s*rmcp\s*=/m.test(f.content)) return 'modern'
     }
     if (f.path.endsWith('build.gradle') || f.path.endsWith('build.gradle.kts') || f.path.endsWith('pom.xml')) {
-      if (/io\.modelcontextprotocol/.test(f.content)) return 'modern'
+      const stripped = f.content.replace(/<!--[\s\S]*?-->/g, '').replace(/(^|\s)\/\/[^\n]*/g, ' ')
+      if (/io\.modelcontextprotocol/.test(stripped)) return 'modern'
     }
     if (f.path.endsWith('.csproj')) {
-      if (/ModelContextProtocol/.test(f.content)) return 'modern'
+      const stripped = f.content.replace(/<!--[\s\S]*?-->/g, '').replace(/(^|\s)\/\/[^\n]*/g, ' ')
+      if (/ModelContextProtocol/.test(stripped)) return 'modern'
     }
   }
   return undefined

@@ -127,4 +127,34 @@ describe('collectGithub', () => {
     const snap = await collectGithub({ ref: 'acme/foo', repo: { owner: 'acme', name: 'foo' } }, http, NOW)
     expect(snap.files.map(f => f.path)).toContain('packages/x/package.json')
   })
+  it('fetches go.mod (root + nested) and .csproj manifests — proving the multi-ecosystem branches are reachable', async () => {
+    const http = fakeHttp()
+    const origJson = http.json.bind(http)
+    const origText = http.text.bind(http)
+    const GO_MOD = 'module x\n\nrequire github.com/modelcontextprotocol/go-sdk v1.7.0\n'
+    http.json = async <T,>(url: string): Promise<T> => {
+      if (url.includes('/git/trees/')) {
+        return {
+          tree: [
+            { path: 'package.json', type: 'blob', size: 500 },
+            { path: 'go.mod', type: 'blob', size: 200 },
+            { path: 'subdir/go.mod', type: 'blob', size: 200 },
+            { path: 'src/Server.csproj', type: 'blob', size: 300 },
+            { path: 'src/index.ts', type: 'blob', size: 2000 },
+          ],
+        } as T
+      }
+      return origJson<T>(url)
+    }
+    http.text = async (url: string): Promise<string> => {
+      if (url.includes('go.mod')) return GO_MOD
+      if (url.includes('.csproj')) return '<PackageReference Include="ModelContextProtocol" Version="0.1.0" />'
+      return origText(url)
+    }
+    const snap = await collectGithub({ ref: 'acme/foo', repo: { owner: 'acme', name: 'foo' } }, http, NOW)
+    const paths = snap.files.map(f => f.path)
+    expect(paths).toContain('go.mod')
+    expect(paths).toContain('subdir/go.mod')
+    expect(paths).toContain('src/Server.csproj')
+  })
 })

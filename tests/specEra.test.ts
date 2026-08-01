@@ -50,4 +50,21 @@ describe('specEra', () => {
   it('modern for a .csproj referencing ModelContextProtocol', () => {
     expect(specEra([{ path: 'src/Server.csproj', content: '<PackageReference Include="ModelContextProtocol" Version="0.1.0" />' }])).toBe('modern')
   })
+
+  // False positives: a mere mention in keywords/description/comments must NOT read as 'modern'.
+  it('undefined for fastmcp only mentioned in pyproject keywords/description, not as a dependency', () => {
+    expect(specEra([{ path: 'pyproject.toml', content: 'keywords = ["fastmcp"]\ndescription = "an alternative to fastmcp"' }])).toBeUndefined()
+  })
+  it('undefined for rmcp only mentioned in Cargo.toml keywords, not as a dependency', () => {
+    expect(specEra([{ path: 'Cargo.toml', content: '[package]\nkeywords = ["rmcp"]' }])).toBeUndefined()
+  })
+  it('undefined for a commented-out ModelContextProtocol PackageReference in .csproj', () => {
+    expect(specEra([{ path: 'MyServer.csproj', content: '<!-- <PackageReference Include="ModelContextProtocol" Version="0.1"/> -->' }])).toBeUndefined()
+  })
+  it('undefined for go.mod SDK path only appearing in a comment', () => {
+    expect(specEra([{ path: 'go.mod', content: 'module x\n\n// require github.com/modelcontextprotocol/go-sdk v1.0.0 (considered, not used)\nrequire github.com/spf13/cobra v1.8.0\n' }])).toBeUndefined()
+  })
+  it('undefined for io.modelcontextprotocol only appearing in a commented-out gradle line', () => {
+    expect(specEra([{ path: 'build.gradle', content: '// implementation("io.modelcontextprotocol:mcp:0.1.0")' }])).toBeUndefined()
+  })
 })
