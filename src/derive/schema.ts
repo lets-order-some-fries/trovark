@@ -199,9 +199,16 @@ function classify(name: string, description: string, schemaText: string): Risk {
 // Fix 5: paths that aren't part of the shipped server — test fixtures, example
 // snippets, and docs source — commonly define fake/sample "tools" that would
 // otherwise fabricate cost/security signals for framework and SDK repos.
-const NON_SERVER_DIR = /(^|\/)(tests|__tests__|examples|docs|docs_src)\//
+// V2 (coverage-spec §3.1/§4): added `samples` — csharp-sdk ships its example
+// servers under samples/** rather than examples/**; without this, signal #2
+// (idiom-only-in-excluded-paths) would misread csharp-sdk's example-only
+// registrations as real tools instead of the library signal they are.
+const NON_SERVER_DIR = /(^|\/)(tests|__tests__|examples|docs|docs_src|samples)\//
 const NON_SERVER_FILE = /(?:^|\/)[^/]*(?:_test\.[^/]+|\.test\.[^/]+)$/
-function isNonServerPath(path: string): boolean {
+// Exported for src/derive/classify.ts (V2): classifyLibrary's idiom-only-in-
+// excluded-paths signal needs the SAME notion of "not part of the shipped
+// server" that extractSchema itself filters on, so the two can never drift.
+export function isNonServerPath(path: string): boolean {
   return NON_SERVER_DIR.test(path) || NON_SERVER_FILE.test(path)
 }
 
@@ -279,7 +286,12 @@ function fromLowLevelToolCalls(content: string): ToolInfo[] {
   return tools
 }
 
-function fromJsSource(f: RepoFile): ToolInfo[] {
+// Exported for src/derive/classify.ts (V2): signal #2 (idiom-only-in-
+// excluded-paths) needs to run the SAME idiom detectors extractSchema uses,
+// over the FULL (unfiltered-by-path) file set, so it can tell "an idiom
+// exists but only under examples/" apart from "no idiom anywhere" — reusing
+// these instead of a second, drifting copy of the regexes.
+export function fromJsSource(f: RepoFile): ToolInfo[] {
   const tools: ToolInfo[] = []
   for (const m of f.content.matchAll(JS_TOOL_CALL_RE)) {
     const afterName = m.index + m[0].length
@@ -330,7 +342,7 @@ function fromJsSource(f: RepoFile): ToolInfo[] {
 const PY_DECORATOR_RE = /@(?:\w+\.)?tool\b(?:\([^)]*\))?[\s\S]{0,200}?\b(?:async\s+)?def\s+(\w+)\s*\(/g
 const PY_IMPERATIVE_RE = /\b(?:add_tool|tool)\(\s*name\s*=\s*["']([\w-]+)["'](?:\s*,\s*description\s*=\s*["']([^"']*)["'])?/g
 
-function fromPySource(f: RepoFile): ToolInfo[] {
+export function fromPySource(f: RepoFile): ToolInfo[] {
   const tools: ToolInfo[] = []
   for (const m of f.content.matchAll(PY_DECORATOR_RE)) {
     tools.push({ name: m[1], schemaText: m[0] })

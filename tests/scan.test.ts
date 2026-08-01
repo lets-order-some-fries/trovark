@@ -22,6 +22,16 @@ describe('summarize', () => {
     expect(s.secretsFindings).toBe(1)
     expect(s.deprecated).toBe(0)
     expect(s.shellExecTools).toBe(0)
+    expect(s.notServer).toBe(0)
+  })
+  it('counts notServer separately from insufficientData (V2)', () => {
+    const entries: IndexEntry[] = [
+      e({ ref: 'a/lib', notServer: true, notServerReason: 'sdk' }),
+      e({ ref: 'a/withheld', insufficientData: true }),
+    ]
+    const s = summarize(entries)
+    expect(s.notServer).toBe(1)
+    expect(s.insufficient).toBe(1)
   })
   it('counts staleOver180 from daysSinceLastCommit, not health score', () => {
     const entries: IndexEntry[] = [

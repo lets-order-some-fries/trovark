@@ -1,6 +1,13 @@
 export type DimensionId = 'health' | 'reliability' | 'security' | 'cost'
 export type Confidence = 'high' | 'medium' | 'low'
 export type Severity = 'info' | 'low' | 'medium' | 'high'
+// v1.3 (V2 — library/SDK/proxy classifier, coverage-spec §3.1 + §3.6): the
+// zero-tools outcome is not monolithic — a repo can be a genuine coverage
+// miss (insufficientData, unchanged) OR a library/SDK ('sdk'), a repo with no
+// MCP surface at all ('not-server'), a remote-proxy that registers tools only
+// at runtime ('proxy'), or a distribution stub pointing at an external
+// package ('stub'). See src/derive/classify.ts for the detector.
+export type NotServerReason = 'sdk' | 'not-server' | 'proxy' | 'stub'
 
 export interface Finding {
   id: string            // e.g. 'security/shell-exec-tool'
@@ -42,6 +49,13 @@ export interface Signals {
   // meta
   findings: Finding[]
   errors: string[]      // human-readable collector failures
+  // V2: library/SDK/proxy/stub classification — only ever set when the
+  // zero-tools guard let classifyLibrary run (see assemble.ts). Carried
+  // through to score.ts so it can produce the distinct notServer Scorecard
+  // outcome instead of insufficientData.
+  notServer?: boolean
+  notServerReason?: NotServerReason
+  notServerNote?: string
 }
 
 export interface DimensionScore {
@@ -63,4 +77,9 @@ export interface Scorecard {
   generatedAt: string   // ISO string, passed in by caller (determinism)
   insufficientData: boolean
   resolved?: { npmPackage?: string; pypiPackage?: string; repo?: { owner: string; name: string } }
+  // V2: a distinct terminal state — NOT the same as insufficientData. Set
+  // when classifyLibrary (src/derive/classify.ts) identified the repo as a
+  // library/SDK/proxy/stub rather than a genuinely un-parseable server.
+  notServer?: boolean
+  notServerReason?: NotServerReason
 }

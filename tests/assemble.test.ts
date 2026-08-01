@@ -186,3 +186,68 @@ describe('assemble', () => {
     expect(queried).toContainEqual({ name: 'requests', ecosystem: 'PyPI', version: '2.31.0' })
   })
 })
+
+describe('assemble — notServer classification (V2)', () => {
+  // Reuses fullFake()'s acme/foo routes (tree, commits, releases, etc. are
+  // already wired there) and only patches the repo-meta description + the
+  // fetched source content — keeps the URLs consistent with the shared fixture.
+  function sdkRepoHttp(): Http {
+    const http = fullFake()
+    const orig = http.json.bind(http)
+    http.json = async <T,>(url: string): Promise<T> => {
+      if (url === 'https://api.github.com/repos/acme/foo') {
+        return { stargazers_count: 300, archived: false, pushed_at: iso(2), default_branch: 'main', description: 'The official Foo SDK' } as T
+      }
+      return orig<T>(url)
+    }
+    http.text = async (url: string): Promise<string> => {
+      if (url.endsWith('package.json')) return JSON.stringify({ dependencies: {} })
+      if (url.endsWith('src/index.ts')) return `export function helper() { return 1 }`
+      throw new Error(`HTTP 404 for ${url}`)
+    }
+    return http
+  }
+
+  it('a repo with zero extracted tools + an SDK-shaped description is classified notServer', async () => {
+    const s = await assemble(
+      { ref: 'foo-mcp', repo: { owner: 'acme', name: 'foo' } },
+      sdkRepoHttp(), NOW,
+    )
+    expect(s.schemaExtracted).toBe(false)
+    expect(s.notServer).toBe(true)
+    expect(s.notServerReason).toBe('sdk')
+  })
+
+  it('GUARD: a server that DID extract tools is never reclassified as notServer, even if its description looks SDK-shaped', async () => {
+    const http = sdkRepoHttp()
+    http.text = async (url: string): Promise<string> => {
+      if (url.endsWith('package.json')) return JSON.stringify({ dependencies: { '@modelcontextprotocol/sdk': '^1.0.0' } })
+      if (url.endsWith('src/index.ts')) return `server.tool('greet', 'Say hello', {}, h)`
+      throw new Error(`HTTP 404 for ${url}`)
+    }
+    const s = await assemble(
+      { ref: 'foo-mcp', repo: { owner: 'acme', name: 'foo' } },
+      http, NOW,
+    )
+    expect(s.schemaExtracted).toBe(true)
+    expect(s.toolCount).toBe(1)
+    expect(s.notServer).toBeUndefined() // the sdk-description signal must never fire once tools were found
+  })
+
+  it('a genuine miss (imports the MCP SDK but registers tools in an unrecognized idiom) stays notServer-undefined, keeping insufficientData intact', async () => {
+    const http = fullFake()
+    http.text = async (url: string): Promise<string> => {
+      if (url.endsWith('package.json')) return JSON.stringify({ dependencies: { '@modelcontextprotocol/sdk': '^1.0.0' } })
+      // proves this IS an MCP server (imports the SDK) but uses a framework/idiom
+      // none of the current extractors recognize — a genuine coverage miss, not a library.
+      if (url.endsWith('src/index.ts')) return `import { Server } from '@modelcontextprotocol/sdk'\nregisterAllTheThings(weirdCustomRegistry)`
+      throw new Error(`HTTP 404 for ${url}`)
+    }
+    const s = await assemble(
+      { ref: 'foo-mcp', repo: { owner: 'acme', name: 'foo' } },
+      http, NOW,
+    )
+    expect(s.schemaExtracted).toBe(false)
+    expect(s.notServer).toBeUndefined() // classifyLibrary correctly declines to guess
+  })
+})

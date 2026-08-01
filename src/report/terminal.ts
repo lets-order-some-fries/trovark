@@ -20,7 +20,13 @@ export function renderTerminal(card: Scorecard, opts: { color?: boolean } = {}):
     if (card.resolved.repo) parts.push(`github.com/${card.resolved.repo.owner}/${card.resolved.repo.name}`)
     if (parts.length > 0) lines.push(`  resolved: ${parts.join(' · ')}`)
   }
-  if (card.insufficientData) {
+  if (card.notServer) {
+    // V2: a DISTINCT terminal state from INSUFFICIENT DATA — this repo was
+    // never going to have tools to grade (library/SDK/proxy/stub), not a
+    // server we failed to check. See src/derive/classify.ts.
+    const reasonPart = card.notServerReason ? ` (${card.notServerReason})` : ''
+    lines.push(paint(33, `LIBRARY — not an MCP server${reasonPart}`, c) + `   rubric v${card.rubricVersion}`)
+  } else if (card.insufficientData) {
     lines.push(paint(31, 'Trust Score: INSUFFICIENT DATA', c) + `   rubric v${card.rubricVersion}`)
   } else {
     lines.push(paint(colorFor(card.overall), `Trust Score: ${card.overall}/100 (${card.grade})`, c) + `   rubric v${card.rubricVersion}`)

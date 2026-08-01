@@ -27,6 +27,7 @@ function fakeHttp(): Http {
     },
     'https://api.github.com/repos/acme/foo': {
       stargazers_count: 1234, archived: false, pushed_at: iso(2), default_branch: 'main',
+      description: 'A handy MCP server', topics: ['mcp', 'ai'],
     },
   }
   return {
@@ -64,6 +65,24 @@ describe('collectGithub', () => {
     expect(snap.files.map(f => f.path)).toEqual(expect.arrayContaining(['package.json', 'src/index.ts']))
     expect(snap.files.map(f => f.path)).not.toContain('huge.ts') // size cap
     expect(snap.medianIssueResponseDays).toBeUndefined() // no token
+  })
+  it('carries repo description + topics for library/SDK classification (V2)', async () => {
+    const snap = await collectGithub({ ref: 'acme/foo', repo: { owner: 'acme', name: 'foo' } }, fakeHttp(), NOW)
+    expect(snap.description).toBe('A handy MCP server')
+    expect(snap.topics).toEqual(['mcp', 'ai'])
+  })
+  it('missing description/topics degrade to undefined/empty, not throw', async () => {
+    const http = fakeHttp()
+    const orig = http.json.bind(http)
+    http.json = async <T,>(url: string): Promise<T> => {
+      if (url === 'https://api.github.com/repos/acme/foo') {
+        return { stargazers_count: 1234, archived: false, pushed_at: iso(2), default_branch: 'main' } as T
+      }
+      return orig<T>(url)
+    }
+    const snap = await collectGithub({ ref: 'acme/foo', repo: { owner: 'acme', name: 'foo' } }, http, NOW)
+    expect(snap.description).toBeUndefined()
+    expect(snap.topics).toEqual([])
   })
   it('throws when identity has no repo', async () => {
     await expect(collectGithub({ ref: 'x' }, fakeHttp(), NOW)).rejects.toThrow(/repo/i)

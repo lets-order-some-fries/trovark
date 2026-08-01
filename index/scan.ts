@@ -14,6 +14,10 @@ export interface IndexEntry {
   overall?: number
   grade?: string
   insufficientData?: boolean
+  // V2: distinct from insufficientData — a library/SDK/proxy/stub repo with
+  // no tools to grade, not a server we failed to check. See src/derive/classify.ts.
+  notServer?: boolean
+  notServerReason?: string
   repoUrl?: string
   dims?: Record<'health' | 'reliability' | 'security' | 'cost', { score: number; confidence: string }>
   topFindings?: Array<{ id: string; severity: string }>
@@ -22,6 +26,9 @@ export interface IndexEntry {
 
 export interface IndexStats {
   total: number; scored: number; failed: number; insufficient: number
+  // V2: count of repos classified as library/SDK/proxy/stub (the correct
+  // terminal outcome, not a withhold) — tracked separately from `insufficient`.
+  notServer: number
   gradeDist: Record<string, number>
   avgOverall: number
   staleOver180: number
@@ -44,6 +51,7 @@ export function summarize(entries: IndexEntry[]): IndexStats {
     scored: scoredOk.length,
     failed: entries.length - scoredOk.length,
     insufficient: scoredOk.filter(e => e.insufficientData).length,
+    notServer: scoredOk.filter(e => e.notServer).length,
     gradeDist,
     avgOverall: graded.length === 0 ? 0 : Math.round(graded.reduce((a, e) => a + (e.overall ?? 0), 0) / graded.length),
     staleOver180: scoredOk.filter(e => (e.daysSinceLastCommit ?? 0) > 180).length,
@@ -61,6 +69,8 @@ function toEntry(ref: string, card: Scorecard, daysSinceLastCommit?: number): In
   return {
     ref, ok: true, overall: card.overall, grade: card.grade,
     insufficientData: card.insufficientData || undefined,
+    notServer: card.notServer || undefined,
+    notServerReason: card.notServer ? card.notServerReason : undefined,
     repoUrl: card.resolved?.repo ? `https://github.com/${card.resolved.repo.owner}/${card.resolved.repo.name}` : undefined,
     dims, topFindings: findings.length > 0 ? findings : undefined,
     daysSinceLastCommit,

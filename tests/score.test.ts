@@ -113,3 +113,35 @@ describe('score()', () => {
     expect(card.insufficientData).toBe(true)
   })
 })
+
+describe('score() — notServer (V2): a distinct terminal state, not insufficientData', () => {
+  it('a notServer scorecard is NOT insufficientData, even though its coverage would otherwise withhold', () => {
+    const s = empty() // sparse signals — would normally trip the <4-signals / dimensions-dropped gate
+    s.notServer = true
+    s.notServerReason = 'sdk'
+    s.notServerNote = 'SDK/framework that defines the tool-registration API but registers no tools itself.'
+    const card = score('x', s, 'T')
+    expect(card.insufficientData).toBe(false)
+    expect(card.notServer).toBe(true)
+    expect(card.notServerReason).toBe('sdk')
+    expect(card.notes.join(' ')).toMatch(/not an mcp server/i)
+  })
+  it('notes for a notServer card do not also claim "insufficient data" / "grade withheld"', () => {
+    const s = empty()
+    s.notServer = true
+    s.notServerReason = 'not-server'
+    const card = score('x', s, 'T')
+    expect(card.notes.join(' ')).not.toMatch(/insufficient|grade withheld/i)
+  })
+  it('a normal card with no notServer signal is unaffected (regression)', () => {
+    const card = score('x', healthy(), 'T')
+    expect(card.notServer).toBeUndefined()
+    expect(card.notServerReason).toBeUndefined()
+  })
+  it('security-primary-absent still withholds normally when notServer is NOT set (guard: only notServer bypasses the gate)', () => {
+    const s = healthy(); s.toolSurfaceRisk = undefined
+    const card = score('x', s, 'T')
+    expect(card.insufficientData).toBe(true)
+    expect(card.notServer).toBeUndefined()
+  })
+})

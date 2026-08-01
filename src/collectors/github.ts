@@ -6,6 +6,13 @@ export interface RepoFile { path: string; content: string }
 export interface RepoSnapshot {
   owner: string; name: string; defaultBranch: string
   stars: number; archived: boolean
+  // V2 (library/SDK/proxy classifier, coverage-spec §3.1): repo metadata the
+  // `-sdk` name / "official ... SDK" description / sdk|library|framework
+  // topics signals key off of. Absent when GitHub omits them (private repo
+  // description-less, no topics set) — never fatal, classifyLibrary treats
+  // absence as "signal doesn't apply", not an error.
+  description?: string
+  topics?: string[]
   pushedAt: string
   latestReleaseAt?: string
   commitsLast90Days?: number
@@ -122,7 +129,10 @@ export async function collectGithub(
   const { owner, name } = identity.repo
   const api = `https://api.github.com/repos/${owner}/${name}`
 
-  interface GhRepo { stargazers_count: number; archived: boolean; pushed_at: string; default_branch: string }
+  interface GhRepo {
+    stargazers_count: number; archived: boolean; pushed_at: string; default_branch: string
+    description?: string | null; topics?: string[]
+  }
   const meta = await http.json<GhRepo>(api)
 
   const since365 = new Date(now.getTime() - 365 * 86_400_000).toISOString()
@@ -302,7 +312,9 @@ export async function collectGithub(
 
   return {
     owner, name, defaultBranch: meta.default_branch,
-    stars: meta.stargazers_count, archived: meta.archived, pushedAt: meta.pushed_at,
+    stars: meta.stargazers_count, archived: meta.archived,
+    description: meta.description ?? undefined, topics: meta.topics ?? [],
+    pushedAt: meta.pushed_at,
     latestReleaseAt, commitsLast90Days, busFactor, medianIssueResponseDays,
     treePaths, files,
   }
