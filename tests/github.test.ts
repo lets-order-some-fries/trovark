@@ -336,6 +336,173 @@ describe('collectGithub', () => {
     expect(commitPageFetches).toBe(10)                // infinite next → loop stops only via the cap, not the cutoff
     expect(snap.busFactor).toBeDefined()              // proves the loop actually terminated and returned a snapshot
   })
+  // --- V1: monorepo sampling overhaul (coverage-spec §3.3 + §4) ---
+
+  it('V1: raised FILE_CAP + source floor rescue a source file that would be starved by 16 nested package.json manifests', async () => {
+    const http = fakeHttp()
+    const origJson = http.json.bind(http)
+    const nestedManifests = Array.from({ length: 15 }, (_, i) => ({ path: `pkg${i + 1}/package.json`, type: 'blob', size: 300 }))
+    http.json = async <T,>(url: string): Promise<T> => {
+      if (url.includes('/git/trees/')) {
+        return {
+          tree: [
+            { path: 'package.json', type: 'blob', size: 500 }, // root, 16 manifests total
+            ...nestedManifests,
+            { path: 'packages/mcp/src/index.ts', type: 'blob', size: 400 },
+          ],
+        } as T
+      }
+      return origJson<T>(url)
+    }
+    http.text = async (url: string): Promise<string> => {
+      if (url.includes('package.json')) return '{"name":"foo"}'
+      return 'export {}'
+    }
+    const snap = await collectGithub({ ref: 'acme/foo', repo: { owner: 'acme', name: 'foo' } }, http, NOW)
+    const paths = snap.files.map(f => f.path)
+    // Under the OLD fixed FILE_CAP=12, 16 manifests alone exceed the cap and the
+    // single source file is never reached. The dynamic cap (>3 manifests → 24)
+    // plus the source floor must rescue it.
+    expect(paths).toContain('packages/mcp/src/index.ts')
+  })
+
+  it('V1: toolSignalScore ranks a tools/ directory file above a same-tier index.ts entrypoint (replaces shortest-path tie-break)', async () => {
+    const http = fakeHttp()
+    const origJson = http.json.bind(http)
+    http.json = async <T,>(url: string): Promise<T> => {
+      if (url.includes('/git/trees/')) {
+        return {
+          tree: [
+            { path: 'package.json', type: 'blob', size: 500 },
+            { path: 'src/index.ts', type: 'blob', size: 200 },
+            { path: 'src/tools/registry.ts', type: 'blob', size: 200 },
+          ],
+        } as T
+      }
+      return origJson<T>(url)
+    }
+    http.text = async (url: string): Promise<string> => {
+      if (url.includes('package.json')) return '{"name":"foo"}'
+      return 'export {}'
+    }
+    const snap = await collectGithub({ ref: 'acme/foo', repo: { owner: 'acme', name: 'foo' } }, http, NOW)
+    const paths = snap.files.map(f => f.path)
+    expect(paths).toContain('src/tools/registry.ts')
+    expect(paths).toContain('src/index.ts')
+    // Old shortest-path tie-break would order 'src/index.ts' (shorter) first;
+    // the tools/-dir signal must now outrank the plain entrypoint signal.
+    expect(paths.indexOf('src/tools/registry.ts')).toBeLessThan(paths.indexOf('src/index.ts'))
+  })
+
+  it('V1: a 150KB src/index.ts entrypoint is fetched under the raised SIZE_CAP (previously skipped at the old 100KB cap)', async () => {
+    const http = fakeHttp()
+    const origJson = http.json.bind(http)
+    const BIG = 'x'.repeat(150_000)
+    http.json = async <T,>(url: string): Promise<T> => {
+      if (url.includes('/git/trees/')) {
+        return { tree: [{ path: 'package.json', type: 'blob', size: 500 }, { path: 'src/index.ts', type: 'blob', size: 150_000 }] } as T
+      }
+      return origJson<T>(url)
+    }
+    http.text = async (url: string): Promise<string> => {
+      if (url.includes('package.json')) return '{"name":"foo"}'
+      if (url.includes('src/index.ts')) return BIG
+      return 'export {}'
+    }
+    const snap = await collectGithub({ ref: 'acme/foo', repo: { owner: 'acme', name: 'foo' } }, http, NOW)
+    const file = snap.files.find(f => f.path === 'src/index.ts')
+    expect(file).toBeDefined()
+    expect(file?.content.length).toBe(150_000) // fully fetched, under the new 300KB cap
+  })
+
+  it('V1: an oversized entrypoint (400KB) is fetched-and-truncated to the 300KB SIZE_CAP rather than skipped', async () => {
+    const http = fakeHttp()
+    const origJson = http.json.bind(http)
+    const HUGE_ENTRYPOINT = 'y'.repeat(400_000)
+    http.json = async <T,>(url: string): Promise<T> => {
+      if (url.includes('/git/trees/')) {
+        return { tree: [{ path: 'package.json', type: 'blob', size: 500 }, { path: 'src/index.ts', type: 'blob', size: 400_000 }] } as T
+      }
+      return origJson<T>(url)
+    }
+    http.text = async (url: string): Promise<string> => {
+      if (url.includes('package.json')) return '{"name":"foo"}'
+      if (url.includes('src/index.ts')) return HUGE_ENTRYPOINT
+      return 'export {}'
+    }
+    const snap = await collectGithub({ ref: 'acme/foo', repo: { owner: 'acme', name: 'foo' } }, http, NOW)
+    const file = snap.files.find(f => f.path === 'src/index.ts')
+    expect(file).toBeDefined() // not skipped
+    expect(file?.content.length).toBe(300_000) // truncated to SIZE_CAP
+  })
+
+  it('V1: a .cursor/mcp.json is NOT treated as a manifest (root-only mcp.json/server.json + editor-dir exclusion)', async () => {
+    const http = fakeHttp()
+    const origJson = http.json.bind(http)
+    http.json = async <T,>(url: string): Promise<T> => {
+      if (url.includes('/git/trees/')) {
+        return {
+          tree: [
+            { path: 'package.json', type: 'blob', size: 500 },
+            { path: '.cursor/mcp.json', type: 'blob', size: 200 },
+            { path: 'src/index.ts', type: 'blob', size: 200 },
+          ],
+        } as T
+      }
+      return origJson<T>(url)
+    }
+    http.text = async (url: string): Promise<string> => {
+      if (url.includes('package.json')) return '{"name":"foo"}'
+      if (url.includes('.cursor/mcp.json')) return '{}'
+      return 'export {}'
+    }
+    const snap = await collectGithub({ ref: 'acme/foo', repo: { owner: 'acme', name: 'foo' } }, http, NOW)
+    const paths = snap.files.map(f => f.path)
+    expect(paths).not.toContain('.cursor/mcp.json')
+  })
+
+  it('V1: a .go file is now fetched (SOURCE_EXT extended with go/rs/java/cs/kt)', async () => {
+    const http = fakeHttp()
+    const origJson = http.json.bind(http)
+    http.json = async <T,>(url: string): Promise<T> => {
+      if (url.includes('/git/trees/')) {
+        return { tree: [{ path: 'go.mod', type: 'blob', size: 200 }, { path: 'internal/server/tools.go', type: 'blob', size: 500 }] } as T
+      }
+      return origJson<T>(url)
+    }
+    http.text = async (url: string): Promise<string> => {
+      if (url.includes('go.mod')) return 'module x\n'
+      return 'package server\n'
+    }
+    const snap = await collectGithub({ ref: 'acme/foo', repo: { owner: 'acme', name: 'foo' } }, http, NOW)
+    const paths = snap.files.map(f => f.path)
+    expect(paths).toContain('internal/server/tools.go')
+  })
+
+  it('V1: manifest eviction protects the source floor when manifest count vastly exceeds even the raised FILE_CAP', async () => {
+    const http = fakeHttp()
+    const origJson = http.json.bind(http)
+    const nestedManifests = Array.from({ length: 29 }, (_, i) => ({ path: `pkg${i + 1}/package.json`, type: 'blob', size: 300 }))
+    const toolFiles = Array.from({ length: 20 }, (_, i) => ({ path: `src/tools/tool${i + 1}.ts`, type: 'blob', size: 200 }))
+    http.json = async <T,>(url: string): Promise<T> => {
+      if (url.includes('/git/trees/')) {
+        return { tree: [{ path: 'package.json', type: 'blob', size: 500 }, ...nestedManifests, ...toolFiles] } as T
+      }
+      return origJson<T>(url)
+    }
+    http.text = async (url: string): Promise<string> => {
+      if (url.includes('package.json')) return '{"name":"foo"}'
+      return 'export {}'
+    }
+    const snap = await collectGithub({ ref: 'acme/foo', repo: { owner: 'acme', name: 'foo' } }, http, NOW)
+    const paths = snap.files.map(f => f.path)
+    // 30 manifest candidates would alone exceed FILE_CAP=24; eviction of
+    // lowest-priority (deepest) manifests must protect the source floor.
+    expect(paths.filter(p => p.endsWith('package.json')).length).toBeLessThan(30)
+    expect(paths).toContain('package.json') // root manifest is never evicted
+    expect(paths.filter(p => p.startsWith('src/tools/')).length).toBeGreaterThanOrEqual(16) // SOURCE_FLOOR = ceil(24*0.66)
+  })
+
   it('stops pagination after page 1 once its oldest commit is already past the 365d cutoff, even with Link: rel="next" present', async () => {
     const http = fakeHttp()
     let commitPageFetches = 0
