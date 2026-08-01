@@ -9,6 +9,7 @@ const httpOf = (routes: Record<string, unknown>): Http => ({
     for (const [prefix, body] of Object.entries(routes)) if (url.startsWith(prefix)) return body as T
     throw new Error(`HTTP 404 for ${url}`)
   },
+  async jsonWithHeaders() { throw new Error('unused') },
   async text() { throw new Error('unused') },
   async postJson() { throw new Error('unused') },
 })
@@ -52,6 +53,7 @@ describe('collectOsv', () => {
   it('maps CVSS >= 9 to critical and emits evidence-linked findings', async () => {
     const http: Http = {
       async json() { throw new Error('unused') },
+      async jsonWithHeaders() { throw new Error('unused') },
       async text() { throw new Error('unused') },
       async postJson<T>(url: string, body: unknown): Promise<T> {
         expect(url).toBe('https://api.osv.dev/v1/querybatch')
@@ -69,6 +71,7 @@ describe('collectOsv', () => {
   it('no vulns → none', async () => {
     const http: Http = {
       async json() { throw new Error('unused') },
+      async jsonWithHeaders() { throw new Error('unused') },
       async text() { throw new Error('unused') },
       async postJson<T>(): Promise<T> { return { results: [{}] } as T },
     }
@@ -77,6 +80,7 @@ describe('collectOsv', () => {
   it('empty deps → undefined (nothing checked), no network', async () => {
     const http: Http = {
       async json() { throw new Error('unused') },
+      async jsonWithHeaders() { throw new Error('unused') },
       async text() { throw new Error('unused') },
       async postJson() { throw new Error('should not be called for empty deps') },
     }

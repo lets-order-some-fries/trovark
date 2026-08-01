@@ -34,6 +34,15 @@ function fakeHttp(): Http {
       for (const [prefix, body] of Object.entries(routes)) if (url.startsWith(prefix)) return body as T
       throw new Error(`HTTP 404 for ${url}`)
     },
+    // Real implementation (not a stub): collectGithub paginates commits through
+    // this method, so every existing single-page fixture must keep working —
+    // same routes table, just no `Link` header → parseNextLink sees no next page.
+    async jsonWithHeaders<T>(url: string): Promise<{ data: T; headers: Headers }> {
+      for (const [prefix, body] of Object.entries(routes)) {
+        if (url.startsWith(prefix)) return { data: body as T, headers: new Headers() }
+      }
+      throw new Error(`HTTP 404 for ${url}`)
+    },
     async text(url: string): Promise<string> {
       if (url.includes('package.json')) return '{"name":"foo"}'
       if (url.includes('src/index.ts')) return 'export {}'
@@ -71,10 +80,11 @@ describe('collectGithub', () => {
   })
   it('commits fetch failure yields undefined activity signals, not zeros', async () => {
     const http = fakeHttp()
-    const orig = http.json.bind(http)
-    http.json = async <T,>(url: string): Promise<T> => {
+    // Commits now paginate through jsonWithHeaders, not json — fail that path.
+    const origWithHeaders = http.jsonWithHeaders.bind(http)
+    http.jsonWithHeaders = async <T,>(url: string): Promise<{ data: T; headers: Headers }> => {
       if (url.includes('/commits?since')) throw new Error('HTTP 500')
-      return orig<T>(url)
+      return origWithHeaders<T>(url)
     }
     const snap = await collectGithub({ ref: 'acme/foo', repo: { owner: 'acme', name: 'foo' } }, http, NOW)
     expect(snap.commitsLast90Days).toBeUndefined()
@@ -176,5 +186,30 @@ describe('collectGithub', () => {
     const snap = await collectGithub({ ref: 'acme/foo', repo: { owner: 'acme', name: 'foo' } }, http, NOW)
     const paths = snap.files.map(f => f.path)
     expect(paths.filter(p => p.startsWith('src/tools/'))).toHaveLength(3) // all 3 tool-signal files survive the FILE_CAP=12 budget
+  })
+  it('paginates commits via Link: rel="next" and accumulates bus factor + 90d activity across the full window', async () => {
+    const http = fakeHttp()
+    // page1: author 'a' has 2 recent commits (within 90d). page2 (reached only via
+    // the Link header): author 'a' gets a 3rd commit, older than 90d but inside 365d.
+    // busFactor must count 'a' (2+1=3 >= threshold) only by accumulating BOTH pages;
+    // commitsLast90Days must stay 2 (page2's commit falls outside the 90d window).
+    const page1 = [
+      { sha: 'p1a', commit: { author: { date: iso(1) } }, author: { login: 'a' } },
+      { sha: 'p1b', commit: { author: { date: iso(2) } }, author: { login: 'a' } },
+    ]
+    const page2 = [
+      { sha: 'p2a', commit: { author: { date: iso(200) } }, author: { login: 'a' } },
+    ]
+    const nextUrl = 'https://api.github.com/repos/acme/foo/commits?since=X&per_page=100&page=2'
+    http.jsonWithHeaders = async <T,>(url: string): Promise<{ data: T; headers: Headers }> => {
+      if (url.includes('/commits?since')) {
+        if (url.startsWith(nextUrl)) return { data: page2 as T, headers: new Headers() }
+        return { data: page1 as T, headers: new Headers({ link: `<${nextUrl}>; rel="next"` }) }
+      }
+      throw new Error(`HTTP 404 for ${url}`)
+    }
+    const snap = await collectGithub({ ref: 'acme/foo', repo: { owner: 'acme', name: 'foo' } }, http, NOW)
+    expect(snap.busFactor).toBe(1)          // 'a': 2 (page1) + 1 (page2) = 3 commits → crosses the >=3 threshold
+    expect(snap.commitsLast90Days).toBe(2)  // only page1's two commits are within 90 days
   })
 })

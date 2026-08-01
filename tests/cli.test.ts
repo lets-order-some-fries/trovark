@@ -5,24 +5,30 @@ import type { Http } from '../src/util/http.js'
 // Minimal fake: a healthy-enough GitHub-only server.
 const NOW = new Date('2026-07-31T00:00:00Z')
 const iso = (d: number) => new Date(NOW.getTime() - d * 86_400_000).toISOString()
+const routes: Record<string, unknown> = {
+  'https://api.github.com/repos/acme/foo/commits?since': [
+    { sha: '1', commit: { author: { date: iso(1) } }, author: { login: 'a' } },
+    { sha: '2', commit: { author: { date: iso(2) } }, author: { login: 'a' } },
+    { sha: '3', commit: { author: { date: iso(3) } }, author: { login: 'a' } },
+  ],
+  'https://api.github.com/repos/acme/foo/releases/latest': { published_at: iso(5) },
+  'https://api.github.com/repos/acme/foo/git/trees/main?recursive=1': { tree: [
+    { path: 'package.json', type: 'blob', size: 100 },
+    { path: 'src/server.js', type: 'blob', size: 200 },
+  ] },
+  'https://api.github.com/repos/acme/foo': {
+    stargazers_count: 2000, archived: false, pushed_at: iso(1), default_branch: 'main',
+  },
+}
 const fake: Http = {
   async json<T>(url: string): Promise<T> {
-    const routes: Record<string, unknown> = {
-      'https://api.github.com/repos/acme/foo/commits?since': [
-        { sha: '1', commit: { author: { date: iso(1) } }, author: { login: 'a' } },
-        { sha: '2', commit: { author: { date: iso(2) } }, author: { login: 'a' } },
-        { sha: '3', commit: { author: { date: iso(3) } }, author: { login: 'a' } },
-      ],
-      'https://api.github.com/repos/acme/foo/releases/latest': { published_at: iso(5) },
-      'https://api.github.com/repos/acme/foo/git/trees/main?recursive=1': { tree: [
-        { path: 'package.json', type: 'blob', size: 100 },
-        { path: 'src/server.js', type: 'blob', size: 200 },
-      ] },
-      'https://api.github.com/repos/acme/foo': {
-        stargazers_count: 2000, archived: false, pushed_at: iso(1), default_branch: 'main',
-      },
-    }
     for (const [p, b] of Object.entries(routes)) if (url.startsWith(p)) return b as T
+    throw new Error(`HTTP 404 for ${url}`)
+  },
+  // Real (not a stub): collectGithub paginates commits through this method;
+  // this fixture's single page has no Link header → one page, as before.
+  async jsonWithHeaders<T>(url: string): Promise<{ data: T; headers: Headers }> {
+    for (const [p, b] of Object.entries(routes)) if (url.startsWith(p)) return { data: b as T, headers: new Headers() }
     throw new Error(`HTTP 404 for ${url}`)
   },
   async postJson<T>(): Promise<T> { return { results: [{}] } as T },
@@ -87,6 +93,7 @@ describe('cli main', () => {
 describe('cli main — insufficient data', () => {
   const unfetchable: Http = {
     async json() { throw new Error('HTTP 403') },
+    async jsonWithHeaders() { throw new Error('HTTP 403') },
     async postJson() { throw new Error('HTTP 403') },
     async text() { throw new Error('HTTP 403') },
   }

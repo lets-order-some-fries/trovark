@@ -1,5 +1,7 @@
 export interface Http {
   json<T>(url: string): Promise<T>
+  /** Like json(), but also returns response headers (e.g. to read `Link` for pagination). Same retry/timeout path. */
+  jsonWithHeaders<T>(url: string): Promise<{ data: T; headers: Headers }>
   text(url: string): Promise<string>
   postJson<T>(url: string, body: unknown): Promise<T>
 }
@@ -50,6 +52,10 @@ export function createHttp(opts: HttpOptions = {}): Http {
 
   return {
     async json<T>(url: string): Promise<T> { return (await request(url)).json() as Promise<T> },
+    async jsonWithHeaders<T>(url: string): Promise<{ data: T; headers: Headers }> {
+      const res = await request(url)
+      return { data: (await res.json()) as T, headers: res.headers }
+    },
     async text(url: string): Promise<string> { return (await request(url)).text() },
     async postJson<T>(url: string, body: unknown): Promise<T> {
       const res = await request(url, {

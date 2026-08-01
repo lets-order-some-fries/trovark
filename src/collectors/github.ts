@@ -34,6 +34,19 @@ const toolSignalScore = (path: string): number => (TOOL_SIGNAL_HINT.test(path) ?
 
 interface GhCommit { commit: { author?: { date?: string } }; author?: { login?: string } | null }
 
+const COMMIT_PAGE_CAP = 10 // safety net against runaway pagination on huge repos
+
+/** Parses the `Link` response header for a `rel="next"` target URL (RFC 8288 / GitHub pagination). */
+function parseNextLink(headers: Headers): string | undefined {
+  const link = headers.get('link')
+  if (!link) return undefined
+  for (const part of link.split(',')) {
+    const m = /<([^>]+)>\s*;\s*rel="next"/.exec(part)
+    if (m) return m[1]
+  }
+  return undefined
+}
+
 export async function collectGithub(
   identity: ServerIdentity, http: Http, now: Date, opts: { hasToken?: boolean } = {},
 ): Promise<RepoSnapshot> {
@@ -45,8 +58,30 @@ export async function collectGithub(
   const meta = await http.json<GhRepo>(api)
 
   const since365 = new Date(now.getTime() - 365 * 86_400_000).toISOString()
+  const cutoff365Ms = now.getTime() - 365 * 86_400_000
+  // Paginate the FULL 365-day commit window: a single 100-commit page on an
+  // active repo can span only weeks, truncating the intended window and
+  // undercounting bus factor / recent activity. Follow `Link: rel="next"`
+  // until a page's oldest commit is already past the cutoff, or the page cap
+  // is hit (huge-repo safety net) — whichever comes first. Deliberately NOT
+  // using /contributors (all-time totals, wrong window) or /stats/contributors
+  // (202 async placeholder that requires polling and isn't guaranteed fresh).
   // Fetch failure → undefined signals (absence ≠ zero); an infra hiccup must not read as a dead repo.
-  const commits = await http.json<GhCommit[]>(`${api}/commits?since=${since365}&per_page=100`).catch(() => undefined)
+  let commits: GhCommit[] | undefined
+  try {
+    const acc: GhCommit[] = []
+    let url: string | undefined = `${api}/commits?since=${since365}&per_page=100`
+    for (let page = 0; page < COMMIT_PAGE_CAP && url; page++) {
+      const { data, headers } = await http.jsonWithHeaders<GhCommit[]>(url)
+      acc.push(...data)
+      const oldestOnPage = data[data.length - 1]?.commit.author?.date
+      if (oldestOnPage !== undefined && new Date(oldestOnPage).getTime() < cutoff365Ms) break
+      url = parseNextLink(headers)
+    }
+    commits = acc
+  } catch {
+    commits = undefined
+  }
   const cutoff90 = now.getTime() - 90 * 86_400_000
   const commitsLast90Days = commits?.filter(c => {
     const d = c.commit.author?.date

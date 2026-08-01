@@ -52,4 +52,14 @@ describe('createHttp', () => {
     expect(await http.postJson('https://x.test/batch', { a: 1 })).toEqual({ ok: true })
     expect(fetchImpl).toHaveBeenCalledTimes(2)
   })
+  it('jsonWithHeaders parses JSON, returns response headers, and retries via the same request path', async () => {
+    const fetchImpl = vi.fn()
+      .mockResolvedValueOnce(new Response('', { status: 500 }))
+      .mockResolvedValueOnce(new Response(JSON.stringify({ a: 1 }), { status: 200, headers: { 'x-test': 'yes' } }))
+    const http = createHttp({ fetchImpl: fetchImpl as unknown as typeof fetch, retries: 2 })
+    const { data, headers } = await http.jsonWithHeaders<{ a: number }>('https://x.test/')
+    expect(data).toEqual({ a: 1 })
+    expect(headers.get('x-test')).toBe('yes')
+    expect(fetchImpl).toHaveBeenCalledTimes(2) // proves it went through the retry path, not a duplicate impl
+  })
 })

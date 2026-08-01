@@ -36,6 +36,14 @@ function fullFake(): Http {
       for (const [prefix, body] of Object.entries(routes)) if (url.startsWith(prefix)) return body as T
       throw new Error(`HTTP 404 for ${url}`)
     },
+    // Real (not a stub): collectGithub paginates commits through this method,
+    // and this fixture's single page has no Link header → one page, as before.
+    async jsonWithHeaders<T>(url: string): Promise<{ data: T; headers: Headers }> {
+      for (const [prefix, body] of Object.entries(routes)) {
+        if (url.startsWith(prefix)) return { data: body as T, headers: new Headers() }
+      }
+      throw new Error(`HTTP 404 for ${url}`)
+    },
     async postJson<T>(url: string): Promise<T> {
       if (url.includes('osv.dev')) return { results: [{}] } as T
       throw new Error(`HTTP 404 for ${url}`)
