@@ -1,6 +1,7 @@
 import { encode } from 'gpt-tokenizer'
 import type { RepoFile } from '../collectors/github.js'
 import type { Finding, ToolInfo } from '../types.js'
+import { fromGoSource } from './lang/go.js'
 
 export interface SchemaResult {
   extracted: boolean
@@ -216,7 +217,11 @@ export function isNonServerPath(path: string): boolean {
 // substring through the matching `closeCh`, honoring nesting depth. Used to
 // pull a whole `{...}`/`(...)` literal out of source text without a real
 // parser. Bounded by `maxLen` so a malformed/huge file can't force a long scan.
-function captureBalanced(text: string, openIdx: number, openCh: string, closeCh: string, maxLen = 4000): string {
+// Exported for src/derive/lang/go.ts (V3): the Go idioms need the same
+// balanced-brace/paren capture (composite `mcp.Tool{...}` literals, nested
+// `NewTool(...)`/`WithDescription(...)` calls) rather than a second,
+// drifting copy of the scanner.
+export function captureBalanced(text: string, openIdx: number, openCh: string, closeCh: string, maxLen = 4000): string {
   if (text[openIdx] !== openCh) return ''
   let depth = 0
   const end = Math.min(text.length, openIdx + maxLen)
@@ -379,12 +384,18 @@ export function extractSchema(files: RepoFile[]): SchemaResult {
   const manifest = serverFiles.filter(f => /(^|\/)(mcp|server)\.json$/.test(f.path))
   const js = serverFiles.filter(f => /\.(ts|js|mjs)$/.test(f.path))
   const py = serverFiles.filter(f => f.path.endsWith('.py'))
+  // V3 (coverage-spec §3.2): Go is its own bucket in the ladder, tried after
+  // manifest/js/py so it never changes precedence for the already-graded
+  // JS/Python servers (those extensions are disjoint from .go, so in practice
+  // this only ever fires for repos where manifest/js/py found nothing).
+  const go = serverFiles.filter(f => f.path.endsWith('.go'))
 
   let tools: Array<ToolInfo & { evidence: string }> = []
   for (const level of [
     () => manifest.flatMap(f => fromManifest(f).map(t => ({ ...t, evidence: f.path }))),
     () => js.flatMap(f => fromJsSource(f).map(t => ({ ...t, evidence: f.path }))),
     () => py.flatMap(f => fromPySource(f).map(t => ({ ...t, evidence: f.path }))),
+    () => go.flatMap(f => fromGoSource(f).map(t => ({ ...t, evidence: f.path }))),
   ]) {
     tools = level()
     if (tools.length > 0) break
