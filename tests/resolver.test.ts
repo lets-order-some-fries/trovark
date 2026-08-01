@@ -52,4 +52,28 @@ describe('resolve()', () => {
   it('throws ResolveError with accepted forms listed when nothing matches', async () => {
     await expect(resolve('definitely-not-a-thing', httpOf({}))).rejects.toThrow(ResolveError)
   })
+  it('throws ResolveError naming both registries when a bare name exists on npm AND PyPI', async () => {
+    await expect(resolve('dual-pkg', httpOf({
+      'https://registry.npmjs.org/dual-pkg': { name: 'dual-pkg' },
+      'https://pypi.org/pypi/dual-pkg/json': { info: { name: 'dual-pkg' } },
+    }))).rejects.toThrow(/both npm and PyPI.*npm:dual-pkg.*pypi:dual-pkg/s)
+  })
+  it('npm: prefix forces npm and skips PyPI', async () => {
+    const id = await resolve('npm:dual-pkg', httpOf({
+      'https://registry.npmjs.org/dual-pkg': { name: 'dual-pkg' },
+      'https://pypi.org/pypi/dual-pkg/json': { info: { name: 'dual-pkg' } },
+    }))
+    expect(id.npmPackage).toBe('dual-pkg')
+    expect(id.pypiPackage).toBeUndefined()
+    expect(id.ref).toBe('npm:dual-pkg')
+  })
+  it('pypi: prefix forces PyPI and skips npm', async () => {
+    const id = await resolve('pypi:dual-pkg', httpOf({
+      'https://registry.npmjs.org/dual-pkg': { name: 'dual-pkg' },
+      'https://pypi.org/pypi/dual-pkg/json': { info: { name: 'dual-pkg' } },
+    }))
+    expect(id.pypiPackage).toBe('dual-pkg')
+    expect(id.npmPackage).toBeUndefined()
+    expect(id.ref).toBe('pypi:dual-pkg')
+  })
 })

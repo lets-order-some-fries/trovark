@@ -15,6 +15,8 @@ It never executes the server's code. Every finding links to its evidence.
     npx mcpscore <ref> --fail-under B     # CI gate: exit 1 below the threshold
     GITHUB_TOKEN=... npx mcpscore <ref>   # higher rate limits + responsiveness signals
 
+A bare package name that exists on both npm and PyPI is rejected as ambiguous — disambiguate with the `npm:<name>` or `pypi:<name>` prefix (e.g. `npx mcpscore pypi:mcp-server-fetch`).
+
 ## What the grade means
 
 | Dimension | Weight | Question it answers |

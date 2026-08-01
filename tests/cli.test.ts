@@ -67,4 +67,8 @@ describe('cli main', () => {
     expect(r.code).toBe(2)
     expect(r.err).toContain('Usage')
   })
+  it('report header shows the resolved identity', async () => {
+    const r = await run(['acme/foo'])
+    expect(r.out).toContain('acme/foo  →  github.com/acme/foo')
+  })
 })

@@ -49,7 +49,12 @@ export async function main(argv: string[], deps: CliDeps): Promise<number> {
   try {
     const identity = await resolve(ref, deps.http)
     const signals = await assemble(identity, deps.http, deps.now, { hasToken: Boolean(process.env.GITHUB_TOKEN) })
-    const card = score(ref, signals, deps.now.toISOString())
+    const parts: string[] = []
+    if (identity.npmPackage) parts.push(`npm:${identity.npmPackage}`)
+    if (identity.pypiPackage) parts.push(`pypi:${identity.pypiPackage}`)
+    if (identity.repo) parts.push(`github.com/${identity.repo.owner}/${identity.repo.name}`)
+    const displayRef = parts.length > 0 ? `${ref}  →  ${parts.join(' · ')}` : ref
+    const card = score(displayRef, signals, deps.now.toISOString())
     deps.log(json ? renderJson(card) : renderTerminal(card, { color: !noColor }))
     if (threshold !== undefined && card.overall < threshold) return 1
     return 0

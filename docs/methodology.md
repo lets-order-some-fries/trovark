@@ -40,3 +40,4 @@ D ≥ 40, F < 40 (+/- at the top/bottom 5 points of each band).
   not resolved lockfile versions.
 - Monorepos are scored at repository granularity.
 - Issue responsiveness is sampled (last 30 issues, first 10 with comments).
+- Bare package names found on both npm and PyPI are rejected as ambiguous rather than guessed — use the npm:/pypi: prefix.
