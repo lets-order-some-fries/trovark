@@ -8,10 +8,10 @@ export interface RepoSnapshot {
   stars: number; archived: boolean
   pushedAt: string
   latestReleaseAt?: string
-  commitsLast90Days: number
-  busFactor: number
+  commitsLast90Days?: number
+  busFactor?: number
   medianIssueResponseDays?: number
-  treePaths: string[]
+  treePaths?: string[]
   files: RepoFile[]
 }
 
@@ -36,18 +36,22 @@ export async function collectGithub(
   const meta = await http.json<GhRepo>(api)
 
   const since365 = new Date(now.getTime() - 365 * 86_400_000).toISOString()
-  const commits = await http.json<GhCommit[]>(`${api}/commits?since=${since365}&per_page=100`).catch(() => [])
+  // Fetch failure → undefined signals (absence ≠ zero); an infra hiccup must not read as a dead repo.
+  const commits = await http.json<GhCommit[]>(`${api}/commits?since=${since365}&per_page=100`).catch(() => undefined)
   const cutoff90 = now.getTime() - 90 * 86_400_000
-  const commitsLast90Days = commits.filter(c => {
+  const commitsLast90Days = commits?.filter(c => {
     const d = c.commit.author?.date
     return d !== undefined && new Date(d).getTime() >= cutoff90
   }).length
-  const byAuthor = new Map<string, number>()
-  for (const c of commits) {
-    const login = c.author?.login
-    if (login) byAuthor.set(login, (byAuthor.get(login) ?? 0) + 1)
+  let busFactor: number | undefined
+  if (commits) {
+    const byAuthor = new Map<string, number>()
+    for (const c of commits) {
+      const login = c.author?.login
+      if (login) byAuthor.set(login, (byAuthor.get(login) ?? 0) + 1)
+    }
+    busFactor = [...byAuthor.values()].filter(n => n >= 3).length
   }
-  const busFactor = [...byAuthor.values()].filter(n => n >= 3).length
 
   const latestReleaseAt = await http
     .json<{ published_at?: string }>(`${api}/releases/latest`)
@@ -79,9 +83,9 @@ export async function collectGithub(
   interface GhTree { tree: Array<{ path: string; type: string; size?: number }> }
   const tree = await http
     .json<GhTree>(`${api}/git/trees/${meta.default_branch}?recursive=1`)
-    .catch(() => ({ tree: [] as GhTree['tree'] }))
-  const blobs = tree.tree.filter(t => t.type === 'blob')
-  const treePaths = blobs.map(b => b.path)
+    .catch(() => undefined)
+  const blobs = tree?.tree.filter(t => t.type === 'blob') ?? []
+  const treePaths = tree ? blobs.map(b => b.path) : undefined
 
   const fetchable = (p: { path: string; size?: number }) => (p.size ?? 0) <= SIZE_CAP
   const wanted = [

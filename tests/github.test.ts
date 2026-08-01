@@ -68,4 +68,44 @@ describe('collectGithub', () => {
     const snap = await collectGithub({ ref: 'acme/foo', repo: { owner: 'acme', name: 'foo' } }, http, NOW)
     expect(snap.latestReleaseAt).toBeUndefined()
   })
+  it('commits fetch failure yields undefined activity signals, not zeros', async () => {
+    const http = fakeHttp()
+    const orig = http.json.bind(http)
+    http.json = async <T,>(url: string): Promise<T> => {
+      if (url.includes('/commits?since')) throw new Error('HTTP 500')
+      return orig<T>(url)
+    }
+    const snap = await collectGithub({ ref: 'acme/foo', repo: { owner: 'acme', name: 'foo' } }, http, NOW)
+    expect(snap.commitsLast90Days).toBeUndefined()
+    expect(snap.busFactor).toBeUndefined()
+  })
+  it('tree fetch failure yields undefined treePaths (distinct from empty repo)', async () => {
+    const http = fakeHttp()
+    const orig = http.json.bind(http)
+    http.json = async <T,>(url: string): Promise<T> => {
+      if (url.includes('/git/trees/')) throw new Error('HTTP 500')
+      return orig<T>(url)
+    }
+    const snap = await collectGithub({ ref: 'acme/foo', repo: { owner: 'acme', name: 'foo' } }, http, NOW)
+    expect(snap.treePaths).toBeUndefined()
+    expect(snap.files).toEqual([])
+  })
+  it('with token, computes median issue time-to-first-response and skips PRs', async () => {
+    const http = fakeHttp()
+    const orig = http.json.bind(http)
+    http.json = async <T,>(url: string): Promise<T> => {
+      if (url.includes('/issues?')) {
+        return [
+          { number: 1, comments: 1, created_at: iso(10) },
+          { number: 2, comments: 1, created_at: iso(20), pull_request: {} },
+          { number: 3, comments: 1, created_at: iso(30) },
+        ] as T
+      }
+      if (url.includes('/issues/1/comments')) return [{ created_at: iso(9) }] as T // 1 day
+      if (url.includes('/issues/3/comments')) return [{ created_at: iso(25) }] as T // 5 days
+      return orig<T>(url)
+    }
+    const snap = await collectGithub({ ref: 'acme/foo', repo: { owner: 'acme', name: 'foo' } }, http, NOW, { hasToken: true })
+    expect(snap.medianIssueResponseDays).toBe(5) // deltas [1,5] → index floor(2/2)=1
+  })
 })
