@@ -1,0 +1,86 @@
+import { describe, expect, it } from 'vitest'
+import { score } from '../src/scoring/score.js'
+import { DIMENSION_WEIGHTS, SIGNALS } from '../src/scoring/rubric.js'
+import type { Signals } from '../src/types.js'
+
+const empty = (): Signals => ({ findings: [], errors: [] })
+
+const healthy = (): Signals => ({
+  daysSinceLastCommit: 3, daysSinceLastRelease: 20, commitsLast90Days: 40,
+  busFactor: 6, medianIssueResponseDays: 1, stars: 5000, weeklyDownloads: 50000,
+  archived: false, specEra: 'modern', hasCI: true, hasTests: true, hasLockfile: true,
+  schemaExtracted: true, toolSurfaceRisk: 'none', secretsFound: 0, cveWorst: 'none',
+  schemaTokenEstimate: 1500, toolCount: 6, findings: [], errors: [],
+})
+
+describe('rubric shape', () => {
+  it('dimension weights sum to 1', () => {
+    expect(Object.values(DIMENSION_WEIGHTS).reduce((a, b) => a + b, 0)).toBeCloseTo(1)
+  })
+  it('every signal belongs to a known dimension and has positive weight', () => {
+    for (const s of SIGNALS) {
+      expect(DIMENSION_WEIGHTS[s.dimension]).toBeGreaterThan(0)
+      expect(s.weight).toBeGreaterThan(0)
+    }
+  })
+})
+
+describe('score()', () => {
+  it('perfect signals → A+ with high confidence everywhere', () => {
+    const card = score('x', healthy(), '2026-07-31T00:00:00Z')
+    expect(card.overall).toBe(100)
+    expect(card.grade).toBe('A+')
+    expect(card.rubricVersion).toBe('1.0.0')
+    for (const d of card.dimensions) expect(d.confidence).toBe('high')
+  })
+  it('missing signals lower confidence, never throw, never zero the score', () => {
+    const s = empty()
+    s.daysSinceLastCommit = 10 // one health signal only
+    const card = score('x', s, '2026-07-31T00:00:00Z')
+    const health = card.dimensions.find(d => d.id === 'health')!
+    expect(health.confidence).toBe('low')
+    expect(health.score).toBeGreaterThan(0) // scored from what exists
+  })
+  it('a dimension with zero signals is excluded from overall and noted', () => {
+    const s = empty()
+    s.daysSinceLastCommit = 10; s.commitsLast90Days = 30; s.busFactor = 5
+    s.archived = false; s.stars = 2000; s.daysSinceLastRelease = 10; s.medianIssueResponseDays = 1
+    const card = score('x', s, '2026-07-31T00:00:00Z')
+    const sec = card.dimensions.find(d => d.id === 'security')!
+    expect(sec.available).toBe(0)
+    expect(card.notes.join(' ')).toMatch(/security/)
+    expect(card.overall).toBe(100) // health-only, perfect health signals
+  })
+  it('archived repo tanks health', () => {
+    const s = healthy(); s.archived = true
+    const card = score('x', s, '2026-07-31T00:00:00Z')
+    const health = card.dimensions.find(d => d.id === 'health')!
+    expect(health.score).toBeLessThan(90)
+  })
+  it('critical CVE tanks security', () => {
+    const s = healthy(); s.cveWorst = 'critical'
+    const card = score('x', s, '2026-07-31T00:00:00Z')
+    expect(card.dimensions.find(d => d.id === 'security')!.score).toBeLessThan(80)
+  })
+  it('findings are routed to their dimension', () => {
+    const s = healthy()
+    s.findings.push({ id: 'security/test', dimension: 'security', severity: 'high', message: 'm', evidence: 'e' })
+    const card = score('x', s, '2026-07-31T00:00:00Z')
+    expect(card.dimensions.find(d => d.id === 'security')!.findings).toHaveLength(1)
+    expect(card.dimensions.find(d => d.id === 'health')!.findings).toHaveLength(0)
+  })
+  it('is deterministic', () => {
+    expect(score('x', healthy(), 'T')).toEqual(score('x', healthy(), 'T'))
+  })
+  it('flags insufficient data when fewer than 4 signals are available', () => {
+    const s = empty()
+    s.daysSinceLastCommit = 10 // one signal only
+    const card = score('x', s, '2026-07-31T00:00:00Z')
+    expect(card.insufficientData).toBe(true)
+    expect(card.notes.join(' ')).toMatch(/not enough to score/i)
+  })
+  it('healthy fixture has plenty of signals → insufficientData is false', () => {
+    const card = score('x', healthy(), '2026-07-31T00:00:00Z')
+    expect(card.insufficientData).toBe(false)
+  })
+})

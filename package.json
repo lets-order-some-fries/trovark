@@ -1,0 +1,41 @@
+{
+  "name": "mcpscore",
+  "version": "0.1.0",
+  "scripts": {
+    "test": "vitest run",
+    "build": "tsc",
+    "dev": "tsx src/cli.ts",
+    "prepublishOnly": "npm run build && npm test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lets-order-some-fries/mcpscore.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/lets-order-some-fries/mcpscore/issues"
+  },
+  "homepage": "https://github.com/lets-order-some-fries/mcpscore#readme",
+  "description": "Trust score for MCP servers, from static public signals",
+  "type": "module",
+  "bin": {
+    "mcpscore": "dist/cli.js"
+  },
+  "files": [
+    "dist"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "gpt-tokenizer": "^3.4.0"
+  },
+  "devDependencies": {
+    "@types/node": "^26.1.2",
+    "tsx": "^4.23.1",
+    "typescript": "^7.0.2",
+    "vitest": "^4.1.10"
+  }
+}

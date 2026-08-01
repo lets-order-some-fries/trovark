@@ -1,0 +1,15 @@
+github/github-mcp-server
+microsoft/playwright-mcp
+cloudflare/mcp-server-cloudflare
+awslabs/mcp
+supabase-community/supabase-mcp
+stripe/agent-toolkit
+upstash/context7
+exa-labs/exa-mcp-server
+makenotion/notion-mcp-server
+browserbase/mcp-server-browserbase
+tavily-ai/tavily-mcp
+modelcontextprotocol/servers
+@modelcontextprotocol/server-filesystem
+@modelcontextprotocol/server-github
+mcp-server-fetch
