@@ -19,10 +19,18 @@ export function specEra(files: RepoFile[]): 'modern' | 'legacy' | undefined {
       } catch { /* malformed */ }
     }
     if (f.path.endsWith('pyproject.toml') || f.path.endsWith('requirements.txt')) {
+      // Strip triple-quoted TOML string values (e.g. a multi-line
+      // `description = """..."""`) before the line-by-line scan below: the
+      // per-line metadata skip only recognizes the opening `key = """` line,
+      // so a continuation line mentioning "fastmcp" inside the string body
+      // would otherwise survive and false-positive as a dependency.
+      const withoutTripleQuoted = f.content
+        .replace(/"""[\s\S]*?"""/g, '""')
+        .replace(/'''[\s\S]*?'''/g, "''")
       // Anchor to dependency lines, not any mention: skip comments and TOML
       // metadata assignments (keywords/description/etc.) so a package merely
       // *talking about* fastmcp in its own description doesn't read as a dep.
-      const depLines = f.content
+      const depLines = withoutTripleQuoted
         .split('\n')
         .filter(line => !/^\s*#/.test(line) && !/^\s*(keywords|description|name|authors|readme|homepage|documentation|repository|classifiers)\s*=/i.test(line))
         .join('\n')

@@ -35,7 +35,11 @@ const SOURCE_EXT = /\.(ts|js|mjs|py)$/
 // were previously starved by short unrelated files (util/log.ts) under pure
 // shortest-path sort, silently undercounting tools. No extra fetches — path
 // hint only; FILE_CAP stays unchanged (minimal version of audit item 11).
-const TOOL_SIGNAL_HINT = /(^|\/)(tools?|server|index|main)(\.|\/|$)/i
+// Match tools?/server/index/main as a word-part bounded by /, _, ., -, or
+// start/end — not just an exact path segment — so common single-file
+// entrypoints like weather_server.py / mcp_server.ts / server_main.py still
+// get the priority boost (P3 review).
+const TOOL_SIGNAL_HINT = /(^|[\/_.-])(tools?|server|index|main)([\/_.-]|$)/i
 const toolSignalScore = (path: string): number => (TOOL_SIGNAL_HINT.test(path) ? 1 : 0)
 
 interface GhCommit { commit: { author?: { date?: string } }; author?: { login?: string } | null }

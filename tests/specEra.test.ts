@@ -67,4 +67,16 @@ describe('specEra', () => {
   it('undefined for io.modelcontextprotocol only appearing in a commented-out gradle line', () => {
     expect(specEra([{ path: 'build.gradle', content: '// implementation("io.modelcontextprotocol:mcp:0.1.0")' }])).toBeUndefined()
   })
+  it('undefined for fastmcp mentioned only inside a multi-line TOML triple-quoted description', () => {
+    expect(specEra([{
+      path: 'pyproject.toml',
+      content: 'description = """\nA drop-in alternative to fastmcp\n"""\ndependencies = ["httpx"]',
+    }])).toBeUndefined()
+  })
+  it('still modern for a real fastmcp dependency alongside an unrelated multi-line TOML description', () => {
+    expect(specEra([{
+      path: 'pyproject.toml',
+      content: 'description = """\nSome multi-line blurb\nabout this package\n"""\ndependencies = ["fastmcp>=2.0"]',
+    }])).toBe('modern')
+  })
 })

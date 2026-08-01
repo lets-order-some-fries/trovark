@@ -187,6 +187,62 @@ describe('collectGithub', () => {
     const paths = snap.files.map(f => f.path)
     expect(paths.filter(p => p.startsWith('src/tools/'))).toHaveLength(3) // all 3 tool-signal files survive the FILE_CAP=12 budget
   })
+  it('ranks single-file entrypoints like weather_server.py / mcp_server.ts by the tool-signal boost, not just exact path segments', async () => {
+    const http = fakeHttp()
+    const origJson = http.json.bind(http)
+    // Tight budget: package.json (manifest, 1 slot) + FILE_CAP-1=11 source slots.
+    // Fillers are shorter than the two entrypoint-style files below, so under the
+    // old exact-segment TOOL_SIGNAL_HINT (score 0 for both) a pure shortest-path
+    // sort fills all 11 slots with fillers and drops both entrypoint files.
+    const fillers = Array.from({ length: 11 }, (_, i) => ({ path: `src/u${i}.ts`, type: 'blob', size: 200 }))
+    const entrypoints = [
+      { path: 'weather_server.py', type: 'blob', size: 200 },
+      { path: 'mcp_server.ts', type: 'blob', size: 200 },
+    ]
+    http.json = async <T,>(url: string): Promise<T> => {
+      if (url.includes('/git/trees/')) {
+        return { tree: [{ path: 'package.json', type: 'blob', size: 500 }, ...fillers, ...entrypoints] } as T
+      }
+      return origJson<T>(url)
+    }
+    http.text = async (url: string): Promise<string> => {
+      if (url.includes('package.json')) return '{"name":"foo"}'
+      return 'export {}'
+    }
+    const snap = await collectGithub({ ref: 'acme/foo', repo: { owner: 'acme', name: 'foo' } }, http, NOW)
+    const paths = snap.files.map(f => f.path)
+    expect(paths).toContain('weather_server.py')
+    expect(paths).toContain('mcp_server.ts')
+  })
+  it('does not give an unrelated file like utils.py the tool-signal priority boost', async () => {
+    const http = fakeHttp()
+    const origJson = http.json.bind(http)
+    // Same tight-budget setup, but the two extra candidates are an unrelated
+    // "src/utils.py" (no tool-signal boost) and a real entrypoint "mcp_server.ts"
+    // (boosted). Only the entrypoint should be rescued from the squeeze.
+    const fillers = Array.from({ length: 11 }, (_, i) => ({ path: `src/u${i}.ts`, type: 'blob', size: 200 }))
+    http.json = async <T,>(url: string): Promise<T> => {
+      if (url.includes('/git/trees/')) {
+        return {
+          tree: [
+            { path: 'package.json', type: 'blob', size: 500 },
+            ...fillers,
+            { path: 'src/utils.py', type: 'blob', size: 200 },
+            { path: 'mcp_server.ts', type: 'blob', size: 200 },
+          ],
+        } as T
+      }
+      return origJson<T>(url)
+    }
+    http.text = async (url: string): Promise<string> => {
+      if (url.includes('package.json')) return '{"name":"foo"}'
+      return 'export {}'
+    }
+    const snap = await collectGithub({ ref: 'acme/foo', repo: { owner: 'acme', name: 'foo' } }, http, NOW)
+    const paths = snap.files.map(f => f.path)
+    expect(paths).toContain('mcp_server.ts')
+    expect(paths).not.toContain('src/utils.py')
+  })
   it('paginates commits via Link: rel="next" and accumulates bus factor + 90d activity across the full window', async () => {
     const http = fakeHttp()
     // page1: author 'a' has 2 recent commits (within 90d). page2 (reached only via
@@ -211,5 +267,46 @@ describe('collectGithub', () => {
     const snap = await collectGithub({ ref: 'acme/foo', repo: { owner: 'acme', name: 'foo' } }, http, NOW)
     expect(snap.busFactor).toBe(1)          // 'a': 2 (page1) + 1 (page2) = 3 commits → crosses the >=3 threshold
     expect(snap.commitsLast90Days).toBe(2)  // only page1's two commits are within 90 days
+  })
+  it('caps commit pagination at COMMIT_PAGE_CAP even when Link: rel="next" is present on every page (huge-repo safety net)', async () => {
+    const http = fakeHttp()
+    let commitPageFetches = 0
+    http.jsonWithHeaders = async <T,>(url: string): Promise<{ data: T; headers: Headers }> => {
+      if (url.includes('/commits?since')) {
+        commitPageFetches++
+        // Every page's commit is recent (well within the 365d cutoff), so the
+        // cutoff early-stop never fires — only the page cap can end this loop.
+        const page = [{ sha: `s${commitPageFetches}`, commit: { author: { date: iso(1) } }, author: { login: 'a' } }]
+        const next = `https://api.github.com/repos/acme/foo/commits?since=X&per_page=100&page=${commitPageFetches + 1}`
+        return { data: page as T, headers: new Headers({ link: `<${next}>; rel="next"` }) }
+      }
+      throw new Error(`HTTP 404 for ${url}`)
+    }
+    const snap = await collectGithub({ ref: 'acme/foo', repo: { owner: 'acme', name: 'foo' } }, http, NOW)
+    expect(commitPageFetches).toBeLessThanOrEqual(10) // COMMIT_PAGE_CAP
+    expect(commitPageFetches).toBe(10)                // infinite next → loop stops only via the cap, not the cutoff
+    expect(snap.busFactor).toBeDefined()              // proves the loop actually terminated and returned a snapshot
+  })
+  it('stops pagination after page 1 once its oldest commit is already past the 365d cutoff, even with Link: rel="next" present', async () => {
+    const http = fakeHttp()
+    let commitPageFetches = 0
+    const nextUrl = 'https://api.github.com/repos/acme/foo/commits?since=X&per_page=100&page=2'
+    http.jsonWithHeaders = async <T,>(url: string): Promise<{ data: T; headers: Headers }> => {
+      if (url.includes('/commits?since')) {
+        commitPageFetches++
+        // Oldest (last) commit on page 1 is 400 days old — already past the
+        // 365d cutoff — even though a next Link is present, page 2 must never
+        // be fetched.
+        const page1 = [
+          { sha: 'p1a', commit: { author: { date: iso(5) } }, author: { login: 'a' } },
+          { sha: 'p1b', commit: { author: { date: iso(400) } }, author: { login: 'a' } },
+        ]
+        return { data: page1 as T, headers: new Headers({ link: `<${nextUrl}>; rel="next"` }) }
+      }
+      throw new Error(`HTTP 404 for ${url}`)
+    }
+    const snap = await collectGithub({ ref: 'acme/foo', repo: { owner: 'acme', name: 'foo' } }, http, NOW)
+    expect(commitPageFetches).toBe(1)
+    expect(snap.commitsLast90Days).toBe(1) // only the 5d-old commit is within the 90d window; 400d is not
   })
 })
