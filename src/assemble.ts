@@ -97,8 +97,13 @@ export async function assemble(
     deps.push(...floorDeps, ...lockDeps)
   }
 
+  // A large monorepo lockfile can resolve into many hundreds/thousands of
+  // transitive deps; cap the OSV batch so one repo can't blow up a single
+  // query (or the downstream findings list) unboundedly.
+  const cappedDeps = deps.slice(0, 400)
+
   try {
-    const osv = await collectOsv(deps, http)
+    const osv = await collectOsv(cappedDeps, http)
     s.cveWorst = osv.cveWorst
     s.findings.push(...osv.findings)
   } catch (err) {

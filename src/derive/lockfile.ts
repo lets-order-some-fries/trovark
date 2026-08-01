@@ -29,6 +29,12 @@ function parsePackageLockJson(content: string): Dep[] {
   const deps: Dep[] = []
   for (const [key, value] of Object.entries(packages as Record<string, unknown>)) {
     if (key === '') continue // root project entry, not a dependency
+    // npm workspaces key each member's own root by its repo-relative path
+    // (e.g. "packages/api", "apps/x") with no "node_modules/" segment — that's
+    // the workspace's own source, not an installed dependency. Sending its
+    // path as a "package name" to OSV is bogus; skip anything that isn't
+    // actually under node_modules/.
+    if (!key.includes('node_modules/')) continue
     const version = (value as { version?: unknown } | null)?.version
     if (typeof version !== 'string' || version === '') continue
     const segments = key.split('node_modules/')

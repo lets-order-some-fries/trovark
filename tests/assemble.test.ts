@@ -142,4 +142,47 @@ describe('assemble', () => {
     )
     expect(queriedVersions).toEqual(['3.22.5']) // lockfile-resolved, not the '3.22.0' manifest floor
   })
+
+  it('coexists per-ecosystem: npm lockfile-resolved dep AND PyPI requires_dist floor dep both reach the OSV query', async () => {
+    const http = fullFake()
+    const origJson = http.json.bind(http)
+    http.json = async <T,>(url: string): Promise<T> => {
+      if (url.startsWith('https://pypi.org/pypi/')) {
+        return { info: { requires_dist: ['requests>=2.31.0'] } } as T
+      }
+      return origJson<T>(url)
+    }
+    const origText = http.text.bind(http)
+    http.text = async (url: string): Promise<string> => {
+      if (url.endsWith('package-lock.json')) {
+        return JSON.stringify({
+          packages: {
+            '': { name: 'foo', version: '1.0.0' },
+            'node_modules/zod': { version: '3.22.5' }, // npm: lockfile-resolved
+          },
+        })
+      }
+      return origText(url)
+    }
+    let queried: Array<{ name: string; ecosystem: string; version: string }> = []
+    http.postJson = async <T,>(url: string, body: unknown): Promise<T> => {
+      if (url.includes('osv.dev')) {
+        queried = (body as { queries: Array<{ package: { name: string; ecosystem: string }; version: string }> })
+          .queries.map(q => ({ name: q.package.name, ecosystem: q.package.ecosystem, version: q.version }))
+        return { results: queried.map(() => ({})) } as T
+      }
+      throw new Error(`HTTP 404 for ${url}`)
+    }
+    await assemble(
+      {
+        ref: 'foo-mcp', repo: { owner: 'acme', name: 'foo' },
+        npmPackage: 'foo-mcp', pypiPackage: 'foo-mcp',
+      },
+      http, NOW,
+    )
+    // npm: resolved from the lockfile (not the manifest floor)
+    expect(queried).toContainEqual({ name: 'zod', ecosystem: 'npm', version: '3.22.5' })
+    // PyPI: no PyPI lockfile was fetched, so the requires_dist floor survives untouched
+    expect(queried).toContainEqual({ name: 'requests', ecosystem: 'PyPI', version: '2.31.0' })
+  })
 })

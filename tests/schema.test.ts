@@ -159,6 +159,24 @@ server.setRequestHandler(ListToolsRequestSchema, async () => ({
     expect(r.extracted).toBe(false)
     expect(r.toolSurfaceRisk).toBe('medium')
   })
+
+  it('does NOT floor toolSurfaceRisk when "spawn" only appears in a lockfile (cross-spawn transitive dep), not source', () => {
+    const r = extractSchema([{
+      path: 'package-lock.json',
+      content: '{"packages":{"node_modules/cross-spawn":{"version":"7.0.3"}}}',
+    }])
+    expect(r.extracted).toBe(false)
+    expect(r.toolSurfaceRisk).toBeUndefined()
+  })
+
+  it('still floors toolSurfaceRisk at medium for a real source file importing spawn from child_process', () => {
+    const r = extractSchema([{
+      path: 'src/run.ts',
+      content: 'import { spawn } from "child_process"',
+    }])
+    expect(r.extracted).toBe(false)
+    expect(r.toolSurfaceRisk).toBe('medium')
+  })
 })
 
 describe('classify (P4): token-set matching for the NAME, \\b-anchored words for description', () => {

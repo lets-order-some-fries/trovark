@@ -85,4 +85,19 @@ describe('parseLockfile', () => {
   it('returns [] for an empty file list', () => {
     expect(parseLockfile([])).toEqual([])
   })
+
+  it('skips npm workspace-root keys (no node_modules/ segment) but keeps real installed deps', () => {
+    const workspaceLock = JSON.stringify({
+      packages: {
+        '': { name: 'monorepo', version: '1.0.0' }, // root — skipped
+        'packages/api': { name: '@acme/api', version: '2.0.0' }, // workspace member root — must be skipped
+        'node_modules/real-dep': { version: '1.2.3' }, // actual installed dep — must be kept
+      },
+    })
+    const deps = parseLockfile([{ path: 'package-lock.json', content: workspaceLock }])
+    expect(deps.find(d => d.name === 'packages/api')).toBeUndefined()
+    expect(deps.find(d => d.name === '@acme/api')).toBeUndefined()
+    expect(deps).toContainEqual({ name: 'real-dep', version: '1.2.3', ecosystem: 'npm' })
+    expect(deps).toHaveLength(1)
+  })
 })

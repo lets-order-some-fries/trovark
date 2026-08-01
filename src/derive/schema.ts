@@ -305,8 +305,15 @@ function fromPySource(f: RepoFile): ToolInfo[] {
 // alone. Any fetched file importing a process-execution API floors the risk
 // at medium — a defensible conservative floor, not a confident tier.
 const SHELL_IMPORT_RE = /\bchild_process\b|\bspawn\b|\bexecSync\b|\bsubprocess\b|os\.system\(/
+// Fix (P7 review): P7 added lockfiles (package-lock.json/uv.lock/poetry.lock)
+// to the fetched-file set. Those are DATA, not source — a manifest/lockfile
+// merely recording the ubiquitous transitive npm dep `cross-spawn` (its name
+// alone contains "spawn") is not evidence the repo imports a shell-exec API.
+// Restrict the floor scan to files that are actual source code so a
+// committed lockfile/package.json/*.toml can never trip it.
+const SRC_EXT = /\.(ts|tsx|js|jsx|mjs|cjs|py|go|rs|java|kt|kts|rb|php|cs)$/i
 function findShellImportFile(files: RepoFile[]): RepoFile | undefined {
-  return files.find(f => SHELL_IMPORT_RE.test(f.content))
+  return files.find(f => SRC_EXT.test(f.path) && SHELL_IMPORT_RE.test(f.content))
 }
 
 export function extractSchema(files: RepoFile[]): SchemaResult {
