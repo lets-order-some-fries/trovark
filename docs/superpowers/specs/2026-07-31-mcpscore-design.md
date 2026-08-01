@@ -1,3 +1,4 @@
+> **RENAMED 2026-08-01:** The product is now **Trovark** (`npx trovark`) — repo `lets-order-some-fries/trovark`. "mcpscore" below is the original working name, kept for historical accuracy.
 # mcpscore — Design
 
 **Date:** 2026-07-31 · **Status:** Approved (design); pre-implementation

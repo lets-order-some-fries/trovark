@@ -1,6 +1,6 @@
 # Methodology (rubric v1.0.0)
 
-mcpscore computes a 0–100 Trust Score from four dimensions: Health 35%,
+trovark computes a 0–100 Trust Score from four dimensions: Health 35%,
 Reliability 25%, Security 25%, Cost 15%. Grade bands: A ≥ 85, B ≥ 70, C ≥ 55,
 D ≥ 40, F < 40 (+/- at the top/bottom 5 points of each band).
 

@@ -22,7 +22,7 @@ export function createHttp(opts: HttpOptions = {}): Http {
   const { githubToken, retries = 2, timeoutMs = 10_000, fetchImpl = fetch } = opts
 
   async function request(url: string, init: RequestInitExtra = {}): Promise<Response> {
-    const headers: Record<string, string> = { 'user-agent': 'mcpscore', ...init.extraHeaders }
+    const headers: Record<string, string> = { 'user-agent': 'trovark', ...init.extraHeaders }
     if (githubToken && new URL(url).hostname === 'api.github.com') headers.authorization = `Bearer ${githubToken}`
     let lastErr: unknown
     for (let attempt = 0; attempt <= retries; attempt++) {

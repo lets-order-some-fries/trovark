@@ -12,7 +12,7 @@ function bar(score: number): string {
 export function renderTerminal(card: Scorecard, opts: { color?: boolean } = {}): string {
   const c = opts.color ?? true
   const lines: string[] = []
-  lines.push(`mcpscore  ·  ${card.ref}`)
+  lines.push(`trovark  ·  ${card.ref}`)
   if (card.resolved) {
     const parts: string[] = []
     if (card.resolved.npmPackage) parts.push(`npm:${card.resolved.npmPackage}`)

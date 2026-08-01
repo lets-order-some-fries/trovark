@@ -7,7 +7,7 @@ import { renderTerminal } from './report/terminal.js'
 import { renderJson } from './report/json.js'
 
 const GRADE_FLOOR: Record<string, number> = { A: 85, B: 70, C: 55, D: 40 }
-const USAGE = `Usage: mcpscore <ref> [--json] [--fail-under <grade|number>] [--no-color]
+const USAGE = `Usage: trovark <ref> [--json] [--fail-under <grade|number>] [--no-color]
 
 <ref>: GitHub URL, owner/repo, npm package, or PyPI package name.
 Set GITHUB_TOKEN for higher rate limits and issue-responsiveness signals.
@@ -62,7 +62,7 @@ export async function main(argv: string[], deps: CliDeps): Promise<number> {
     const card = score(ref, signals, deps.now.toISOString(), Object.keys(resolved).length > 0 ? resolved : undefined)
     deps.log(json ? renderJson(card) : renderTerminal(card, { color: !noColor }))
     if (card.insufficientData) {
-      deps.err('mcpscore: insufficient data to score this ref')
+      deps.err('trovark: insufficient data to score this ref')
       for (const e of signals.errors) deps.err(`  - ${e}`)
       return 2
     }
@@ -70,7 +70,7 @@ export async function main(argv: string[], deps: CliDeps): Promise<number> {
     return 0
   } catch (err) {
     if (err instanceof ResolveError) { deps.err(err.message); return 2 }
-    deps.err(`mcpscore failed: ${(err as Error).message}`)
+    deps.err(`trovark failed: ${(err as Error).message}`)
     return 2
   }
 }

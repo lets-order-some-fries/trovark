@@ -1,5 +1,5 @@
 {
-  "name": "mcpscore",
+  "name": "trovark",
   "version": "0.1.0",
   "scripts": {
     "test": "vitest run",
@@ -9,19 +9,19 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/lets-order-some-fries/mcpscore.git"
+    "url": "git+https://github.com/lets-order-some-fries/trovark.git"
   },
   "keywords": [],
   "author": "",
   "license": "Apache-2.0",
   "bugs": {
-    "url": "https://github.com/lets-order-some-fries/mcpscore/issues"
+    "url": "https://github.com/lets-order-some-fries/trovark/issues"
   },
-  "homepage": "https://github.com/lets-order-some-fries/mcpscore#readme",
+  "homepage": "https://github.com/lets-order-some-fries/trovark#readme",
   "description": "Trust score for MCP servers, from static public signals",
   "type": "module",
   "bin": {
-    "mcpscore": "dist/cli.js"
+    "trovark": "dist/cli.js"
   },
   "files": [
     "dist"
