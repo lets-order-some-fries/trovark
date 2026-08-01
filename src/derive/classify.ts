@@ -24,6 +24,16 @@ export interface ClassifyContext {
   description?: string
   topics?: string[]
   files: RepoFile[]
+  // V2: cross-language MCP SDK detection (src/derive/specEra.ts — matches the
+  // MCP SDK dependency in package.json/pyproject.toml/requirements.txt/go.mod/
+  // Cargo.toml/gradle/pom/.csproj), passed in by assemble.ts. JS/TS repos are
+  // accidentally protected from signal 3 below because @modelcontextprotocol/sdk
+  // in package.json also matches MCP_IMPORT_RE — but Python's `mcp>=1.0` /
+  // `fastmcp>=2.0` in pyproject.toml, or Go/Rust/JVM/.NET manifest deps, do NOT
+  // match that import regex. Without this, a non-JS server whose import-bearing
+  // source file simply wasn't sampled gets falsely tagged "not a server". This
+  // gives every language the same protection JS gets by accident.
+  mcpSdkDetected?: boolean
 }
 
 export interface NotServerResult {
@@ -100,13 +110,15 @@ export function classifyLibrary(ctx: ClassifyContext): NotServerResult | null {
     }
   }
 
-  // 3. No-MCP-anywhere: no fetched file imports an MCP SDK and no
-  // mcp.json/server.json manifest exists — OR the repo has Pipedream's
-  // component shape (a positive, reinforcing not-server signal on its own).
+  // 3. No-MCP-anywhere: no fetched file imports an MCP SDK, no cross-language
+  // MCP SDK dependency was detected in a manifest (mcpSdkDetected — see
+  // ClassifyContext), and no mcp.json/server.json manifest exists — OR the
+  // repo has Pipedream's component shape (a reinforcing not-server signal,
+  // but still scoped to `!importsMcp`: a positive import hit always wins).
   const importsMcp = ctx.files.some(f => MCP_IMPORT_RE.test(f.content))
   const hasManifest = ctx.files.some(f => ROOT_MANIFEST_RE.test(f.path))
   const isPipedreamComponent = ctx.files.some(f => PIPEDREAM_COMPONENT_RE.test(f.content))
-  if ((!importsMcp && !hasManifest) || isPipedreamComponent) {
+  if (!importsMcp && !ctx.mcpSdkDetected && (!hasManifest || isPipedreamComponent)) {
     return {
       notServer: true, reason: 'not-server',
       note: 'No MCP SDK import and no tool manifest — not an MCP server.',

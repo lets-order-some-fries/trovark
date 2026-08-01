@@ -39,7 +39,7 @@ export interface IndexStats {
 
 export function summarize(entries: IndexEntry[]): IndexStats {
   const scoredOk = entries.filter(e => e.ok)
-  const graded = scoredOk.filter(e => !e.insufficientData && typeof e.overall === 'number')
+  const graded = scoredOk.filter(e => !e.insufficientData && !e.notServer && typeof e.overall === 'number')
   const gradeDist: Record<string, number> = {}
   for (const g of graded) {
     const letter = (g.grade ?? '').replace(/[+-]$/, '')

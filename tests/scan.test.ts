@@ -24,14 +24,18 @@ describe('summarize', () => {
     expect(s.shellExecTools).toBe(0)
     expect(s.notServer).toBe(0)
   })
-  it('counts notServer separately from insufficientData (V2)', () => {
+  it('counts notServer separately from insufficientData (V2), and excludes it from gradeDist/avgOverall even when scored', () => {
     const entries: IndexEntry[] = [
-      e({ ref: 'a/lib', notServer: true, notServerReason: 'sdk' }),
+      // A library/SDK entry CAN carry a real score (schema extraction still ran) —
+      // it must still be excluded from site-stats tiles, not just from the count.
+      e({ ref: 'a/lib', notServer: true, notServerReason: 'sdk', overall: 78, grade: 'B+' }),
       e({ ref: 'a/withheld', insufficientData: true }),
     ]
     const s = summarize(entries)
     expect(s.notServer).toBe(1)
     expect(s.insufficient).toBe(1)
+    expect(s.gradeDist).toEqual({})   // the notServer entry's B+ must not appear here
+    expect(s.avgOverall).toBe(0)      // ...nor pull avgOverall away from 0 (no graded entries)
   })
   it('counts staleOver180 from daysSinceLastCommit, not health score', () => {
     const entries: IndexEntry[] = [

@@ -98,6 +98,34 @@ describe('classifyLibrary — signal 3: no MCP SDK import anywhere + no manifest
     })
     expect(r?.reason).toBe('not-server')
   })
+  it('a Python-shaped repo — no MCP import string sampled, but mcpSdkDetected:true (pyproject "mcp>=1.0") and no manifest — must NOT be not-server', () => {
+    const r = classifyLibrary({
+      name: 'some-python-server',
+      description: 'Does something useful',
+      files: [{ path: 'src/server.py', content: 'def add(a, b):\n    return a + b\n' }],
+      mcpSdkDetected: true,
+    })
+    expect(r).toBeNull()
+  })
+  it('the same shape with mcpSdkDetected:false still returns not-server (baseline unchanged)', () => {
+    const r = classifyLibrary({
+      name: 'some-python-server',
+      description: 'Does something useful',
+      files: [{ path: 'src/server.py', content: 'def add(a, b):\n    return a + b\n' }],
+      mcpSdkDetected: false,
+    })
+    expect(r).toEqual({ notServer: true, reason: 'not-server', note: expect.any(String) })
+  })
+  it('Fix 3: importsMcp:true + a Pipedream component shape present → NOT not-server (positive import always wins)', () => {
+    const r = classifyLibrary({
+      name: 'pipedream-connect-with-mcp',
+      files: [{
+        path: 'components/foo/foo.mjs',
+        content: `import { Server } from '@modelcontextprotocol/sdk'\nexport default {\n  key: "foo-action",\n  name: "Foo action",\n  type: "action",\n  async run() {},\n}`,
+      }],
+    })
+    expect(r).toBeNull()
+  })
 })
 
 describe('classifyLibrary — signal 4: remote-proxy', () => {

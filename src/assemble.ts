@@ -53,6 +53,11 @@ export async function assemble(
         if (schema.tools.length === 0) {
           const classification = classifyLibrary({
             name: snap.name, description: snap.description, topics: snap.topics, files: snap.files,
+            // Cross-language MCP SDK detection (already computed above for
+            // s.specEra) protects non-JS servers whose import-bearing file
+            // wasn't sampled from a false 'not a server' verdict — see
+            // ClassifyContext.mcpSdkDetected in classify.ts.
+            mcpSdkDetected: s.specEra !== undefined,
           })
           if (classification) {
             s.notServer = true
