@@ -84,7 +84,10 @@ export async function collectGithub(
       }
       if (deltas.length > 0) {
         deltas.sort((a, b) => a - b)
-        medianIssueResponseDays = deltas[Math.floor(deltas.length / 2)]
+        const n = deltas.length
+        medianIssueResponseDays = n % 2
+          ? deltas[(n - 1) / 2]
+          : (deltas[n / 2 - 1] + deltas[n / 2]) / 2
       }
     } catch { /* leave undefined */ }
   }

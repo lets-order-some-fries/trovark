@@ -17,6 +17,7 @@ export interface IndexEntry {
   repoUrl?: string
   dims?: Record<'health' | 'reliability' | 'security' | 'cost', { score: number; confidence: string }>
   topFindings?: Array<{ id: string; severity: string }>
+  daysSinceLastCommit?: number
 }
 
 export interface IndexStats {
@@ -45,14 +46,14 @@ export function summarize(entries: IndexEntry[]): IndexStats {
     insufficient: scoredOk.filter(e => e.insufficientData).length,
     gradeDist,
     avgOverall: graded.length === 0 ? 0 : Math.round(graded.reduce((a, e) => a + (e.overall ?? 0), 0) / graded.length),
-    staleOver180: graded.filter(e => (e.dims?.health.score ?? 100) < 40).length,
+    staleOver180: scoredOk.filter(e => (e.daysSinceLastCommit ?? 0) > 180).length,
     secretsFindings: scoredOk.filter(e => has(e, 'security/committed-secret')).length,
     deprecated: scoredOk.filter(e => has(e, 'health/deprecated-package')).length,
     shellExecTools: scoredOk.filter(e => has(e, 'security/shell-exec-tool')).length,
   }
 }
 
-function toEntry(ref: string, card: Scorecard): IndexEntry {
+function toEntry(ref: string, card: Scorecard, daysSinceLastCommit?: number): IndexEntry {
   const dims = Object.fromEntries(card.dimensions.map(d => [d.id, { score: d.score, confidence: d.confidence }])) as IndexEntry['dims']
   const findings = card.dimensions.flatMap(d => d.findings)
     .sort((a, b) => ['high', 'medium', 'low', 'info'].indexOf(a.severity) - ['high', 'medium', 'low', 'info'].indexOf(b.severity))
@@ -62,6 +63,7 @@ function toEntry(ref: string, card: Scorecard): IndexEntry {
     insufficientData: card.insufficientData || undefined,
     repoUrl: card.resolved?.repo ? `https://github.com/${card.resolved.repo.owner}/${card.resolved.repo.name}` : undefined,
     dims, topFindings: findings.length > 0 ? findings : undefined,
+    daysSinceLastCommit,
   }
 }
 
@@ -104,7 +106,7 @@ async function main(): Promise<void> {
         ...(identity.pypiPackage ? { pypiPackage: identity.pypiPackage } : {}),
         ...(identity.repo ? { repo: identity.repo } : {}),
       })
-      return toEntry(ref, card)
+      return toEntry(ref, card, signals.daysSinceLastCommit)
     } catch (err) {
       return { ref, ok: false, error: (err as Error).message }
     } finally {

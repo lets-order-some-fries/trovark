@@ -107,7 +107,7 @@ describe('collectGithub', () => {
       return orig<T>(url)
     }
     const snap = await collectGithub({ ref: 'acme/foo', repo: { owner: 'acme', name: 'foo' } }, http, NOW, { hasToken: true })
-    expect(snap.medianIssueResponseDays).toBe(5) // deltas [1,5] → index floor(2/2)=1
+    expect(snap.medianIssueResponseDays).toBe(3) // deltas [1,5], even n → true median avg (1+5)/2=3
   })
   it('fetches manifest files by basename even when nested in a workspace subpath', async () => {
     const http = fakeHttp()
