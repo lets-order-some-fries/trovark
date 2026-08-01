@@ -245,6 +245,68 @@ describe('classify (P4): token-set matching for the NAME, \\b-anchored words for
   })
 })
 
+describe('classify (final review fix): schemaText (inputSchema property names) uses a STRONG exec-only subset, not the full name/description vocabulary', () => {
+  it('a "command" property name on an otherwise-benign manifest tool does NOT inflate to high', () => {
+    const r = extractSchema([{
+      path: 'mcp.json',
+      content: JSON.stringify({ tools: [{
+        name: 'get_config', description: 'Get configuration',
+        inputSchema: { properties: { command: { type: 'string' } } },
+      }] }),
+    }])
+    expect(r.toolSurfaceRisk).not.toBe('high')
+    expect(['none', 'low']).toContain(r.toolSurfaceRisk)
+  })
+
+  it('an "update_frequency" property name does NOT inflate to medium', () => {
+    const r = extractSchema([{
+      path: 'mcp.json',
+      content: JSON.stringify({ tools: [{
+        name: 'get_weather', inputSchema: { properties: { update_frequency: {} } },
+      }] }),
+    }])
+    expect(r.toolSurfaceRisk).not.toBe('medium')
+  })
+
+  // Regressions — must stay exactly as before.
+  it('regression: shell_exec in description/schemaText still → high', () => {
+    const r = extractSchema([{
+      path: 'mcp.json',
+      content: JSON.stringify({ tools: [{
+        name: 'helper', description: 'wrapper around shell_exec', schemaText: 'shell_exec(cmd)',
+      }] }),
+    }])
+    expect(r.toolSurfaceRisk).toBe('high')
+  })
+  it('regression: run_python → high', () => {
+    const r = extractSchema([{ path: 'mcp.json', content: JSON.stringify({ tools: [{ name: 'run_python' }] }) }])
+    expect(r.toolSurfaceRisk).toBe('high')
+  })
+  it('regression: delete_file → medium', () => {
+    const r = extractSchema([{ path: 'mcp.json', content: JSON.stringify({ tools: [{ name: 'delete_file' }] }) }])
+    expect(r.toolSurfaceRisk).toBe('medium')
+  })
+  it('regression: edit_file → medium', () => {
+    const r = extractSchema([{ path: 'mcp.json', content: JSON.stringify({ tools: [{ name: 'edit_file' }] }) }])
+    expect(r.toolSurfaceRisk).toBe('medium')
+  })
+  it('regression: fetch_page → low', () => {
+    const r = extractSchema([{ path: 'mcp.json', content: JSON.stringify({ tools: [{ name: 'fetch_page' }] }) }])
+    expect(r.toolSurfaceRisk).toBe('low')
+  })
+  it('regression: add_numbers → none', () => {
+    const r = extractSchema([{ path: 'mcp.json', content: JSON.stringify({ tools: [{ name: 'add_numbers' }] }) }])
+    expect(r.toolSurfaceRisk).toBe('none')
+  })
+  it('regression: a real dangerous manifest tool (name + description) still → high', () => {
+    const r = extractSchema([{
+      path: 'mcp.json',
+      content: JSON.stringify({ tools: [{ name: 'run_command', description: 'Execute a shell command' }] }),
+    }])
+    expect(r.toolSurfaceRisk).toBe('high')
+  })
+})
+
 describe('classify (P4 review fix): bare run/code demoted, co-occurrence rule, tokenized text channel', () => {
   const nameOnly = (name: string) => extractSchema([{ path: 'mcp.json', content: JSON.stringify({ tools: [{ name }] }) }])
 

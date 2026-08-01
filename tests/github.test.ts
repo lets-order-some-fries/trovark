@@ -243,6 +243,55 @@ describe('collectGithub', () => {
     expect(paths).toContain('mcp_server.ts')
     expect(paths).not.toContain('src/utils.py')
   })
+  it('final review fix: lockfiles rank LAST — under a full FILE_CAP=12 budget of source files, package-lock.json is starved out', async () => {
+    const http = fakeHttp()
+    const origJson = http.json.bind(http)
+    const sourceFiles = Array.from({ length: 12 }, (_, i) => ({ path: `src/tool${i + 1}.ts`, type: 'blob', size: 200 }))
+    http.json = async <T,>(url: string): Promise<T> => {
+      if (url.includes('/git/trees/')) {
+        return { tree: [{ path: 'package-lock.json', type: 'blob', size: 500 }, ...sourceFiles] } as T
+      }
+      return origJson<T>(url)
+    }
+    http.text = async (url: string): Promise<string> => {
+      if (url.includes('package-lock.json')) return '{}'
+      return 'export {}'
+    }
+    const snap = await collectGithub({ ref: 'acme/foo', repo: { owner: 'acme', name: 'foo' } }, http, NOW)
+    const paths = snap.files.map(f => f.path)
+    expect(paths).toHaveLength(12)
+    for (const f of sourceFiles) expect(paths).toContain(f.path)
+    expect(paths).not.toContain('package-lock.json') // budget fully consumed by source before lockfiles are considered
+  })
+
+  it('final review fix: a PRIMARY manifest (package.json) and source files both win over a lockfile when budget is tight', async () => {
+    const http = fakeHttp()
+    const origJson = http.json.bind(http)
+    const sourceFiles = Array.from({ length: 5 }, (_, i) => ({ path: `src/tool${i + 1}.ts`, type: 'blob', size: 200 }))
+    http.json = async <T,>(url: string): Promise<T> => {
+      if (url.includes('/git/trees/')) {
+        return {
+          tree: [
+            { path: 'package.json', type: 'blob', size: 500 },
+            { path: 'package-lock.json', type: 'blob', size: 500 },
+            ...sourceFiles,
+          ],
+        } as T
+      }
+      return origJson<T>(url)
+    }
+    http.text = async (url: string): Promise<string> => {
+      if (url.includes('package-lock.json')) return '{}'
+      if (url.includes('package.json')) return '{"name":"foo"}'
+      return 'export {}'
+    }
+    const snap = await collectGithub({ ref: 'acme/foo', repo: { owner: 'acme', name: 'foo' } }, http, NOW)
+    const paths = snap.files.map(f => f.path)
+    expect(paths).toContain('package.json')
+    for (const f of sourceFiles) expect(paths).toContain(f.path)
+    expect(paths).toContain('package-lock.json') // 7 used of 12 cap, room remains for the lockfile
+  })
+
   it('paginates commits via Link: rel="next" and accumulates bus factor + 90d activity across the full window', async () => {
     const http = fakeHttp()
     // page1: author 'a' has 2 recent commits (within 90d). page2 (reached only via

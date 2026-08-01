@@ -64,6 +64,41 @@ const LOW_TOKENS = new Set([
 // standalone-word reading, so a `\b`-anchored match on the raw text is fine.
 const SHELL_MODULE_RE = /\bchild_process\b|\bsubprocess\b/i
 
+// Fix (final review): schemaText is the serialized inputSchema — i.e.
+// PARAMETER NAMES, not prose a human wrote to describe what the tool does.
+// Applying the full HIGH/MEDIUM/LOW vocabulary there produced false positives
+// on entirely benign tools: a `command` string parameter on `get_config`
+// (HIGH, "executes commands") or an `update_frequency`/`create_time` param
+// (MEDIUM, "write"/"create") — because those are substrings/tokens that mean
+// something very different as a schema property name than as a verb in a
+// description. schemaText is instead scanned with a STRONG, unambiguous
+// process-execution-only subset: these tokens (plus the existing shell-module
+// text checks) are never legitimate parameter-name fragments for a benign
+// tool, so a hit there is real signal. No MEDIUM/LOW tier and none of the
+// softer HIGH tokens (command, python, run, code, notebook, interpreter,
+// terminal, cmd) apply to this channel — those are common enough as innocuous
+// property names (command palette, python_version, run_id, area_code) that
+// they're only trustworthy signal in the name/description channel.
+const STRONG_EXEC_TOKENS = new Set([
+  'exec', 'execute', 'spawn', 'shell', 'bash', 'eval', 'sh', 'subprocess', 'childprocess',
+])
+const SCHEMA_TEXT_SHELL_RE = /\bchild_process\b|os\.system\(|\bexecSync\b|\bspawnSync\b/i
+
+// schemaText-only classifier: 'high' on a strong exec signal, else 'none'.
+// Tokenized the same way as riskFromText (per whitespace-delimited word, then
+// split on non-alnum/camelCase) so `shell_exec(cmd)` still matches even
+// though it's not English prose.
+function riskFromSchemaText(schemaText: string): Risk {
+  if (SCHEMA_TEXT_SHELL_RE.test(schemaText) || SHELL_MODULE_RE.test(schemaText)) return 'high'
+  for (const word of schemaText.split(/\s+/)) {
+    if (!word) continue
+    for (const tok of tokenize(word)) {
+      if (STRONG_EXEC_TOKENS.has(tok)) return 'high'
+    }
+  }
+  return 'none'
+}
+
 // Co-occurrence re-admission for the demoted `run`/`code` tokens: both an
 // execution-shaped token and a code/script-shaped token must appear in the
 // SAME token group (the tokens produced by splitting one identifier/word) —
@@ -115,19 +150,24 @@ function riskFromName(name: string): Risk {
 }
 
 // Fix (P4 review): the previous `\b`-anchored word-regex match on the raw
-// description/schemaText treated `_` as a word character, so `\bshell\b`
-// never matched inside `shell_exec` — a snake_case mention or raw schemaText
-// blob (e.g. `shell_exec(cmd)`) sailed through undetected. Fixed by
-// tokenizing the free text with the SAME tokenizer used for the name (so
-// `_`/camelCase boundaries split it) and matching token-SET membership. The
-// text is walked one whitespace-delimited word at a time (not tokenized as
-// one flat bag) so the co-occurrence rule only fires when run-like and
+// description treated `_` as a word character, so `\bshell\b` never matched
+// inside `shell_exec` — a snake_case mention sailed through undetected.
+// Fixed by tokenizing the free text with the SAME tokenizer used for the name
+// (so `_`/camelCase boundaries split it) and matching token-SET membership.
+// The text is walked one whitespace-delimited word at a time (not tokenized
+// as one flat bag) so the co-occurrence rule only fires when run-like and
 // code-like tokens come from the SAME compound word — "shell_exec" (one
 // word) co-occurs; "status code ... of the run" (run/code as separate,
 // unrelated words in a sentence) does not. Single-token HIGH/MEDIUM/LOW
 // matches ("delete", "shell") still work anywhere in the text since every
 // word is checked. `execution`/`dropdown` stay safe: neither is itself a
 // member of any token set.
+//
+// Fix (final review): this is now the DESCRIPTION-only channel (human prose
+// about what the tool does). schemaText (inputSchema property names) has its
+// own STRONG-only channel below — see riskFromSchemaText — because a
+// parameter name like `command` or `update_frequency` isn't a claim about
+// tool behavior the way a description sentence is.
 function riskFromText(text: string): Risk {
   if (SHELL_MODULE_RE.test(text)) return 'high'
   let worst: Risk = 'none'
@@ -140,14 +180,20 @@ function riskFromText(text: string): Risk {
   return worst
 }
 
-// NAME is the strong signal (token-set, exact match); description/schemaText
-// is corroborating free text (tokenized the same way, per word). Either can
-// independently establish a tier; the tool's overall risk is the higher of
-// the two.
+// NAME is the strong signal (token-set, exact match); DESCRIPTION is
+// corroborating free text (full HIGH/MEDIUM/LOW vocabulary, tokenized the
+// same way, per word); SCHEMATEXT (serialized inputSchema / property names)
+// is classified separately with only the strong process-execution subset —
+// see riskFromSchemaText for why. Any of the three can independently
+// establish a tier; the tool's overall risk is the max of all three.
 function classify(name: string, description: string, schemaText: string): Risk {
   const nameRisk = riskFromName(name)
-  const textRisk = riskFromText(`${description} ${schemaText}`)
-  return RISK_ORDER.indexOf(nameRisk) >= RISK_ORDER.indexOf(textRisk) ? nameRisk : textRisk
+  const textRisk = riskFromText(description)
+  const schemaRisk = riskFromSchemaText(schemaText)
+  let worst = nameRisk
+  if (RISK_ORDER.indexOf(textRisk) > RISK_ORDER.indexOf(worst)) worst = textRisk
+  if (RISK_ORDER.indexOf(schemaRisk) > RISK_ORDER.indexOf(worst)) worst = schemaRisk
+  return worst
 }
 
 // Fix 5: paths that aren't part of the shipped server — test fixtures, example

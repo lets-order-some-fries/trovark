@@ -17,16 +17,24 @@ export interface RepoSnapshot {
 
 const FILE_CAP = 12
 const SIZE_CAP = 100_000
+// PRIMARY manifests: spec-era detection + secrets-relevant, always worth a
+// budget slot ahead of source. Deliberately excludes lockfiles — see
+// LOCKFILES below and the final-review fix note on `wanted`.
 const ALWAYS_FETCH = new Set([
   'package.json', 'pyproject.toml', 'requirements.txt', 'mcp.json', 'server.json', 'smithery.yaml',
   'go.mod', 'Cargo.toml', 'build.gradle', 'build.gradle.kts', 'pom.xml',
-  // Committed lockfiles let assemble() query OSV at exact resolved versions
-  // (incl. transitive deps) instead of manifest-range floors (see P7 /
-  // src/derive/lockfile.ts). These files can be large; SIZE_CAP below already
-  // skips oversized blobs, so a huge lockfile is silently omitted rather than
-  // fetched — acceptable, falls back to floor-based deps for that repo.
-  'package-lock.json', 'uv.lock', 'poetry.lock',
 ])
+// Fix (final review): committed lockfiles let assemble() query OSV at exact
+// resolved versions (incl. transitive deps) instead of manifest-range floors
+// (see P7 / src/derive/lockfile.ts) — but they are DATA that only feeds CVE
+// lookup, never tool extraction. The previous single ALWAYS_FETCH bucket put
+// lockfiles in the SAME first-priority tier as source-critical manifests, so
+// under FILE_CAP=12 a repo with a big lockfile plus many source files could
+// have the lockfile crowd out source needed for the gate (tool extraction).
+// Lockfiles now rank in their own LAST bucket — fetched only if budget
+// remains after PRIMARY manifests and SOURCE files. SIZE_CAP below still
+// skips oversized blobs either way.
+const LOCKFILES = new Set(['package-lock.json', 'uv.lock', 'poetry.lock'])
 const SOURCE_HINT = /(src\/|server|tool|index|main)/
 const SOURCE_EXT = /\.(ts|js|mjs|py)$/
 // Fix 7 (tool-signal ranking): among source candidates that already passed
@@ -154,11 +162,17 @@ export async function collectGithub(
   // many nested manifests could start crowding out source files — revisit if
   // that shows up (tracked for P4).
   const isManifest = (p: string) => ALWAYS_FETCH.has(p.split('/').pop() ?? '') || p.endsWith('.csproj')
+  const isLockfile = (p: string) => LOCKFILES.has(p.split('/').pop() ?? '')
+  // Fix (final review): three priority buckets, in order — (1) PRIMARY
+  // manifests + .env matches, (2) ranked SOURCE files, (3) LOCKFILES last —
+  // so lockfiles (CVE-lookup data only) never outrank source (needed for tool
+  // extraction → gate) under a tight FILE_CAP.
   const wanted = [
     ...blobs.filter(b => fetchable(b) && (isManifest(b.path) || /(^|\/)\.env[^/]*$/.test(b.path))),
     ...blobs
       .filter(b => fetchable(b) && SOURCE_EXT.test(b.path) && SOURCE_HINT.test(b.path))
       .sort((a, b) => toolSignalScore(b.path) - toolSignalScore(a.path) || a.path.length - b.path.length),
+    ...blobs.filter(b => fetchable(b) && isLockfile(b.path)),
   ]
   const seen = new Set<string>()
   const files: RepoFile[] = []
