@@ -10,7 +10,7 @@
 
 ## Why this product (context)
 
-Deep market research (2026-07-31, recorded in the CareerMap repo at `ventures/2026-07-31_ai-market-research-zero-capital.md`) established, via adversarially verified claims:
+Deep market research (2026-07-31, adversarially verified, private notes) established:
 
 - Agent security/governance is a confirmed, underserved, growing category (Gartner: $492M → $1B+ by 2030).
 - The MCP ecosystem is very large (order 10k+ public servers), but **no trustworthy, first-party data exists on its health** — every viral statistic about MCP rot/vulnerability failed adversarial source-verification.
