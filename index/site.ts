@@ -58,7 +58,7 @@ footer{margin:28px 0;color:#8b949e;font-size:13px}
 <h1>Trovark</h1>
 <p class="tag">Trust scores for MCP servers — evidence-linked grades from static public signals. <code>npx trovark &lt;server&gt;</code></p>
 <div class="stats">
-${stat(s.total, 'servers scanned')}${stat(s.scored - s.insufficient, 'graded')}${stat(s.avgOverall, 'avg score')}${stat(s.gradeDist['A'] ?? 0, 'A grades')}${stat(s.staleOver180, 'poor health')}${stat(s.secretsFindings, 'possible committed secrets')}${stat(s.insufficient, 'insufficient data')}${stat(s.failed, 'failed / unreachable')}
+${stat(s.total, 'servers scanned')}${stat(s.scored - s.insufficient, 'graded')}${stat(s.avgOverall, 'avg score')}${stat(s.gradeDist['A'] ?? 0, 'A grades')}${stat(s.staleOver180, 'stale / abandoned')}${stat(s.shellExecTools, 'expose exec/shell tools')}${stat(s.insufficient, 'insufficient data')}${stat(s.failed, 'failed / unreachable')}
 </div>
 <table id="t"><thead><tr>
 <th data-k="0">server</th><th data-k="1">grade</th><th data-k="2">score</th><th data-k="3">health</th><th data-k="4">reliability</th><th data-k="5">security</th><th data-k="6">cost</th>
