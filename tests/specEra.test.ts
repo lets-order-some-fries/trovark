@@ -20,4 +20,7 @@ describe('specEra', () => {
   it('undefined on malformed package.json', () => {
     expect(specEra([{ path: 'package.json', content: 'not json' }])).toBeUndefined()
   })
+  it('modern for unquoted mcp at the very start of requirements.txt', () => {
+    expect(specEra([{ path: 'requirements.txt', content: 'mcp>=1.2.0\nhttpx>=0.24' }])).toBe('modern')
+  })
 })

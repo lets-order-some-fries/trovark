@@ -13,8 +13,8 @@ export function specEra(files: RepoFile[]): 'modern' | 'legacy' | undefined {
       } catch { /* malformed */ }
     }
     if (f.path.endsWith('pyproject.toml') || f.path.endsWith('requirements.txt')) {
-      const m = f.content.match(/["'\s]mcp\s*(?:\[[^\]]*\])?\s*(?:>=|==|~=|>)\s*(\d+)/)
-      if (m) return Number(m[1]) >= 1 ? 'modern' : 'legacy'
+      const m = f.content.match(/(^|["'\s])mcp\s*(?:\[[^\]]*\])?\s*(?:>=|==|~=|>)\s*(\d+)/)
+      if (m) return Number(m[2]) >= 1 ? 'modern' : 'legacy'
     }
   }
   return undefined
