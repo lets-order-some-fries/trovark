@@ -35,4 +35,17 @@ describe('renderSite', () => {
   it('links rows to their repos', () => {
     expect(html).toContain('https://github.com/acme/top')
   })
+  it('sort comparator distinguishes rows by class, not a wrong cell count', () => {
+    expect(html).toContain("classList.contains('failed')")
+    expect(html).not.toContain('cells.length<8')
+  })
+  it('rejects non-http(s) repoUrl schemes', () => {
+    const evil = {
+      ...results,
+      entries: [{ ref: 'a/evil', ok: true, overall: 50, grade: 'D', repoUrl: 'javascript:alert(1)', dims: { health: { score: 50, confidence: 'low' }, reliability: { score: 50, confidence: 'low' }, security: { score: 50, confidence: 'low' }, cost: { score: 50, confidence: 'low' } } }],
+    } as never
+    const out = renderSite(evil)
+    expect(out).not.toContain('javascript:alert')
+    expect(out).toContain('a/evil') // still rendered, just unlinked
+  })
 })

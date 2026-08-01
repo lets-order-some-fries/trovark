@@ -15,7 +15,8 @@ const gradeColor = (grade: string | undefined) =>
   !grade ? '#666' : grade.startsWith('A') ? '#22a06b' : grade.startsWith('B') ? '#7fa32a' : grade.startsWith('C') ? '#c9a227' : '#c0392b'
 
 function row(e: IndexEntry): string {
-  const name = e.repoUrl ? `<a href="${esc(e.repoUrl)}">${esc(e.ref)}</a>` : esc(e.ref)
+  const safeUrl = e.repoUrl && /^https?:\/\//.test(e.repoUrl) ? e.repoUrl : undefined
+  const name = safeUrl ? `<a href="${esc(safeUrl)}">${esc(e.ref)}</a>` : esc(e.ref)
   if (!e.ok) return `<tr class="failed" data-overall="-1"><td>${name}</td><td colspan="6" class="muted">unreachable — ${esc(e.error ?? 'unknown error')}</td></tr>`
   if (e.insufficientData) return `<tr class="failed" data-overall="-1"><td>${name}</td><td colspan="6" class="muted">insufficient data to score</td></tr>`
   const d = e.dims
@@ -75,7 +76,7 @@ document.querySelectorAll('th').forEach(th=>th.addEventListener('click',()=>{
   const dir=th.dataset.d==='a'?-1:1; th.dataset.d=dir===1?'a':'d'
   rows.sort((x,y)=>{
     if(k===0)return dir*x.cells[0].textContent.localeCompare(y.cells[0].textContent)
-    const g=r=>r.cells.length<8?(k===2?+r.dataset.overall:-1):(k===1?+r.dataset.overall:parseFloat(r.cells[k].textContent)||-1)
+    const g=r=>r.classList.contains('failed')?-1:(k<=2?+r.dataset.overall:parseFloat(r.cells[k].textContent)||-1)
     return dir*(g(y)-g(x))
   })
   rows.forEach(r=>tb.appendChild(r))
