@@ -157,4 +157,24 @@ describe('collectGithub', () => {
     expect(paths).toContain('subdir/go.mod')
     expect(paths).toContain('src/Server.csproj')
   })
+  it('ranks tool-signal-bearing source paths (tools?/server/index/main) above merely-short unrelated files under a tight file budget', async () => {
+    const http = fakeHttp()
+    const origJson = http.json.bind(http)
+    const fillers = Array.from({ length: 11 }, (_, i) => ({ path: `src/util${i}.ts`, type: 'blob', size: 200 }))
+    const toolFiles = ['create_widget', 'delete_widget', 'list_widgets']
+      .map(n => ({ path: `src/tools/${n}.ts`, type: 'blob', size: 200 }))
+    http.json = async <T,>(url: string): Promise<T> => {
+      if (url.includes('/git/trees/')) {
+        return { tree: [{ path: 'package.json', type: 'blob', size: 500 }, ...fillers, ...toolFiles] } as T
+      }
+      return origJson<T>(url)
+    }
+    http.text = async (url: string): Promise<string> => {
+      if (url.includes('package.json')) return '{"name":"foo"}'
+      return 'export {}'
+    }
+    const snap = await collectGithub({ ref: 'acme/foo', repo: { owner: 'acme', name: 'foo' } }, http, NOW)
+    const paths = snap.files.map(f => f.path)
+    expect(paths.filter(p => p.startsWith('src/tools/'))).toHaveLength(3) // all 3 tool-signal files survive the FILE_CAP=12 budget
+  })
 })

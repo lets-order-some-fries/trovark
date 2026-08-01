@@ -47,3 +47,116 @@ server.tool("delete_file", "Delete a file at path", {}, handler2)`,
     expect(r.schemaTokenEstimate).toBeUndefined()
   })
 })
+
+describe('extractSchema breadth fixes (P3)', () => {
+  it('extracts modern server.registerTool() registrations, including the config-object description', () => {
+    const r = extractSchema([{
+      path: 'src/index.ts',
+      content: `server.registerTool("delete_file", {
+  description: "Delete a file at the given path",
+  inputSchema: { path: z.string() },
+}, async ({ path }) => { /* ... */ })`,
+    }])
+    expect(r.extracted).toBe(true)
+    expect(r.tools.map(t => t.name)).toEqual(['delete_file'])
+    expect(r.tools[0].description).toBe('Delete a file at the given path')
+    expect(r.toolSurfaceRisk).toBe('medium')
+  })
+
+  it('extracts python imperative add_tool(name=...) registrations', () => {
+    const r = extractSchema([{
+      path: 'server.py',
+      content: `mcp.add_tool(name="delete_record", description="Delete a record from the database")`,
+    }])
+    expect(r.extracted).toBe(true)
+    expect(r.tools.map(t => t.name)).toEqual(['delete_record'])
+    expect(r.toolSurfaceRisk).toBe('medium')
+  })
+
+  it('extracts bare @mcp.tool decorators (no parens), split from def', () => {
+    const r = extractSchema([{
+      path: 'server.py',
+      content: `@mcp.tool\ndef list_items() -> list:\n    """List items."""\n    ...\n`,
+    }])
+    expect(r.extracted).toBe(true)
+    expect(r.tools.map(t => t.name)).toEqual(['list_items'])
+  })
+
+  it('extracts low-level types.Tool(name=..., description=...) literals in a list_tools handler', () => {
+    const r = extractSchema([{
+      path: 'server.py',
+      content: `
+@server.list_tools()
+async def handle_list_tools() -> list[types.Tool]:
+    return [
+        types.Tool(
+            name="execute_command",
+            description="Execute a shell command on the host",
+            inputSchema={"type": "object"},
+        ),
+    ]
+`,
+    }])
+    expect(r.extracted).toBe(true)
+    expect(r.tools.map(t => t.name)).toEqual(['execute_command'])
+    expect(r.toolSurfaceRisk).toBe('high')
+  })
+
+  it('ListToolsRequestSchema fallback: a name: without an adjacent description/inputSchema sibling is not counted (logger/config phantom)', () => {
+    const r = extractSchema([{
+      path: 'src/index.ts',
+      content: `
+import { ListToolsRequestSchema } from '@mcp/sdk'
+const logger = { name: "app-logger", level: "info" }
+server.setRequestHandler(ListToolsRequestSchema, async () => ({
+  tools: [
+    { name: "search_docs", description: "Search documentation", inputSchema: { type: "object" } },
+  ],
+}))
+`,
+    }])
+    expect(r.tools.map(t => t.name)).toEqual(['search_docs'])
+  })
+
+  it('ListToolsRequestSchema fallback: new Server({name}) identity is not counted as a tool (drops the server-name phantom)', () => {
+    const r = extractSchema([{
+      path: 'src/index.ts',
+      content: `
+import { ListToolsRequestSchema, Server } from '@mcp/sdk'
+const server = new Server({ name: "tavily-mcp", version: "1.0.0" })
+server.setRequestHandler(ListToolsRequestSchema, async () => ({
+  tools: [
+    { name: "tavily_search", description: "Search the web", inputSchema: {} },
+  ],
+}))
+`,
+    }])
+    expect(r.tools.map(t => t.name)).toEqual(['tavily_search'])
+  })
+
+  it('excludes non-server paths (tests/) from schema file selection', () => {
+    const r = extractSchema([{
+      path: 'tests/mcp_server.py',
+      content: `@mcp.tool()\ndef fake_tool(x: int) -> int:\n    ...\n`,
+    }])
+    expect(r.extracted).toBe(false)
+    expect(r.toolSurfaceRisk).toBeUndefined()
+  })
+
+  it('dedupes duplicate tool names (across files) before counting/tokenizing', () => {
+    const r = extractSchema([
+      { path: 'src/a.ts', content: `server.tool('search', 'Search things', {}, h)` },
+      { path: 'src/b.ts', content: `server.tool('search', 'Search things again', {}, h)` },
+    ])
+    expect(r.tools.map(t => t.name)).toEqual(['search'])
+  })
+
+  it('floors toolSurfaceRisk at medium when a fetched file imports child_process but no tools extract', () => {
+    const r = extractSchema([{
+      path: 'src/index.ts',
+      content: `import { execSync } from 'child_process'\n// glue code, no MCP tool registrations here\nexecSync('ls')\n`,
+    }])
+    expect(r.extracted).toBe(false)
+    expect(r.toolSurfaceRisk).toBe('medium')
+  })
+})

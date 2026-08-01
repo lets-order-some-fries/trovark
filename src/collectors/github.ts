@@ -23,6 +23,14 @@ const ALWAYS_FETCH = new Set([
 ])
 const SOURCE_HINT = /(src\/|server|tool|index|main)/
 const SOURCE_EXT = /\.(ts|js|mjs|py)$/
+// Fix 7 (tool-signal ranking): among source candidates that already passed
+// SOURCE_HINT, prefer paths that look like a tool-registration/entry-point
+// file over merely-short ones — deep one-tool-per-file layouts (tools/x.ts)
+// were previously starved by short unrelated files (util/log.ts) under pure
+// shortest-path sort, silently undercounting tools. No extra fetches — path
+// hint only; FILE_CAP stays unchanged (minimal version of audit item 11).
+const TOOL_SIGNAL_HINT = /(^|\/)(tools?|server|index|main)(\.|\/|$)/i
+const toolSignalScore = (path: string): number => (TOOL_SIGNAL_HINT.test(path) ? 1 : 0)
 
 interface GhCommit { commit: { author?: { date?: string } }; author?: { login?: string } | null }
 
@@ -102,7 +110,7 @@ export async function collectGithub(
     ...blobs.filter(b => fetchable(b) && (isManifest(b.path) || /(^|\/)\.env[^/]*$/.test(b.path))),
     ...blobs
       .filter(b => fetchable(b) && SOURCE_EXT.test(b.path) && SOURCE_HINT.test(b.path))
-      .sort((a, b) => a.path.length - b.path.length),
+      .sort((a, b) => toolSignalScore(b.path) - toolSignalScore(a.path) || a.path.length - b.path.length),
   ]
   const seen = new Set<string>()
   const files: RepoFile[] = []
