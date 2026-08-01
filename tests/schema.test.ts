@@ -160,3 +160,69 @@ server.setRequestHandler(ListToolsRequestSchema, async () => ({
     expect(r.toolSurfaceRisk).toBe('medium')
   })
 })
+
+describe('classify (P4): token-set matching for the NAME, \\b-anchored words for description', () => {
+  const nameOnly = (name: string) => extractSchema([{ path: 'mcp.json', content: JSON.stringify({ tools: [{ name }] }) }])
+
+  it('get_execution_status is not high — "execution" is a noun, not the token "exec"/"execute"', () => {
+    const r = nameOnly('get_execution_status')
+    expect(r.toolSurfaceRisk).not.toBe('high')
+    expect(r.toolSurfaceRisk).toBe('low') // "get"
+  })
+
+  it('list_dropdown_options is not medium — "dropdown" is not the token "drop"', () => {
+    const r = nameOnly('list_dropdown_options')
+    expect(r.toolSurfaceRisk).not.toBe('medium')
+    expect(r.toolSurfaceRisk).toBe('low') // "list"
+  })
+
+  it('edit_file → medium', () => {
+    expect(nameOnly('edit_file').toolSurfaceRisk).toBe('medium')
+  })
+
+  it('run_notebook → high', () => {
+    expect(nameOnly('run_notebook').toolSurfaceRisk).toBe('high')
+  })
+
+  it('bash_command → high', () => {
+    expect(nameOnly('bash_command').toolSurfaceRisk).toBe('high')
+  })
+
+  it('run_python → high', () => {
+    expect(nameOnly('run_python').toolSurfaceRisk).toBe('high')
+  })
+
+  it('fork_repository → medium', () => {
+    expect(nameOnly('fork_repository').toolSurfaceRisk).toBe('medium')
+  })
+
+  it('search_files is not high — token-set "search" is low, not a substring match on any high token', () => {
+    const r = nameOnly('search_files')
+    expect(r.toolSurfaceRisk).not.toBe('high')
+    expect(r.toolSurfaceRisk).toBe('low')
+  })
+
+  it('benign add_numbers → none', () => {
+    expect(nameOnly('add_numbers').toolSurfaceRisk).toBe('none')
+  })
+
+  it('a real word "delete" in the description counts even with a benign name', () => {
+    const r = extractSchema([{
+      path: 'mcp.json',
+      content: JSON.stringify({ tools: [{ name: 'process_item', description: 'delete the queued item' }] }),
+    }])
+    expect(r.toolSurfaceRisk).toBe('medium')
+  })
+
+  it('the noun "dropdown" in the description does not trigger the "drop" keyword', () => {
+    const r = extractSchema([{
+      path: 'mcp.json',
+      content: JSON.stringify({ tools: [{ name: 'render_widget', description: 'Render a dropdown menu' }] }),
+    }])
+    expect(r.toolSurfaceRisk).toBe('none')
+  })
+
+  it('camelCase names tokenize like snake_case (runPython → high)', () => {
+    expect(nameOnly('runPython').toolSurfaceRisk).toBe('high')
+  })
+})

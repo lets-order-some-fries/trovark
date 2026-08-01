@@ -13,15 +13,84 @@ export interface SchemaResult {
 type Risk = 'none' | 'low' | 'medium' | 'high'
 const RISK_ORDER: Risk[] = ['none', 'low', 'medium', 'high']
 
-const HIGH = /exec|spawn|shell|child_process|subprocess|os\.system|eval\(/i
-const MEDIUM = /write|delete|remove|unlink|\brm\b|drop/i
-const LOW = /fetch|http|request|url|download/i
+// Fix (P4): the old classifier tested these as UNANCHORED SUBSTRINGS over
+// name+description+schemaText, so `exec` matched inside the noun "execution"
+// (get_execution_status → high) and `drop` matched inside "dropdown"
+// (list_dropdown_options → medium), while genuinely risky tools with no
+// substring hit (edit_file, run_notebook, bash_command, run_python,
+// fork_repository) fell through to 'none'. Fixed by:
+//  - tokenizing the tool NAME on `_`/camelCase and matching token-SET
+//    membership (exact equality, never substring) — the strong signal.
+//  - matching the free-text (description + schemaText) with `\b`-anchored
+//    word regexes — catches a real word ("delete") without matching inside
+//    an unrelated word ("dropdown").
+// Overall per-tool risk is the max of the two; overall server risk is the
+// max across all tools (unchanged).
+const HIGH_TOKENS = new Set([
+  'exec', 'execute', 'spawn', 'eval', 'shell', 'bash', 'terminal', 'sh',
+  'python', 'run', 'code', 'interpreter', 'notebook', 'command', 'cmd',
+])
+// 'fork' isn't in the plan's literal MEDIUM list, but is required to
+// correctly tier `fork_repository` (forking duplicates/creates a repo — a
+// create-like mutation, not a process-fork/spawn, hence MEDIUM not HIGH).
+const MEDIUM_TOKENS = new Set([
+  'write', 'delete', 'remove', 'unlink', 'rm', 'drop', 'edit', 'create',
+  'update', 'modify', 'put', 'patch', 'append', 'upload', 'move', 'rename',
+  'overwrite', 'push', 'merge', 'fork',
+])
+const LOW_TOKENS = new Set([
+  'fetch', 'http', 'request', 'url', 'download', 'get', 'read', 'list',
+  'search', 'query',
+])
+// child_process/subprocess are identifiers (module names), not English
+// words a tool-namer would choose — checked directly against the free text
+// rather than folded into HIGH_TOKENS, per the plan's "(+ child_process/
+// subprocess appearing in text)" addendum.
+const SHELL_MODULE_RE = /\bchild_process\b|\bsubprocess\b/i
 
-function classify(text: string): Risk {
-  if (HIGH.test(text)) return 'high'
-  if (MEDIUM.test(text)) return 'medium'
-  if (LOW.test(text)) return 'low'
+function wordBoundaryRegex(tokens: Set<string>): RegExp {
+  const escaped = [...tokens].map(t => t.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'))
+  return new RegExp(`\\b(?:${escaped.join('|')})\\b`, 'i')
+}
+const HIGH_WORD_RE = wordBoundaryRegex(HIGH_TOKENS)
+const MEDIUM_WORD_RE = wordBoundaryRegex(MEDIUM_TOKENS)
+const LOW_WORD_RE = wordBoundaryRegex(LOW_TOKENS)
+
+// Splits a tool name on `_`/`-`/`.`/whitespace and camelCase boundaries into
+// lowercase tokens, e.g. "runPython" / "run_python" both → ["run","python"].
+function tokenizeName(name: string): string[] {
+  return name
+    .replace(/([a-z0-9])([A-Z])/g, '$1_$2')
+    .split(/[^a-zA-Z0-9]+/)
+    .map(t => t.toLowerCase())
+    .filter(Boolean)
+}
+
+function riskFromNameTokens(name: string): Risk {
+  let worst: Risk = 'none'
+  for (const tok of tokenizeName(name)) {
+    if (HIGH_TOKENS.has(tok)) return 'high' // can't exceed high; short-circuit
+    if (MEDIUM_TOKENS.has(tok)) worst = 'medium'
+    else if (LOW_TOKENS.has(tok) && worst === 'none') worst = 'low'
+  }
+  return worst
+}
+
+function riskFromText(text: string): Risk {
+  if (HIGH_WORD_RE.test(text) || SHELL_MODULE_RE.test(text)) return 'high'
+  if (MEDIUM_WORD_RE.test(text)) return 'medium'
+  if (LOW_WORD_RE.test(text)) return 'low'
   return 'none'
+}
+
+// NAME is the strong signal (token-set, exact match); description/schemaText
+// is corroborating free text (anchored-word match, so it can't be tricked by
+// a substring inside an unrelated word). Either can independently establish
+// a tier; the tool's overall risk is the higher of the two.
+function classify(name: string, description: string, schemaText: string): Risk {
+  const nameRisk = riskFromNameTokens(name)
+  const textRisk = riskFromText(`${description} ${schemaText}`)
+  return RISK_ORDER.indexOf(nameRisk) >= RISK_ORDER.indexOf(textRisk) ? nameRisk : textRisk
 }
 
 // Fix 5: paths that aren't part of the shipped server — test fixtures, example
@@ -227,7 +296,7 @@ export function extractSchema(files: RepoFile[]): SchemaResult {
   const findings: Finding[] = []
   let worst: Risk = 'none'
   for (const t of tools) {
-    const risk = classify(`${t.name} ${t.description ?? ''} ${t.schemaText}`)
+    const risk = classify(t.name, t.description ?? '', t.schemaText)
     if (RISK_ORDER.indexOf(risk) > RISK_ORDER.indexOf(worst)) worst = risk
     if (risk === 'high') {
       findings.push({
