@@ -39,6 +39,36 @@ describe('renderSite', () => {
     expect(html).toContain("classList.contains('failed')")
     expect(html).not.toContain('cells.length<8')
   })
+  it('shows partial dimensions for grade-withheld servers instead of a blank row', () => {
+    const partial = {
+      ...results,
+      entries: [{
+        ref: 'gorm-server/rust-mcp',
+        ok: true,
+        insufficientData: true,
+        repoUrl: 'https://github.com/gorm-server/rust-mcp',
+        dims: {
+          health: { score: 85, confidence: 'high' },
+          reliability: { score: 72, confidence: 'high' },
+          security: { score: 50, confidence: 'low' },
+          cost: { score: 60, confidence: 'medium' },
+        },
+      }],
+    } as never
+    const out = renderSite(partial)
+    // health/reliability scores it does have are shown
+    expect(out).toContain('85')
+    expect(out).toContain('72')
+    // grade withheld, not a fabricated letter grade
+    expect(out).not.toMatch(/class="chip" style="background:[^"]*">[A-F][+-]?</)
+    expect(out).toMatch(/grade withheld/i)
+    // no fabricated overall number rendered as the score cell
+    expect(out).toContain('<td class="muted">—</td>')
+    // security wasn't meaningfully determined (low confidence) → marked not assessed
+    expect(out).toMatch(/title="not assessed">\?</)
+    // still sortable / sinks below graded rows like other failed/insufficient rows
+    expect(out).toMatch(/<tr class="failed" data-overall="-1"[^>]*>[\s\S]*gorm-server\/rust-mcp/)
+  })
   it('rejects non-http(s) repoUrl schemes', () => {
     const evil = {
       ...results,
