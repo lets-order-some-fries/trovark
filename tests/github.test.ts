@@ -39,6 +39,7 @@ function fakeHttp(): Http {
       if (url.includes('src/index.ts')) return 'export {}'
       throw new Error(`HTTP 404 for ${url}`)
     },
+    async postJson() { throw new Error('unused') },
   }
 }
 

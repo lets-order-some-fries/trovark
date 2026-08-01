@@ -8,6 +8,7 @@ const httpOf = (routes: Record<string, unknown>): Http => ({
     throw new Error(`HTTP 404 for ${url}`)
   },
   async text() { throw new Error('unused') },
+  async postJson() { throw new Error('unused') },
 })
 
 describe('resolve()', () => {
