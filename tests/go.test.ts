@@ -62,11 +62,15 @@ func SearchProviders() mcp.Tool {
 
 describe('fromGoSource — idiom 3: mark3labs positional MustTool(name, desc)', () => {
   it('extracts name + description in one shot', () => {
+    // mcp-grafana-shaped: MustTool is always package-qualified
+    // (mcpgrafana.MustTool) and the file also carries an mcp.With*
+    // annotation from the mark3labs/mcp-go SDK it wraps.
     const content = `
-var SearchDashboardsTool = MustTool(
+var SearchDashboardsTool = mcpgrafana.MustTool(
 	"search_dashboards",
 	"Search for Grafana dashboards by title, tag, or folder",
 	searchDashboardsHandler,
+	mcp.WithReadOnlyHintAnnotation(true),
 )
 `
     const tools = fromGoSource({ path: 'tools/search.go', content })
@@ -139,15 +143,51 @@ func main() {
   })
 })
 
+describe('fromGoSource — MCP-relatedness gate (phantom-tool guard)', () => {
+  it('does not fabricate a tool from an unrelated NewTool constructor with no MCP marker', () => {
+    // A bare, unrelated domain constructor that happens to share the name
+    // NewTool with the mark3labs idiom. Nothing here references an MCP SDK,
+    // so this must not be mistaken for a tool registration.
+    const content = `
+package inventory
+
+type Tool struct {
+	Name string
+	Kind string
+}
+
+func NewTool(name, kind string) *Tool {
+	return &Tool{Name: name, Kind: kind}
+}
+
+var hammer = NewTool("hammer", "striking")
+`
+    const tools = fromGoSource({ path: 'internal/inventory/tool.go', content })
+    expect(tools).toEqual([])
+  })
+
+  it('extracts a qualified mcp.NewTool call once the file carries an MCP SDK marker', () => {
+    const content = `
+func RealTool() mcp.Tool {
+	return mcp.NewTool("real_tool", mcp.WithDescription(` + '`does X`' + `))
+}
+`
+    const tools = fromGoSource({ path: 'pkg/tools/real.go', content })
+    expect(tools).toHaveLength(1)
+    expect(tools[0]).toMatchObject({ name: 'real_tool', description: 'does X' })
+  })
+})
+
 describe('extractSchema wiring — .go files dispatch to fromGoSource', () => {
   it('extracts tools from a .go file and classifies risk through the shared token-set path', () => {
     const r = extractSchema([{
       path: 'tools/search.go',
       content: `
-var SearchDashboardsTool = MustTool(
+var SearchDashboardsTool = mcpgrafana.MustTool(
 	"search_dashboards",
 	"Search for Grafana dashboards by title, tag, or folder",
 	searchDashboardsHandler,
+	mcp.WithReadOnlyHintAnnotation(true),
 )
 `,
     }])
