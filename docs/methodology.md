@@ -1,4 +1,4 @@
-# Methodology (rubric v1.0.0)
+# Methodology (rubric v1.1.0)
 
 trovark computes a 0–100 Trust Score from four dimensions: Health 35%,
 Reliability 25%, Security 25%, Cost 15%. Grade bands: A ≥ 85, B ≥ 70, C ≥ 55,
@@ -26,8 +26,12 @@ D ≥ 40, F < 40 (+/- at the top/bottom 5 points of each band).
   statically extractable.
 - **Security:** tool-surface risk classified from extracted tool names,
   descriptions, and schemas (exec/shell → high; write/delete → medium;
-  network → low); committed-secret patterns (reported by path, match text never
-  shown); known CVEs in declared dependencies via OSV.dev.
+  network → low); committed-secret patterns — a low-confidence candidate
+  heuristic over sampled files (not full git history), reported by path with
+  match text never shown; it ran at ~13% true-positive rate in testing, so it
+  carries a lower rubric weight and findings are labeled "candidate, verify
+  manually" — use a dedicated scanner (gitleaks, trufflehog) for authoritative
+  secret detection; known CVEs in declared dependencies via OSV.dev.
 - **Cost:** estimated tokens of the serialized tool schema (gpt-tokenizer —
   an estimate, so labeled); tool count.
 
