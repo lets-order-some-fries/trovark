@@ -109,4 +109,22 @@ describe('collectGithub', () => {
     const snap = await collectGithub({ ref: 'acme/foo', repo: { owner: 'acme', name: 'foo' } }, http, NOW, { hasToken: true })
     expect(snap.medianIssueResponseDays).toBe(5) // deltas [1,5] → index floor(2/2)=1
   })
+  it('fetches manifest files by basename even when nested in a workspace subpath', async () => {
+    const http = fakeHttp()
+    const origJson = http.json.bind(http)
+    http.json = async <T,>(url: string): Promise<T> => {
+      if (url.includes('/git/trees/')) {
+        return {
+          tree: [
+            { path: 'package.json', type: 'blob', size: 500 },
+            { path: 'packages/x/package.json', type: 'blob', size: 400 },
+            { path: 'src/index.ts', type: 'blob', size: 2000 },
+          ],
+        } as T
+      }
+      return origJson<T>(url)
+    }
+    const snap = await collectGithub({ ref: 'acme/foo', repo: { owner: 'acme', name: 'foo' } }, http, NOW)
+    expect(snap.files.map(f => f.path)).toContain('packages/x/package.json')
+  })
 })

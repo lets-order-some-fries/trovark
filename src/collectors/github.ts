@@ -88,8 +88,14 @@ export async function collectGithub(
   const treePaths = tree ? blobs.map(b => b.path) : undefined
 
   const fetchable = (p: { path: string; size?: number }) => (p.size ?? 0) <= SIZE_CAP
+  // Basename match (not full-path) so workspace/monorepo manifests nested under
+  // e.g. packages/x/package.json are still always-fetched, not just root ones.
+  // Manifests are listed ahead of source below and FILE_CAP is unchanged, so
+  // they win budget naturally; at the current cap this is fine, but a repo with
+  // many nested manifests could start crowding out source files — revisit if
+  // that shows up (tracked for P4).
   const wanted = [
-    ...blobs.filter(b => fetchable(b) && (ALWAYS_FETCH.has(b.path) || /(^|\/)\.env[^/]*$/.test(b.path))),
+    ...blobs.filter(b => fetchable(b) && (ALWAYS_FETCH.has(b.path.split('/').pop() ?? '') || /(^|\/)\.env[^/]*$/.test(b.path))),
     ...blobs
       .filter(b => fetchable(b) && SOURCE_EXT.test(b.path) && SOURCE_HINT.test(b.path))
       .sort((a, b) => a.path.length - b.path.length),
