@@ -85,4 +85,25 @@ describe('assemble', () => {
     expect(s.weeklyDownloads).toBeUndefined()   // npm part absent
     expect(s.errors.some(e => e.startsWith('npm:'))).toBe(true)
   })
+  it('tree fetch failure skips repo-content signals and notes it', async () => {
+    const http = fullFake()
+    const orig = http.json.bind(http)
+    http.json = async <T,>(url: string): Promise<T> => {
+      if (url.includes('/git/trees/')) throw new Error('HTTP 500')
+      return orig<T>(url)
+    }
+    const s = await assemble(
+      { ref: 'foo-mcp', repo: { owner: 'acme', name: 'foo' }, npmPackage: 'foo-mcp' },
+      http, NOW,
+    )
+    expect(s.hasCI).toBeUndefined()
+    expect(s.hasTests).toBeUndefined()
+    expect(s.hasLockfile).toBeUndefined()
+    expect(s.specEra).toBeUndefined()
+    expect(s.schemaExtracted).toBeUndefined()
+    expect(s.secretsFound).toBeUndefined()
+    expect(s.toolCount).toBeUndefined()
+    expect(s.errors).toContain('github: file tree unavailable; repo-content signals skipped')
+    expect(s.daysSinceLastCommit).toBe(2) // metadata signals still intact
+  })
 })

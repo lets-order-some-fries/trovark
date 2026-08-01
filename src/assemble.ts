@@ -17,7 +17,7 @@ export async function assemble(
   identity: ServerIdentity, http: Http, now: Date, opts: { hasToken?: boolean } = {},
 ): Promise<Signals> {
   const s: Signals = { findings: [], errors: [] }
-  let deps: Dep[] = []
+  const deps: Dep[] = []
 
   if (identity.repo) {
     try {
@@ -62,7 +62,7 @@ export async function assemble(
           evidence: `https://www.npmjs.com/package/${identity.npmPackage}`,
         })
       }
-      deps = depsFromManifest(npm.dependencies, 'npm')
+      deps.push(...depsFromManifest(npm.dependencies, 'npm'))
     } catch (err) {
       s.errors.push(`npm: ${(err as Error).message}`)
     }
