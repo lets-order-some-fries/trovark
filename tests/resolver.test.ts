@@ -7,6 +7,7 @@ const httpOf = (routes: Record<string, unknown>): Http => ({
     for (const [prefix, body] of Object.entries(routes)) if (url.startsWith(prefix)) return body as T
     throw new Error(`HTTP 404 for ${url}`)
   },
+  async jsonWithHeaders() { throw new Error('unused') },
   async text() { throw new Error('unused') },
   async postJson() { throw new Error('unused') },
 })

@@ -1,7 +1,7 @@
 import type { Http } from './util/http.js'
 import type { ServerIdentity } from './resolver.js'
 import type { Signals } from './types.js'
-import { collectGithub } from './collectors/github.js'
+import { collectGithub, type RepoFile } from './collectors/github.js'
 import { collectNpm } from './collectors/npm.js'
 import { collectPypi } from './collectors/pypi.js'
 import { collectOsv, depsFromManifest, type Dep } from './collectors/osv.js'
@@ -9,6 +9,7 @@ import { repoChecks } from './derive/repoChecks.js'
 import { specEra } from './derive/specEra.js'
 import { extractSchema } from './derive/schema.js'
 import { scanSecrets } from './derive/secrets.js'
+import { parseLockfile } from './derive/lockfile.js'
 
 const days = (fromIso: string, now: Date) =>
   Math.max(0, Math.floor((now.getTime() - new Date(fromIso).getTime()) / 86_400_000))
@@ -18,10 +19,12 @@ export async function assemble(
 ): Promise<Signals> {
   const s: Signals = { findings: [], errors: [] }
   const deps: Dep[] = []
+  let repoFiles: RepoFile[] | undefined
 
   if (identity.repo) {
     try {
       const snap = await collectGithub(identity, http, now, opts)
+      repoFiles = snap.files
       s.daysSinceLastCommit = days(snap.pushedAt, now)
       if (snap.latestReleaseAt) s.daysSinceLastRelease = days(snap.latestReleaseAt, now)
       s.commitsLast90Days = snap.commitsLast90Days
@@ -80,8 +83,27 @@ export async function assemble(
     }
   }
 
+  // Prefer exact resolved versions from a committed lockfile over the manifest
+  // floor, per ecosystem: this catches transitive deps and versions already
+  // patched within the declared range, avoiding both over- and under-reporting
+  // CVEs (see src/derive/lockfile.ts). Falls back to floors when no supported
+  // lockfile was fetched (labelled approximate — no code change needed here,
+  // that's simply the pre-existing `deps` array being left untouched).
+  const lockDeps = repoFiles ? parseLockfile(repoFiles) : []
+  if (lockDeps.length > 0) {
+    const lockEcosystems = new Set(lockDeps.map(d => d.ecosystem))
+    const floorDeps = deps.filter(d => !lockEcosystems.has(d.ecosystem))
+    deps.length = 0
+    deps.push(...floorDeps, ...lockDeps)
+  }
+
+  // A large monorepo lockfile can resolve into many hundreds/thousands of
+  // transitive deps; cap the OSV batch so one repo can't blow up a single
+  // query (or the downstream findings list) unboundedly.
+  const cappedDeps = deps.slice(0, 400)
+
   try {
-    const osv = await collectOsv(deps, http)
+    const osv = await collectOsv(cappedDeps, http)
     s.cveWorst = osv.cveWorst
     s.findings.push(...osv.findings)
   } catch (err) {

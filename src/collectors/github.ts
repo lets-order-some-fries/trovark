@@ -17,13 +17,53 @@ export interface RepoSnapshot {
 
 const FILE_CAP = 12
 const SIZE_CAP = 100_000
+// PRIMARY manifests: spec-era detection + secrets-relevant, always worth a
+// budget slot ahead of source. Deliberately excludes lockfiles — see
+// LOCKFILES below and the final-review fix note on `wanted`.
 const ALWAYS_FETCH = new Set([
   'package.json', 'pyproject.toml', 'requirements.txt', 'mcp.json', 'server.json', 'smithery.yaml',
+  'go.mod', 'Cargo.toml', 'build.gradle', 'build.gradle.kts', 'pom.xml',
 ])
+// Fix (final review): committed lockfiles let assemble() query OSV at exact
+// resolved versions (incl. transitive deps) instead of manifest-range floors
+// (see P7 / src/derive/lockfile.ts) — but they are DATA that only feeds CVE
+// lookup, never tool extraction. The previous single ALWAYS_FETCH bucket put
+// lockfiles in the SAME first-priority tier as source-critical manifests, so
+// under FILE_CAP=12 a repo with a big lockfile plus many source files could
+// have the lockfile crowd out source needed for the gate (tool extraction).
+// Lockfiles now rank in their own LAST bucket — fetched only if budget
+// remains after PRIMARY manifests and SOURCE files. SIZE_CAP below still
+// skips oversized blobs either way.
+const LOCKFILES = new Set(['package-lock.json', 'uv.lock', 'poetry.lock'])
 const SOURCE_HINT = /(src\/|server|tool|index|main)/
 const SOURCE_EXT = /\.(ts|js|mjs|py)$/
+// Fix 7 (tool-signal ranking): among source candidates that already passed
+// SOURCE_HINT, prefer paths that look like a tool-registration/entry-point
+// file over merely-short ones — deep one-tool-per-file layouts (tools/x.ts)
+// were previously starved by short unrelated files (util/log.ts) under pure
+// shortest-path sort, silently undercounting tools. No extra fetches — path
+// hint only; FILE_CAP stays unchanged (minimal version of audit item 11).
+// Match tools?/server/index/main as a word-part bounded by /, _, ., -, or
+// start/end — not just an exact path segment — so common single-file
+// entrypoints like weather_server.py / mcp_server.ts / server_main.py still
+// get the priority boost (P3 review).
+const TOOL_SIGNAL_HINT = /(^|[\/_.-])(tools?|server|index|main)([\/_.-]|$)/i
+const toolSignalScore = (path: string): number => (TOOL_SIGNAL_HINT.test(path) ? 1 : 0)
 
 interface GhCommit { commit: { author?: { date?: string } }; author?: { login?: string } | null }
+
+const COMMIT_PAGE_CAP = 10 // safety net against runaway pagination on huge repos
+
+/** Parses the `Link` response header for a `rel="next"` target URL (RFC 8288 / GitHub pagination). */
+function parseNextLink(headers: Headers): string | undefined {
+  const link = headers.get('link')
+  if (!link) return undefined
+  for (const part of link.split(',')) {
+    const m = /<([^>]+)>\s*;\s*rel="next"/.exec(part)
+    if (m) return m[1]
+  }
+  return undefined
+}
 
 export async function collectGithub(
   identity: ServerIdentity, http: Http, now: Date, opts: { hasToken?: boolean } = {},
@@ -36,8 +76,30 @@ export async function collectGithub(
   const meta = await http.json<GhRepo>(api)
 
   const since365 = new Date(now.getTime() - 365 * 86_400_000).toISOString()
+  const cutoff365Ms = now.getTime() - 365 * 86_400_000
+  // Paginate the FULL 365-day commit window: a single 100-commit page on an
+  // active repo can span only weeks, truncating the intended window and
+  // undercounting bus factor / recent activity. Follow `Link: rel="next"`
+  // until a page's oldest commit is already past the cutoff, or the page cap
+  // is hit (huge-repo safety net) — whichever comes first. Deliberately NOT
+  // using /contributors (all-time totals, wrong window) or /stats/contributors
+  // (202 async placeholder that requires polling and isn't guaranteed fresh).
   // Fetch failure → undefined signals (absence ≠ zero); an infra hiccup must not read as a dead repo.
-  const commits = await http.json<GhCommit[]>(`${api}/commits?since=${since365}&per_page=100`).catch(() => undefined)
+  let commits: GhCommit[] | undefined
+  try {
+    const acc: GhCommit[] = []
+    let url: string | undefined = `${api}/commits?since=${since365}&per_page=100`
+    for (let page = 0; page < COMMIT_PAGE_CAP && url; page++) {
+      const { data, headers } = await http.jsonWithHeaders<GhCommit[]>(url)
+      acc.push(...data)
+      const oldestOnPage = data[data.length - 1]?.commit.author?.date
+      if (oldestOnPage !== undefined && new Date(oldestOnPage).getTime() < cutoff365Ms) break
+      url = parseNextLink(headers)
+    }
+    commits = acc
+  } catch {
+    commits = undefined
+  }
   const cutoff90 = now.getTime() - 90 * 86_400_000
   const commitsLast90Days = commits?.filter(c => {
     const d = c.commit.author?.date
@@ -75,7 +137,10 @@ export async function collectGithub(
       }
       if (deltas.length > 0) {
         deltas.sort((a, b) => a - b)
-        medianIssueResponseDays = deltas[Math.floor(deltas.length / 2)]
+        const n = deltas.length
+        medianIssueResponseDays = n % 2
+          ? deltas[(n - 1) / 2]
+          : (deltas[n / 2 - 1] + deltas[n / 2]) / 2
       }
     } catch { /* leave undefined */ }
   }
@@ -88,11 +153,26 @@ export async function collectGithub(
   const treePaths = tree ? blobs.map(b => b.path) : undefined
 
   const fetchable = (p: { path: string; size?: number }) => (p.size ?? 0) <= SIZE_CAP
+  // Basename match (not full-path) so workspace/monorepo manifests nested under
+  // e.g. packages/x/package.json are still always-fetched, not just root ones.
+  // .csproj filenames vary (MyServer.csproj), so basename-Set membership can't
+  // catch them — fall back to an extension check for that ecosystem.
+  // Manifests are listed ahead of source below and FILE_CAP is unchanged, so
+  // they win budget naturally; at the current cap this is fine, but a repo with
+  // many nested manifests could start crowding out source files — revisit if
+  // that shows up (tracked for P4).
+  const isManifest = (p: string) => ALWAYS_FETCH.has(p.split('/').pop() ?? '') || p.endsWith('.csproj')
+  const isLockfile = (p: string) => LOCKFILES.has(p.split('/').pop() ?? '')
+  // Fix (final review): three priority buckets, in order — (1) PRIMARY
+  // manifests + .env matches, (2) ranked SOURCE files, (3) LOCKFILES last —
+  // so lockfiles (CVE-lookup data only) never outrank source (needed for tool
+  // extraction → gate) under a tight FILE_CAP.
   const wanted = [
-    ...blobs.filter(b => fetchable(b) && (ALWAYS_FETCH.has(b.path) || /(^|\/)\.env[^/]*$/.test(b.path))),
+    ...blobs.filter(b => fetchable(b) && (isManifest(b.path) || /(^|\/)\.env[^/]*$/.test(b.path))),
     ...blobs
       .filter(b => fetchable(b) && SOURCE_EXT.test(b.path) && SOURCE_HINT.test(b.path))
-      .sort((a, b) => a.path.length - b.path.length),
+      .sort((a, b) => toolSignalScore(b.path) - toolSignalScore(a.path) || a.path.length - b.path.length),
+    ...blobs.filter(b => fetchable(b) && isLockfile(b.path)),
   ]
   const seen = new Set<string>()
   const files: RepoFile[] = []

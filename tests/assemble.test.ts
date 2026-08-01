@@ -36,6 +36,14 @@ function fullFake(): Http {
       for (const [prefix, body] of Object.entries(routes)) if (url.startsWith(prefix)) return body as T
       throw new Error(`HTTP 404 for ${url}`)
     },
+    // Real (not a stub): collectGithub paginates commits through this method,
+    // and this fixture's single page has no Link header → one page, as before.
+    async jsonWithHeaders<T>(url: string): Promise<{ data: T; headers: Headers }> {
+      for (const [prefix, body] of Object.entries(routes)) {
+        if (url.startsWith(prefix)) return { data: body as T, headers: new Headers() }
+      }
+      throw new Error(`HTTP 404 for ${url}`)
+    },
     async postJson<T>(url: string): Promise<T> {
       if (url.includes('osv.dev')) return { results: [{}] } as T
       throw new Error(`HTTP 404 for ${url}`)
@@ -105,5 +113,76 @@ describe('assemble', () => {
     expect(s.toolCount).toBeUndefined()
     expect(s.errors).toContain('github: file tree unavailable; repo-content signals skipped')
     expect(s.daysSinceLastCommit).toBe(2) // metadata signals still intact
+  })
+  it('prefers resolved lockfile versions over manifest floors for the OSV query', async () => {
+    const http = fullFake()
+    const origText = http.text.bind(http)
+    http.text = async (url: string): Promise<string> => {
+      if (url.endsWith('package-lock.json')) {
+        return JSON.stringify({
+          packages: {
+            '': { name: 'foo', version: '1.0.0' },
+            'node_modules/zod': { version: '3.22.5' }, // resolved version differs from the ^3.22.0 floor
+          },
+        })
+      }
+      return origText(url)
+    }
+    let queriedVersions: string[] = []
+    http.postJson = async <T,>(url: string, body: unknown): Promise<T> => {
+      if (url.includes('osv.dev')) {
+        queriedVersions = (body as { queries: Array<{ version: string }> }).queries.map(q => q.version)
+        return { results: [{}] } as T
+      }
+      throw new Error(`HTTP 404 for ${url}`)
+    }
+    await assemble(
+      { ref: 'foo-mcp', repo: { owner: 'acme', name: 'foo' }, npmPackage: 'foo-mcp' },
+      http, NOW,
+    )
+    expect(queriedVersions).toEqual(['3.22.5']) // lockfile-resolved, not the '3.22.0' manifest floor
+  })
+
+  it('coexists per-ecosystem: npm lockfile-resolved dep AND PyPI requires_dist floor dep both reach the OSV query', async () => {
+    const http = fullFake()
+    const origJson = http.json.bind(http)
+    http.json = async <T,>(url: string): Promise<T> => {
+      if (url.startsWith('https://pypi.org/pypi/')) {
+        return { info: { requires_dist: ['requests>=2.31.0'] } } as T
+      }
+      return origJson<T>(url)
+    }
+    const origText = http.text.bind(http)
+    http.text = async (url: string): Promise<string> => {
+      if (url.endsWith('package-lock.json')) {
+        return JSON.stringify({
+          packages: {
+            '': { name: 'foo', version: '1.0.0' },
+            'node_modules/zod': { version: '3.22.5' }, // npm: lockfile-resolved
+          },
+        })
+      }
+      return origText(url)
+    }
+    let queried: Array<{ name: string; ecosystem: string; version: string }> = []
+    http.postJson = async <T,>(url: string, body: unknown): Promise<T> => {
+      if (url.includes('osv.dev')) {
+        queried = (body as { queries: Array<{ package: { name: string; ecosystem: string }; version: string }> })
+          .queries.map(q => ({ name: q.package.name, ecosystem: q.package.ecosystem, version: q.version }))
+        return { results: queried.map(() => ({})) } as T
+      }
+      throw new Error(`HTTP 404 for ${url}`)
+    }
+    await assemble(
+      {
+        ref: 'foo-mcp', repo: { owner: 'acme', name: 'foo' },
+        npmPackage: 'foo-mcp', pypiPackage: 'foo-mcp',
+      },
+      http, NOW,
+    )
+    // npm: resolved from the lockfile (not the manifest floor)
+    expect(queried).toContainEqual({ name: 'zod', ecosystem: 'npm', version: '3.22.5' })
+    // PyPI: no PyPI lockfile was fetched, so the requires_dist floor survives untouched
+    expect(queried).toContainEqual({ name: 'requests', ecosystem: 'PyPI', version: '2.31.0' })
   })
 })

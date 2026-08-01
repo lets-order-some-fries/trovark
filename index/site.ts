@@ -18,10 +18,16 @@ function row(e: IndexEntry): string {
   const safeUrl = e.repoUrl && /^https?:\/\//.test(e.repoUrl) ? e.repoUrl : undefined
   const name = safeUrl ? `<a href="${esc(safeUrl)}">${esc(e.ref)}</a>` : esc(e.ref)
   if (!e.ok) return `<tr class="failed" data-overall="-1"><td>${name}</td><td colspan="6" class="muted">unreachable — ${esc(e.error ?? 'unknown error')}</td></tr>`
-  if (e.insufficientData) return `<tr class="failed" data-overall="-1"><td>${name}</td><td colspan="6" class="muted">insufficient data to score</td></tr>`
   const d = e.dims
   const dim = (k: 'health' | 'reliability' | 'security' | 'cost') =>
     d ? `<td>${d[k].score}<span class="conf">${esc(d[k].confidence[0])}</span></td>` : '<td>—</td>'
+  if (e.insufficientData) {
+    if (!d) return `<tr class="failed" data-overall="-1"><td>${name}</td><td colspan="6" class="muted">insufficient data to score</td></tr>`
+    const securityCell = d.security.confidence === 'low' ? '<td class="muted" title="not assessed">?</td>' : dim('security')
+    return `<tr class="failed" data-overall="-1" title="grade withheld — tool surface unreadable"><td>${name}</td>` +
+      `<td><span class="chip muted-chip" title="grade withheld — tool surface unreadable">—</span></td>` +
+      `<td class="muted">—</td>${dim('health')}${dim('reliability')}${securityCell}${dim('cost')}</tr>`
+  }
   const flags = (e.topFindings ?? []).map(f => `<span class="flag ${esc(f.severity)}" title="${esc(f.id)}">⚑</span>`).join('')
   return `<tr data-overall="${e.overall}"><td>${name} ${flags}</td>` +
     `<td><span class="chip" style="background:${gradeColor(e.grade)}">${esc(e.grade ?? '?')}</span></td>` +
@@ -49,11 +55,12 @@ th,td{text-align:left;padding:8px 10px;border-bottom:1px solid #21262d}
 th{cursor:pointer;color:#8b949e;user-select:none;white-space:nowrap}
 a{color:#58a6ff;text-decoration:none}
 .chip{color:#fff;border-radius:6px;padding:1px 8px;font-weight:600}
+.chip.muted-chip{background:#30363d;color:#8b949e;font-weight:500}
 .conf{color:#8b949e;font-size:10px;margin-left:3px;vertical-align:super}
 .flag{margin-left:4px}.flag.high{color:#f85149}.flag.medium{color:#c9a227}.flag.low{color:#8b949e}
 .failed td{color:#8b949e}.muted{color:#8b949e}
 footer{margin:28px 0;color:#8b949e;font-size:13px}
-@media(prefers-color-scheme:light){body{background:#fff;color:#1f2328}.stat,code{background:#f6f8fa;border-color:#d0d7de}th,td{border-color:#d0d7de}}
+@media(prefers-color-scheme:light){body{background:#fff;color:#1f2328}.stat,code{background:#f6f8fa;border-color:#d0d7de}th,td{border-color:#d0d7de}.chip.muted-chip{background:#eaeef2;color:#57606a}}
 </style></head><body><main>
 <h1>Trovark</h1>
 <p class="tag">Trust scores for MCP servers — evidence-linked grades from static public signals. <code>npx trovark &lt;server&gt;</code></p>
