@@ -48,7 +48,13 @@ export function score(
   })
 
   const availableTotal = dimensions.reduce((a, d) => a + d.available, 0)
-  const insufficientData = availableTotal < 4
+  // Coverage gate: don't hand out a confident grade when the security PRIMARY
+  // signal (tool-surface risk) couldn't be determined — without it, security
+  // renormalizes onto the low-weight no-secrets candidate signal and can read
+  // as a false clean bill (e.g. 100/A+) even for dangerous servers.
+  const securityPrimaryAbsent = signals.toolSurfaceRisk === undefined
+  const dimensionsFullyDropped = dimensions.filter(d => d.available === 0).length
+  const insufficientData = availableTotal < 4 || securityPrimaryAbsent || dimensionsFullyDropped >= 2
 
   const notes: string[] = []
   for (const d of dimensions) {
@@ -56,7 +62,13 @@ export function score(
     else if (d.confidence === 'low') notes.push(`Low confidence in ${d.id}: only ${d.available}/${d.total} signals available.`)
   }
   for (const e of signals.errors) notes.push(`Collector issue: ${e}`)
-  if (insufficientData) {
+  if (securityPrimaryAbsent) {
+    notes.push('Security tool surface could not be determined — grade withheld to avoid a false clean bill.')
+  }
+  if (dimensionsFullyDropped >= 2) {
+    notes.push(`${dimensionsFullyDropped} dimensions had zero collectible signals — not enough coverage to score confidently. Grade withheld.`)
+  }
+  if (availableTotal < 4) {
     notes.push(`Only ${availableTotal} of ${SIGNALS.length} signals were collectable — not enough to score. Grade withheld.`)
   }
 

@@ -16,6 +16,7 @@ const fake: Http = {
       'https://api.github.com/repos/acme/foo/releases/latest': { published_at: iso(5) },
       'https://api.github.com/repos/acme/foo/git/trees/main?recursive=1': { tree: [
         { path: 'package.json', type: 'blob', size: 100 },
+        { path: 'src/server.js', type: 'blob', size: 200 },
       ] },
       'https://api.github.com/repos/acme/foo': {
         stargazers_count: 2000, archived: false, pushed_at: iso(1), default_branch: 'main',
@@ -27,6 +28,10 @@ const fake: Http = {
   async postJson<T>(): Promise<T> { return { results: [{}] } as T },
   async text(url: string): Promise<string> {
     if (url.endsWith('package.json')) return JSON.stringify({ dependencies: { '@modelcontextprotocol/sdk': '^1.0.0' } })
+    // A minimal tool registration so the security dimension's PRIMARY signal
+    // (tool-surface) is determinable — without this the P1 coverage gate
+    // correctly withholds a confident grade for this fixture.
+    if (url.endsWith('src/server.js')) return 'server.tool("add_numbers", "adds two numbers")'
     throw new Error(`HTTP 404 for ${url}`)
   },
 }
@@ -46,13 +51,13 @@ describe('cli main', () => {
   it('--json emits parseable scorecard', async () => {
     const r = await run(['acme/foo', '--json'])
     const card = JSON.parse(r.out)
-    expect(card.rubricVersion).toBe('1.1.0')
+    expect(card.rubricVersion).toBe('1.2.0')
     expect(card.dimensions).toHaveLength(4)
     expect(card.ref).toBe('acme/foo')
   })
   it('--fail-under A exits 1 when below A', async () => {
     const r = await run(['acme/foo', '--fail-under', 'A'])
-    // fake repo has no CI/tests/lockfile and no extractable schema; lands ~B
+    // fake repo has no CI/tests/lockfile; lands ~B despite a clean, extractable tool surface
     expect(r.code).toBe(1)
   })
   it('--fail-under 10 passes', async () => {

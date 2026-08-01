@@ -30,7 +30,7 @@ describe('score()', () => {
     const card = score('x', healthy(), '2026-07-31T00:00:00Z')
     expect(card.overall).toBe(100)
     expect(card.grade).toBe('A+')
-    expect(card.rubricVersion).toBe('1.1.0')
+    expect(card.rubricVersion).toBe('1.2.0')
     for (const d of card.dimensions) expect(d.confidence).toBe('high')
   })
   it('missing signals lower confidence, never throw, never zero the score', () => {
@@ -82,5 +82,19 @@ describe('score()', () => {
   it('healthy fixture has plenty of signals → insufficientData is false', () => {
     const card = score('x', healthy(), '2026-07-31T00:00:00Z')
     expect(card.insufficientData).toBe(false)
+  })
+  it('withholds grade when the security tool-surface signal is absent', () => {
+    const s = healthy(); s.toolSurfaceRisk = undefined
+    const card = score('x', s, 'T')
+    expect(card.insufficientData).toBe(true)
+    expect(card.notes.join(' ')).toMatch(/tool surface|grade withheld/i)
+  })
+  it('does NOT withhold when tool-surface is present (even if low)', () => {
+    const s = healthy(); s.toolSurfaceRisk = 'high'
+    expect(score('x', s, 'T').insufficientData).toBe(false)
+  })
+  it('withholds when two or more dimensions are fully dropped', () => {
+    const s = empty(); s.daysSinceLastCommit = 5 // only health has 1 signal; reliability/security/cost empty
+    expect(score('x', s, 'T').insufficientData).toBe(true)
   })
 })

@@ -1,6 +1,6 @@
 import type { DimensionId, Signals } from '../types.js'
 
-export const RUBRIC_VERSION = '1.1.0'
+export const RUBRIC_VERSION = '1.2.0'
 
 export const DIMENSION_WEIGHTS: Record<DimensionId, number> = {
   health: 0.35,

@@ -1,4 +1,4 @@
-# Methodology (rubric v1.1.0)
+# Methodology (rubric v1.2.0)
 
 trovark computes a 0–100 Trust Score from four dimensions: Health 35%,
 Reliability 25%, Security 25%, Cost 15%. Grade bands: A ≥ 85, B ≥ 70, C ≥ 55,
