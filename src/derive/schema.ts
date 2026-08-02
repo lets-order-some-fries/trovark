@@ -271,8 +271,96 @@ function fromManifest(f: RepoFile): ToolInfo[] {
 }
 
 // Fix 1: modern high-level SDK `server.registerTool("name", {...})` alongside
-// the legacy `server.tool("name", "description", ...)` form.
-const JS_TOOL_CALL_RE = /\.(?:registerTool|tool)\(\s*["'`]([\w.-]+)["'`]\s*(?:,\s*["'`]([^"'`]*)["'`])?/g
+// the legacy `server.tool("name", "description", ...)` form. V4 (coverage-
+// spec §3.4 TS #1): also match fastmcp's `.addTool("name", ...)` — same
+// quoted-first-arg method-call shape, so it flows through the existing
+// config-object description fallback below for free.
+const JS_TOOL_CALL_RE = /\.(?:registerTool|tool|addTool)\(\s*["'`]([\w.-]+)["'`]\s*(?:,\s*["'`]([^"'`]*)["'`])?/g
+
+// V4 #1/#4 (coverage-spec §3.4 TS): metatool/sentry's `defineTool(...)` is
+// usually called bare (an imported function, not a method), so it needs its
+// own alternation rather than living in JS_TOOL_CALL_RE's `\.`-anchored
+// form. This single regex covers both the "add a bare-call form for
+// defineTool" extension from #1 and the positional name+description form
+// from #4 (`defineTool("run_workflow", "Runs a saved workflow")`) —
+// description is optional so a name-only call still extracts.
+const DEFINE_TOOL_CALL_RE = /\bdefineTool\(\s*["'`]([\w-]+)["'`]\s*(?:,\s*["'`]([^"'`]*)["'`])?/g
+
+// V4 #2 (coverage-spec §3.4 TS): object-literal FIRST arg — fastmcp
+// `server.addTool({name,...})`, sentry `defineTool({name:...})`. Distinct
+// from JS_TOOL_CALL_RE's config-object fallback (which fires on the SECOND
+// arg, after an already-quoted name as arg 1): here there is no quoted name
+// at the call site at all, the whole tool is described by the object.
+const OBJECT_ARG_CALL_RE = /\b(?:addTool|defineTool)\(\s*\{/g
+
+// V4 #3 (coverage-spec §3.4 TS): keyed-factory — supabase's
+// `list_organizations: tool({...})`, where the object KEY (not a string
+// literal anywhere in the call) is the tool name. This shape is
+// indistinguishable from an arbitrary `foo: bar({...})` object property by
+// regex alone, so it is gated by MCP_UTILS_TOOL_IMPORT_RE / GET_TOOLS_FN_RE
+// below — it never fires unqualified (see the guard in fromJsSource).
+const KEYED_FACTORY_RE = /([\w-]+)\s*:\s*tool\(/g
+const MCP_UTILS_TOOL_IMPORT_RE = /import\s*\{[^}]*\btool\b[^}]*\}\s*from\s*["'][^"']*mcp-utils[^"']*["']/
+const GET_TOOLS_FN_RE = /(?:function\s+(get\w*Tools)\s*\([^)]*\)\s*\{|(?:export\s+)?(?:const|let)\s+(get\w*Tools)\s*=\s*(?:async\s*)?\([^)]*\)\s*=>\s*\{)/g
+
+// V4 #5 (coverage-spec §3.4 TS): class-based tool (mongodb) — a class
+// extending some `*Tool*Base` whose body sets `name`/`toolName` and
+// `description` instance fields rather than passing them to a call.
+const CLASS_TOOL_RE = /class\s+\w+\s+extends\s+[\w.]*Tool[\w.]*Base\b[^{]*\{/g
+const CLASS_NAME_FIELD_RE = /(?:static\s+)?(?:toolName|name)\s*=\s*["'`]([\w-]+)["'`]/
+const CLASS_DESC_FIELD_RE = /(?:public\s+)?description\s*=\s*["'`]([^"'`]*)["'`]/
+
+// V4 #6 (coverage-spec §3.4 TS): wrapper member-expression name (cloudflare)
+// — `server.accountTool(NAME_MAP.key, {...})`. The name isn't a string
+// literal at the call site; resolveWrapperName below resolves it via a
+// sibling `const NAME_MAP = { key: 'literal' }` map when one exists, else
+// falls back to the raw identifier text.
+const WRAPPER_TOOL_CALL_RE = /\.\w*[Tt]ool\(\s*([A-Z_][\w.]*)\s*,\s*\{/g
+
+// V4 #7 (coverage-spec §3.4 TS): the ListToolsRequestSchema sibling-check
+// scan below is also the right shape for discogs-style FastMCP object
+// literals that never funnel through a single quoted-name call site (a
+// `tools = [{name, parameters, ...}]` array iterated into `.addTool(t)`).
+// Trigger the scan whenever the file imports fastmcp too, not only when
+// ListToolsRequestSchema is present.
+const FASTMCP_IMPORT_RE = /['"]fastmcp['"]/
+
+function escapeRegExp(s: string): string {
+  return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+}
+
+// V4 #3 helper: spans (start/end index of the `{...}` body) of every
+// `function getXTools(...) { ... }` / `const getXTools = (...) => { ... }`
+// declaration in the file, so the keyed-factory guard can check whether a
+// given match position falls inside one of the supabase/cloudflare
+// `getXTools()` factory-function bodies.
+function findGetToolsFnSpans(content: string): Array<[number, number]> {
+  const spans: Array<[number, number]> = []
+  for (const m of content.matchAll(GET_TOOLS_FN_RE)) {
+    const braceIdx = m.index + m[0].length - 1
+    const body = captureBalanced(content, braceIdx, '{', '}')
+    if (body) spans.push([braceIdx, braceIdx + body.length - 1])
+  }
+  return spans
+}
+
+// V4 #6 helper: resolves a captured wrapper identifier (e.g. `TOOLS.list`)
+// to the string literal it points at, via a sibling `const TOOLS = { list:
+// 'accounts_list' }` map. Falls back to the raw identifier when there's no
+// dotted member access, no matching const map, or the key isn't a string
+// literal in that map — "accept the identifier as the name" per spec.
+function resolveWrapperName(content: string, ident: string): string {
+  const dotIdx = ident.indexOf('.')
+  if (dotIdx === -1) return ident
+  const objectName = ident.slice(0, dotIdx)
+  const key = ident.slice(dotIdx + 1)
+  const mapMatch = new RegExp(`\\bconst\\s+${escapeRegExp(objectName)}\\s*(?::[^=]+)?=\\s*\\{`).exec(content)
+  if (!mapMatch) return ident
+  const braceIdx = mapMatch.index + mapMatch[0].length - 1
+  const body = captureBalanced(content, braceIdx, '{', '}')
+  const keyMatch = body.match(new RegExp(`\\b${escapeRegExp(key)}\\s*:\\s*["'\`]([\\w.-]+)["'\`]`))
+  return keyMatch ? keyMatch[1] : ident
+}
 
 // Fix 4: low-level SDK `Tool(...)`/`types.Tool(...)` constructor literals
 // (JS positional-object and Python kwargs both land here — the captured args
@@ -318,12 +406,73 @@ export function fromJsSource(f: RepoFile): ToolInfo[] {
     tools.push({ name: m[1], description, schemaText })
   }
 
-  // Fix 3: the ListToolsRequestSchema fallback only counts a `name:"x"` when
-  // the SAME object literal also has an adjacent `description:`/`inputSchema:`
-  // sibling — this drops logger/config `name:` phantoms AND the
-  // `new Server({name})` identity phantom, without losing real tool entries.
-  if (f.content.includes('ListToolsRequestSchema')) {
-    const SIBLING_RE = /\b(?:description|inputSchema)\s*:/
+  // V4 #1/#4: bare/positional defineTool("name"[, "description"]) — the
+  // dot-anchored JS_TOOL_CALL_RE above can't see this since it's usually an
+  // imported function, not a method call.
+  for (const m of f.content.matchAll(DEFINE_TOOL_CALL_RE)) {
+    if (tools.some(t => t.name === m[1])) continue
+    tools.push({ name: m[1], description: m[2], schemaText: m[0] })
+  }
+
+  // V4 #2: object-literal first arg — addTool({name,...}) / defineTool({name}).
+  for (const m of f.content.matchAll(OBJECT_ARG_CALL_RE)) {
+    const braceIdx = m.index + m[0].length - 1
+    const obj = captureBalanced(f.content, braceIdx, '{', '}')
+    const nameMatch = obj.match(/\bname\s*:\s*["'`]([\w.-]+)["'`]/)
+    if (!nameMatch) continue
+    if (tools.some(t => t.name === nameMatch[1])) continue
+    const descMatch = obj.match(/\bdescription\s*:\s*["'`]([^"'`]*)["'`]/)
+    tools.push({ name: nameMatch[1], description: descMatch?.[1], schemaText: m[0] + obj })
+  }
+
+  // V4 #3: keyed-factory `key: tool({...})` — the object KEY is the tool
+  // name. Guarded: only runs when `tool` is imported from an *mcp-utils*
+  // module, or (checked per-match) the match sits inside a `getXTools()`
+  // factory function body — never on an arbitrary `foo: bar({...})`.
+  if (MCP_UTILS_TOOL_IMPORT_RE.test(f.content) || /get\w*Tools\(/.test(f.content)) {
+    const mcpUtilsImport = MCP_UTILS_TOOL_IMPORT_RE.test(f.content)
+    const fnSpans = mcpUtilsImport ? [] : findGetToolsFnSpans(f.content)
+    for (const m of f.content.matchAll(KEYED_FACTORY_RE)) {
+      const insideGetToolsFn = fnSpans.some(([s, e]) => m.index >= s && m.index <= e)
+      if (!mcpUtilsImport && !insideGetToolsFn) continue
+      if (tools.some(t => t.name === m[1])) continue
+      tools.push({ name: m[1], schemaText: m[0] })
+    }
+  }
+
+  // V4 #5: class-based tool — `class FindTool extends MongoDBToolBase {
+  // name = 'find'; description = '...' }`.
+  for (const m of f.content.matchAll(CLASS_TOOL_RE)) {
+    const braceIdx = m.index + m[0].length - 1
+    const body = captureBalanced(f.content, braceIdx, '{', '}')
+    const nameMatch = body.match(CLASS_NAME_FIELD_RE)
+    if (!nameMatch) continue
+    if (tools.some(t => t.name === nameMatch[1])) continue
+    const descMatch = body.match(CLASS_DESC_FIELD_RE)
+    tools.push({ name: nameMatch[1], description: descMatch?.[1], schemaText: m[0] + body })
+  }
+
+  // V4 #6: wrapper member-expression name — `server.accountTool(NAME_MAP.key,
+  // {...})`, resolved via a sibling const map (or the raw identifier).
+  for (const m of f.content.matchAll(WRAPPER_TOOL_CALL_RE)) {
+    const name = resolveWrapperName(f.content, m[1])
+    if (tools.some(t => t.name === name)) continue
+    tools.push({ name, schemaText: m[0] })
+  }
+
+  // Fix 3 / V4 #7: the ListToolsRequestSchema fallback only counts a
+  // `name:"x"` when the SAME object literal also has an adjacent
+  // `description:`/`inputSchema:`/`parameters:` sibling — this drops
+  // logger/config `name:` phantoms AND the `new Server({name})` identity
+  // phantom, without losing real tool entries. V4 #7 drops the
+  // ListToolsRequestSchema precondition: the same scan now also runs when
+  // the file imports fastmcp or calls `.addTool(`, so discogs-shaped
+  // FastMCP tool-array object literals are picked up even without an
+  // explicit ListToolsRequestSchema handler; the sibling set is broadened to
+  // include `parameters:` (fastmcp/zod-style schemas use that key instead of
+  // `inputSchema:`).
+  if (f.content.includes('ListToolsRequestSchema') || FASTMCP_IMPORT_RE.test(f.content) || f.content.includes('.addTool(')) {
+    const SIBLING_RE = /\b(?:description|inputSchema|parameters)\s*:/
     for (const m of f.content.matchAll(/name:\s*["'`]([\w-]+)["'`]/g)) {
       if (tools.some(t => t.name === m[1])) continue
       const span = enclosingObjectSpan(f.content, m.index)

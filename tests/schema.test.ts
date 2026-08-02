@@ -373,3 +373,192 @@ describe('classify (P4 review fix): bare run/code demoted, co-occurrence rule, t
     expect(nameOnly('fork_repository').toolSurfaceRisk).toBe('medium')
   })
 })
+
+// V4 (coverage-spec §3.4 TS): the 7 real-world idioms that were withholding
+// flagship servers (fastmcp/discogs, sentry/metatool defineTool, supabase's
+// keyed-factory, mongodb's class-based tools, cloudflare's wrapper+NAME_MAP).
+// Every snippet below is shaped after the real repo named in its title.
+describe('fromJsSource (V4): TS idiom pack — addTool/defineTool/keyed-factory/class-based/wrapper', () => {
+  it('idiom 1+2: fastmcp server.addTool({name, description}) object literal → extracts name+description', () => {
+    const r = extractSchema([{
+      path: 'src/index.ts',
+      content: `
+import { FastMCP } from 'fastmcp'
+const server = new FastMCP({ name: 'my-server', version: '1.0.0' })
+server.addTool({
+  name: 'search',
+  description: 'Search the web for results',
+  parameters: z.object({ query: z.string() }),
+})
+`,
+    }])
+    expect(r.extracted).toBe(true)
+    expect(r.tools.map(t => t.name)).toEqual(['search'])
+    expect(r.tools[0].description).toBe('Search the web for results')
+  })
+
+  it('idiom 1+4: metatool positional defineTool("name", "description", ...) → extracts name+description', () => {
+    const r = extractSchema([{
+      path: 'src/tools.ts',
+      content: `
+defineTool('run_workflow', 'Run a saved workflow by id', {
+  parameters: z.object({ id: z.string() }),
+})
+`,
+    }])
+    expect(r.extracted).toBe(true)
+    expect(r.tools.map(t => t.name)).toEqual(['run_workflow'])
+    expect(r.tools[0].description).toBe('Run a saved workflow by id')
+  })
+
+  it('idiom 3: supabase keyed-factory `list_organizations: tool({...})` inside a getSupabaseTools() fn → extracts the KEY as the name', () => {
+    const r = extractSchema([{
+      path: 'src/tools/index.ts',
+      content: `
+export function getSupabaseTools(server) {
+  return {
+    list_organizations: tool({
+      description: 'Lists all organizations the user has access to',
+      parameters: z.object({}),
+      execute: async () => {},
+    }),
+  }
+}
+`,
+    }])
+    expect(r.extracted).toBe(true)
+    expect(r.tools.map(t => t.name)).toEqual(['list_organizations'])
+  })
+
+  it('idiom 3: supabase keyed-factory guarded by an *mcp-utils* `tool` import (no getTools wrapper needed) → extracts the KEY', () => {
+    const r = extractSchema([{
+      path: 'src/tools/registry.ts',
+      content: `
+import { tool } from '../../shared/mcp-utils.js'
+
+export const supabaseToolsRegistry = {
+  list_organizations: tool({
+    description: 'Lists all organizations the user has access to',
+  }),
+}
+`,
+    }])
+    expect(r.extracted).toBe(true)
+    expect(r.tools.map(t => t.name)).toEqual(['list_organizations'])
+  })
+
+  it('idiom 3 GUARD: `foo: bar({...})` with no tool/mcp-utils context is not extracted at all', () => {
+    const r = extractSchema([{
+      path: 'src/registry.ts',
+      content: `
+const registry = {
+  foo: bar({
+    description: 'not a real tool',
+  }),
+}
+`,
+    }])
+    expect(r.extracted).toBe(false)
+  })
+
+  it('idiom 3 GUARD: `foo: tool({...})` outside any getTools()/mcp-utils context is not extracted (exercises the guard, not just the regex shape)', () => {
+    const r = extractSchema([{
+      path: 'src/unrelated.ts',
+      content: `
+function unrelatedHelper() {
+  const registry = {
+    foo: tool({
+      description: 'not a real tool',
+    }),
+  }
+  return registry
+}
+`,
+    }])
+    expect(r.extracted).toBe(false)
+  })
+
+  it('idiom 5: mongodb class-based tool `class FindTool extends MongoDBToolBase { name = "find" }` → extracts name+description fields', () => {
+    const r = extractSchema([{
+      path: 'src/tools/find.ts',
+      content: `
+class FindTool extends MongoDBToolBase {
+  name = 'find'
+  description = 'Run a find query against a MongoDB collection'
+  async execute(args: FindArgs) {
+    return this.db.collection(args.collection).find(args.filter).toArray()
+  }
+}
+`,
+    }])
+    expect(r.extracted).toBe(true)
+    expect(r.tools.map(t => t.name)).toEqual(['find'])
+    expect(r.tools[0].description).toBe('Run a find query against a MongoDB collection')
+  })
+
+  it('idiom 6: cloudflare wrapper accountTool(NAME_MAP.key, {...}) resolved via sibling const map → extracts the mapped literal', () => {
+    const r = extractSchema([{
+      path: 'src/tools/accounts.ts',
+      content: `
+const TOOLS = {
+  list: 'accounts_list',
+  get: 'accounts_get',
+}
+
+function registerAccountTools(server) {
+  server.accountTool(TOOLS.list, {
+    description: 'List Cloudflare accounts',
+  })
+}
+`,
+    }])
+    expect(r.extracted).toBe(true)
+    expect(r.tools.map(t => t.name)).toEqual(['accounts_list'])
+  })
+
+  it('idiom 6 fallback: wrapper identifier with no resolvable sibling const map is still accepted as the raw name', () => {
+    const r = extractSchema([{
+      path: 'src/tools/unmapped.ts',
+      content: `
+function registerWidgetTools(server) {
+  server.widgetTool(WIDGET_NAME, {
+    description: 'Does widget things',
+  })
+}
+`,
+    }])
+    expect(r.extracted).toBe(true)
+    expect(r.tools.map(t => t.name)).toEqual(['WIDGET_NAME'])
+  })
+
+  it('idiom 7: discogs-style fastmcp tool-array object literal (no ListToolsRequestSchema handler) is picked up via the broadened sibling scan (name + parameters, no description)', () => {
+    const r = extractSchema([{
+      path: 'src/index.ts',
+      content: `
+import { FastMCP } from 'fastmcp'
+
+const server = new FastMCP({ name: 'discogs-mcp', version: '1.0.0' })
+
+const toolDefs = [
+  { name: 'search_releases', parameters: { query: 'string' }, handler: searchReleases },
+]
+
+for (const t of toolDefs) server.addTool(t)
+`,
+    }])
+    expect(r.extracted).toBe(true)
+    expect(r.tools.map(t => t.name)).toEqual(['search_releases'])
+  })
+
+  it('regression: all idioms combined in one file still dedupe by name and keep prior extraction working', () => {
+    const r = extractSchema([{
+      path: 'src/index.ts',
+      content: `server.registerTool("delete_file", {
+  description: "Delete a file at the given path",
+  inputSchema: { path: z.string() },
+}, async ({ path }) => { /* ... */ })
+server.addTool({ name: 'search', description: 'Search things' })`,
+    }])
+    expect(r.tools.map(t => t.name).sort()).toEqual(['delete_file', 'search'])
+  })
+})
