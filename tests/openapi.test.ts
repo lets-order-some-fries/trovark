@@ -72,9 +72,21 @@ describe('fromToolDefinitions', () => {
   })
 
   it('array entries without a string name are dropped, not fabricated', () => {
-    const content = JSON.stringify([{ description: 'no name here' }, { name: 'valid_tool' }])
+    const content = JSON.stringify([{ description: 'no name here' }, { name: 'valid_tool', description: 'A valid tool' }])
     const tools = fromToolDefinitions({ path: 'toolDefinitions.json', content })
     expect(tools.map(t => t.name)).toEqual(['valid_tool'])
+  })
+
+  it('entries with a name but no description/inputSchema/parameters are not tool-ish -> []', () => {
+    const content = JSON.stringify([{ name: 'dev' }, { name: 'staging' }])
+    const tools = fromToolDefinitions({ path: 'toolDefinitions.json', content })
+    expect(tools).toEqual([])
+  })
+
+  it('an entry with a name and a description still extracts', () => {
+    const content = JSON.stringify([{ name: 'find_issue', description: 'Find an issue' }])
+    const tools = fromToolDefinitions({ path: 'toolDefinitions.json', content })
+    expect(tools.map(t => t.name)).toEqual(['find_issue'])
   })
 })
 
@@ -99,14 +111,5 @@ describe('extractSchema JSON dispatch: fromOpenApi ‖ fromToolDefinitions ‖ f
     expect(r.extracted).toBe(true)
     expect(r.tools.map(t => t.name)).toEqual(['delete_issue'])
     expect(r.toolSurfaceRisk).toBe('medium')
-  })
-
-  it('fromManifest (via the JSON dispatch) still accepts a top-level array, not only {tools:[...]}', () => {
-    const r = extractSchema([{
-      path: 'mcp.json',
-      content: JSON.stringify([{ name: 'ping', description: 'Ping the server' }]),
-    }])
-    expect(r.extracted).toBe(true)
-    expect(r.tools.map(t => t.name)).toEqual(['ping'])
   })
 })

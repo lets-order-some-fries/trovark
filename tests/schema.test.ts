@@ -46,6 +46,22 @@ server.tool("delete_file", "Delete a file at path", {}, handler2)`,
     expect(r.toolSurfaceRisk).toBeUndefined()
     expect(r.schemaTokenEstimate).toBeUndefined()
   })
+  it('CRITICAL GUARD: an unrelated "tools" field in package.json does NOT fabricate tools', () => {
+    const r = extractSchema([{ path: 'package.json', content: JSON.stringify({
+      name: 'my-cli-app', version: '1.0.0',
+      tools: [{ name: 'dev', description: 'dev environment launcher' }, { name: 'build', description: 'production build' }],
+    }) }])
+    expect(r.extracted).toBe(false)
+    expect(r.tools).toEqual([])
+  })
+  it('a real mcp.json manifest still extracts', () => {
+    const r = extractSchema([{ path: 'mcp.json', content: JSON.stringify({ tools: [{ name: 'search_docs', description: 'Search' }] }) }])
+    expect(r.tools.map(t => t.name)).toEqual(['search_docs'])
+  })
+  it('toolDefinitions.json still extracts (allowlisted basename)', () => {
+    const r = extractSchema([{ path: 'src/toolDefinitions.json', content: JSON.stringify([{ name: 'find_issue', description: 'Find an issue' }]) }])
+    expect(r.tools.map(t => t.name)).toEqual(['find_issue'])
+  })
 })
 
 describe('extractSchema breadth fixes (P3)', () => {

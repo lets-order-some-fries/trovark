@@ -261,15 +261,13 @@ function enclosingObjectSpan(text: string, pos: number): [number, number] | unde
   return undefined
 }
 
-// V5 (coverage-spec §3.5): sentry-shaped generated manifests ship the tool
-// list as a bare top-level ARRAY rather than wrapped in `{tools:[...]}` —
-// accept both shapes. (The array case is also reachable directly via
-// fromToolDefinitions in openapi.ts; this keeps fromManifest itself correct
-// per the spec's explicit "extend fromManifest" instruction, and covers any
-// caller that only has fromManifest in its ladder.)
+// Fix 3 (review): the bare-top-level-ARRAY branch here was unreachable —
+// fromJsonFile always tries fromToolDefinitions (openapi.ts) first, which
+// applies an identical/tighter filter to any top-level array before
+// fromManifest is ever called with one. Only the `{tools:[...]}` object
+// shape is fromManifest's actual job.
 type ManifestTool = { name?: unknown; description?: string; inputSchema?: unknown }
 function toolsFromManifestDoc(doc: unknown): ManifestTool[] | undefined {
-  if (Array.isArray(doc)) return doc as ManifestTool[]
   if (doc && typeof doc === 'object' && Array.isArray((doc as { tools?: unknown }).tools)) {
     return (doc as { tools: ManifestTool[] }).tools
   }
@@ -289,10 +287,9 @@ function fromManifest(f: RepoFile): ToolInfo[] {
 
 // V5 (coverage-spec §3.5): per-.json-file dispatch, tried in order from most
 // to least specific — an OpenAPI/Swagger spec, then a bare toolDefinitions
-// array, then the {tools:[...]}/array manifest shape. An unrelated JSON file
-// picked up by the fetch budget (package.json, a lockfile) simply matches
-// none of the three shapes and yields [] from all three, so widening the
-// JSON bucket beyond mcp.json/server.json below is harmless.
+// array, then the {tools:[...]} manifest shape. Only reached for files whose
+// basename is in TOOL_JSON_BASENAME_RE (see extractSchema below); package.json
+// and other incidental JSON never reach this function at all.
 function fromJsonFile(f: RepoFile): ToolInfo[] {
   const openapi = fromOpenApi(f)
   if (openapi.length > 0) return openapi
@@ -659,14 +656,20 @@ function findShellImportFile(files: RepoFile[]): RepoFile | undefined {
   return files.find(f => SRC_EXT.test(f.path) && SHELL_IMPORT_RE.test(f.content))
 }
 
+// Only these JSON files are treated as tool sources. A bare `.json` bucket let an
+// unrelated "tools" field in package.json fabricate a fake tool surface.
+const TOOL_JSON_BASENAME_RE = /^(mcp|server|toolDefinitions|openapi|swagger)\.json$/i
+
 export function extractSchema(files: RepoFile[]): SchemaResult {
   const serverFiles = files.filter(f => !isNonServerPath(f.path))
-  // V5 (coverage-spec §3.5): widened from mcp.json/server.json only to ANY
-  // fetched .json file, so openapi.json/swagger.json/toolDefinitions.json
-  // reach the ladder too — fromJsonFile's per-file dispatch (fromOpenApi ‖
-  // fromToolDefinitions ‖ fromManifest) keeps an unrelated JSON file
-  // (package.json, a lockfile) a harmless no-op.
-  const json = serverFiles.filter(f => f.path.endsWith('.json'))
+  // Fix (review, Critical): re-scoped from ANY fetched .json file back to a
+  // known manifest/spec basename allowlist. The any-.json bucket let an
+  // unrelated "tools" field in package.json (fetched for nearly every JS/TS
+  // repo) fabricate a fake tool surface via fromManifest's {tools:[...]}
+  // shape. mcp.json/server.json (pre-V5 scoping) plus V5's new spec files
+  // (openapi.json/swagger.json/toolDefinitions.json) are the only basenames
+  // that reach the ladder now.
+  const json = serverFiles.filter(f => TOOL_JSON_BASENAME_RE.test(f.path.split('/').pop() ?? ''))
   const js = serverFiles.filter(f => /\.(ts|js|mjs)$/.test(f.path))
   const py = serverFiles.filter(f => f.path.endsWith('.py'))
   // V3 (coverage-spec §3.2): Go is its own bucket in the ladder, tried after

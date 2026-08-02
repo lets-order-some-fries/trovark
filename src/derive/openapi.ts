@@ -57,6 +57,13 @@ export function fromOpenApi(file: RepoFile): ToolInfo[] {
  * `fromToolDefinitions`: a top-level JSON ARRAY of `{name, description,
  * inputSchema}` objects (sentry's toolDefinitions.json shape) -> those
  * tools. Entries missing a string `name` are dropped, not fabricated.
+ *
+ * Fix 2 (review, Important): a string `name` alone is not enough — ANY
+ * top-level array whose entries merely have a `name` field (e.g. a config
+ * array `[{name:'dev'}, {name:'staging'}]`) would otherwise pass. An entry
+ * only counts if it also has a `description` string OR an `inputSchema`/
+ * `parameters` object — some evidence it's actually describing a callable
+ * tool, not an arbitrary named record.
  */
 export function fromToolDefinitions(file: RepoFile): ToolInfo[] {
   let doc: unknown
@@ -67,7 +74,13 @@ export function fromToolDefinitions(file: RepoFile): ToolInfo[] {
   }
   if (!Array.isArray(doc)) return []
   return doc
-    .filter((t): t is { name: string; description?: string; inputSchema?: unknown } =>
-      Boolean(t) && typeof t === 'object' && typeof (t as { name?: unknown }).name === 'string')
+    .filter((t): t is { name: string; description?: string; inputSchema?: unknown; parameters?: unknown } => {
+      if (!t || typeof t !== 'object' || typeof (t as { name?: unknown }).name !== 'string') return false
+      const rec = t as { description?: unknown; inputSchema?: unknown; parameters?: unknown }
+      const hasDescription = typeof rec.description === 'string'
+      const hasSchema = (typeof rec.inputSchema === 'object' && rec.inputSchema !== null) ||
+        (typeof rec.parameters === 'object' && rec.parameters !== null)
+      return hasDescription || hasSchema
+    })
     .map(t => ({ name: t.name, description: t.description, schemaText: JSON.stringify(t) }))
 }
