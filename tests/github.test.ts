@@ -522,6 +522,101 @@ describe('collectGithub', () => {
     expect(paths.filter(p => p.startsWith('src/tools/')).length).toBeGreaterThanOrEqual(16) // SOURCE_FLOOR = ceil(24*0.66)
   })
 
+  // --- V5: OpenAPI/toolDefinitions spec-fetch allowance (coverage-spec §3.5) ---
+
+  it('V5: an openapi.json spec file is fetched (spec-fetch allowance)', async () => {
+    const http = fakeHttp()
+    const origJson = http.json.bind(http)
+    http.json = async <T,>(url: string): Promise<T> => {
+      if (url.includes('/git/trees/')) {
+        return {
+          tree: [
+            { path: 'package.json', type: 'blob', size: 500 },
+            { path: 'openapi.json', type: 'blob', size: 2000 },
+            { path: 'src/index.ts', type: 'blob', size: 2000 },
+          ],
+        } as T
+      }
+      return origJson<T>(url)
+    }
+    http.text = async (url: string): Promise<string> => {
+      if (url.includes('package.json')) return '{"name":"foo"}'
+      if (url.includes('openapi.json')) return '{"openapi":"3.0.0","paths":{}}'
+      return 'export {}'
+    }
+    const snap = await collectGithub({ ref: 'acme/foo', repo: { owner: 'acme', name: 'foo' } }, http, NOW)
+    expect(snap.files.map(f => f.path)).toContain('openapi.json')
+  })
+
+  it('V5: a toolDefinitions.json spec file is fetched', async () => {
+    const http = fakeHttp()
+    const origJson = http.json.bind(http)
+    http.json = async <T,>(url: string): Promise<T> => {
+      if (url.includes('/git/trees/')) {
+        return {
+          tree: [
+            { path: 'package.json', type: 'blob', size: 500 },
+            { path: 'toolDefinitions.json', type: 'blob', size: 2000 },
+          ],
+        } as T
+      }
+      return origJson<T>(url)
+    }
+    http.text = async (url: string): Promise<string> => {
+      if (url.includes('package.json')) return '{"name":"foo"}'
+      return '[]'
+    }
+    const snap = await collectGithub({ ref: 'acme/foo', repo: { owner: 'acme', name: 'foo' } }, http, NOW)
+    expect(snap.files.map(f => f.path)).toContain('toolDefinitions.json')
+  })
+
+  it('V5: a case-variant OpenAPI.JSON basename is still recognized as a spec file', async () => {
+    const http = fakeHttp()
+    const origJson = http.json.bind(http)
+    http.json = async <T,>(url: string): Promise<T> => {
+      if (url.includes('/git/trees/')) {
+        return {
+          tree: [
+            { path: 'package.json', type: 'blob', size: 500 },
+            { path: 'OpenAPI.JSON', type: 'blob', size: 200 },
+          ],
+        } as T
+      }
+      return origJson<T>(url)
+    }
+    http.text = async (url: string): Promise<string> => {
+      if (url.includes('package.json')) return '{"name":"foo"}'
+      return '{}'
+    }
+    const snap = await collectGithub({ ref: 'acme/foo', repo: { owner: 'acme', name: 'foo' } }, http, NOW)
+    expect(snap.files.map(f => f.path)).toContain('OpenAPI.JSON')
+  })
+
+  it('V5: the spec-fetch bucket is capped at 2 files even with 3 spec candidates present', async () => {
+    const http = fakeHttp()
+    const origJson = http.json.bind(http)
+    http.json = async <T,>(url: string): Promise<T> => {
+      if (url.includes('/git/trees/')) {
+        return {
+          tree: [
+            { path: 'package.json', type: 'blob', size: 500 },
+            { path: 'openapi.json', type: 'blob', size: 200 },
+            { path: 'swagger.json', type: 'blob', size: 200 },
+            { path: 'toolDefinitions.json', type: 'blob', size: 200 },
+          ],
+        } as T
+      }
+      return origJson<T>(url)
+    }
+    http.text = async (url: string): Promise<string> => {
+      if (url.includes('package.json')) return '{"name":"foo"}'
+      return '{}'
+    }
+    const snap = await collectGithub({ ref: 'acme/foo', repo: { owner: 'acme', name: 'foo' } }, http, NOW)
+    const specPaths = snap.files.map(f => f.path).filter(p => /(?:^|\/)(?:openapi|swagger)\.json$/i.test(p) || /(?:^|\/)toolDefinitions\.json$/.test(p))
+    expect(specPaths).toHaveLength(2)
+  })
+
   it('stops pagination after page 1 once its oldest commit is already past the 365d cutoff, even with Link: rel="next" present', async () => {
     const http = fakeHttp()
     let commitPageFetches = 0

@@ -2,6 +2,7 @@ import { encode } from 'gpt-tokenizer'
 import type { RepoFile } from '../collectors/github.js'
 import type { Finding, ToolInfo } from '../types.js'
 import { fromGoSource } from './lang/go.js'
+import { fromOpenApi, fromToolDefinitions } from './openapi.js'
 
 export interface SchemaResult {
   extracted: boolean
@@ -260,14 +261,44 @@ function enclosingObjectSpan(text: string, pos: number): [number, number] | unde
   return undefined
 }
 
+// V5 (coverage-spec §3.5): sentry-shaped generated manifests ship the tool
+// list as a bare top-level ARRAY rather than wrapped in `{tools:[...]}` —
+// accept both shapes. (The array case is also reachable directly via
+// fromToolDefinitions in openapi.ts; this keeps fromManifest itself correct
+// per the spec's explicit "extend fromManifest" instruction, and covers any
+// caller that only has fromManifest in its ladder.)
+type ManifestTool = { name?: unknown; description?: string; inputSchema?: unknown }
+function toolsFromManifestDoc(doc: unknown): ManifestTool[] | undefined {
+  if (Array.isArray(doc)) return doc as ManifestTool[]
+  if (doc && typeof doc === 'object' && Array.isArray((doc as { tools?: unknown }).tools)) {
+    return (doc as { tools: ManifestTool[] }).tools
+  }
+  return undefined
+}
+
 function fromManifest(f: RepoFile): ToolInfo[] {
   try {
-    const doc = JSON.parse(f.content) as { tools?: Array<{ name?: string; description?: string; inputSchema?: unknown }> }
-    if (!Array.isArray(doc.tools)) return []
-    return doc.tools
+    const doc = JSON.parse(f.content) as unknown
+    const list = toolsFromManifestDoc(doc)
+    if (!list) return []
+    return list
       .filter((t): t is { name: string; description?: string; inputSchema?: unknown } => typeof t.name === 'string')
       .map(t => ({ name: t.name, description: t.description, schemaText: JSON.stringify(t) }))
   } catch { return [] }
+}
+
+// V5 (coverage-spec §3.5): per-.json-file dispatch, tried in order from most
+// to least specific — an OpenAPI/Swagger spec, then a bare toolDefinitions
+// array, then the {tools:[...]}/array manifest shape. An unrelated JSON file
+// picked up by the fetch budget (package.json, a lockfile) simply matches
+// none of the three shapes and yields [] from all three, so widening the
+// JSON bucket beyond mcp.json/server.json below is harmless.
+function fromJsonFile(f: RepoFile): ToolInfo[] {
+  const openapi = fromOpenApi(f)
+  if (openapi.length > 0) return openapi
+  const toolDefs = fromToolDefinitions(f)
+  if (toolDefs.length > 0) return toolDefs
+  return fromManifest(f)
 }
 
 // Fix 1: modern high-level SDK `server.registerTool("name", {...})` alongside
@@ -521,6 +552,75 @@ export function fromJsSource(f: RepoFile): ToolInfo[] {
 const PY_DECORATOR_RE = /@(?:\w+\.)?tool\b(?:\([^)]*\))?[\s\S]{0,200}?\b(?:async\s+)?def\s+(\w+)\s*\(/g
 const PY_IMPERATIVE_RE = /\b(?:add_tool|tool)\(\s*name\s*=\s*["']([\w-]+)["'](?:\s*,\s*description\s*=\s*["']([^"']*)["'])?/g
 
+// V5 (coverage-spec §3.4 Python #1): serena's class-subclass idiom —
+// `class ReadFileTool(Tool):` / `class DeleteLinesTool(EditingTool):`.
+// GUARD (high-FP rule, per plan Global Constraints): the class name must
+// end in `Tool` AND the base-class list must mention Tool/EditingTool*/
+// BaseTool — an arbitrary `class HelperThing(Base):` matches neither half
+// and is never touched by this idiom.
+const PY_CLASS_SUBCLASS_RE = /class\s+(\w+Tool)\s*\([^)]*\b(?:Tool|EditingTool\w*|BaseTool)\b[^)]*\)\s*:/g
+// Bounded, best-effort lookup of the `apply()` method's docstring first
+// line, searched in the window after the class header up to (not
+// including) the next top-level `class` — so a docstring picked up here can
+// never belong to a different, later class.
+const PY_APPLY_DOCSTRING_RE = /def\s+apply\s*\([^)]*\)\s*(?:->[^:]+)?:\s*("""|''')([\s\S]*?)\1/
+
+// serena derives the tool name from the class name by stripping the
+// trailing `Tool` suffix and converting CamelCase -> snake_case:
+// ReadFileTool -> ReadFile -> read_file; DeleteLinesTool -> DeleteLines -> delete_lines.
+function camelToSnake(s: string): string {
+  return s.replace(/([a-z0-9])([A-Z])/g, '$1_$2').toLowerCase()
+}
+
+function findApplyDocstring(content: string, afterIdx: number): string | undefined {
+  const rest = content.slice(afterIdx)
+  const nextClassIdx = rest.search(/\n(?=class\s)/)
+  const window = rest.slice(0, nextClassIdx === -1 ? 4000 : Math.min(nextClassIdx, 4000))
+  const m = PY_APPLY_DOCSTRING_RE.exec(window)
+  if (!m) return undefined
+  return m[2].split('\n').map(l => l.trim()).find(l => l.length > 0)
+}
+
+function fromClassSubclass(content: string): ToolInfo[] {
+  const tools: ToolInfo[] = []
+  for (const m of content.matchAll(PY_CLASS_SUBCLASS_RE)) {
+    const name = camelToSnake(m[1].replace(/Tool$/, ''))
+    const description = findApplyDocstring(content, m.index + m[0].length)
+    tools.push({ name, description, schemaText: m[0] })
+  }
+  return tools
+}
+
+// V5 (coverage-spec §3.4 Python #2): awslabs' call-decorator idiom —
+// `mcp.tool()(docs.search_agentcore_docs)` registers an already-defined
+// function object rather than decorating a `def` in place; the tool name is
+// the last dotted segment of the referenced identifier.
+const PY_CALL_DECORATOR_RE = /\bmcp\.tool\([^)]*\)\(\s*([\w.]+)\s*\)/g
+
+function fromCallDecorator(content: string): ToolInfo[] {
+  const tools: ToolInfo[] = []
+  for (const m of content.matchAll(PY_CALL_DECORATOR_RE)) {
+    const segments = m[1].split('.')
+    tools.push({ name: segments[segments.length - 1], schemaText: m[0] })
+  }
+  return tools
+}
+
+// V5 (coverage-spec §3.4 Python #3): registration-surface SIGNAL, not a
+// tool. awslabs-shaped servers register their tool functions via
+// `register_search_tools(mcp)` in a file that may not itself contain any of
+// the idioms above (the @mcp.tool()-decorated / mcp.tool()(...)-registered
+// functions can live in a sibling module that wasn't sampled). This must
+// NEVER fabricate a ToolInfo — fromPySource does not call it — it is
+// exported solely for src/derive/classify.ts (V2) to treat as an
+// "this repo IS MCP-related" signal, so classifyLibrary's signal 3
+// (no-MCP-anywhere -> not-server) doesn't fire on such a repo. See the
+// wiring in classify.ts.
+const PY_REGISTER_TOOLS_SURFACE_RE = /\bregister_\w+_tools\(\s*\w+\s*\)/
+export function hasPythonToolRegistrationSurface(files: RepoFile[]): boolean {
+  return files.some(f => f.path.endsWith('.py') && PY_REGISTER_TOOLS_SURFACE_RE.test(f.content))
+}
+
 export function fromPySource(f: RepoFile): ToolInfo[] {
   const tools: ToolInfo[] = []
   for (const m of f.content.matchAll(PY_DECORATOR_RE)) {
@@ -529,6 +629,12 @@ export function fromPySource(f: RepoFile): ToolInfo[] {
   for (const m of f.content.matchAll(PY_IMPERATIVE_RE)) {
     if (tools.some(t => t.name === m[1])) continue
     tools.push({ name: m[1], description: m[2], schemaText: m[0] })
+  }
+  for (const t of fromClassSubclass(f.content)) {
+    if (!tools.some(x => x.name === t.name)) tools.push(t)
+  }
+  for (const t of fromCallDecorator(f.content)) {
+    if (!tools.some(x => x.name === t.name)) tools.push(t)
   }
   for (const t of fromLowLevelToolCalls(f.content)) {
     if (!tools.some(x => x.name === t.name)) tools.push(t)
@@ -555,7 +661,12 @@ function findShellImportFile(files: RepoFile[]): RepoFile | undefined {
 
 export function extractSchema(files: RepoFile[]): SchemaResult {
   const serverFiles = files.filter(f => !isNonServerPath(f.path))
-  const manifest = serverFiles.filter(f => /(^|\/)(mcp|server)\.json$/.test(f.path))
+  // V5 (coverage-spec §3.5): widened from mcp.json/server.json only to ANY
+  // fetched .json file, so openapi.json/swagger.json/toolDefinitions.json
+  // reach the ladder too — fromJsonFile's per-file dispatch (fromOpenApi ‖
+  // fromToolDefinitions ‖ fromManifest) keeps an unrelated JSON file
+  // (package.json, a lockfile) a harmless no-op.
+  const json = serverFiles.filter(f => f.path.endsWith('.json'))
   const js = serverFiles.filter(f => /\.(ts|js|mjs)$/.test(f.path))
   const py = serverFiles.filter(f => f.path.endsWith('.py'))
   // V3 (coverage-spec §3.2): Go is its own bucket in the ladder, tried after
@@ -566,7 +677,7 @@ export function extractSchema(files: RepoFile[]): SchemaResult {
 
   let tools: Array<ToolInfo & { evidence: string }> = []
   for (const level of [
-    () => manifest.flatMap(f => fromManifest(f).map(t => ({ ...t, evidence: f.path }))),
+    () => json.flatMap(f => fromJsonFile(f).map(t => ({ ...t, evidence: f.path }))),
     () => js.flatMap(f => fromJsSource(f).map(t => ({ ...t, evidence: f.path }))),
     () => py.flatMap(f => fromPySource(f).map(t => ({ ...t, evidence: f.path }))),
     () => go.flatMap(f => fromGoSource(f).map(t => ({ ...t, evidence: f.path }))),

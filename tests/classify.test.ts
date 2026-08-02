@@ -173,6 +173,26 @@ describe('classifyLibrary — priority order', () => {
   })
 })
 
+describe('classifyLibrary — V5: Python register_*_tools registration-surface signal', () => {
+  it('a Python repo with no MCP import matched and no manifest, but a register_search_tools(mcp) call, is NOT classified not-server', () => {
+    const r = classifyLibrary({
+      name: 'awslabs-docs-mcp-server',
+      files: [{
+        path: 'src/server.py',
+        content: `def setup(mcp):\n    register_search_tools(mcp)\n`,
+      }],
+    })
+    expect(r).toBeNull()
+  })
+  it('baseline unchanged: the same shape WITHOUT a register_*_tools call still returns not-server', () => {
+    const r = classifyLibrary({
+      name: 'awslabs-docs-mcp-server',
+      files: [{ path: 'src/server.py', content: `def setup(mcp):\n    pass\n` }],
+    })
+    expect(r).toEqual({ notServer: true, reason: 'not-server', note: expect.any(String) })
+  })
+})
+
 describe('classifyLibrary — negative: genuine miss stays null', () => {
   it('an unparseable server with no recognizable signal returns null (caller keeps insufficientData)', () => {
     const r = classifyLibrary({

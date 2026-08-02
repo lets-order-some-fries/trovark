@@ -17,7 +17,7 @@
 // never reach here, so it can never be reclassified.
 import type { RepoFile } from '../collectors/github.js'
 import type { NotServerReason } from '../types.js'
-import { fromJsSource, fromPySource, isNonServerPath } from './schema.js'
+import { fromJsSource, fromPySource, hasPythonToolRegistrationSurface, isNonServerPath } from './schema.js'
 
 export interface ClassifyContext {
   name: string
@@ -112,13 +112,20 @@ export function classifyLibrary(ctx: ClassifyContext): NotServerResult | null {
 
   // 3. No-MCP-anywhere: no fetched file imports an MCP SDK, no cross-language
   // MCP SDK dependency was detected in a manifest (mcpSdkDetected — see
-  // ClassifyContext), and no mcp.json/server.json manifest exists — OR the
-  // repo has Pipedream's component shape (a reinforcing not-server signal,
-  // but still scoped to `!importsMcp`: a positive import hit always wins).
+  // ClassifyContext), no Python register_*_tools(...) surface signal (V5,
+  // coverage-spec §3.4 Python #3 — see hasPythonToolRegistrationSurface in
+  // schema.ts: it never fabricates a ToolInfo, it only proves "this repo IS
+  // MCP-related" the same way mcpSdkDetected does for awslabs-shaped
+  // servers whose actual @mcp.tool()-decorated functions live in a sibling
+  // module that wasn't sampled), and no mcp.json/server.json manifest
+  // exists — OR the repo has Pipedream's component shape (a reinforcing
+  // not-server signal, but still scoped to `!importsMcp`: a positive import
+  // hit always wins).
   const importsMcp = ctx.files.some(f => MCP_IMPORT_RE.test(f.content))
+  const hasPyToolRegistrationSurface = hasPythonToolRegistrationSurface(ctx.files)
   const hasManifest = ctx.files.some(f => ROOT_MANIFEST_RE.test(f.path))
   const isPipedreamComponent = ctx.files.some(f => PIPEDREAM_COMPONENT_RE.test(f.content))
-  if (!importsMcp && !ctx.mcpSdkDetected && (!hasManifest || isPipedreamComponent)) {
+  if (!importsMcp && !ctx.mcpSdkDetected && !hasPyToolRegistrationSurface && (!hasManifest || isPipedreamComponent)) {
     return {
       notServer: true, reason: 'not-server',
       note: 'No MCP SDK import and no tool manifest — not an MCP server.',

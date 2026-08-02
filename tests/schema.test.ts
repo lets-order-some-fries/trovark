@@ -590,3 +590,81 @@ server.addTool({ name: 'search', description: 'Search things' })`,
     expect(r.tools.map(t => t.name).sort()).toEqual(['delete_file', 'search'])
   })
 })
+
+// V5 (coverage-spec §3.4 Python): serena's class-subclass idiom and
+// awslabs' call-decorator idiom, plus the register_*_tools surface signal
+// (which must never fabricate a tool — see the GUARD test below and the
+// classifyLibrary wiring in classify.test.ts).
+describe('fromPySource (V5): Python class-subclass + call-decorator idioms', () => {
+  it('serena-style class ReadFileTool(Tool): -> read_file (CamelCase minus trailing Tool -> snake_case), description from apply() docstring', () => {
+    const r = extractSchema([{
+      path: 'src/serena/tools/file_tools.py',
+      content: `
+class ReadFileTool(Tool):
+    """Reads the contents of a file."""
+
+    def apply(self, relative_path: str) -> str:
+        """Read the file contents at the given path."""
+        ...
+`,
+    }])
+    expect(r.extracted).toBe(true)
+    expect(r.tools.map(t => t.name)).toEqual(['read_file'])
+    expect(r.tools[0].description).toBe('Read the file contents at the given path.')
+  })
+
+  it('serena-style class DeleteLinesTool(EditingTool): -> delete_lines', () => {
+    const r = extractSchema([{
+      path: 'src/serena/tools/edit_tools.py',
+      content: `
+class DeleteLinesTool(EditingTool):
+    def apply(self, start_line: int, end_line: int) -> None:
+        ...
+`,
+    }])
+    expect(r.extracted).toBe(true)
+    expect(r.tools.map(t => t.name)).toEqual(['delete_lines'])
+  })
+
+  it('GUARD: a class whose name does not end in Tool is not extracted', () => {
+    const r = extractSchema([{
+      path: 'src/serena/helpers.py',
+      content: `
+class HelperThing(Base):
+    def apply(self):
+        ...
+`,
+    }])
+    expect(r.extracted).toBe(false)
+  })
+
+  it('GUARD: a *Tool class whose base is not Tool-ish (Tool/EditingTool*/BaseTool) is not extracted', () => {
+    const r = extractSchema([{
+      path: 'src/serena/other.py',
+      content: `
+class FooTool(Base):
+    def apply(self):
+        ...
+`,
+    }])
+    expect(r.extracted).toBe(false)
+  })
+
+  it('awslabs call-decorator mcp.tool()(docs.search_agentcore_docs) -> search_agentcore_docs (last dotted segment)', () => {
+    const r = extractSchema([{
+      path: 'src/awslabs/server.py',
+      content: `mcp.tool()(docs.search_agentcore_docs)`,
+    }])
+    expect(r.extracted).toBe(true)
+    expect(r.tools.map(t => t.name)).toEqual(['search_agentcore_docs'])
+  })
+
+  it('GUARD: register_search_tools(mcp) is a surface signal only — it does NOT emit a fake tool', () => {
+    const r = extractSchema([{
+      path: 'src/awslabs/server.py',
+      content: `def setup(mcp):\n    register_search_tools(mcp)\n`,
+    }])
+    expect(r.extracted).toBe(false)
+    expect(r.tools).toEqual([])
+  })
+})

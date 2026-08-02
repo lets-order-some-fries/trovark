@@ -55,6 +55,19 @@ const EXCLUDED_MANIFEST_DATA_DIR_RE = /(^|\/)data\//
 // remains after PRIMARY manifests and SOURCE files. SIZE_CAP below still
 // skips oversized blobs either way.
 const LOCKFILES = new Set(['package-lock.json', 'uv.lock', 'poetry.lock'])
+// V5 (coverage-spec §3.5): a small spec-fetch allowance for generated JSON
+// tool catalogs — notion's openapi.json / a generic swagger.json / sentry's
+// toolDefinitions.json — parsed by src/derive/openapi.ts. Basename match,
+// case-insensitive on openapi/swagger (toolDefinitions.json is matched
+// exact-case, per its one real-world spelling). Capped at 2 slots (below)
+// so it can never starve the ranked SOURCE bucket the way manifests used to.
+const SPEC_BASENAME_RE = /^(?:openapi|swagger)\.json$/i
+const TOOL_DEFINITIONS_BASENAME_RE = /^toolDefinitions\.json$/
+const SPEC_FETCH_CAP = 2
+function isSpecFile(path: string): boolean {
+  const base = path.split('/').pop() ?? ''
+  return SPEC_BASENAME_RE.test(base) || TOOL_DEFINITIONS_BASENAME_RE.test(base)
+}
 const SOURCE_HINT = /(src\/|server|tool|index|main)/
 // V1 change 1: adds go/rs/java/cs/kt so wave-1/2 language extractors (V3+)
 // actually get source to parse. Fetching them now is harmless even before
@@ -267,6 +280,12 @@ export async function collectGithub(
   const SOURCE_FLOOR = Math.ceil(FILE_CAP * 0.66)
 
   const envBlobs = blobs.filter(b => fetchable(b) && /(^|\/)\.env[^/]*$/.test(b.path))
+  // V5 (coverage-spec §3.5): spec-fetch bucket, capped at SPEC_FETCH_CAP —
+  // computed before the source-floor eviction loop below so those 2 slots
+  // are counted against the budget the same way manifests are (otherwise an
+  // uncapped/unaccounted spec bucket could itself become a new starvation
+  // source, the exact failure mode this whole task is fixing).
+  const specCandidates = blobs.filter(b => fetchable(b) && isSpecFile(b.path)).slice(0, SPEC_FETCH_CAP)
   // V1 change 4: tool-signal score replaces the old shortest-path tie-break.
   const rankedSource = blobs
     .filter(b => fetchable(b) && SOURCE_EXT.test(b.path) && SOURCE_HINT.test(b.path))
@@ -281,18 +300,21 @@ export async function collectGithub(
   // would otherwise fall below SOURCE_FLOOR, and never below MANIFEST_QUOTA.
   let manifestsSelected = manifestCandidates
   const sourceTarget = Math.min(SOURCE_FLOOR, rankedSource.length)
-  const availableSourceSlots = () => Math.max(0, FILE_CAP - envBlobs.length - manifestsSelected.length)
+  const availableSourceSlots = () => Math.max(0, FILE_CAP - envBlobs.length - manifestsSelected.length - specCandidates.length)
   while (availableSourceSlots() < sourceTarget && manifestsSelected.length > MANIFEST_QUOTA) {
     manifestsSelected = manifestsSelected.slice(0, -1)
   }
 
-  // Fix (final review): three priority buckets, in order — (1) PRIMARY
-  // manifests + .env matches, (2) ranked SOURCE files, (3) LOCKFILES last —
-  // so lockfiles (CVE-lookup data only) never outrank source (needed for tool
-  // extraction → gate) under a tight FILE_CAP.
+  // Fix (final review): priority buckets, in order — (1) PRIMARY manifests +
+  // .env matches, (2) up to SPEC_FETCH_CAP spec files (V5, §3.5), (3) ranked
+  // SOURCE files, (4) LOCKFILES last — so lockfiles (CVE-lookup data only)
+  // never outrank source (needed for tool extraction → gate) under a tight
+  // FILE_CAP, and the spec bucket sits right after primary manifests per
+  // the spec's selection order (§3.3b).
   const wanted = [
     ...envBlobs,
     ...manifestsSelected,
+    ...specCandidates,
     ...rankedSource,
     ...blobs.filter(b => fetchable(b) && isLockfile(b.path)),
   ]
