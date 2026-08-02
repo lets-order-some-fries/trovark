@@ -712,6 +712,145 @@ server.addTool({ name: 'search', description: 'Search things' })`,
   })
 })
 
+// Coverage-v1.3 review: the "nearest preceding key/call by raw text index"
+// guards used by the idiom-7 whole-file scan above had NO brace/scope
+// awareness, so they silently DROPPED real tools rather than merely
+// over-extracting fake ones — worse than the bug they were meant to fix.
+// Replaced with POSITIVE, scope-aware containment: a {name,...} candidate is
+// accepted only when it is genuinely reachable from a tool-registration
+// context (an addTool/registerTool/tool/defineTool call's argument span, a
+// `tools:` key's value span, or a /tool/i-named array literal), never by
+// text-proximity to the nearest preceding key/call.
+describe('idiom 7 v2: positive scope-aware containment (replaces nearest-preceding-key/call heuristics)', () => {
+  it("REGRESSION: both tools in a toolDefs array survive — an earlier tool's inputSchema.properties no longer swallows every later tool", () => {
+    const r = extractSchema([{
+      path: 'src/index.ts',
+      content: `
+import { FastMCP } from 'fastmcp'
+const toolDefs = [
+  { name: 'search_releases', description: 'Search releases', inputSchema: { type: 'object', properties: { query: { type: 'string' } } } },
+  { name: 'get_release', description: 'Get a release by id' },
+]
+for (const t of toolDefs) server.addTool(t)
+`,
+    }])
+    expect(r.extracted).toBe(true)
+    expect(r.tools.map(t => t.name).sort()).toEqual(['get_release', 'search_releases'])
+  })
+
+  it('REGRESSION: an addPrompt(...) call before a toolDefs array no longer erases the entire tool surface', () => {
+    const r = extractSchema([{
+      path: 'src/index.ts',
+      content: `
+server.addPrompt({ name: 'greeting', description: 'A greeting prompt' })
+const toolDefs = [
+  { name: 'search_releases', description: 'Search releases', parameters: { query: 'string' } },
+]
+for (const t of toolDefs) server.addTool(t)
+`,
+    }])
+    expect(r.tools.map(t => t.name)).toEqual(['search_releases'])
+    expect(r.tools.some(t => t.name === 'greeting')).toBe(false)
+  })
+
+  it('GUARD: a bare config array not named /tool/i still yields no phantom tools, even with two items, alongside a real tool', () => {
+    const r = extractSchema([{
+      path: 'src/index.ts',
+      content: `
+const options = [
+  { name: 'port', description: 'Port to listen on' },
+  { name: 'verbose', description: 'Verbose logging' },
+]
+server.addTool({ name: 'real_tool', description: 'A real tool' })
+`,
+    }])
+    expect(r.tools.map(t => t.name)).toEqual(['real_tool'])
+  })
+
+  it('GUARD: addPrompt with a nested arguments array leaks neither the prompt nor its argument', () => {
+    const r = extractSchema([{
+      path: 'src/index.ts',
+      content: `
+server.addPrompt({ name: 'summarize_thread', description: 'd', arguments: [{ name: 'thread_id', description: 'd' }] })
+server.addTool({ name: 'get_weather', description: 'd' })
+`,
+    }])
+    expect(r.tools.map(t => t.name)).toEqual(['get_weather'])
+  })
+
+  it('GUARD: the resource-shape safety net still rejects a uri-carrying object even when it sits inside an accepted /tool/i-named array', () => {
+    const r = extractSchema([{
+      path: 'src/index.ts',
+      content: `
+const toolDefs = [
+  { name: 'file_resource', description: 'Looks like a tool but is not', uri: 'file:///x' },
+  { name: 'real_tool', description: 'A real tool' },
+]
+for (const t of toolDefs) server.addTool(t)
+`,
+    }])
+    expect(r.tools.map(t => t.name)).toEqual(['real_tool'])
+  })
+
+  it('GUARD: new Server({name}) is still not a tool (subsumed by positive scoping — no registration call/tools-key/tool-array contains it)', () => {
+    const r = extractSchema([{
+      path: 'src/index.ts',
+      content: `
+import { ListToolsRequestSchema, Server } from '@mcp/sdk'
+const server = new Server({ name: "tavily-mcp", version: "1.0.0" })
+server.setRequestHandler(ListToolsRequestSchema, async () => ({
+  tools: [
+    { name: "tavily_search", description: "Search the web", inputSchema: {} },
+  ],
+}))
+`,
+    }])
+    expect(r.tools.map(t => t.name)).toEqual(['tavily_search'])
+  })
+
+  // Live spot-check regression (v1.3 coverage): discogs-mcp-server, a real
+  // fastmcp flagship server, never passes an object literal to `.addTool(`
+  // at all — every tool is a top-level named const registered by bare-
+  // identifier reference. Pure positive scoping (accepted spans only around
+  // the literal `.addTool(` call argument) rejected 100% of this repo's
+  // tools until rule (a) was extended to resolve the identifier back to its
+  // declaring `const IDENT = {...}` object literal.
+  it('REGRESSION: discogs-mcp-server-style named Tool consts registered by bare identifier (server.addTool(searchTool)) are extracted', () => {
+    const r = extractSchema([{
+      path: 'src/tools/database.ts',
+      content: `
+import { FastMCP, Tool } from 'fastmcp'
+
+export const searchTool: Tool<FastMCPSessionAuth, typeof SearchParamsSchema> = {
+  name: 'search',
+  description: 'Issue a search query to the Discogs database',
+  parameters: SearchParamsSchema,
+  execute: async (args) => {
+    return JSON.stringify(args)
+  },
+}
+
+export const getArtistTool: Tool<FastMCPSessionAuth, typeof ArtistIdParamSchema> =
+  {
+    name: 'get_artist',
+    description: 'Get an artist',
+    parameters: ArtistIdParamSchema,
+    execute: async (args) => {
+      return JSON.stringify(args)
+    },
+  }
+
+export function registerDatabaseTools(server: FastMCP): void {
+  server.addTool(searchTool)
+  server.addTool(getArtistTool)
+}
+`,
+    }])
+    expect(r.extracted).toBe(true)
+    expect(r.tools.map(t => t.name).sort()).toEqual(['get_artist', 'search'])
+  })
+})
+
 // V5 (coverage-spec §3.4 Python): serena's class-subclass idiom and
 // awslabs' call-decorator idiom, plus the register_*_tools surface signal
 // (which must never fabricate a tool — see the GUARD test below and the

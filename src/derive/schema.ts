@@ -360,6 +360,89 @@ const WRAPPER_EXCLUDED_METHODS = new Set(['callTool', 'getTool', 'removeTool', '
 // ListToolsRequestSchema is present.
 const FASTMCP_IMPORT_RE = /['"]fastmcp['"]/
 
+// Coverage-v1.3 review (idiom 7 rewrite): the three POSITIVE containment
+// sources a `{name,...}` candidate can be reached from. Each produces a set
+// of balanced [start, end] spans (via captureBalanced); a candidate is
+// accepted only if its `name:` match falls inside at least one span from at
+// least one of the three.
+//
+// (a) a tool-registration CALL's argument span: `.addTool(`, `.registerTool(`,
+// `.tool(`, or bare `defineTool(`. Note this deliberately excludes
+// addPrompt/prompt/addResource/addResourceTemplate/resource — those calls'
+// argument spans are never scanned, so anything nested inside them (including
+// a prompt's own `arguments: [{name,...}]`) is unreachable and rejected.
+const REGISTRATION_CALL_ARG_RE = /\.(?:addTool|registerTool|tool)\(|\bdefineTool\(/g
+// (b) the VALUE span of a `tools:` key, array- or object-shaped — e.g.
+// `{ tools: [{name,...}] }` or a `tools: { ... }` map, at any nesting depth.
+const TOOLS_KEY_RE = /\btools\s*:\s*([[{])/g
+// (c) an array-literal span assigned to an identifier whose name matches
+// /tool/i — e.g. `const toolDefs = [...]`, `const TOOLS = [...]`. This is
+// what makes the discogs-style `for (const t of toolDefs) server.addTool(t)`
+// pattern work: the per-item `.addTool(t)` call argument is just `t`, so (a)
+// alone can't see inside the array — (c) captures the array itself, and
+// every object literal in it (however many) is reachable.
+const TOOL_NAMED_ARRAY_RE = /\b(?:export\s+)?(?:const|let|var)\s+(\w+)\s*(?::[^=\n]+)?=\s*\[/g
+
+// (a, extended) Live spot-check regression: discogs-mcp-server (a real
+// fastmcp flagship server, not a synthetic test case) never passes an object
+// literal to `.addTool(` at all — every tool is a top-level named const
+// (`export const searchTool: Tool<...> = { name: 'search', ... }`) registered
+// by bare-identifier reference (`server.addTool(searchTool)`). The call's own
+// argument span is just the identifier, so rule (a) alone can't see the
+// object — without resolving the reference, positive scoping would reject
+// 100% of this (very common) idiom's tools. Mirrors resolveWrapperName's
+// sibling-const-lookup approach (V4 #6) but for a plain `const IDENT = {...}`
+// object declaration instead of a `{ key: 'literal' }` map.
+function findConstObjectSpan(content: string, ident: string): [number, number] | undefined {
+  const declRe = new RegExp(`\\b(?:export\\s+)?(?:const|let|var)\\s+${escapeRegExp(ident)}\\b\\s*(?::[^=\\n]+)?=\\s*\\{`)
+  const m = declRe.exec(content)
+  if (!m) return undefined
+  const braceIdx = m.index + m[0].length - 1
+  const obj = captureBalanced(content, braceIdx, '{', '}')
+  if (!obj) return undefined
+  return [braceIdx, braceIdx + obj.length - 1]
+}
+
+// Computes the accepted-containment spans (a)/(b)/(c) described above for one
+// file's content. Returns balanced [start, end] index pairs (inclusive of the
+// delimiters); a `name:` match is accepted iff its index falls inside any one
+// of them.
+function acceptedToolSpans(content: string): Array<[number, number]> {
+  const spans: Array<[number, number]> = []
+
+  for (const m of content.matchAll(REGISTRATION_CALL_ARG_RE)) {
+    const openIdx = m.index + m[0].length - 1 // m[0] ends with '('
+    const call = captureBalanced(content, openIdx, '(', ')')
+    if (!call) continue
+    spans.push([openIdx, openIdx + call.length - 1])
+    // Bare-identifier argument (e.g. `server.addTool(searchTool)`) — resolve
+    // to its declaring top-level object-literal const, if any (see
+    // findConstObjectSpan above).
+    const argIdent = call.slice(1, -1).trim()
+    if (/^[\w$]+$/.test(argIdent)) {
+      const declSpan = findConstObjectSpan(content, argIdent)
+      if (declSpan) spans.push(declSpan)
+    }
+  }
+
+  for (const m of content.matchAll(TOOLS_KEY_RE)) {
+    const openCh = m[1]
+    const closeCh = openCh === '[' ? ']' : '}'
+    const openIdx = m.index + m[0].length - 1 // m[0] ends with the open delimiter
+    const val = captureBalanced(content, openIdx, openCh, closeCh)
+    if (val) spans.push([openIdx, openIdx + val.length - 1])
+  }
+
+  for (const m of content.matchAll(TOOL_NAMED_ARRAY_RE)) {
+    if (!/tool/i.test(m[1])) continue
+    const openIdx = m.index + m[0].length - 1 // m[0] ends with '['
+    const arr = captureBalanced(content, openIdx, '[', ']')
+    if (arr) spans.push([openIdx, openIdx + arr.length - 1])
+  }
+
+  return spans
+}
+
 function escapeRegExp(s: string): string {
   return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
 }
@@ -515,59 +598,38 @@ export function fromJsSource(f: RepoFile): ToolInfo[] {
   // `inputSchema:`).
   if (f.content.includes('ListToolsRequestSchema') || FASTMCP_IMPORT_RE.test(f.content) || f.content.includes('.addTool(')) {
     const SIBLING_RE = /\b(?:description|inputSchema|parameters)\s*:/
-    // Fix (idiom 7 false-positive review): resources and prompts share the
-    // exact same `{name, description}` shape as tools, and dropping the
-    // ListToolsRequestSchema precondition (above) means this scan now runs
-    // over the WHOLE file whenever fastmcp is imported or `.addTool(` is
-    // called — so without a negative check it fabricates a "tool" for every
-    // resource/prompt object too, inflating toolCount and tool-surface risk.
-    // A false tool is worse than a miss, so independent guards reject a
-    // candidate before it's accepted:
-    // I5: `arguments:`/`properties:` added to the key set — a prompt's
-    // per-argument object (fastmcp addPrompt's `arguments: [{name,
-    // description}]`) and a JSON-schema-shaped properties bag both nest
-    // {name, description} objects that are never tools, the same way a
-    // `resources:`/`prompts:` collection isn't.
-    const REGISTRATION_KEY_RE = /\b(resources|prompts|resourceTemplates|tools|arguments|properties)\s*:\s*[[{]/g
+    // Fix (coverage-v1.3 review): the prior version of this scan rejected a
+    // `{name,...}` candidate via NEGATIVE guards — "what's the nearest
+    // preceding key/call by raw text index?" — with no brace/scope
+    // awareness. That silently DROPPED legitimate tools: one tool's
+    // `inputSchema.properties` key became the "nearest preceding key" for
+    // every later tool in the same array, and an unrelated `.addPrompt(...)`
+    // call earlier in the file became the "nearest preceding call" for the
+    // entire rest of the tool surface. Losing real tools is worse than the
+    // over-extraction the guards were meant to prevent.
+    //
+    // Replaced with POSITIVE, scope-aware containment: a candidate is
+    // accepted only if it is genuinely reachable from a tool-registration
+    // context, computed via real brace/paren-balanced spans (not text-index
+    // proximity) — see acceptedToolSpans below. A resource-shape check
+    // (uri/uriTemplate/mimeType) remains as a cheap secondary safety net,
+    // applied only to already-accepted candidates.
     const RESOURCE_SHAPE_RE = /\b(?:uri|uriTemplate|mimeType)\s*:/
-    // I4: an object literal passed directly as the argument to a prompt/
-    // resource registration CALL (`.addPrompt({...})`, `.addResource({...})`,
-    // `.addResourceTemplate({...})`, `.prompt({...})`, `.resource({...})`) has
-    // no enclosing `prompts:`/`resources:` KEY for guard 1 above to see — it's
-    // a bare call argument, not a collection entry — so this scans for the
-    // nearest preceding registration-style CALL itself.
-    const REGISTRATION_CALL_RE = /\.(addTool|tool|addPrompt|prompt|addResource|addResourceTemplate|resource)\(/g
+    const acceptedSpans = acceptedToolSpans(f.content)
     for (const m of f.content.matchAll(/name:\s*["'`]([\w-]+)["'`]/g)) {
       if (tools.some(t => t.name === m[1])) continue
       const span = enclosingObjectSpan(f.content, m.index)
       if (!span) continue
       const objText = f.content.slice(span[0], span[1] + 1)
       if (!SIBLING_RE.test(objText)) continue
-      // Guard 1 (registration-key exclusion): find the nearest `<key>: [`/
-      // `<key>: {` before the match — if it's `resources:`/`prompts:`/
-      // `resourceTemplates:`/`arguments:`/`properties:` rather than `tools:`,
-      // this object is lexically inside a non-tool collection. No match found
-      // at all falls through to guard 2.
-      let nearestKey: string | undefined
-      let nearestKeyIdx = -1
-      for (const km of f.content.matchAll(REGISTRATION_KEY_RE)) {
-        if (km.index >= m.index) break
-        if (km.index > nearestKeyIdx) { nearestKeyIdx = km.index; nearestKey = km[1] }
-      }
-      if (nearestKey && nearestKey !== 'tools') continue
-      // Guard 2 (resource-shape exclusion): tools never carry uri/
-      // uriTemplate/mimeType fields — those are resource/prompt-specific.
+      // Positive containment: the candidate must fall inside a registration
+      // call's argument span, a `tools:` value span, or a /tool/i-named
+      // array literal — see acceptedToolSpans.
+      if (!acceptedSpans.some(([s, e]) => m.index >= s && m.index <= e)) continue
+      // Safety net: tools never carry uri/uriTemplate/mimeType fields —
+      // those are resource/prompt-specific, even for an otherwise-accepted
+      // candidate (e.g. a stray resource object mixed into a tools array).
       if (RESOURCE_SHAPE_RE.test(objText)) continue
-      // Guard 3 (registration-call exclusion, I4): the object's own nearest
-      // preceding registration-style CALL — accept only addTool/tool; a
-      // prompt/resource-family call rejects it even with no enclosing key.
-      let nearestCall: string | undefined
-      let nearestCallIdx = -1
-      for (const cm of f.content.matchAll(REGISTRATION_CALL_RE)) {
-        if (cm.index >= m.index) break
-        if (cm.index > nearestCallIdx) { nearestCallIdx = cm.index; nearestCall = cm[1] }
-      }
-      if (nearestCall && nearestCall !== 'addTool' && nearestCall !== 'tool') continue
       tools.push({ name: m[1], schemaText: objText })
     }
   }
