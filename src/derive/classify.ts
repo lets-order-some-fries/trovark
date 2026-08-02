@@ -12,9 +12,21 @@
 //
 // This module is a pure function: no I/O, no network, no file-system access
 // — it only classifies data the caller (src/assemble.ts) already fetched.
-// The caller MUST only invoke this when `tools.length === 0` — see the
-// guard note in assemble.ts. A server that extracted even one tool must
-// never reach here, so it can never be reclassified.
+//
+// V6 — two-tier rule (coverage-spec §3.1 escalation). V3-V5's better
+// extraction started yielding tool-shaped hits from the official SDK repos'
+// own API-definition/example code (python-sdk, typescript-sdk, go-sdk,
+// kotlin-sdk), so a guard that only ever ran at zero tools stopped firing for
+// exactly the repos it most needs to catch — they started receiving real
+// server grades instead of `notServer`. The caller now ALWAYS invokes this,
+// passing `toolsExtracted` so the function itself decides which tier applies:
+//   - Tier A (toolsExtracted: false) — any ONE of the existing signals below
+//     suffices. Unchanged from V2.
+//   - Tier B (toolsExtracted: true) — a server that extracted even one tool
+//     is normally never reclassified, UNLESS the repo's identity is
+//     corroborated by TWO independent signals at once (name ends `-sdk` AND
+//     an official-SDK description or sdk/library/framework topic) — see
+//     classifyCorroboratedSdkIdentity below.
 import type { RepoFile } from '../collectors/github.js'
 import type { NotServerReason } from '../types.js'
 import { fromJsSource, fromPySource, hasPythonToolRegistrationSurface, isNonServerPath } from './schema.js'
@@ -34,6 +46,12 @@ export interface ClassifyContext {
   // source file simply wasn't sampled gets falsely tagged "not a server". This
   // gives every language the same protection JS gets by accident.
   mcpSdkDetected?: boolean
+  // V6: whether extractSchema found ANY tools in this repo (assemble.ts:
+  // `schema.tools.length > 0`). Defaults to falsy (Tier A) when omitted, so
+  // every pre-V6 call site/test that never mentions this field keeps running
+  // the unchanged zero-tools signals. When true, only Tier B's corroborated
+  // identity check runs — see classifyLibrary below.
+  toolsExtracted?: boolean
 }
 
 export interface NotServerResult {
@@ -76,13 +94,20 @@ const MCP_URL_RE = /mcp\.(?:stripe|[\w.]+)\.com/
 const SOURCE_REDIRECT_RE = /where is the source\?/i
 
 /**
- * Classifies a zero-tools repo as library/SDK/proxy/stub, or returns null
- * when none of the signals apply (a genuine coverage miss — the caller keeps
- * `insufficientData`). Signals are checked in priority order; the first
- * match wins (e.g. an `-sdk`-named repo that also happens to contain a
- * proxy-shaped snippet is still reported as `sdk`, not `proxy`).
+ * Classifies a repo as library/SDK/proxy/stub, or returns null when none of
+ * the signals apply (the caller keeps whatever it already had — a genuine
+ * zero-tools coverage miss stays `insufficientData`; a repo with real tools
+ * stays graded). Signals are checked in priority order; the first match wins
+ * (e.g. an `-sdk`-named repo that also happens to contain a proxy-shaped
+ * snippet is still reported as `sdk`, not `proxy`).
+ *
+ * `ctx.toolsExtracted` selects the tier (see the V6 note above the imports):
+ * Tier A's five signals only run at zero tools; Tier B's single corroborated-
+ * identity check only runs once tools were extracted.
  */
 export function classifyLibrary(ctx: ClassifyContext): NotServerResult | null {
+  if (ctx.toolsExtracted) return classifyCorroboratedSdkIdentity(ctx)
+
   // 1. Name / topic / description SDK signal.
   const isSdkByName = SDK_NAME_RE.test(ctx.name)
   const isSdkByDesc = SDK_DESC_RE.test(ctx.description ?? '')
@@ -160,6 +185,39 @@ export function classifyLibrary(ctx: ClassifyContext): NotServerResult | null {
   }
 
   return null
+}
+
+// Tier B description signal — deliberately stricter than Tier A's SDK_DESC_RE
+// above: `[^.]*` stops at the first sentence boundary instead of matching
+// across the whole description with `.*`. Tier A can afford the loose match
+// because it only ever fires at zero tools (a low-stakes tie-breaker); Tier B
+// overrides a REAL extraction result, so it must not fire on a description
+// where "official" and "SDK" merely appear in different, unrelated sentences.
+const SDK_DESC_TIER_B_RE = /\bofficial\b[^.]*\bsdk\b/i
+
+/**
+ * Tier B (coverage-spec §3.1 escalation): fires even when tools WERE
+ * extracted, but only when the repo's SDK identity is corroborated by TWO
+ * independent signals at once:
+ *   1. the repo name ends in `-sdk`, AND
+ *   2. an official-SDK description (same sentence) OR an sdk/library/
+ *      framework topic.
+ * Either alone is not enough to override a real extraction — a genuine MCP
+ * server could plausibly be *named* `*-sdk`, or merely *described* in SDK-
+ * adjacent language, without actually being a library. Requiring both is
+ * what keeps a real server safe while still catching python-sdk/typescript-
+ * sdk/go-sdk/kotlin-sdk, whose own API-definition/example code the improved
+ * V3-V5 extractors now read as tool-shaped.
+ */
+function classifyCorroboratedSdkIdentity(ctx: ClassifyContext): NotServerResult | null {
+  if (!SDK_NAME_RE.test(ctx.name)) return null
+  const descCorroborates = SDK_DESC_TIER_B_RE.test(ctx.description ?? '')
+  const topicCorroborates = (ctx.topics ?? []).some(t => SDK_TOPICS.has(t.toLowerCase()))
+  if (!descCorroborates && !topicCorroborates) return null
+  return {
+    notServer: true, reason: 'sdk',
+    note: 'Repo name + description/topics corroborate an official SDK identity; extracted "tools" are API-definition/example code from the SDK itself, not a server surface.',
+  }
 }
 
 function externalPackageIdentifier(serverJsonContent: string, repoName: string): string | undefined {

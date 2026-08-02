@@ -42,28 +42,34 @@ export async function assemble(
         s.schemaTokenEstimate = schema.schemaTokenEstimate
         if (schema.extracted) s.toolCount = schema.tools.length
         s.findings.push(...schema.findings)
-        // V2 (library/SDK/proxy classifier, coverage-spec §3.1): GUARD — only
-        // ever runs when tools.length === 0, so a server that extracted even
-        // one tool can NEVER be reclassified as notServer. assemble.ts (not
-        // schema.ts) is the wiring seam: classifyLibrary needs repo metadata
-        // (name/description/topics, only on RepoSnapshot) alongside the
-        // FULL fetched file set, both of which live on `snap` here — routing
-        // this through schema.ts would need schema.ts to import classify.ts
-        // while classify.ts imports schema.ts's idiom detectors, a cycle.
-        if (schema.tools.length === 0) {
-          const classification = classifyLibrary({
-            name: snap.name, description: snap.description, topics: snap.topics, files: snap.files,
-            // Cross-language MCP SDK detection (already computed above for
-            // s.specEra) protects non-JS servers whose import-bearing file
-            // wasn't sampled from a false 'not a server' verdict — see
-            // ClassifyContext.mcpSdkDetected in classify.ts.
-            mcpSdkDetected: s.specEra !== undefined,
-          })
-          if (classification) {
-            s.notServer = true
-            s.notServerReason = classification.reason
-            s.notServerNote = classification.note
-          }
+        // V2/V6 (library/SDK/proxy classifier, coverage-spec §3.1): ALWAYS
+        // call classifyLibrary and let it pick the tier via `toolsExtracted`
+        // (see the V6 note atop classify.ts). At zero tools it runs the
+        // unchanged Tier A signals (any one suffices); once tools WERE
+        // extracted it runs ONLY Tier B's corroborated-identity check (name
+        // ends `-sdk` AND an official-SDK description/topic) — added because
+        // V3-V5's better extraction started reading python-sdk/typescript-
+        // sdk/go-sdk/kotlin-sdk's own API-definition code as tool-shaped, so
+        // the old zero-tools-only guard stopped firing for exactly those
+        // repos. assemble.ts (not schema.ts) is the wiring seam:
+        // classifyLibrary needs repo metadata (name/description/topics, only
+        // on RepoSnapshot) alongside the FULL fetched file set, both of
+        // which live on `snap` here — routing this through schema.ts would
+        // need schema.ts to import classify.ts while classify.ts imports
+        // schema.ts's idiom detectors, a cycle.
+        const classification = classifyLibrary({
+          name: snap.name, description: snap.description, topics: snap.topics, files: snap.files,
+          // Cross-language MCP SDK detection (already computed above for
+          // s.specEra) protects non-JS servers whose import-bearing file
+          // wasn't sampled from a false 'not a server' verdict — see
+          // ClassifyContext.mcpSdkDetected in classify.ts.
+          mcpSdkDetected: s.specEra !== undefined,
+          toolsExtracted: schema.tools.length > 0,
+        })
+        if (classification) {
+          s.notServer = true
+          s.notServerReason = classification.reason
+          s.notServerNote = classification.note
         }
         const secrets = scanSecrets(snap.files)
         s.secretsFound = secrets.count

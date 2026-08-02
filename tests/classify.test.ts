@@ -206,3 +206,60 @@ describe('classifyLibrary — negative: genuine miss stays null', () => {
     expect(r).toBeNull()
   })
 })
+
+// Tier B (escalation, coverage-spec §3.1): better extraction (V3-V5) now
+// yields tool-shaped hits from the official SDK repos' own API-definition
+// code, so the `toolsExtracted:false` guard (Tier A above) no longer fires
+// for python-sdk/typescript-sdk/go-sdk/kotlin-sdk. Tier B fires even when
+// tools WERE extracted, but only on corroborated identity: the repo name
+// must end in `-sdk` AND at least one independent signal (official-SDK
+// description or an sdk/library/framework topic) must also be present.
+// Either alone is not enough — a real MCP server could plausibly be
+// *named* `*-sdk` OR merely *described* generically; requiring both keeps
+// real servers safe.
+describe('classifyLibrary — Tier B: corroborated SDK identity overrides extracted tools', () => {
+  it('name ends -sdk + official-SDK description + tools extracted → notServer sdk', () => {
+    const r = classifyLibrary({
+      name: 'python-sdk',
+      description: 'The official Python SDK for Model Context Protocol servers and clients',
+      files: [],
+      toolsExtracted: true,
+    })
+    expect(r).toEqual({ notServer: true, reason: 'sdk', note: expect.any(String) })
+  })
+  it('name ends -sdk + sdk topic + tools extracted → notServer sdk', () => {
+    const r = classifyLibrary({
+      name: 'foo-sdk',
+      topics: ['sdk'],
+      files: [],
+      toolsExtracted: true,
+    })
+    expect(r).toEqual({ notServer: true, reason: 'sdk', note: expect.any(String) })
+  })
+  it('name ends -sdk ALONE (generic description, no sdk/library/framework topic) + tools extracted → does NOT fire (still graded)', () => {
+    const r = classifyLibrary({
+      name: 'foo-sdk',
+      description: 'A helpful toolkit for building things',
+      files: [],
+      toolsExtracted: true,
+    })
+    expect(r).toBeNull()
+  })
+  it('a real server (name does not end -sdk) + tools extracted → does NOT fire, regardless of description', () => {
+    const r = classifyLibrary({
+      name: 'weather-mcp-server',
+      description: 'An MCP server for weather',
+      files: [],
+      toolsExtracted: true,
+    })
+    expect(r).toBeNull()
+  })
+  it('Tier A unchanged: name ends -sdk + zero tools extracted → notServer sdk (existing behavior preserved)', () => {
+    const r = classifyLibrary({
+      name: 'foo-sdk',
+      files: [],
+      toolsExtracted: false,
+    })
+    expect(r?.reason).toBe('sdk')
+  })
+})
