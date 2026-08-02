@@ -323,6 +323,75 @@ describe('classify (final review fix): schemaText (inputSchema property names) u
   })
 })
 
+// Final review Fix 3 (pre-existing precision bug): FastMCP's mandatory
+// `execute:` handler property key is code STRUCTURE, not tool semantics, but
+// riskFromSchemaText tokenized schemaText (the raw captured object-literal
+// source, including its handler key) and matched "execute" as a STRONG_EXEC
+// token — so EVERY tool in a FastMCP-shaped server (e.g.
+// cswkim/discogs-mcp-server) was flagged security/shell-exec-tool HIGH
+// regardless of what the tool actually does. Fixed by stripping structural/
+// handler property-key positions (execute|handler|callback|run|fn|method|cb|
+// resolve|invoke, each followed by `:`) from schemaText before risk
+// tokenization — genuine content (a shell_exec(cmd) call, a child_process
+// import, a param literally named shell_command) is untouched.
+describe('classify (final review Fix 3): structural handler keys (execute:/handler:/etc.) in schemaText are not risk signal', () => {
+  it("FastMCP tool object literal with a mandatory `execute:` handler key is NOT flagged high from that key alone", () => {
+    const r = extractSchema([{
+      path: 'src/index.ts',
+      content: `
+import { FastMCP } from 'fastmcp'
+const server = new FastMCP({ name: 'my-server', version: '1.0.0' })
+server.addTool({
+  name: 'search_releases',
+  description: 'Search the Discogs API',
+  parameters: { query: 'string' },
+  execute: async () => {},
+})
+`,
+    }])
+    expect(r.toolSurfaceRisk).not.toBe('high')
+    expect(['none', 'low']).toContain(r.toolSurfaceRisk)
+  })
+
+  it('keeps passing: genuine shell_exec(cmd) content in schemaText is still high even alongside a stripped execute: key', () => {
+    const r = extractSchema([{
+      path: 'src/index.ts',
+      content: `
+import { FastMCP } from 'fastmcp'
+const server = new FastMCP({ name: 'my-server', version: '1.0.0' })
+server.addTool({
+  name: 'run_helper',
+  description: 'A helper tool',
+  parameters: { query: 'string' },
+  execute: async ({ query }) => { return shell_exec(query) },
+})
+`,
+    }])
+    expect(r.toolSurfaceRisk).toBe('high')
+  })
+
+  it('keeps passing: run_command by NAME is still high', () => {
+    const r = extractSchema([{ path: 'mcp.json', content: JSON.stringify({ tools: [{ name: 'run_command' }] }) }])
+    expect(r.toolSurfaceRisk).toBe('high')
+  })
+
+  it('keeps passing: bash_command by NAME is still high', () => {
+    const r = extractSchema([{ path: 'mcp.json', content: JSON.stringify({ tools: [{ name: 'bash_command' }] }) }])
+    expect(r.toolSurfaceRisk).toBe('high')
+  })
+
+  it('keeps passing: a "command" property name on an otherwise-benign manifest tool still does NOT inflate to high', () => {
+    const r = extractSchema([{
+      path: 'mcp.json',
+      content: JSON.stringify({ tools: [{
+        name: 'get_config', description: 'Get configuration',
+        inputSchema: { properties: { command: { type: 'string' } } },
+      }] }),
+    }])
+    expect(r.toolSurfaceRisk).not.toBe('high')
+  })
+})
+
 describe('classify (P4 review fix): bare run/code demoted, co-occurrence rule, tokenized text channel', () => {
   const nameOnly = (name: string) => extractSchema([{ path: 'mcp.json', content: JSON.stringify({ tools: [{ name }] }) }])
 
@@ -848,6 +917,216 @@ export function registerDatabaseTools(server: FastMCP): void {
     }])
     expect(r.extracted).toBe(true)
     expect(r.tools.map(t => t.name).sort()).toEqual(['get_artist', 'search'])
+  })
+})
+
+// Final review Fix 1: rule (c) of acceptedToolSpans (TOOL_NAMED_ARRAY_RE)
+// accepted an assigned identifier via a raw /tool/i SUBSTRING test, so
+// `toolbarItems`/`toolkitConfig`/`coolTools`-shaped identifiers that merely
+// CONTAIN "tool" as a substring (not as a token) were wrongly treated as
+// tool-definition arrays. Reviewer verified `toolbarItems` fabricated phantom
+// tools `save`/`open`. Fixed by requiring an identifier-BOUNDARY match: the
+// identifier is tokenized (same tokenizer as risk classification) and only
+// accepted if a token is exactly `tool` or `tools`.
+describe('idiom 7 v3 (Fix 1): tool-named-array identifier match uses token boundaries, not raw substring', () => {
+  it("REGRESSION: `toolbarItems` (contains \"tool\" only as a substring of \"toolbar\") does not fabricate phantom tools", () => {
+    const r = extractSchema([{
+      path: 'src/index.ts',
+      content: `
+import { FastMCP } from 'fastmcp'
+const server = new FastMCP({ name: 'my-server', version: '1.0.0' })
+server.addTool({ name: 'real_tool', description: 'A real tool' })
+const toolbarItems = [
+  { name: 'save', description: 'Save' },
+  { name: 'open', description: 'Open' },
+]
+`,
+    }])
+    expect(r.tools.map(t => t.name)).toEqual(['real_tool'])
+  })
+
+  it('REGRESSION: `toolkitConfig` (substring "tool" inside "toolkit") does not fabricate phantom tools', () => {
+    const r = extractSchema([{
+      path: 'src/index.ts',
+      content: `
+import { FastMCP } from 'fastmcp'
+const server = new FastMCP({ name: 'my-server', version: '1.0.0' })
+server.addTool({ name: 'real_tool', description: 'A real tool' })
+const toolkitConfig = [
+  { name: 'x', description: 'y' },
+]
+`,
+    }])
+    expect(r.tools.map(t => t.name)).toEqual(['real_tool'])
+  })
+
+  it('keeps passing: `toolDefs` (token "tool") still extracts', () => {
+    const r = extractSchema([{
+      path: 'src/index.ts',
+      content: `
+import { FastMCP } from 'fastmcp'
+const toolDefs = [
+  { name: 'search_releases', description: 'Search releases' },
+]
+for (const t of toolDefs) server.addTool(t)
+`,
+    }])
+    expect(r.tools.map(t => t.name)).toEqual(['search_releases'])
+  })
+
+  it('keeps passing: `TOOLS` (whole identifier is the token "tools") still extracts', () => {
+    const r = extractSchema([{
+      path: 'src/index.ts',
+      content: `
+import { FastMCP } from 'fastmcp'
+const TOOLS = [
+  { name: 'search_releases', description: 'Search releases' },
+]
+for (const t of TOOLS) server.addTool(t)
+`,
+    }])
+    expect(r.tools.map(t => t.name)).toEqual(['search_releases'])
+  })
+
+  it('keeps passing: `searchTools` (token "tools" after camelCase split) still extracts', () => {
+    const r = extractSchema([{
+      path: 'src/index.ts',
+      content: `
+import { FastMCP } from 'fastmcp'
+const searchTools = [
+  { name: 'search_web', description: 'Search the web' },
+]
+for (const t of searchTools) server.addTool(t)
+`,
+    }])
+    expect(r.tools.map(t => t.name)).toEqual(['search_web'])
+  })
+
+  it('legitimately contains the token "tools": `coolTools` still extracts', () => {
+    const r = extractSchema([{
+      path: 'src/index.ts',
+      content: `
+import { FastMCP } from 'fastmcp'
+const coolTools = [
+  { name: 'search_web', description: 'Search the web' },
+]
+for (const t of coolTools) server.addTool(t)
+`,
+    }])
+    expect(r.tools.map(t => t.name)).toEqual(['search_web'])
+  })
+})
+
+// Final review Fix 2 (walked-back regression): once a candidate's enclosing
+// span is accepted, there was no exclusion for a {name,description} object
+// nested inside a NON-TOOL sub-key of that accepted span — e.g. a param
+// object under `inputSchema.properties.<field>` or under a `parameters:`
+// array. The old (deleted) "nearest preceding key by text index" guard used
+// to catch this; positive scoping alone did not. Reviewer verified
+// server.addTool({name:'outer_tool',...,inputSchema:{properties:{filter:
+// {name:'inner_name_field',...}}}}) extracted BOTH outer_tool and
+// inner_name_field. Fixed with a scope-aware (containment-based, not
+// text-index) walk: within an accepted span, reject a candidate nested under
+// a properties:/arguments:/inputSchema:/parameters: sub-object.
+describe('idiom 7 v4 (Fix 2): candidates nested under properties:/arguments:/inputSchema:/parameters: within an accepted span are rejected', () => {
+  it('REGRESSION: a {name,description} object nested under inputSchema.properties.<field> is not extracted as a second tool', () => {
+    const r = extractSchema([{
+      path: 'src/index.ts',
+      content: `
+server.addTool({name:'outer_tool',description:'d',inputSchema:{properties:{filter:{name:'inner_name_field',description:'...',type:'string'}}}})
+`,
+    }])
+    expect(r.tools.map(t => t.name)).toEqual(['outer_tool'])
+  })
+
+  it('a {name,...} array element nested under a `parameters:` array is not extracted as a second tool', () => {
+    const r = extractSchema([{
+      path: 'src/index.ts',
+      content: `
+server.addTool({
+  name: 'outer_tool2',
+  description: 'd',
+  parameters: [
+    { name: 'username', type: 'string', description: 'd' },
+  ],
+})
+`,
+    }])
+    expect(r.tools.map(t => t.name)).toEqual(['outer_tool2'])
+  })
+
+  it('keeps passing: toolDefs two-tool array still extracts both tools (not nested under an excluded key)', () => {
+    const r = extractSchema([{
+      path: 'src/index.ts',
+      content: `
+import { FastMCP } from 'fastmcp'
+const toolDefs = [
+  { name: 'search_releases', description: 'Search releases', inputSchema: { type: 'object', properties: { query: { type: 'string' } } } },
+  { name: 'get_release', description: 'Get a release by id' },
+]
+for (const t of toolDefs) server.addTool(t)
+`,
+    }])
+    expect(r.tools.map(t => t.name).sort()).toEqual(['get_release', 'search_releases'])
+  })
+
+  it('keeps passing: bare-identifier registration (discogs-style named Tool consts) still extracts both tools', () => {
+    const r = extractSchema([{
+      path: 'src/tools/database.ts',
+      content: `
+import { FastMCP, Tool } from 'fastmcp'
+
+export const searchTool: Tool<FastMCPSessionAuth, typeof SearchParamsSchema> = {
+  name: 'search',
+  description: 'Issue a search query to the Discogs database',
+  parameters: SearchParamsSchema,
+  execute: async (args) => {
+    return JSON.stringify(args)
+  },
+}
+
+export const getArtistTool: Tool<FastMCPSessionAuth, typeof ArtistIdParamSchema> =
+  {
+    name: 'get_artist',
+    description: 'Get an artist',
+    parameters: ArtistIdParamSchema,
+    execute: async (args) => {
+      return JSON.stringify(args)
+    },
+  }
+
+export function registerDatabaseTools(server: FastMCP): void {
+  server.addTool(searchTool)
+  server.addTool(getArtistTool)
+}
+`,
+    }])
+    expect(r.tools.map(t => t.name).sort()).toEqual(['get_artist', 'search'])
+  })
+
+  it('keeps passing: discogs manifest shape (mcp.json) is unaffected by the JS-source containment walk', () => {
+    const r = extractSchema([{
+      path: 'mcp.json',
+      content: JSON.stringify({ tools: [
+        { name: 'search_docs', description: 'Search documentation' },
+      ] }),
+    }])
+    expect(r.tools.map(t => t.name)).toEqual(['search_docs'])
+  })
+
+  it('keeps passing: addPrompt-before-tools regression is unaffected', () => {
+    const r = extractSchema([{
+      path: 'src/index.ts',
+      content: `
+server.addPrompt({ name: 'greeting', description: 'A greeting prompt' })
+const toolDefs = [
+  { name: 'search_releases', description: 'Search releases', parameters: { query: 'string' } },
+]
+for (const t of toolDefs) server.addTool(t)
+`,
+    }])
+    expect(r.tools.map(t => t.name)).toEqual(['search_releases'])
+    expect(r.tools.some(t => t.name === 'greeting')).toBe(false)
   })
 })
 

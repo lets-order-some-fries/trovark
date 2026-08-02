@@ -86,13 +86,29 @@ const STRONG_EXEC_TOKENS = new Set([
 ])
 const SCHEMA_TEXT_SHELL_RE = /\bchild_process\b|os\.system\(|\bexecSync\b|\bspawnSync\b/i
 
+// Fix (final review, Fix 3): schemaText for a JS-source-extracted candidate
+// is the raw captured object-literal source, which includes its own
+// code-STRUCTURE property keys (the handler/callback the tool is registered
+// with) — not just user-meaningful content. FastMCP's `Tool` shape mandates
+// an `execute:` key on every single tool, so `execute` (itself a
+// STRONG_EXEC_TOKENS member) tokenized out of that key and flagged EVERY
+// tool in a FastMCP-shaped server (e.g. cswkim/discogs-mcp-server) 'high'
+// regardless of what the tool actually does. Fixed by stripping these
+// structural/handler key positions (each only when immediately followed by
+// `:`, i.e. genuinely in key position, not as a free word) before
+// tokenizing. Genuine content is untouched: `execSync(`/`child_process`
+// (checked separately below), a param named `shell_command`, or `execute`
+// appearing anywhere other than immediately before a colon.
+const STRUCTURAL_SCHEMA_KEY_RE = /\b(?:execute|handler|callback|run|fn|method|cb|resolve|invoke)\s*:/gi
+
 // schemaText-only classifier: 'high' on a strong exec signal, else 'none'.
 // Tokenized the same way as riskFromText (per whitespace-delimited word, then
 // split on non-alnum/camelCase) so `shell_exec(cmd)` still matches even
 // though it's not English prose.
 function riskFromSchemaText(schemaText: string): Risk {
-  if (SCHEMA_TEXT_SHELL_RE.test(schemaText) || SHELL_MODULE_RE.test(schemaText)) return 'high'
-  for (const word of schemaText.split(/\s+/)) {
+  const cleaned = schemaText.replace(STRUCTURAL_SCHEMA_KEY_RE, '')
+  if (SCHEMA_TEXT_SHELL_RE.test(cleaned) || SHELL_MODULE_RE.test(cleaned)) return 'high'
+  for (const word of cleaned.split(/\s+/)) {
     if (!word) continue
     for (const tok of tokenize(word)) {
       if (STRONG_EXEC_TOKENS.has(tok)) return 'high'
@@ -434,7 +450,16 @@ function acceptedToolSpans(content: string): Array<[number, number]> {
   }
 
   for (const m of content.matchAll(TOOL_NAMED_ARRAY_RE)) {
-    if (!/tool/i.test(m[1])) continue
+    // Fix (final review): a raw /tool/i SUBSTRING test accepted identifiers
+    // like `toolbarItems`/`toolkitConfig`/`MyToolboxOptions` — "tool" is a
+    // substring of "toolbar"/"toolkit"/"toolbox" but not the identifier's
+    // meaning. Require an identifier-BOUNDARY match instead: tokenize (same
+    // tokenizer as risk classification — splits on `_`/`-`/camelCase) and
+    // accept only if a token is exactly `tool` or `tools`. `coolTools` still
+    // matches (it genuinely contains the token `tools`); `toolbarItems` does
+    // not (`toolbar`/`items`, neither is the token `tool(s)`).
+    const identTokens = tokenize(m[1])
+    if (!identTokens.includes('tool') && !identTokens.includes('tools')) continue
     const openIdx = m.index + m[0].length - 1 // m[0] ends with '['
     const arr = captureBalanced(content, openIdx, '[', ']')
     if (arr) spans.push([openIdx, openIdx + arr.length - 1])
@@ -445,6 +470,72 @@ function acceptedToolSpans(content: string): Array<[number, number]> {
 
 function escapeRegExp(s: string): string {
   return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+}
+
+// Fix (final review, Fix 2): once a candidate's enclosing span is accepted
+// (registration call / tools: value / tool-named array), there was no
+// exclusion for a `{name,description}` object nested inside a NON-TOOL
+// sub-key of that accepted span — e.g. a param object under
+// `inputSchema.properties.<field>`, or an array element under a
+// `parameters:` array. The old (deleted) guard explicitly excluded
+// properties/arguments for exactly this; positive scoping alone did not
+// subsume it. Fixed with a scope-aware (containment-based, not text-index)
+// walk: within the accepted span, find each enclosing bracket from the
+// candidate's own object outward, and reject if any of them is the value of
+// a properties:/arguments:/inputSchema:/parameters: key. Bounded at the
+// accepted span's own start (`floor`) so this can never leak across sibling
+// statements the way the deleted "nearest preceding key by text index"
+// heuristic did.
+const EXCLUDED_NESTED_KEYS = new Set(['properties', 'arguments', 'inputschema', 'parameters'])
+const BRACKET_CLOSERS: Record<string, string> = { '{': '}', '[': ']', '(': ')' }
+
+// Generalization of enclosingObjectSpan's backward walk to all three bracket
+// kinds (`{`, `[`, `(`): scans backward from `pos` and returns the nearest
+// unmatched OPENING bracket at or after `floor`, skipping over any balanced
+// nested pairs along the way. Returns undefined if none is found before
+// `floor` is reached.
+function nearestEnclosingBracket(text: string, pos: number, floor: number): { idx: number; open: string } | undefined {
+  const stack: string[] = []
+  for (let i = pos; i >= floor; i--) {
+    const c = text[i]
+    if (c === '}' || c === ']' || c === ')') {
+      stack.push(c)
+    } else if (c === '{' || c === '[' || c === '(') {
+      if (stack.length > 0 && BRACKET_CLOSERS[c] === stack[stack.length - 1]) {
+        stack.pop()
+      } else {
+        return { idx: i, open: c }
+      }
+    }
+  }
+  return undefined
+}
+
+// Looks immediately before `bracketIdx` for the `key:` this bracket is the
+// value of (e.g. `properties: {` → 'properties'). Returns undefined when the
+// bracket isn't directly preceded by a key — a call's `(`, an array element
+// separated by `,`, or a bare top-level declaration's `=`.
+function precedingKeyOf(text: string, bracketIdx: number): string | undefined {
+  const before = text.slice(Math.max(0, bracketIdx - 100), bracketIdx)
+  const m = /([\w$]+)\s*:\s*$/.exec(before)
+  return m?.[1]?.toLowerCase()
+}
+
+// Walks outward from `objSpan` (the candidate's own enclosing object, as
+// returned by enclosingObjectSpan) through each enclosing bracket, stopping
+// at `floor` (the accepted span's own start — never walking past it, so this
+// can't leak across sibling statements). Returns true if any level along the
+// way is the value of an excluded key.
+function isNestedUnderExcludedKey(content: string, objSpan: [number, number], floor: number): boolean {
+  let pos = objSpan[0]
+  while (pos > floor) {
+    const bracket = nearestEnclosingBracket(content, pos - 1, floor)
+    if (!bracket || bracket.idx <= floor) return false
+    const key = precedingKeyOf(content, bracket.idx)
+    if (key && EXCLUDED_NESTED_KEYS.has(key)) return true
+    pos = bracket.idx
+  }
+  return false
 }
 
 // V4 #3 helper: spans (start/end index of the `{...}` body) of every
@@ -624,8 +715,12 @@ export function fromJsSource(f: RepoFile): ToolInfo[] {
       if (!SIBLING_RE.test(objText)) continue
       // Positive containment: the candidate must fall inside a registration
       // call's argument span, a `tools:` value span, or a /tool/i-named
-      // array literal — see acceptedToolSpans.
-      if (!acceptedSpans.some(([s, e]) => m.index >= s && m.index <= e)) continue
+      // array literal — see acceptedToolSpans. Additionally (Fix 2), it must
+      // NOT be nested under a properties:/arguments:/inputSchema:/parameters:
+      // sub-key WITHIN that same accepted span — see isNestedUnderExcludedKey.
+      if (!acceptedSpans.some(([s, e]) =>
+        m.index >= s && m.index <= e && !isNestedUnderExcludedKey(f.content, span, s)
+      )) continue
       // Safety net: tools never carry uri/uriTemplate/mimeType fields —
       // those are resource/prompt-specific, even for an otherwise-accepted
       // candidate (e.g. a stray resource object mixed into a tools array).
