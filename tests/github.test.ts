@@ -385,7 +385,7 @@ describe('collectGithub', () => {
     expect(paths).toContain('packages/mcp/src/index.ts')
   })
 
-  it('V1: toolSignalScore ranks a tools/ directory file above a same-tier index.ts entrypoint (replaces shortest-path tie-break)', async () => {
+  it('V1 + regression fix: a tools/ directory file and the index.ts entrypoint are BOTH fetched, entrypoint prioritized (guaranteed bucket)', async () => {
     const http = fakeHttp()
     const origJson = http.json.bind(http)
     http.json = async <T,>(url: string): Promise<T> => {
@@ -408,9 +408,18 @@ describe('collectGithub', () => {
     const paths = snap.files.map(f => f.path)
     expect(paths).toContain('src/tools/registry.ts')
     expect(paths).toContain('src/index.ts')
-    // Old shortest-path tie-break would order 'src/index.ts' (shorter) first;
-    // the tools/-dir signal must now outrank the plain entrypoint signal.
-    expect(paths.indexOf('src/tools/registry.ts')).toBeLessThan(paths.indexOf('src/index.ts'))
+    // Regression fix (coverage-v1.3 fix wave): V1 originally made the
+    // tools/-dir signal (+5) outrank the plain entrypoint signal (+2) so that
+    // 'src/tools/registry.ts' sorted ahead of 'src/index.ts' in rankedSource.
+    // That ordering is exactly what caused the 16/17-server regression this
+    // fix wave addresses: under a TIGHT budget (many tools/-dir helper files,
+    // few source slots), the entrypoint — often the ONLY file with the actual
+    // `server.tool("x", ...)` / `ListToolsRequestSchema` registration, since
+    // tools/-dir files frequently hold only handler LOGIC — got evicted
+    // entirely. The entrypoint now has its own guaranteed bucket
+    // (ENTRYPOINT_FETCH_CAP) placed ahead of ranked source, so it can never
+    // be crowded out by tools/-dir files, regardless of their score.
+    expect(paths.indexOf('src/index.ts')).toBeLessThan(paths.indexOf('src/tools/registry.ts'))
   })
 
   it('V1: a 150KB src/index.ts entrypoint is fetched under the raised SIZE_CAP (previously skipped at the old 100KB cap)', async () => {
@@ -638,5 +647,130 @@ describe('collectGithub', () => {
     const snap = await collectGithub({ ref: 'acme/foo', repo: { owner: 'acme', name: 'foo' } }, http, NOW)
     expect(commitPageFetches).toBe(1)
     expect(snap.commitsLast90Days).toBe(1) // only the 5d-old commit is within the 90d window; 400d is not
+  })
+
+  // --- Regression fix (coverage-v1.3 fix wave) regression guards ---------
+  // These reproduce the exact shapes that caused 16/17 previously-graded
+  // servers to regress to "insufficient data" after the V1 sampling
+  // overhaul. See src/collectors/github.ts (ENTRYPOINT_FETCH_CAP,
+  // BARE_TOOL_FILE_RE, WELL_KNOWN_MANIFEST_PATH_RE,
+  // UNSUPPORTED_EXTRACTOR_EXT_RE) and .superpowers/sdd/regression-fix-report.md.
+
+  it('regression fix #1: the entrypoint survives even when a tools/ directory has MORE files than fit in the source budget (8enSmith/mcp-open-library, modelcontextprotocol/servers shape)', async () => {
+    const http = fakeHttp()
+    const origJson = http.json.bind(http)
+    // 15 tools/-dir helper files (score 5 each, no registration — like real
+    // one-tool-per-file layouts where only the entrypoint calls
+    // `server.tool(name, ...)`) vastly outnumber the 11 source slots
+    // available (FILE_CAP=12 - 1 manifest). Pre-fix, all 11 slots go to
+    // tools/-dir files and 'src/index.ts' (score 2) is evicted entirely.
+    const toolFiles = Array.from({ length: 15 }, (_, i) => ({ path: `src/tools/handler${i}.ts`, type: 'blob', size: 200 }))
+    http.json = async <T,>(url: string): Promise<T> => {
+      if (url.includes('/git/trees/')) {
+        return {
+          tree: [
+            { path: 'package.json', type: 'blob', size: 500 },
+            { path: 'src/index.ts', type: 'blob', size: 200 },
+            ...toolFiles,
+          ],
+        } as T
+      }
+      return origJson<T>(url)
+    }
+    http.text = async (url: string): Promise<string> => {
+      if (url.includes('package.json')) return '{"name":"foo"}'
+      return 'export {}'
+    }
+    const snap = await collectGithub({ ref: 'acme/foo', repo: { owner: 'acme', name: 'foo' } }, http, NOW)
+    const paths = snap.files.map(f => f.path)
+    expect(paths).toContain('src/index.ts')
+    expect(paths.length).toBeLessThanOrEqual(12)
+  })
+
+  it('regression fix #2: a bare tool.py FILE (not a tools/ directory) is prioritized over many irrelevant same-score files (mroops0111/openapi-mcp-gateway shape)', async () => {
+    const http = fakeHttp()
+    const origJson = http.json.bind(http)
+    // 11 irrelevant, SHORTER-path .py files (no tool signal at all) would
+    // win the shortest-path tie-break over 'src/exposure/tool.py' pre-fix,
+    // since bare "tool.py" only matched the OLD TOOL_SIGNAL_HINT (dropped by
+    // V1's directory-only TOOLS_DIR_RE).
+    const noise = Array.from({ length: 11 }, (_, i) => ({ path: `src/m${i}.py`, type: 'blob', size: 200 }))
+    http.json = async <T,>(url: string): Promise<T> => {
+      if (url.includes('/git/trees/')) {
+        return {
+          tree: [
+            { path: 'pyproject.toml', type: 'blob', size: 500 },
+            { path: 'src/exposure/tool.py', type: 'blob', size: 200 },
+            ...noise,
+          ],
+        } as T
+      }
+      return origJson<T>(url)
+    }
+    http.text = async (url: string): Promise<string> => {
+      if (url.includes('pyproject.toml')) return '[project]\nname = "foo"\n'
+      return 'x = 1'
+    }
+    const snap = await collectGithub({ ref: 'acme/foo', repo: { owner: 'acme', name: 'foo' } }, http, NOW)
+    const paths = snap.files.map(f => f.path)
+    expect(paths).toContain('src/exposure/tool.py')
+  })
+
+  it('regression fix #3: a mcp.json under a .well-known/ directory is fetched despite ROOT_ONLY_MANIFEST (codex-curator/studiomcphub shape)', async () => {
+    const http = fakeHttp()
+    const origJson = http.json.bind(http)
+    http.json = async <T,>(url: string): Promise<T> => {
+      if (url.includes('/git/trees/')) {
+        return {
+          tree: [
+            { path: 'package.json', type: 'blob', size: 500 },
+            { path: 'site/.well-known/mcp.json', type: 'blob', size: 500 },
+            // A DIFFERENT nested mcp.json outside .well-known/ must still be
+            // excluded — this test must not just blanket-revert
+            // ROOT_ONLY_MANIFEST.
+            { path: '.cursor/mcp.json', type: 'blob', size: 500 },
+          ],
+        } as T
+      }
+      return origJson<T>(url)
+    }
+    http.text = async (url: string): Promise<string> => {
+      if (url.includes('package.json')) return '{"name":"foo"}'
+      return '{"tools":[{"name":"x"}]}'
+    }
+    const snap = await collectGithub({ ref: 'acme/foo', repo: { owner: 'acme', name: 'foo' } }, http, NOW)
+    const paths = snap.files.map(f => f.path)
+    expect(paths).toContain('site/.well-known/mcp.json')
+    expect(paths).not.toContain('.cursor/mcp.json')
+  })
+
+  it('regression fix #4: an extractor-unsupported extension (.rs) does not outrank a .py file (extractor exists) on shortest-path tie-break (protostatis/unbrowser shape)', async () => {
+    const http = fakeHttp()
+    const origJson = http.json.bind(http)
+    // 'src/a.rs' is shorter than 'scripts/observers_smoke.py' — pre-fix
+    // (SOURCE_EXT gained rs/java/cs/kt in V1 with no ranking penalty), the
+    // unsupported-extractor .rs file would win the tie-break and, under a
+    // tight budget, could displace the .py file entirely.
+    http.json = async <T,>(url: string): Promise<T> => {
+      if (url.includes('/git/trees/')) {
+        return {
+          tree: [
+            { path: 'Cargo.toml', type: 'blob', size: 500 },
+            { path: 'src/a.rs', type: 'blob', size: 200 },
+            { path: 'scripts/observers_smoke.py', type: 'blob', size: 200 },
+          ],
+        } as T
+      }
+      return origJson<T>(url)
+    }
+    http.text = async (url: string): Promise<string> => {
+      if (url.includes('Cargo.toml')) return '[package]\nname = "foo"\n'
+      return 'import subprocess'
+    }
+    const snap = await collectGithub({ ref: 'acme/foo', repo: { owner: 'acme', name: 'foo' } }, http, NOW)
+    const paths = snap.files.map(f => f.path)
+    expect(paths).toContain('scripts/observers_smoke.py')
+    // The .py extractor-supported file must rank ahead of the unsupported .rs one.
+    expect(paths.indexOf('scripts/observers_smoke.py')).toBeLessThan(paths.indexOf('src/a.rs'))
   })
 })

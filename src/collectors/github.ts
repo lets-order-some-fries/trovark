@@ -44,6 +44,19 @@ const ALWAYS_FETCH = new Set([
 const ROOT_ONLY_MANIFEST = new Set(['mcp.json', 'server.json'])
 const EXCLUDED_MANIFEST_PATH_RE = /(^|\/)(\.cursor|\.vscode)\//
 const EXCLUDED_MANIFEST_DATA_DIR_RE = /(^|\/)data\//
+// Regression fix (coverage-v1.3 fix wave, coverage-spec-regression §2): a
+// `mcp.json`/`server.json` under a `.well-known/` directory (RFC 8615
+// well-known-URI convention, e.g. `site/.well-known/mcp.json` served at
+// https://host/.well-known/mcp.json) is a PUBLISHED discovery manifest, not
+// an IDE config — the false-positive ROOT_ONLY_MANIFEST above was built to
+// kill (.cursor/mcp.json, .vscode/mcp.json, already independently excluded
+// by EXCLUDED_MANIFEST_PATH_RE). Confirmed live (codex-curator/studiomcphub):
+// its real, spec-shaped 16-tool manifest lives at `site/.well-known/mcp.json`
+// — nested, so ROOT_ONLY_MANIFEST silently dropped it from the candidate set
+// entirely, and no other fetched file carried the tool list. This is a
+// narrow, path-shape-specific exception (not a general revert of
+// ROOT_ONLY_MANIFEST) so it can't reopen the editor-config false positive.
+const WELL_KNOWN_MANIFEST_PATH_RE = /(^|\/)\.well-known\/(mcp|server)\.json$/
 // Fix (final review): committed lockfiles let assemble() query OSV at exact
 // resolved versions (incl. transitive deps) instead of manifest-range floors
 // (see P7 / src/derive/lockfile.ts) — but they are DATA that only feeds CVE
@@ -80,6 +93,38 @@ const SOURCE_EXT = /\.(ts|js|mjs|py|go|rs|java|cs|kt)$/
 // are still skipped by the plain size check.
 const ENTRYPOINT_RE = /(server|index|main)\.(ts|js|mjs|py|go)$/
 const isEntrypointPath = (path: string): boolean => ENTRYPOINT_RE.test(path)
+// Regression fix (coverage-v1.3 fix wave): a bare `tool.<ext>`/`tools.<ext>`
+// FILE (not a `tools/` directory) is where some servers put their single
+// "the tool module" — e.g. openapi-mcp-gateway's `exposure/tool.py`. The old
+// (pre-v1.3) TOOL_SIGNAL_HINT matched "tool"/"tools" as a bounded path
+// SEGMENT anywhere (directory OR filename); toolSignalScore's TOOLS_DIR_RE
+// below only matches it as a directory (`(^|\/)tools?\/`), so a lone
+// `tool.py` lost its only source of ranking signal and fell to the
+// unranked/shortest-path tier — see ENTRYPOINT_FETCH_CAP below, which this
+// feeds into.
+const BARE_TOOL_FILE_RE = /(^|\/)tools?\.(ts|tsx|js|jsx|mjs|cjs|py|go|rs|java|kt|cs)$/
+// Regression fix (coverage-v1.3 fix wave, coverage-spec-regression §1): a
+// small guaranteed bucket for entrypoint-shaped files, mirroring
+// SPEC_FETCH_CAP. Root cause of the 16-server regression: toolSignalScore's
+// TOOLS_DIR_RE/TOOL_REGISTRY_RE bonuses (+5/+6, below) rank a "tools/"
+// directory's per-tool HELPER files above the actual entrypoint
+// (isEntrypointPath, +2 only) that imports and *registers* them
+// (`server.tool("x", ...)`, `server.setRequestHandler(ListToolsRequestSchema,
+// ...)`). Confirmed live against 5 regressed repos (8enSmith/mcp-open-library,
+// modelcontextprotocol/servers, FradSer/mcp-server-apple-reminders,
+// AliKarami/MikroMCP, PantelisGeorgiadis/dicomweb-mcp-server): under a tight
+// FILE_CAP, the many tools/-dir files (which usually hold only handler
+// LOGIC, not the registration call with the literal tool name) fill every
+// source slot and evict the one file that actually has the names. This
+// bucket does NOT change the ranking among non-entrypoint files (V1's
+// tools/-dir bonus, which recovered 94 previously-withheld servers whose
+// tools genuinely ARE declared per-file, is untouched) — it only guarantees
+// a handful of entrypoint-shaped candidates always get a slot, the same way
+// MANIFEST_QUOTA guarantees manifests can't be fully evicted by source.
+const ENTRYPOINT_FETCH_CAP = 6
+function isEntrypointOrBareToolFile(path: string): boolean {
+  return isEntrypointPath(path) || BARE_TOOL_FILE_RE.test(path)
+}
 // V1 change 6: local, github.ts-scoped copy of the non-server-path notion
 // used by src/derive/schema.ts's classifier (kept separate — collectors must
 // not import from derive/ — see the module-boundary note above the fetch
@@ -102,6 +147,21 @@ const TOOLS_DIR_RE = /(^|\/)tools?\//
 const DOT_TOOLS_TS_RE = /\.tools\.ts$/
 const TOOL_REGISTRY_RE = /(tools?-registry|admin-mcp|toolDefinitions)/i
 const MCP_DIR_RE = /\/mcp\//
+// Regression fix (coverage-v1.3 fix wave, coverage-spec-regression §3): V1
+// change 1 added rs/java/cs/kt to SOURCE_EXT so their WAVE-2 extractors
+// (deferred — no rs/java/cs extractor exists yet, see progress.md) would have
+// source ready once wired up, reasoning "harmless" since nothing consumed
+// them anyway. That was wrong under a tight per-repo budget: these files
+// compete in the SAME ranked-source pool and shortest-path tie-break as
+// ts/js/mjs/py/go (which DO have extractors) — and a short, otherwise
+// unscored `src/policy.rs` sorts ahead of a longer `scripts/observers.py`
+// purely on path length, displacing a file an extractor can actually read.
+// Confirmed live (protostatis/unbrowser, a mixed Rust+Python+JS repo): adding
+// .rs to SOURCE_EXT displaced the .py file that used to carry the only
+// tool-surface signal. A small penalty keeps them fetchable (still useful
+// once a Wave-2 extractor lands) without letting them outrank
+// extractor-supported languages on tie-break alone.
+const UNSUPPORTED_EXTRACTOR_EXT_RE = /\.(rs|java|cs|kt)$/
 function toolSignalScore(path: string, pkgName: string | undefined): number {
   let s = 0
   if (TOOLS_DIR_RE.test(path)) s += 5
@@ -110,6 +170,7 @@ function toolSignalScore(path: string, pkgName: string | undefined): number {
   if (MCP_DIR_RE.test(path) || /-mcp$/.test(pkgName ?? '')) s += 4
   if (isEntrypointPath(path)) s += 2
   if (isNonServerPath(path)) s -= 10
+  if (UNSUPPORTED_EXTRACTOR_EXT_RE.test(path)) s -= 3
   return s
 }
 // V1 change 3: manifest selection priority — root (fewest path segments)
@@ -239,7 +300,7 @@ export async function collectGithub(
     if (EXCLUDED_MANIFEST_PATH_RE.test(p) || EXCLUDED_MANIFEST_DATA_DIR_RE.test(p)) return false
     const base = p.split('/').pop() ?? ''
     if (!ALWAYS_FETCH.has(base) && !p.endsWith('.csproj')) return false
-    if (ROOT_ONLY_MANIFEST.has(base)) return p === base
+    if (ROOT_ONLY_MANIFEST.has(base)) return p === base || WELL_KNOWN_MANIFEST_PATH_RE.test(p)
     return true
   }
   const isLockfile = (p: string) => LOCKFILES.has(p.split('/').pop() ?? '')
@@ -286,9 +347,24 @@ export async function collectGithub(
   // uncapped/unaccounted spec bucket could itself become a new starvation
   // source, the exact failure mode this whole task is fixing).
   const specCandidates = blobs.filter(b => fetchable(b) && isSpecFile(b.path)).slice(0, SPEC_FETCH_CAP)
+  // Regression fix: guaranteed entrypoint bucket, computed BEFORE rankedSource
+  // (and excluded from it below) so the two buckets never double-count the
+  // same path against the budget. Prioritized root/shallow-first then
+  // shortest-path — same ordering rule as manifestPriority — since the
+  // top-level entrypoint is the most likely place a monorepo subpackage
+  // registers its tools.
+  const entrypointCandidates = blobs
+    .filter(b => fetchable(b) && SOURCE_EXT.test(b.path) && SOURCE_HINT.test(b.path) && isEntrypointOrBareToolFile(b.path))
+    .sort((a, b) => {
+      const [da, la] = manifestPriority(a.path)
+      const [db, lb] = manifestPriority(b.path)
+      return da - db || la - lb
+    })
+    .slice(0, ENTRYPOINT_FETCH_CAP)
+  const entrypointPaths = new Set(entrypointCandidates.map(b => b.path))
   // V1 change 4: tool-signal score replaces the old shortest-path tie-break.
   const rankedSource = blobs
-    .filter(b => fetchable(b) && SOURCE_EXT.test(b.path) && SOURCE_HINT.test(b.path))
+    .filter(b => fetchable(b) && SOURCE_EXT.test(b.path) && SOURCE_HINT.test(b.path) && !entrypointPaths.has(b.path))
     .sort((a, b) => toolSignalScore(b.path, rootPkgName) - toolSignalScore(a.path, rootPkgName) || a.path.length - b.path.length)
 
   // Manifests start at full candidate strength (not pre-capped to
@@ -300,21 +376,24 @@ export async function collectGithub(
   // would otherwise fall below SOURCE_FLOOR, and never below MANIFEST_QUOTA.
   let manifestsSelected = manifestCandidates
   const sourceTarget = Math.min(SOURCE_FLOOR, rankedSource.length)
-  const availableSourceSlots = () => Math.max(0, FILE_CAP - envBlobs.length - manifestsSelected.length - specCandidates.length)
+  const availableSourceSlots = () => Math.max(0, FILE_CAP - envBlobs.length - manifestsSelected.length - specCandidates.length - entrypointCandidates.length)
   while (availableSourceSlots() < sourceTarget && manifestsSelected.length > MANIFEST_QUOTA) {
     manifestsSelected = manifestsSelected.slice(0, -1)
   }
 
   // Fix (final review): priority buckets, in order — (1) PRIMARY manifests +
-  // .env matches, (2) up to SPEC_FETCH_CAP spec files (V5, §3.5), (3) ranked
-  // SOURCE files, (4) LOCKFILES last — so lockfiles (CVE-lookup data only)
-  // never outrank source (needed for tool extraction → gate) under a tight
-  // FILE_CAP, and the spec bucket sits right after primary manifests per
-  // the spec's selection order (§3.3b).
+  // .env matches, (2) up to SPEC_FETCH_CAP spec files (V5, §3.5), (3) up to
+  // ENTRYPOINT_FETCH_CAP guaranteed entrypoint files (regression fix, see
+  // ENTRYPOINT_FETCH_CAP above), (4) ranked SOURCE files, (5) LOCKFILES last
+  // — so lockfiles (CVE-lookup data only) never outrank source (needed for
+  // tool extraction → gate) under a tight FILE_CAP, and the spec/entrypoint
+  // buckets sit right after primary manifests per the spec's selection order
+  // (§3.3b).
   const wanted = [
     ...envBlobs,
     ...manifestsSelected,
     ...specCandidates,
+    ...entrypointCandidates,
     ...rankedSource,
     ...blobs.filter(b => fetchable(b) && isLockfile(b.path)),
   ]
