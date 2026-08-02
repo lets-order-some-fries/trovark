@@ -66,7 +66,9 @@ export async function main(argv: string[], deps: CliDeps): Promise<number> {
       for (const e of signals.errors) deps.err(`  - ${e}`)
       return 2
     }
-    if (threshold !== undefined && card.overall < threshold) return 1
+    // I9: --fail-under is a no-op for a notServer card (card.overall is
+    // null — there is no grade to compare against a threshold).
+    if (threshold !== undefined && card.overall !== null && card.overall < threshold) return 1
     return 0
   } catch (err) {
     if (err instanceof ResolveError) { deps.err(err.message); return 2 }

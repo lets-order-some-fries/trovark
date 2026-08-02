@@ -22,6 +22,42 @@ describe('summarize', () => {
     expect(s.secretsFindings).toBe(1)
     expect(s.deprecated).toBe(0)
     expect(s.shellExecTools).toBe(0)
+    expect(s.notServer).toBe(0)
+  })
+  it('counts notServer separately from insufficientData (V2), and excludes it from gradeDist/avgOverall even when scored', () => {
+    const entries: IndexEntry[] = [
+      // A library/SDK entry CAN carry a real score (schema extraction still ran) —
+      // it must still be excluded from site-stats tiles, not just from the count.
+      e({ ref: 'a/lib', notServer: true, notServerReason: 'sdk', overall: 78, grade: 'B+' }),
+      e({ ref: 'a/withheld', insufficientData: true }),
+    ]
+    const s = summarize(entries)
+    expect(s.notServer).toBe(1)
+    expect(s.insufficient).toBe(1)
+    expect(s.gradeDist).toEqual({})   // the notServer entry's B+ must not appear here
+    expect(s.avgOverall).toBe(0)      // ...nor pull avgOverall away from 0 (no graded entries)
+  })
+  // M14: shellExecTools/staleOver180/secretsFindings still counted notServer
+  // entries — a library/SDK repo that happens to be stale or carries an
+  // "exec"-shaped findings from its own API-definition code shouldn't
+  // pollute the "real servers you should worry about" tiles, consistent
+  // with gradeDist/avgOverall already excluding notServer above.
+  it('M14: excludes notServer entries from staleOver180/secretsFindings/shellExecTools (not just gradeDist/avgOverall)', () => {
+    const entries: IndexEntry[] = [
+      e({
+        ref: 'a/lib', notServer: true, notServerReason: 'sdk', overall: 78, grade: 'B+',
+        daysSinceLastCommit: 400,
+        topFindings: [
+          { id: 'security/committed-secret', severity: 'high' },
+          { id: 'security/shell-exec-tool', severity: 'high' },
+        ],
+      }),
+    ]
+    const s = summarize(entries)
+    expect(s.notServer).toBe(1)
+    expect(s.staleOver180).toBe(0)
+    expect(s.secretsFindings).toBe(0)
+    expect(s.shellExecTools).toBe(0)
   })
   it('counts staleOver180 from daysSinceLastCommit, not health score', () => {
     const entries: IndexEntry[] = [

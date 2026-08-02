@@ -14,6 +14,10 @@ export interface IndexEntry {
   overall?: number
   grade?: string
   insufficientData?: boolean
+  // V2: distinct from insufficientData — a library/SDK/proxy/stub repo with
+  // no tools to grade, not a server we failed to check. See src/derive/classify.ts.
+  notServer?: boolean
+  notServerReason?: string
   repoUrl?: string
   dims?: Record<'health' | 'reliability' | 'security' | 'cost', { score: number; confidence: string }>
   topFindings?: Array<{ id: string; severity: string }>
@@ -22,6 +26,9 @@ export interface IndexEntry {
 
 export interface IndexStats {
   total: number; scored: number; failed: number; insufficient: number
+  // V2: count of repos classified as library/SDK/proxy/stub (the correct
+  // terminal outcome, not a withhold) — tracked separately from `insufficient`.
+  notServer: number
   gradeDist: Record<string, number>
   avgOverall: number
   staleOver180: number
@@ -32,24 +39,31 @@ export interface IndexStats {
 
 export function summarize(entries: IndexEntry[]): IndexStats {
   const scoredOk = entries.filter(e => e.ok)
-  const graded = scoredOk.filter(e => !e.insufficientData && typeof e.overall === 'number')
+  const graded = scoredOk.filter(e => !e.insufficientData && !e.notServer && typeof e.overall === 'number')
   const gradeDist: Record<string, number> = {}
   for (const g of graded) {
     const letter = (g.grade ?? '').replace(/[+-]$/, '')
     if (letter) gradeDist[letter] = (gradeDist[letter] ?? 0) + 1
   }
   const has = (e: IndexEntry, id: string) => (e.topFindings ?? []).some(f => f.id === id)
+  // M14: notServer entries (library/SDK/proxy/stub — not real servers you
+  // should worry about) are already excluded from gradeDist/avgOverall
+  // above; staleOver180/secretsFindings/shellExecTools must be consistent —
+  // a library that happens to be stale, or whose own API-definition code
+  // reads as "exec"-shaped, shouldn't inflate the site's headline tiles.
+  const nonLibrary = scoredOk.filter(e => !e.notServer)
   return {
     total: entries.length,
     scored: scoredOk.length,
     failed: entries.length - scoredOk.length,
     insufficient: scoredOk.filter(e => e.insufficientData).length,
+    notServer: scoredOk.filter(e => e.notServer).length,
     gradeDist,
     avgOverall: graded.length === 0 ? 0 : Math.round(graded.reduce((a, e) => a + (e.overall ?? 0), 0) / graded.length),
-    staleOver180: scoredOk.filter(e => (e.daysSinceLastCommit ?? 0) > 180).length,
-    secretsFindings: scoredOk.filter(e => has(e, 'security/committed-secret')).length,
+    staleOver180: nonLibrary.filter(e => (e.daysSinceLastCommit ?? 0) > 180).length,
+    secretsFindings: nonLibrary.filter(e => has(e, 'security/committed-secret')).length,
     deprecated: scoredOk.filter(e => has(e, 'health/deprecated-package')).length,
-    shellExecTools: scoredOk.filter(e => has(e, 'security/shell-exec-tool')).length,
+    shellExecTools: nonLibrary.filter(e => has(e, 'security/shell-exec-tool')).length,
   }
 }
 
@@ -59,8 +73,12 @@ function toEntry(ref: string, card: Scorecard, daysSinceLastCommit?: number): In
     .sort((a, b) => ['high', 'medium', 'low', 'info'].indexOf(a.severity) - ['high', 'medium', 'low', 'info'].indexOf(b.severity))
     .slice(0, 3).map(f => ({ id: f.id, severity: f.severity }))
   return {
-    ref, ok: true, overall: card.overall, grade: card.grade,
+    // I9: card.overall/grade are null for notServer cards — IndexEntry keeps
+    // them optional (number|undefined), so convert null -> undefined here.
+    ref, ok: true, overall: card.overall ?? undefined, grade: card.grade ?? undefined,
     insufficientData: card.insufficientData || undefined,
+    notServer: card.notServer || undefined,
+    notServerReason: card.notServer ? card.notServerReason : undefined,
     repoUrl: card.resolved?.repo ? `https://github.com/${card.resolved.repo.owner}/${card.resolved.repo.name}` : undefined,
     dims, topFindings: findings.length > 0 ? findings : undefined,
     daysSinceLastCommit,

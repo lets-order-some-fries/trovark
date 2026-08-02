@@ -14,6 +14,19 @@ describe('specEra', () => {
   it('legacy for python mcp 0.x', () => {
     expect(specEra([{ path: 'pyproject.toml', content: 'dependencies = ["mcp==0.9.1"]' }])).toBe('legacy')
   })
+  // C1: SDK 2.x package split — @modelcontextprotocol/core, /server, /client
+  // replace the single @modelcontextprotocol/sdk package. These only exist
+  // post-split (2025+), so — like the Go/Rust/JVM/.NET branches — merely
+  // detecting the dependency at all (regardless of version range) is modern.
+  it('modern for @modelcontextprotocol/server (SDK 2.x split) in package.json, regardless of a beta version range', () => {
+    expect(specEra([{ path: 'package.json', content: JSON.stringify({ dependencies: { '@modelcontextprotocol/server': '2.0.0-beta.4' } }) }])).toBe('modern')
+  })
+  it('modern for @modelcontextprotocol/core (SDK 2.x split) in package.json', () => {
+    expect(specEra([{ path: 'package.json', content: JSON.stringify({ dependencies: { '@modelcontextprotocol/core': '2.0.0-beta.4' } }) }])).toBe('modern')
+  })
+  it('modern for @modelcontextprotocol/client (SDK 2.x split) in devDependencies', () => {
+    expect(specEra([{ path: 'package.json', content: JSON.stringify({ devDependencies: { '@modelcontextprotocol/client': '2.0.0' } }) }])).toBe('modern')
+  })
   it('undefined when no MCP SDK dependency found', () => {
     expect(specEra([{ path: 'package.json', content: '{"dependencies":{"express":"^4.0.0"}}' }])).toBeUndefined()
   })

@@ -13,7 +13,7 @@ for (const ref of refs) {
   try {
     const id = await resolve(ref, http)
     const card = score(ref, await assemble(id, http, now, { hasToken: Boolean(process.env.GITHUB_TOKEN) }), now.toISOString())
-    console.log(`${card.grade.padEnd(3)} ${String(card.overall).padStart(3)}  ${ref}`)
+    console.log(`${(card.grade ?? '—').padEnd(3)} ${String(card.overall ?? '—').padStart(3)}  ${ref}`)
   } catch (err) {
     console.log(`ERR      ${ref}  (${(err as Error).message})`)
   }

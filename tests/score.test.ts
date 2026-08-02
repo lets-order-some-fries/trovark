@@ -30,7 +30,7 @@ describe('score()', () => {
     const card = score('x', healthy(), '2026-07-31T00:00:00Z')
     expect(card.overall).toBe(100)
     expect(card.grade).toBe('A+')
-    expect(card.rubricVersion).toBe('1.2.0')
+    expect(card.rubricVersion).toBe('1.3.0')
     for (const d of card.dimensions) expect(d.confidence).toBe('high')
   })
   it('missing signals lower confidence, never throw, never zero the score', () => {
@@ -111,5 +111,49 @@ describe('score()', () => {
     expect(reliability.available).toBe(0)
     expect(cost.available).toBe(0)
     expect(card.insufficientData).toBe(true)
+  })
+})
+
+describe('score() — notServer (V2): a distinct terminal state, not insufficientData', () => {
+  it('a notServer scorecard is NOT insufficientData, even though its coverage would otherwise withhold', () => {
+    const s = empty() // sparse signals — would normally trip the <4-signals / dimensions-dropped gate
+    s.notServer = true
+    s.notServerReason = 'sdk'
+    s.notServerNote = 'SDK/framework that defines the tool-registration API but registers no tools itself.'
+    const card = score('x', s, 'T')
+    expect(card.insufficientData).toBe(false)
+    expect(card.notServer).toBe(true)
+    expect(card.notServerReason).toBe('sdk')
+    expect(card.notes.join(' ')).toMatch(/not an mcp server/i)
+  })
+  it('notes for a notServer card do not also claim "insufficient data" / "grade withheld"', () => {
+    const s = empty()
+    s.notServer = true
+    s.notServerReason = 'not-server'
+    const card = score('x', s, 'T')
+    expect(card.notes.join(' ')).not.toMatch(/insufficient|grade withheld/i)
+  })
+  // I9: a notServer card previously still carried a real numeric
+  // overall/grade (e.g. typescript-sdk scored 100/A+) — misleading, since
+  // there's no tool surface to grade, and it tripped `--fail-under` on a
+  // library (see cli.test.ts). No headline score/grade is reported.
+  it('I9: a notServer card has null overall and grade — no headline score to report', () => {
+    const s = empty()
+    s.notServer = true
+    s.notServerReason = 'sdk'
+    const card = score('x', s, 'T')
+    expect(card.overall).toBeNull()
+    expect(card.grade).toBeNull()
+  })
+  it('a normal card with no notServer signal is unaffected (regression)', () => {
+    const card = score('x', healthy(), 'T')
+    expect(card.notServer).toBeUndefined()
+    expect(card.notServerReason).toBeUndefined()
+  })
+  it('security-primary-absent still withholds normally when notServer is NOT set (guard: only notServer bypasses the gate)', () => {
+    const s = healthy(); s.toolSurfaceRisk = undefined
+    const card = score('x', s, 'T')
+    expect(card.insufficientData).toBe(true)
+    expect(card.notServer).toBeUndefined()
   })
 })

@@ -69,6 +69,34 @@ describe('renderSite', () => {
     // still sortable / sinks below graded rows like other failed/insufficient rows
     expect(out).toMatch(/<tr class="failed" data-overall="-1"[^>]*>[\s\S]*gorm-server\/rust-mcp/)
   })
+  it('renders notServer rows distinctly from insufficient-data rows (V2)', () => {
+    const withLibrary = {
+      ...results,
+      entries: [{
+        ref: 'modelcontextprotocol/rust-sdk',
+        ok: true,
+        notServer: true,
+        notServerReason: 'sdk',
+        repoUrl: 'https://github.com/modelcontextprotocol/rust-sdk',
+        dims: {
+          health: { score: 90, confidence: 'high' },
+          reliability: { score: 65, confidence: 'medium' },
+          security: { score: 50, confidence: 'low' },
+          cost: { score: 60, confidence: 'medium' },
+        },
+      }],
+    } as never
+    const out = renderSite(withLibrary)
+    // distinct wording — not the insufficient-data phrasing
+    expect(out).toMatch(/library.*not an mcp server/i)
+    expect(out).not.toMatch(/insufficient data to score/i)
+    expect(out).not.toMatch(/tool surface unreadable/i)
+    // no fabricated letter grade or overall number
+    expect(out).not.toMatch(/class="chip" style="background:[^"]*">[A-F][+-]?</)
+    expect(out).toContain('<td class="muted">—</td>')
+    // still sinks below graded rows for sorting, like other withheld outcomes
+    expect(out).toMatch(/<tr class="failed" data-overall="-1"[^>]*>[\s\S]*rust-sdk/)
+  })
   it('rejects non-http(s) repoUrl schemes', () => {
     const evil = {
       ...results,

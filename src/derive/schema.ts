@@ -1,6 +1,8 @@
 import { encode } from 'gpt-tokenizer'
 import type { RepoFile } from '../collectors/github.js'
 import type { Finding, ToolInfo } from '../types.js'
+import { fromGoSource } from './lang/go.js'
+import { fromOpenApi, fromToolDefinitions } from './openapi.js'
 
 export interface SchemaResult {
   extracted: boolean
@@ -84,13 +86,29 @@ const STRONG_EXEC_TOKENS = new Set([
 ])
 const SCHEMA_TEXT_SHELL_RE = /\bchild_process\b|os\.system\(|\bexecSync\b|\bspawnSync\b/i
 
+// Fix (final review, Fix 3): schemaText for a JS-source-extracted candidate
+// is the raw captured object-literal source, which includes its own
+// code-STRUCTURE property keys (the handler/callback the tool is registered
+// with) — not just user-meaningful content. FastMCP's `Tool` shape mandates
+// an `execute:` key on every single tool, so `execute` (itself a
+// STRONG_EXEC_TOKENS member) tokenized out of that key and flagged EVERY
+// tool in a FastMCP-shaped server (e.g. cswkim/discogs-mcp-server) 'high'
+// regardless of what the tool actually does. Fixed by stripping these
+// structural/handler key positions (each only when immediately followed by
+// `:`, i.e. genuinely in key position, not as a free word) before
+// tokenizing. Genuine content is untouched: `execSync(`/`child_process`
+// (checked separately below), a param named `shell_command`, or `execute`
+// appearing anywhere other than immediately before a colon.
+const STRUCTURAL_SCHEMA_KEY_RE = /\b(?:execute|handler|callback|run|fn|method|cb|resolve|invoke)\s*:/gi
+
 // schemaText-only classifier: 'high' on a strong exec signal, else 'none'.
 // Tokenized the same way as riskFromText (per whitespace-delimited word, then
 // split on non-alnum/camelCase) so `shell_exec(cmd)` still matches even
 // though it's not English prose.
 function riskFromSchemaText(schemaText: string): Risk {
-  if (SCHEMA_TEXT_SHELL_RE.test(schemaText) || SHELL_MODULE_RE.test(schemaText)) return 'high'
-  for (const word of schemaText.split(/\s+/)) {
+  const cleaned = schemaText.replace(STRUCTURAL_SCHEMA_KEY_RE, '')
+  if (SCHEMA_TEXT_SHELL_RE.test(cleaned) || SHELL_MODULE_RE.test(cleaned)) return 'high'
+  for (const word of cleaned.split(/\s+/)) {
     if (!word) continue
     for (const tok of tokenize(word)) {
       if (STRONG_EXEC_TOKENS.has(tok)) return 'high'
@@ -199,9 +217,16 @@ function classify(name: string, description: string, schemaText: string): Risk {
 // Fix 5: paths that aren't part of the shipped server — test fixtures, example
 // snippets, and docs source — commonly define fake/sample "tools" that would
 // otherwise fabricate cost/security signals for framework and SDK repos.
-const NON_SERVER_DIR = /(^|\/)(tests|__tests__|examples|docs|docs_src)\//
+// V2 (coverage-spec §3.1/§4): added `samples` — csharp-sdk ships its example
+// servers under samples/** rather than examples/**; without this, signal #2
+// (idiom-only-in-excluded-paths) would misread csharp-sdk's example-only
+// registrations as real tools instead of the library signal they are.
+const NON_SERVER_DIR = /(^|\/)(tests|__tests__|examples|docs|docs_src|samples)\//
 const NON_SERVER_FILE = /(?:^|\/)[^/]*(?:_test\.[^/]+|\.test\.[^/]+)$/
-function isNonServerPath(path: string): boolean {
+// Exported for src/derive/classify.ts (V2): classifyLibrary's idiom-only-in-
+// excluded-paths signal needs the SAME notion of "not part of the shipped
+// server" that extractSchema itself filters on, so the two can never drift.
+export function isNonServerPath(path: string): boolean {
   return NON_SERVER_DIR.test(path) || NON_SERVER_FILE.test(path)
 }
 
@@ -209,7 +234,11 @@ function isNonServerPath(path: string): boolean {
 // substring through the matching `closeCh`, honoring nesting depth. Used to
 // pull a whole `{...}`/`(...)` literal out of source text without a real
 // parser. Bounded by `maxLen` so a malformed/huge file can't force a long scan.
-function captureBalanced(text: string, openIdx: number, openCh: string, closeCh: string, maxLen = 4000): string {
+// Exported for src/derive/lang/go.ts (V3): the Go idioms need the same
+// balanced-brace/paren capture (composite `mcp.Tool{...}` literals, nested
+// `NewTool(...)`/`WithDescription(...)` calls) rather than a second,
+// drifting copy of the scanner.
+export function captureBalanced(text: string, openIdx: number, openCh: string, closeCh: string, maxLen = 4000): string {
   if (text[openIdx] !== openCh) return ''
   let depth = 0
   const end = Math.min(text.length, openIdx + maxLen)
@@ -248,19 +277,301 @@ function enclosingObjectSpan(text: string, pos: number): [number, number] | unde
   return undefined
 }
 
+// Fix 3 (review): the bare-top-level-ARRAY branch here was unreachable —
+// fromJsonFile always tries fromToolDefinitions (openapi.ts) first, which
+// applies an identical/tighter filter to any top-level array before
+// fromManifest is ever called with one. Only the `{tools:[...]}` object
+// shape is fromManifest's actual job.
+type ManifestTool = { name?: unknown; description?: string; inputSchema?: unknown }
+function toolsFromManifestDoc(doc: unknown): ManifestTool[] | undefined {
+  if (doc && typeof doc === 'object' && Array.isArray((doc as { tools?: unknown }).tools)) {
+    return (doc as { tools: ManifestTool[] }).tools
+  }
+  return undefined
+}
+
 function fromManifest(f: RepoFile): ToolInfo[] {
   try {
-    const doc = JSON.parse(f.content) as { tools?: Array<{ name?: string; description?: string; inputSchema?: unknown }> }
-    if (!Array.isArray(doc.tools)) return []
-    return doc.tools
+    const doc = JSON.parse(f.content) as unknown
+    const list = toolsFromManifestDoc(doc)
+    if (!list) return []
+    return list
       .filter((t): t is { name: string; description?: string; inputSchema?: unknown } => typeof t.name === 'string')
       .map(t => ({ name: t.name, description: t.description, schemaText: JSON.stringify(t) }))
   } catch { return [] }
 }
 
+// V5 (coverage-spec §3.5): per-.json-file dispatch, tried in order from most
+// to least specific — an OpenAPI/Swagger spec, then a bare toolDefinitions
+// array, then the {tools:[...]} manifest shape. Only reached for files whose
+// basename is in TOOL_JSON_BASENAME_RE (see extractSchema below); package.json
+// and other incidental JSON never reach this function at all.
+function fromJsonFile(f: RepoFile): ToolInfo[] {
+  const openapi = fromOpenApi(f)
+  if (openapi.length > 0) return openapi
+  const toolDefs = fromToolDefinitions(f)
+  if (toolDefs.length > 0) return toolDefs
+  return fromManifest(f)
+}
+
 // Fix 1: modern high-level SDK `server.registerTool("name", {...})` alongside
-// the legacy `server.tool("name", "description", ...)` form.
-const JS_TOOL_CALL_RE = /\.(?:registerTool|tool)\(\s*["'`]([\w.-]+)["'`]\s*(?:,\s*["'`]([^"'`]*)["'`])?/g
+// the legacy `server.tool("name", "description", ...)` form. V4 (coverage-
+// spec §3.4 TS #1): also match fastmcp's `.addTool("name", ...)` — same
+// quoted-first-arg method-call shape, so it flows through the existing
+// config-object description fallback below for free.
+const JS_TOOL_CALL_RE = /\.(?:registerTool|tool|addTool)\(\s*["'`]([\w.-]+)["'`]\s*(?:,\s*["'`]([^"'`]*)["'`])?/g
+
+// V4 #1/#4 (coverage-spec §3.4 TS): metatool/sentry's `defineTool(...)` is
+// usually called bare (an imported function, not a method), so it needs its
+// own alternation rather than living in JS_TOOL_CALL_RE's `\.`-anchored
+// form. This single regex covers both the "add a bare-call form for
+// defineTool" extension from #1 and the positional name+description form
+// from #4 (`defineTool("run_workflow", "Runs a saved workflow")`) —
+// description is optional so a name-only call still extracts.
+const DEFINE_TOOL_CALL_RE = /\bdefineTool\(\s*["'`]([\w-]+)["'`]\s*(?:,\s*["'`]([^"'`]*)["'`])?/g
+
+// V4 #2 (coverage-spec §3.4 TS): object-literal FIRST arg — fastmcp
+// `server.addTool({name,...})`, sentry `defineTool({name:...})`. Distinct
+// from JS_TOOL_CALL_RE's config-object fallback (which fires on the SECOND
+// arg, after an already-quoted name as arg 1): here there is no quoted name
+// at the call site at all, the whole tool is described by the object.
+const OBJECT_ARG_CALL_RE = /\b(?:addTool|defineTool)\(\s*\{/g
+
+// V4 #3 (coverage-spec §3.4 TS): keyed-factory — supabase's
+// `list_organizations: tool({...})`, where the object KEY (not a string
+// literal anywhere in the call) is the tool name. This shape is
+// indistinguishable from an arbitrary `foo: bar({...})` object property by
+// regex alone, so it is gated by MCP_UTILS_TOOL_IMPORT_RE / GET_TOOLS_FN_RE
+// below — it never fires unqualified (see the guard in fromJsSource).
+const KEYED_FACTORY_RE = /([\w-]+)\s*:\s*tool\(/g
+const MCP_UTILS_TOOL_IMPORT_RE = /import\s*\{[^}]*\btool\b[^}]*\}\s*from\s*["'][^"']*mcp-utils[^"']*["']/
+const GET_TOOLS_FN_RE = /(?:function\s+(get\w*Tools)\s*\([^)]*\)\s*\{|(?:export\s+)?(?:const|let)\s+(get\w*Tools)\s*=\s*(?:async\s*)?\([^)]*\)\s*=>\s*\{)/g
+
+// V4 #5 (coverage-spec §3.4 TS): class-based tool (mongodb) — a class
+// extending some `*Tool*Base` whose body sets `name`/`toolName` and
+// `description` instance fields rather than passing them to a call.
+const CLASS_TOOL_RE = /class\s+\w+\s+extends\s+[\w.]*Tool[\w.]*Base\b[^{]*\{/g
+const CLASS_NAME_FIELD_RE = /(?:static\s+)?(?:toolName|name)\s*=\s*["'`]([\w-]+)["'`]/
+const CLASS_DESC_FIELD_RE = /(?:public\s+)?description\s*=\s*["'`]([^"'`]*)["'`]/
+
+// V4 #6 (coverage-spec §3.4 TS): wrapper member-expression name (cloudflare)
+// — `server.accountTool(NAME_MAP.key, {...})`. The name isn't a string
+// literal at the call site; resolveWrapperName below resolves it via a
+// sibling `const NAME_MAP = { key: 'literal' }` map when one exists.
+// I6: the callee alternation matched ANY `*Tool(` member call, including
+// USES of an already-registered tool (`.callTool(`, `.getTool(`,
+// `.removeTool(`, `.hasTool(`) — reviewer verified
+// `client.callTool(TOOL_REQUEST, {cursor:1})` published a fake tool named
+// `TOOL_REQUEST`. The regex still matches the general `*Tool(` shape (it
+// can't distinguish registration verbs from use verbs by shape alone); the
+// exclusion is applied in code via WRAPPER_EXCLUDED_METHODS below.
+const WRAPPER_TOOL_CALL_RE = /\.(\w*[Tt]ool)\(\s*([A-Z_][\w.]*)\s*,\s*\{/g
+const WRAPPER_EXCLUDED_METHODS = new Set(['callTool', 'getTool', 'removeTool', 'hasTool', 'listTools'])
+
+// V4 #7 (coverage-spec §3.4 TS): the ListToolsRequestSchema sibling-check
+// scan below is also the right shape for discogs-style FastMCP object
+// literals that never funnel through a single quoted-name call site (a
+// `tools = [{name, parameters, ...}]` array iterated into `.addTool(t)`).
+// Trigger the scan whenever the file imports fastmcp too, not only when
+// ListToolsRequestSchema is present.
+const FASTMCP_IMPORT_RE = /['"]fastmcp['"]/
+
+// Coverage-v1.3 review (idiom 7 rewrite): the three POSITIVE containment
+// sources a `{name,...}` candidate can be reached from. Each produces a set
+// of balanced [start, end] spans (via captureBalanced); a candidate is
+// accepted only if its `name:` match falls inside at least one span from at
+// least one of the three.
+//
+// (a) a tool-registration CALL's argument span: `.addTool(`, `.registerTool(`,
+// `.tool(`, or bare `defineTool(`. Note this deliberately excludes
+// addPrompt/prompt/addResource/addResourceTemplate/resource — those calls'
+// argument spans are never scanned, so anything nested inside them (including
+// a prompt's own `arguments: [{name,...}]`) is unreachable and rejected.
+const REGISTRATION_CALL_ARG_RE = /\.(?:addTool|registerTool|tool)\(|\bdefineTool\(/g
+// (b) the VALUE span of a `tools:` key, array- or object-shaped — e.g.
+// `{ tools: [{name,...}] }` or a `tools: { ... }` map, at any nesting depth.
+const TOOLS_KEY_RE = /\btools\s*:\s*([[{])/g
+// (c) an array-literal span assigned to an identifier whose name matches
+// /tool/i — e.g. `const toolDefs = [...]`, `const TOOLS = [...]`. This is
+// what makes the discogs-style `for (const t of toolDefs) server.addTool(t)`
+// pattern work: the per-item `.addTool(t)` call argument is just `t`, so (a)
+// alone can't see inside the array — (c) captures the array itself, and
+// every object literal in it (however many) is reachable.
+const TOOL_NAMED_ARRAY_RE = /\b(?:export\s+)?(?:const|let|var)\s+(\w+)\s*(?::[^=\n]+)?=\s*\[/g
+
+// (a, extended) Live spot-check regression: discogs-mcp-server (a real
+// fastmcp flagship server, not a synthetic test case) never passes an object
+// literal to `.addTool(` at all — every tool is a top-level named const
+// (`export const searchTool: Tool<...> = { name: 'search', ... }`) registered
+// by bare-identifier reference (`server.addTool(searchTool)`). The call's own
+// argument span is just the identifier, so rule (a) alone can't see the
+// object — without resolving the reference, positive scoping would reject
+// 100% of this (very common) idiom's tools. Mirrors resolveWrapperName's
+// sibling-const-lookup approach (V4 #6) but for a plain `const IDENT = {...}`
+// object declaration instead of a `{ key: 'literal' }` map.
+function findConstObjectSpan(content: string, ident: string): [number, number] | undefined {
+  const declRe = new RegExp(`\\b(?:export\\s+)?(?:const|let|var)\\s+${escapeRegExp(ident)}\\b\\s*(?::[^=\\n]+)?=\\s*\\{`)
+  const m = declRe.exec(content)
+  if (!m) return undefined
+  const braceIdx = m.index + m[0].length - 1
+  const obj = captureBalanced(content, braceIdx, '{', '}')
+  if (!obj) return undefined
+  return [braceIdx, braceIdx + obj.length - 1]
+}
+
+// Computes the accepted-containment spans (a)/(b)/(c) described above for one
+// file's content. Returns balanced [start, end] index pairs (inclusive of the
+// delimiters); a `name:` match is accepted iff its index falls inside any one
+// of them.
+function acceptedToolSpans(content: string): Array<[number, number]> {
+  const spans: Array<[number, number]> = []
+
+  for (const m of content.matchAll(REGISTRATION_CALL_ARG_RE)) {
+    const openIdx = m.index + m[0].length - 1 // m[0] ends with '('
+    const call = captureBalanced(content, openIdx, '(', ')')
+    if (!call) continue
+    spans.push([openIdx, openIdx + call.length - 1])
+    // Bare-identifier argument (e.g. `server.addTool(searchTool)`) — resolve
+    // to its declaring top-level object-literal const, if any (see
+    // findConstObjectSpan above).
+    const argIdent = call.slice(1, -1).trim()
+    if (/^[\w$]+$/.test(argIdent)) {
+      const declSpan = findConstObjectSpan(content, argIdent)
+      if (declSpan) spans.push(declSpan)
+    }
+  }
+
+  for (const m of content.matchAll(TOOLS_KEY_RE)) {
+    const openCh = m[1]
+    const closeCh = openCh === '[' ? ']' : '}'
+    const openIdx = m.index + m[0].length - 1 // m[0] ends with the open delimiter
+    const val = captureBalanced(content, openIdx, openCh, closeCh)
+    if (val) spans.push([openIdx, openIdx + val.length - 1])
+  }
+
+  for (const m of content.matchAll(TOOL_NAMED_ARRAY_RE)) {
+    // Fix (final review): a raw /tool/i SUBSTRING test accepted identifiers
+    // like `toolbarItems`/`toolkitConfig`/`MyToolboxOptions` — "tool" is a
+    // substring of "toolbar"/"toolkit"/"toolbox" but not the identifier's
+    // meaning. Require an identifier-BOUNDARY match instead: tokenize (same
+    // tokenizer as risk classification — splits on `_`/`-`/camelCase) and
+    // accept only if a token is exactly `tool` or `tools`. `coolTools` still
+    // matches (it genuinely contains the token `tools`); `toolbarItems` does
+    // not (`toolbar`/`items`, neither is the token `tool(s)`).
+    const identTokens = tokenize(m[1])
+    if (!identTokens.includes('tool') && !identTokens.includes('tools')) continue
+    const openIdx = m.index + m[0].length - 1 // m[0] ends with '['
+    const arr = captureBalanced(content, openIdx, '[', ']')
+    if (arr) spans.push([openIdx, openIdx + arr.length - 1])
+  }
+
+  return spans
+}
+
+function escapeRegExp(s: string): string {
+  return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+}
+
+// Fix (final review, Fix 2): once a candidate's enclosing span is accepted
+// (registration call / tools: value / tool-named array), there was no
+// exclusion for a `{name,description}` object nested inside a NON-TOOL
+// sub-key of that accepted span — e.g. a param object under
+// `inputSchema.properties.<field>`, or an array element under a
+// `parameters:` array. The old (deleted) guard explicitly excluded
+// properties/arguments for exactly this; positive scoping alone did not
+// subsume it. Fixed with a scope-aware (containment-based, not text-index)
+// walk: within the accepted span, find each enclosing bracket from the
+// candidate's own object outward, and reject if any of them is the value of
+// a properties:/arguments:/inputSchema:/parameters: key. Bounded at the
+// accepted span's own start (`floor`) so this can never leak across sibling
+// statements the way the deleted "nearest preceding key by text index"
+// heuristic did.
+const EXCLUDED_NESTED_KEYS = new Set(['properties', 'arguments', 'inputschema', 'parameters'])
+const BRACKET_CLOSERS: Record<string, string> = { '{': '}', '[': ']', '(': ')' }
+
+// Generalization of enclosingObjectSpan's backward walk to all three bracket
+// kinds (`{`, `[`, `(`): scans backward from `pos` and returns the nearest
+// unmatched OPENING bracket at or after `floor`, skipping over any balanced
+// nested pairs along the way. Returns undefined if none is found before
+// `floor` is reached.
+function nearestEnclosingBracket(text: string, pos: number, floor: number): { idx: number; open: string } | undefined {
+  const stack: string[] = []
+  for (let i = pos; i >= floor; i--) {
+    const c = text[i]
+    if (c === '}' || c === ']' || c === ')') {
+      stack.push(c)
+    } else if (c === '{' || c === '[' || c === '(') {
+      if (stack.length > 0 && BRACKET_CLOSERS[c] === stack[stack.length - 1]) {
+        stack.pop()
+      } else {
+        return { idx: i, open: c }
+      }
+    }
+  }
+  return undefined
+}
+
+// Looks immediately before `bracketIdx` for the `key:` this bracket is the
+// value of (e.g. `properties: {` → 'properties'). Returns undefined when the
+// bracket isn't directly preceded by a key — a call's `(`, an array element
+// separated by `,`, or a bare top-level declaration's `=`.
+function precedingKeyOf(text: string, bracketIdx: number): string | undefined {
+  const before = text.slice(Math.max(0, bracketIdx - 100), bracketIdx)
+  const m = /([\w$]+)\s*:\s*$/.exec(before)
+  return m?.[1]?.toLowerCase()
+}
+
+// Walks outward from `objSpan` (the candidate's own enclosing object, as
+// returned by enclosingObjectSpan) through each enclosing bracket, stopping
+// at `floor` (the accepted span's own start — never walking past it, so this
+// can't leak across sibling statements). Returns true if any level along the
+// way is the value of an excluded key.
+function isNestedUnderExcludedKey(content: string, objSpan: [number, number], floor: number): boolean {
+  let pos = objSpan[0]
+  while (pos > floor) {
+    const bracket = nearestEnclosingBracket(content, pos - 1, floor)
+    if (!bracket || bracket.idx <= floor) return false
+    const key = precedingKeyOf(content, bracket.idx)
+    if (key && EXCLUDED_NESTED_KEYS.has(key)) return true
+    pos = bracket.idx
+  }
+  return false
+}
+
+// V4 #3 helper: spans (start/end index of the `{...}` body) of every
+// `function getXTools(...) { ... }` / `const getXTools = (...) => { ... }`
+// declaration in the file, so the keyed-factory guard can check whether a
+// given match position falls inside one of the supabase/cloudflare
+// `getXTools()` factory-function bodies.
+function findGetToolsFnSpans(content: string): Array<[number, number]> {
+  const spans: Array<[number, number]> = []
+  for (const m of content.matchAll(GET_TOOLS_FN_RE)) {
+    const braceIdx = m.index + m[0].length - 1
+    const body = captureBalanced(content, braceIdx, '{', '}')
+    if (body) spans.push([braceIdx, braceIdx + body.length - 1])
+  }
+  return spans
+}
+
+// V4 #6 helper: resolves a captured wrapper identifier (e.g. `TOOLS.list`)
+// to the string literal it points at, via a sibling `const TOOLS = { list:
+// 'accounts_list' }` map. I6: no longer falls back to the raw identifier —
+// when there's no dotted member access, no matching const map, or the key
+// isn't a string literal in that map, returns undefined so the caller emits
+// NO tool. A miss beats a garbage name (e.g. `TOOL_NAMES.search` published
+// verbatim as a "tool").
+function resolveWrapperName(content: string, ident: string): string | undefined {
+  const dotIdx = ident.indexOf('.')
+  if (dotIdx === -1) return undefined
+  const objectName = ident.slice(0, dotIdx)
+  const key = ident.slice(dotIdx + 1)
+  const mapMatch = new RegExp(`\\bconst\\s+${escapeRegExp(objectName)}\\s*(?::[^=]+)?=\\s*\\{`).exec(content)
+  if (!mapMatch) return undefined
+  const braceIdx = mapMatch.index + mapMatch[0].length - 1
+  const body = captureBalanced(content, braceIdx, '{', '}')
+  const keyMatch = body.match(new RegExp(`\\b${escapeRegExp(key)}\\s*:\\s*["'\`]([\\w.-]+)["'\`]`))
+  return keyMatch?.[1]
+}
 
 // Fix 4: low-level SDK `Tool(...)`/`types.Tool(...)` constructor literals
 // (JS positional-object and Python kwargs both land here — the captured args
@@ -279,7 +590,12 @@ function fromLowLevelToolCalls(content: string): ToolInfo[] {
   return tools
 }
 
-function fromJsSource(f: RepoFile): ToolInfo[] {
+// Exported for src/derive/classify.ts (V2): signal #2 (idiom-only-in-
+// excluded-paths) needs to run the SAME idiom detectors extractSchema uses,
+// over the FULL (unfiltered-by-path) file set, so it can tell "an idiom
+// exists but only under examples/" apart from "no idiom anywhere" — reusing
+// these instead of a second, drifting copy of the regexes.
+export function fromJsSource(f: RepoFile): ToolInfo[] {
   const tools: ToolInfo[] = []
   for (const m of f.content.matchAll(JS_TOOL_CALL_RE)) {
     const afterName = m.index + m[0].length
@@ -301,18 +617,114 @@ function fromJsSource(f: RepoFile): ToolInfo[] {
     tools.push({ name: m[1], description, schemaText })
   }
 
-  // Fix 3: the ListToolsRequestSchema fallback only counts a `name:"x"` when
-  // the SAME object literal also has an adjacent `description:`/`inputSchema:`
-  // sibling — this drops logger/config `name:` phantoms AND the
-  // `new Server({name})` identity phantom, without losing real tool entries.
-  if (f.content.includes('ListToolsRequestSchema')) {
-    const SIBLING_RE = /\b(?:description|inputSchema)\s*:/
+  // V4 #1/#4: bare/positional defineTool("name"[, "description"]) — the
+  // dot-anchored JS_TOOL_CALL_RE above can't see this since it's usually an
+  // imported function, not a method call.
+  for (const m of f.content.matchAll(DEFINE_TOOL_CALL_RE)) {
+    if (tools.some(t => t.name === m[1])) continue
+    tools.push({ name: m[1], description: m[2], schemaText: m[0] })
+  }
+
+  // V4 #2: object-literal first arg — addTool({name,...}) / defineTool({name}).
+  for (const m of f.content.matchAll(OBJECT_ARG_CALL_RE)) {
+    const braceIdx = m.index + m[0].length - 1
+    const obj = captureBalanced(f.content, braceIdx, '{', '}')
+    const nameMatch = obj.match(/\bname\s*:\s*["'`]([\w.-]+)["'`]/)
+    if (!nameMatch) continue
+    if (tools.some(t => t.name === nameMatch[1])) continue
+    const descMatch = obj.match(/\bdescription\s*:\s*["'`]([^"'`]*)["'`]/)
+    tools.push({ name: nameMatch[1], description: descMatch?.[1], schemaText: m[0] + obj })
+  }
+
+  // V4 #3: keyed-factory `key: tool({...})` — the object KEY is the tool
+  // name. Guarded: only runs when `tool` is imported from an *mcp-utils*
+  // module, or (checked per-match) the match sits inside a `getXTools()`
+  // factory function body — never on an arbitrary `foo: bar({...})`.
+  if (MCP_UTILS_TOOL_IMPORT_RE.test(f.content) || /get\w*Tools\(/.test(f.content)) {
+    const mcpUtilsImport = MCP_UTILS_TOOL_IMPORT_RE.test(f.content)
+    const fnSpans = mcpUtilsImport ? [] : findGetToolsFnSpans(f.content)
+    for (const m of f.content.matchAll(KEYED_FACTORY_RE)) {
+      const insideGetToolsFn = fnSpans.some(([s, e]) => m.index >= s && m.index <= e)
+      if (!mcpUtilsImport && !insideGetToolsFn) continue
+      if (tools.some(t => t.name === m[1])) continue
+      tools.push({ name: m[1], schemaText: m[0] })
+    }
+  }
+
+  // V4 #5: class-based tool — `class FindTool extends MongoDBToolBase {
+  // name = 'find'; description = '...' }`.
+  for (const m of f.content.matchAll(CLASS_TOOL_RE)) {
+    const braceIdx = m.index + m[0].length - 1
+    const body = captureBalanced(f.content, braceIdx, '{', '}')
+    const nameMatch = body.match(CLASS_NAME_FIELD_RE)
+    if (!nameMatch) continue
+    if (tools.some(t => t.name === nameMatch[1])) continue
+    const descMatch = body.match(CLASS_DESC_FIELD_RE)
+    tools.push({ name: nameMatch[1], description: descMatch?.[1], schemaText: m[0] + body })
+  }
+
+  // V4 #6: wrapper member-expression name — `server.accountTool(NAME_MAP.key,
+  // {...})`, resolved via a sibling const map. I6: excludes USE verbs
+  // (callTool/getTool/removeTool/hasTool/listTools — see
+  // WRAPPER_EXCLUDED_METHODS) and emits no tool at all when the identifier
+  // can't be resolved (see resolveWrapperName).
+  for (const m of f.content.matchAll(WRAPPER_TOOL_CALL_RE)) {
+    if (WRAPPER_EXCLUDED_METHODS.has(m[1])) continue
+    const name = resolveWrapperName(f.content, m[2])
+    if (name === undefined) continue
+    if (tools.some(t => t.name === name)) continue
+    tools.push({ name, schemaText: m[0] })
+  }
+
+  // Fix 3 / V4 #7: the ListToolsRequestSchema fallback only counts a
+  // `name:"x"` when the SAME object literal also has an adjacent
+  // `description:`/`inputSchema:`/`parameters:` sibling — this drops
+  // logger/config `name:` phantoms AND the `new Server({name})` identity
+  // phantom, without losing real tool entries. V4 #7 drops the
+  // ListToolsRequestSchema precondition: the same scan now also runs when
+  // the file imports fastmcp or calls `.addTool(`, so discogs-shaped
+  // FastMCP tool-array object literals are picked up even without an
+  // explicit ListToolsRequestSchema handler; the sibling set is broadened to
+  // include `parameters:` (fastmcp/zod-style schemas use that key instead of
+  // `inputSchema:`).
+  if (f.content.includes('ListToolsRequestSchema') || FASTMCP_IMPORT_RE.test(f.content) || f.content.includes('.addTool(')) {
+    const SIBLING_RE = /\b(?:description|inputSchema|parameters)\s*:/
+    // Fix (coverage-v1.3 review): the prior version of this scan rejected a
+    // `{name,...}` candidate via NEGATIVE guards — "what's the nearest
+    // preceding key/call by raw text index?" — with no brace/scope
+    // awareness. That silently DROPPED legitimate tools: one tool's
+    // `inputSchema.properties` key became the "nearest preceding key" for
+    // every later tool in the same array, and an unrelated `.addPrompt(...)`
+    // call earlier in the file became the "nearest preceding call" for the
+    // entire rest of the tool surface. Losing real tools is worse than the
+    // over-extraction the guards were meant to prevent.
+    //
+    // Replaced with POSITIVE, scope-aware containment: a candidate is
+    // accepted only if it is genuinely reachable from a tool-registration
+    // context, computed via real brace/paren-balanced spans (not text-index
+    // proximity) — see acceptedToolSpans below. A resource-shape check
+    // (uri/uriTemplate/mimeType) remains as a cheap secondary safety net,
+    // applied only to already-accepted candidates.
+    const RESOURCE_SHAPE_RE = /\b(?:uri|uriTemplate|mimeType)\s*:/
+    const acceptedSpans = acceptedToolSpans(f.content)
     for (const m of f.content.matchAll(/name:\s*["'`]([\w-]+)["'`]/g)) {
       if (tools.some(t => t.name === m[1])) continue
       const span = enclosingObjectSpan(f.content, m.index)
       if (!span) continue
       const objText = f.content.slice(span[0], span[1] + 1)
       if (!SIBLING_RE.test(objText)) continue
+      // Positive containment: the candidate must fall inside a registration
+      // call's argument span, a `tools:` value span, or a /tool/i-named
+      // array literal — see acceptedToolSpans. Additionally (Fix 2), it must
+      // NOT be nested under a properties:/arguments:/inputSchema:/parameters:
+      // sub-key WITHIN that same accepted span — see isNestedUnderExcludedKey.
+      if (!acceptedSpans.some(([s, e]) =>
+        m.index >= s && m.index <= e && !isNestedUnderExcludedKey(f.content, span, s)
+      )) continue
+      // Safety net: tools never carry uri/uriTemplate/mimeType fields —
+      // those are resource/prompt-specific, even for an otherwise-accepted
+      // candidate (e.g. a stray resource object mixed into a tools array).
+      if (RESOURCE_SHAPE_RE.test(objText)) continue
       tools.push({ name: m[1], schemaText: objText })
     }
   }
@@ -330,7 +742,76 @@ function fromJsSource(f: RepoFile): ToolInfo[] {
 const PY_DECORATOR_RE = /@(?:\w+\.)?tool\b(?:\([^)]*\))?[\s\S]{0,200}?\b(?:async\s+)?def\s+(\w+)\s*\(/g
 const PY_IMPERATIVE_RE = /\b(?:add_tool|tool)\(\s*name\s*=\s*["']([\w-]+)["'](?:\s*,\s*description\s*=\s*["']([^"']*)["'])?/g
 
-function fromPySource(f: RepoFile): ToolInfo[] {
+// V5 (coverage-spec §3.4 Python #1): serena's class-subclass idiom —
+// `class ReadFileTool(Tool):` / `class DeleteLinesTool(EditingTool):`.
+// GUARD (high-FP rule, per plan Global Constraints): the class name must
+// end in `Tool` AND the base-class list must mention Tool/EditingTool*/
+// BaseTool — an arbitrary `class HelperThing(Base):` matches neither half
+// and is never touched by this idiom.
+const PY_CLASS_SUBCLASS_RE = /class\s+(\w+Tool)\s*\([^)]*\b(?:Tool|EditingTool\w*|BaseTool)\b[^)]*\)\s*:/g
+// Bounded, best-effort lookup of the `apply()` method's docstring first
+// line, searched in the window after the class header up to (not
+// including) the next top-level `class` — so a docstring picked up here can
+// never belong to a different, later class.
+const PY_APPLY_DOCSTRING_RE = /def\s+apply\s*\([^)]*\)\s*(?:->[^:]+)?:\s*("""|''')([\s\S]*?)\1/
+
+// serena derives the tool name from the class name by stripping the
+// trailing `Tool` suffix and converting CamelCase -> snake_case:
+// ReadFileTool -> ReadFile -> read_file; DeleteLinesTool -> DeleteLines -> delete_lines.
+function camelToSnake(s: string): string {
+  return s.replace(/([a-z0-9])([A-Z])/g, '$1_$2').toLowerCase()
+}
+
+function findApplyDocstring(content: string, afterIdx: number): string | undefined {
+  const rest = content.slice(afterIdx)
+  const nextClassIdx = rest.search(/\n(?=class\s)/)
+  const window = rest.slice(0, nextClassIdx === -1 ? 4000 : Math.min(nextClassIdx, 4000))
+  const m = PY_APPLY_DOCSTRING_RE.exec(window)
+  if (!m) return undefined
+  return m[2].split('\n').map(l => l.trim()).find(l => l.length > 0)
+}
+
+function fromClassSubclass(content: string): ToolInfo[] {
+  const tools: ToolInfo[] = []
+  for (const m of content.matchAll(PY_CLASS_SUBCLASS_RE)) {
+    const name = camelToSnake(m[1].replace(/Tool$/, ''))
+    const description = findApplyDocstring(content, m.index + m[0].length)
+    tools.push({ name, description, schemaText: m[0] })
+  }
+  return tools
+}
+
+// V5 (coverage-spec §3.4 Python #2): awslabs' call-decorator idiom —
+// `mcp.tool()(docs.search_agentcore_docs)` registers an already-defined
+// function object rather than decorating a `def` in place; the tool name is
+// the last dotted segment of the referenced identifier.
+const PY_CALL_DECORATOR_RE = /\bmcp\.tool\([^)]*\)\(\s*([\w.]+)\s*\)/g
+
+function fromCallDecorator(content: string): ToolInfo[] {
+  const tools: ToolInfo[] = []
+  for (const m of content.matchAll(PY_CALL_DECORATOR_RE)) {
+    const segments = m[1].split('.')
+    tools.push({ name: segments[segments.length - 1], schemaText: m[0] })
+  }
+  return tools
+}
+
+// V5 (coverage-spec §3.4 Python #3): registration-surface SIGNAL, not a
+// tool. awslabs-shaped servers register their tool functions via
+// `register_search_tools(mcp)` in a file that may not itself contain any of
+// the idioms above (the @mcp.tool()-decorated / mcp.tool()(...)-registered
+// functions can live in a sibling module that wasn't sampled). This must
+// NEVER fabricate a ToolInfo — fromPySource does not call it — it is
+// exported solely for src/derive/classify.ts (V2) to treat as an
+// "this repo IS MCP-related" signal, so classifyLibrary's signal 3
+// (no-MCP-anywhere -> not-server) doesn't fire on such a repo. See the
+// wiring in classify.ts.
+const PY_REGISTER_TOOLS_SURFACE_RE = /\bregister_\w+_tools\(\s*\w+\s*\)/
+export function hasPythonToolRegistrationSurface(files: RepoFile[]): boolean {
+  return files.some(f => f.path.endsWith('.py') && PY_REGISTER_TOOLS_SURFACE_RE.test(f.content))
+}
+
+export function fromPySource(f: RepoFile): ToolInfo[] {
   const tools: ToolInfo[] = []
   for (const m of f.content.matchAll(PY_DECORATOR_RE)) {
     tools.push({ name: m[1], schemaText: m[0] })
@@ -338,6 +819,12 @@ function fromPySource(f: RepoFile): ToolInfo[] {
   for (const m of f.content.matchAll(PY_IMPERATIVE_RE)) {
     if (tools.some(t => t.name === m[1])) continue
     tools.push({ name: m[1], description: m[2], schemaText: m[0] })
+  }
+  for (const t of fromClassSubclass(f.content)) {
+    if (!tools.some(x => x.name === t.name)) tools.push(t)
+  }
+  for (const t of fromCallDecorator(f.content)) {
+    if (!tools.some(x => x.name === t.name)) tools.push(t)
   }
   for (const t of fromLowLevelToolCalls(f.content)) {
     if (!tools.some(x => x.name === t.name)) tools.push(t)
@@ -362,17 +849,49 @@ function findShellImportFile(files: RepoFile[]): RepoFile | undefined {
   return files.find(f => SRC_EXT.test(f.path) && SHELL_IMPORT_RE.test(f.content))
 }
 
+// Only these JSON files are treated as tool sources. A bare `.json` bucket let an
+// unrelated "tools" field in package.json fabricate a fake tool surface.
+// C3: split into two buckets, tried at OPPOSITE ends of the ladder below.
+// mcp.json/server.json/toolDefinitions.json are hand-authored manifests that
+// directly declare the server's tool surface — authoritative, so they stay
+// FIRST. openapi.json/swagger.json are commonly a VENDORED REST client spec
+// (e.g. a generated API client checked in alongside the MCP server) with no
+// relationship to the actual MCP tool surface — parsing them first let a
+// vendored spec entirely REPLACE a server's real `server.tool()`
+// registrations and fabricate security findings from REST operationIds.
+// They now run LAST, only when no source extractor (JS/Py/Go) found anything.
+const MANIFEST_JSON_BASENAME_RE = /^(mcp|server|toolDefinitions)\.json$/i
+const SPEC_JSON_BASENAME_RE = /^(openapi|swagger)\.json$/i
+
 export function extractSchema(files: RepoFile[]): SchemaResult {
   const serverFiles = files.filter(f => !isNonServerPath(f.path))
-  const manifest = serverFiles.filter(f => /(^|\/)(mcp|server)\.json$/.test(f.path))
+  // Fix (review, Critical): re-scoped from ANY fetched .json file back to a
+  // known manifest/spec basename allowlist. The any-.json bucket let an
+  // unrelated "tools" field in package.json (fetched for nearly every JS/TS
+  // repo) fabricate a fake tool surface via fromManifest's {tools:[...]}
+  // shape. mcp.json/server.json (pre-V5 scoping) plus V5's new spec files
+  // (openapi.json/swagger.json/toolDefinitions.json) are the only basenames
+  // that reach the ladder now.
+  const manifestJson = serverFiles.filter(f => MANIFEST_JSON_BASENAME_RE.test(f.path.split('/').pop() ?? ''))
+  const specJson = serverFiles.filter(f => SPEC_JSON_BASENAME_RE.test(f.path.split('/').pop() ?? ''))
   const js = serverFiles.filter(f => /\.(ts|js|mjs)$/.test(f.path))
   const py = serverFiles.filter(f => f.path.endsWith('.py'))
+  // V3 (coverage-spec §3.2): Go is its own bucket in the ladder, tried after
+  // manifest/js/py so it never changes precedence for the already-graded
+  // JS/Python servers (those extensions are disjoint from .go, so in practice
+  // this only ever fires for repos where manifest/js/py found nothing).
+  const go = serverFiles.filter(f => f.path.endsWith('.go'))
 
   let tools: Array<ToolInfo & { evidence: string }> = []
   for (const level of [
-    () => manifest.flatMap(f => fromManifest(f).map(t => ({ ...t, evidence: f.path }))),
+    () => manifestJson.flatMap(f => fromJsonFile(f).map(t => ({ ...t, evidence: f.path }))),
     () => js.flatMap(f => fromJsSource(f).map(t => ({ ...t, evidence: f.path }))),
     () => py.flatMap(f => fromPySource(f).map(t => ({ ...t, evidence: f.path }))),
+    () => go.flatMap(f => fromGoSource(f).map(t => ({ ...t, evidence: f.path }))),
+    // C3: openapi/swagger LAST — only fires when no manifest and no source
+    // extractor found a single tool, so a vendored REST spec can never
+    // outrank a server's real tool registrations.
+    () => specJson.flatMap(f => fromJsonFile(f).map(t => ({ ...t, evidence: f.path }))),
   ]) {
     tools = level()
     if (tools.length > 0) break

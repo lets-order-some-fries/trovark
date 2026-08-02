@@ -46,6 +46,22 @@ server.tool("delete_file", "Delete a file at path", {}, handler2)`,
     expect(r.toolSurfaceRisk).toBeUndefined()
     expect(r.schemaTokenEstimate).toBeUndefined()
   })
+  it('CRITICAL GUARD: an unrelated "tools" field in package.json does NOT fabricate tools', () => {
+    const r = extractSchema([{ path: 'package.json', content: JSON.stringify({
+      name: 'my-cli-app', version: '1.0.0',
+      tools: [{ name: 'dev', description: 'dev environment launcher' }, { name: 'build', description: 'production build' }],
+    }) }])
+    expect(r.extracted).toBe(false)
+    expect(r.tools).toEqual([])
+  })
+  it('a real mcp.json manifest still extracts', () => {
+    const r = extractSchema([{ path: 'mcp.json', content: JSON.stringify({ tools: [{ name: 'search_docs', description: 'Search' }] }) }])
+    expect(r.tools.map(t => t.name)).toEqual(['search_docs'])
+  })
+  it('toolDefinitions.json still extracts (allowlisted basename)', () => {
+    const r = extractSchema([{ path: 'src/toolDefinitions.json', content: JSON.stringify([{ name: 'find_issue', description: 'Find an issue' }]) }])
+    expect(r.tools.map(t => t.name)).toEqual(['find_issue'])
+  })
 })
 
 describe('extractSchema breadth fixes (P3)', () => {
@@ -307,6 +323,75 @@ describe('classify (final review fix): schemaText (inputSchema property names) u
   })
 })
 
+// Final review Fix 3 (pre-existing precision bug): FastMCP's mandatory
+// `execute:` handler property key is code STRUCTURE, not tool semantics, but
+// riskFromSchemaText tokenized schemaText (the raw captured object-literal
+// source, including its handler key) and matched "execute" as a STRONG_EXEC
+// token — so EVERY tool in a FastMCP-shaped server (e.g.
+// cswkim/discogs-mcp-server) was flagged security/shell-exec-tool HIGH
+// regardless of what the tool actually does. Fixed by stripping structural/
+// handler property-key positions (execute|handler|callback|run|fn|method|cb|
+// resolve|invoke, each followed by `:`) from schemaText before risk
+// tokenization — genuine content (a shell_exec(cmd) call, a child_process
+// import, a param literally named shell_command) is untouched.
+describe('classify (final review Fix 3): structural handler keys (execute:/handler:/etc.) in schemaText are not risk signal', () => {
+  it("FastMCP tool object literal with a mandatory `execute:` handler key is NOT flagged high from that key alone", () => {
+    const r = extractSchema([{
+      path: 'src/index.ts',
+      content: `
+import { FastMCP } from 'fastmcp'
+const server = new FastMCP({ name: 'my-server', version: '1.0.0' })
+server.addTool({
+  name: 'search_releases',
+  description: 'Search the Discogs API',
+  parameters: { query: 'string' },
+  execute: async () => {},
+})
+`,
+    }])
+    expect(r.toolSurfaceRisk).not.toBe('high')
+    expect(['none', 'low']).toContain(r.toolSurfaceRisk)
+  })
+
+  it('keeps passing: genuine shell_exec(cmd) content in schemaText is still high even alongside a stripped execute: key', () => {
+    const r = extractSchema([{
+      path: 'src/index.ts',
+      content: `
+import { FastMCP } from 'fastmcp'
+const server = new FastMCP({ name: 'my-server', version: '1.0.0' })
+server.addTool({
+  name: 'run_helper',
+  description: 'A helper tool',
+  parameters: { query: 'string' },
+  execute: async ({ query }) => { return shell_exec(query) },
+})
+`,
+    }])
+    expect(r.toolSurfaceRisk).toBe('high')
+  })
+
+  it('keeps passing: run_command by NAME is still high', () => {
+    const r = extractSchema([{ path: 'mcp.json', content: JSON.stringify({ tools: [{ name: 'run_command' }] }) }])
+    expect(r.toolSurfaceRisk).toBe('high')
+  })
+
+  it('keeps passing: bash_command by NAME is still high', () => {
+    const r = extractSchema([{ path: 'mcp.json', content: JSON.stringify({ tools: [{ name: 'bash_command' }] }) }])
+    expect(r.toolSurfaceRisk).toBe('high')
+  })
+
+  it('keeps passing: a "command" property name on an otherwise-benign manifest tool still does NOT inflate to high', () => {
+    const r = extractSchema([{
+      path: 'mcp.json',
+      content: JSON.stringify({ tools: [{
+        name: 'get_config', description: 'Get configuration',
+        inputSchema: { properties: { command: { type: 'string' } } },
+      }] }),
+    }])
+    expect(r.toolSurfaceRisk).not.toBe('high')
+  })
+})
+
 describe('classify (P4 review fix): bare run/code demoted, co-occurrence rule, tokenized text channel', () => {
   const nameOnly = (name: string) => extractSchema([{ path: 'mcp.json', content: JSON.stringify({ tools: [{ name }] }) }])
 
@@ -371,5 +456,754 @@ describe('classify (P4 review fix): bare run/code demoted, co-occurrence rule, t
   })
   it('fork_repository → medium', () => {
     expect(nameOnly('fork_repository').toolSurfaceRisk).toBe('medium')
+  })
+})
+
+// V4 (coverage-spec §3.4 TS): the 7 real-world idioms that were withholding
+// flagship servers (fastmcp/discogs, sentry/metatool defineTool, supabase's
+// keyed-factory, mongodb's class-based tools, cloudflare's wrapper+NAME_MAP).
+// Every snippet below is shaped after the real repo named in its title.
+describe('fromJsSource (V4): TS idiom pack — addTool/defineTool/keyed-factory/class-based/wrapper', () => {
+  it('idiom 1+2: fastmcp server.addTool({name, description}) object literal → extracts name+description', () => {
+    const r = extractSchema([{
+      path: 'src/index.ts',
+      content: `
+import { FastMCP } from 'fastmcp'
+const server = new FastMCP({ name: 'my-server', version: '1.0.0' })
+server.addTool({
+  name: 'search',
+  description: 'Search the web for results',
+  parameters: z.object({ query: z.string() }),
+})
+`,
+    }])
+    expect(r.extracted).toBe(true)
+    expect(r.tools.map(t => t.name)).toEqual(['search'])
+    expect(r.tools[0].description).toBe('Search the web for results')
+  })
+
+  it('idiom 1+4: metatool positional defineTool("name", "description", ...) → extracts name+description', () => {
+    const r = extractSchema([{
+      path: 'src/tools.ts',
+      content: `
+defineTool('run_workflow', 'Run a saved workflow by id', {
+  parameters: z.object({ id: z.string() }),
+})
+`,
+    }])
+    expect(r.extracted).toBe(true)
+    expect(r.tools.map(t => t.name)).toEqual(['run_workflow'])
+    expect(r.tools[0].description).toBe('Run a saved workflow by id')
+  })
+
+  it('idiom 3: supabase keyed-factory `list_organizations: tool({...})` inside a getSupabaseTools() fn → extracts the KEY as the name', () => {
+    const r = extractSchema([{
+      path: 'src/tools/index.ts',
+      content: `
+export function getSupabaseTools(server) {
+  return {
+    list_organizations: tool({
+      description: 'Lists all organizations the user has access to',
+      parameters: z.object({}),
+      execute: async () => {},
+    }),
+  }
+}
+`,
+    }])
+    expect(r.extracted).toBe(true)
+    expect(r.tools.map(t => t.name)).toEqual(['list_organizations'])
+  })
+
+  it('idiom 3: supabase keyed-factory guarded by an *mcp-utils* `tool` import (no getTools wrapper needed) → extracts the KEY', () => {
+    const r = extractSchema([{
+      path: 'src/tools/registry.ts',
+      content: `
+import { tool } from '../../shared/mcp-utils.js'
+
+export const supabaseToolsRegistry = {
+  list_organizations: tool({
+    description: 'Lists all organizations the user has access to',
+  }),
+}
+`,
+    }])
+    expect(r.extracted).toBe(true)
+    expect(r.tools.map(t => t.name)).toEqual(['list_organizations'])
+  })
+
+  it('idiom 3 GUARD: `foo: bar({...})` with no tool/mcp-utils context is not extracted at all', () => {
+    const r = extractSchema([{
+      path: 'src/registry.ts',
+      content: `
+const registry = {
+  foo: bar({
+    description: 'not a real tool',
+  }),
+}
+`,
+    }])
+    expect(r.extracted).toBe(false)
+  })
+
+  it('idiom 3 GUARD: `foo: tool({...})` outside any getTools()/mcp-utils context is not extracted (exercises the guard, not just the regex shape)', () => {
+    const r = extractSchema([{
+      path: 'src/unrelated.ts',
+      content: `
+function unrelatedHelper() {
+  const registry = {
+    foo: tool({
+      description: 'not a real tool',
+    }),
+  }
+  return registry
+}
+`,
+    }])
+    expect(r.extracted).toBe(false)
+  })
+
+  it('idiom 5: mongodb class-based tool `class FindTool extends MongoDBToolBase { name = "find" }` → extracts name+description fields', () => {
+    const r = extractSchema([{
+      path: 'src/tools/find.ts',
+      content: `
+class FindTool extends MongoDBToolBase {
+  name = 'find'
+  description = 'Run a find query against a MongoDB collection'
+  async execute(args: FindArgs) {
+    return this.db.collection(args.collection).find(args.filter).toArray()
+  }
+}
+`,
+    }])
+    expect(r.extracted).toBe(true)
+    expect(r.tools.map(t => t.name)).toEqual(['find'])
+    expect(r.tools[0].description).toBe('Run a find query against a MongoDB collection')
+  })
+
+  it('idiom 6: cloudflare wrapper accountTool(NAME_MAP.key, {...}) resolved via sibling const map → extracts the mapped literal', () => {
+    const r = extractSchema([{
+      path: 'src/tools/accounts.ts',
+      content: `
+const TOOLS = {
+  list: 'accounts_list',
+  get: 'accounts_get',
+}
+
+function registerAccountTools(server) {
+  server.accountTool(TOOLS.list, {
+    description: 'List Cloudflare accounts',
+  })
+}
+`,
+    }])
+    expect(r.extracted).toBe(true)
+    expect(r.tools.map(t => t.name)).toEqual(['accounts_list'])
+  })
+
+  // I6: the "accept the raw identifier as the name" fallback was dropped — a
+  // miss beats a garbage name (e.g. `TOOL_REQUEST`, `TOOL_NAMES.search`
+  // published verbatim as a "tool"). See the I6 describe block below for the
+  // full coverage of this change.
+  it('idiom 6 (I6): a wrapper identifier with no resolvable sibling const map extracts NO tool, not the raw identifier', () => {
+    const r = extractSchema([{
+      path: 'src/tools/unmapped.ts',
+      content: `
+function registerWidgetTools(server) {
+  server.widgetTool(WIDGET_NAME, {
+    description: 'Does widget things',
+  })
+}
+`,
+    }])
+    expect(r.extracted).toBe(false)
+    expect(r.tools).toEqual([])
+  })
+
+  it('idiom 7: discogs-style fastmcp tool-array object literal (no ListToolsRequestSchema handler) is picked up via the broadened sibling scan (name + parameters, no description)', () => {
+    const r = extractSchema([{
+      path: 'src/index.ts',
+      content: `
+import { FastMCP } from 'fastmcp'
+
+const server = new FastMCP({ name: 'discogs-mcp', version: '1.0.0' })
+
+const toolDefs = [
+  { name: 'search_releases', parameters: { query: 'string' }, handler: searchReleases },
+]
+
+for (const t of toolDefs) server.addTool(t)
+`,
+    }])
+    expect(r.extracted).toBe(true)
+    expect(r.tools.map(t => t.name)).toEqual(['search_releases'])
+  })
+
+  it('idiom 7 GUARD: a resource object {name, description, uri} in a fastmcp file is NOT extracted as a tool', () => {
+    const r = extractSchema([{ path: 'src/index.ts', content: `
+      import { FastMCP } from 'fastmcp'
+      server.addTool({ name: 'search_docs', description: 'Search the docs' })
+      const resources = [{ name: 'config_file', description: 'The config', uri: 'file:///config.json' }]
+    ` }])
+    expect(r.tools.map(t => t.name)).toEqual(['search_docs'])
+  })
+  it('idiom 7 GUARD: objects under a resources: array are not tools', () => {
+    const r = extractSchema([{ path: 'src/index.ts', content: `
+      import { FastMCP } from 'fastmcp'
+      const server = {
+        tools: [{ name: 'run_query', description: 'Runs a query' }],
+        resources: [{ name: 'schema_doc', description: 'Schema documentation' }],
+      }
+      server.addTool({ name: 'run_query', description: 'Runs a query' })
+    ` }])
+    expect(r.tools.map(t => t.name).sort()).toEqual(['run_query'])
+  })
+  it('idiom 7 GUARD: a prompt object with mimeType is not a tool', () => {
+    const r = extractSchema([{ path: 'src/index.ts', content: `
+      import { FastMCP } from 'fastmcp'
+      server.addTool({ name: 'real_tool', description: 'A real tool' })
+      const p = { name: 'greeting_prompt', description: 'A prompt', mimeType: 'text/plain' }
+    ` }])
+    expect(r.tools.map(t => t.name)).toEqual(['real_tool'])
+  })
+
+  // I4 + I5: the broadened idiom-7 whole-file scan only guarded resources:/
+  // prompts: collection KEYS and uri/mimeType shapes — it did not know about
+  // registration CALLS other than addTool, and did not scope out nested
+  // arguments:/properties: bags. Reviewer verified fastmcp's addPrompt(...)
+  // (with a nested `arguments:` array of {name, description} objects) and a
+  // config array nested under a `properties:` key both leaked fake tools.
+  it('I4: server.addPrompt({name, description, arguments:[{name, description}]}) is not extracted as a tool — nor is its nested argument', () => {
+    const r = extractSchema([{
+      path: 'src/index.ts',
+      content: `
+import { FastMCP } from 'fastmcp'
+const server = new FastMCP({ name: 'my-server', version: '1.0.0' })
+server.addTool({ name: 'real_tool', description: 'A real tool' })
+server.addPrompt({
+  name: 'summarize_thread',
+  description: 'Summarize a thread',
+  arguments: [{ name: 'thread_id', description: 'Thread ID to summarize' }],
+  load: async (args) => '...',
+})
+`,
+    }])
+    expect(r.tools.map(t => t.name)).toEqual(['real_tool'])
+  })
+
+  it('I4: server.addResource({name, description, uri}) and server.addResourceTemplate(...) calls are not extracted as tools', () => {
+    const r = extractSchema([{
+      path: 'src/index.ts',
+      content: `
+import { FastMCP } from 'fastmcp'
+const server = new FastMCP({ name: 'my-server', version: '1.0.0' })
+server.addTool({ name: 'real_tool', description: 'A real tool' })
+server.addResource({ name: 'config_file', description: 'The config file', uri: 'file:///config.json' })
+server.addResourceTemplate({ name: 'log_file', description: 'A log file', uriTemplate: 'file:///logs/{id}.log' })
+`,
+    }])
+    expect(r.tools.map(t => t.name)).toEqual(['real_tool'])
+  })
+
+  it('I5: a config array nested under a properties: key is not extracted as tools', () => {
+    const r = extractSchema([{
+      path: 'src/index.ts',
+      content: `
+import { FastMCP } from 'fastmcp'
+const server = new FastMCP({ name: 'my-server', version: '1.0.0' })
+server.addTool({ name: 'real_tool', description: 'A real tool' })
+const CONFIG_SCHEMA = {
+  properties: [
+    { name: 'port', description: 'Port to listen on' },
+    { name: 'verbose', description: 'Enable verbose logging' },
+  ],
+}
+`,
+    }])
+    expect(r.tools.map(t => t.name)).toEqual(['real_tool'])
+  })
+
+  // I6: WRAPPER_TOOL_CALL_RE also matched USE calls, not just registration
+  // calls (`.callTool(`, `.getTool(`, `.removeTool(`, `.hasTool(`) — reviewer
+  // verified `client.callTool(TOOL_REQUEST, {cursor:1})` published a tool
+  // named `TOOL_REQUEST`. Restricted to registration-verb wrappers; combined
+  // with dropping the raw-identifier fallback above, an unresolvable name now
+  // emits no tool instead of garbage.
+  describe('I6: wrapper idiom restricted to registration verbs; unresolved identifiers emit no tool', () => {
+    it('client.callTool(TOOL_REQUEST, {...}) is a USE, not a registration — extracts no tool', () => {
+      const r = extractSchema([{ path: 'src/client.ts', content: `client.callTool(TOOL_REQUEST, { cursor: 1 })` }])
+      expect(r.extracted).toBe(false)
+      expect(r.tools).toEqual([])
+    })
+    it('getTool/removeTool/hasTool calls are likewise excluded from the wrapper idiom', () => {
+      const r = extractSchema([{
+        path: 'src/client.ts',
+        content: `
+server.getTool(SOME_ID, { x: 1 })
+server.removeTool(SOME_ID, { x: 1 })
+server.hasTool(SOME_ID, { x: 1 })
+`,
+      }])
+      expect(r.extracted).toBe(false)
+      expect(r.tools).toEqual([])
+    })
+    it('server.registerTool(TOOL_NAMES.search, {...}) with no resolvable const map emits NO tool (not the raw identifier)', () => {
+      const r = extractSchema([{
+        path: 'src/tools/search.ts',
+        content: `server.registerTool(TOOL_NAMES.search, { description: 'Search things' })`,
+      }])
+      expect(r.extracted).toBe(false)
+      expect(r.tools).toEqual([])
+    })
+    it('a resolvable const map still extracts the mapped literal (regression, unaffected by the registration-verb restriction)', () => {
+      const r = extractSchema([{
+        path: 'src/tools/accounts.ts',
+        content: `
+const TOOLS = { list: 'accounts_list' }
+server.accountTool(TOOLS.list, { description: 'List accounts' })
+`,
+      }])
+      expect(r.extracted).toBe(true)
+      expect(r.tools.map(t => t.name)).toEqual(['accounts_list'])
+    })
+  })
+
+  it('regression: all idioms combined in one file still dedupe by name and keep prior extraction working', () => {
+    const r = extractSchema([{
+      path: 'src/index.ts',
+      content: `server.registerTool("delete_file", {
+  description: "Delete a file at the given path",
+  inputSchema: { path: z.string() },
+}, async ({ path }) => { /* ... */ })
+server.addTool({ name: 'search', description: 'Search things' })`,
+    }])
+    expect(r.tools.map(t => t.name).sort()).toEqual(['delete_file', 'search'])
+  })
+})
+
+// Coverage-v1.3 review: the "nearest preceding key/call by raw text index"
+// guards used by the idiom-7 whole-file scan above had NO brace/scope
+// awareness, so they silently DROPPED real tools rather than merely
+// over-extracting fake ones — worse than the bug they were meant to fix.
+// Replaced with POSITIVE, scope-aware containment: a {name,...} candidate is
+// accepted only when it is genuinely reachable from a tool-registration
+// context (an addTool/registerTool/tool/defineTool call's argument span, a
+// `tools:` key's value span, or a /tool/i-named array literal), never by
+// text-proximity to the nearest preceding key/call.
+describe('idiom 7 v2: positive scope-aware containment (replaces nearest-preceding-key/call heuristics)', () => {
+  it("REGRESSION: both tools in a toolDefs array survive — an earlier tool's inputSchema.properties no longer swallows every later tool", () => {
+    const r = extractSchema([{
+      path: 'src/index.ts',
+      content: `
+import { FastMCP } from 'fastmcp'
+const toolDefs = [
+  { name: 'search_releases', description: 'Search releases', inputSchema: { type: 'object', properties: { query: { type: 'string' } } } },
+  { name: 'get_release', description: 'Get a release by id' },
+]
+for (const t of toolDefs) server.addTool(t)
+`,
+    }])
+    expect(r.extracted).toBe(true)
+    expect(r.tools.map(t => t.name).sort()).toEqual(['get_release', 'search_releases'])
+  })
+
+  it('REGRESSION: an addPrompt(...) call before a toolDefs array no longer erases the entire tool surface', () => {
+    const r = extractSchema([{
+      path: 'src/index.ts',
+      content: `
+server.addPrompt({ name: 'greeting', description: 'A greeting prompt' })
+const toolDefs = [
+  { name: 'search_releases', description: 'Search releases', parameters: { query: 'string' } },
+]
+for (const t of toolDefs) server.addTool(t)
+`,
+    }])
+    expect(r.tools.map(t => t.name)).toEqual(['search_releases'])
+    expect(r.tools.some(t => t.name === 'greeting')).toBe(false)
+  })
+
+  it('GUARD: a bare config array not named /tool/i still yields no phantom tools, even with two items, alongside a real tool', () => {
+    const r = extractSchema([{
+      path: 'src/index.ts',
+      content: `
+const options = [
+  { name: 'port', description: 'Port to listen on' },
+  { name: 'verbose', description: 'Verbose logging' },
+]
+server.addTool({ name: 'real_tool', description: 'A real tool' })
+`,
+    }])
+    expect(r.tools.map(t => t.name)).toEqual(['real_tool'])
+  })
+
+  it('GUARD: addPrompt with a nested arguments array leaks neither the prompt nor its argument', () => {
+    const r = extractSchema([{
+      path: 'src/index.ts',
+      content: `
+server.addPrompt({ name: 'summarize_thread', description: 'd', arguments: [{ name: 'thread_id', description: 'd' }] })
+server.addTool({ name: 'get_weather', description: 'd' })
+`,
+    }])
+    expect(r.tools.map(t => t.name)).toEqual(['get_weather'])
+  })
+
+  it('GUARD: the resource-shape safety net still rejects a uri-carrying object even when it sits inside an accepted /tool/i-named array', () => {
+    const r = extractSchema([{
+      path: 'src/index.ts',
+      content: `
+const toolDefs = [
+  { name: 'file_resource', description: 'Looks like a tool but is not', uri: 'file:///x' },
+  { name: 'real_tool', description: 'A real tool' },
+]
+for (const t of toolDefs) server.addTool(t)
+`,
+    }])
+    expect(r.tools.map(t => t.name)).toEqual(['real_tool'])
+  })
+
+  it('GUARD: new Server({name}) is still not a tool (subsumed by positive scoping — no registration call/tools-key/tool-array contains it)', () => {
+    const r = extractSchema([{
+      path: 'src/index.ts',
+      content: `
+import { ListToolsRequestSchema, Server } from '@mcp/sdk'
+const server = new Server({ name: "tavily-mcp", version: "1.0.0" })
+server.setRequestHandler(ListToolsRequestSchema, async () => ({
+  tools: [
+    { name: "tavily_search", description: "Search the web", inputSchema: {} },
+  ],
+}))
+`,
+    }])
+    expect(r.tools.map(t => t.name)).toEqual(['tavily_search'])
+  })
+
+  // Live spot-check regression (v1.3 coverage): discogs-mcp-server, a real
+  // fastmcp flagship server, never passes an object literal to `.addTool(`
+  // at all — every tool is a top-level named const registered by bare-
+  // identifier reference. Pure positive scoping (accepted spans only around
+  // the literal `.addTool(` call argument) rejected 100% of this repo's
+  // tools until rule (a) was extended to resolve the identifier back to its
+  // declaring `const IDENT = {...}` object literal.
+  it('REGRESSION: discogs-mcp-server-style named Tool consts registered by bare identifier (server.addTool(searchTool)) are extracted', () => {
+    const r = extractSchema([{
+      path: 'src/tools/database.ts',
+      content: `
+import { FastMCP, Tool } from 'fastmcp'
+
+export const searchTool: Tool<FastMCPSessionAuth, typeof SearchParamsSchema> = {
+  name: 'search',
+  description: 'Issue a search query to the Discogs database',
+  parameters: SearchParamsSchema,
+  execute: async (args) => {
+    return JSON.stringify(args)
+  },
+}
+
+export const getArtistTool: Tool<FastMCPSessionAuth, typeof ArtistIdParamSchema> =
+  {
+    name: 'get_artist',
+    description: 'Get an artist',
+    parameters: ArtistIdParamSchema,
+    execute: async (args) => {
+      return JSON.stringify(args)
+    },
+  }
+
+export function registerDatabaseTools(server: FastMCP): void {
+  server.addTool(searchTool)
+  server.addTool(getArtistTool)
+}
+`,
+    }])
+    expect(r.extracted).toBe(true)
+    expect(r.tools.map(t => t.name).sort()).toEqual(['get_artist', 'search'])
+  })
+})
+
+// Final review Fix 1: rule (c) of acceptedToolSpans (TOOL_NAMED_ARRAY_RE)
+// accepted an assigned identifier via a raw /tool/i SUBSTRING test, so
+// `toolbarItems`/`toolkitConfig`/`coolTools`-shaped identifiers that merely
+// CONTAIN "tool" as a substring (not as a token) were wrongly treated as
+// tool-definition arrays. Reviewer verified `toolbarItems` fabricated phantom
+// tools `save`/`open`. Fixed by requiring an identifier-BOUNDARY match: the
+// identifier is tokenized (same tokenizer as risk classification) and only
+// accepted if a token is exactly `tool` or `tools`.
+describe('idiom 7 v3 (Fix 1): tool-named-array identifier match uses token boundaries, not raw substring', () => {
+  it("REGRESSION: `toolbarItems` (contains \"tool\" only as a substring of \"toolbar\") does not fabricate phantom tools", () => {
+    const r = extractSchema([{
+      path: 'src/index.ts',
+      content: `
+import { FastMCP } from 'fastmcp'
+const server = new FastMCP({ name: 'my-server', version: '1.0.0' })
+server.addTool({ name: 'real_tool', description: 'A real tool' })
+const toolbarItems = [
+  { name: 'save', description: 'Save' },
+  { name: 'open', description: 'Open' },
+]
+`,
+    }])
+    expect(r.tools.map(t => t.name)).toEqual(['real_tool'])
+  })
+
+  it('REGRESSION: `toolkitConfig` (substring "tool" inside "toolkit") does not fabricate phantom tools', () => {
+    const r = extractSchema([{
+      path: 'src/index.ts',
+      content: `
+import { FastMCP } from 'fastmcp'
+const server = new FastMCP({ name: 'my-server', version: '1.0.0' })
+server.addTool({ name: 'real_tool', description: 'A real tool' })
+const toolkitConfig = [
+  { name: 'x', description: 'y' },
+]
+`,
+    }])
+    expect(r.tools.map(t => t.name)).toEqual(['real_tool'])
+  })
+
+  it('keeps passing: `toolDefs` (token "tool") still extracts', () => {
+    const r = extractSchema([{
+      path: 'src/index.ts',
+      content: `
+import { FastMCP } from 'fastmcp'
+const toolDefs = [
+  { name: 'search_releases', description: 'Search releases' },
+]
+for (const t of toolDefs) server.addTool(t)
+`,
+    }])
+    expect(r.tools.map(t => t.name)).toEqual(['search_releases'])
+  })
+
+  it('keeps passing: `TOOLS` (whole identifier is the token "tools") still extracts', () => {
+    const r = extractSchema([{
+      path: 'src/index.ts',
+      content: `
+import { FastMCP } from 'fastmcp'
+const TOOLS = [
+  { name: 'search_releases', description: 'Search releases' },
+]
+for (const t of TOOLS) server.addTool(t)
+`,
+    }])
+    expect(r.tools.map(t => t.name)).toEqual(['search_releases'])
+  })
+
+  it('keeps passing: `searchTools` (token "tools" after camelCase split) still extracts', () => {
+    const r = extractSchema([{
+      path: 'src/index.ts',
+      content: `
+import { FastMCP } from 'fastmcp'
+const searchTools = [
+  { name: 'search_web', description: 'Search the web' },
+]
+for (const t of searchTools) server.addTool(t)
+`,
+    }])
+    expect(r.tools.map(t => t.name)).toEqual(['search_web'])
+  })
+
+  it('legitimately contains the token "tools": `coolTools` still extracts', () => {
+    const r = extractSchema([{
+      path: 'src/index.ts',
+      content: `
+import { FastMCP } from 'fastmcp'
+const coolTools = [
+  { name: 'search_web', description: 'Search the web' },
+]
+for (const t of coolTools) server.addTool(t)
+`,
+    }])
+    expect(r.tools.map(t => t.name)).toEqual(['search_web'])
+  })
+})
+
+// Final review Fix 2 (walked-back regression): once a candidate's enclosing
+// span is accepted, there was no exclusion for a {name,description} object
+// nested inside a NON-TOOL sub-key of that accepted span — e.g. a param
+// object under `inputSchema.properties.<field>` or under a `parameters:`
+// array. The old (deleted) "nearest preceding key by text index" guard used
+// to catch this; positive scoping alone did not. Reviewer verified
+// server.addTool({name:'outer_tool',...,inputSchema:{properties:{filter:
+// {name:'inner_name_field',...}}}}) extracted BOTH outer_tool and
+// inner_name_field. Fixed with a scope-aware (containment-based, not
+// text-index) walk: within an accepted span, reject a candidate nested under
+// a properties:/arguments:/inputSchema:/parameters: sub-object.
+describe('idiom 7 v4 (Fix 2): candidates nested under properties:/arguments:/inputSchema:/parameters: within an accepted span are rejected', () => {
+  it('REGRESSION: a {name,description} object nested under inputSchema.properties.<field> is not extracted as a second tool', () => {
+    const r = extractSchema([{
+      path: 'src/index.ts',
+      content: `
+server.addTool({name:'outer_tool',description:'d',inputSchema:{properties:{filter:{name:'inner_name_field',description:'...',type:'string'}}}})
+`,
+    }])
+    expect(r.tools.map(t => t.name)).toEqual(['outer_tool'])
+  })
+
+  it('a {name,...} array element nested under a `parameters:` array is not extracted as a second tool', () => {
+    const r = extractSchema([{
+      path: 'src/index.ts',
+      content: `
+server.addTool({
+  name: 'outer_tool2',
+  description: 'd',
+  parameters: [
+    { name: 'username', type: 'string', description: 'd' },
+  ],
+})
+`,
+    }])
+    expect(r.tools.map(t => t.name)).toEqual(['outer_tool2'])
+  })
+
+  it('keeps passing: toolDefs two-tool array still extracts both tools (not nested under an excluded key)', () => {
+    const r = extractSchema([{
+      path: 'src/index.ts',
+      content: `
+import { FastMCP } from 'fastmcp'
+const toolDefs = [
+  { name: 'search_releases', description: 'Search releases', inputSchema: { type: 'object', properties: { query: { type: 'string' } } } },
+  { name: 'get_release', description: 'Get a release by id' },
+]
+for (const t of toolDefs) server.addTool(t)
+`,
+    }])
+    expect(r.tools.map(t => t.name).sort()).toEqual(['get_release', 'search_releases'])
+  })
+
+  it('keeps passing: bare-identifier registration (discogs-style named Tool consts) still extracts both tools', () => {
+    const r = extractSchema([{
+      path: 'src/tools/database.ts',
+      content: `
+import { FastMCP, Tool } from 'fastmcp'
+
+export const searchTool: Tool<FastMCPSessionAuth, typeof SearchParamsSchema> = {
+  name: 'search',
+  description: 'Issue a search query to the Discogs database',
+  parameters: SearchParamsSchema,
+  execute: async (args) => {
+    return JSON.stringify(args)
+  },
+}
+
+export const getArtistTool: Tool<FastMCPSessionAuth, typeof ArtistIdParamSchema> =
+  {
+    name: 'get_artist',
+    description: 'Get an artist',
+    parameters: ArtistIdParamSchema,
+    execute: async (args) => {
+      return JSON.stringify(args)
+    },
+  }
+
+export function registerDatabaseTools(server: FastMCP): void {
+  server.addTool(searchTool)
+  server.addTool(getArtistTool)
+}
+`,
+    }])
+    expect(r.tools.map(t => t.name).sort()).toEqual(['get_artist', 'search'])
+  })
+
+  it('keeps passing: discogs manifest shape (mcp.json) is unaffected by the JS-source containment walk', () => {
+    const r = extractSchema([{
+      path: 'mcp.json',
+      content: JSON.stringify({ tools: [
+        { name: 'search_docs', description: 'Search documentation' },
+      ] }),
+    }])
+    expect(r.tools.map(t => t.name)).toEqual(['search_docs'])
+  })
+
+  it('keeps passing: addPrompt-before-tools regression is unaffected', () => {
+    const r = extractSchema([{
+      path: 'src/index.ts',
+      content: `
+server.addPrompt({ name: 'greeting', description: 'A greeting prompt' })
+const toolDefs = [
+  { name: 'search_releases', description: 'Search releases', parameters: { query: 'string' } },
+]
+for (const t of toolDefs) server.addTool(t)
+`,
+    }])
+    expect(r.tools.map(t => t.name)).toEqual(['search_releases'])
+    expect(r.tools.some(t => t.name === 'greeting')).toBe(false)
+  })
+})
+
+// V5 (coverage-spec §3.4 Python): serena's class-subclass idiom and
+// awslabs' call-decorator idiom, plus the register_*_tools surface signal
+// (which must never fabricate a tool — see the GUARD test below and the
+// classifyLibrary wiring in classify.test.ts).
+describe('fromPySource (V5): Python class-subclass + call-decorator idioms', () => {
+  it('serena-style class ReadFileTool(Tool): -> read_file (CamelCase minus trailing Tool -> snake_case), description from apply() docstring', () => {
+    const r = extractSchema([{
+      path: 'src/serena/tools/file_tools.py',
+      content: `
+class ReadFileTool(Tool):
+    """Reads the contents of a file."""
+
+    def apply(self, relative_path: str) -> str:
+        """Read the file contents at the given path."""
+        ...
+`,
+    }])
+    expect(r.extracted).toBe(true)
+    expect(r.tools.map(t => t.name)).toEqual(['read_file'])
+    expect(r.tools[0].description).toBe('Read the file contents at the given path.')
+  })
+
+  it('serena-style class DeleteLinesTool(EditingTool): -> delete_lines', () => {
+    const r = extractSchema([{
+      path: 'src/serena/tools/edit_tools.py',
+      content: `
+class DeleteLinesTool(EditingTool):
+    def apply(self, start_line: int, end_line: int) -> None:
+        ...
+`,
+    }])
+    expect(r.extracted).toBe(true)
+    expect(r.tools.map(t => t.name)).toEqual(['delete_lines'])
+  })
+
+  it('GUARD: a class whose name does not end in Tool is not extracted', () => {
+    const r = extractSchema([{
+      path: 'src/serena/helpers.py',
+      content: `
+class HelperThing(Base):
+    def apply(self):
+        ...
+`,
+    }])
+    expect(r.extracted).toBe(false)
+  })
+
+  it('GUARD: a *Tool class whose base is not Tool-ish (Tool/EditingTool*/BaseTool) is not extracted', () => {
+    const r = extractSchema([{
+      path: 'src/serena/other.py',
+      content: `
+class FooTool(Base):
+    def apply(self):
+        ...
+`,
+    }])
+    expect(r.extracted).toBe(false)
+  })
+
+  it('awslabs call-decorator mcp.tool()(docs.search_agentcore_docs) -> search_agentcore_docs (last dotted segment)', () => {
+    const r = extractSchema([{
+      path: 'src/awslabs/server.py',
+      content: `mcp.tool()(docs.search_agentcore_docs)`,
+    }])
+    expect(r.extracted).toBe(true)
+    expect(r.tools.map(t => t.name)).toEqual(['search_agentcore_docs'])
+  })
+
+  it('GUARD: register_search_tools(mcp) is a surface signal only — it does NOT emit a fake tool', () => {
+    const r = extractSchema([{
+      path: 'src/awslabs/server.py',
+      content: `def setup(mcp):\n    register_search_tools(mcp)\n`,
+    }])
+    expect(r.extracted).toBe(false)
+    expect(r.tools).toEqual([])
   })
 })

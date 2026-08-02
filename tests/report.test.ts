@@ -67,3 +67,21 @@ describe('renderJson', () => {
     expect(JSON.parse(renderJson(card))).toEqual(card)
   })
 })
+
+describe('renderTerminal — notServer (V2): rendered distinctly from INSUFFICIENT DATA', () => {
+  const notServerCard: Scorecard = {
+    ...card, insufficientData: false, notServer: true, notServerReason: 'sdk',
+    notes: ['Library / not an MCP server (sdk): SDK/framework that defines the tool-registration API but registers no tools itself.'],
+  }
+  it('shows a distinct "LIBRARY — not an MCP server" banner, not INSUFFICIENT DATA and not a fabricated grade', () => {
+    const out = renderTerminal(notServerCard, { color: false })
+    expect(out).toMatch(/library.*not an mcp server/i)
+    expect(out).not.toContain('INSUFFICIENT DATA')
+    expect(out).not.toContain(`${notServerCard.overall}/100`)
+  })
+  it('still shows the reason and notes', () => {
+    const out = renderTerminal(notServerCard, { color: false })
+    expect(out).toContain('sdk')
+    expect(out).toContain('SDK/framework that defines the tool-registration API')
+  })
+})

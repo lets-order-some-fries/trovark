@@ -54,7 +54,14 @@ export function score(
   // as a false clean bill (e.g. 100/A+) even for dangerous servers.
   const securityPrimaryAbsent = signals.toolSurfaceRisk === undefined
   const dimensionsFullyDropped = dimensions.filter(d => d.available === 0).length
-  const insufficientData = availableTotal < 4 || securityPrimaryAbsent || dimensionsFullyDropped >= 2
+  // V2: notServer is a DISTINCT terminal state, not insufficientData — a
+  // library/SDK/proxy/stub was never going to have a coverage-gate-passing
+  // tool surface (it has none by design), so the same sparse-signal shape
+  // that would normally trip this gate must not be reported as "we failed to
+  // check this server". The notServer flag (set by classifyLibrary via
+  // assemble.ts) unconditionally overrides the gate.
+  const notServer = Boolean(signals.notServer)
+  const insufficientData = !notServer && (availableTotal < 4 || securityPrimaryAbsent || dimensionsFullyDropped >= 2)
 
   const notes: string[] = []
   for (const d of dimensions) {
@@ -62,14 +69,19 @@ export function score(
     else if (d.confidence === 'low') notes.push(`Low confidence in ${d.id}: only ${d.available}/${d.total} signals available.`)
   }
   for (const e of signals.errors) notes.push(`Collector issue: ${e}`)
-  if (securityPrimaryAbsent) {
-    notes.push('Security tool surface could not be determined — grade withheld to avoid a false clean bill.')
-  }
-  if (dimensionsFullyDropped >= 2) {
-    notes.push(`${dimensionsFullyDropped} dimensions had zero collectible signals — not enough coverage to score confidently. Grade withheld.`)
-  }
-  if (availableTotal < 4) {
-    notes.push(`Only ${availableTotal} of ${SIGNALS.length} signals were collectable — not enough to score. Grade withheld.`)
+  if (notServer) {
+    const reasonPart = signals.notServerReason ? ` (${signals.notServerReason})` : ''
+    notes.push(`Library / not an MCP server${reasonPart}: ${signals.notServerNote ?? 'no tools to grade.'}`)
+  } else {
+    if (securityPrimaryAbsent) {
+      notes.push('Security tool surface could not be determined — grade withheld to avoid a false clean bill.')
+    }
+    if (dimensionsFullyDropped >= 2) {
+      notes.push(`${dimensionsFullyDropped} dimensions had zero collectible signals — not enough coverage to score confidently. Grade withheld.`)
+    }
+    if (availableTotal < 4) {
+      notes.push(`Only ${availableTotal} of ${SIGNALS.length} signals were collectable — not enough to score. Grade withheld.`)
+    }
   }
 
   const scored = dimensions.filter(d => d.available > 0)
@@ -77,9 +89,16 @@ export function score(
   const overall = wTotal === 0 ? 0
     : Math.round(scored.reduce((a, d) => a + d.score * DIMENSION_WEIGHTS[d.id], 0) / wTotal)
 
+  // I9: a notServer card carries no headline score/grade — there is no tool
+  // surface to grade, so a real-looking number (e.g. 100/A+ for
+  // typescript-sdk) misrepresents "nothing to check" as "checked and clean".
   return {
-    ref, rubricVersion: RUBRIC_VERSION, overall, grade: grade(overall), dimensions, notes, generatedAt,
+    ref, rubricVersion: RUBRIC_VERSION,
+    overall: notServer ? null : overall,
+    grade: notServer ? null : grade(overall),
+    dimensions, notes, generatedAt,
     insufficientData,
     ...(resolved ? { resolved } : {}),
+    ...(notServer ? { notServer: true, notServerReason: signals.notServerReason } : {}),
   }
 }
