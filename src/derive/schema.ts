@@ -473,12 +473,37 @@ export function fromJsSource(f: RepoFile): ToolInfo[] {
   // `inputSchema:`).
   if (f.content.includes('ListToolsRequestSchema') || FASTMCP_IMPORT_RE.test(f.content) || f.content.includes('.addTool(')) {
     const SIBLING_RE = /\b(?:description|inputSchema|parameters)\s*:/
+    // Fix (idiom 7 false-positive review): resources and prompts share the
+    // exact same `{name, description}` shape as tools, and dropping the
+    // ListToolsRequestSchema precondition (above) means this scan now runs
+    // over the WHOLE file whenever fastmcp is imported or `.addTool(` is
+    // called — so without a negative check it fabricates a "tool" for every
+    // resource/prompt object too, inflating toolCount and tool-surface risk.
+    // A false tool is worse than a miss, so two independent guards reject a
+    // candidate before it's accepted:
+    const REGISTRATION_KEY_RE = /\b(resources|prompts|resourceTemplates|tools)\s*:\s*[[{]/g
+    const RESOURCE_SHAPE_RE = /\b(?:uri|uriTemplate|mimeType)\s*:/
     for (const m of f.content.matchAll(/name:\s*["'`]([\w-]+)["'`]/g)) {
       if (tools.some(t => t.name === m[1])) continue
       const span = enclosingObjectSpan(f.content, m.index)
       if (!span) continue
       const objText = f.content.slice(span[0], span[1] + 1)
       if (!SIBLING_RE.test(objText)) continue
+      // Guard 1 (registration-key exclusion): find the nearest `<key>: [`/
+      // `<key>: {` before the match — if it's `resources:`/`prompts:`/
+      // `resourceTemplates:` rather than `tools:`, this object is lexically
+      // inside a resource/prompt collection, not a tool one. No match found
+      // at all falls through to guard 2.
+      let nearestKey: string | undefined
+      let nearestKeyIdx = -1
+      for (const km of f.content.matchAll(REGISTRATION_KEY_RE)) {
+        if (km.index >= m.index) break
+        if (km.index > nearestKeyIdx) { nearestKeyIdx = km.index; nearestKey = km[1] }
+      }
+      if (nearestKey && nearestKey !== 'tools') continue
+      // Guard 2 (resource-shape exclusion): tools never carry uri/
+      // uriTemplate/mimeType fields — those are resource/prompt-specific.
+      if (RESOURCE_SHAPE_RE.test(objText)) continue
       tools.push({ name: m[1], schemaText: objText })
     }
   }

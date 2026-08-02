@@ -550,6 +550,34 @@ for (const t of toolDefs) server.addTool(t)
     expect(r.tools.map(t => t.name)).toEqual(['search_releases'])
   })
 
+  it('idiom 7 GUARD: a resource object {name, description, uri} in a fastmcp file is NOT extracted as a tool', () => {
+    const r = extractSchema([{ path: 'src/index.ts', content: `
+      import { FastMCP } from 'fastmcp'
+      server.addTool({ name: 'search_docs', description: 'Search the docs' })
+      const resources = [{ name: 'config_file', description: 'The config', uri: 'file:///config.json' }]
+    ` }])
+    expect(r.tools.map(t => t.name)).toEqual(['search_docs'])
+  })
+  it('idiom 7 GUARD: objects under a resources: array are not tools', () => {
+    const r = extractSchema([{ path: 'src/index.ts', content: `
+      import { FastMCP } from 'fastmcp'
+      const server = {
+        tools: [{ name: 'run_query', description: 'Runs a query' }],
+        resources: [{ name: 'schema_doc', description: 'Schema documentation' }],
+      }
+      server.addTool({ name: 'run_query', description: 'Runs a query' })
+    ` }])
+    expect(r.tools.map(t => t.name).sort()).toEqual(['run_query'])
+  })
+  it('idiom 7 GUARD: a prompt object with mimeType is not a tool', () => {
+    const r = extractSchema([{ path: 'src/index.ts', content: `
+      import { FastMCP } from 'fastmcp'
+      server.addTool({ name: 'real_tool', description: 'A real tool' })
+      const p = { name: 'greeting_prompt', description: 'A prompt', mimeType: 'text/plain' }
+    ` }])
+    expect(r.tools.map(t => t.name)).toEqual(['real_tool'])
+  })
+
   it('regression: all idioms combined in one file still dedupe by name and keep prior extraction working', () => {
     const r = extractSchema([{
       path: 'src/index.ts',
