@@ -84,6 +84,36 @@ describe('classifyLibrary — signal 3: no MCP SDK import anywhere + no manifest
     })
     expect(r).toBeNull()
   })
+  // C1: the MCP SDK 2.x package split (@modelcontextprotocol/core, /server,
+  // /client) matched neither the old MCP_IMPORT_RE nor specEra's package.json
+  // branch — live proof: netlify/netlify-mcp (deps @modelcontextprotocol/core
+  // + /server) was falsely classified not-server. Broadened to match any of
+  // sdk|core|server|client.
+  it('C1: a fetched package.json declaring the SDK 2.x split (@modelcontextprotocol/core + /server) prevents the not-server verdict', () => {
+    const r = classifyLibrary({
+      name: 'netlify-mcp',
+      description: "Netlify's Official MCP server",
+      files: [{
+        path: 'package.json',
+        content: JSON.stringify({ dependencies: { '@modelcontextprotocol/core': '2.0.0-beta.4', '@modelcontextprotocol/server': '2.0.0-beta.4' } }),
+      }],
+    })
+    expect(r).toBeNull()
+  })
+  it('C1: a source file importing from @modelcontextprotocol/server (2.x split) also counts as an MCP import', () => {
+    const r = classifyLibrary({
+      name: 'some-random-repo',
+      files: [{ path: 'src/index.ts', content: `import { Server } from '@modelcontextprotocol/server'\n// no tool registrations reached in sampled files` }],
+    })
+    expect(r).toBeNull()
+  })
+  it('C1: a source file importing from @modelcontextprotocol/client (2.x split) also counts as an MCP import', () => {
+    const r = classifyLibrary({
+      name: 'some-random-repo',
+      files: [{ path: 'src/client.ts', content: `import { Client } from '@modelcontextprotocol/client'` }],
+    })
+    expect(r).toBeNull()
+  })
   it('a root mcp.json manifest (even with unparseable/empty tools) prevents the not-server verdict', () => {
     const r = classifyLibrary({
       name: 'some-random-repo',
@@ -227,10 +257,36 @@ describe('classifyLibrary — Tier B: corroborated SDK identity overrides extrac
     })
     expect(r).toEqual({ notServer: true, reason: 'sdk', note: expect.any(String) })
   })
-  it('name ends -sdk + sdk topic + tools extracted → notServer sdk', () => {
+  // I7: topics are unverified/author-set — a real server could self-tag
+  // 'library'/'sdk' without being one. Reviewer verified {name:'weather-sdk',
+  // description:'Weather MCP server', topics:['library'], toolsExtracted:true}
+  // was de-graded on the topic alone. Tier B now requires the DESCRIPTION
+  // signal (same-sentence "official ... SDK") when tools were extracted —
+  // topic-alone corroboration is dropped for this tier only (Tier A, zero
+  // tools, is unaffected — see below).
+  it('I7: name ends -sdk + sdk topic ALONE (no official-SDK description) + tools extracted → does NOT fire (topic-alone no longer corroborates)', () => {
     const r = classifyLibrary({
       name: 'foo-sdk',
       topics: ['sdk'],
+      files: [],
+      toolsExtracted: true,
+    })
+    expect(r).toBeNull()
+  })
+  it('I7: reviewer counterexample — weather-sdk, generic description, topics:[library], tools extracted → NOT notServer (real server safe)', () => {
+    const r = classifyLibrary({
+      name: 'weather-sdk',
+      description: 'Weather MCP server',
+      topics: ['library'],
+      files: [],
+      toolsExtracted: true,
+    })
+    expect(r).toBeNull()
+  })
+  it('I7: python-sdk with a genuine official-SDK description + tools extracted → still notServer (Tier B not over-narrowed)', () => {
+    const r = classifyLibrary({
+      name: 'python-sdk',
+      description: 'The official Python SDK for Model Context Protocol servers and clients',
       files: [],
       toolsExtracted: true,
     })

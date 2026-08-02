@@ -46,6 +46,12 @@ export function summarize(entries: IndexEntry[]): IndexStats {
     if (letter) gradeDist[letter] = (gradeDist[letter] ?? 0) + 1
   }
   const has = (e: IndexEntry, id: string) => (e.topFindings ?? []).some(f => f.id === id)
+  // M14: notServer entries (library/SDK/proxy/stub — not real servers you
+  // should worry about) are already excluded from gradeDist/avgOverall
+  // above; staleOver180/secretsFindings/shellExecTools must be consistent —
+  // a library that happens to be stale, or whose own API-definition code
+  // reads as "exec"-shaped, shouldn't inflate the site's headline tiles.
+  const nonLibrary = scoredOk.filter(e => !e.notServer)
   return {
     total: entries.length,
     scored: scoredOk.length,
@@ -54,10 +60,10 @@ export function summarize(entries: IndexEntry[]): IndexStats {
     notServer: scoredOk.filter(e => e.notServer).length,
     gradeDist,
     avgOverall: graded.length === 0 ? 0 : Math.round(graded.reduce((a, e) => a + (e.overall ?? 0), 0) / graded.length),
-    staleOver180: scoredOk.filter(e => (e.daysSinceLastCommit ?? 0) > 180).length,
-    secretsFindings: scoredOk.filter(e => has(e, 'security/committed-secret')).length,
+    staleOver180: nonLibrary.filter(e => (e.daysSinceLastCommit ?? 0) > 180).length,
+    secretsFindings: nonLibrary.filter(e => has(e, 'security/committed-secret')).length,
     deprecated: scoredOk.filter(e => has(e, 'health/deprecated-package')).length,
-    shellExecTools: scoredOk.filter(e => has(e, 'security/shell-exec-tool')).length,
+    shellExecTools: nonLibrary.filter(e => has(e, 'security/shell-exec-tool')).length,
   }
 }
 
@@ -67,7 +73,9 @@ function toEntry(ref: string, card: Scorecard, daysSinceLastCommit?: number): In
     .sort((a, b) => ['high', 'medium', 'low', 'info'].indexOf(a.severity) - ['high', 'medium', 'low', 'info'].indexOf(b.severity))
     .slice(0, 3).map(f => ({ id: f.id, severity: f.severity }))
   return {
-    ref, ok: true, overall: card.overall, grade: card.grade,
+    // I9: card.overall/grade are null for notServer cards — IndexEntry keeps
+    // them optional (number|undefined), so convert null -> undefined here.
+    ref, ok: true, overall: card.overall ?? undefined, grade: card.grade ?? undefined,
     insufficientData: card.insufficientData || undefined,
     notServer: card.notServer || undefined,
     notServerReason: card.notServer ? card.notServerReason : undefined,

@@ -113,3 +113,60 @@ describe('extractSchema JSON dispatch: fromOpenApi ‖ fromToolDefinitions ‖ f
     expect(r.toolSurfaceRisk).toBe('medium')
   })
 })
+
+// C3: openapi.json/swagger.json were parsed as the FIRST JSON rung and
+// `extractSchema`'s ladder `break`s on the first level that yields any
+// tools — so a vendored `api/openapi.json` (e.g. a generated REST client
+// spec, common in repos that also happen to run an HTTP API alongside their
+// MCP server) REPLACED a server's real `server.tool()` registrations
+// wholesale, and fabricated HIGH/MEDIUM security findings from REST
+// operationIds that were never real MCP tools. Fix: split the JSON rung —
+// manifest JSON (mcp/server/toolDefinitions.json) stays FIRST (authoritative,
+// unaffected above); openapi/swagger.json moves to the LAST rung, firing only
+// when no source extractor (JS/Py/Go) found anything.
+describe('extractSchema JSON dispatch: openapi/swagger rung ordering (C3)', () => {
+  it("reviewer's exact counterexample — a vendored api/openapi.json does not replace real server.tool() registrations, and fabricates no exec/destructive findings", () => {
+    const openapiContent = JSON.stringify({
+      openapi: '3.0.0',
+      paths: {
+        '/users/{id}': { delete: { operationId: 'deleteUser', summary: 'Delete a user' } },
+        '/exec': { post: { operationId: 'execCommand', summary: 'Execute a command' } },
+        '/health': { get: { operationId: 'healthCheck' } },
+      },
+    })
+    const r = extractSchema([
+      { path: 'api/openapi.json', content: openapiContent },
+      {
+        path: 'src/index.ts',
+        content: `
+server.tool('list_files', 'List directory contents', {}, handler)
+server.tool('get_weather', 'Get the weather forecast', {}, handler2)
+`,
+      },
+    ])
+    expect(r.extracted).toBe(true)
+    expect(r.tools.map(t => t.name).sort()).toEqual(['get_weather', 'list_files'])
+    expect(r.tools.map(t => t.name)).not.toContain('deleteUser')
+    expect(r.tools.map(t => t.name)).not.toContain('execCommand')
+    expect(r.findings.some(f => f.id === 'security/shell-exec-tool')).toBe(false)
+    expect(r.findings.some(f => f.id === 'security/destructive-tool')).toBe(false)
+  })
+
+  it('an openapi.json ALONE (no source extractor found anything) still extracts operationIds, as the last rung', () => {
+    const r = extractSchema([{
+      path: 'api/openapi.json',
+      content: JSON.stringify({ openapi: '3.0.0', paths: { '/search': { get: { operationId: 'search', summary: 'Search' } } } }),
+    }])
+    expect(r.extracted).toBe(true)
+    expect(r.tools.map(t => t.name)).toEqual(['search'])
+  })
+
+  it('manifest JSON (mcp.json) still wins over BOTH source and openapi.json — first rung, unaffected by the reorder', () => {
+    const r = extractSchema([
+      { path: 'mcp.json', content: JSON.stringify({ tools: [{ name: 'manifest_tool', description: 'From the manifest' }] }) },
+      { path: 'openapi.json', content: JSON.stringify({ openapi: '3.0.0', paths: { '/x': { get: { operationId: 'spec_tool' } } } }) },
+      { path: 'src/index.ts', content: `server.tool('source_tool', 'From source', {}, h)` },
+    ])
+    expect(r.tools.map(t => t.name)).toEqual(['manifest_tool'])
+  })
+})

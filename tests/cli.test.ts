@@ -57,7 +57,7 @@ describe('cli main', () => {
   it('--json emits parseable scorecard', async () => {
     const r = await run(['acme/foo', '--json'])
     const card = JSON.parse(r.out)
-    expect(card.rubricVersion).toBe('1.2.0')
+    expect(card.rubricVersion).toBe('1.3.0')
     expect(card.dimensions).toHaveLength(4)
     expect(card.ref).toBe('acme/foo')
   })
@@ -87,6 +87,59 @@ describe('cli main', () => {
     const r = await run(['acme/foo', '--fail-under'])
     expect(r.code).toBe(2)
     expect(r.err).toMatch(/requires a value/)
+  })
+})
+
+describe('cli main — notServer (I9)', () => {
+  // A minimal repo whose name alone triggers classifyLibrary Tier A (zero
+  // tools extracted from a bare package.json) — a distinct terminal state
+  // from a real graded server.
+  const sdkRoutes: Record<string, unknown> = {
+    'https://api.github.com/repos/acme/foo-sdk/commits?since': [],
+    'https://api.github.com/repos/acme/foo-sdk/releases/latest': { published_at: iso(5) },
+    'https://api.github.com/repos/acme/foo-sdk/git/trees/main?recursive=1': { tree: [
+      { path: 'package.json', type: 'blob', size: 100 },
+    ] },
+    'https://api.github.com/repos/acme/foo-sdk': {
+      stargazers_count: 500, archived: false, pushed_at: iso(1), default_branch: 'main',
+      description: 'The official Foo SDK', topics: [],
+    },
+  }
+  const sdkHttp: Http = {
+    async json<T>(url: string): Promise<T> {
+      for (const [p, b] of Object.entries(sdkRoutes)) if (url.startsWith(p)) return b as T
+      throw new Error(`HTTP 404 for ${url}`)
+    },
+    async jsonWithHeaders<T>(url: string): Promise<{ data: T; headers: Headers }> {
+      for (const [p, b] of Object.entries(sdkRoutes)) if (url.startsWith(p)) return { data: b as T, headers: new Headers() }
+      throw new Error(`HTTP 404 for ${url}`)
+    },
+    async postJson<T>(): Promise<T> { return { results: [{}] } as T },
+    async text(url: string): Promise<string> {
+      if (url.endsWith('package.json')) return '{"name":"foo-sdk"}'
+      throw new Error(`HTTP 404 for ${url}`)
+    },
+  }
+  const runSdk = async (argv: string[]) => {
+    const logs: string[] = [], errs: string[] = []
+    const code = await main(argv, { http: sdkHttp, now: NOW, log: s => logs.push(s), err: s => errs.push(s) })
+    return { code, out: logs.join('\n'), err: errs.join('\n') }
+  }
+  it('--json emits no numeric overall/grade for a notServer ref', async () => {
+    const r = await runSdk(['acme/foo-sdk', '--json'])
+    const card = JSON.parse(r.out)
+    expect(card.notServer).toBe(true)
+    expect(card.overall).toBeNull()
+    expect(card.grade).toBeNull()
+  })
+  it('--fail-under is a no-op (exit 0) on a notServer ref, even at the strictest threshold', async () => {
+    const r = await runSdk(['acme/foo-sdk', '--fail-under', 'A'])
+    expect(r.code).toBe(0)
+  })
+  it('terminal output reports LIBRARY, not INSUFFICIENT DATA, and exits 0 with no --fail-under', async () => {
+    const r = await runSdk(['acme/foo-sdk'])
+    expect(r.code).toBe(0)
+    expect(r.out).toContain('LIBRARY')
   })
 })
 

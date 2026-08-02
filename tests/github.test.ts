@@ -283,6 +283,37 @@ describe('collectGithub', () => {
     expect(paths).not.toContain('package-lock.json') // budget fully consumed by source before lockfiles are considered
   })
 
+  // I8: envBlobs had no cap and was never evicted — 10 .env.example files
+  // plus 8 src/tools/*.ts files at FILE_CAP=12 left zero budget for ranked
+  // source, so the whole tool surface starved. ENV_FETCH_CAP=3 (shallowest
+  // path first) mirrors SPEC_FETCH_CAP/ENTRYPOINT_FETCH_CAP.
+  it('I8: an uncapped .env bucket no longer starves ranked source — at most ENV_FETCH_CAP env files fetched, shallowest first', async () => {
+    const http = fakeHttp()
+    const origJson = http.json.bind(http)
+    const envFiles = [
+      { path: '.env.example', type: 'blob', size: 50 }, // depth 1 — shallowest, must survive
+      ...Array.from({ length: 9 }, (_, i) => ({ path: `deploy/envs/env${i}/.env.example`, type: 'blob', size: 50 })),
+    ]
+    const toolFiles = Array.from({ length: 8 }, (_, i) => ({ path: `src/tools/tool${i}.ts`, type: 'blob', size: 200 }))
+    http.json = async <T,>(url: string): Promise<T> => {
+      if (url.includes('/git/trees/')) {
+        return { tree: [{ path: 'package.json', type: 'blob', size: 500 }, ...envFiles, ...toolFiles] } as T
+      }
+      return origJson<T>(url)
+    }
+    http.text = async (url: string): Promise<string> => {
+      if (url.includes('package.json')) return '{"name":"foo"}'
+      return 'export {}'
+    }
+    const snap = await collectGithub({ ref: 'acme/foo', repo: { owner: 'acme', name: 'foo' } }, http, NOW)
+    const paths = snap.files.map(f => f.path)
+    const envPaths = paths.filter(p => p.includes('.env'))
+    const toolPaths = paths.filter(p => p.startsWith('src/tools/'))
+    expect(envPaths.length).toBeLessThanOrEqual(3)
+    expect(envPaths).toContain('.env.example') // shallowest survives eviction
+    expect(toolPaths).toHaveLength(8) // all 8 source files fetched — no longer starved
+  })
+
   it('final review fix: a PRIMARY manifest (package.json) and source files both win over a lockfile when budget is tight', async () => {
     const http = fakeHttp()
     const origJson = http.json.bind(http)

@@ -89,8 +89,14 @@ export function score(
   const overall = wTotal === 0 ? 0
     : Math.round(scored.reduce((a, d) => a + d.score * DIMENSION_WEIGHTS[d.id], 0) / wTotal)
 
+  // I9: a notServer card carries no headline score/grade — there is no tool
+  // surface to grade, so a real-looking number (e.g. 100/A+ for
+  // typescript-sdk) misrepresents "nothing to check" as "checked and clean".
   return {
-    ref, rubricVersion: RUBRIC_VERSION, overall, grade: grade(overall), dimensions, notes, generatedAt,
+    ref, rubricVersion: RUBRIC_VERSION,
+    overall: notServer ? null : overall,
+    grade: notServer ? null : grade(overall),
+    dimensions, notes, generatedAt,
     insufficientData,
     ...(resolved ? { resolved } : {}),
     ...(notServer ? { notServer: true, notServerReason: signals.notServerReason } : {}),

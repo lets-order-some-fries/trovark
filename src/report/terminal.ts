@@ -29,7 +29,11 @@ export function renderTerminal(card: Scorecard, opts: { color?: boolean } = {}):
   } else if (card.insufficientData) {
     lines.push(paint(31, 'Trust Score: INSUFFICIENT DATA', c) + `   rubric v${card.rubricVersion}`)
   } else {
-    lines.push(paint(colorFor(card.overall), `Trust Score: ${card.overall}/100 (${card.grade})`, c) + `   rubric v${card.rubricVersion}`)
+    // I9: overall/grade are only ever null when notServer (handled above) —
+    // this branch always has real values, but the type is nullable to
+    // reflect that case, so fall back defensively rather than asserting.
+    const overall = card.overall ?? 0
+    lines.push(paint(colorFor(overall), `Trust Score: ${overall}/100 (${card.grade ?? '?'})`, c) + `   rubric v${card.rubricVersion}`)
   }
   lines.push('')
   for (const d of card.dimensions) {

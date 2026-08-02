@@ -1,4 +1,4 @@
-# Methodology (rubric v1.2.0)
+# Methodology (rubric v1.3.0)
 
 trovark computes a 0–100 Trust Score from four dimensions: Health 35%,
 Reliability 25%, Security 25%, Cost 15%. Grade bands: A ≥ 85, B ≥ 70, C ≥ 55,
@@ -55,7 +55,36 @@ D ≥ 40, F < 40 (+/- at the top/bottom 5 points of each band).
   an estimate, so labeled; currently an under-estimate, see limitations); tool
   count (deduplicated; test/example paths excluded).
 
-## Known limitations (v1.2)
+## Multi-language tool extraction & the `notServer` outcome (v1.3)
+
+Tool schemas are extracted via static, per-language idiom matching, tried in
+priority order: hand-authored manifests (`mcp.json`/`server.json`/
+`toolDefinitions.json`, authoritative when present) first, then
+TypeScript/JavaScript (`registerTool`/`addTool`/`defineTool`/class-based/
+wrapper idioms), Python (decorator/imperative/class-subclass/call-decorator
+forms), Go (`mcp.Tool{...}`/`NewTool(...)` composite literals), and finally
+OpenAPI/Swagger specs — a last-resort fallback that only fires when no
+manifest and no source extractor found a single tool, so a vendored REST
+client spec checked in alongside a real server can never replace that
+server's actual tool registrations or fabricate findings from REST
+operationIds.
+
+Not every repo that speaks MCP is itself a *server*: SDKs/frameworks, remote
+proxies, and distribution stubs define or forward tools but register none of
+their own. These are classified as a distinct terminal outcome, `notServer`
+(reason `sdk`/`proxy`/`stub`/`not-server`) — not a coverage failure. A
+`notServer` card reports no headline score or letter grade (there is nothing
+to grade), is excluded from index-wide stats (grade distribution, average
+score, stale/secrets/shell-exec-tool counts), and `--fail-under` is a no-op
+against it.
+
+Grade withholding (`INSUFFICIENT DATA`, principle 4 above) is unchanged and
+still applies whenever a genuine MCP server's tool surface simply couldn't be
+statically read — that remains a coverage miss, a fundamentally different
+outcome from `notServer`: one says "we don't know," the other says "there's
+nothing here to know."
+
+## Known limitations (v1.3)
 
 - Tool-schema extraction is best-effort static parsing across languages/idioms;
   it does not cover every framework, and a miss triggers the coverage gate

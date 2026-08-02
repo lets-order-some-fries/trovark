@@ -341,9 +341,16 @@ const CLASS_DESC_FIELD_RE = /(?:public\s+)?description\s*=\s*["'`]([^"'`]*)["'`]
 // V4 #6 (coverage-spec §3.4 TS): wrapper member-expression name (cloudflare)
 // — `server.accountTool(NAME_MAP.key, {...})`. The name isn't a string
 // literal at the call site; resolveWrapperName below resolves it via a
-// sibling `const NAME_MAP = { key: 'literal' }` map when one exists, else
-// falls back to the raw identifier text.
-const WRAPPER_TOOL_CALL_RE = /\.\w*[Tt]ool\(\s*([A-Z_][\w.]*)\s*,\s*\{/g
+// sibling `const NAME_MAP = { key: 'literal' }` map when one exists.
+// I6: the callee alternation matched ANY `*Tool(` member call, including
+// USES of an already-registered tool (`.callTool(`, `.getTool(`,
+// `.removeTool(`, `.hasTool(`) — reviewer verified
+// `client.callTool(TOOL_REQUEST, {cursor:1})` published a fake tool named
+// `TOOL_REQUEST`. The regex still matches the general `*Tool(` shape (it
+// can't distinguish registration verbs from use verbs by shape alone); the
+// exclusion is applied in code via WRAPPER_EXCLUDED_METHODS below.
+const WRAPPER_TOOL_CALL_RE = /\.(\w*[Tt]ool)\(\s*([A-Z_][\w.]*)\s*,\s*\{/g
+const WRAPPER_EXCLUDED_METHODS = new Set(['callTool', 'getTool', 'removeTool', 'hasTool', 'listTools'])
 
 // V4 #7 (coverage-spec §3.4 TS): the ListToolsRequestSchema sibling-check
 // scan below is also the right shape for discogs-style FastMCP object
@@ -374,20 +381,22 @@ function findGetToolsFnSpans(content: string): Array<[number, number]> {
 
 // V4 #6 helper: resolves a captured wrapper identifier (e.g. `TOOLS.list`)
 // to the string literal it points at, via a sibling `const TOOLS = { list:
-// 'accounts_list' }` map. Falls back to the raw identifier when there's no
-// dotted member access, no matching const map, or the key isn't a string
-// literal in that map — "accept the identifier as the name" per spec.
-function resolveWrapperName(content: string, ident: string): string {
+// 'accounts_list' }` map. I6: no longer falls back to the raw identifier —
+// when there's no dotted member access, no matching const map, or the key
+// isn't a string literal in that map, returns undefined so the caller emits
+// NO tool. A miss beats a garbage name (e.g. `TOOL_NAMES.search` published
+// verbatim as a "tool").
+function resolveWrapperName(content: string, ident: string): string | undefined {
   const dotIdx = ident.indexOf('.')
-  if (dotIdx === -1) return ident
+  if (dotIdx === -1) return undefined
   const objectName = ident.slice(0, dotIdx)
   const key = ident.slice(dotIdx + 1)
   const mapMatch = new RegExp(`\\bconst\\s+${escapeRegExp(objectName)}\\s*(?::[^=]+)?=\\s*\\{`).exec(content)
-  if (!mapMatch) return ident
+  if (!mapMatch) return undefined
   const braceIdx = mapMatch.index + mapMatch[0].length - 1
   const body = captureBalanced(content, braceIdx, '{', '}')
   const keyMatch = body.match(new RegExp(`\\b${escapeRegExp(key)}\\s*:\\s*["'\`]([\\w.-]+)["'\`]`))
-  return keyMatch ? keyMatch[1] : ident
+  return keyMatch?.[1]
 }
 
 // Fix 4: low-level SDK `Tool(...)`/`types.Tool(...)` constructor literals
@@ -481,9 +490,14 @@ export function fromJsSource(f: RepoFile): ToolInfo[] {
   }
 
   // V4 #6: wrapper member-expression name — `server.accountTool(NAME_MAP.key,
-  // {...})`, resolved via a sibling const map (or the raw identifier).
+  // {...})`, resolved via a sibling const map. I6: excludes USE verbs
+  // (callTool/getTool/removeTool/hasTool/listTools — see
+  // WRAPPER_EXCLUDED_METHODS) and emits no tool at all when the identifier
+  // can't be resolved (see resolveWrapperName).
   for (const m of f.content.matchAll(WRAPPER_TOOL_CALL_RE)) {
-    const name = resolveWrapperName(f.content, m[1])
+    if (WRAPPER_EXCLUDED_METHODS.has(m[1])) continue
+    const name = resolveWrapperName(f.content, m[2])
+    if (name === undefined) continue
     if (tools.some(t => t.name === name)) continue
     tools.push({ name, schemaText: m[0] })
   }
@@ -507,10 +521,22 @@ export function fromJsSource(f: RepoFile): ToolInfo[] {
     // over the WHOLE file whenever fastmcp is imported or `.addTool(` is
     // called — so without a negative check it fabricates a "tool" for every
     // resource/prompt object too, inflating toolCount and tool-surface risk.
-    // A false tool is worse than a miss, so two independent guards reject a
+    // A false tool is worse than a miss, so independent guards reject a
     // candidate before it's accepted:
-    const REGISTRATION_KEY_RE = /\b(resources|prompts|resourceTemplates|tools)\s*:\s*[[{]/g
+    // I5: `arguments:`/`properties:` added to the key set — a prompt's
+    // per-argument object (fastmcp addPrompt's `arguments: [{name,
+    // description}]`) and a JSON-schema-shaped properties bag both nest
+    // {name, description} objects that are never tools, the same way a
+    // `resources:`/`prompts:` collection isn't.
+    const REGISTRATION_KEY_RE = /\b(resources|prompts|resourceTemplates|tools|arguments|properties)\s*:\s*[[{]/g
     const RESOURCE_SHAPE_RE = /\b(?:uri|uriTemplate|mimeType)\s*:/
+    // I4: an object literal passed directly as the argument to a prompt/
+    // resource registration CALL (`.addPrompt({...})`, `.addResource({...})`,
+    // `.addResourceTemplate({...})`, `.prompt({...})`, `.resource({...})`) has
+    // no enclosing `prompts:`/`resources:` KEY for guard 1 above to see — it's
+    // a bare call argument, not a collection entry — so this scans for the
+    // nearest preceding registration-style CALL itself.
+    const REGISTRATION_CALL_RE = /\.(addTool|tool|addPrompt|prompt|addResource|addResourceTemplate|resource)\(/g
     for (const m of f.content.matchAll(/name:\s*["'`]([\w-]+)["'`]/g)) {
       if (tools.some(t => t.name === m[1])) continue
       const span = enclosingObjectSpan(f.content, m.index)
@@ -519,8 +545,8 @@ export function fromJsSource(f: RepoFile): ToolInfo[] {
       if (!SIBLING_RE.test(objText)) continue
       // Guard 1 (registration-key exclusion): find the nearest `<key>: [`/
       // `<key>: {` before the match — if it's `resources:`/`prompts:`/
-      // `resourceTemplates:` rather than `tools:`, this object is lexically
-      // inside a resource/prompt collection, not a tool one. No match found
+      // `resourceTemplates:`/`arguments:`/`properties:` rather than `tools:`,
+      // this object is lexically inside a non-tool collection. No match found
       // at all falls through to guard 2.
       let nearestKey: string | undefined
       let nearestKeyIdx = -1
@@ -532,6 +558,16 @@ export function fromJsSource(f: RepoFile): ToolInfo[] {
       // Guard 2 (resource-shape exclusion): tools never carry uri/
       // uriTemplate/mimeType fields — those are resource/prompt-specific.
       if (RESOURCE_SHAPE_RE.test(objText)) continue
+      // Guard 3 (registration-call exclusion, I4): the object's own nearest
+      // preceding registration-style CALL — accept only addTool/tool; a
+      // prompt/resource-family call rejects it even with no enclosing key.
+      let nearestCall: string | undefined
+      let nearestCallIdx = -1
+      for (const cm of f.content.matchAll(REGISTRATION_CALL_RE)) {
+        if (cm.index >= m.index) break
+        if (cm.index > nearestCallIdx) { nearestCallIdx = cm.index; nearestCall = cm[1] }
+      }
+      if (nearestCall && nearestCall !== 'addTool' && nearestCall !== 'tool') continue
       tools.push({ name: m[1], schemaText: objText })
     }
   }
@@ -658,7 +694,17 @@ function findShellImportFile(files: RepoFile[]): RepoFile | undefined {
 
 // Only these JSON files are treated as tool sources. A bare `.json` bucket let an
 // unrelated "tools" field in package.json fabricate a fake tool surface.
-const TOOL_JSON_BASENAME_RE = /^(mcp|server|toolDefinitions|openapi|swagger)\.json$/i
+// C3: split into two buckets, tried at OPPOSITE ends of the ladder below.
+// mcp.json/server.json/toolDefinitions.json are hand-authored manifests that
+// directly declare the server's tool surface — authoritative, so they stay
+// FIRST. openapi.json/swagger.json are commonly a VENDORED REST client spec
+// (e.g. a generated API client checked in alongside the MCP server) with no
+// relationship to the actual MCP tool surface — parsing them first let a
+// vendored spec entirely REPLACE a server's real `server.tool()`
+// registrations and fabricate security findings from REST operationIds.
+// They now run LAST, only when no source extractor (JS/Py/Go) found anything.
+const MANIFEST_JSON_BASENAME_RE = /^(mcp|server|toolDefinitions)\.json$/i
+const SPEC_JSON_BASENAME_RE = /^(openapi|swagger)\.json$/i
 
 export function extractSchema(files: RepoFile[]): SchemaResult {
   const serverFiles = files.filter(f => !isNonServerPath(f.path))
@@ -669,7 +715,8 @@ export function extractSchema(files: RepoFile[]): SchemaResult {
   // shape. mcp.json/server.json (pre-V5 scoping) plus V5's new spec files
   // (openapi.json/swagger.json/toolDefinitions.json) are the only basenames
   // that reach the ladder now.
-  const json = serverFiles.filter(f => TOOL_JSON_BASENAME_RE.test(f.path.split('/').pop() ?? ''))
+  const manifestJson = serverFiles.filter(f => MANIFEST_JSON_BASENAME_RE.test(f.path.split('/').pop() ?? ''))
+  const specJson = serverFiles.filter(f => SPEC_JSON_BASENAME_RE.test(f.path.split('/').pop() ?? ''))
   const js = serverFiles.filter(f => /\.(ts|js|mjs)$/.test(f.path))
   const py = serverFiles.filter(f => f.path.endsWith('.py'))
   // V3 (coverage-spec §3.2): Go is its own bucket in the ladder, tried after
@@ -680,10 +727,14 @@ export function extractSchema(files: RepoFile[]): SchemaResult {
 
   let tools: Array<ToolInfo & { evidence: string }> = []
   for (const level of [
-    () => json.flatMap(f => fromJsonFile(f).map(t => ({ ...t, evidence: f.path }))),
+    () => manifestJson.flatMap(f => fromJsonFile(f).map(t => ({ ...t, evidence: f.path }))),
     () => js.flatMap(f => fromJsSource(f).map(t => ({ ...t, evidence: f.path }))),
     () => py.flatMap(f => fromPySource(f).map(t => ({ ...t, evidence: f.path }))),
     () => go.flatMap(f => fromGoSource(f).map(t => ({ ...t, evidence: f.path }))),
+    // C3: openapi/swagger LAST — only fires when no manifest and no source
+    // extractor found a single tool, so a vendored REST spec can never
+    // outrank a server's real tool registrations.
+    () => specJson.flatMap(f => fromJsonFile(f).map(t => ({ ...t, evidence: f.path }))),
   ]) {
     tools = level()
     if (tools.length > 0) break

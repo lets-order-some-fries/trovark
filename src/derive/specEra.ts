@@ -16,6 +16,13 @@ export function specEra(files: RepoFile[]): 'modern' | 'legacy' | undefined {
         const pkg = JSON.parse(f.content) as { dependencies?: Record<string, string>; devDependencies?: Record<string, string> }
         const range = pkg.dependencies?.['@modelcontextprotocol/sdk'] ?? pkg.devDependencies?.['@modelcontextprotocol/sdk']
         if (range) return majorOf(range)
+        // C1: SDK 2.x split @modelcontextprotocol/sdk into /core, /server,
+        // /client (live proof: netlify/netlify-mcp depends on /core + /server).
+        // These packages only exist post-split (2025+) — like the Go/Rust/
+        // JVM/.NET branches below, merely detecting the dependency at all is
+        // enough to call it 'modern', independent of the pinned version range.
+        const deps = { ...pkg.dependencies, ...pkg.devDependencies }
+        if (deps['@modelcontextprotocol/core'] || deps['@modelcontextprotocol/server'] || deps['@modelcontextprotocol/client']) return 'modern'
       } catch { /* malformed */ }
     }
     if (f.path.endsWith('pyproject.toml') || f.path.endsWith('requirements.txt')) {

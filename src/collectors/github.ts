@@ -77,6 +77,13 @@ const LOCKFILES = new Set(['package-lock.json', 'uv.lock', 'poetry.lock'])
 const SPEC_BASENAME_RE = /^(?:openapi|swagger)\.json$/i
 const TOOL_DEFINITIONS_BASENAME_RE = /^toolDefinitions\.json$/
 const SPEC_FETCH_CAP = 2
+// I8: mirrors SPEC_FETCH_CAP/ENTRYPOINT_FETCH_CAP — envBlobs previously had no
+// cap and was never evicted. Reviewer verified 10 .env.example files + 8
+// src/tools/*.ts files at FILE_CAP=12 left zero budget for ranked source, so
+// the whole tool surface starved. .env files feed the secrets scanner, not
+// tool extraction, so 3 slots (shallowest path first, same priority order as
+// manifests) is plenty of signal without being able to starve source again.
+const ENV_FETCH_CAP = 3
 function isSpecFile(path: string): boolean {
   const base = path.split('/').pop() ?? ''
   return SPEC_BASENAME_RE.test(base) || TOOL_DEFINITIONS_BASENAME_RE.test(base)
@@ -340,7 +347,14 @@ export async function collectGithub(
   const MANIFEST_QUOTA = Math.min(manifestCount, 3) // root + 2, per coverage-spec §3.3b
   const SOURCE_FLOOR = Math.ceil(FILE_CAP * 0.66)
 
-  const envBlobs = blobs.filter(b => fetchable(b) && /(^|\/)\.env[^/]*$/.test(b.path))
+  const envBlobs = blobs
+    .filter(b => fetchable(b) && /(^|\/)\.env[^/]*$/.test(b.path))
+    .sort((a, b) => {
+      const [da, la] = manifestPriority(a.path)
+      const [db, lb] = manifestPriority(b.path)
+      return da - db || la - lb
+    })
+    .slice(0, ENV_FETCH_CAP)
   // V5 (coverage-spec §3.5): spec-fetch bucket, capped at SPEC_FETCH_CAP —
   // computed before the source-floor eviction loop below so those 2 slots
   // are counted against the budget the same way manifests are (otherwise an

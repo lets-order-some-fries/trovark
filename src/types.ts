@@ -70,8 +70,12 @@ export interface DimensionScore {
 export interface Scorecard {
   ref: string
   rubricVersion: string
-  overall: number       // 0-100
-  grade: string         // 'A+' | 'A' | 'A-' | ... | 'F'
+  // I9: null when notServer — a library/SDK/proxy/stub has no tool surface
+  // to grade, so no headline score/letter grade is reported (dimensions are
+  // still populated below when useful). Only ever number/string together
+  // (never notServer) or null/null together (notServer) — see score.ts.
+  overall: number | null       // 0-100
+  grade: string | null         // 'A+' | 'A' | 'A-' | ... | 'F'
   dimensions: DimensionScore[]
   notes: string[]
   generatedAt: string   // ISO string, passed in by caller (determinism)

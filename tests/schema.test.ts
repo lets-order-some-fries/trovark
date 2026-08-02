@@ -532,7 +532,11 @@ function registerAccountTools(server) {
     expect(r.tools.map(t => t.name)).toEqual(['accounts_list'])
   })
 
-  it('idiom 6 fallback: wrapper identifier with no resolvable sibling const map is still accepted as the raw name', () => {
+  // I6: the "accept the raw identifier as the name" fallback was dropped — a
+  // miss beats a garbage name (e.g. `TOOL_REQUEST`, `TOOL_NAMES.search`
+  // published verbatim as a "tool"). See the I6 describe block below for the
+  // full coverage of this change.
+  it('idiom 6 (I6): a wrapper identifier with no resolvable sibling const map extracts NO tool, not the raw identifier', () => {
     const r = extractSchema([{
       path: 'src/tools/unmapped.ts',
       content: `
@@ -543,8 +547,8 @@ function registerWidgetTools(server) {
 }
 `,
     }])
-    expect(r.extracted).toBe(true)
-    expect(r.tools.map(t => t.name)).toEqual(['WIDGET_NAME'])
+    expect(r.extracted).toBe(false)
+    expect(r.tools).toEqual([])
   })
 
   it('idiom 7: discogs-style fastmcp tool-array object literal (no ListToolsRequestSchema handler) is picked up via the broadened sibling scan (name + parameters, no description)', () => {
@@ -592,6 +596,107 @@ for (const t of toolDefs) server.addTool(t)
       const p = { name: 'greeting_prompt', description: 'A prompt', mimeType: 'text/plain' }
     ` }])
     expect(r.tools.map(t => t.name)).toEqual(['real_tool'])
+  })
+
+  // I4 + I5: the broadened idiom-7 whole-file scan only guarded resources:/
+  // prompts: collection KEYS and uri/mimeType shapes — it did not know about
+  // registration CALLS other than addTool, and did not scope out nested
+  // arguments:/properties: bags. Reviewer verified fastmcp's addPrompt(...)
+  // (with a nested `arguments:` array of {name, description} objects) and a
+  // config array nested under a `properties:` key both leaked fake tools.
+  it('I4: server.addPrompt({name, description, arguments:[{name, description}]}) is not extracted as a tool — nor is its nested argument', () => {
+    const r = extractSchema([{
+      path: 'src/index.ts',
+      content: `
+import { FastMCP } from 'fastmcp'
+const server = new FastMCP({ name: 'my-server', version: '1.0.0' })
+server.addTool({ name: 'real_tool', description: 'A real tool' })
+server.addPrompt({
+  name: 'summarize_thread',
+  description: 'Summarize a thread',
+  arguments: [{ name: 'thread_id', description: 'Thread ID to summarize' }],
+  load: async (args) => '...',
+})
+`,
+    }])
+    expect(r.tools.map(t => t.name)).toEqual(['real_tool'])
+  })
+
+  it('I4: server.addResource({name, description, uri}) and server.addResourceTemplate(...) calls are not extracted as tools', () => {
+    const r = extractSchema([{
+      path: 'src/index.ts',
+      content: `
+import { FastMCP } from 'fastmcp'
+const server = new FastMCP({ name: 'my-server', version: '1.0.0' })
+server.addTool({ name: 'real_tool', description: 'A real tool' })
+server.addResource({ name: 'config_file', description: 'The config file', uri: 'file:///config.json' })
+server.addResourceTemplate({ name: 'log_file', description: 'A log file', uriTemplate: 'file:///logs/{id}.log' })
+`,
+    }])
+    expect(r.tools.map(t => t.name)).toEqual(['real_tool'])
+  })
+
+  it('I5: a config array nested under a properties: key is not extracted as tools', () => {
+    const r = extractSchema([{
+      path: 'src/index.ts',
+      content: `
+import { FastMCP } from 'fastmcp'
+const server = new FastMCP({ name: 'my-server', version: '1.0.0' })
+server.addTool({ name: 'real_tool', description: 'A real tool' })
+const CONFIG_SCHEMA = {
+  properties: [
+    { name: 'port', description: 'Port to listen on' },
+    { name: 'verbose', description: 'Enable verbose logging' },
+  ],
+}
+`,
+    }])
+    expect(r.tools.map(t => t.name)).toEqual(['real_tool'])
+  })
+
+  // I6: WRAPPER_TOOL_CALL_RE also matched USE calls, not just registration
+  // calls (`.callTool(`, `.getTool(`, `.removeTool(`, `.hasTool(`) — reviewer
+  // verified `client.callTool(TOOL_REQUEST, {cursor:1})` published a tool
+  // named `TOOL_REQUEST`. Restricted to registration-verb wrappers; combined
+  // with dropping the raw-identifier fallback above, an unresolvable name now
+  // emits no tool instead of garbage.
+  describe('I6: wrapper idiom restricted to registration verbs; unresolved identifiers emit no tool', () => {
+    it('client.callTool(TOOL_REQUEST, {...}) is a USE, not a registration — extracts no tool', () => {
+      const r = extractSchema([{ path: 'src/client.ts', content: `client.callTool(TOOL_REQUEST, { cursor: 1 })` }])
+      expect(r.extracted).toBe(false)
+      expect(r.tools).toEqual([])
+    })
+    it('getTool/removeTool/hasTool calls are likewise excluded from the wrapper idiom', () => {
+      const r = extractSchema([{
+        path: 'src/client.ts',
+        content: `
+server.getTool(SOME_ID, { x: 1 })
+server.removeTool(SOME_ID, { x: 1 })
+server.hasTool(SOME_ID, { x: 1 })
+`,
+      }])
+      expect(r.extracted).toBe(false)
+      expect(r.tools).toEqual([])
+    })
+    it('server.registerTool(TOOL_NAMES.search, {...}) with no resolvable const map emits NO tool (not the raw identifier)', () => {
+      const r = extractSchema([{
+        path: 'src/tools/search.ts',
+        content: `server.registerTool(TOOL_NAMES.search, { description: 'Search things' })`,
+      }])
+      expect(r.extracted).toBe(false)
+      expect(r.tools).toEqual([])
+    })
+    it('a resolvable const map still extracts the mapped literal (regression, unaffected by the registration-verb restriction)', () => {
+      const r = extractSchema([{
+        path: 'src/tools/accounts.ts',
+        content: `
+const TOOLS = { list: 'accounts_list' }
+server.accountTool(TOOLS.list, { description: 'List accounts' })
+`,
+      }])
+      expect(r.extracted).toBe(true)
+      expect(r.tools.map(t => t.name)).toEqual(['accounts_list'])
+    })
   })
 
   it('regression: all idioms combined in one file still dedupe by name and keep prior extraction working', () => {

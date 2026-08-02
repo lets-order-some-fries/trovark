@@ -25,8 +25,9 @@
 //   - Tier B (toolsExtracted: true) — a server that extracted even one tool
 //     is normally never reclassified, UNLESS the repo's identity is
 //     corroborated by TWO independent signals at once (name ends `-sdk` AND
-//     an official-SDK description or sdk/library/framework topic) — see
-//     classifyCorroboratedSdkIdentity below.
+//     an official-SDK description, same sentence) — see
+//     classifyCorroboratedSdkIdentity below. I7: topic-alone corroboration
+//     was dropped from this tier (topics are unverified/author-set).
 import type { RepoFile } from '../collectors/github.js'
 import type { NotServerReason } from '../types.js'
 import { fromJsSource, fromPySource, hasPythonToolRegistrationSurface, isNonServerPath } from './schema.js'
@@ -75,7 +76,12 @@ const SDK_TOPICS = new Set(['sdk', 'library', 'framework'])
 // depth here (unlike github.ts's root-only fetch-selection rule) — a nested
 // manifest is still positive evidence "this repo claims to be an MCP
 // server", which is exactly what this signal needs to rule out.
-const MCP_IMPORT_RE = /@modelcontextprotocol\/sdk|['"]fastmcp['"]|mcp\.server\.fastmcp|from mcp\b|rmcp::/
+// C1: MCP SDK 2.x split the single @modelcontextprotocol/sdk package into
+// @modelcontextprotocol/core, /server, /client — matched neither the old
+// sdk-only regex nor specEra.ts's package.json branch, so live 2.x servers
+// (netlify/netlify-mcp: deps on /core + /server) were falsely classified
+// not-server. Broadened to any of sdk|core|server|client.
+const MCP_IMPORT_RE = /@modelcontextprotocol\/(?:sdk|core|server|client)|['"]fastmcp['"]|mcp\.server\.fastmcp|from mcp\b|rmcp::/
 const ROOT_MANIFEST_RE = /(^|\/)(mcp|server)\.json$/
 // Reinforcing signal: Pipedream's component shape proves the repo is a
 // Pipedream action/source component, not an MCP server, independent of the
@@ -200,23 +206,27 @@ const SDK_DESC_TIER_B_RE = /\bofficial\b[^.]*\bsdk\b/i
  * extracted, but only when the repo's SDK identity is corroborated by TWO
  * independent signals at once:
  *   1. the repo name ends in `-sdk`, AND
- *   2. an official-SDK description (same sentence) OR an sdk/library/
- *      framework topic.
+ *   2. an official-SDK description (same sentence).
  * Either alone is not enough to override a real extraction — a genuine MCP
  * server could plausibly be *named* `*-sdk`, or merely *described* in SDK-
  * adjacent language, without actually being a library. Requiring both is
  * what keeps a real server safe while still catching python-sdk/typescript-
  * sdk/go-sdk/kotlin-sdk, whose own API-definition/example code the improved
  * V3-V5 extractors now read as tool-shaped.
+ *
+ * I7: topic-alone corroboration was dropped. Repo topics are author-set and
+ * unverified — reviewer verified {name:'weather-sdk', description:'Weather
+ * MCP server', topics:['library'], toolsExtracted:true} was de-graded on the
+ * topic alone, a real server false positive. Only Tier B's override needs
+ * this tightening; Tier A (zero tools, a low-stakes tie-breaker) still
+ * accepts topics — see SDK_TOPICS usage above.
  */
 function classifyCorroboratedSdkIdentity(ctx: ClassifyContext): NotServerResult | null {
   if (!SDK_NAME_RE.test(ctx.name)) return null
-  const descCorroborates = SDK_DESC_TIER_B_RE.test(ctx.description ?? '')
-  const topicCorroborates = (ctx.topics ?? []).some(t => SDK_TOPICS.has(t.toLowerCase()))
-  if (!descCorroborates && !topicCorroborates) return null
+  if (!SDK_DESC_TIER_B_RE.test(ctx.description ?? '')) return null
   return {
     notServer: true, reason: 'sdk',
-    note: 'Repo name + description/topics corroborate an official SDK identity; extracted "tools" are API-definition/example code from the SDK itself, not a server surface.',
+    note: 'Repo name + description corroborate an official SDK identity; extracted "tools" are API-definition/example code from the SDK itself, not a server surface.',
   }
 }
 

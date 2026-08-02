@@ -30,7 +30,7 @@ describe('score()', () => {
     const card = score('x', healthy(), '2026-07-31T00:00:00Z')
     expect(card.overall).toBe(100)
     expect(card.grade).toBe('A+')
-    expect(card.rubricVersion).toBe('1.2.0')
+    expect(card.rubricVersion).toBe('1.3.0')
     for (const d of card.dimensions) expect(d.confidence).toBe('high')
   })
   it('missing signals lower confidence, never throw, never zero the score', () => {
@@ -132,6 +132,18 @@ describe('score() — notServer (V2): a distinct terminal state, not insufficien
     s.notServerReason = 'not-server'
     const card = score('x', s, 'T')
     expect(card.notes.join(' ')).not.toMatch(/insufficient|grade withheld/i)
+  })
+  // I9: a notServer card previously still carried a real numeric
+  // overall/grade (e.g. typescript-sdk scored 100/A+) — misleading, since
+  // there's no tool surface to grade, and it tripped `--fail-under` on a
+  // library (see cli.test.ts). No headline score/grade is reported.
+  it('I9: a notServer card has null overall and grade — no headline score to report', () => {
+    const s = empty()
+    s.notServer = true
+    s.notServerReason = 'sdk'
+    const card = score('x', s, 'T')
+    expect(card.overall).toBeNull()
+    expect(card.grade).toBeNull()
   })
   it('a normal card with no notServer signal is unaffected (regression)', () => {
     const card = score('x', healthy(), 'T')
