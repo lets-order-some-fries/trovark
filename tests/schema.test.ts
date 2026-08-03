@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { extractSchema } from '../src/derive/schema.js'
+import { extractSchema, hasPythonToolRegistrationSurface } from '../src/derive/schema.js'
 
 describe('extractSchema ladder', () => {
   it('level 1: reads tools from mcp.json manifest', () => {
@@ -1130,6 +1130,91 @@ for (const t of toolDefs) server.addTool(t)
   })
 })
 
+// W4 (coverage-v1.4, Part B): a reviewer verified that EXCLUDED_NESTED_KEYS
+// (an allowlist of 4 keys: properties/arguments/inputSchema/parameters) is
+// inherently incomplete — any OTHER non-tool key nested inside an accepted
+// tool span (e.g. a `metadata:` bag) still lets a nested {name,description}
+// object fabricate a second, phantom tool. Replaced with a principled,
+// depth-based rule: a candidate is accepted only when its `name:` sits at
+// the accepted span's OWN top-level object (depth 0, when the span opens
+// with `{` — a resolved const-object arg, an R1 object-const, a `tools: {}`
+// value), or as a direct array/call-arg ELEMENT one bracket in from the
+// span's own `[`/`(` opener (depth 1 — a `tools:` array, a tool-named array
+// literal, or a registration call's argument list). Anything strictly
+// deeper is rejected, for ANY key name — not just the 4 previously
+// enumerated ones.
+describe('W4 (coverage-v1.4, Part B): depth-based rejection of nested non-tool sub-objects (replaces the 4-key allowlist)', () => {
+  it('FABRICATION (reviewer-verified): a metadata:{name,description} nested inside an accepted addTool call no longer produces a second tool', () => {
+    const r = extractSchema([{
+      path: 'src/index.ts',
+      content: `
+server.addTool({ name:'outer_tool', description:'d', metadata:{ name:'inner_meta_name', description:'d' } })
+`,
+    }])
+    expect(r.tools.map(t => t.name)).toEqual(['outer_tool'])
+  })
+
+  it('a metadata:{name,description} nested inside an R1 object-const tool span is likewise rejected (not just the addTool-call shape)', () => {
+    const r = extractSchema([{
+      path: 'src/tools/search.ts',
+      content: `
+const searchTool = {
+  name: 'search',
+  description: 'Search the web',
+  metadata: { name: 'nested_name', description: 'Not a real tool' },
+}
+`,
+    }])
+    expect(r.tools.map(t => t.name)).toEqual(['search'])
+  })
+
+  it('REGRESSION: a real tools ARRAY still extracts both direct elements (array elements are depth 1, not rejected)', () => {
+    const r = extractSchema([{
+      path: 'src/index.ts',
+      content: `
+const toolDefs = [
+  { name: 'a', description: 'd' },
+  { name: 'b', description: 'd' },
+]
+for (const t of toolDefs) server.addTool(t)
+`,
+    }])
+    expect(r.tools.map(t => t.name).sort()).toEqual(['a', 'b'])
+  })
+
+  it('REGRESSION: a simple server.addTool({name,description}) with no nesting still extracts', () => {
+    const r = extractSchema([{
+      path: 'src/index.ts',
+      content: `server.addTool({name:'x',description:'d'})`,
+    }])
+    expect(r.tools.map(t => t.name)).toEqual(['x'])
+  })
+
+  it('REGRESSION: the existing properties:/parameters: nested-key cases still reject the nested candidate (allowlist replaced, not weakened)', () => {
+    const r1 = extractSchema([{
+      path: 'src/index.ts',
+      content: `
+server.addTool({name:'outer_tool',description:'d',inputSchema:{properties:{filter:{name:'inner_name_field',description:'...',type:'string'}}}})
+`,
+    }])
+    expect(r1.tools.map(t => t.name)).toEqual(['outer_tool'])
+
+    const r2 = extractSchema([{
+      path: 'src/index.ts',
+      content: `
+server.addTool({
+  name: 'outer_tool2',
+  description: 'd',
+  parameters: [
+    { name: 'username', type: 'string', description: 'd' },
+  ],
+})
+`,
+    }])
+    expect(r2.tools.map(t => t.name)).toEqual(['outer_tool2'])
+  })
+})
+
 // V5 (coverage-spec §3.4 Python): serena's class-subclass idiom and
 // awslabs' call-decorator idiom, plus the register_*_tools surface signal
 // (which must never fabricate a tool — see the GUARD test below and the
@@ -1203,6 +1288,80 @@ class FooTool(Base):
       path: 'src/awslabs/server.py',
       content: `def setup(mcp):\n    register_search_tools(mcp)\n`,
     }])
+    expect(r.extracted).toBe(false)
+    expect(r.tools).toEqual([])
+  })
+})
+
+// W4 (coverage-v1.4): Python idiom pack 2 (spec §3 R2) — replaces the
+// imperative matcher to handle LEADING POSITIONAL ARGS (qdrant's
+// `self.add_tool(self.find, name="qdrant-find", ...)`, where the old regex
+// anchored `add_tool(` directly to `name=` and could never skip a leading
+// positional) and F-STRING name values (gget-mcp's `name=f"{prefix}gget_ref"`
+// — the `f?["'](?:\{[^}]*\})?` prefix skips the `f"` marker and any leading
+// `{...}` interpolation, capturing the literal tail). Also widens
+// PY_CALL_DECORATOR_RE's receiver beyond a bare `mcp.` and widens the
+// registration-surface signal beyond the single `register_X_tools(` shape.
+describe('W4 (coverage-v1.4): Python idiom pack 2 — positional-arg imperative, f-string names, wider decorators/registration-surface', () => {
+  it('qdrant-style: self.add_tool(self.find, name="qdrant-find", description="Find memories") -> qdrant-find (leading positional arg skipped)', () => {
+    const r = extractSchema([{
+      path: 'src/mcp_server_qdrant/mcp_server.py',
+      content: `
+self.add_tool(self.find, name="qdrant-find", description="Find memories")
+self.add_tool(self.store, name="qdrant-store", description="Store memories")
+`,
+    }])
+    expect(r.extracted).toBe(true)
+    expect(r.tools.map(t => t.name).sort()).toEqual(['qdrant-find', 'qdrant-store'])
+    expect(r.tools.find(t => t.name === 'qdrant-find')?.description).toBe('Find memories')
+  })
+
+  it('gget-mcp-style: name=f"{prefix}gget_ref" (f-string with a leading interpolation) resolves to the literal tail gget_ref', () => {
+    const r = extractSchema([{
+      path: 'src/gget_mcp/server.py',
+      content: `self.add_tool(self.gget_ref, name=f"{prefix}gget_ref", description="Get gene reference")`,
+    }])
+    expect(r.extracted).toBe(true)
+    expect(r.tools.map(t => t.name)).toEqual(['gget_ref'])
+  })
+
+  it('self.tool() call-decorator form: self.tool()(self.find_memories) -> find_memories (widened receiver, not just bare mcp.)', () => {
+    const r = extractSchema([{
+      path: 'src/server.py',
+      content: `self.tool()(self.find_memories)`,
+    }])
+    expect(r.extracted).toBe(true)
+    expect(r.tools.map(t => t.name)).toEqual(['find_memories'])
+  })
+
+  it('regression: bare mcp.tool()(...) call-decorator form (awslabs) still works after widening the receiver class', () => {
+    const r = extractSchema([{
+      path: 'src/awslabs/server.py',
+      content: `mcp.tool()(docs.search_agentcore_docs)`,
+    }])
+    expect(r.tools.map(t => t.name)).toEqual(['search_agentcore_docs'])
+  })
+
+  it('GUARD: a tool(...)/add_tool(...) call with NO name= kwarg emits no tool (the name= literal anchor prevents fabrication)', () => {
+    const r = extractSchema([{
+      path: 'src/server.py',
+      content: `mcp.add_tool(some_fn)`,
+    }])
+    expect(r.extracted).toBe(false)
+    expect(r.tools).toEqual([])
+  })
+
+  it('wider registration-surface signal: setup_tools(mcp) / add_search_tools(mcp) are detected as an MCP-tool-registration surface (widened beyond register_X_tools)', () => {
+    expect(hasPythonToolRegistrationSurface([{ path: 'src/server.py', content: 'def setup(mcp):\n    setup_tools(mcp)\n' }])).toBe(true)
+    expect(hasPythonToolRegistrationSurface([{ path: 'src/server.py', content: 'def setup(mcp):\n    add_search_tools(mcp)\n' }])).toBe(true)
+  })
+
+  it('regression: the original register_search_tools(mcp) shape is still detected by the widened registration-surface signal', () => {
+    expect(hasPythonToolRegistrationSurface([{ path: 'src/server.py', content: 'register_search_tools(mcp)' }])).toBe(true)
+  })
+
+  it('the registration-surface signal never emits a fake tool on its own — extractSchema still returns nothing for a bare setup_tools(mcp) call', () => {
+    const r = extractSchema([{ path: 'src/server.py', content: 'def setup(mcp):\n    setup_tools(mcp)\n' }])
     expect(r.extracted).toBe(false)
     expect(r.tools).toEqual([])
   })

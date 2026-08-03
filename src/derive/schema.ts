@@ -542,81 +542,62 @@ function escapeRegExp(s: string): string {
   return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
 }
 
-// Fix (final review, Fix 2): once a candidate's enclosing span is accepted
-// (registration call / tools: value / tool-named array), there was no
-// exclusion for a `{name,description}` object nested inside a NON-TOOL
-// sub-key of that accepted span — e.g. a param object under
-// `inputSchema.properties.<field>`, or an array element under a
-// `parameters:` array. The old (deleted) guard explicitly excluded
-// properties/arguments for exactly this; positive scoping alone did not
-// subsume it. Fixed with a scope-aware (containment-based, not text-index)
-// walk: within the accepted span, find each enclosing bracket from the
-// candidate's own object outward, and reject if any of them is the value of
-// a properties:/arguments:/inputSchema:/parameters: key. Bounded at the
-// accepted span's own start (`floor`) so this can never leak across sibling
-// statements the way the deleted "nearest preceding key by text index"
-// heuristic did.
-const EXCLUDED_NESTED_KEYS = new Set(['properties', 'arguments', 'inputschema', 'parameters'])
-const BRACKET_CLOSERS: Record<string, string> = { '{': '}', '[': ']', '(': ')' }
-
-// Generalization of enclosingObjectSpan's backward walk to all three bracket
-// kinds (`{`, `[`, `(`): scans backward from `pos` and returns the nearest
-// unmatched OPENING bracket at or after `floor`, skipping over any balanced
-// nested pairs along the way. Returns undefined if none is found before
-// `floor` is reached.
-function nearestEnclosingBracket(text: string, pos: number, floor: number): { idx: number; open: string } | undefined {
-  const stack: string[] = []
-  for (let i = pos; i >= floor; i--) {
-    const c = text[i]
-    if (c === '}' || c === ']' || c === ')') {
-      stack.push(c)
-    } else if (c === '{' || c === '[' || c === '(') {
-      if (stack.length > 0 && BRACKET_CLOSERS[c] === stack[stack.length - 1]) {
-        stack.pop()
-      } else {
-        return { idx: i, open: c }
-      }
-    }
+// Fix (final review, Fix 2 — W4 coverage-v1.4 review, Part B): once a
+// candidate's enclosing span is accepted (registration call / tools: value /
+// tool-named array), there was no exclusion for a `{name,description}`
+// object nested inside a NON-TOOL sub-key of that accepted span — e.g. a
+// param object under `inputSchema.properties.<field>`, an array element
+// under a `parameters:` array, or (reviewer-verified, and the reason this was
+// rewritten) an arbitrary `metadata:{name,description}` bag. The original fix
+// here was an EXCLUDED_NESTED_KEYS allowlist of 4 literal key names
+// (properties/arguments/inputSchema/parameters) — necessarily incomplete,
+// since any OTHER key a real codebase happens to nest a sub-object under
+// (metadata, config, whatever) was never in the list and still fabricated a
+// phantom tool.
+//
+// Replaced with a principled, SHAPE-based rule instead of an allowlist: a
+// candidate is accepted only when its own enclosing object sits at the
+// accepted span's OWN top-level — never any deeper, regardless of what key
+// the deeper nesting sits under. Concretely, walking forward from the span's
+// own opening bracket (`floor`) to the candidate's enclosing object's own
+// opening bracket, counting bracket depth along the way:
+//  - if the span itself opens with `{` (a resolved const-object arg, an R1
+//    object-const, a `tools: {...}` value) — the span IS the tool's own
+//    object, so only its OWN direct properties (depth 0, i.e. the
+//    candidate's enclosing object literally IS the span) are accepted;
+//  - if the span opens with `[` or `(` (a `tools:` array, a tool-named array
+//    literal, or a registration call's argument list) — the tool objects are
+//    one bracket further in (direct array ELEMENTS, or a call's direct
+//    argument), so depth 1 is accepted.
+// Anything strictly deeper — `metadata:{name,...}`, `inputSchema.properties.
+// <field>`, a `parameters:` array entry — sits at depth ≥2 (object-shaped
+// span) or ≥2 (array/call-shaped span) and is rejected, for ANY intervening
+// key name. Bounded at the accepted span's own start (`floor`), same as
+// before, so this can never leak across sibling statements.
+function bracketDepthAt(content: string, floor: number, pos: number): number {
+  let depth = 0
+  for (let i = floor; i < pos; i++) {
+    const c = content[i]
+    if (c === '{' || c === '[' || c === '(') depth++
+    else if (c === '}' || c === ']' || c === ')') depth--
   }
-  return undefined
+  return depth
 }
 
-// Looks immediately before `bracketIdx` for the `key:` this bracket is the
-// value of (e.g. `properties: {` → 'properties'). Returns undefined when the
-// bracket isn't directly preceded by a key — a call's `(`, an array element
-// separated by `,`, or a bare top-level declaration's `=`.
-function precedingKeyOf(text: string, bracketIdx: number): string | undefined {
-  const before = text.slice(Math.max(0, bracketIdx - 100), bracketIdx)
-  const m = /([\w$]+)\s*:\s*$/.exec(before)
-  return m?.[1]?.toLowerCase()
-}
-
-// Walks outward from `objSpan` (the candidate's own enclosing object, as
-// returned by enclosingObjectSpan) through each enclosing bracket, stopping
-// at `floor` (the accepted span's own start — never walking past it, so this
-// can't leak across sibling statements). Returns true if any level along the
-// way is the value of an excluded key.
-function isNestedUnderExcludedKey(content: string, objSpan: [number, number], floor: number): boolean {
-  let pos = objSpan[0]
-  while (pos > floor) {
-    const bracket = nearestEnclosingBracket(content, pos - 1, floor)
-    if (!bracket || bracket.idx <= floor) return false
-    const key = precedingKeyOf(content, bracket.idx)
-    if (key && EXCLUDED_NESTED_KEYS.has(key)) return true
-    pos = bracket.idx
-  }
-  return false
+function isAtSpanOwnToolLevel(content: string, objSpan: [number, number], floor: number): boolean {
+  const targetDepth = content[floor] === '{' ? 0 : 1
+  return bracketDepthAt(content, floor, objSpan[0]) === targetDepth
 }
 
 // W3: shared by the literal-name and R1b scalar-name candidate loops in
 // fromJsSource below. Given a `name:` match's index, returns its enclosing
 // object's source text iff the candidate is tool-shaped (SIBLING_RE),
-// reachable from a registration context (acceptedSpans containment,
-// honoring the properties:/arguments:/inputSchema:/parameters: nested-key
-// exclusion), and not resource/prompt-shaped (RESOURCE_SHAPE_RE) — else
-// undefined. Factored out of the single literal-name loop that used to be
-// the only caller, so R1b's scalar-identifier loop can reuse the exact same
-// acceptance logic instead of a second, drifting copy.
+// reachable from a registration context (acceptedSpans containment, honoring
+// the depth-based own-tool-level rule above), and not resource/prompt-shaped
+// (RESOURCE_SHAPE_RE) — else undefined. Factored out of the single
+// literal-name loop that used to be the only caller, so R1b's scalar-
+// identifier loop can reuse the exact same acceptance logic instead of a
+// second, drifting copy.
 function acceptedCandidateObjectText(
   content: string, matchIndex: number, acceptedSpans: Array<[number, number]>
 ): string | undefined {
@@ -625,7 +606,7 @@ function acceptedCandidateObjectText(
   const objText = content.slice(span[0], span[1] + 1)
   if (!SIBLING_RE.test(objText)) return undefined
   if (!acceptedSpans.some(([s, e]) =>
-    matchIndex >= s && matchIndex <= e && !isNestedUnderExcludedKey(content, span, s)
+    matchIndex >= s && matchIndex <= e && isAtSpanOwnToolLevel(content, span, s)
   )) return undefined
   if (RESOURCE_SHAPE_RE.test(objText)) return undefined
   return objText
@@ -871,7 +852,21 @@ export function fromJsSource(f: RepoFile): ToolInfo[] {
 // tolerating a decorator that's separated from its `def` by other decorators,
 // comments, or blank lines.
 const PY_DECORATOR_RE = /@(?:\w+\.)?tool\b(?:\([^)]*\))?[\s\S]{0,200}?\b(?:async\s+)?def\s+(\w+)\s*\(/g
-const PY_IMPERATIVE_RE = /\b(?:add_tool|tool)\(\s*name\s*=\s*["']([\w-]+)["'](?:\s*,\s*description\s*=\s*["']([^"']*)["'])?/g
+// W4 (coverage-v1.4, R2 — best ratio in the wave: 5 repos, all unique).
+// Replaces the old form (which anchored `name=` directly after the opening
+// paren) with one that also handles:
+//  - LEADING POSITIONAL ARGS before the `name=` kwarg — qdrant-server's
+//    `self.add_tool(self.find, name="qdrant-find", description="...")`
+//    registers an already-bound method as the first (positional) arg.
+//  - F-STRING name values with a leading interpolation — gget-mcp's
+//    `name=f"{prefix}gget_ref"`; the `f?["'](?:\{[^}]*\})?` prefix skips the
+//    optional `f` marker, the opening quote, and one leading `{...}`
+//    interpolation, then captures the literal tail.
+// The `name=` literal anchor is preserved (just no longer glued to the
+// opening paren), so a `tool(...)`/`add_tool(...)` call that never names a
+// tool still cannot match — see the GUARD test in schema.test.ts.
+const PY_IMPERATIVE_RE =
+  /\b(?:add_tool|tool)\(\s*(?:[\w.\[\]'"]+\s*,\s*)*name\s*=\s*f?["'](?:\{[^}]*\})?([\w.-]+)["'](?:\s*,\s*description\s*=\s*f?["']([^"']*)["'])?/g
 
 // V5 (coverage-spec §3.4 Python #1): serena's class-subclass idiom —
 // `class ReadFileTool(Tool):` / `class DeleteLinesTool(EditingTool):`.
@@ -916,7 +911,11 @@ function fromClassSubclass(content: string): ToolInfo[] {
 // `mcp.tool()(docs.search_agentcore_docs)` registers an already-defined
 // function object rather than decorating a `def` in place; the tool name is
 // the last dotted segment of the referenced identifier.
-const PY_CALL_DECORATOR_RE = /\bmcp\.tool\([^)]*\)\(\s*([\w.]+)\s*\)/g
+// W4 (coverage-v1.4, R2): widened beyond a bare `mcp.` receiver — FastMCP
+// subclasses call this on `self`/`server`/`app`/`_mcp` too (e.g. qdrant's
+// `self.tool()(self.find)`), and none of these receivers change the shape
+// (still requires the literal `.tool(...)( ident )` call-decorator form).
+const PY_CALL_DECORATOR_RE = /\b(?:self|mcp|server|app|_mcp)\.tool\([^)]*\)\(\s*([\w.]+)\s*\)/g
 
 function fromCallDecorator(content: string): ToolInfo[] {
   const tools: ToolInfo[] = []
@@ -937,7 +936,12 @@ function fromCallDecorator(content: string): ToolInfo[] {
 // "this repo IS MCP-related" signal, so classifyLibrary's signal 3
 // (no-MCP-anywhere -> not-server) doesn't fire on such a repo. See the
 // wiring in classify.ts.
-const PY_REGISTER_TOOLS_SURFACE_RE = /\bregister_\w+_tools\(\s*\w+\s*\)/
+// W4 (coverage-v1.4, R2): widened from the single `register_X_tools(arg)`
+// shape to any `register_`/`setup_`/`add_`-prefixed function whose name
+// tokenizes to tool(s) — FastMCP subclasses commonly register in a
+// `setup_tools()` method instead. Still just a boolean "is MCP-related"
+// signal; it deliberately does not require a specific argument shape.
+const PY_REGISTER_TOOLS_SURFACE_RE = /\b(?:register|setup|add)_\w*tools?\s*\(/
 export function hasPythonToolRegistrationSurface(files: RepoFile[]): boolean {
   return files.some(f => f.path.endsWith('.py') && PY_REGISTER_TOOLS_SURFACE_RE.test(f.content))
 }
