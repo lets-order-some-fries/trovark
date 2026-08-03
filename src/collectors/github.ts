@@ -1,7 +1,24 @@
-import type { Http } from '../util/http.js'
+import { HttpError, type Http } from '../util/http.js'
 import type { ServerIdentity } from '../resolver.js'
 
 export interface RepoFile { path: string; content: string }
+
+// W1 (coverage-v1.4, correctness fix): a 404 fetching repo METADATA means the
+// repo itself is gone (deleted, renamed past any redirect, or never existed)
+// — distinct from every other collectGithub failure mode (network blip, 403,
+// 5xx), all of which already degrade gracefully via assemble.ts's generic
+// `errors[]` path. A plain Error can't be told apart from those; this type
+// lets assemble.ts mark the result `unresolved` instead of scoring a
+// degenerate all-zero card as a real (F-grade) outcome. See http.ts's
+// `HttpError` (carries the numeric status) and the redirect note on
+// `createHttp` — a renamed repo's 301 is already followed transparently by
+// fetch, so a 404 here means genuinely gone, not "one hop short".
+export class RepoNotFoundError extends Error {
+  constructor(owner: string, name: string) {
+    super(`GitHub repo not found: ${owner}/${name} (404 — deleted, renamed with no redirect, or never existed)`)
+    this.name = 'RepoNotFoundError'
+  }
+}
 
 export interface RepoSnapshot {
   owner: string; name: string; defaultBranch: string
@@ -214,7 +231,13 @@ export async function collectGithub(
     stargazers_count: number; archived: boolean; pushed_at: string; default_branch: string
     description?: string | null; topics?: string[]
   }
-  const meta = await http.json<GhRepo>(api)
+  let meta: GhRepo
+  try {
+    meta = await http.json<GhRepo>(api)
+  } catch (err) {
+    if (err instanceof HttpError && err.status === 404) throw new RepoNotFoundError(owner, name)
+    throw err
+  }
 
   const since365 = new Date(now.getTime() - 365 * 86_400_000).toISOString()
   const cutoff365Ms = now.getTime() - 365 * 86_400_000

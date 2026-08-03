@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { main } from '../src/cli.js'
+import { HttpError } from '../src/util/http.js'
 import type { Http } from '../src/util/http.js'
 
 // Minimal fake: a healthy-enough GitHub-only server.
@@ -156,5 +157,35 @@ describe('cli main — insufficient data', () => {
     expect(code).toBe(2)
     expect(logs.join('\n')).toContain('INSUFFICIENT DATA')
     expect(errs.join('\n')).toMatch(/insufficient data/i)
+  })
+})
+
+describe('cli main — unresolved repo (W1): a 404 must never print a graded F card', () => {
+  const notFound: Http = {
+    async json(url: string) { throw new HttpError(404, url) },
+    async jsonWithHeaders() { throw new Error('unused') },
+    async postJson() { throw new Error('unused') },
+    async text() { throw new Error('unused') },
+  }
+  it('exits 2 with "repository not found" in stderr, and never prints a Trust Score / F grade', async () => {
+    const logs: string[] = [], errs: string[] = []
+    const code = await main(['acme/gone'], { http: notFound, now: NOW, log: s => logs.push(s), err: s => errs.push(s) })
+    expect(code).toBe(2)
+    expect(errs.join('\n')).toMatch(/repository not found: acme\/gone/i)
+    expect(logs.join('\n')).not.toContain('Trust Score:')
+    expect(logs.join('\n')).not.toMatch(/\(F\)/)
+  })
+  it('--json emits unresolved:true with null overall/grade, not a fabricated F', async () => {
+    const logs: string[] = [], errs: string[] = []
+    await main(['acme/gone', '--json'], { http: notFound, now: NOW, log: s => logs.push(s), err: s => errs.push(s) })
+    const card = JSON.parse(logs.join('\n'))
+    expect(card.unresolved).toBe(true)
+    expect(card.overall).toBeNull()
+    expect(card.grade).toBeNull()
+  })
+  it('--fail-under cannot turn this into a pass — unresolved always exits 2 regardless of threshold', async () => {
+    const logs: string[] = [], errs: string[] = []
+    const code = await main(['acme/gone', '--fail-under', '0'], { http: notFound, now: NOW, log: s => logs.push(s), err: s => errs.push(s) })
+    expect(code).toBe(2)
   })
 })

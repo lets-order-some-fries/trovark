@@ -56,6 +56,13 @@ export interface Signals {
   notServer?: boolean
   notServerReason?: NotServerReason
   notServerNote?: string
+  // W1 (coverage-v1.4): the GitHub repo could not be resolved at all (404 on
+  // repo metadata — deleted/renamed/never existed), distinct from notServer
+  // (we DID read it and it's a library) and from a generic insufficientData
+  // miss (we read it but couldn't extract enough). Set by assemble.ts when
+  // collectGithub throws RepoNotFoundError; carried through to Scorecard so
+  // score.ts can null overall/grade the same way it does for notServer.
+  unresolved?: boolean
 }
 
 export interface DimensionScore {
@@ -86,4 +93,9 @@ export interface Scorecard {
   // library/SDK/proxy/stub rather than a genuinely un-parseable server.
   notServer?: boolean
   notServerReason?: NotServerReason
+  // W1: a distinct terminal state — the GitHub repo 404s (deleted/renamed/
+  // never existed), so there is nothing to grade. Mutually exclusive with
+  // notServer/insufficientData in practice (see score.ts). overall/grade are
+  // null, exactly like notServer — see the I9 note above.
+  unresolved?: boolean
 }

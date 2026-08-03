@@ -61,7 +61,15 @@ export function score(
   // check this server". The notServer flag (set by classifyLibrary via
   // assemble.ts) unconditionally overrides the gate.
   const notServer = Boolean(signals.notServer)
-  const insufficientData = !notServer && (availableTotal < 4 || securityPrimaryAbsent || dimensionsFullyDropped >= 2)
+  // W1: unresolved (GitHub 404 — repo deleted/renamed/never existed) is a
+  // THIRD distinct terminal state, alongside notServer ("we read it, it's a
+  // library") and the generic insufficientData gate below ("we read it, but
+  // couldn't extract enough"). It bypasses the gate the same way notServer
+  // does — there was never a tool surface to fail to extract, because there
+  // was never a repo to read.
+  const unresolved = Boolean(signals.unresolved)
+  const insufficientData = !notServer && !unresolved
+    && (availableTotal < 4 || securityPrimaryAbsent || dimensionsFullyDropped >= 2)
 
   const notes: string[] = []
   for (const d of dimensions) {
@@ -72,6 +80,8 @@ export function score(
   if (notServer) {
     const reasonPart = signals.notServerReason ? ` (${signals.notServerReason})` : ''
     notes.push(`Library / not an MCP server${reasonPart}: ${signals.notServerNote ?? 'no tools to grade.'}`)
+  } else if (unresolved) {
+    notes.push('Repository could not be resolved on GitHub (404 — deleted or renamed) — no grade to report.')
   } else {
     if (securityPrimaryAbsent) {
       notes.push('Security tool surface could not be determined — grade withheld to avoid a false clean bill.')
@@ -92,13 +102,17 @@ export function score(
   // I9: a notServer card carries no headline score/grade — there is no tool
   // surface to grade, so a real-looking number (e.g. 100/A+ for
   // typescript-sdk) misrepresents "nothing to check" as "checked and clean".
+  // W1: unresolved cards get the same treatment — a repo we never fetched
+  // must never carry a numeric overall or letter grade (the 18-false-F-card bug).
+  const withheld = notServer || unresolved
   return {
     ref, rubricVersion: RUBRIC_VERSION,
-    overall: notServer ? null : overall,
-    grade: notServer ? null : grade(overall),
+    overall: withheld ? null : overall,
+    grade: withheld ? null : grade(overall),
     dimensions, notes, generatedAt,
     insufficientData,
     ...(resolved ? { resolved } : {}),
     ...(notServer ? { notServer: true, notServerReason: signals.notServerReason } : {}),
+    ...(unresolved ? { unresolved: true } : {}),
   }
 }

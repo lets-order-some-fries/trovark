@@ -75,3 +75,47 @@ describe('summarize', () => {
     expect(s.gradeDist).toEqual({})
   })
 })
+
+describe('summarize — unresolved repos (W1): a GitHub 404 must never count as a graded F', () => {
+  it('counts unresolved separately, and excludes it from gradeDist/avgOverall even if overall/grade were somehow set', () => {
+    // Reproduces today's actual buggy shape (index/results.json pre-fix): an
+    // entry with insufficientData:true STILL carried overall:0/grade:"F".
+    // The fix must be defense-in-depth — summarize() must never let such an
+    // entry pollute the published stats, regardless of what leaked into
+    // overall/grade upstream.
+    const entries: IndexEntry[] = [
+      e({ ref: 'pulumi/mcp-server', unresolved: true, overall: 0, grade: 'F' }),
+      e({ ref: 'a/real', overall: 90, grade: 'A' }),
+    ]
+    const s = summarize(entries)
+    expect(s.unresolved).toBe(1)
+    expect(s.gradeDist).toEqual({ A: 1 })
+    expect(s.avgOverall).toBe(90)
+  })
+  it('excludes unresolved entries from staleOver180/secretsFindings/shellExecTools too', () => {
+    const entries: IndexEntry[] = [
+      e({
+        ref: 'pulumi/mcp-server', unresolved: true, overall: 0, grade: 'F',
+        daysSinceLastCommit: 400,
+        topFindings: [
+          { id: 'security/committed-secret', severity: 'high' },
+          { id: 'security/shell-exec-tool', severity: 'high' },
+        ],
+      }),
+    ]
+    const s = summarize(entries)
+    expect(s.unresolved).toBe(1)
+    expect(s.staleOver180).toBe(0)
+    expect(s.secretsFindings).toBe(0)
+    expect(s.shellExecTools).toBe(0)
+  })
+  it('unresolved is independent of notServer — both can be counted without double-affecting each other', () => {
+    const entries: IndexEntry[] = [
+      e({ ref: 'a/gone', unresolved: true }),
+      e({ ref: 'a/lib', notServer: true, notServerReason: 'sdk' }),
+    ]
+    const s = summarize(entries)
+    expect(s.unresolved).toBe(1)
+    expect(s.notServer).toBe(1)
+  })
+})

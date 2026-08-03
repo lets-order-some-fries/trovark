@@ -1,7 +1,7 @@
 import type { Http } from './util/http.js'
 import type { ServerIdentity } from './resolver.js'
 import type { Signals } from './types.js'
-import { collectGithub, type RepoFile } from './collectors/github.js'
+import { collectGithub, RepoNotFoundError, type RepoFile } from './collectors/github.js'
 import { collectNpm } from './collectors/npm.js'
 import { collectPypi } from './collectors/pypi.js'
 import { collectOsv, depsFromManifest, type Dep } from './collectors/osv.js'
@@ -78,6 +78,11 @@ export async function assemble(
         s.errors.push('github: file tree unavailable; repo-content signals skipped')
       }
     } catch (err) {
+      // W1: a 404 on repo metadata (RepoNotFoundError) means the repo is
+      // gone — a distinct terminal state, not a generic collector hiccup.
+      // Everything else (network errors, 403, 5xx) keeps today's behavior:
+      // recorded in errors[], surfaced later as insufficientData.
+      if (err instanceof RepoNotFoundError) s.unresolved = true
       s.errors.push(`github: ${(err as Error).message}`)
     }
   } else {

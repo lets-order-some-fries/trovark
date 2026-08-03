@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { assemble } from '../src/assemble.js'
+import { HttpError } from '../src/util/http.js'
 import type { Http } from '../src/util/http.js'
 
 const NOW = new Date('2026-07-31T00:00:00Z')
@@ -249,5 +250,44 @@ describe('assemble — notServer classification (V2)', () => {
     )
     expect(s.schemaExtracted).toBe(false)
     expect(s.notServer).toBeUndefined() // classifyLibrary correctly declines to guess
+  })
+})
+
+describe('assemble — unresolved repo (W1): a GitHub 404 must not become a degenerate all-zero card', () => {
+  function notFoundHttp(): Http {
+    return {
+      async json<T>(url: string): Promise<T> {
+        if (url === 'https://api.github.com/repos/acme/gone') throw new HttpError(404, url)
+        throw new Error(`unexpected call: ${url}`)
+      },
+      async jsonWithHeaders<T>(url: string): Promise<{ data: T; headers: Headers }> {
+        throw new Error(`unexpected call: ${url}`)
+      },
+      async text(url: string): Promise<string> { throw new Error(`unexpected call: ${url}`) },
+      async postJson<T>(): Promise<T> { throw new Error('unused') },
+    }
+  }
+  it('a repo-metadata 404 sets signals.unresolved and records the error, without touching other signals', async () => {
+    const s = await assemble({ ref: 'acme/gone', repo: { owner: 'acme', name: 'gone' } }, notFoundHttp(), NOW)
+    expect(s.unresolved).toBe(true)
+    expect(s.toolSurfaceRisk).toBeUndefined()
+    expect(s.daysSinceLastCommit).toBeUndefined()
+    expect(s.errors.some(e => e.startsWith('github:'))).toBe(true)
+  })
+  it('GUARD: a generic (non-404) github failure does NOT set unresolved — stays the existing generic-error path', async () => {
+    const http: Http = {
+      async json<T>(url: string): Promise<T> {
+        if (url === 'https://api.github.com/repos/acme/broken') throw new HttpError(500, url)
+        throw new Error(`unexpected call: ${url}`)
+      },
+      async jsonWithHeaders<T>(url: string): Promise<{ data: T; headers: Headers }> {
+        throw new Error(`unexpected call: ${url}`)
+      },
+      async text(url: string): Promise<string> { throw new Error(`unexpected call: ${url}`) },
+      async postJson<T>(): Promise<T> { throw new Error('unused') },
+    }
+    const s = await assemble({ ref: 'acme/broken', repo: { owner: 'acme', name: 'broken' } }, http, NOW)
+    expect(s.unresolved).toBeUndefined()
+    expect(s.errors.some(e => e.startsWith('github:'))).toBe(true)
   })
 })

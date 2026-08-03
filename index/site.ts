@@ -18,6 +18,13 @@ function row(e: IndexEntry): string {
   const safeUrl = e.repoUrl && /^https?:\/\//.test(e.repoUrl) ? e.repoUrl : undefined
   const name = safeUrl ? `<a href="${esc(safeUrl)}">${esc(e.ref)}</a>` : esc(e.ref)
   if (!e.ok) return `<tr class="failed" data-overall="-1"><td>${name}</td><td colspan="6" class="muted">unreachable — ${esc(e.error ?? 'unknown error')}</td></tr>`
+  // W1: a repo GitHub 404s (deleted/renamed) — rendered distinctly from both
+  // insufficientData ("we read it, couldn't score it") and notServer ("we
+  // read it, it's a library"). Checked first: there is nothing else to show,
+  // not even partial dimensions, since nothing was ever fetched.
+  if (e.unresolved) {
+    return `<tr class="failed" data-overall="-1" title="repo unavailable — not found on GitHub (renamed or deleted)"><td>${name}</td><td colspan="6" class="muted">repo unavailable — not found on GitHub (renamed or deleted)</td></tr>`
+  }
   const d = e.dims
   const dim = (k: 'health' | 'reliability' | 'security' | 'cost') =>
     d ? `<td>${d[k].score}<span class="conf">${esc(d[k].confidence[0])}</span></td>` : '<td>—</td>'
@@ -77,7 +84,7 @@ footer{margin:28px 0;color:#8b949e;font-size:13px}
 <h1>Trovark</h1>
 <p class="tag">Trust scores for MCP servers — evidence-linked grades from static public signals. <code>npx trovark &lt;server&gt;</code></p>
 <div class="stats">
-${stat(s.total, 'servers scanned')}${stat(s.scored - s.insufficient - (s.notServer ?? 0), 'graded')}${stat(s.avgOverall, 'avg score')}${stat(s.gradeDist['A'] ?? 0, 'A grades')}${stat(s.staleOver180, 'stale / abandoned')}${stat(s.shellExecTools, 'expose exec/shell tools')}${stat(s.insufficient, 'insufficient data')}${stat(s.notServer ?? 0, 'library / not a server')}${stat(s.failed, 'failed / unreachable')}
+${stat(s.total, 'servers scanned')}${stat(s.scored - s.insufficient - (s.notServer ?? 0) - (s.unresolved ?? 0), 'graded')}${stat(s.avgOverall, 'avg score')}${stat(s.gradeDist['A'] ?? 0, 'A grades')}${stat(s.staleOver180, 'stale / abandoned')}${stat(s.shellExecTools, 'expose exec/shell tools')}${stat(s.insufficient, 'insufficient data')}${stat(s.notServer ?? 0, 'library / not a server')}${stat(s.unresolved ?? 0, 'repo unavailable')}${stat(s.failed, 'failed / unreachable')}
 </div>
 <table id="t"><thead><tr>
 <th data-k="0">server</th><th data-k="1">grade</th><th data-k="2">score</th><th data-k="3">health</th><th data-k="4">reliability</th><th data-k="5">security</th><th data-k="6">cost</th>

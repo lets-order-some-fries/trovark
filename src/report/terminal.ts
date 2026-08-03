@@ -20,7 +20,13 @@ export function renderTerminal(card: Scorecard, opts: { color?: boolean } = {}):
     if (card.resolved.repo) parts.push(`github.com/${card.resolved.repo.owner}/${card.resolved.repo.name}`)
     if (parts.length > 0) lines.push(`  resolved: ${parts.join(' · ')}`)
   }
-  if (card.notServer) {
+  if (card.unresolved) {
+    // W1: a DISTINCT terminal state from both notServer and INSUFFICIENT
+    // DATA — the GitHub repo 404s (deleted/renamed/never existed), so there
+    // is nothing to grade. Must never render as a Trust Score / F card (the
+    // 18-false-F-card bug this fixes).
+    lines.push(paint(31, 'REPO UNAVAILABLE — not found on GitHub (renamed or deleted)', c) + `   rubric v${card.rubricVersion}`)
+  } else if (card.notServer) {
     // V2: a DISTINCT terminal state from INSUFFICIENT DATA — this repo was
     // never going to have tools to grade (library/SDK/proxy/stub), not a
     // server we failed to check. See src/derive/classify.ts.
