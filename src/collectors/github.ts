@@ -423,9 +423,30 @@ export function selectRepoFiles(
   // before ranking ever ran (measured: 21/77 repos lost >50% of source this
   // way, 6 fetched zero). SOURCE_HINT is now folded into toolSignalScore as a
   // +3 ranking signal instead — a file that misses it can still be selected.
+  // Fix (post-W5 review): NON_SERVER_FETCH_CAP is a quota on THIS bucket
+  // only — computed here, self-contained, the same way every other bucket's
+  // cap is (filter -> sort -> cap), rather than as a mutable counter in the
+  // shared dedup/FILE_CAP loop below. It must be scoped to rankedSource
+  // specifically: ENTRYPOINT_RE matches `examples/index.ts`-shaped paths,
+  // which ALSO match NON_SERVER_DIR_RE, so a shared/global counter let a
+  // couple of example entrypoints (processed earlier, in the
+  // entrypointCandidates bucket) exhaust the 3-slot quota before rankedSource
+  // was ever reached — silently starving the non-server allowance
+  // classifyLibrary signal 2 needs (see NON_SERVER_FETCH_CAP's comment) for
+  // an unrelated reason, AND (separately) capping entrypoint-bucket members
+  // that ENTRYPOINT_FETCH_CAP had room for. Applied AFTER the score sort so
+  // the quota keeps the highest-ranked non-server files, not just the first
+  // ones encountered in tree order.
+  let nonServerRankedSelected = 0
   const rankedSource = blobs
     .filter(b => fetchable(b) && SOURCE_EXT.test(b.path) && !entrypointPaths.has(b.path))
     .sort((a, b) => toolSignalScore(b.path, rootPkgName) - toolSignalScore(a.path, rootPkgName) || a.path.length - b.path.length)
+    .filter(b => {
+      if (!isNonServerPath(b.path)) return true
+      if (nonServerRankedSelected >= NON_SERVER_FETCH_CAP) return false
+      nonServerRankedSelected++
+      return true
+    })
 
   // Manifests start at full candidate strength (not pre-capped to
   // MANIFEST_QUOTA) — most repos have few enough manifests that no eviction is
@@ -459,19 +480,10 @@ export function selectRepoFiles(
   ]
   const selected: string[] = []
   const seen = new Set<string>()
-  // W5 (wave2-spec §2.1 change 5 / §2.2 point 5): quota non-server-path
-  // (tests/examples/docs/samples) files that reach here via rankedSource's
-  // now-relaxed gate — see NON_SERVER_FETCH_CAP's comment for why this is a
-  // quota and not an exclusion.
-  let nonServerSelected = 0
   for (const b of wanted) {
     if (selected.length >= FILE_CAP) break
     if (seen.has(b.path)) continue
     seen.add(b.path)
-    if (isNonServerPath(b.path)) {
-      if (nonServerSelected >= NON_SERVER_FETCH_CAP) continue
-      nonServerSelected++
-    }
     selected.push(b.path)
   }
   return selected

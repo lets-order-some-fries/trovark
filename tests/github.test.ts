@@ -1093,6 +1093,67 @@ describe('collectGithub', () => {
     for (const f of toolFiles) expect(paths).toContain(f.path) // real source is never displaced by the quota'd files
   })
 
+  it('fix: NON_SERVER_FETCH_CAP is scoped to rankedSource — example entrypoints must not drain it and starve the guaranteed entrypoint bucket', () => {
+    // Bug this guards: NON_SERVER_FETCH_CAP was a mutable counter in the
+    // SHARED final dedup/FILE_CAP loop, not scoped to rankedSource.
+    // ENTRYPOINT_RE matches `examples/index.ts` (etc.), which ALSO matches
+    // NON_SERVER_DIR_RE — so entrypoint-bucket members were counted against
+    // the SAME 3-slot quota rankedSource's own non-server files use,
+    // exhausting it before rankedSource was even reached and silently
+    // dropping legitimate entrypoint-bucket members that ENTRYPOINT_FETCH_CAP
+    // (=6) had room for.
+    const blobs = [
+      { path: 'package.json', size: 500 },
+      // 5 example entrypoints — all match BOTH ENTRYPOINT_RE and
+      // NON_SERVER_DIR_RE, well within ENTRYPOINT_FETCH_CAP=6. Pre-fix, only
+      // the first 3 (by manifestPriority: shallowest/shortest first) survive
+      // the shared quota; `examples/foo/index.ts` and `examples/bar/index.ts`
+      // are silently dropped.
+      { path: 'examples/index.ts', size: 100 },
+      { path: 'examples/server.ts', size: 100 },
+      { path: 'examples/main.ts', size: 100 },
+      { path: 'examples/foo/index.ts', size: 100 },
+      { path: 'examples/bar/index.ts', size: 100 },
+      // Non-entrypoint-shaped example files — these fall through to
+      // rankedSource (not the entrypoint bucket) and are the files
+      // NON_SERVER_FETCH_CAP was actually designed to quota.
+      { path: 'examples/util-one.ts', size: 100 },
+      { path: 'examples/util-two.ts', size: 100 },
+      { path: 'examples/util-three.ts', size: 100 },
+      { path: 'examples/util-four.ts', size: 100 },
+      // 8 real tool files: (a) real tool-bearing source that must never be
+      // starved by this bug, and (b) trips toolFanout>=8 so FILE_CAP widens
+      // to 24, giving ample budget headroom — isolating the assertions below
+      // from any FILE_CAP eviction, so only the quota-scoping bug can explain
+      // a dropped path.
+      ...Array.from({ length: 8 }, (_, i) => ({ path: `src/tools/tool${i}.ts`, size: 100 })),
+    ]
+    const selected = selectRepoFiles(blobs, 'foo', false)
+
+    // 1. Real source is (and was always) unaffected by this bug — still
+    // selected. (It is never itself a non-server path, so it was never at
+    // risk; asserted for completeness / non-regression.)
+    for (let i = 0; i < 8; i++) expect(selected).toContain(`src/tools/tool${i}.ts`)
+
+    // 2. rankedSource's OWN non-server quota still holds: at most
+    // NON_SERVER_FETCH_CAP (=3) of the 4 non-entrypoint example files make it
+    // through — the quota still applies where it was designed to, just
+    // scoped to this bucket instead of shared globally.
+    const rankedSourceNonServer = selected.filter(p => p.startsWith('examples/util'))
+    expect(rankedSourceNonServer.length).toBeLessThanOrEqual(3)
+
+    // 3. THE CORE ASSERTION: the entrypoint bucket is NOT subject to the
+    // quota at all — all 5 example entrypoints (well within
+    // ENTRYPOINT_FETCH_CAP=6) are selected as entrypoints, not just the
+    // first 3. Pre-fix this fails: `examples/foo/index.ts` and
+    // `examples/bar/index.ts` are silently dropped because the shared quota
+    // was already exhausted by `examples/index.ts`, `examples/server.ts`,
+    // `examples/main.ts`.
+    for (const p of ['examples/index.ts', 'examples/server.ts', 'examples/main.ts', 'examples/foo/index.ts', 'examples/bar/index.ts']) {
+      expect(selected).toContain(p)
+    }
+  })
+
   // --- W5 THE REGRESSION GUARD (plan Task W5, wave2-spec §2.2) ----------
   //
   // tests/fixtures/sampling-corpus.json was recorded live (`gh api
