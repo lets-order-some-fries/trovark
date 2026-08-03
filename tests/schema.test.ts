@@ -1234,6 +1234,186 @@ describe('W2 (coverage-v1.4): prefixed openapi/swagger basenames + tools.json ma
     expect(r.tools.map(t => t.name)).toEqual(['ping'])
   })
 
+})
+
+// W3 (coverage-v1.4): TS idiom pack 2 — object-const tool literals (R1),
+// scalar-const name resolution (R1b), lowercase wrapper identifiers (R3),
+// factory-returned arrays (R4), and sibling-key/entry-gate relaxation (R5).
+// Every snippet is shaped after the real repo named in its title (verified
+// live against browserbase/mcp-server-browserbase, brave/brave-search-mcp-server,
+// executeautomation/mcp-playwright, and awdr74100/figwright).
+describe('W3 (coverage-v1.4): TS idiom pack 2 — object-const, scalar-const names, factory arrays, wrapper idents', () => {
+  it('R1: browserbase-style const typed `: ToolSchema<...>` (identifier has no "tool" token at all) is extracted via the type annotation', () => {
+    const r = extractSchema([{
+      path: 'src/tools/act.ts',
+      content: `
+import type { Tool, ToolSchema } from './tool.js'
+
+const actSchema: ToolSchema<typeof ActInputSchema> = {
+  name: 'act',
+  description: 'Perform an action on the page',
+  inputSchema: ActInputSchema,
+}
+
+const actTool: Tool<typeof ActInputSchema> = {
+  capability: 'core',
+  schema: actSchema,
+  handle: handleAct,
+}
+
+export default actTool
+`,
+    }])
+    expect(r.extracted).toBe(true)
+    expect(r.tools.map(t => t.name)).toEqual(['act'])
+  })
+
+  it('R1: a plain `const searchTool = {...}` (identifier tokenizes to "tool", no type annotation needed) is extracted', () => {
+    const r = extractSchema([{
+      path: 'src/tools/search.ts',
+      content: `
+const searchTool = {
+  name: 'search',
+  description: 'Search the web for results',
+}
+`,
+    }])
+    expect(r.extracted).toBe(true)
+    expect(r.tools.map(t => t.name)).toEqual(['search'])
+  })
+
+  it('R1 GUARD: an unrelated `const config = {name,description}` (no tool token, no Tool type) is NOT extracted', () => {
+    const r = extractSchema([{
+      path: 'src/config.ts',
+      content: `
+const config = {
+  name: 'x',
+  description: 'y',
+}
+`,
+    }])
+    expect(r.extracted).toBe(false)
+    expect(r.tools).toEqual([])
+  })
+
+  it('R1b: figwright-style `name: PING_TOOL_NAME` (identifier, not a string literal) resolves via a same-file scalar const', () => {
+    const r = extractSchema([{
+      path: 'packages/mcp/src/tools/ping.ts',
+      content: `
+export const PING_TOOL_NAME = 'ping';
+
+export const pingTool = {
+  name: PING_TOOL_NAME,
+  description: 'Health check.',
+  inputShape: {},
+  kind: 'read',
+};
+`,
+    }])
+    expect(r.extracted).toBe(true)
+    expect(r.tools.map(t => t.name)).toEqual(['ping'])
+  })
+
+  it('R3: brave-style lowercase wrapper identifier (mcpServer.registerTool(name, {...})) resolves via a same-file scalar const', () => {
+    const r = extractSchema([{
+      path: 'src/tools/web/index.ts',
+      content: `
+export const name = 'brave_web_search';
+export const description = 'Performs web searches using the Brave Search API.';
+
+export const register = (mcpServer) => {
+  mcpServer.registerTool(
+    name,
+    {
+      title: name,
+      description: description,
+      inputSchema: params.shape,
+    },
+    execute
+  );
+};
+`,
+    }])
+    expect(r.extracted).toBe(true)
+    expect(r.tools.map(t => t.name)).toEqual(['brave_web_search'])
+  })
+
+  it('R3 GUARD: an unresolvable lowercase wrapper identifier still emits no tool (widened character class does not fabricate)', () => {
+    const r = extractSchema([{
+      path: 'src/tools/mystery.ts',
+      content: `server.registerTool(mysteryName, { description: 'Does something' })`,
+    }])
+    expect(r.extracted).toBe(false)
+    expect(r.tools).toEqual([])
+  })
+
+  it('R4: a factory function returning an array of 6 tools (>4000 chars) proves the 400k captureBalanced limit, not the 4000 default', () => {
+    const longDesc = 'Lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor. '.repeat(20)
+    const toolNames = ['alpha_tool', 'beta_tool', 'gamma_tool', 'delta_tool', 'epsilon_tool', 'zeta_tool']
+    const body = toolNames.map(n => `    {
+      name: "${n}",
+      description: "${longDesc}",
+      inputSchema: { type: "object", properties: {} },
+    },`).join('\n')
+    const content = `
+import type { Tool } from "@modelcontextprotocol/sdk/types.js"
+
+function createToolDefinitions() {
+  return [
+${body}
+  ]
+}
+`
+    expect(content.length).toBeGreaterThan(4000)
+    const r = extractSchema([{ path: 'src/tools.ts', content }])
+    expect(r.extracted).toBe(true)
+    expect(r.tools.map(t => t.name).sort()).toEqual([...toolNames].sort())
+  })
+
+  it('R5: .registerTool( entry point + a `schema:` sibling (olostep-style, not inputSchema) is extracted — entry-gate widening + SIBLING_RE gaining `schema`', () => {
+    const r = extractSchema([{
+      path: 'src/tools/scrapeWebsite.ts',
+      content: `
+server.registerTool({
+  name: 'scrape_website',
+  schema: { url: 'string' },
+})
+`,
+    }])
+    expect(r.extracted).toBe(true)
+    expect(r.tools.map(t => t.name)).toEqual(['scrape_website'])
+  })
+
+  it('GUARD: a nested properties:{filter:{name,description}} inside a real tool is still not extracted as a second tool', () => {
+    const r = extractSchema([{
+      path: 'src/index.ts',
+      content: `
+server.addTool({
+  name: 'outer_tool',
+  description: 'd',
+  inputSchema: { properties: { filter: { name: 'inner_name_field', description: 'd', type: 'string' } } },
+})
+`,
+    }])
+    expect(r.tools.map(t => t.name)).toEqual(['outer_tool'])
+  })
+
+  it('GUARD: `const toolbarItems = [...]` still does not fabricate tools (identifier-boundary rule, unaffected by W3)', () => {
+    const r = extractSchema([{
+      path: 'src/index.ts',
+      content: `
+import { FastMCP } from 'fastmcp'
+server.addTool({ name: 'real_tool', description: 'A real tool' })
+const toolbarItems = [
+  { name: 'save', description: 'Save' },
+]
+`,
+    }])
+    expect(r.tools.map(t => t.name)).toEqual(['real_tool'])
+  })
+})
+
+describe('W2 (coverage-v1.4 continued): manifest basename tests', () => {
   it('a tools.json manifest ({tools:[...]} shape) is parsed (olostep-style)', () => {
     const r = extractSchema([{
       path: 'tools.json',

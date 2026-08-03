@@ -366,7 +366,12 @@ const CLASS_DESC_FIELD_RE = /(?:public\s+)?description\s*=\s*["'`]([^"'`]*)["'`]
 // `TOOL_REQUEST`. The regex still matches the general `*Tool(` shape (it
 // can't distinguish registration verbs from use verbs by shape alone); the
 // exclusion is applied in code via WRAPPER_EXCLUDED_METHODS below.
-const WRAPPER_TOOL_CALL_RE = /\.(\w*[Tt]ool)\(\s*([A-Z_][\w.]*)\s*,\s*\{/g
+// W3 (coverage-v1.4, R3): widened from [A-Z_][\w.]* to also match a lowercase
+// bare identifier — brave's `mcpServer.registerTool(name, {...})` where `name`
+// is `export const name = 'brave_web_search'`. WRAPPER_EXCLUDED_METHODS below
+// and "unresolvable identifier => emit nothing" (resolveWrapperName) are
+// unaffected and still apply to the widened match.
+const WRAPPER_TOOL_CALL_RE = /\.(\w*[Tt]ool)\(\s*([A-Za-z_$][\w.$]*)\s*,\s*\{/g
 const WRAPPER_EXCLUDED_METHODS = new Set(['callTool', 'getTool', 'removeTool', 'hasTool', 'listTools'])
 
 // V4 #7 (coverage-spec §3.4 TS): the ListToolsRequestSchema sibling-check
@@ -399,6 +404,36 @@ const TOOLS_KEY_RE = /\btools\s*:\s*([[{])/g
 // alone can't see inside the array — (c) captures the array itself, and
 // every object literal in it (however many) is reachable.
 const TOOL_NAMED_ARRAY_RE = /\b(?:export\s+)?(?:const|let|var)\s+(\w+)\s*(?::[^=\n]+)?=\s*\[/g
+
+// (d) W3 (coverage-v1.4, R1 — measured highest single yield, 13 repos/5
+// unique): a standalone `const <ident> = {...}` object literal that is
+// itself the whole tool, with no wrapping registration call at all in this
+// file (browserbase ships one `const actSchema: ToolSchema<...> = {...}` per
+// file; the call that registers it lives elsewhere and is never sampled).
+// Accepted iff tokenize(ident) includes 'tool'/'tools' OR the type
+// annotation matches /\bTool\b|\bTool[A-Z<]/ — the type half is load-bearing:
+// `actSchema` tokenizes to ['act','schema'] (no 'tool' token) and is only
+// identifiable via `: ToolSchema<typeof ActInputSchema>`.
+const TOOL_NAMED_OBJECT_RE = /\b(?:export\s+)?(?:const|let|var)\s+(\w+)\s*(?::\s*([^=\n]+?))?\s*=\s*\{/g
+const TOOL_TYPE_ANNOTATION_RE = /\bTool\b|\bTool[A-Z<]/
+
+// W3 (R4): a factory function whose body is just `return [ ...tool
+// literals... ]` — executeautomation's `createToolDefinitions()`. Gated the
+// same way as TOOL_NAMED_ARRAY_RE above (identifier must tokenize to
+// tool/tools).
+const TOOL_FACTORY_RETURN_RE = /\bfunction\s+(\w+)\s*\([^)]*\)\s*(?::[^{]+?)?\{\s*return\s*\[/g
+
+// W3 (R1 / R5a): siblings that mark a `{name,...}` candidate as tool-shaped —
+// used both to gate a TOOL_NAMED_OBJECT_RE span at acceptance time (R1) and,
+// further below, to gate an individual `name:` candidate found inside any
+// accepted span. `schema`/`inputShape` added for R5a: olostep and figwright
+// use those keys instead of `inputSchema`.
+const SIBLING_RE = /\b(?:description|inputSchema|parameters|schema|inputShape)\s*:/
+// Tools never carry uri/uriTemplate/mimeType fields — those are
+// resource/prompt-specific, even for an otherwise-accepted candidate (e.g. a
+// stray resource object mixed into a tools array, or an R1 object span that
+// turns out to be a resource literal).
+const RESOURCE_SHAPE_RE = /\b(?:uri|uriTemplate|mimeType)\s*:/
 
 // (a, extended) Live spot-check regression: discogs-mcp-server (a real
 // fastmcp flagship server, not a synthetic test case) never passes an object
@@ -463,6 +498,40 @@ function acceptedToolSpans(content: string): Array<[number, number]> {
     if (!identTokens.includes('tool') && !identTokens.includes('tools')) continue
     const openIdx = m.index + m[0].length - 1 // m[0] ends with '['
     const arr = captureBalanced(content, openIdx, '[', ']')
+    if (arr) spans.push([openIdx, openIdx + arr.length - 1])
+  }
+
+  // (d) W3 (R1): see TOOL_NAMED_OBJECT_RE above. Uses the 400_000 cap (not
+  // the 4000 default) — measured live: browserbase's `actSchema`/`session`
+  // objects and similar single-tool-per-file consts are small, but nothing
+  // caps how large a hand-written tool-config object can get.
+  for (const m of content.matchAll(TOOL_NAMED_OBJECT_RE)) {
+    const identTokens = tokenize(m[1])
+    const typeAnnotation = m[2]
+    const tokenMatch = identTokens.includes('tool') || identTokens.includes('tools')
+    const typeMatch = typeAnnotation !== undefined && TOOL_TYPE_ANNOTATION_RE.test(typeAnnotation)
+    if (!tokenMatch && !typeMatch) continue
+    const openIdx = m.index + m[0].length - 1 // m[0] ends with '{'
+    const obj = captureBalanced(content, openIdx, '{', '}', 400_000)
+    if (!obj) continue
+    // Required at span-acceptance time (not just later, per-candidate): a
+    // const object that merely tokenizes to 'tool(s)' but carries none of
+    // the tool-shaped sibling keys is something else entirely — e.g.
+    // cloudflare's `const TOOLS = { list: 'accounts_list', get: '...' }`
+    // name-map, which tokenizes to ['tools'] but has no description/schema.
+    if (!SIBLING_RE.test(obj)) continue
+    if (RESOURCE_SHAPE_RE.test(obj)) continue
+    spans.push([openIdx, openIdx + obj.length - 1])
+  }
+
+  // (e) W3 (R4): see TOOL_FACTORY_RETURN_RE above. Uses the 400_000 cap —
+  // the 4000 default clips executeautomation's 19KB createToolDefinitions()
+  // array at ~4 tools instead of all 33.
+  for (const m of content.matchAll(TOOL_FACTORY_RETURN_RE)) {
+    const identTokens = tokenize(m[1])
+    if (!identTokens.includes('tool') && !identTokens.includes('tools')) continue
+    const openIdx = m.index + m[0].length - 1 // m[0] ends with '['
+    const arr = captureBalanced(content, openIdx, '[', ']', 400_000)
     if (arr) spans.push([openIdx, openIdx + arr.length - 1])
   }
 
@@ -539,6 +608,29 @@ function isNestedUnderExcludedKey(content: string, objSpan: [number, number], fl
   return false
 }
 
+// W3: shared by the literal-name and R1b scalar-name candidate loops in
+// fromJsSource below. Given a `name:` match's index, returns its enclosing
+// object's source text iff the candidate is tool-shaped (SIBLING_RE),
+// reachable from a registration context (acceptedSpans containment,
+// honoring the properties:/arguments:/inputSchema:/parameters: nested-key
+// exclusion), and not resource/prompt-shaped (RESOURCE_SHAPE_RE) — else
+// undefined. Factored out of the single literal-name loop that used to be
+// the only caller, so R1b's scalar-identifier loop can reuse the exact same
+// acceptance logic instead of a second, drifting copy.
+function acceptedCandidateObjectText(
+  content: string, matchIndex: number, acceptedSpans: Array<[number, number]>
+): string | undefined {
+  const span = enclosingObjectSpan(content, matchIndex)
+  if (!span) return undefined
+  const objText = content.slice(span[0], span[1] + 1)
+  if (!SIBLING_RE.test(objText)) return undefined
+  if (!acceptedSpans.some(([s, e]) =>
+    matchIndex >= s && matchIndex <= e && !isNestedUnderExcludedKey(content, span, s)
+  )) return undefined
+  if (RESOURCE_SHAPE_RE.test(objText)) return undefined
+  return objText
+}
+
 // V4 #3 helper: spans (start/end index of the `{...}` body) of every
 // `function getXTools(...) { ... }` / `const getXTools = (...) => { ... }`
 // declaration in the file, so the keyed-factory guard can check whether a
@@ -554,6 +646,22 @@ function findGetToolsFnSpans(content: string): Array<[number, number]> {
   return spans
 }
 
+// W3 (R1b / R3, shared helper): resolves a same-file scalar const
+// declaration (`const IDENT = "literal"`) to its string value. Used both
+// when an accepted span's `name:` is an identifier rather than a literal
+// (R1b — figwright's `name: PING_TOOL_NAME` alongside `export const
+// PING_TOOL_NAME = 'ping'`) and as resolveWrapperName's fallback for a bare,
+// non-dotted wrapper identifier (R3 — brave's `registerTool(name, {...})`
+// where `name` is `export const name = 'brave_web_search'`). Verified 4/4
+// live on figwright: PING_TOOL_NAME->"ping", get-node->"get_node",
+// add-page->"add_page", clone-node->"clone_node".
+function resolveScalarConst(content: string, ident: string): string | undefined {
+  const re = new RegExp(
+    `\\b(?:export\\s+)?(?:const|let|var)\\s+${escapeRegExp(ident)}\\s*(?::[^=\\n]+)?=\\s*["'\`]([^"'\`]+)["'\`]`
+  )
+  return re.exec(content)?.[1]
+}
+
 // V4 #6 helper: resolves a captured wrapper identifier (e.g. `TOOLS.list`)
 // to the string literal it points at, via a sibling `const TOOLS = { list:
 // 'accounts_list' }` map. I6: no longer falls back to the raw identifier —
@@ -561,9 +669,12 @@ function findGetToolsFnSpans(content: string): Array<[number, number]> {
 // isn't a string literal in that map, returns undefined so the caller emits
 // NO tool. A miss beats a garbage name (e.g. `TOOL_NAMES.search` published
 // verbatim as a "tool").
+// W3 (R3): a bare (non-dotted) identifier no longer falls straight through
+// to undefined — it's tried against the R1b scalar-const resolver first
+// (brave's plain `registerTool(name, {...})`, no NAME_MAP involved at all).
 function resolveWrapperName(content: string, ident: string): string | undefined {
   const dotIdx = ident.indexOf('.')
-  if (dotIdx === -1) return undefined
+  if (dotIdx === -1) return resolveScalarConst(content, ident)
   const objectName = ident.slice(0, dotIdx)
   const key = ident.slice(dotIdx + 1)
   const mapMatch = new RegExp(`\\bconst\\s+${escapeRegExp(objectName)}\\s*(?::[^=]+)?=\\s*\\{`).exec(content)
@@ -688,45 +799,64 @@ export function fromJsSource(f: RepoFile): ToolInfo[] {
   // explicit ListToolsRequestSchema handler; the sibling set is broadened to
   // include `parameters:` (fastmcp/zod-style schemas use that key instead of
   // `inputSchema:`).
-  if (f.content.includes('ListToolsRequestSchema') || FASTMCP_IMPORT_RE.test(f.content) || f.content.includes('.addTool(')) {
-    const SIBLING_RE = /\b(?:description|inputSchema|parameters)\s*:/
-    // Fix (coverage-v1.3 review): the prior version of this scan rejected a
-    // `{name,...}` candidate via NEGATIVE guards — "what's the nearest
-    // preceding key/call by raw text index?" — with no brace/scope
-    // awareness. That silently DROPPED legitimate tools: one tool's
-    // `inputSchema.properties` key became the "nearest preceding key" for
-    // every later tool in the same array, and an unrelated `.addPrompt(...)`
-    // call earlier in the file became the "nearest preceding call" for the
-    // entire rest of the tool surface. Losing real tools is worse than the
-    // over-extraction the guards were meant to prevent.
-    //
-    // Replaced with POSITIVE, scope-aware containment: a candidate is
-    // accepted only if it is genuinely reachable from a tool-registration
-    // context, computed via real brace/paren-balanced spans (not text-index
-    // proximity) — see acceptedToolSpans below. A resource-shape check
-    // (uri/uriTemplate/mimeType) remains as a cheap secondary safety net,
-    // applied only to already-accepted candidates.
-    const RESOURCE_SHAPE_RE = /\b(?:uri|uriTemplate|mimeType)\s*:/
-    const acceptedSpans = acceptedToolSpans(f.content)
+  // Fix (coverage-v1.3 review): the prior version of this scan rejected a
+  // `{name,...}` candidate via NEGATIVE guards — "what's the nearest
+  // preceding key/call by raw text index?" — with no brace/scope awareness.
+  // That silently DROPPED legitimate tools: one tool's `inputSchema.properties`
+  // key became the "nearest preceding key" for every later tool in the same
+  // array, and an unrelated `.addPrompt(...)` call earlier in the file became
+  // the "nearest preceding call" for the entire rest of the tool surface.
+  // Losing real tools is worse than the over-extraction the guards were meant
+  // to prevent.
+  //
+  // Replaced with POSITIVE, scope-aware containment: a candidate is accepted
+  // only if it is genuinely reachable from a tool-registration context,
+  // computed via real brace/paren-balanced spans (not text-index proximity)
+  // — see acceptedToolSpans. A resource-shape check (uri/uriTemplate/
+  // mimeType) remains as a cheap secondary safety net, applied only to
+  // already-accepted candidates. See acceptedCandidateObjectText above.
+  //
+  // W3 (R5b): entry gate widened. It used to require one of
+  // ListToolsRequestSchema / a fastmcp import / a literal '.addTool(' before
+  // even computing acceptedSpans — olostep's `.registerTool(` (and, more
+  // generally, any file whose ONLY tool evidence is an R1 object-const or an
+  // R4 factory array, neither of which implies any of those three strings)
+  // matched none of them, so the whole positive-containment scan below never
+  // ran even though acceptedToolSpans() was fully capable of finding it.
+  // acceptedSpans is now computed unconditionally and its own non-emptiness
+  // is the general-purpose gate condition — positive containment already IS
+  // the proof that a registration context exists, so the old three checks
+  // are logically redundant with it; they're kept (plus the two new literal
+  // checks) only as a cheap, harmless short-circuit for the common cases.
+  const acceptedSpans = acceptedToolSpans(f.content)
+  if (
+    f.content.includes('ListToolsRequestSchema') ||
+    FASTMCP_IMPORT_RE.test(f.content) ||
+    f.content.includes('.addTool(') ||
+    f.content.includes('.registerTool(') ||
+    f.content.includes('.tool(') ||
+    f.content.includes('defineTool(') ||
+    acceptedSpans.length > 0
+  ) {
     for (const m of f.content.matchAll(/name:\s*["'`]([\w-]+)["'`]/g)) {
       if (tools.some(t => t.name === m[1])) continue
-      const span = enclosingObjectSpan(f.content, m.index)
-      if (!span) continue
-      const objText = f.content.slice(span[0], span[1] + 1)
-      if (!SIBLING_RE.test(objText)) continue
-      // Positive containment: the candidate must fall inside a registration
-      // call's argument span, a `tools:` value span, or a /tool/i-named
-      // array literal — see acceptedToolSpans. Additionally (Fix 2), it must
-      // NOT be nested under a properties:/arguments:/inputSchema:/parameters:
-      // sub-key WITHIN that same accepted span — see isNestedUnderExcludedKey.
-      if (!acceptedSpans.some(([s, e]) =>
-        m.index >= s && m.index <= e && !isNestedUnderExcludedKey(f.content, span, s)
-      )) continue
-      // Safety net: tools never carry uri/uriTemplate/mimeType fields —
-      // those are resource/prompt-specific, even for an otherwise-accepted
-      // candidate (e.g. a stray resource object mixed into a tools array).
-      if (RESOURCE_SHAPE_RE.test(objText)) continue
+      const objText = acceptedCandidateObjectText(f.content, m.index, acceptedSpans)
+      if (objText === undefined) continue
       tools.push({ name: m[1], schemaText: objText })
+    }
+
+    // W3 (R1b): `name:` is an identifier rather than a string literal
+    // (figwright's `name: PING_TOOL_NAME`) — resolve it via a same-file
+    // scalar const. Same acceptance logic (span/sibling/containment/
+    // resource-shape) as the literal-name loop above, via
+    // acceptedCandidateObjectText; only the name SOURCE differs.
+    for (const m of f.content.matchAll(/\bname\s*:\s*([A-Za-z_$][\w$]*)\s*[,}]/g)) {
+      const resolved = resolveScalarConst(f.content, m[1])
+      if (resolved === undefined) continue
+      if (tools.some(t => t.name === resolved)) continue
+      const objText = acceptedCandidateObjectText(f.content, m.index, acceptedSpans)
+      if (objText === undefined) continue
+      tools.push({ name: resolved, schemaText: objText })
     }
   }
 
