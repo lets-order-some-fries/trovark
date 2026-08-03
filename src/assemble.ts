@@ -10,6 +10,7 @@ import { specEra } from './derive/specEra.js'
 import { extractSchema } from './derive/schema.js'
 import { classifyLibrary } from './derive/classify.js'
 import { scanSecrets } from './derive/secrets.js'
+import { scanIntegrity } from './derive/integrity.js'
 import { parseLockfile } from './derive/lockfile.js'
 
 const days = (fromIso: string, now: Date) =>
@@ -95,6 +96,16 @@ export async function assemble(
         const secrets = scanSecrets(snap.files)
         s.secretsFound = secrets.count
         s.findings.push(...secrets.findings)
+        // D1 (integrity-v1): findings-only, provably zero grade effect (see
+        // score.ts / src/scoring/rubric.ts — nothing reads s.integrityHits).
+        // Gated on the same snap.treePaths branch as everything else above,
+        // so "absence != clean" holds: if this branch didn't run,
+        // integrityHits stays undefined and report/terminal.ts prints "not
+        // checked" rather than a false "clean".
+        const integrity = scanIntegrity(snap.files, schema.tools)
+        s.findings.push(...integrity.findings)
+        s.integrityHits = integrity.hits
+        s.integrityScanned = integrity.scanned
       } else {
         s.errors.push('github: file tree unavailable; repo-content signals skipped')
       }

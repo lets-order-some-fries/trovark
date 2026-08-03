@@ -1771,3 +1771,34 @@ describe('extractSchema — surfacePartial (W5)', () => {
     expect(r.surfacePartial).toBe(true)
   })
 })
+
+describe('extractSchema (D1 integrity-v1, trap #6): evidence is retained on returned tools, but never leaks into schemaTokenEstimate', () => {
+  it('r.tools now carries evidence (D1 needs it to cite each hit\'s source file)', () => {
+    const r = extractSchema([{
+      path: 'mcp.json',
+      content: JSON.stringify({ tools: [{ name: 'add_numbers', description: 'Add two numbers' }] }),
+    }])
+    expect(r.extracted).toBe(true)
+    expect(r.tools[0].evidence).toBe('mcp.json')
+  })
+
+  it('schemaTokenEstimate is byte-identical to the pre-trap-6 formula (evidence stripped before stringify), regardless of tools[] carrying it', async () => {
+    const { encode } = await import('gpt-tokenizer')
+    const files = [{
+      path: 'mcp.json',
+      content: JSON.stringify({ tools: [
+        { name: 'search_docs', description: 'Search documentation' },
+        { name: 'run_command', description: 'Execute a shell command', inputSchema: { type: 'object' } },
+      ] }),
+    }]
+    const r = extractSchema(files)
+    expect(r.extracted).toBe(true)
+    // Recompute independently from ONLY the name/description/schemaText a
+    // consumer is meant to token-cost — if `evidence` (or any other field)
+    // ever leaks into the real schemaTokenEstimate, this diverges and every
+    // cost score in the index would have silently shifted.
+    const canonical = r.tools.map(t => ({ name: t.name, description: t.description, schemaText: t.schemaText }))
+    const expected = encode(JSON.stringify(canonical)).length
+    expect(r.schemaTokenEstimate).toBe(expected)
+  })
+})

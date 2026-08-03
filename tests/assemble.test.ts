@@ -88,6 +88,10 @@ describe('assemble', () => {
     expect(s.weeklyDownloads).toBe(2000)
     expect(s.cveWorst).toBe('none')
     expect(s.errors).toEqual([])
+    // D1 (integrity-v1): wired alongside scanSecrets — a real scan (files
+    // WERE fetched) always sets integrityHits (even to []) and scanned{}.
+    expect(s.integrityHits).toEqual([])
+    expect(s.integrityScanned).toEqual({ files: 2, chars: expect.any(Number), tools: 1 })
   })
   it('a failing collector degrades gracefully into errors[], never throws', async () => {
     const http = fullFake()

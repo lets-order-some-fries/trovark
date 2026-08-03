@@ -26,6 +26,10 @@ export interface IndexEntry {
   dims?: Record<'health' | 'reliability' | 'security' | 'cost', { score: number; confidence: string }>
   topFindings?: Array<{ id: string; severity: string }>
   daysSinceLastCommit?: number
+  // D1 (integrity-v1): undefined when not checked (no files fetched) — same
+  // absence != clean discipline as Scorecard.integrityHits. Stats (below)
+  // are deliberately left untouched for now; this is a per-entry count only.
+  integrity?: { payloads: number; observations: number }
 }
 
 export interface IndexStats {
@@ -97,6 +101,10 @@ function toEntry(ref: string, card: Scorecard, daysSinceLastCommit?: number): In
     repoUrl: card.resolved?.repo ? `https://github.com/${card.resolved.repo.owner}/${card.resolved.repo.name}` : undefined,
     dims, topFindings: findings.length > 0 ? findings : undefined,
     daysSinceLastCommit,
+    integrity: card.integrityHits ? {
+      payloads: card.integrityHits.filter(h => h.kind === 'hidden-payload').length,
+      observations: card.integrityHits.filter(h => h.kind !== 'hidden-payload').length,
+    } : undefined,
   }
 }
 

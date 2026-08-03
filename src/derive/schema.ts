@@ -7,7 +7,12 @@ import { fromOpenApi, fromToolDefinitions } from './openapi.js'
 
 export interface SchemaResult {
   extracted: boolean
-  tools: ToolInfo[]
+  // D1 (integrity-v1, trap #6): evidence (the source file each tool was
+  // extracted from) is retained here — D1 (src/derive/integrity.ts) cites it
+  // so a tool-surface hit can point at the file it came from. It must NOT
+  // leak into schemaTokenEstimate's JSON.stringify (see the return
+  // statement below) or every cost score in the index would shift.
+  tools: Array<ToolInfo & { evidence: string }>
   toolSurfaceRisk: 'none' | 'low' | 'medium' | 'high' | undefined
   schemaTokenEstimate: number | undefined
   findings: Finding[]
@@ -1324,7 +1329,12 @@ export function extractSchema(files: RepoFile[], treePaths?: string[], toolFanou
 
   return {
     extracted: true,
-    tools: tools.map(({ evidence: _e, ...t }) => t),
+    // D1 (integrity-v1, trap #6): evidence is now RETAINED here (D1 needs it
+    // to cite each tool's source file) — but schemaTokenEstimate below
+    // MUST keep stripping it via the same destructure, or every cost score
+    // in the index would shift the moment a tool carries an `evidence`
+    // field. See tests/schema.test.ts's byte-identical regression test.
+    tools,
     toolSurfaceRisk: worst,
     schemaTokenEstimate: encode(JSON.stringify(tools.map(({ evidence: _e, ...t }) => t))).length,
     findings,
