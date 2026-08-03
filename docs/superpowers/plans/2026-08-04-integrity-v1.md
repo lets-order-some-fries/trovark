@@ -74,3 +74,14 @@ Canopii indexes 38× more servers; Snyk has a cloud LLM backend and 93.2% claime
 
 ## Explicitly NOT building (skeptic's rejections, recorded so we don't relitigate)
 Tool-poisoning *classification* from description text; homoglyph/confusable detection (fires on legitimate non-Latin names); token-passthrough detection (needs interprocedural taint analysis; absence of visible validation ≠ anti-pattern); command-injection SAST (fires on every server that legitimately shells out); rug-pull-as-security-finding (a description change is overwhelmingly a docs fix — publishing it as a security finding accuses every maintainer who fixes a typo); blanket Cf/Cc unicode flagging (fires on Microsoft's own TypeScript stdlib).
+
+---
+
+## Threshold clarifications (recorded during implementation, BEFORE any corpus run)
+
+The pre-registered text said a run must "decode to ≥2 printable-ASCII chars". That was ambiguous about mixed output. Implementation resolved it in the **stricter** direction, recorded here before any data was observed:
+
+1. **A decode succeeds only if EVERY decoded byte is printable AND there are ≥2 of them.** (Not "≥2 of many".) Rationale: a partially-printable decode is noise, and for a differentiator whose entire claim is precision, the stricter reading is correct. This can only reduce findings, never inflate them.
+2. **Two distinct observation ids** — `security/invisible-chars-observed` and `security/bidi-override-observed` — rather than one shared id, so the two are separable in the published data. Neither is a "payload" finding.
+
+Both changes are precision-increasing and were made before the corpus audit, not in response to it.
