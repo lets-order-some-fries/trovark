@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { extractSchema } from '../src/derive/schema.js'
+import { extractSchema, hasPythonToolRegistrationSurface } from '../src/derive/schema.js'
 
 describe('extractSchema ladder', () => {
   it('level 1: reads tools from mcp.json manifest', () => {
@@ -1130,6 +1130,91 @@ for (const t of toolDefs) server.addTool(t)
   })
 })
 
+// W4 (coverage-v1.4, Part B): a reviewer verified that EXCLUDED_NESTED_KEYS
+// (an allowlist of 4 keys: properties/arguments/inputSchema/parameters) is
+// inherently incomplete — any OTHER non-tool key nested inside an accepted
+// tool span (e.g. a `metadata:` bag) still lets a nested {name,description}
+// object fabricate a second, phantom tool. Replaced with a principled,
+// depth-based rule: a candidate is accepted only when its `name:` sits at
+// the accepted span's OWN top-level object (depth 0, when the span opens
+// with `{` — a resolved const-object arg, an R1 object-const, a `tools: {}`
+// value), or as a direct array/call-arg ELEMENT one bracket in from the
+// span's own `[`/`(` opener (depth 1 — a `tools:` array, a tool-named array
+// literal, or a registration call's argument list). Anything strictly
+// deeper is rejected, for ANY key name — not just the 4 previously
+// enumerated ones.
+describe('W4 (coverage-v1.4, Part B): depth-based rejection of nested non-tool sub-objects (replaces the 4-key allowlist)', () => {
+  it('FABRICATION (reviewer-verified): a metadata:{name,description} nested inside an accepted addTool call no longer produces a second tool', () => {
+    const r = extractSchema([{
+      path: 'src/index.ts',
+      content: `
+server.addTool({ name:'outer_tool', description:'d', metadata:{ name:'inner_meta_name', description:'d' } })
+`,
+    }])
+    expect(r.tools.map(t => t.name)).toEqual(['outer_tool'])
+  })
+
+  it('a metadata:{name,description} nested inside an R1 object-const tool span is likewise rejected (not just the addTool-call shape)', () => {
+    const r = extractSchema([{
+      path: 'src/tools/search.ts',
+      content: `
+const searchTool = {
+  name: 'search',
+  description: 'Search the web',
+  metadata: { name: 'nested_name', description: 'Not a real tool' },
+}
+`,
+    }])
+    expect(r.tools.map(t => t.name)).toEqual(['search'])
+  })
+
+  it('REGRESSION: a real tools ARRAY still extracts both direct elements (array elements are depth 1, not rejected)', () => {
+    const r = extractSchema([{
+      path: 'src/index.ts',
+      content: `
+const toolDefs = [
+  { name: 'a', description: 'd' },
+  { name: 'b', description: 'd' },
+]
+for (const t of toolDefs) server.addTool(t)
+`,
+    }])
+    expect(r.tools.map(t => t.name).sort()).toEqual(['a', 'b'])
+  })
+
+  it('REGRESSION: a simple server.addTool({name,description}) with no nesting still extracts', () => {
+    const r = extractSchema([{
+      path: 'src/index.ts',
+      content: `server.addTool({name:'x',description:'d'})`,
+    }])
+    expect(r.tools.map(t => t.name)).toEqual(['x'])
+  })
+
+  it('REGRESSION: the existing properties:/parameters: nested-key cases still reject the nested candidate (allowlist replaced, not weakened)', () => {
+    const r1 = extractSchema([{
+      path: 'src/index.ts',
+      content: `
+server.addTool({name:'outer_tool',description:'d',inputSchema:{properties:{filter:{name:'inner_name_field',description:'...',type:'string'}}}})
+`,
+    }])
+    expect(r1.tools.map(t => t.name)).toEqual(['outer_tool'])
+
+    const r2 = extractSchema([{
+      path: 'src/index.ts',
+      content: `
+server.addTool({
+  name: 'outer_tool2',
+  description: 'd',
+  parameters: [
+    { name: 'username', type: 'string', description: 'd' },
+  ],
+})
+`,
+    }])
+    expect(r2.tools.map(t => t.name)).toEqual(['outer_tool2'])
+  })
+})
+
 // V5 (coverage-spec §3.4 Python): serena's class-subclass idiom and
 // awslabs' call-decorator idiom, plus the register_*_tools surface signal
 // (which must never fabricate a tool — see the GUARD test below and the
@@ -1205,5 +1290,432 @@ class FooTool(Base):
     }])
     expect(r.extracted).toBe(false)
     expect(r.tools).toEqual([])
+  })
+})
+
+// W4 (coverage-v1.4): Python idiom pack 2 (spec §3 R2) — replaces the
+// imperative matcher to handle LEADING POSITIONAL ARGS (qdrant's
+// `self.add_tool(self.find, name="qdrant-find", ...)`, where the old regex
+// anchored `add_tool(` directly to `name=` and could never skip a leading
+// positional) and F-STRING name values (gget-mcp's `name=f"{prefix}gget_ref"`
+// — the `f?["'](?:\{[^}]*\})?` prefix skips the `f"` marker and any leading
+// `{...}` interpolation, capturing the literal tail). Also widens
+// PY_CALL_DECORATOR_RE's receiver beyond a bare `mcp.` and widens the
+// registration-surface signal beyond the single `register_X_tools(` shape.
+describe('W4 (coverage-v1.4): Python idiom pack 2 — positional-arg imperative, f-string names, wider decorators/registration-surface', () => {
+  it('qdrant-style: self.add_tool(self.find, name="qdrant-find", description="Find memories") -> qdrant-find (leading positional arg skipped)', () => {
+    const r = extractSchema([{
+      path: 'src/mcp_server_qdrant/mcp_server.py',
+      content: `
+self.add_tool(self.find, name="qdrant-find", description="Find memories")
+self.add_tool(self.store, name="qdrant-store", description="Store memories")
+`,
+    }])
+    expect(r.extracted).toBe(true)
+    expect(r.tools.map(t => t.name).sort()).toEqual(['qdrant-find', 'qdrant-store'])
+    expect(r.tools.find(t => t.name === 'qdrant-find')?.description).toBe('Find memories')
+  })
+
+  it('gget-mcp-style: name=f"{prefix}gget_ref" (f-string with a leading interpolation) resolves to the literal tail gget_ref', () => {
+    const r = extractSchema([{
+      path: 'src/gget_mcp/server.py',
+      content: `self.add_tool(self.gget_ref, name=f"{prefix}gget_ref", description="Get gene reference")`,
+    }])
+    expect(r.extracted).toBe(true)
+    expect(r.tools.map(t => t.name)).toEqual(['gget_ref'])
+  })
+
+  it('self.tool() call-decorator form: self.tool()(self.find_memories) -> find_memories (widened receiver, not just bare mcp.)', () => {
+    const r = extractSchema([{
+      path: 'src/server.py',
+      content: `self.tool()(self.find_memories)`,
+    }])
+    expect(r.extracted).toBe(true)
+    expect(r.tools.map(t => t.name)).toEqual(['find_memories'])
+  })
+
+  it('regression: bare mcp.tool()(...) call-decorator form (awslabs) still works after widening the receiver class', () => {
+    const r = extractSchema([{
+      path: 'src/awslabs/server.py',
+      content: `mcp.tool()(docs.search_agentcore_docs)`,
+    }])
+    expect(r.tools.map(t => t.name)).toEqual(['search_agentcore_docs'])
+  })
+
+  it('GUARD: a tool(...)/add_tool(...) call with NO name= kwarg emits no tool (the name= literal anchor prevents fabrication)', () => {
+    const r = extractSchema([{
+      path: 'src/server.py',
+      content: `mcp.add_tool(some_fn)`,
+    }])
+    expect(r.extracted).toBe(false)
+    expect(r.tools).toEqual([])
+  })
+
+  it('wider registration-surface signal: setup_tools(mcp) / add_search_tools(mcp) are detected as an MCP-tool-registration surface (widened beyond register_X_tools)', () => {
+    expect(hasPythonToolRegistrationSurface([{ path: 'src/server.py', content: 'def setup(mcp):\n    setup_tools(mcp)\n' }])).toBe(true)
+    expect(hasPythonToolRegistrationSurface([{ path: 'src/server.py', content: 'def setup(mcp):\n    add_search_tools(mcp)\n' }])).toBe(true)
+  })
+
+  it('regression: the original register_search_tools(mcp) shape is still detected by the widened registration-surface signal', () => {
+    expect(hasPythonToolRegistrationSurface([{ path: 'src/server.py', content: 'register_search_tools(mcp)' }])).toBe(true)
+  })
+
+  it('the registration-surface signal never emits a fake tool on its own — extractSchema still returns nothing for a bare setup_tools(mcp) call', () => {
+    const r = extractSchema([{ path: 'src/server.py', content: 'def setup(mcp):\n    setup_tools(mcp)\n' }])
+    expect(r.extracted).toBe(false)
+    expect(r.tools).toEqual([])
+  })
+})
+
+describe('W2 (coverage-v1.4): prefixed openapi/swagger basenames + tools.json manifest', () => {
+  it('extracts operationIds from a prefixed notion-style basename (scripts/notion-openapi.json)', () => {
+    const content = JSON.stringify({
+      openapi: '3.0.0',
+      paths: {
+        '/v1/search': { post: { operationId: 'post-search', summary: 'Search' } },
+        '/v1/users/me': { get: { operationId: 'get-self', summary: 'Get current user' } },
+      },
+    })
+    const r = extractSchema([{ path: 'scripts/notion-openapi.json', content }])
+    expect(r.extracted).toBe(true)
+    expect(r.tools.map(t => t.name).sort()).toEqual(['get-self', 'post-search'])
+  })
+
+  it('GUARD: fixture/example spec paths are still excluded from extraction (non-server paths)', () => {
+    const content = JSON.stringify({ openapi: '3.0.0', paths: { '/x': { get: { operationId: 'x' } } } })
+    expect(extractSchema([{ path: '__tests__/fixture-openapi.json', content }]).extracted).toBe(false)
+    expect(extractSchema([{ path: 'examples/openapi.json', content }]).extracted).toBe(false)
+  })
+
+  it('regression: plain openapi.json (no prefix) still extracts', () => {
+    const content = JSON.stringify({ openapi: '3.0.0', paths: { '/ping': { get: { operationId: 'ping' } } } })
+    const r = extractSchema([{ path: 'openapi.json', content }])
+    expect(r.tools.map(t => t.name)).toEqual(['ping'])
+  })
+
+})
+
+// W3 (coverage-v1.4): TS idiom pack 2 — object-const tool literals (R1),
+// scalar-const name resolution (R1b), lowercase wrapper identifiers (R3),
+// factory-returned arrays (R4), and sibling-key/entry-gate relaxation (R5).
+// Every snippet is shaped after the real repo named in its title (verified
+// live against browserbase/mcp-server-browserbase, brave/brave-search-mcp-server,
+// executeautomation/mcp-playwright, and awdr74100/figwright).
+describe('W3 (coverage-v1.4): TS idiom pack 2 — object-const, scalar-const names, factory arrays, wrapper idents', () => {
+  it('R1: browserbase-style const typed `: ToolSchema<...>` (identifier has no "tool" token at all) is extracted via the type annotation', () => {
+    const r = extractSchema([{
+      path: 'src/tools/act.ts',
+      content: `
+import type { Tool, ToolSchema } from './tool.js'
+
+const actSchema: ToolSchema<typeof ActInputSchema> = {
+  name: 'act',
+  description: 'Perform an action on the page',
+  inputSchema: ActInputSchema,
+}
+
+const actTool: Tool<typeof ActInputSchema> = {
+  capability: 'core',
+  schema: actSchema,
+  handle: handleAct,
+}
+
+export default actTool
+`,
+    }])
+    expect(r.extracted).toBe(true)
+    expect(r.tools.map(t => t.name)).toEqual(['act'])
+  })
+
+  it('R1: a plain `const searchTool = {...}` (identifier tokenizes to "tool", no type annotation needed) is extracted', () => {
+    const r = extractSchema([{
+      path: 'src/tools/search.ts',
+      content: `
+const searchTool = {
+  name: 'search',
+  description: 'Search the web for results',
+}
+`,
+    }])
+    expect(r.extracted).toBe(true)
+    expect(r.tools.map(t => t.name)).toEqual(['search'])
+  })
+
+  it('R1 GUARD: an unrelated `const config = {name,description}` (no tool token, no Tool type) is NOT extracted', () => {
+    const r = extractSchema([{
+      path: 'src/config.ts',
+      content: `
+const config = {
+  name: 'x',
+  description: 'y',
+}
+`,
+    }])
+    expect(r.extracted).toBe(false)
+    expect(r.tools).toEqual([])
+  })
+
+  it('R1b: figwright-style `name: PING_TOOL_NAME` (identifier, not a string literal) resolves via a same-file scalar const', () => {
+    const r = extractSchema([{
+      path: 'packages/mcp/src/tools/ping.ts',
+      content: `
+export const PING_TOOL_NAME = 'ping';
+
+export const pingTool = {
+  name: PING_TOOL_NAME,
+  description: 'Health check.',
+  inputShape: {},
+  kind: 'read',
+};
+`,
+    }])
+    expect(r.extracted).toBe(true)
+    expect(r.tools.map(t => t.name)).toEqual(['ping'])
+  })
+
+  it('R3: brave-style lowercase wrapper identifier (mcpServer.registerTool(name, {...})) resolves via a same-file scalar const', () => {
+    const r = extractSchema([{
+      path: 'src/tools/web/index.ts',
+      content: `
+export const name = 'brave_web_search';
+export const description = 'Performs web searches using the Brave Search API.';
+
+export const register = (mcpServer) => {
+  mcpServer.registerTool(
+    name,
+    {
+      title: name,
+      description: description,
+      inputSchema: params.shape,
+    },
+    execute
+  );
+};
+`,
+    }])
+    expect(r.extracted).toBe(true)
+    expect(r.tools.map(t => t.name)).toEqual(['brave_web_search'])
+  })
+
+  it('R3 GUARD: an unresolvable lowercase wrapper identifier still emits no tool (widened character class does not fabricate)', () => {
+    const r = extractSchema([{
+      path: 'src/tools/mystery.ts',
+      content: `server.registerTool(mysteryName, { description: 'Does something' })`,
+    }])
+    expect(r.extracted).toBe(false)
+    expect(r.tools).toEqual([])
+  })
+
+  it('R4: a factory function returning an array of 6 tools (>4000 chars) proves the 400k captureBalanced limit, not the 4000 default', () => {
+    const longDesc = 'Lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor. '.repeat(20)
+    const toolNames = ['alpha_tool', 'beta_tool', 'gamma_tool', 'delta_tool', 'epsilon_tool', 'zeta_tool']
+    const body = toolNames.map(n => `    {
+      name: "${n}",
+      description: "${longDesc}",
+      inputSchema: { type: "object", properties: {} },
+    },`).join('\n')
+    const content = `
+import type { Tool } from "@modelcontextprotocol/sdk/types.js"
+
+function createToolDefinitions() {
+  return [
+${body}
+  ]
+}
+`
+    expect(content.length).toBeGreaterThan(4000)
+    const r = extractSchema([{ path: 'src/tools.ts', content }])
+    expect(r.extracted).toBe(true)
+    expect(r.tools.map(t => t.name).sort()).toEqual([...toolNames].sort())
+  })
+
+  it('R5: .registerTool( entry point + a `schema:` sibling (olostep-style, not inputSchema) is extracted — entry-gate widening + SIBLING_RE gaining `schema`', () => {
+    const r = extractSchema([{
+      path: 'src/tools/scrapeWebsite.ts',
+      content: `
+server.registerTool({
+  name: 'scrape_website',
+  schema: { url: 'string' },
+})
+`,
+    }])
+    expect(r.extracted).toBe(true)
+    expect(r.tools.map(t => t.name)).toEqual(['scrape_website'])
+  })
+
+  it('GUARD: a nested properties:{filter:{name,description}} inside a real tool is still not extracted as a second tool', () => {
+    const r = extractSchema([{
+      path: 'src/index.ts',
+      content: `
+server.addTool({
+  name: 'outer_tool',
+  description: 'd',
+  inputSchema: { properties: { filter: { name: 'inner_name_field', description: 'd', type: 'string' } } },
+})
+`,
+    }])
+    expect(r.tools.map(t => t.name)).toEqual(['outer_tool'])
+  })
+
+  it('GUARD: `const toolbarItems = [...]` still does not fabricate tools (identifier-boundary rule, unaffected by W3)', () => {
+    const r = extractSchema([{
+      path: 'src/index.ts',
+      content: `
+import { FastMCP } from 'fastmcp'
+server.addTool({ name: 'real_tool', description: 'A real tool' })
+const toolbarItems = [
+  { name: 'save', description: 'Save' },
+]
+`,
+    }])
+    expect(r.tools.map(t => t.name)).toEqual(['real_tool'])
+  })
+})
+
+describe('W2 (coverage-v1.4 continued): manifest basename tests', () => {
+  it('a tools.json manifest ({tools:[...]} shape) is parsed (olostep-style)', () => {
+    const r = extractSchema([{
+      path: 'tools.json',
+      content: JSON.stringify({ tools: [{ name: 'search_web', description: 'Search the web' }] }),
+    }])
+    expect(r.tools.map(t => t.name)).toEqual(['search_web'])
+  })
+
+  it('a tools.json manifest (bare top-level array shape) is also parsed', () => {
+    const r = extractSchema([{
+      path: 'tools.json',
+      content: JSON.stringify([{ name: 'list_pages', description: 'List pages' }]),
+    }])
+    expect(r.tools.map(t => t.name)).toEqual(['list_pages'])
+  })
+
+  it('GUARD: an unrelated "tools" field in package.json still does NOT fabricate tools', () => {
+    const r = extractSchema([{
+      path: 'package.json',
+      content: JSON.stringify({ name: 'my-cli-app', tools: [{ name: 'dev', description: 'dev launcher' }] }),
+    }])
+    expect(r.extracted).toBe(false)
+    expect(r.tools).toEqual([])
+  })
+
+  it('GUARD: a random config.json is not treated as a manifest or spec', () => {
+    const r = extractSchema([{
+      path: 'config.json',
+      content: JSON.stringify({ openapi: '3.0.0', paths: { '/x': { get: { operationId: 'x' } } } }),
+    }])
+    expect(r.extracted).toBe(false)
+    expect(r.tools).toEqual([])
+  })
+})
+
+describe('coverage-v1.4 (bracket-scanning fix): captureBalanced/bracketDepthAt/enclosingObjectSpan are now string- and comment-aware', () => {
+  it('FABRICATION: a stray `}` inside a description no longer fabricates a nested metadata object as a phantom tool', () => {
+    const r = extractSchema([{
+      path: 'src/index.ts',
+      content: `
+server.addTool({ name:'real_tool', description:'unbalanced } here', metadata:{ name:'phantom', description:'d' } })
+`,
+    }])
+    expect(r.tools.map(t => t.name)).toEqual(['real_tool'])
+  })
+
+  it('FABRICATION: a stray `]` inside a description does not desync the unified bracket-depth counter either', () => {
+    const r = extractSchema([{
+      path: 'src/index.ts',
+      content: `
+server.addTool({ name:'real_tool', description:'unbalanced ] here', metadata:{ name:'phantom', description:'d' } })
+`,
+    }])
+    expect(r.tools.map(t => t.name)).toEqual(['real_tool'])
+  })
+
+  it('FABRICATION: a stray `)` inside a description does not desync the unified bracket-depth counter either', () => {
+    const r = extractSchema([{
+      path: 'src/index.ts',
+      content: `
+server.addTool({ name:'real_tool', description:'unbalanced ) here', metadata:{ name:'phantom', description:'d' } })
+`,
+    }])
+    expect(r.tools.map(t => t.name)).toEqual(['real_tool'])
+  })
+
+  it('COVERAGE: a stray `{` inside a description no longer truncates captureBalanced (single-tool case)', () => {
+    const r = extractSchema([{
+      path: 'src/index.ts',
+      content: `server.addTool({ name:'a', description:'contains { stray brace' })`,
+    }])
+    expect(r.tools.map(t => t.name)).toEqual(['a'])
+  })
+
+  it('COVERAGE: a stray `{` in one array tool no longer swallows a later real tool in the same array', () => {
+    const r = extractSchema([{
+      path: 'src/index.ts',
+      content: `
+const toolDefs = [
+  { name: 'a', description: 'has { brace' },
+  { name: 'b', description: 'd' },
+]
+for (const t of toolDefs) server.addTool(t)
+`,
+    }])
+    expect(r.tools.map(t => t.name).sort()).toEqual(['a', 'b'])
+  })
+
+  it('COVERAGE: a backslash-escaped quote inside a description does not desync string-boundary detection for a later tool', () => {
+    const r = extractSchema([{
+      path: 'src/index.ts',
+      content: `
+const toolDefs = [
+  { name: 'a', description: 'it\\'s fine }' },
+  { name: 'b', description: 'plain' },
+]
+for (const t of toolDefs) server.addTool(t)
+`,
+    }])
+    expect(r.tools.map(t => t.name).sort()).toEqual(['a', 'b'])
+  })
+
+  it('COMMENT SAFETY: a commented-out addTool call is not extracted as a tool', () => {
+    const r = extractSchema([{
+      path: 'src/index.ts',
+      content: `
+// server.addTool({name:'commented_out'})
+server.addTool({ name: 'real_tool', description: 'A real tool' })
+`,
+    }])
+    expect(r.tools.map(t => t.name)).toEqual(['real_tool'])
+  })
+
+  it('COMMENT SAFETY: a block comment containing an unbalanced brace does not desync a later real tool in the same array', () => {
+    const r = extractSchema([{
+      path: 'src/index.ts',
+      content: `
+const toolDefs = [
+  { name: 'a', description: 'd' },
+  /* legacy note: single stray brace { without a match */
+  { name: 'b', description: 'd' },
+]
+for (const t of toolDefs) server.addTool(t)
+`,
+    }])
+    expect(r.tools.map(t => t.name).sort()).toEqual(['a', 'b'])
+  })
+
+  // Found live (not in the original fix spec): the first cut of the
+  // comment-safety lexer treated ANY bare `/` as a potential comment start
+  // and, if it turned out not to be one (division, a regex literal), broke
+  // out of its "plain code" scan without advancing — an infinite loop that
+  // hung on real-world source (executeautomation/mcp-playwright) until
+  // `stripComments`'s array-builder overflowed with `RangeError: Invalid
+  // array length`. Locking this in so it can't regress silently.
+  it('REGRESSION: a bare `/` (division, not a comment) does not hang or desync the scanner', () => {
+    const r = extractSchema([{
+      path: 'src/index.ts',
+      content: `
+const half = 10 / 2
+server.addTool({ name: 'real_tool', description: 'divides a / b' })
+`,
+    }])
+    expect(r.tools.map(t => t.name)).toEqual(['real_tool'])
   })
 })

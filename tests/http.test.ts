@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest'
-import { createHttp } from '../src/util/http.js'
+import { createHttp, HttpError } from '../src/util/http.js'
 
 const ok = (body: unknown) => new Response(JSON.stringify(body), { status: 200 })
 
@@ -22,6 +22,22 @@ describe('createHttp', () => {
     const http = createHttp({ fetchImpl: fetchImpl as unknown as typeof fetch, retries: 2 })
     await expect(http.json('https://x.test/')).rejects.toThrow('404')
     expect(fetchImpl).toHaveBeenCalledTimes(1)
+  })
+  // W1: a typed status lets callers (e.g. collectGithub) distinguish "repo
+  // gone (404)" from other failures without parsing the message string.
+  it('throws a typed HttpError carrying the numeric status on a non-retryable failure', async () => {
+    const fetchImpl = vi.fn(async () => new Response('', { status: 404 }))
+    const http = createHttp({ fetchImpl: fetchImpl as unknown as typeof fetch, retries: 2 })
+    await expect(http.json('https://x.test/repo')).rejects.toBeInstanceOf(HttpError)
+    const err = await http.json('https://x.test/repo').catch(e => e as HttpError)
+    expect(err.status).toBe(404)
+  })
+  it('throws a typed HttpError on a retry-exhausted 5xx too', async () => {
+    const fetchImpl = vi.fn(async () => new Response('', { status: 503 }))
+    const http = createHttp({ fetchImpl: fetchImpl as unknown as typeof fetch, retries: 1 })
+    const err = await http.json('https://x.test/').catch(e => e as HttpError)
+    expect(err).toBeInstanceOf(HttpError)
+    expect(err.status).toBe(503)
   })
   it('sends GitHub token only to api.github.com', async () => {
     const fetchImpl = vi.fn(async () => ok({}))

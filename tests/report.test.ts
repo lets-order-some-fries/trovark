@@ -85,3 +85,21 @@ describe('renderTerminal — notServer (V2): rendered distinctly from INSUFFICIE
     expect(out).toContain('SDK/framework that defines the tool-registration API')
   })
 })
+
+describe('renderTerminal — unresolved repo (W1): rendered distinctly, never as a graded F', () => {
+  const unresolvedCard: Scorecard = {
+    ...card, overall: null, grade: null, insufficientData: false, unresolved: true,
+    notes: ['Repository could not be resolved on GitHub (404) — no grade to report.'],
+  }
+  it('shows a distinct "REPO UNAVAILABLE" banner, not INSUFFICIENT DATA and not a Trust Score', () => {
+    const out = renderTerminal(unresolvedCard, { color: false })
+    expect(out).toMatch(/repo unavailable/i)
+    expect(out).not.toContain('INSUFFICIENT DATA')
+    expect(out).not.toContain('Trust Score:')
+    expect(out).not.toMatch(/\(F\)/)
+  })
+  it('still shows the explanatory note', () => {
+    const out = renderTerminal(unresolvedCard, { color: false })
+    expect(out).toContain('could not be resolved')
+  })
+})

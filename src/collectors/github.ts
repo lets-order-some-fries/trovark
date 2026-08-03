@@ -1,7 +1,24 @@
-import type { Http } from '../util/http.js'
+import { HttpError, type Http } from '../util/http.js'
 import type { ServerIdentity } from '../resolver.js'
 
 export interface RepoFile { path: string; content: string }
+
+// W1 (coverage-v1.4, correctness fix): a 404 fetching repo METADATA means the
+// repo itself is gone (deleted, renamed past any redirect, or never existed)
+// — distinct from every other collectGithub failure mode (network blip, 403,
+// 5xx), all of which already degrade gracefully via assemble.ts's generic
+// `errors[]` path. A plain Error can't be told apart from those; this type
+// lets assemble.ts mark the result `unresolved` instead of scoring a
+// degenerate all-zero card as a real (F-grade) outcome. See http.ts's
+// `HttpError` (carries the numeric status) and the redirect note on
+// `createHttp` — a renamed repo's 301 is already followed transparently by
+// fetch, so a 404 here means genuinely gone, not "one hop short".
+export class RepoNotFoundError extends Error {
+  constructor(owner: string, name: string) {
+    super(`GitHub repo not found: ${owner}/${name} (404 — deleted, renamed with no redirect, or never existed)`)
+    this.name = 'RepoNotFoundError'
+  }
+}
 
 export interface RepoSnapshot {
   owner: string; name: string; defaultBranch: string
@@ -74,8 +91,30 @@ const LOCKFILES = new Set(['package-lock.json', 'uv.lock', 'poetry.lock'])
 // case-insensitive on openapi/swagger (toolDefinitions.json is matched
 // exact-case, per its one real-world spelling). Capped at 2 slots (below)
 // so it can never starve the ranked SOURCE bucket the way manifests used to.
-const SPEC_BASENAME_RE = /^(?:openapi|swagger)\.json$/i
+// W2 (coverage-v1.4, R7): relaxed from an exact-basename match to accept
+// PREFIXED/SUFFIXED spec filenames — notion's real file is
+// `scripts/notion-openapi.json`, never plain `openapi.json` — plus YAML
+// specs (`swagger.yaml`). Still case-insensitive on openapi/swagger, still
+// requires the openapi/swagger token adjacent to a `-`/`_`/`.` boundary (so
+// it can't match an unrelated `myopenapithing.json` run-together word).
+// Exported so src/derive/schema.ts's SPEC_JSON_BASENAME_RE can import this
+// SAME regex instead of keeping a second copy that could drift out of sync
+// (collectors must not import from derive/, but derive already imports
+// RepoFile from here — see the module-boundary note near NON_SERVER_DIR_RE
+// below — so this import direction is the established one-way boundary).
+// A fetched `.yaml`/`.yml` spec is never parsed — src/derive/openapi.ts only
+// JSON.parses, so a YAML file's JSON.parse throws and fromOpenApi/
+// fromToolDefinitions/fromManifest each catch and return [] — no crash, no
+// new YAML dependency, just a harmless miss (occupies a spec slot without
+// ever fabricating a tool surface).
+export const SPEC_BASENAME_RE = /^(?:[\w.-]*[-_.])?(?:openapi|swagger)(?:[-_.][\w.-]*)?\.(?:json|ya?ml)$/i
 const TOOL_DEFINITIONS_BASENAME_RE = /^toolDefinitions\.json$/
+// W2: olostep ships a bare `tools.json` manifest. Fetched through this same
+// capped spec bucket — the exact dual-bucket precedent toolDefinitions.json
+// already established (fetched here via isSpecFile, but extracted via the
+// MANIFEST_JSON_BASENAME_RE ladder rung in schema.ts, not the openapi/swagger
+// rung) — rather than adding a new uncapped ALWAYS_FETCH entry.
+const TOOL_MANIFEST_BASENAME_RE = /^tools\.json$/i
 const SPEC_FETCH_CAP = 2
 // I8: mirrors SPEC_FETCH_CAP/ENTRYPOINT_FETCH_CAP — envBlobs previously had no
 // cap and was never evicted. Reviewer verified 10 .env.example files + 8
@@ -86,7 +125,7 @@ const SPEC_FETCH_CAP = 2
 const ENV_FETCH_CAP = 3
 function isSpecFile(path: string): boolean {
   const base = path.split('/').pop() ?? ''
-  return SPEC_BASENAME_RE.test(base) || TOOL_DEFINITIONS_BASENAME_RE.test(base)
+  return SPEC_BASENAME_RE.test(base) || TOOL_DEFINITIONS_BASENAME_RE.test(base) || TOOL_MANIFEST_BASENAME_RE.test(base)
 }
 const SOURCE_HINT = /(src\/|server|tool|index|main)/
 // V1 change 1: adds go/rs/java/cs/kt so wave-1/2 language extractors (V3+)
@@ -214,7 +253,13 @@ export async function collectGithub(
     stargazers_count: number; archived: boolean; pushed_at: string; default_branch: string
     description?: string | null; topics?: string[]
   }
-  const meta = await http.json<GhRepo>(api)
+  let meta: GhRepo
+  try {
+    meta = await http.json<GhRepo>(api)
+  } catch (err) {
+    if (err instanceof HttpError && err.status === 404) throw new RepoNotFoundError(owner, name)
+    throw err
+  }
 
   const since365 = new Date(now.getTime() - 365 * 86_400_000).toISOString()
   const cutoff365Ms = now.getTime() - 365 * 86_400_000
@@ -360,7 +405,21 @@ export async function collectGithub(
   // are counted against the budget the same way manifests are (otherwise an
   // uncapped/unaccounted spec bucket could itself become a new starvation
   // source, the exact failure mode this whole task is fixing).
-  const specCandidates = blobs.filter(b => fetchable(b) && isSpecFile(b.path)).slice(0, SPEC_FETCH_CAP)
+  // W2: (a) excludes isNonServerPath matches — a test-fixture or example spec
+  // (`__tests__/fixture-openapi.json`, `examples/openapi.json`) must never
+  // occupy one of only 2 slots and starve the real spec file (this is what
+  // correctly drops upstash/context7's `docs/openapi.json`); (b) sorted
+  // shallowest-first (same manifestPriority ordering as every other
+  // guaranteed bucket) instead of raw tree order, so the root-level spec
+  // file always wins the cap over a deeply nested one.
+  const specCandidates = blobs
+    .filter(b => fetchable(b) && isSpecFile(b.path) && !isNonServerPath(b.path))
+    .sort((a, b) => {
+      const [da, la] = manifestPriority(a.path)
+      const [db, lb] = manifestPriority(b.path)
+      return da - db || la - lb
+    })
+    .slice(0, SPEC_FETCH_CAP)
   // Regression fix: guaranteed entrypoint bucket, computed BEFORE rankedSource
   // (and excluded from it below) so the two buckets never double-count the
   // same path against the budget. Prioritized root/shallow-first then

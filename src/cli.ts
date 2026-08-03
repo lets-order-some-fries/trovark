@@ -61,6 +61,15 @@ export async function main(argv: string[], deps: CliDeps): Promise<number> {
     }
     const card = score(ref, signals, deps.now.toISOString(), Object.keys(resolved).length > 0 ? resolved : undefined)
     deps.log(json ? renderJson(card) : renderTerminal(card, { color: !noColor }))
+    // W1: a repo GitHub 404s (deleted/renamed) — checked before
+    // insufficientData (mutually exclusive per score.ts) so the message is
+    // specific ("repository not found") rather than the generic
+    // insufficient-data wording, and so --fail-under can never turn this
+    // into a pass (there is no grade, period).
+    if (card.unresolved) {
+      deps.err(`repository not found: ${ref}`)
+      return 2
+    }
     if (card.insufficientData) {
       deps.err('trovark: insufficient data to score this ref')
       for (const e of signals.errors) deps.err(`  - ${e}`)

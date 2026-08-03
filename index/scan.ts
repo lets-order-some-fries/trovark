@@ -18,6 +18,10 @@ export interface IndexEntry {
   // no tools to grade, not a server we failed to check. See src/derive/classify.ts.
   notServer?: boolean
   notServerReason?: string
+  // W1: distinct from both notServer and insufficientData — the GitHub repo
+  // 404s (deleted/renamed/never existed), so there was never anything to
+  // grade. See src/collectors/github.ts's RepoNotFoundError.
+  unresolved?: boolean
   repoUrl?: string
   dims?: Record<'health' | 'reliability' | 'security' | 'cost', { score: number; confidence: string }>
   topFindings?: Array<{ id: string; severity: string }>
@@ -29,6 +33,10 @@ export interface IndexStats {
   // V2: count of repos classified as library/SDK/proxy/stub (the correct
   // terminal outcome, not a withhold) — tracked separately from `insufficient`.
   notServer: number
+  // W1: repos GitHub 404s (deleted/renamed/never existed) — never graded,
+  // never counted in gradeDist/avgOverall/staleOver180/secretsFindings/
+  // shellExecTools (see summarize() below).
+  unresolved: number
   gradeDist: Record<string, number>
   avgOverall: number
   staleOver180: number
@@ -39,7 +47,10 @@ export interface IndexStats {
 
 export function summarize(entries: IndexEntry[]): IndexStats {
   const scoredOk = entries.filter(e => e.ok)
-  const graded = scoredOk.filter(e => !e.insufficientData && !e.notServer && typeof e.overall === 'number')
+  // W1: excluded defense-in-depth (not just via `typeof e.overall ===
+  // 'number'`) — a repo GitHub 404s must never be counted as graded, even if
+  // a stale/malformed entry somehow still carried a numeric overall/grade.
+  const graded = scoredOk.filter(e => !e.insufficientData && !e.notServer && !e.unresolved && typeof e.overall === 'number')
   const gradeDist: Record<string, number> = {}
   for (const g of graded) {
     const letter = (g.grade ?? '').replace(/[+-]$/, '')
@@ -51,13 +62,16 @@ export function summarize(entries: IndexEntry[]): IndexStats {
   // above; staleOver180/secretsFindings/shellExecTools must be consistent —
   // a library that happens to be stale, or whose own API-definition code
   // reads as "exec"-shaped, shouldn't inflate the site's headline tiles.
-  const nonLibrary = scoredOk.filter(e => !e.notServer)
+  // W1: unresolved entries (repo 404s) get the same treatment — there is no
+  // real signal behind them at all.
+  const nonLibrary = scoredOk.filter(e => !e.notServer && !e.unresolved)
   return {
     total: entries.length,
     scored: scoredOk.length,
     failed: entries.length - scoredOk.length,
     insufficient: scoredOk.filter(e => e.insufficientData).length,
     notServer: scoredOk.filter(e => e.notServer).length,
+    unresolved: scoredOk.filter(e => e.unresolved).length,
     gradeDist,
     avgOverall: graded.length === 0 ? 0 : Math.round(graded.reduce((a, e) => a + (e.overall ?? 0), 0) / graded.length),
     staleOver180: nonLibrary.filter(e => (e.daysSinceLastCommit ?? 0) > 180).length,
@@ -79,6 +93,7 @@ function toEntry(ref: string, card: Scorecard, daysSinceLastCommit?: number): In
     insufficientData: card.insufficientData || undefined,
     notServer: card.notServer || undefined,
     notServerReason: card.notServer ? card.notServerReason : undefined,
+    unresolved: card.unresolved || undefined,
     repoUrl: card.resolved?.repo ? `https://github.com/${card.resolved.repo.owner}/${card.resolved.repo.name}` : undefined,
     dims, topFindings: findings.length > 0 ? findings : undefined,
     daysSinceLastCommit,

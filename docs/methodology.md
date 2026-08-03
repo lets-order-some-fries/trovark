@@ -1,4 +1,4 @@
-# Methodology (rubric v1.3.0)
+# Methodology (rubric v1.4.0)
 
 trovark computes a 0–100 Trust Score from four dimensions: Health 35%,
 Reliability 25%, Security 25%, Cost 15%. Grade bands: A ≥ 85, B ≥ 70, C ≥ 55,
@@ -83,6 +83,31 @@ still applies whenever a genuine MCP server's tool surface simply couldn't be
 statically read — that remains a coverage miss, a fundamentally different
 outcome from `notServer`: one says "we don't know," the other says "there's
 nothing here to know."
+
+## `unresolved` outcome — repository not found (v1.4)
+
+When a GitHub repository reference cannot be resolved (repository does not exist
+or is not accessible), the outcome is classified as `unresolved` — distinct from
+both `notServer` and `INSUFFICIENT DATA`. An `unresolved` card reports no score,
+grade, or findings, is excluded from all published statistics (grade distribution,
+average score, risk counts), and represents a reference error rather than a
+grading outcome.
+
+## Expanded tool extraction (v1.4)
+
+Tool extraction has been widened to cover additional patterns and formats:
+
+- **OpenAPI/Swagger specs:** Now matches specs with a `-openapi.json` or `-openapi.yaml` prefix/suffix
+  convention in addition to unprefixed specs (e.g., `server-openapi.json`, `openapi-spec.json`).
+- **TypeScript/JavaScript idioms:** Extended matchers include typed object constants (`as const` annotated
+  tools), scalar constant tool names, arrays returned from factory functions, and lowercase wrapper
+  identifiers alongside the existing `registerTool`/`addTool`/`defineTool` patterns.
+- **Python imperative registration:** Added support for imperative `add_tool(..., name=...)` calls that
+  use f-strings or other dynamic naming for tool names, extending coverage beyond the previously supported
+  decorator and class-subclass forms.
+
+These expansions improve coverage on real-world servers without changing the extraction priority order
+or fallback behavior; they remain last-resort compared to hand-authored manifests and primary source idioms.
 
 ## Known limitations (v1.3)
 

@@ -97,6 +97,32 @@ describe('renderSite', () => {
     // still sinks below graded rows for sorting, like other withheld outcomes
     expect(out).toMatch(/<tr class="failed" data-overall="-1"[^>]*>[\s\S]*rust-sdk/)
   })
+  it('renders unresolved rows distinctly — never as a graded F, never "insufficient data" (W1)', () => {
+    const withUnresolved = {
+      ...results,
+      stats: { ...results.stats, unresolved: 1 },
+      entries: [{
+        ref: 'pulumi/mcp-server',
+        ok: true,
+        unresolved: true,
+        repoUrl: 'https://github.com/pulumi/mcp-server',
+      }],
+    } as never
+    const out = renderSite(withUnresolved)
+    // distinct wording — "repo unavailable", not the insufficient-data or notServer phrasing
+    expect(out).toMatch(/repo unavailable/i)
+    expect(out).not.toMatch(/insufficient data to score/i)
+    expect(out).not.toMatch(/library.*not an mcp server/i)
+    // no fabricated letter grade chip (e.g. an "F" chip) anywhere for this row
+    expect(out).not.toMatch(/class="chip" style="background:[^"]*">[A-F][+-]?</)
+    // still sinks below graded rows for sorting, like other withheld outcomes
+    expect(out).toMatch(/<tr class="failed" data-overall="-1"[^>]*>[\s\S]*pulumi\/mcp-server/)
+  })
+  it('shows an "unresolved" stat tile distinct from insufficient/notServer/failed', () => {
+    const withUnresolved = { ...results, stats: { ...results.stats, unresolved: 3 } } as never
+    const out = renderSite(withUnresolved)
+    expect(out).toMatch(/<b>3<\/b><span>repo unavailable<\/span>/)
+  })
   it('rejects non-http(s) repoUrl schemes', () => {
     const evil = {
       ...results,

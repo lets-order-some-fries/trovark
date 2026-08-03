@@ -30,7 +30,7 @@ describe('score()', () => {
     const card = score('x', healthy(), '2026-07-31T00:00:00Z')
     expect(card.overall).toBe(100)
     expect(card.grade).toBe('A+')
-    expect(card.rubricVersion).toBe('1.3.0')
+    expect(card.rubricVersion).toBe('1.4.0')
     for (const d of card.dimensions) expect(d.confidence).toBe('high')
   })
   it('missing signals lower confidence, never throw, never zero the score', () => {
@@ -155,5 +155,35 @@ describe('score() — notServer (V2): a distinct terminal state, not insufficien
     const card = score('x', s, 'T')
     expect(card.insufficientData).toBe(true)
     expect(card.notServer).toBeUndefined()
+  })
+})
+
+describe('score() — unresolved (W1): a repo GitHub 404s must never get a numeric grade', () => {
+  // Reproduces the exact shape assemble.ts produces for a 404'd repo today:
+  // sparse/empty signals (nothing was ever fetched) plus the new unresolved flag.
+  it('an unresolved scorecard has null overall/grade — the same non-null-until-verified guarantee as notServer', () => {
+    const s = empty()
+    s.unresolved = true
+    const card = score('x', s, 'T')
+    expect(card.overall).toBeNull()
+    expect(card.grade).toBeNull()
+    expect(card.unresolved).toBe(true)
+  })
+  it('an unresolved scorecard is NOT insufficientData — it is its own distinct terminal state', () => {
+    const s = empty()
+    s.unresolved = true
+    const card = score('x', s, 'T')
+    expect(card.insufficientData).toBe(false)
+  })
+  it('notes explain the repo could not be resolved, without also claiming "insufficient data"', () => {
+    const s = empty()
+    s.unresolved = true
+    const card = score('x', s, 'T')
+    expect(card.notes.join(' ')).toMatch(/not.*(resolved|found)/i)
+    expect(card.notes.join(' ')).not.toMatch(/insufficient|grade withheld/i)
+  })
+  it('is mutually exclusive with notServer in practice, and a normal card is unaffected (regression)', () => {
+    const card = score('x', healthy(), 'T')
+    expect(card.unresolved).toBeUndefined()
   })
 })

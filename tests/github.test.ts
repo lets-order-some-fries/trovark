@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
-import { collectGithub } from '../src/collectors/github.js'
+import { collectGithub, RepoNotFoundError } from '../src/collectors/github.js'
+import { HttpError } from '../src/util/http.js'
 import type { Http } from '../src/util/http.js'
 
 const NOW = new Date('2026-07-31T00:00:00Z')
@@ -657,6 +658,114 @@ describe('collectGithub', () => {
     expect(specPaths).toHaveLength(2)
   })
 
+  // --- W2 (coverage-v1.4): prefixed openapi/swagger basenames + tools.json manifest ---
+
+  it('W2: a prefixed openapi basename (notion-style scripts/notion-openapi.json) is fetched by the spec bucket', async () => {
+    const http = fakeHttp()
+    const origJson = http.json.bind(http)
+    http.json = async <T,>(url: string): Promise<T> => {
+      if (url.includes('/git/trees/')) {
+        return {
+          tree: [
+            { path: 'package.json', type: 'blob', size: 500 },
+            { path: 'scripts/notion-openapi.json', type: 'blob', size: 2000 },
+          ],
+        } as T
+      }
+      return origJson<T>(url)
+    }
+    http.text = async (url: string): Promise<string> => {
+      if (url.includes('package.json')) return '{"name":"foo"}'
+      if (url.includes('notion-openapi.json')) return '{"openapi":"3.0.0","paths":{}}'
+      return '{}'
+    }
+    const snap = await collectGithub({ ref: 'acme/foo', repo: { owner: 'acme', name: 'foo' } }, http, NOW)
+    expect(snap.files.map(f => f.path)).toContain('scripts/notion-openapi.json')
+  })
+
+  it('W2: non-server spec paths (docs/, examples/) never occupy a slot that would starve the real spec file under the cap', async () => {
+    const http = fakeHttp()
+    const origJson = http.json.bind(http)
+    http.json = async <T,>(url: string): Promise<T> => {
+      if (url.includes('/git/trees/')) {
+        return {
+          tree: [
+            { path: 'package.json', type: 'blob', size: 500 },
+            // Shorter/shallower than the real file below — without the
+            // isNonServerPath exclusion these two would win both
+            // SPEC_FETCH_CAP slots on path-length alone and evict the real
+            // spec entirely.
+            { path: 'docs/openapi.json', type: 'blob', size: 200 },
+            { path: 'examples/openapi.json', type: 'blob', size: 200 },
+            { path: 'scripts/notion-openapi.json', type: 'blob', size: 200 },
+          ],
+        } as T
+      }
+      return origJson<T>(url)
+    }
+    http.text = async (url: string): Promise<string> => {
+      if (url.includes('package.json')) return '{"name":"foo"}'
+      return '{}'
+    }
+    const snap = await collectGithub({ ref: 'acme/foo', repo: { owner: 'acme', name: 'foo' } }, http, NOW)
+    const paths = snap.files.map(f => f.path)
+    expect(paths).toContain('scripts/notion-openapi.json')
+    expect(paths).not.toContain('docs/openapi.json')
+    expect(paths).not.toContain('examples/openapi.json')
+  })
+
+  it('W2: spec candidates are prioritized shallowest-first under SPEC_FETCH_CAP=2', async () => {
+    const http = fakeHttp()
+    const origJson = http.json.bind(http)
+    http.json = async <T,>(url: string): Promise<T> => {
+      if (url.includes('/git/trees/')) {
+        return {
+          tree: [
+            { path: 'package.json', type: 'blob', size: 500 },
+            // Same basename at 3 depths, listed deep-first in the tree, so
+            // only a shallowest-first SORT (not raw tree/slice order) can
+            // make the root file survive the cap=2.
+            { path: 'a/b/openapi.json', type: 'blob', size: 200 },
+            { path: 'scripts/openapi.json', type: 'blob', size: 200 },
+            { path: 'openapi.json', type: 'blob', size: 200 },
+          ],
+        } as T
+      }
+      return origJson<T>(url)
+    }
+    http.text = async (url: string): Promise<string> => {
+      if (url.includes('package.json')) return '{"name":"foo"}'
+      return '{}'
+    }
+    const snap = await collectGithub({ ref: 'acme/foo', repo: { owner: 'acme', name: 'foo' } }, http, NOW)
+    const paths = snap.files.map(f => f.path)
+    expect(paths).toContain('openapi.json')
+    expect(paths).toContain('scripts/openapi.json')
+    expect(paths).not.toContain('a/b/openapi.json')
+  })
+
+  it('W2: a tools.json manifest is fetched (olostep-style)', async () => {
+    const http = fakeHttp()
+    const origJson = http.json.bind(http)
+    http.json = async <T,>(url: string): Promise<T> => {
+      if (url.includes('/git/trees/')) {
+        return {
+          tree: [
+            { path: 'package.json', type: 'blob', size: 500 },
+            { path: 'tools.json', type: 'blob', size: 200 },
+          ],
+        } as T
+      }
+      return origJson<T>(url)
+    }
+    http.text = async (url: string): Promise<string> => {
+      if (url.includes('package.json')) return '{"name":"foo"}'
+      return '[]'
+    }
+    const snap = await collectGithub({ ref: 'acme/foo', repo: { owner: 'acme', name: 'foo' } }, http, NOW)
+    expect(snap.files.map(f => f.path)).toContain('tools.json')
+  })
+
   it('stops pagination after page 1 once its oldest commit is already past the 365d cutoff, even with Link: rel="next" present', async () => {
     const http = fakeHttp()
     let commitPageFetches = 0
@@ -803,5 +912,58 @@ describe('collectGithub', () => {
     expect(paths).toContain('scripts/observers_smoke.py')
     // The .py extractor-supported file must rank ahead of the unsupported .rs one.
     expect(paths.indexOf('scripts/observers_smoke.py')).toBeLessThan(paths.indexOf('src/a.rs'))
+  })
+
+  // --- W1: stop publishing an F for a repo we never fetched -------------
+  // 18/400 index entries are repos GitHub 404s (deleted/renamed) yet get
+  // published with ok:true/overall:0/grade:"F". Root cause: the repo-metadata
+  // fetch (`const meta = await http.json<GhRepo>(api)`) is the single
+  // unguarded throw point in collectGithub — every other fetch inside this
+  // function already has its own try/catch or `.catch()`. A 404 there means
+  // "this repo does not exist" and must be distinguishable from a generic
+  // collector hiccup (network blip, 403, 5xx) so assemble.ts can mark the
+  // result `unresolved` instead of scoring a degenerate all-zero card.
+  it('W1: a 404 on repo metadata throws RepoNotFoundError, not a generic Error', async () => {
+    const http: Http = {
+      async json<T>(url: string): Promise<T> {
+        if (url === 'https://api.github.com/repos/acme/gone') throw new HttpError(404, url)
+        throw new Error(`unexpected call: ${url}`)
+      },
+      async jsonWithHeaders<T>(url: string): Promise<{ data: T; headers: Headers }> {
+        throw new Error(`unexpected call: ${url}`)
+      },
+      async text(url: string): Promise<string> { throw new Error(`unexpected call: ${url}`) },
+      async postJson<T>(): Promise<T> { throw new Error('unused') },
+    }
+    await expect(
+      collectGithub({ ref: 'acme/gone', repo: { owner: 'acme', name: 'gone' } }, http, NOW),
+    ).rejects.toBeInstanceOf(RepoNotFoundError)
+  })
+  it('W1: a non-404 failure on repo metadata is NOT reclassified as RepoNotFoundError (403/5xx/network stay generic)', async () => {
+    const http: Http = {
+      async json<T>(url: string): Promise<T> {
+        if (url === 'https://api.github.com/repos/acme/broken') throw new HttpError(403, url)
+        throw new Error(`unexpected call: ${url}`)
+      },
+      async jsonWithHeaders<T>(url: string): Promise<{ data: T; headers: Headers }> {
+        throw new Error(`unexpected call: ${url}`)
+      },
+      async text(url: string): Promise<string> { throw new Error(`unexpected call: ${url}`) },
+      async postJson<T>(): Promise<T> { throw new Error('unused') },
+    }
+    const p = collectGithub({ ref: 'acme/broken', repo: { owner: 'acme', name: 'broken' } }, http, NOW)
+    await expect(p).rejects.not.toBeInstanceOf(RepoNotFoundError)
+    await expect(p).rejects.toBeInstanceOf(HttpError)
+  })
+  // Rename redirects: `request()` in src/util/http.ts never sets
+  // `redirect: 'manual'`, so the real fetch already follows a GitHub 301
+  // (rename) transparently — collectGithub's repo-metadata call simply sees
+  // a normal 200 for the new location, indistinguishable from a repo that
+  // was never renamed. This test documents/guards that: a fixture shaped
+  // like "the redirect already happened" scores normally, with no special
+  // rename-handling code needed inside collectGithub itself.
+  it('W1: a followed rename redirect (fetch already resolved 301→200) scores the repo normally, no special-casing needed', async () => {
+    const snap = await collectGithub({ ref: 'acme/foo', repo: { owner: 'acme', name: 'foo' } }, fakeHttp(), NOW)
+    expect(snap.stars).toBe(1234) // ordinary success path — same as any other resolved repo
   })
 })
