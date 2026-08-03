@@ -1,4 +1,5 @@
 import { encode } from 'gpt-tokenizer'
+import { SPEC_BASENAME_RE } from '../collectors/github.js'
 import type { RepoFile } from '../collectors/github.js'
 import type { Finding, ToolInfo } from '../types.js'
 import { fromGoSource } from './lang/go.js'
@@ -860,8 +861,17 @@ function findShellImportFile(files: RepoFile[]): RepoFile | undefined {
 // vendored spec entirely REPLACE a server's real `server.tool()`
 // registrations and fabricate security findings from REST operationIds.
 // They now run LAST, only when no source extractor (JS/Py/Go) found anything.
-const MANIFEST_JSON_BASENAME_RE = /^(mcp|server|toolDefinitions)\.json$/i
-const SPEC_JSON_BASENAME_RE = /^(openapi|swagger)\.json$/i
+// W2 (coverage-v1.4, R7): added `tools` — olostep ships a bare `tools.json`
+// manifest. Still a narrow, explicit basename allowlist (never a bare
+// `.json` bucket) — package.json's basename is "package", not "tools", so
+// the CRITICAL GUARD test above (an unrelated "tools" field in package.json)
+// is untouched by this addition.
+const MANIFEST_JSON_BASENAME_RE = /^(mcp|server|toolDefinitions|tools)\.json$/i
+// W2: imported from src/collectors/github.ts so the fetch-side gate and this
+// extraction-side gate can never drift apart — see that file's SPEC_BASENAME_RE
+// comment for the full rationale (prefixed/suffixed basenames, YAML handled
+// gracefully by JSON.parse failing closed).
+const SPEC_JSON_BASENAME_RE = SPEC_BASENAME_RE
 
 export function extractSchema(files: RepoFile[]): SchemaResult {
   const serverFiles = files.filter(f => !isNonServerPath(f.path))

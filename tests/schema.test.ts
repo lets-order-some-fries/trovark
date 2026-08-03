@@ -1207,3 +1207,64 @@ class FooTool(Base):
     expect(r.tools).toEqual([])
   })
 })
+
+describe('W2 (coverage-v1.4): prefixed openapi/swagger basenames + tools.json manifest', () => {
+  it('extracts operationIds from a prefixed notion-style basename (scripts/notion-openapi.json)', () => {
+    const content = JSON.stringify({
+      openapi: '3.0.0',
+      paths: {
+        '/v1/search': { post: { operationId: 'post-search', summary: 'Search' } },
+        '/v1/users/me': { get: { operationId: 'get-self', summary: 'Get current user' } },
+      },
+    })
+    const r = extractSchema([{ path: 'scripts/notion-openapi.json', content }])
+    expect(r.extracted).toBe(true)
+    expect(r.tools.map(t => t.name).sort()).toEqual(['get-self', 'post-search'])
+  })
+
+  it('GUARD: fixture/example spec paths are still excluded from extraction (non-server paths)', () => {
+    const content = JSON.stringify({ openapi: '3.0.0', paths: { '/x': { get: { operationId: 'x' } } } })
+    expect(extractSchema([{ path: '__tests__/fixture-openapi.json', content }]).extracted).toBe(false)
+    expect(extractSchema([{ path: 'examples/openapi.json', content }]).extracted).toBe(false)
+  })
+
+  it('regression: plain openapi.json (no prefix) still extracts', () => {
+    const content = JSON.stringify({ openapi: '3.0.0', paths: { '/ping': { get: { operationId: 'ping' } } } })
+    const r = extractSchema([{ path: 'openapi.json', content }])
+    expect(r.tools.map(t => t.name)).toEqual(['ping'])
+  })
+
+  it('a tools.json manifest ({tools:[...]} shape) is parsed (olostep-style)', () => {
+    const r = extractSchema([{
+      path: 'tools.json',
+      content: JSON.stringify({ tools: [{ name: 'search_web', description: 'Search the web' }] }),
+    }])
+    expect(r.tools.map(t => t.name)).toEqual(['search_web'])
+  })
+
+  it('a tools.json manifest (bare top-level array shape) is also parsed', () => {
+    const r = extractSchema([{
+      path: 'tools.json',
+      content: JSON.stringify([{ name: 'list_pages', description: 'List pages' }]),
+    }])
+    expect(r.tools.map(t => t.name)).toEqual(['list_pages'])
+  })
+
+  it('GUARD: an unrelated "tools" field in package.json still does NOT fabricate tools', () => {
+    const r = extractSchema([{
+      path: 'package.json',
+      content: JSON.stringify({ name: 'my-cli-app', tools: [{ name: 'dev', description: 'dev launcher' }] }),
+    }])
+    expect(r.extracted).toBe(false)
+    expect(r.tools).toEqual([])
+  })
+
+  it('GUARD: a random config.json is not treated as a manifest or spec', () => {
+    const r = extractSchema([{
+      path: 'config.json',
+      content: JSON.stringify({ openapi: '3.0.0', paths: { '/x': { get: { operationId: 'x' } } } }),
+    }])
+    expect(r.extracted).toBe(false)
+    expect(r.tools).toEqual([])
+  })
+})
