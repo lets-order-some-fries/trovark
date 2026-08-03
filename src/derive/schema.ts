@@ -231,48 +231,216 @@ export function isNonServerPath(path: string): boolean {
   return NON_SERVER_DIR.test(path) || NON_SERVER_FILE.test(path)
 }
 
+// FABRICATION FIX (coverage-v1.4, closes a phantom-tool vector that bit
+// twice — once against the Go extractor, now against the JS/TS one too):
+// every bracket-counting helper below used to count `{ } [ ] ( )` characters
+// as raw text, with zero awareness of string literals or comments. A stray
+// `}`/`]`/`)` sitting inside a description string desyncs the depth count —
+// e.g. `description:'unbalanced } here'` decrements depth one level early,
+// so a LATER nested object (`metadata:{name:'phantom',...}`) gets
+// mis-measured as sitting at the span's own top level and is fabricated as a
+// second, phantom tool. The mirror-image bug also occurs: a stray `{` inside
+// a description makes `captureBalanced` return an early, truncated span,
+// silently losing whatever real tool data was supposed to follow it.
+//
+// Fixed with ONE shared lexical-state scanner (`lexSpans` below) that both
+// `captureBalanced`/`bracketDepthAt`/`enclosingObjectSpan` (bracket counting)
+// and `stripComments` (comment neutralization ahead of all the idiom
+// regexes) are built on, so the three counting helpers and the
+// comment-safety pass can never drift into disagreeing about what counts as
+// real code.
+type Lang = 'js' | 'py'
+type LexKind = 'code' | 'string' | 'comment'
+
+// The one low-level lexer. Walks `text` over [start, end) and yields
+// contiguous [spanStart, spanEnd, kind) runs — 'code' for genuine source,
+// 'string' for the interior of a string/template literal (delimiters
+// included), 'comment' for a line or block comment (delimiters included).
+// Yielding whole runs (not one index at a time) keeps this a single forward
+// pass with allocation proportional to the number of tokens, not characters.
+//
+// Rules (deliberately generic — no per-language branching beyond `lang`):
+//  - '...' and "..." — backslash-escaped strings (\\, \', \", ...). Correct
+//    for JS/TS string literals and for Go's interpreted "..." strings / rune
+//    literals, which also process backslash escapes.
+//  - `...` (backtick) — treated as OPAQUE raw text with NO escape
+//    processing at all: scanned straight through to the very next backtick,
+//    full stop. This is exactly Go's raw-string semantics (no escaping, no
+//    interpolation — required for the Go path per the fix spec) and is a
+//    deliberate, documented SIMPLIFICATION for JS template literals: `${...}`
+//    interpolation is NOT re-entered as code, the whole template is skipped
+//    end to end. Trade-off accepted: a bracket meant to close something
+//    OUTSIDE the template but typed inside a `${}` expression would also be
+//    skipped — never observed in practice for tool name/description text,
+//    which is plain string content, not template expressions.
+//  - `//...` to end-of-line, and `/* ... */` — line/block comments. Always
+//    active; both JS and Go use this syntax and neither uses `#` for
+//    anything that would collide with it.
+//  - (lang==='py' only) `#...` to end-of-line, and '''...'''/"""..."""
+//    triple-quoted strings (also backslash-escape aware). Gated strictly
+//    behind lang==='py' so a JS private class field (`#name = 'x'`) is never
+//    mistaken for a comment — only Python content ever requests 'py' mode.
+function* lexSpans(text: string, start: number, end: number, lang: Lang): Generator<[number, number, LexKind]> {
+  let i = start
+  while (i < end) {
+    const ch = text[i]
+    if (ch === '/' && text[i + 1] === '/') {
+      const s = i
+      i += 2
+      while (i < end && text[i] !== '\n') i++
+      yield [s, i, 'comment']
+      continue
+    }
+    if (ch === '/' && text[i + 1] === '*') {
+      const s = i
+      i += 2
+      while (i < end && !(text[i] === '*' && text[i + 1] === '/')) i++
+      i = Math.min(end, i + 2)
+      yield [s, i, 'comment']
+      continue
+    }
+    if (lang === 'py' && ch === '#') {
+      const s = i
+      i++
+      while (i < end && text[i] !== '\n') i++
+      yield [s, i, 'comment']
+      continue
+    }
+    if (lang === 'py' && (ch === "'" || ch === '"') && text[i + 1] === ch && text[i + 2] === ch) {
+      const s = i
+      const q = ch
+      i += 3
+      while (i < end && !(text[i] === q && text[i + 1] === q && text[i + 2] === q)) {
+        if (text[i] === '\\') i++
+        i++
+      }
+      i = Math.min(end, i + 3)
+      yield [s, i, 'string']
+      continue
+    }
+    if (ch === "'" || ch === '"') {
+      const s = i
+      const q = ch
+      i++
+      while (i < end && text[i] !== q) {
+        if (text[i] === '\\') i++
+        i++
+      }
+      i = Math.min(end, i + 1)
+      yield [s, i, 'string']
+      continue
+    }
+    if (ch === '`') {
+      const s = i
+      i++
+      // No escape processing at all — see the backtick rule above.
+      while (i < end && text[i] !== '`') i++
+      i = Math.min(end, i + 1)
+      yield [s, i, 'string']
+      continue
+    }
+    // Plain code run: consume up to the next character that ACTUALLY starts
+    // a string/comment/template span, in either language mode — mirroring
+    // the exact conditions checked above. Deliberately NOT "any `/`": a bare
+    // `/` that isn't followed by another `/` or `*` (division, a regex
+    // literal, a path separator) is ordinary code and must not stop the run,
+    // or `i` never advances and this becomes an infinite loop (confirmed
+    // live — a single stray `/` anywhere in real source, e.g. `a / b`, spun
+    // this forever until `parts.push` in `stripComments` overflowed the
+    // array-length limit).
+    const s = i
+    while (i < end) {
+      const c = text[i]
+      if (c === '/' && (text[i + 1] === '/' || text[i + 1] === '*')) break
+      if (c === "'" || c === '"' || c === '`') break
+      if (lang === 'py' && c === '#') break
+      i++
+    }
+    yield [s, i, 'code']
+  }
+}
+
+// Comment-safety preprocessing pass: returns a copy of `text` with every
+// comment span blanked to spaces (embedded newlines preserved so line-based
+// reasoning elsewhere is unaffected) while CODE and STRING content — the
+// only text callers actually inspect for names/descriptions — passes through
+// byte-for-byte. Length- and index-preserving, so every downstream regex
+// `.matchAll` index and `captureBalanced`/`enclosingObjectSpan` offset
+// computed against the stripped text still lines up with the original.
+//
+// This is what makes a commented-out registration call
+// (`// server.addTool({name:'x'})`) invisible to the idiom regexes: they
+// never see the literal text at all once it's been blanked, rather than
+// relying on each regex loop to separately re-check "was my match inside a
+// comment?".
+export function stripComments(text: string, lang: Lang = 'js'): string {
+  const parts: string[] = []
+  for (const [s, e, kind] of lexSpans(text, 0, text.length, lang)) {
+    parts.push(kind === 'comment' ? text.slice(s, e).replace(/[^\n]/g, ' ') : text.slice(s, e))
+  }
+  return parts.join('')
+}
+
 // Scans from `openIdx` (which must point at `openCh`) and returns the
-// substring through the matching `closeCh`, honoring nesting depth. Used to
-// pull a whole `{...}`/`(...)` literal out of source text without a real
-// parser. Bounded by `maxLen` so a malformed/huge file can't force a long scan.
+// substring through the matching `closeCh`, honoring nesting depth AND
+// lexical state — brackets inside a string literal or comment are ignored,
+// so a stray `}`/`]`/`)` in a description can no longer desync the count
+// (see the FABRICATION FIX note above `lexSpans`). Used to pull a whole
+// `{...}`/`(...)` literal out of source text without a real parser. Bounded
+// by `maxLen` so a malformed/huge file can't force a long scan.
 // Exported for src/derive/lang/go.ts (V3): the Go idioms need the same
 // balanced-brace/paren capture (composite `mcp.Tool{...}` literals, nested
 // `NewTool(...)`/`WithDescription(...)` calls) rather than a second,
-// drifting copy of the scanner.
-export function captureBalanced(text: string, openIdx: number, openCh: string, closeCh: string, maxLen = 4000): string {
+// drifting copy of the scanner. `lang` defaults to 'js', which is also
+// correct for Go source (same comment syntax, same escape-aware quoting,
+// backtick treated as an opaque raw string — exactly Go's own semantics).
+export function captureBalanced(text: string, openIdx: number, openCh: string, closeCh: string, maxLen = 4000, lang: Lang = 'js'): string {
   if (text[openIdx] !== openCh) return ''
-  let depth = 0
   const end = Math.min(text.length, openIdx + maxLen)
-  for (let i = openIdx; i < end; i++) {
-    if (text[i] === openCh) depth++
-    else if (text[i] === closeCh) {
-      depth--
-      if (depth === 0) return text.slice(openIdx, i + 1)
+  let depth = 0
+  for (const [s, e, kind] of lexSpans(text, openIdx, end, lang)) {
+    if (kind !== 'code') continue
+    for (let i = s; i < e; i++) {
+      const ch = text[i]
+      if (ch === openCh) depth++
+      else if (ch === closeCh) {
+        depth--
+        if (depth === 0) return text.slice(openIdx, i + 1)
+      }
     }
   }
   return text.slice(openIdx, end)
 }
 
 // Finds the smallest `{...}` object literal that encloses `pos` (e.g. the
-// position of a `name:` match), by walking backward to the nearest unmatched
-// `{` and then forward to its matching `}`.
-function enclosingObjectSpan(text: string, pos: number): [number, number] | undefined {
-  let depth = 0
-  let start = -1
-  for (let i = pos; i >= 0; i--) {
-    if (text[i] === '}') depth++
-    else if (text[i] === '{') {
-      if (depth === 0) { start = i; break }
-      depth--
+// position of a `name:` match), by walking forward from the start of the
+// file maintaining a stack of unmatched `{` positions (equivalent to, but
+// lexically safe unlike, a naive backward scan — string/comment state is
+// only well-defined scanning forward) then forward again from the top of
+// that stack to the matching `}`. Both passes skip brackets inside strings
+// and comments via `lexSpans`.
+function enclosingObjectSpan(text: string, pos: number, lang: Lang = 'js'): [number, number] | undefined {
+  const stack: number[] = []
+  for (const [s, e, kind] of lexSpans(text, 0, pos, lang)) {
+    if (kind !== 'code') continue
+    for (let i = s; i < e; i++) {
+      const ch = text[i]
+      if (ch === '{') stack.push(i)
+      else if (ch === '}') stack.pop()
     }
   }
-  if (start === -1) return undefined
-  depth = 0
-  for (let i = start; i < text.length; i++) {
-    if (text[i] === '{') depth++
-    else if (text[i] === '}') {
-      depth--
-      if (depth === 0) return [start, i]
+  const start = stack.length > 0 ? stack[stack.length - 1] : undefined
+  if (start === undefined) return undefined
+  let depth = 0
+  for (const [s, e, kind] of lexSpans(text, start, text.length, lang)) {
+    if (kind !== 'code') continue
+    for (let i = s; i < e; i++) {
+      const ch = text[i]
+      if (ch === '{') depth++
+      else if (ch === '}') {
+        depth--
+        if (depth === 0) return [start, i]
+      }
     }
   }
   return undefined
@@ -574,12 +742,23 @@ function escapeRegExp(s: string): string {
 // span) or ≥2 (array/call-shaped span) and is rejected, for ANY intervening
 // key name. Bounded at the accepted span's own start (`floor`), same as
 // before, so this can never leak across sibling statements.
-function bracketDepthAt(content: string, floor: number, pos: number): number {
+// FABRICATION FIX: this used to count brackets as raw characters over
+// [floor, pos), so a stray `}` inside an intervening description STRING
+// (e.g. `description:'unbalanced } here'`) decremented depth one level
+// early — miscounting a later nested object (`metadata:{...}`) as sitting at
+// depth 1 (the span's own tool level) instead of its true depth 2, and
+// fabricating it as a phantom tool. Now routed through `lexSpans`, which
+// skips brackets inside string literals and comments, so only genuine code
+// brackets are counted.
+function bracketDepthAt(content: string, floor: number, pos: number, lang: Lang = 'js'): number {
   let depth = 0
-  for (let i = floor; i < pos; i++) {
-    const c = content[i]
-    if (c === '{' || c === '[' || c === '(') depth++
-    else if (c === '}' || c === ']' || c === ')') depth--
+  for (const [s, e, kind] of lexSpans(content, floor, pos, lang)) {
+    if (kind !== 'code') continue
+    for (let i = s; i < e; i++) {
+      const c = content[i]
+      if (c === '{' || c === '[' || c === '(') depth++
+      else if (c === '}' || c === ']' || c === ')') depth--
+    }
   }
   return depth
 }
@@ -669,11 +848,14 @@ function resolveWrapperName(content: string, ident: string): string | undefined 
 // Fix 4: low-level SDK `Tool(...)`/`types.Tool(...)` constructor literals
 // (JS positional-object and Python kwargs both land here — the captured args
 // text is searched for `name`/`description` regardless of `:` vs `=`).
-function fromLowLevelToolCalls(content: string): ToolInfo[] {
+// `lang` is threaded through to `captureBalanced` since this one helper is
+// shared by both `fromJsSource` (lang 'js') and `fromPySource` (lang 'py') —
+// Python callers need '''/"""-string and `#`-comment awareness too.
+function fromLowLevelToolCalls(content: string, lang: Lang = 'js'): ToolInfo[] {
   const tools: ToolInfo[] = []
   for (const m of content.matchAll(/\b(?:new\s+)?(?:types\.)?Tool\(/g)) {
     const openIdx = m.index + m[0].length - 1
-    const call = captureBalanced(content, openIdx, '(', ')')
+    const call = captureBalanced(content, openIdx, '(', ')', 4000, lang)
     if (!call) continue
     const nameMatch = call.match(/name\s*[:=]\s*["'`]([\w-]+)["'`]/)
     if (!nameMatch) continue
@@ -689,8 +871,16 @@ function fromLowLevelToolCalls(content: string): ToolInfo[] {
 // exists but only under examples/" apart from "no idiom anywhere" — reusing
 // these instead of a second, drifting copy of the regexes.
 export function fromJsSource(f: RepoFile): ToolInfo[] {
+  // COMMENT-SAFETY FIX (coverage-v1.4): every regex below used to scan
+  // `f.content` directly, so a commented-out registration
+  // (`// server.addTool({name:'x'})`) matched exactly like a live one — none
+  // of these idiom regexes know what a comment is. Scanning `content`
+  // (comments blanked to spaces, code/strings byte-identical — see
+  // `stripComments`) instead means a commented-out call is simply invisible
+  // text now, with no per-loop "was this inside a comment?" check needed.
+  const content = stripComments(f.content)
   const tools: ToolInfo[] = []
-  for (const m of f.content.matchAll(JS_TOOL_CALL_RE)) {
+  for (const m of content.matchAll(JS_TOOL_CALL_RE)) {
     const afterName = m.index + m[0].length
     let schemaText = m[0]
     let description = m[2]
@@ -698,10 +888,10 @@ export function fromJsSource(f: RepoFile): ToolInfo[] {
     // string — pull it in so a description like "Execute a shell command"
     // buried in the config is still visible to classify().
     if (description === undefined) {
-      const skip = /^\s*,?\s*/.exec(f.content.slice(afterName))
+      const skip = /^\s*,?\s*/.exec(content.slice(afterName))
       const objStart = afterName + (skip ? skip[0].length : 0)
-      if (f.content[objStart] === '{') {
-        const obj = captureBalanced(f.content, objStart, '{', '}')
+      if (content[objStart] === '{') {
+        const obj = captureBalanced(content, objStart, '{', '}')
         schemaText += obj
         const descMatch = obj.match(/description\s*:\s*["'`]([^"'`]*)["'`]/)
         if (descMatch) description = descMatch[1]
@@ -713,15 +903,15 @@ export function fromJsSource(f: RepoFile): ToolInfo[] {
   // V4 #1/#4: bare/positional defineTool("name"[, "description"]) — the
   // dot-anchored JS_TOOL_CALL_RE above can't see this since it's usually an
   // imported function, not a method call.
-  for (const m of f.content.matchAll(DEFINE_TOOL_CALL_RE)) {
+  for (const m of content.matchAll(DEFINE_TOOL_CALL_RE)) {
     if (tools.some(t => t.name === m[1])) continue
     tools.push({ name: m[1], description: m[2], schemaText: m[0] })
   }
 
   // V4 #2: object-literal first arg — addTool({name,...}) / defineTool({name}).
-  for (const m of f.content.matchAll(OBJECT_ARG_CALL_RE)) {
+  for (const m of content.matchAll(OBJECT_ARG_CALL_RE)) {
     const braceIdx = m.index + m[0].length - 1
-    const obj = captureBalanced(f.content, braceIdx, '{', '}')
+    const obj = captureBalanced(content, braceIdx, '{', '}')
     const nameMatch = obj.match(/\bname\s*:\s*["'`]([\w.-]+)["'`]/)
     if (!nameMatch) continue
     if (tools.some(t => t.name === nameMatch[1])) continue
@@ -733,10 +923,10 @@ export function fromJsSource(f: RepoFile): ToolInfo[] {
   // name. Guarded: only runs when `tool` is imported from an *mcp-utils*
   // module, or (checked per-match) the match sits inside a `getXTools()`
   // factory function body — never on an arbitrary `foo: bar({...})`.
-  if (MCP_UTILS_TOOL_IMPORT_RE.test(f.content) || /get\w*Tools\(/.test(f.content)) {
-    const mcpUtilsImport = MCP_UTILS_TOOL_IMPORT_RE.test(f.content)
-    const fnSpans = mcpUtilsImport ? [] : findGetToolsFnSpans(f.content)
-    for (const m of f.content.matchAll(KEYED_FACTORY_RE)) {
+  if (MCP_UTILS_TOOL_IMPORT_RE.test(content) || /get\w*Tools\(/.test(content)) {
+    const mcpUtilsImport = MCP_UTILS_TOOL_IMPORT_RE.test(content)
+    const fnSpans = mcpUtilsImport ? [] : findGetToolsFnSpans(content)
+    for (const m of content.matchAll(KEYED_FACTORY_RE)) {
       const insideGetToolsFn = fnSpans.some(([s, e]) => m.index >= s && m.index <= e)
       if (!mcpUtilsImport && !insideGetToolsFn) continue
       if (tools.some(t => t.name === m[1])) continue
@@ -746,9 +936,9 @@ export function fromJsSource(f: RepoFile): ToolInfo[] {
 
   // V4 #5: class-based tool — `class FindTool extends MongoDBToolBase {
   // name = 'find'; description = '...' }`.
-  for (const m of f.content.matchAll(CLASS_TOOL_RE)) {
+  for (const m of content.matchAll(CLASS_TOOL_RE)) {
     const braceIdx = m.index + m[0].length - 1
-    const body = captureBalanced(f.content, braceIdx, '{', '}')
+    const body = captureBalanced(content, braceIdx, '{', '}')
     const nameMatch = body.match(CLASS_NAME_FIELD_RE)
     if (!nameMatch) continue
     if (tools.some(t => t.name === nameMatch[1])) continue
@@ -761,9 +951,9 @@ export function fromJsSource(f: RepoFile): ToolInfo[] {
   // (callTool/getTool/removeTool/hasTool/listTools — see
   // WRAPPER_EXCLUDED_METHODS) and emits no tool at all when the identifier
   // can't be resolved (see resolveWrapperName).
-  for (const m of f.content.matchAll(WRAPPER_TOOL_CALL_RE)) {
+  for (const m of content.matchAll(WRAPPER_TOOL_CALL_RE)) {
     if (WRAPPER_EXCLUDED_METHODS.has(m[1])) continue
-    const name = resolveWrapperName(f.content, m[2])
+    const name = resolveWrapperName(content, m[2])
     if (name === undefined) continue
     if (tools.some(t => t.name === name)) continue
     tools.push({ name, schemaText: m[0] })
@@ -809,19 +999,19 @@ export function fromJsSource(f: RepoFile): ToolInfo[] {
   // the proof that a registration context exists, so the old three checks
   // are logically redundant with it; they're kept (plus the two new literal
   // checks) only as a cheap, harmless short-circuit for the common cases.
-  const acceptedSpans = acceptedToolSpans(f.content)
+  const acceptedSpans = acceptedToolSpans(content)
   if (
-    f.content.includes('ListToolsRequestSchema') ||
-    FASTMCP_IMPORT_RE.test(f.content) ||
-    f.content.includes('.addTool(') ||
-    f.content.includes('.registerTool(') ||
-    f.content.includes('.tool(') ||
-    f.content.includes('defineTool(') ||
+    content.includes('ListToolsRequestSchema') ||
+    FASTMCP_IMPORT_RE.test(content) ||
+    content.includes('.addTool(') ||
+    content.includes('.registerTool(') ||
+    content.includes('.tool(') ||
+    content.includes('defineTool(') ||
     acceptedSpans.length > 0
   ) {
-    for (const m of f.content.matchAll(/name:\s*["'`]([\w-]+)["'`]/g)) {
+    for (const m of content.matchAll(/name:\s*["'`]([\w-]+)["'`]/g)) {
       if (tools.some(t => t.name === m[1])) continue
-      const objText = acceptedCandidateObjectText(f.content, m.index, acceptedSpans)
+      const objText = acceptedCandidateObjectText(content, m.index, acceptedSpans)
       if (objText === undefined) continue
       tools.push({ name: m[1], schemaText: objText })
     }
@@ -831,17 +1021,17 @@ export function fromJsSource(f: RepoFile): ToolInfo[] {
     // scalar const. Same acceptance logic (span/sibling/containment/
     // resource-shape) as the literal-name loop above, via
     // acceptedCandidateObjectText; only the name SOURCE differs.
-    for (const m of f.content.matchAll(/\bname\s*:\s*([A-Za-z_$][\w$]*)\s*[,}]/g)) {
-      const resolved = resolveScalarConst(f.content, m[1])
+    for (const m of content.matchAll(/\bname\s*:\s*([A-Za-z_$][\w$]*)\s*[,}]/g)) {
+      const resolved = resolveScalarConst(content, m[1])
       if (resolved === undefined) continue
       if (tools.some(t => t.name === resolved)) continue
-      const objText = acceptedCandidateObjectText(f.content, m.index, acceptedSpans)
+      const objText = acceptedCandidateObjectText(content, m.index, acceptedSpans)
       if (objText === undefined) continue
       tools.push({ name: resolved, schemaText: objText })
     }
   }
 
-  for (const t of fromLowLevelToolCalls(f.content)) {
+  for (const t of fromLowLevelToolCalls(content)) {
     if (!tools.some(x => x.name === t.name)) tools.push(t)
   }
   return tools
@@ -947,21 +1137,28 @@ export function hasPythonToolRegistrationSurface(files: RepoFile[]): boolean {
 }
 
 export function fromPySource(f: RepoFile): ToolInfo[] {
+  // COMMENT-SAFETY FIX (coverage-v1.4): same rationale as fromJsSource — scan
+  // a comment-blanked copy so a `# self.add_tool(name="commented_out")` line
+  // is invisible to every regex below, not just bracket-counted correctly.
+  // lang 'py' also makes `stripComments` recognize triple-quoted docstrings
+  // as STRING (left untouched) rather than accidentally treating a `#`
+  // inside one as a comment.
+  const content = stripComments(f.content, 'py')
   const tools: ToolInfo[] = []
-  for (const m of f.content.matchAll(PY_DECORATOR_RE)) {
+  for (const m of content.matchAll(PY_DECORATOR_RE)) {
     tools.push({ name: m[1], schemaText: m[0] })
   }
-  for (const m of f.content.matchAll(PY_IMPERATIVE_RE)) {
+  for (const m of content.matchAll(PY_IMPERATIVE_RE)) {
     if (tools.some(t => t.name === m[1])) continue
     tools.push({ name: m[1], description: m[2], schemaText: m[0] })
   }
-  for (const t of fromClassSubclass(f.content)) {
+  for (const t of fromClassSubclass(content)) {
     if (!tools.some(x => x.name === t.name)) tools.push(t)
   }
-  for (const t of fromCallDecorator(f.content)) {
+  for (const t of fromCallDecorator(content)) {
     if (!tools.some(x => x.name === t.name)) tools.push(t)
   }
-  for (const t of fromLowLevelToolCalls(f.content)) {
+  for (const t of fromLowLevelToolCalls(content, 'py')) {
     if (!tools.some(x => x.name === t.name)) tools.push(t)
   }
   return tools

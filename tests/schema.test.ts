@@ -1607,3 +1607,115 @@ describe('W2 (coverage-v1.4 continued): manifest basename tests', () => {
     expect(r.tools).toEqual([])
   })
 })
+
+describe('coverage-v1.4 (bracket-scanning fix): captureBalanced/bracketDepthAt/enclosingObjectSpan are now string- and comment-aware', () => {
+  it('FABRICATION: a stray `}` inside a description no longer fabricates a nested metadata object as a phantom tool', () => {
+    const r = extractSchema([{
+      path: 'src/index.ts',
+      content: `
+server.addTool({ name:'real_tool', description:'unbalanced } here', metadata:{ name:'phantom', description:'d' } })
+`,
+    }])
+    expect(r.tools.map(t => t.name)).toEqual(['real_tool'])
+  })
+
+  it('FABRICATION: a stray `]` inside a description does not desync the unified bracket-depth counter either', () => {
+    const r = extractSchema([{
+      path: 'src/index.ts',
+      content: `
+server.addTool({ name:'real_tool', description:'unbalanced ] here', metadata:{ name:'phantom', description:'d' } })
+`,
+    }])
+    expect(r.tools.map(t => t.name)).toEqual(['real_tool'])
+  })
+
+  it('FABRICATION: a stray `)` inside a description does not desync the unified bracket-depth counter either', () => {
+    const r = extractSchema([{
+      path: 'src/index.ts',
+      content: `
+server.addTool({ name:'real_tool', description:'unbalanced ) here', metadata:{ name:'phantom', description:'d' } })
+`,
+    }])
+    expect(r.tools.map(t => t.name)).toEqual(['real_tool'])
+  })
+
+  it('COVERAGE: a stray `{` inside a description no longer truncates captureBalanced (single-tool case)', () => {
+    const r = extractSchema([{
+      path: 'src/index.ts',
+      content: `server.addTool({ name:'a', description:'contains { stray brace' })`,
+    }])
+    expect(r.tools.map(t => t.name)).toEqual(['a'])
+  })
+
+  it('COVERAGE: a stray `{` in one array tool no longer swallows a later real tool in the same array', () => {
+    const r = extractSchema([{
+      path: 'src/index.ts',
+      content: `
+const toolDefs = [
+  { name: 'a', description: 'has { brace' },
+  { name: 'b', description: 'd' },
+]
+for (const t of toolDefs) server.addTool(t)
+`,
+    }])
+    expect(r.tools.map(t => t.name).sort()).toEqual(['a', 'b'])
+  })
+
+  it('COVERAGE: a backslash-escaped quote inside a description does not desync string-boundary detection for a later tool', () => {
+    const r = extractSchema([{
+      path: 'src/index.ts',
+      content: `
+const toolDefs = [
+  { name: 'a', description: 'it\\'s fine }' },
+  { name: 'b', description: 'plain' },
+]
+for (const t of toolDefs) server.addTool(t)
+`,
+    }])
+    expect(r.tools.map(t => t.name).sort()).toEqual(['a', 'b'])
+  })
+
+  it('COMMENT SAFETY: a commented-out addTool call is not extracted as a tool', () => {
+    const r = extractSchema([{
+      path: 'src/index.ts',
+      content: `
+// server.addTool({name:'commented_out'})
+server.addTool({ name: 'real_tool', description: 'A real tool' })
+`,
+    }])
+    expect(r.tools.map(t => t.name)).toEqual(['real_tool'])
+  })
+
+  it('COMMENT SAFETY: a block comment containing an unbalanced brace does not desync a later real tool in the same array', () => {
+    const r = extractSchema([{
+      path: 'src/index.ts',
+      content: `
+const toolDefs = [
+  { name: 'a', description: 'd' },
+  /* legacy note: single stray brace { without a match */
+  { name: 'b', description: 'd' },
+]
+for (const t of toolDefs) server.addTool(t)
+`,
+    }])
+    expect(r.tools.map(t => t.name).sort()).toEqual(['a', 'b'])
+  })
+
+  // Found live (not in the original fix spec): the first cut of the
+  // comment-safety lexer treated ANY bare `/` as a potential comment start
+  // and, if it turned out not to be one (division, a regex literal), broke
+  // out of its "plain code" scan without advancing — an infinite loop that
+  // hung on real-world source (executeautomation/mcp-playwright) until
+  // `stripComments`'s array-builder overflowed with `RangeError: Invalid
+  // array length`. Locking this in so it can't regress silently.
+  it('REGRESSION: a bare `/` (division, not a comment) does not hang or desync the scanner', () => {
+    const r = extractSchema([{
+      path: 'src/index.ts',
+      content: `
+const half = 10 / 2
+server.addTool({ name: 'real_tool', description: 'divides a / b' })
+`,
+    }])
+    expect(r.tools.map(t => t.name)).toEqual(['real_tool'])
+  })
+})

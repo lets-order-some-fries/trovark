@@ -178,6 +178,20 @@ func RealTool() mcp.Tool {
   })
 })
 
+describe('coverage-v1.4 (bracket-scanning fix): Go idiom 1 with a stray `}` inside the description string', () => {
+  it('extracts go_tool with its full description intact — no phantom, no truncation', () => {
+    const content = `
+	return mcp.Tool{
+		Name: "go_tool",
+		Description: "has } brace",
+	}
+`
+    const tools = fromGoSource({ path: 'pkg/tools/go_tool.go', content })
+    expect(tools).toHaveLength(1)
+    expect(tools[0]).toMatchObject({ name: 'go_tool', description: 'has } brace' })
+  })
+})
+
 describe('extractSchema wiring — .go files dispatch to fromGoSource', () => {
   it('extracts tools from a .go file and classifies risk through the shared token-set path', () => {
     const r = extractSchema([{

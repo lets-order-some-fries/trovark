@@ -26,7 +26,7 @@
 //     a bare `NewTool(...)` call is never the MCP SDK's.
 import type { RepoFile } from '../../collectors/github.js'
 import type { ToolInfo } from '../../types.js'
-import { captureBalanced } from '../schema.js'
+import { captureBalanced, stripComments } from '../schema.js'
 
 // Matches files that plausibly touch a Go MCP SDK: either SDK's import
 // path, a qualified `mcp.` symbol from the mark3labs/official SDKs
@@ -135,7 +135,16 @@ function fromSelfRegister(content: string): ToolInfo[] {
 }
 
 export function fromGoSource(file: RepoFile): ToolInfo[] {
-  const content = file.content
+  // COMMENT-SAFETY FIX (coverage-v1.4): scan a comment-blanked copy so a
+  // commented-out `// mcp.NewTool("commented_out", ...)` line is invisible
+  // to the idiom regexes below, and captureBalanced's own lexical awareness
+  // (string/comment-safe bracket counting — see schema.ts) is consistent
+  // whether it's called from here or from the JS/TS path. `lang` defaults to
+  // 'js' inside stripComments/captureBalanced, which is also correct Go
+  // lexing: same // and /* */ comment syntax, same backslash-escaped
+  // '...'/"..." strings, and backtick treated as an opaque raw string with
+  // NO escape processing — exactly Go's own raw-string semantics.
+  const content = stripComments(file.content)
   // Phantom-tool guard: skip files that don't reference a Go MCP SDK at
   // all. Without this, a file that merely happens to define its own
   // NewTool/MustTool-named function (unrelated to MCP) would still be
