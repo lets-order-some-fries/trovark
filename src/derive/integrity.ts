@@ -117,30 +117,55 @@ function decodeTagRun(cps: number[]): { bytes: number[]; decoded: string } | nul
 }
 
 // D1b mandatory structural guard — RGI emoji tag sequences (subdivision
-// flags: Wales/Scotland/England etc.) are the ONLY legitimate tag-block use.
-// Exact, not heuristic — verified against Wales (base U+1F3F4, tag chars
-// U+E0067,E0062,E0077,E006C,E0073, terminator U+E007F).
+// flags) are the ONLY legitimate tag-block use, and exactly three exist:
+// England (gbeng), Scotland (gbsct), Wales (gbwls). A structurally-shaped
+// run (black flag + 3-7 tag chars + cancel tag) that does NOT decode to one
+// of these three codes is not a real flag — it is a decode-confirmed hidden
+// payload wearing a flag costume, and must fall through to the normal
+// decode/finding path (Defect 2: the previous version suppressed ANY
+// structural match, which is trivially evadable — encode an arbitrary
+// <=6-char payload as tag chars, wrap it in the black flag + cancel tag,
+// and it vanished with zero hits).
+const RGI_SUBDIVISION_TAG_CODES = new Set(['gbeng', 'gbsct', 'gbwls'])
+
 function isEmojiTagSequence(run: Run): boolean {
   if (run.prevCp !== WAVING_BLACK_FLAG) return false
   if (run.cps.length < 3 || run.cps.length > 7) return false
   const last = run.cps[run.cps.length - 1]
   if (last !== CANCEL_TAG) return false
-  return run.cps.slice(0, -1).every(c => c >= 0xe0020 && c <= 0xe007e)
+  const interior = run.cps.slice(0, -1)
+  if (!interior.every(c => c >= 0xe0020 && c <= 0xe007e)) return false
+  const decoded = interior.map(c => String.fromCharCode(c - TAG_LO)).join('')
+  return RGI_SUBDIVISION_TAG_CODES.has(decoded)
 }
 
 const BANNED_WORDS = /malicious|backdoor|attack|poisoned|typosquat/i
 
-function assertNoVerdictLanguage(message: string): string {
-  if (BANNED_WORDS.test(message)) throw new Error(`integrity.ts: finding message must state fact only, not a verdict: "${message}"`)
-  return message
+// Dev-time template lint ONLY. This must be called exclusively on STATIC
+// message-template text authored by us in this file — NEVER on interpolated
+// scan output (decoded payloads, tool names, surfaces, paths). Those come
+// from attacker-controlled content and this scanner's entire purpose is to
+// catch attacker-controlled content that says things like "attack" —
+// running this assertion against it turns the detector into a self-inflicted
+// denial of service (Defect 1: a payload decoding to "attack now" used to
+// throw, discarding every other finding accumulated in the same scanIntegrity
+// call, and the caller's catch-block then reported "not checked").
+function assertNoVerdictLanguage(template: string): string {
+  if (BANNED_WORDS.test(template)) throw new Error(`integrity.ts: finding message template must state fact only, not a verdict: "${template}"`)
+  return template
 }
 
 function payloadFinding(encoding: IntegrityEncoding, surface: string, path: string, line: number, col: number, cps: number[], decoded: string): Finding {
   const kind = encoding === 'variation-selector' ? 'variation-selector' : 'tag-block'
-  const message = assertNoVerdictLanguage(
-    `${surface} contains a ${cps.length}-character ${kind} sequence that renders as nothing but decodes to printable ASCII: "${decoded}". `
-    + 'This is a decode-confirmed invisible-payload encoding — codepoints at a location that decode to text, never a judgement about intent.',
+  // The lint runs ONLY on this static prefix/suffix (kind and cps.length are
+  // internal values, never attacker-controlled). `surface` and `decoded` are
+  // concatenated in afterward, clearly delimited in quotes, and are exempt
+  // from the lint by construction — they can never reach assertNoVerdictLanguage.
+  const prefix = assertNoVerdictLanguage(`contains a ${cps.length}-character ${kind} sequence that renders as nothing but decodes to printable ASCII: `)
+  const suffix = assertNoVerdictLanguage(
+    '. This is a decode-confirmed invisible-payload encoding — codepoints at a location that decode to text, never a judgement about intent.',
   )
+  const message = `${surface} ${prefix}"${decoded}"${suffix}`
   return {
     id: 'security/hidden-payload', dimension: 'security', severity: 'high', message,
     evidence: `${path}:${line}:${col} — ${cps.map(cpHex).join(',')} (${cps.length} cps) → "${decoded}"`,
@@ -209,6 +234,22 @@ function scanText(text: string, path: string, surface: string): { hits: Integrit
   return { hits, findings }
 }
 
+// Defense-in-depth for Defect 1: scanIntegrity is called inside assemble()
+// alongside other collectors, and a thrown error there is swallowed into
+// s.errors, discarding every finding accumulated in the SAME call and making
+// the report falsely claim "not checked". The root cause (the verdict-
+// language lint touching attacker-controlled text) is fixed above, but this
+// module's entire reason to exist is processing attacker-controlled input —
+// so scanning one field/file must never be able to take the whole scan down.
+// On any unexpected error, that one field/file simply contributes zero hits.
+function safeScanText(text: string, path: string, surface: string): { hits: IntegrityHit[]; findings: Finding[] } {
+  try {
+    return scanText(text, path, surface)
+  } catch {
+    return { hits: [], findings: [] }
+  }
+}
+
 type ToolField = 'name' | 'description' | 'schemaText'
 
 function toolFieldLocator(tool: ToolInfo & { evidence?: string }, field: ToolField): { path: string; surface: string } {
@@ -238,7 +279,7 @@ export function scanIntegrity(files: RepoFile[], tools: Array<ToolInfo & { evide
       if (!text) continue
       chars += text.length
       const { path, surface } = toolFieldLocator(tool, field)
-      const r = scanText(text, path, surface)
+      const r = safeScanText(text, path, surface)
       hits.push(...r.hits)
       findings.push(...r.findings)
     }
@@ -246,10 +287,30 @@ export function scanIntegrity(files: RepoFile[], tools: Array<ToolInfo & { evide
 
   for (const f of files) {
     chars += f.content.length
-    const r = scanText(f.content, f.path, `File "${f.path}"`)
+    const r = safeScanText(f.content, f.path, `File "${f.path}"`)
     hits.push(...r.hits)
     findings.push(...r.findings)
   }
 
   return { hits, findings, scanned: { files: files.length, chars, tools: tools.length } }
 }
+
+// ---- exported for index/audit.ts (corpus-measurement harness only) ----
+// Pure re-exports of the constants/primitives already defined above — no new
+// logic, no threshold change. The audit harness needs to record EVERY run at
+// length >= 1 (not just the >= MIN_VS_RUN hits scanText emits) for ship-gate
+// G3's near-miss review, and to explain guarded run >= MIN_VS_RUN sequences
+// (e.g. RGI emoji tag-sequence flags) for ship-gate G1 — reusing these exact
+// functions guarantees zero drift between what ships and what's measured.
+export const AUDIT_THRESHOLDS = {
+  minVsRun: MIN_VS_RUN,
+  minDecoded: MIN_DECODED,
+  vsRanges: [[VS_LO, VS_HI], [VSS_LO, VSS_HI]] as const,
+  tagRange: [TAG_LO, TAG_HI] as const,
+  cancelTag: CANCEL_TAG,
+  bidiRanges: [[BIDI1_LO, BIDI1_HI], [BIDI2_LO, BIDI2_HI]] as const,
+  printableSet: '0x09, 0x0A, 0x20-0x7E',
+  decoders: ['byte', 'nibble-pair'] as const,
+}
+export { isVS, isTag, isBidi, scanRuns, lineStarts, lineColFor, decodeVsRun, decodeTagRun, isEmojiTagSequence, cpHex, assertNoVerdictLanguage }
+export type { Run }
