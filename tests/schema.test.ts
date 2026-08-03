@@ -1719,3 +1719,55 @@ server.addTool({ name: 'real_tool', description: 'divides a / b' })
     expect(r.tools.map(t => t.name)).toEqual(['real_tool'])
   })
 })
+
+// W5 (coverage-v1.5, wave2-spec §2.3): partial-surface honesty.
+describe('extractSchema — surfacePartial (W5)', () => {
+  const toolFile = (n: number) => ({
+    path: `src/tools/tool${n}.ts`,
+    content: `server.tool('tool_${n}', 'desc', {}, handler)`,
+  })
+
+  it('detected (full tree) > sampled (fetched files) among tool-fanout-shaped paths -> surfacePartial true (figwright shape: 133 tool files, ~20 sampled)', () => {
+    // 3 files actually fetched/sampled...
+    const files = [toolFile(0), toolFile(1), toolFile(2)]
+    // ...but the full tree (treePaths) shows 5 tool-fanout-shaped paths exist
+    // in the repo — 2 were never reached by the sampler's FILE_CAP.
+    const treePaths = [
+      'src/tools/tool0.ts', 'src/tools/tool1.ts', 'src/tools/tool2.ts',
+      'src/tools/tool3.ts', 'src/tools/tool4.ts',
+    ]
+    const r = extractSchema(files, treePaths)
+    expect(r.extracted).toBe(true)
+    expect(r.tools).toHaveLength(3) // the sample itself is untouched — still grades on what WAS sampled
+    expect(r.surfacePartial).toBe(true)
+  })
+
+  it('detected === sampled (every tool-fanout path in the tree was fetched) -> surfacePartial false', () => {
+    const files = [toolFile(0), toolFile(1), toolFile(2)]
+    const treePaths = ['src/tools/tool0.ts', 'src/tools/tool1.ts', 'src/tools/tool2.ts']
+    const r = extractSchema(files, treePaths)
+    expect(r.surfacePartial).toBe(false)
+  })
+
+  it('no treePaths argument (tree fetch failed, or a pre-W5 call site) -> surfacePartial defaults to false, never crashes', () => {
+    const files = [toolFile(0)]
+    const r = extractSchema(files)
+    expect(r.extracted).toBe(true)
+    expect(r.surfacePartial).toBe(false)
+  })
+
+  it('a file OUTSIDE any tools?/ directory does not count toward the fanout comparison, even if unsampled', () => {
+    const files = [toolFile(0), toolFile(1)]
+    const treePaths = ['src/tools/tool0.ts', 'src/tools/tool1.ts', 'docs/unrelated.md', 'src/notes.txt']
+    const r = extractSchema(files, treePaths)
+    expect(r.surfacePartial).toBe(false)
+  })
+
+  it('surfacePartial is still computed when extraction finds zero tools', () => {
+    const files = [{ path: 'README.md', content: '# hi' }]
+    const treePaths = ['src/tools/tool0.ts', 'src/tools/tool1.ts'] // detected=2, sampled=0
+    const r = extractSchema(files, treePaths)
+    expect(r.extracted).toBe(false)
+    expect(r.surfacePartial).toBe(true)
+  })
+})

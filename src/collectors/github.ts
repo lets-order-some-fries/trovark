@@ -36,6 +36,13 @@ export interface RepoSnapshot {
   busFactor?: number
   medianIssueResponseDays?: number
   treePaths?: string[]
+  // Cleanup (dedup full-tree scan): the count of isToolFanoutPath matches
+  // across the FULL tree (treePaths), computed once here in collectGithub —
+  // the same value selectRepoFiles already needs for its FILE_CAP decision.
+  // Threaded through so src/derive/schema.ts's detectSurfacePartial can reuse
+  // it instead of re-scanning treePaths itself. Undefined when the tree
+  // fetch failed (mirrors treePaths' own undefined-on-failure semantics).
+  toolFanoutCount?: number
   files: RepoFile[]
 }
 
@@ -123,15 +130,47 @@ const SPEC_FETCH_CAP = 2
 // tool extraction, so 3 slots (shallowest path first, same priority order as
 // manifests) is plenty of signal without being able to starve source again.
 const ENV_FETCH_CAP = 3
+// W5 (wave2-spec §2.1 change 5 / §2.2 point 5): a QUOTA (not an exclusion)
+// on non-server-path (tests/examples/docs/samples, per isNonServerPath) files
+// reaching the sample. Now that SOURCE_HINT is a score rather than a gate,
+// rankedSource's filter no longer excludes these paths either — they only
+// carry a -10 score penalty — so a repo with many `*.test.ts` files can win
+// slots once FILE_CAP widens to 24. extractSchema filters them out before
+// extraction, so beyond a few they are pure waste; but classifyLibrary
+// signal 2 (src/derive/classify.ts) genuinely needs a handful present to
+// distinguish "idiom only under examples/" from "no idiom anywhere" — zero
+// would break that signal, unbounded is waste. 3 is the quota.
+const NON_SERVER_FETCH_CAP = 3
 function isSpecFile(path: string): boolean {
   const base = path.split('/').pop() ?? ''
   return SPEC_BASENAME_RE.test(base) || TOOL_DEFINITIONS_BASENAME_RE.test(base) || TOOL_MANIFEST_BASENAME_RE.test(base)
 }
+// W5 (coverage-v1.4/1.5, wave2-spec §2): SOURCE_HINT used to be a hard GATE
+// in both entrypointCandidates and rankedSource below — measured
+// (hint_probe.mjs) 21 of 77 live repos had >50% of their non-test source
+// excluded before ranking ever ran; 6 fetched ZERO source. It is now a +3
+// RANKING SCORE inside toolSignalScore only — a file that fails this hint
+// (salwks/mcp-techTrend's `trends_mcp.py`, cyclops-ui/mcp-cyclops's
+// `internal/modules/create.go`) can still be selected, just without the
+// bonus a more idiomatically-named file gets.
 const SOURCE_HINT = /(src\/|server|tool|index|main)/
 // V1 change 1: adds go/rs/java/cs/kt so wave-1/2 language extractors (V3+)
 // actually get source to parse. Fetching them now is harmless even before
 // their extractors are wired.
 const SOURCE_EXT = /\.(ts|js|mjs|py|go|rs|java|cs|kt)$/
+// W5 new positive ranking signals (wave2-spec §2.1), filename-level and
+// independent of directory name — recover repos whose tool surface lives in
+// a flatly-named file with no `src/`/`tools/` directory at all:
+// TOOL_BASENAME_RE catches 1mcp's `discoveryTools.ts`-shaped files;
+// MCP_BASENAME_RE catches `bilibili_mcp.py`/`trends_mcp.py`-shaped files.
+const TOOL_BASENAME_RE = /(^|\/)[A-Za-z0-9]+(Tools?|_tools?)\.(ts|js|mjs|py|go)$/
+const MCP_BASENAME_RE = /(^|\/)[\w.-]*mcp[\w.-]*\.(ts|js|mjs|py|go)$/i
+// W5 new negative signal: build/config noise that only became reachable now
+// that SOURCE_HINT is no longer a hard gate (an eslint/vite/rollup/jest/
+// webpack config, or a near-empty Python `setup.py`/`__init__.py`/
+// `conftest.py`, all satisfy SOURCE_EXT + often "index"/"main"-adjacent
+// paths without carrying any tool surface).
+const CONFIG_NOISE_RE = /(^|\/)(?:[\w.-]*\.config\.(?:ts|js|mjs|cjs)|eslint\.[\w.]+|vite\.[\w.]+|rollup\.[\w.]+|jest\.[\w.]+|webpack\.[\w.]+|conftest\.py|setup\.py|__init__\.py)$/
 // V1 change 5 (entrypoint size relaxation): a single-file entrypoint
 // (server/index/main.<ext>) that exceeds SIZE_CAP is fetched-and-truncated
 // rather than skipped outright — the alternative is losing the ENTIRE tool
@@ -191,6 +230,23 @@ const isNonServerPath = (path: string): boolean => NON_SERVER_DIR_RE.test(path) 
 // `@upstash/context7-mcp`) is still covered.
 const TOOLS_DIR_RE = /(^|\/)tools?\//
 const DOT_TOOLS_TS_RE = /\.tools\.ts$/
+// W5 (wave2-spec §2.1 change 4 / §2.3): the "tool fan-out" shape — a
+// non-test/example source file living under a tools?/ directory or matching
+// `*.tools.ts`. Used TWICE, over two different path universes: (a) here,
+// against the FETCHED blob list, to decide whether FILE_CAP should widen to
+// 24 (a repo with >=8 such files, e.g. figwright's 133, brave's 27, is
+// corpus-wide shape, not a special case — 21 of 77 live repos trip this);
+// (b) exported for src/derive/schema.ts's `surfacePartial` (§2.3), which
+// re-runs the SAME shape against the repo's FULL tree (treePaths, every path
+// GitHub reports — never truncated by the budget) and compares that count to
+// how many of those paths actually made it into the fetched sample. When the
+// full-tree count exceeds the sampled count, the sample is provably partial
+// (figwright: 133 detected, ~20 sampled under a 24-file cap) and cost
+// signals derived from the sample (toolCount, schemaTokenEstimate) would be
+// confidently wrong rather than merely approximate — see schema.ts.
+export function isToolFanoutPath(path: string): boolean {
+  return !isNonServerPath(path) && SOURCE_EXT.test(path) && (TOOLS_DIR_RE.test(path) || DOT_TOOLS_TS_RE.test(path))
+}
 const TOOL_REGISTRY_RE = /(tools?-registry|admin-mcp|toolDefinitions)/i
 const MCP_DIR_RE = /\/mcp\//
 // Regression fix (coverage-v1.3 fix wave, coverage-spec-regression §3): V1
@@ -217,6 +273,13 @@ function toolSignalScore(path: string, pkgName: string | undefined): number {
   if (isEntrypointPath(path)) s += 2
   if (isNonServerPath(path)) s -= 10
   if (UNSUPPORTED_EXTRACTOR_EXT_RE.test(path)) s -= 3
+  // W5 (wave2-spec §2.1): SOURCE_HINT is now a ranking signal, not a hard
+  // gate (see the comment on its declaration) — a file that misses it is
+  // still eligible, just unranked by it.
+  if (SOURCE_HINT.test(path)) s += 3
+  if (TOOL_BASENAME_RE.test(path)) s += 5
+  if (MCP_BASENAME_RE.test(path)) s += 4
+  if (CONFIG_NOISE_RE.test(path)) s -= 6
   return s
 }
 // V1 change 3: manifest selection priority — root (fewest path segments)
@@ -240,6 +303,178 @@ function parseNextLink(headers: Headers): string | undefined {
     if (m) return m[1]
   }
   return undefined
+}
+
+export interface BlobInfo { path: string; size?: number }
+
+// V1 change 5: entrypoints are fetchable even past SIZE_CAP — fetched then
+// truncated by collectGithub's fetch loop, rather than skipped outright.
+// Hoisted to module scope (cleanup): this predicate only closes over
+// module-level SIZE_CAP/isEntrypointPath, so it was previously defined
+// identically in both selectRepoFiles and collectGithub — one copy now
+// serves both.
+const fetchable = (p: BlobInfo): boolean => (p.size ?? 0) <= SIZE_CAP || isEntrypointPath(p.path)
+
+// W5 (coverage-v1.5, wave2-spec §2.2 / plan Task W5) — THE REGRESSION GUARD:
+// the pure, network-free half of the file-selection step, extracted
+// verbatim (behaviorally, at extraction time) out of collectGithub below.
+// Recorded tree (path+size, no content) + the two scalars that need the root
+// package.json's CONTENT (rootPkgName, hasWorkspaces — collectGithub still
+// fetches that one file over the network before calling this) go in; the
+// ordered, deduped, FILE_CAP-capped list of paths collectGithub will fetch
+// comes out. No I/O anywhere in this function.
+//
+// This determinism is what makes the guard possible: tests/github.test.ts's
+// "sampling regression guard" describe block calls this directly against
+// `gh api .../git/trees/<branch>?recursive=1` dumps checked into
+// tests/fixtures/sampling-corpus.json (see that file's header) and asserts
+// no tool-bearing path that a PRE-W5 run of this same function selected is
+// dropped by the POST-W5 version — without touching the network at all.
+export function selectRepoFiles(
+  blobs: BlobInfo[], rootPkgName: string | undefined, hasWorkspaces: boolean,
+  // Cleanup: optional precomputed fan-out count. collectGithub already scans
+  // `blobs` once for this exact value (to also stash it on RepoSnapshot for
+  // schema.ts's detectSurfacePartial — see RepoSnapshot.toolFanoutCount) and
+  // passes it through here so this function doesn't redundantly re-scan the
+  // same full tree. Falls back to computing it locally when omitted, so
+  // direct callers (e.g. the sampling-regression-guard tests) are unaffected.
+  toolFanoutCount?: number,
+): string[] {
+  // Basename match (not full-path) so workspace/monorepo manifests nested under
+  // e.g. packages/x/package.json are still always-fetched, not just root ones.
+  // .csproj filenames vary (MyServer.csproj), so basename-Set membership can't
+  // catch them — fall back to an extension check for that ecosystem.
+  // V1 change 2: mcp.json/server.json are root-only; .cursor/, .vscode/, and
+  // any **/data/** path are never manifests regardless of basename (kills
+  // .cursor/mcp.json / .vscode/mcp.json editor-config false positives).
+  const isManifest = (p: string): boolean => {
+    if (EXCLUDED_MANIFEST_PATH_RE.test(p) || EXCLUDED_MANIFEST_DATA_DIR_RE.test(p)) return false
+    const base = p.split('/').pop() ?? ''
+    if (!ALWAYS_FETCH.has(base) && !p.endsWith('.csproj')) return false
+    if (ROOT_ONLY_MANIFEST.has(base)) return p === base || WELL_KNOWN_MANIFEST_PATH_RE.test(p)
+    return true
+  }
+  const isLockfile = (p: string) => LOCKFILES.has(p.split('/').pop() ?? '')
+  const byPriority = (a: BlobInfo, b: BlobInfo) => {
+    const [da, la] = manifestPriority(a.path)
+    const [db, lb] = manifestPriority(b.path)
+    return da - db || la - lb
+  }
+
+  // V1 change 3 (dynamic budget, coverage-spec §3.3b): a fixed FILE_CAP=12 let
+  // 7-26 manifest files (context7, cloudflare, awslabs, metatool) eat the
+  // entire budget before any tool source was reached. Manifest candidates are
+  // computed FIRST (path-only, no fetch needed) so the cap can react to repo
+  // shape.
+  const manifestCandidates = blobs.filter(b => fetchable(b) && isManifest(b.path)).sort(byPriority)
+  const manifestCount = manifestCandidates.length
+
+  // W5 (wave2-spec §2.1 change 4): fan-out budget trigger — a repo with 8 or
+  // more tool-fanout-shaped files (one-tool-per-file `tools/` layouts, or
+  // `*.tools.ts`) needs the wider cap even when it has few manifests and no
+  // workspaces field. Measured corpus-wide, not a special case: fires on 21
+  // of 77 live repos (brave 27, webdriverio 36, netlify 34, browserbase 8,
+  // executeautomation 30, firefox 34, 1mcp 50, figwright 133, heor 110…).
+  const toolFanout = toolFanoutCount ?? blobs.filter(b => isToolFanoutPath(b.path)).length
+  const FILE_CAP = (manifestCount > 3 || hasWorkspaces || toolFanout >= 8) ? 24 : 12
+  const MANIFEST_QUOTA = Math.min(manifestCount, 3) // root + 2, per coverage-spec §3.3b
+  const SOURCE_FLOOR = Math.ceil(FILE_CAP * 0.66)
+
+  const envBlobs = blobs
+    .filter(b => fetchable(b) && /(^|\/)\.env[^/]*$/.test(b.path))
+    .sort(byPriority)
+    .slice(0, ENV_FETCH_CAP)
+  // V5 (coverage-spec §3.5): spec-fetch bucket, capped at SPEC_FETCH_CAP —
+  // computed before the source-floor eviction loop below so those 2 slots
+  // are counted against the budget the same way manifests are (otherwise an
+  // uncapped/unaccounted spec bucket could itself become a new starvation
+  // source, the exact failure mode this whole task is fixing).
+  // W2: (a) excludes isNonServerPath matches — a test-fixture or example spec
+  // (`__tests__/fixture-openapi.json`, `examples/openapi.json`) must never
+  // occupy one of only 2 slots and starve the real spec file (this is what
+  // correctly drops upstash/context7's `docs/openapi.json`); (b) sorted
+  // shallowest-first (same manifestPriority ordering as every other
+  // guaranteed bucket) instead of raw tree order, so the root-level spec
+  // file always wins the cap over a deeply nested one.
+  const specCandidates = blobs
+    .filter(b => fetchable(b) && isSpecFile(b.path) && !isNonServerPath(b.path))
+    .sort(byPriority)
+    .slice(0, SPEC_FETCH_CAP)
+  // Regression fix: guaranteed entrypoint bucket, computed BEFORE rankedSource
+  // (and excluded from it below) so the two buckets never double-count the
+  // same path against the budget. Prioritized root/shallow-first then
+  // shortest-path — same ordering rule as manifestPriority — since the
+  // top-level entrypoint is the most likely place a monorepo subpackage
+  // registers its tools.
+  // W5: SOURCE_HINT dropped from this filter (was AND'd in here) — in
+  // practice this changes nothing for THIS bucket, because
+  // isEntrypointOrBareToolFile already requires a server/index/main/
+  // tool(s)-shaped basename, which always itself satisfies SOURCE_HINT. The
+  // gate removal is what matters for rankedSource below.
+  const entrypointCandidates = blobs
+    .filter(b => fetchable(b) && SOURCE_EXT.test(b.path) && isEntrypointOrBareToolFile(b.path))
+    .sort(byPriority)
+    .slice(0, ENTRYPOINT_FETCH_CAP)
+  const entrypointPaths = new Set(entrypointCandidates.map(b => b.path))
+  // V1 change 4: tool-signal score replaces the old shortest-path tie-break.
+  // W5 (wave2-spec §2.1 change 1): SOURCE_HINT deleted from this filter — it
+  // used to be a hard AND-gate here, excluding e.g. salwks/mcp-techTrend's
+  // `trends_mcp.py` and cyclops-ui/mcp-cyclops's `internal/modules/create.go`
+  // before ranking ever ran (measured: 21/77 repos lost >50% of source this
+  // way, 6 fetched zero). SOURCE_HINT is now folded into toolSignalScore as a
+  // +3 ranking signal instead — a file that misses it can still be selected.
+  const rankedSource = blobs
+    .filter(b => fetchable(b) && SOURCE_EXT.test(b.path) && !entrypointPaths.has(b.path))
+    .sort((a, b) => toolSignalScore(b.path, rootPkgName) - toolSignalScore(a.path, rootPkgName) || a.path.length - b.path.length)
+
+  // Manifests start at full candidate strength (not pre-capped to
+  // MANIFEST_QUOTA) — most repos have few enough manifests that no eviction is
+  // ever needed, and pre-capping would needlessly drop legitimate nested
+  // manifests (go.mod, .csproj, per-workspace package.json) in small repos
+  // that were never actually starving source. Eviction only kicks in — lowest
+  // priority (deepest/longest path) first — when the ranked-source budget
+  // would otherwise fall below SOURCE_FLOOR, and never below MANIFEST_QUOTA.
+  let manifestsSelected = manifestCandidates
+  const sourceTarget = Math.min(SOURCE_FLOOR, rankedSource.length)
+  const availableSourceSlots = () => Math.max(0, FILE_CAP - envBlobs.length - manifestsSelected.length - specCandidates.length - entrypointCandidates.length)
+  while (availableSourceSlots() < sourceTarget && manifestsSelected.length > MANIFEST_QUOTA) {
+    manifestsSelected = manifestsSelected.slice(0, -1)
+  }
+
+  // Fix (final review): priority buckets, in order — (1) PRIMARY manifests +
+  // .env matches, (2) up to SPEC_FETCH_CAP spec files (V5, §3.5), (3) up to
+  // ENTRYPOINT_FETCH_CAP guaranteed entrypoint files (regression fix, see
+  // ENTRYPOINT_FETCH_CAP above), (4) ranked SOURCE files, (5) LOCKFILES last
+  // — so lockfiles (CVE-lookup data only) never outrank source (needed for
+  // tool extraction → gate) under a tight FILE_CAP, and the spec/entrypoint
+  // buckets sit right after primary manifests per the spec's selection order
+  // (§3.3b).
+  const wanted = [
+    ...envBlobs,
+    ...manifestsSelected,
+    ...specCandidates,
+    ...entrypointCandidates,
+    ...rankedSource,
+    ...blobs.filter(b => fetchable(b) && isLockfile(b.path)),
+  ]
+  const selected: string[] = []
+  const seen = new Set<string>()
+  // W5 (wave2-spec §2.1 change 5 / §2.2 point 5): quota non-server-path
+  // (tests/examples/docs/samples) files that reach here via rankedSource's
+  // now-relaxed gate — see NON_SERVER_FETCH_CAP's comment for why this is a
+  // quota and not an exclusion.
+  let nonServerSelected = 0
+  for (const b of wanted) {
+    if (selected.length >= FILE_CAP) break
+    if (seen.has(b.path)) continue
+    seen.add(b.path)
+    if (isNonServerPath(b.path)) {
+      if (nonServerSelected >= NON_SERVER_FETCH_CAP) continue
+      nonServerSelected++
+    }
+    selected.push(b.path)
+  }
+  return selected
 }
 
 export async function collectGithub(
@@ -337,44 +572,22 @@ export async function collectGithub(
     .catch(() => undefined)
   const blobs = tree?.tree.filter(t => t.type === 'blob') ?? []
   const treePaths = tree ? blobs.map(b => b.path) : undefined
+  // Cleanup (dedup full-tree scan): computed ONCE here, over the full tree,
+  // and threaded into both selectRepoFiles (which needs it for its FILE_CAP
+  // decision) and RepoSnapshot.toolFanoutCount (which schema.ts's
+  // detectSurfacePartial reads instead of re-scanning treePaths itself).
+  // undefined (not 0) when the tree fetch failed, mirroring treePaths.
+  const toolFanoutCount = tree ? blobs.filter(b => isToolFanoutPath(b.path)).length : undefined
 
-  // V1 change 5: entrypoints are fetchable even past SIZE_CAP — fetched then
-  // truncated below, rather than skipped outright.
-  const fetchable = (p: { path: string; size?: number }) => (p.size ?? 0) <= SIZE_CAP || isEntrypointPath(p.path)
-  // Basename match (not full-path) so workspace/monorepo manifests nested under
-  // e.g. packages/x/package.json are still always-fetched, not just root ones.
-  // .csproj filenames vary (MyServer.csproj), so basename-Set membership can't
-  // catch them — fall back to an extension check for that ecosystem.
-  // V1 change 2: mcp.json/server.json are root-only; .cursor/, .vscode/, and
-  // any **/data/** path are never manifests regardless of basename (kills
-  // .cursor/mcp.json / .vscode/mcp.json editor-config false positives).
-  const isManifest = (p: string): boolean => {
-    if (EXCLUDED_MANIFEST_PATH_RE.test(p) || EXCLUDED_MANIFEST_DATA_DIR_RE.test(p)) return false
-    const base = p.split('/').pop() ?? ''
-    if (!ALWAYS_FETCH.has(base) && !p.endsWith('.csproj')) return false
-    if (ROOT_ONLY_MANIFEST.has(base)) return p === base || WELL_KNOWN_MANIFEST_PATH_RE.test(p)
-    return true
-  }
-  const isLockfile = (p: string) => LOCKFILES.has(p.split('/').pop() ?? '')
   const rawUrl = (p: string) => `https://raw.githubusercontent.com/${owner}/${name}/${meta.default_branch}/${p}`
 
-  // V1 change 3 (dynamic budget, coverage-spec §3.3b): a fixed FILE_CAP=12 let
-  // 7-26 manifest files (context7, cloudflare, awslabs, metatool) eat the
-  // entire budget before any tool source was reached. Manifest candidates are
-  // computed FIRST (path-only, no fetch needed) so the cap can react to repo
-  // shape; the root package.json is then fetched once, both to detect
-  // `workspaces` (npm/yarn monorepo signal) and to resolve the root package
-  // name for the `-mcp` toolSignalScore bonus. That single fetch is cached and
-  // reused by the main loop below — never fetched twice.
-  const manifestCandidates = blobs
-    .filter(b => fetchable(b) && isManifest(b.path))
-    .sort((a, b) => {
-      const [da, la] = manifestPriority(a.path)
-      const [db, lb] = manifestPriority(b.path)
-      return da - db || la - lb
-    })
-  const manifestCount = manifestCandidates.length
-
+  // V1 change 3 (dynamic budget, coverage-spec §3.3b): the root package.json
+  // is fetched once, both to detect `workspaces` (npm/yarn monorepo signal,
+  // widens FILE_CAP in selectRepoFiles below) and to resolve the root package
+  // name for the `-mcp` toolSignalScore bonus. This is the one piece of the
+  // selection step that genuinely needs network access (the manifest's JSON
+  // *content*, not just its path) — everything else selectRepoFiles needs is
+  // path/size-only and lives in the recorded tree.
   let hasWorkspaces = false
   let rootPkgName: string | undefined
   let rootPkgContent: string | undefined
@@ -388,99 +601,14 @@ export async function collectGithub(
     } catch { /* malformed/unfetchable root package.json — treat as no signal */ }
   }
 
-  const FILE_CAP = (manifestCount > 3 || hasWorkspaces) ? 24 : 12
-  const MANIFEST_QUOTA = Math.min(manifestCount, 3) // root + 2, per coverage-spec §3.3b
-  const SOURCE_FLOOR = Math.ceil(FILE_CAP * 0.66)
-
-  const envBlobs = blobs
-    .filter(b => fetchable(b) && /(^|\/)\.env[^/]*$/.test(b.path))
-    .sort((a, b) => {
-      const [da, la] = manifestPriority(a.path)
-      const [db, lb] = manifestPriority(b.path)
-      return da - db || la - lb
-    })
-    .slice(0, ENV_FETCH_CAP)
-  // V5 (coverage-spec §3.5): spec-fetch bucket, capped at SPEC_FETCH_CAP —
-  // computed before the source-floor eviction loop below so those 2 slots
-  // are counted against the budget the same way manifests are (otherwise an
-  // uncapped/unaccounted spec bucket could itself become a new starvation
-  // source, the exact failure mode this whole task is fixing).
-  // W2: (a) excludes isNonServerPath matches — a test-fixture or example spec
-  // (`__tests__/fixture-openapi.json`, `examples/openapi.json`) must never
-  // occupy one of only 2 slots and starve the real spec file (this is what
-  // correctly drops upstash/context7's `docs/openapi.json`); (b) sorted
-  // shallowest-first (same manifestPriority ordering as every other
-  // guaranteed bucket) instead of raw tree order, so the root-level spec
-  // file always wins the cap over a deeply nested one.
-  const specCandidates = blobs
-    .filter(b => fetchable(b) && isSpecFile(b.path) && !isNonServerPath(b.path))
-    .sort((a, b) => {
-      const [da, la] = manifestPriority(a.path)
-      const [db, lb] = manifestPriority(b.path)
-      return da - db || la - lb
-    })
-    .slice(0, SPEC_FETCH_CAP)
-  // Regression fix: guaranteed entrypoint bucket, computed BEFORE rankedSource
-  // (and excluded from it below) so the two buckets never double-count the
-  // same path against the budget. Prioritized root/shallow-first then
-  // shortest-path — same ordering rule as manifestPriority — since the
-  // top-level entrypoint is the most likely place a monorepo subpackage
-  // registers its tools.
-  const entrypointCandidates = blobs
-    .filter(b => fetchable(b) && SOURCE_EXT.test(b.path) && SOURCE_HINT.test(b.path) && isEntrypointOrBareToolFile(b.path))
-    .sort((a, b) => {
-      const [da, la] = manifestPriority(a.path)
-      const [db, lb] = manifestPriority(b.path)
-      return da - db || la - lb
-    })
-    .slice(0, ENTRYPOINT_FETCH_CAP)
-  const entrypointPaths = new Set(entrypointCandidates.map(b => b.path))
-  // V1 change 4: tool-signal score replaces the old shortest-path tie-break.
-  const rankedSource = blobs
-    .filter(b => fetchable(b) && SOURCE_EXT.test(b.path) && SOURCE_HINT.test(b.path) && !entrypointPaths.has(b.path))
-    .sort((a, b) => toolSignalScore(b.path, rootPkgName) - toolSignalScore(a.path, rootPkgName) || a.path.length - b.path.length)
-
-  // Manifests start at full candidate strength (not pre-capped to
-  // MANIFEST_QUOTA) — most repos have few enough manifests that no eviction is
-  // ever needed, and pre-capping would needlessly drop legitimate nested
-  // manifests (go.mod, .csproj, per-workspace package.json) in small repos
-  // that were never actually starving source. Eviction only kicks in — lowest
-  // priority (deepest/longest path) first — when the ranked-source budget
-  // would otherwise fall below SOURCE_FLOOR, and never below MANIFEST_QUOTA.
-  let manifestsSelected = manifestCandidates
-  const sourceTarget = Math.min(SOURCE_FLOOR, rankedSource.length)
-  const availableSourceSlots = () => Math.max(0, FILE_CAP - envBlobs.length - manifestsSelected.length - specCandidates.length - entrypointCandidates.length)
-  while (availableSourceSlots() < sourceTarget && manifestsSelected.length > MANIFEST_QUOTA) {
-    manifestsSelected = manifestsSelected.slice(0, -1)
-  }
-
-  // Fix (final review): priority buckets, in order — (1) PRIMARY manifests +
-  // .env matches, (2) up to SPEC_FETCH_CAP spec files (V5, §3.5), (3) up to
-  // ENTRYPOINT_FETCH_CAP guaranteed entrypoint files (regression fix, see
-  // ENTRYPOINT_FETCH_CAP above), (4) ranked SOURCE files, (5) LOCKFILES last
-  // — so lockfiles (CVE-lookup data only) never outrank source (needed for
-  // tool extraction → gate) under a tight FILE_CAP, and the spec/entrypoint
-  // buckets sit right after primary manifests per the spec's selection order
-  // (§3.3b).
-  const wanted = [
-    ...envBlobs,
-    ...manifestsSelected,
-    ...specCandidates,
-    ...entrypointCandidates,
-    ...rankedSource,
-    ...blobs.filter(b => fetchable(b) && isLockfile(b.path)),
-  ]
-  const seen = new Set<string>()
+  const selectedPaths = selectRepoFiles(blobs, rootPkgName, hasWorkspaces, toolFanoutCount)
   const files: RepoFile[] = []
-  for (const b of wanted) {
-    if (files.length >= FILE_CAP) break
-    if (seen.has(b.path)) continue
-    seen.add(b.path)
+  for (const path of selectedPaths) {
     try {
-      const content = b.path === 'package.json' && rootPkgContent !== undefined
+      const content = path === 'package.json' && rootPkgContent !== undefined
         ? rootPkgContent
-        : await http.text(rawUrl(b.path))
-      files.push({ path: b.path, content: content.length > SIZE_CAP ? content.slice(0, SIZE_CAP) : content })
+        : await http.text(rawUrl(path))
+      files.push({ path, content: content.length > SIZE_CAP ? content.slice(0, SIZE_CAP) : content })
     } catch { /* skip unfetchable file */ }
   }
 
@@ -490,6 +618,6 @@ export async function collectGithub(
     description: meta.description ?? undefined, topics: meta.topics ?? [],
     pushedAt: meta.pushed_at,
     latestReleaseAt, commitsLast90Days, busFactor, medianIssueResponseDays,
-    treePaths, files,
+    treePaths, toolFanoutCount, files,
   }
 }

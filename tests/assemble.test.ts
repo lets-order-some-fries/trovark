@@ -6,6 +6,34 @@ import type { Http } from '../src/util/http.js'
 const NOW = new Date('2026-07-31T00:00:00Z')
 const iso = (daysAgo: number) => new Date(NOW.getTime() - daysAgo * 86_400_000).toISOString()
 
+// Cleanup: shared builder for the route-matching mock Http used across this
+// file's fixtures — fullFake() and figwrightShapedHttp() previously
+// duplicated this json/jsonWithHeaders/postJson boilerplate verbatim, with
+// only `routes` and the `text` lookup differing between them.
+function makeRoutedHttp(routes: Record<string, unknown>, textFn: (url: string) => string): Http {
+  return {
+    async json<T>(url: string): Promise<T> {
+      for (const [prefix, body] of Object.entries(routes)) if (url.startsWith(prefix)) return body as T
+      throw new Error(`HTTP 404 for ${url}`)
+    },
+    // Real (not a stub): collectGithub paginates commits through this method,
+    // and a single-page fixture with no Link header → one page, as before.
+    async jsonWithHeaders<T>(url: string): Promise<{ data: T; headers: Headers }> {
+      for (const [prefix, body] of Object.entries(routes)) {
+        if (url.startsWith(prefix)) return { data: body as T, headers: new Headers() }
+      }
+      throw new Error(`HTTP 404 for ${url}`)
+    },
+    async postJson<T>(url: string): Promise<T> {
+      if (url.includes('osv.dev')) return { results: [{}] } as T
+      throw new Error(`HTTP 404 for ${url}`)
+    },
+    async text(url: string): Promise<string> {
+      return textFn(url)
+    },
+  }
+}
+
 function fullFake(): Http {
   const routes: Record<string, unknown> = {
     'https://api.github.com/repos/acme/foo/commits?since': [
@@ -32,29 +60,11 @@ function fullFake(): Http {
     },
     'https://api.npmjs.org/downloads/point/last-week/foo-mcp': { downloads: 2000 },
   }
-  return {
-    async json<T>(url: string): Promise<T> {
-      for (const [prefix, body] of Object.entries(routes)) if (url.startsWith(prefix)) return body as T
-      throw new Error(`HTTP 404 for ${url}`)
-    },
-    // Real (not a stub): collectGithub paginates commits through this method,
-    // and this fixture's single page has no Link header → one page, as before.
-    async jsonWithHeaders<T>(url: string): Promise<{ data: T; headers: Headers }> {
-      for (const [prefix, body] of Object.entries(routes)) {
-        if (url.startsWith(prefix)) return { data: body as T, headers: new Headers() }
-      }
-      throw new Error(`HTTP 404 for ${url}`)
-    },
-    async postJson<T>(url: string): Promise<T> {
-      if (url.includes('osv.dev')) return { results: [{}] } as T
-      throw new Error(`HTTP 404 for ${url}`)
-    },
-    async text(url: string): Promise<string> {
-      if (url.endsWith('package.json')) return JSON.stringify({ dependencies: { '@modelcontextprotocol/sdk': '^1.2.0' } })
-      if (url.endsWith('src/index.ts')) return `server.tool('greet', 'Say hello', {}, h)`
-      throw new Error(`HTTP 404 for ${url}`)
-    },
-  }
+  return makeRoutedHttp(routes, (url) => {
+    if (url.endsWith('package.json')) return JSON.stringify({ dependencies: { '@modelcontextprotocol/sdk': '^1.2.0' } })
+    if (url.endsWith('src/index.ts')) return `server.tool('greet', 'Say hello', {}, h)`
+    throw new Error(`HTTP 404 for ${url}`)
+  })
 }
 
 describe('assemble', () => {
@@ -289,5 +299,44 @@ describe('assemble — unresolved repo (W1): a GitHub 404 must not become a dege
     const s = await assemble({ ref: 'acme/broken', repo: { owner: 'acme', name: 'broken' } }, http, NOW)
     expect(s.unresolved).toBeUndefined()
     expect(s.errors.some(e => e.startsWith('github:'))).toBe(true)
+  })
+})
+
+// W5 (coverage-v1.5, wave2-spec §2.3): partial-surface honesty, end-to-end
+// through the real collectGithub selection + extractSchema + assemble wiring
+// (figwright shape: far more tool-fanout files exist than the sampler's
+// FILE_CAP can fetch).
+describe('assemble — partial-surface honesty (W5)', () => {
+  function figwrightShapedHttp(): Http {
+    // 30 one-tool-per-file modules under src/tools/ trips toolFanout>=8
+    // (FILE_CAP widens to 24), but 30 candidates for the 23 rankedSource
+    // slots left after the 1 manifest slot means 7 are never sampled.
+    const toolPaths = Array.from({ length: 30 }, (_, i) => `src/tools/tool${i}.ts`)
+    const routes: Record<string, unknown> = {
+      'https://api.github.com/repos/acme/foo/commits?since': [],
+      'https://api.github.com/repos/acme/foo/releases/latest': {},
+      'https://api.github.com/repos/acme/foo/git/trees/main?recursive=1': {
+        tree: [
+          { path: 'package.json', type: 'blob', size: 500 },
+          ...toolPaths.map(p => ({ path: p, type: 'blob', size: 200 })),
+        ],
+      },
+      'https://api.github.com/repos/acme/foo': {
+        stargazers_count: 10, archived: false, pushed_at: NOW.toISOString(), default_branch: 'main',
+      },
+    }
+    return makeRoutedHttp(routes, (url) => {
+      if (url.endsWith('package.json')) return '{"name":"foo"}'
+      const m = /tool(\d+)\.ts$/.exec(url)
+      return `server.tool('tool_${m ? m[1] : 'x'}', 'benign', {}, handler)`
+    })
+  }
+
+  it('a repo with more detected tool-fanout files than the sampler reached leaves toolCount/schemaTokenEstimate undefined, but still grades security on the sampled tools', async () => {
+    const s = await assemble({ ref: 'acme/foo', repo: { owner: 'acme', name: 'foo' } }, figwrightShapedHttp(), NOW)
+    expect(s.schemaExtracted).toBe(true)       // extraction itself succeeded on the sample
+    expect(s.toolSurfaceRisk).toBe('none')     // security still grades on the sampled tools
+    expect(s.toolCount).toBeUndefined()        // cost declines to publish a count from a partial sample
+    expect(s.schemaTokenEstimate).toBeUndefined()
   })
 })
