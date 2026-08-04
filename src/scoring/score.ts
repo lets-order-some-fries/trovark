@@ -47,6 +47,35 @@ export function score(
     }
   })
 
+  // D2 (integrity-phase2, docs/superpowers/plans/2026-08-04-integrity-v1.md
+  // "Phase 2"): a decode-confirmed hidden payload in tool metadata is
+  // implemented as a DISQUALIFYING OVERRIDE on the security dimension, not
+  // as an additional weighted SIGNALS entry. Why: the 400-server audit
+  // found this fires on 0% of the corpus (0 payloads / 400 servers) — a
+  // signal that evaluates to 1.0 for 100% of servers carries no
+  // information, but adding it as, say, weight 3 to security's existing
+  // tool-surface(3)+no-secrets(1)+dependency-cves(2)=6 denominator would
+  // still INFLATE every score by diluting the signals that actually
+  // discriminate (measured: a high-risk exec/shell server would move
+  // 60->73; a high-risk server with a secret candidate would move 43->62).
+  // That is a regression in scoring quality, not an improvement. An
+  // override sidesteps this entirely: it has ZERO effect when
+  // hiddenPayloadDecoded is 0 or undefined — true for every server measured
+  // so far, so this is a provable zero-regression change — and is DECISIVE
+  // (forces security to 0, the worst possible score) when a hit is
+  // decode-confirmed. A decode-confirmed payload is positive evidence of
+  // deliberate concealment (not a probabilistic guess like the secrets
+  // heuristic above), and the audit measured zero legitimate runs >=4
+  // across 56.7M characters, so this cannot fire on benign content.
+  // Weights, denominators, and every other dimension are untouched — see
+  // src/scoring/rubric.ts, which this override does not modify.
+  let hiddenPayloadNote: string | undefined
+  if (signals.hiddenPayloadDecoded !== undefined && signals.hiddenPayloadDecoded > 0) {
+    const sec = dimensions.find(d => d.id === 'security')
+    if (sec) sec.score = 0
+    hiddenPayloadNote = `Security scored 0: ${signals.hiddenPayloadDecoded} decode-confirmed hidden payload(s) in tool metadata — see findings for path, codepoints and decoded text.`
+  }
+
   const availableTotal = dimensions.reduce((a, d) => a + d.available, 0)
   // Coverage gate: don't hand out a confident grade when the security PRIMARY
   // signal (tool-surface risk) couldn't be determined — without it, security
@@ -72,6 +101,7 @@ export function score(
     && (availableTotal < 4 || securityPrimaryAbsent || dimensionsFullyDropped >= 2)
 
   const notes: string[] = []
+  if (hiddenPayloadNote) notes.push(hiddenPayloadNote)
   for (const d of dimensions) {
     if (d.available === 0) notes.push(`No ${d.id} signals could be collected; ${d.id} is excluded from the overall score.`)
     else if (d.confidence === 'low') notes.push(`Low confidence in ${d.id}: only ${d.available}/${d.total} signals available.`)
@@ -109,11 +139,14 @@ export function score(
     ref, rubricVersion: RUBRIC_VERSION,
     // D1 (integrity-v1): checksVersion records which CHECK set produced this
     // card — distinct from rubricVersion, which records which set of
-    // signals GRADED it. integrityHits/integrityScanned are display-only
-    // passthroughs from Signals; nothing above (overall/grade/dimensions)
-    // reads them, so this is provably zero grade effect. integrityHits
-    // stays undefined (never []) when assemble.ts never called
-    // scanIntegrity — see its "absence != clean" note.
+    // signals GRADED it. integrityHits/integrityScanned remain display-only
+    // passthroughs from Signals — nothing above reads the hits list itself.
+    // integrityHits stays undefined (never []) when assemble.ts never
+    // called scanIntegrity — see its "absence != clean" note.
+    // D2 (integrity-phase2): the ONE exception is signals.hiddenPayloadDecoded
+    // (a derived count, not the hits list), which the override above reads
+    // to zero the security dimension — see that comment for the full
+    // rationale.
     checksVersion: '1.0.0',
     overall: withheld ? null : overall,
     grade: withheld ? null : grade(overall),
