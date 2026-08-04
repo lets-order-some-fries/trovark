@@ -1,0 +1,32 @@
+name: Bug report
+description: A wrong grade, crash, or incorrect finding
+labels: [bug]
+body:
+  - type: input
+    id: ref
+    attributes:
+      label: Server ref you scanned
+      placeholder: "npx trovark github/github-mcp-server"
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: trovark version
+      placeholder: "npx trovark --version"
+    validations:
+      required: true
+  - type: textarea
+    id: observed
+    attributes:
+      label: Observed output
+      description: Paste the relevant scorecard section or error (use --json if helpful)
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: What you expected and why
+      description: If you're disputing a grade or finding, link the evidence (repo file, commit, registry page)
+    validations:
+      required: true
