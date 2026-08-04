@@ -96,16 +96,27 @@ export async function assemble(
         const secrets = scanSecrets(snap.files)
         s.secretsFound = secrets.count
         s.findings.push(...secrets.findings)
-        // D1 (integrity-v1): findings-only, provably zero grade effect (see
-        // score.ts / src/scoring/rubric.ts — nothing reads s.integrityHits).
-        // Gated on the same snap.treePaths branch as everything else above,
-        // so "absence != clean" holds: if this branch didn't run,
-        // integrityHits stays undefined and report/terminal.ts prints "not
-        // checked" rather than a false "clean".
+        // D1 (integrity-v1): integrityHits/integrityScanned remain
+        // findings-only passthroughs for rendering — score.ts never reads
+        // the hits list itself. Gated on the same snap.treePaths branch as
+        // everything else above, so "absence != clean" holds: if this
+        // branch didn't run, integrityHits/hiddenPayloadDecoded stay
+        // undefined and report/terminal.ts prints "not checked" rather than
+        // a false "clean".
+        // D2 (integrity-phase2, docs/superpowers/plans/2026-08-04-integrity-v1.md
+        // "Phase 2"): hiddenPayloadDecoded counts ONLY decode-confirmed
+        // 'hidden-payload' hits — never 'invisible-chars-observed' or
+        // 'bidi-override-observed', which are observations, not evidence of
+        // concealment, and must never affect scoring. score.ts reads this
+        // single count as a disqualifying override on the security
+        // dimension (see the rationale comment there); it stays undefined
+        // (not 0) whenever this branch didn't run, so the override provably
+        // cannot fire on a server we never scanned.
         const integrity = scanIntegrity(snap.files, schema.tools)
         s.findings.push(...integrity.findings)
         s.integrityHits = integrity.hits
         s.integrityScanned = integrity.scanned
+        s.hiddenPayloadDecoded = integrity.hits.filter(h => h.kind === 'hidden-payload').length
       } else {
         s.errors.push('github: file tree unavailable; repo-content signals skipped')
       }

@@ -30,7 +30,7 @@ describe('score()', () => {
     const card = score('x', healthy(), '2026-07-31T00:00:00Z')
     expect(card.overall).toBe(100)
     expect(card.grade).toBe('A+')
-    expect(card.rubricVersion).toBe('1.4.0')
+    expect(card.rubricVersion).toBe('1.5.0')
     for (const d of card.dimensions) expect(d.confidence).toBe('high')
   })
   it('missing signals lower confidence, never throw, never zero the score', () => {
@@ -185,5 +185,66 @@ describe('score() — unresolved (W1): a repo GitHub 404s must never get a numer
   it('is mutually exclusive with notServer in practice, and a normal card is unaffected (regression)', () => {
     const card = score('x', healthy(), 'T')
     expect(card.unresolved).toBeUndefined()
+  })
+})
+
+// D2 (integrity-phase2, 2026-08-04-integrity-v1.md "Phase 2"): a decode-
+// confirmed hidden payload is a DISQUALIFYING OVERRIDE on the security
+// dimension, not a weighted rubric signal — see the rationale comment in
+// src/scoring/score.ts. These tests pin: (a) zero effect when absent —
+// hiddenPayloadDecoded 0 or undefined, the universal case today — so there
+// is provably no dilution of existing scores; (b) decisive effect when
+// present; (c) the override cannot be triggered by mere observations
+// (bidi/invisible-chars) — only a decode-confirmed count.
+describe('score() — hidden-payload disqualifying override (Phase 2)', () => {
+  it('hiddenPayloadDecoded: 0 → security score identical to before, no override note', () => {
+    const s = healthy(); s.hiddenPayloadDecoded = 0
+    const card = score('x', s, 'T')
+    const sec = card.dimensions.find(d => d.id === 'security')!
+    expect(sec.score).toBe(100) // healthy fixture: tool-surface(1)+no-secrets(1)+cve(1) all perfect
+    expect(card.notes.join(' ')).not.toMatch(/decode-confirmed/i)
+  })
+  it('hiddenPayloadDecoded: undefined (not checked) → identical, no override note', () => {
+    const s = healthy() // hiddenPayloadDecoded left undefined
+    const card = score('x', s, 'T')
+    const sec = card.dimensions.find(d => d.id === 'security')!
+    expect(sec.score).toBe(100)
+    expect(card.notes.join(' ')).not.toMatch(/decode-confirmed/i)
+  })
+  it('hiddenPayloadDecoded: 2 → security forced to exactly 0, note names the count, other dimensions unchanged', () => {
+    const baseline = score('x', healthy(), 'T')
+    const s = healthy(); s.hiddenPayloadDecoded = 2
+    const card = score('x', s, 'T')
+    const sec = card.dimensions.find(d => d.id === 'security')!
+    expect(sec.score).toBe(0)
+    expect(card.notes.join(' ')).toMatch(/Security scored 0: 2 decode-confirmed hidden payload/i)
+    for (const id of ['health', 'reliability', 'cost'] as const) {
+      const before = baseline.dimensions.find(d => d.id === id)!.score
+      const after = card.dimensions.find(d => d.id === id)!.score
+      expect(after).toBe(before)
+    }
+  })
+  it('does not fire for mere observations (bidi/invisible-chars) — only a decode-confirmed count triggers it', () => {
+    const s = healthy()
+    s.hiddenPayloadDecoded = 0
+    s.findings.push(
+      { id: 'security/invisible-chars-observed', dimension: 'security', severity: 'info', message: 'm', evidence: 'e' },
+      { id: 'security/bidi-override-observed', dimension: 'security', severity: 'info', message: 'm', evidence: 'e' },
+    )
+    const card = score('x', s, 'T')
+    const sec = card.dimensions.find(d => d.id === 'security')!
+    expect(sec.score).toBe(100)
+    expect(card.notes.join(' ')).not.toMatch(/decode-confirmed/i)
+  })
+  it('regression: existing healthy fixture overall/grade unchanged at hiddenPayloadDecoded 0/undefined', () => {
+    const base = score('x', healthy(), 'T')
+    const zero = healthy(); zero.hiddenPayloadDecoded = 0
+    const undef = healthy() // undefined
+    expect(score('x', zero, 'T').overall).toBe(base.overall)
+    expect(score('x', zero, 'T').grade).toBe(base.grade)
+    expect(score('x', undef, 'T').overall).toBe(base.overall)
+    expect(score('x', undef, 'T').grade).toBe(base.grade)
+    expect(base.overall).toBe(100)
+    expect(base.grade).toBe('A+')
   })
 })

@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-08-04T13:24:12.998Z",
-  "rubricVersion": "1.4.0",
+  "generatedAt": "2026-08-04T15:54:21.482Z",
+  "rubricVersion": "1.5.0",
   "stats": {
     "total": 400,
     "scored": 400,
@@ -10,8 +10,8 @@
     "unresolved": 18,
     "gradeDist": {
       "A": 59,
-      "B": 153,
-      "C": 90,
+      "B": 152,
+      "C": 91,
       "D": 17,
       "F": 2
     },
@@ -558,7 +558,7 @@
           "confidence": "low"
         }
       },
-      "daysSinceLastCommit": 0,
+      "daysSinceLastCommit": 1,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -1295,7 +1295,7 @@
           "confidence": "low"
         }
       },
-      "daysSinceLastCommit": 1,
+      "daysSinceLastCommit": 2,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -1676,7 +1676,7 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 1,
+      "daysSinceLastCommit": 0,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -2798,7 +2798,7 @@
           "confidence": "high"
         }
       },
-      "daysSinceLastCommit": 2,
+      "daysSinceLastCommit": 3,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -3655,7 +3655,7 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 2,
+      "daysSinceLastCommit": 3,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -4179,7 +4179,7 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 16,
+      "daysSinceLastCommit": 17,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -4209,7 +4209,7 @@
           "confidence": "high"
         }
       },
-      "daysSinceLastCommit": 157,
+      "daysSinceLastCommit": 158,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -4239,7 +4239,7 @@
           "confidence": "high"
         }
       },
-      "daysSinceLastCommit": 140,
+      "daysSinceLastCommit": 141,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -4520,7 +4520,7 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 7,
+      "daysSinceLastCommit": 8,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -4814,7 +4814,7 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 6,
+      "daysSinceLastCommit": 7,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -6158,7 +6158,7 @@
           "severity": "high"
         }
       ],
-      "daysSinceLastCommit": 0,
+      "daysSinceLastCommit": 1,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -6548,7 +6548,7 @@
           "confidence": "high"
         }
       },
-      "daysSinceLastCommit": 55,
+      "daysSinceLastCommit": 56,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -7471,7 +7471,7 @@
           "confidence": "low"
         }
       },
-      "daysSinceLastCommit": 47,
+      "daysSinceLastCommit": 48,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -7515,7 +7515,7 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 65,
+      "daysSinceLastCommit": 66,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -7666,50 +7666,6 @@
         }
       ],
       "daysSinceLastCommit": 37,
-      "integrity": {
-        "payloads": 0,
-        "observations": 0
-      }
-    },
-    {
-      "ref": "arnstarn/mcp-server-spotinst",
-      "ok": true,
-      "overall": 71,
-      "grade": "B-",
-      "repoUrl": "https://github.com/arnstarn/mcp-server-spotinst",
-      "dims": {
-        "health": {
-          "score": 59,
-          "confidence": "high"
-        },
-        "reliability": {
-          "score": 89,
-          "confidence": "high"
-        },
-        "security": {
-          "score": 63,
-          "confidence": "medium"
-        },
-        "cost": {
-          "score": 80,
-          "confidence": "high"
-        }
-      },
-      "topFindings": [
-        {
-          "id": "security/destructive-tool",
-          "severity": "medium"
-        },
-        {
-          "id": "security/destructive-tool",
-          "severity": "medium"
-        },
-        {
-          "id": "security/destructive-tool",
-          "severity": "medium"
-        }
-      ],
-      "daysSinceLastCommit": 90,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -7952,7 +7908,7 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 87,
+      "daysSinceLastCommit": 88,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -7996,7 +7952,7 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 18,
+      "daysSinceLastCommit": 19,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -8740,7 +8696,7 @@
           "confidence": "high"
         }
       },
-      "daysSinceLastCommit": 280,
+      "daysSinceLastCommit": 281,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -8962,7 +8918,7 @@
           "severity": "high"
         }
       ],
-      "daysSinceLastCommit": 157,
+      "daysSinceLastCommit": 158,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -9080,7 +9036,7 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 9,
+      "daysSinceLastCommit": 10,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -9200,7 +9156,7 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 16,
+      "daysSinceLastCommit": 17,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -9394,7 +9350,7 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 92,
+      "daysSinceLastCommit": 93,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -9523,6 +9479,50 @@
         }
       ],
       "daysSinceLastCommit": 146,
+      "integrity": {
+        "payloads": 0,
+        "observations": 0
+      }
+    },
+    {
+      "ref": "arnstarn/mcp-server-spotinst",
+      "ok": true,
+      "overall": 66,
+      "grade": "C+",
+      "repoUrl": "https://github.com/arnstarn/mcp-server-spotinst",
+      "dims": {
+        "health": {
+          "score": 46,
+          "confidence": "high"
+        },
+        "reliability": {
+          "score": 89,
+          "confidence": "high"
+        },
+        "security": {
+          "score": 63,
+          "confidence": "medium"
+        },
+        "cost": {
+          "score": 80,
+          "confidence": "high"
+        }
+      },
+      "topFindings": [
+        {
+          "id": "security/destructive-tool",
+          "severity": "medium"
+        },
+        {
+          "id": "security/destructive-tool",
+          "severity": "medium"
+        },
+        {
+          "id": "security/destructive-tool",
+          "severity": "medium"
+        }
+      ],
+      "daysSinceLastCommit": 91,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -10028,7 +10028,7 @@
           "confidence": "high"
         }
       },
-      "daysSinceLastCommit": 194,
+      "daysSinceLastCommit": 195,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -10765,7 +10765,7 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 46,
+      "daysSinceLastCommit": 47,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -11400,7 +11400,7 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 384,
+      "daysSinceLastCommit": 385,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -12061,7 +12061,7 @@
           "severity": "high"
         }
       ],
-      "daysSinceLastCommit": 173,
+      "daysSinceLastCommit": 174,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -12488,7 +12488,7 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 457,
+      "daysSinceLastCommit": 458,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -13139,7 +13139,7 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 178,
+      "daysSinceLastCommit": 179,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -13865,7 +13865,7 @@
           "confidence": "low"
         }
       },
-      "daysSinceLastCommit": 24,
+      "daysSinceLastCommit": 25,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -13985,7 +13985,7 @@
           "confidence": "low"
         }
       },
-      "daysSinceLastCommit": 0,
+      "daysSinceLastCommit": 1,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -14183,7 +14183,7 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 0,
+      "daysSinceLastCommit": 1,
       "integrity": {
         "payloads": 0,
         "observations": 0

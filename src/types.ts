@@ -63,6 +63,14 @@ export interface Signals {
   toolSurfaceRisk?: 'none' | 'low' | 'medium' | 'high'
   secretsFound?: number
   cveWorst?: 'none' | 'low' | 'medium' | 'high' | 'critical'
+  // D2 (integrity-phase2, docs/superpowers/plans/2026-08-04-integrity-v1.md
+  // "Phase 2"): count of DECODE-CONFIRMED 'hidden-payload' hits only — never
+  // 'invisible-chars-observed' or 'bidi-override-observed' observations,
+  // which must never influence scoring. Absence != zero: this stays
+  // undefined (not 0) whenever integrity wasn't checked, so score.ts's
+  // disqualifying override (see src/scoring/score.ts) provably cannot fire
+  // on a server we never scanned.
+  hiddenPayloadDecoded?: number
   // cost
   schemaTokenEstimate?: number
   toolCount?: number

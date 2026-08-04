@@ -92,6 +92,10 @@ describe('assemble', () => {
     // WERE fetched) always sets integrityHits (even to []) and scanned{}.
     expect(s.integrityHits).toEqual([])
     expect(s.integrityScanned).toEqual({ files: 2, chars: expect.any(Number), tools: 1 })
+    // D2 (integrity-phase2): a clean scan (no 'hidden-payload' kind hits)
+    // sets hiddenPayloadDecoded to 0, not undefined — score.ts's override
+    // relies on this to distinguish "checked, clean" from "never checked".
+    expect(s.hiddenPayloadDecoded).toBe(0)
   })
   it('a failing collector degrades gracefully into errors[], never throws', async () => {
     const http = fullFake()

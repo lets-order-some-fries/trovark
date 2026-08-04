@@ -1,4 +1,4 @@
-# Methodology (rubric v1.4.0)
+# Methodology (rubric v1.5.0)
 
 trovark computes a 0–100 Trust Score from four dimensions: Health 35%,
 Reliability 25%, Security 25%, Cost 15%. Grade bands: A ≥ 85, B ≥ 70, C ≥ 55,
@@ -108,6 +108,46 @@ Tool extraction has been widened to cover additional patterns and formats:
 
 These expansions improve coverage on real-world servers without changing the extraction priority order
 or fallback behavior; they remain last-resort compared to hand-authored manifests and primary source idioms.
+
+## Metadata integrity: decode-confirmed hidden payloads are a disqualifying override (v1.5)
+
+trovark statically scans extracted tool metadata and fetched files for
+invisible-Unicode encodings (variation-selector runs, tag-block runs, bidi
+overrides) that render as nothing but can carry a hidden payload — the same
+technique documented in the wild against the OpenVSX/npm ecosystem (GlassWorm,
+35k+ installs), not yet observed against MCP servers. A run only counts as a
+**decode-confirmed hidden payload** if it decodes entirely to printable ASCII
+(≥2 characters); anything else — a qualifying run that doesn't decode, or a
+bidi override — is reported as an **observation**, never a payload. See
+`docs/superpowers/plans/2026-08-04-integrity-v1.md` for the full threshold
+derivation and false-positive measurement (0.00% at run-length ≥ 4 across a
+2,133-file / 27.5M-character corpus).
+
+A decode-confirmed hit forces the **security dimension score to 0** — a
+disqualifying override, not a weighted rubric signal. This is a deliberate
+design choice, made instead of the originally planned `no-hidden-payload`
+weighted signal (weight 3): the 400-server audit that measured this technique
+found **zero** payloads in the wild, meaning a weighted signal would evaluate
+to 1.0 for 100% of the corpus. A constant-valued signal carries no
+information, yet adding it to security's weight-6 denominator
+(tool-surface 3 + no-secrets 1 + dependency-cves 2) would still *inflate*
+every score by diluting the signals that do discriminate — measured effects
+include a high-risk exec/shell server moving 60→73 and a high-risk server
+with a secret candidate moving 43→62. That is a regression in scoring
+quality, not an improvement.
+
+An override avoids this entirely: it has **zero effect** whenever
+`hiddenPayloadDecoded` is 0 or undefined — true for every server measured so
+far, so this was a provable zero-regression change (confirmed by a full
+corpus re-scan showing no grade changes) — and is **decisive** when a hit is
+decode-confirmed, since a decode-confirmed payload is positive evidence of
+deliberate concealment rather than a probabilistic guess (contrast the
+committed-secrets heuristic above, ~13% true-positive rate). Weights and
+dimension denominators elsewhere in the rubric are untouched.
+
+**Observations (bidi overrides, invisible-character runs that don't decode)
+never affect scoring**, at any weight, in any dimension — they are reported
+for transparency only, exactly as in v1's findings-only integration.
 
 ## Known limitations (v1.3)
 
