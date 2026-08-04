@@ -5,6 +5,7 @@
     "test": "vitest run",
     "build": "tsc",
     "dev": "tsx src/cli.ts",
+    "audit": "tsx index/audit.ts",
     "prepublishOnly": "npm run build && npm test"
   },
   "repository": {
