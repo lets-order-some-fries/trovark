@@ -56,6 +56,28 @@ export function renderTerminal(card: Scorecard, opts: { color?: boolean } = {}):
       lines.push(`         evidence: ${f.evidence}`)
     }
   }
+  // D1 (integrity-v1): absence != clean. When no files were fetched,
+  // integrityHits is undefined and we say so explicitly rather than
+  // rendering nothing (which would read as "nothing to report" = clean).
+  // A real scan — even a zero-hit one — always prints its denominators, so
+  // "0 findings" is legible as a measurement, not a missing check.
+  if (card.integrityHits === undefined) {
+    lines.push('', 'Metadata Integrity: not checked — no files fetched')
+  } else {
+    const scanned = card.integrityScanned
+    const denom = scanned ? `${scanned.files} files / ${scanned.chars} characters / ${scanned.tools} tool descriptions` : `${card.integrityHits.length} hits`
+    if (card.integrityHits.length === 0) {
+      lines.push('', `Metadata Integrity: 0 findings across ${denom}.`)
+    } else {
+      const payloads = card.integrityHits.filter(h => h.kind === 'hidden-payload')
+      const observations = card.integrityHits.filter(h => h.kind !== 'hidden-payload')
+      lines.push('', `Metadata Integrity: ${payloads.length} decode-confirmed payload(s), ${observations.length} observation(s) across ${denom}.`)
+      for (const h of card.integrityHits) {
+        const decodedPart = h.decoded ? ` → "${h.decoded}"` : ''
+        lines.push(`  [${h.kind}] ${h.surface} — ${h.path}:${h.line}:${h.col} (${h.runLength} cps)${decodedPart}`)
+      }
+    }
+  }
   if (card.notes.length > 0) {
     lines.push('', 'Notes:')
     for (const n of card.notes) lines.push(`  - ${n}`)

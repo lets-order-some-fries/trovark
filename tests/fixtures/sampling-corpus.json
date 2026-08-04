@@ -1,0 +1,6080 @@
+[
+  {
+    "ref": "8enSmith/mcp-open-library",
+    "defaultBranch": "main",
+    "rootPkgName": "mcp-open-library",
+    "hasWorkspaces": false,
+    "tree": [
+      {
+        "path": ".cz.json",
+        "size": 226,
+        "type": "blob"
+      },
+      {
+        "path": ".eslintrc.json",
+        "size": 510,
+        "type": "blob"
+      },
+      {
+        "path": ".github/workflows/pr-greeter.yml",
+        "size": 489,
+        "type": "blob"
+      },
+      {
+        "path": ".gitignore",
+        "size": 20,
+        "type": "blob"
+      },
+      {
+        "path": ".husky/pre-commit",
+        "size": 90,
+        "type": "blob"
+      },
+      {
+        "path": ".nvmrc",
+        "size": 8,
+        "type": "blob"
+      },
+      {
+        "path": ".prettierrc.json",
+        "size": 3,
+        "type": "blob"
+      },
+      {
+        "path": "CHANGELOG.md",
+        "size": 872,
+        "type": "blob"
+      },
+      {
+        "path": "Dockerfile",
+        "size": 1376,
+        "type": "blob"
+      },
+      {
+        "path": "LICENSE.md",
+        "size": 1065,
+        "type": "blob"
+      },
+      {
+        "path": "README.md",
+        "size": 8518,
+        "type": "blob"
+      },
+      {
+        "path": "eslint.config.mjs",
+        "size": 1427,
+        "type": "blob"
+      },
+      {
+        "path": "image.png",
+        "size": 422150,
+        "type": "blob"
+      },
+      {
+        "path": "package-lock.json",
+        "size": 210958,
+        "type": "blob"
+      },
+      {
+        "path": "package.json",
+        "size": 1756,
+        "type": "blob"
+      },
+      {
+        "path": "smithery.yaml",
+        "size": 458,
+        "type": "blob"
+      },
+      {
+        "path": "src/index.test.ts",
+        "size": 12257,
+        "type": "blob"
+      },
+      {
+        "path": "src/index.ts",
+        "size": 5917,
+        "type": "blob"
+      },
+      {
+        "path": "src/tools/get-author-info/index.test.ts",
+        "size": 5458,
+        "type": "blob"
+      },
+      {
+        "path": "src/tools/get-author-info/index.ts",
+        "size": 2807,
+        "type": "blob"
+      },
+      {
+        "path": "src/tools/get-author-info/types.ts",
+        "size": 775,
+        "type": "blob"
+      },
+      {
+        "path": "src/tools/get-author-photo/index.test.ts",
+        "size": 2131,
+        "type": "blob"
+      },
+      {
+        "path": "src/tools/get-author-photo/index.ts",
+        "size": 1546,
+        "type": "blob"
+      },
+      {
+        "path": "src/tools/get-authors-by-name/index.test.ts",
+        "size": 6819,
+        "type": "blob"
+      },
+      {
+        "path": "src/tools/get-authors-by-name/index.ts",
+        "size": 2570,
+        "type": "blob"
+      },
+      {
+        "path": "src/tools/get-authors-by-name/types.ts",
+        "size": 543,
+        "type": "blob"
+      },
+      {
+        "path": "src/tools/get-book-by-id/index.test.ts",
+        "size": 9714,
+        "type": "blob"
+      },
+      {
+        "path": "src/tools/get-book-by-id/index.ts",
+        "size": 4873,
+        "type": "blob"
+      },
+      {
+        "path": "src/tools/get-book-by-id/types.ts",
+        "size": 2659,
+        "type": "blob"
+      },
+      {
+        "path": "src/tools/get-book-by-title/index.test.ts",
+        "size": 5449,
+        "type": "blob"
+      },
+      {
+        "path": "src/tools/get-book-by-title/index.ts",
+        "size": 2808,
+        "type": "blob"
+      },
+      {
+        "path": "src/tools/get-book-by-title/types.ts",
+        "size": 492,
+        "type": "blob"
+      },
+      {
+        "path": "src/tools/get-book-cover/index.test.ts",
+        "size": 3684,
+        "type": "blob"
+      },
+      {
+        "path": "src/tools/get-book-cover/index.ts",
+        "size": 1349,
+        "type": "blob"
+      },
+      {
+        "path": "src/tools/index.ts",
+        "size": 269,
+        "type": "blob"
+      },
+      {
+        "path": "tsconfig.json",
+        "size": 342,
+        "type": "blob"
+      }
+    ],
+    "expectedRetained": [
+      "package.json",
+      "smithery.yaml",
+      "src/index.ts",
+      "src/tools/index.ts",
+      "src/tools/get-book-by-id/index.ts",
+      "src/tools/get-book-cover/index.ts",
+      "src/tools/get-author-info/index.ts",
+      "src/tools/get-author-photo/index.ts",
+      "src/tools/get-book-by-title/index.ts",
+      "src/tools/get-authors-by-name/index.ts",
+      "src/tools/get-book-by-id/types.ts",
+      "src/tools/get-author-info/types.ts"
+    ]
+  },
+  {
+    "ref": "FradSer/mcp-server-apple-reminders",
+    "defaultBranch": "main",
+    "rootPkgName": "mcp-server-apple-events",
+    "hasWorkspaces": false,
+    "tree": [
+      {
+        "path": ".claude/git.local.md",
+        "size": 1673,
+        "type": "blob"
+      },
+      {
+        "path": ".git-agent/config.yml",
+        "size": 1026,
+        "type": "blob"
+      },
+      {
+        "path": ".github/workflows/release.yml",
+        "size": 5240,
+        "type": "blob"
+      },
+      {
+        "path": ".gitignore",
+        "size": 2678,
+        "type": "blob"
+      },
+      {
+        "path": ".gitmodules",
+        "size": 92,
+        "type": "blob"
+      },
+      {
+        "path": "AGENTS.md",
+        "size": 4046,
+        "type": "blob"
+      },
+      {
+        "path": "CHANGELOG.md",
+        "size": 24129,
+        "type": "blob"
+      },
+      {
+        "path": "CLAUDE.md",
+        "size": 9115,
+        "type": "blob"
+      },
+      {
+        "path": "GEMINI.md",
+        "size": 4566,
+        "type": "blob"
+      },
+      {
+        "path": "LICENSE",
+        "size": 1066,
+        "type": "blob"
+      },
+      {
+        "path": "README.md",
+        "size": 14337,
+        "type": "blob"
+      },
+      {
+        "path": "README.zh-CN.md",
+        "size": 13132,
+        "type": "blob"
+      },
+      {
+        "path": "biome.json",
+        "size": 650,
+        "type": "blob"
+      },
+      {
+        "path": "check-permissions.sh",
+        "size": 4198,
+        "type": "blob"
+      },
+      {
+        "path": "docs/migration-to-event-cli.md",
+        "size": 7601,
+        "type": "blob"
+      },
+      {
+        "path": "docs/plans/2026-02-27-code-review-fixes-design/_index.md",
+        "size": 4086,
+        "type": "blob"
+      },
+      {
+        "path": "docs/plans/2026-02-27-code-review-fixes-design/architecture.md",
+        "size": 13125,
+        "type": "blob"
+      },
+      {
+        "path": "docs/plans/2026-02-27-code-review-fixes-design/bdd-specs.md",
+        "size": 7440,
+        "type": "blob"
+      },
+      {
+        "path": "docs/plans/2026-02-27-code-review-fixes-design/best-practices.md",
+        "size": 6321,
+        "type": "blob"
+      },
+      {
+        "path": "docs/plans/2026-02-27-code-review-fixes-plan/_index.md",
+        "size": 3468,
+        "type": "blob"
+      },
+      {
+        "path": "docs/plans/2026-02-27-code-review-fixes-plan/task-001-swift-filtering-impl.md",
+        "size": 1570,
+        "type": "blob"
+      },
+      {
+        "path": "docs/plans/2026-02-27-code-review-fixes-plan/task-001-swift-filtering-test.md",
+        "size": 2076,
+        "type": "blob"
+      },
+      {
+        "path": "docs/plans/2026-02-27-code-review-fixes-plan/task-002-locale-week-start-impl.md",
+        "size": 1786,
+        "type": "blob"
+      },
+      {
+        "path": "docs/plans/2026-02-27-code-review-fixes-plan/task-002-locale-week-start-test.md",
+        "size": 1745,
+        "type": "blob"
+      },
+      {
+        "path": "docs/plans/2026-02-27-code-review-fixes-plan/task-003-ssrf-url-validation-impl.md",
+        "size": 1662,
+        "type": "blob"
+      },
+      {
+        "path": "docs/plans/2026-02-27-code-review-fixes-plan/task-003-ssrf-url-validation-test.md",
+        "size": 2484,
+        "type": "blob"
+      },
+      {
+        "path": "docs/plans/2026-02-27-code-review-fixes-plan/task-004-subtask-routing-test.md",
+        "size": 2555,
+        "type": "blob"
+      },
+      {
+        "path": "docs/plans/2026-02-27-code-review-fixes-plan/task-005-error-handling-impl.md",
+        "size": 1585,
+        "type": "blob"
+      },
+      {
+        "path": "docs/plans/2026-02-27-code-review-fixes-plan/task-005-error-handling-test.md",
+        "size": 2380,
+        "type": "blob"
+      },
+      {
+        "path": "docs/plans/2026-02-27-code-review-fixes-plan/task-006-cli-executor-documentation.md",
+        "size": 1552,
+        "type": "blob"
+      },
+      {
+        "path": "docs/plans/2026-02-27-code-review-fixes-plan/task-007-final-verification.md",
+        "size": 1566,
+        "type": "blob"
+      },
+      {
+        "path": "jest-env.cjs",
+        "size": 750,
+        "type": "blob"
+      },
+      {
+        "path": "jest.config.mjs",
+        "size": 1794,
+        "type": "blob"
+      },
+      {
+        "path": "package.json",
+        "size": 2596,
+        "type": "blob"
+      },
+      {
+        "path": "pnpm-lock.yaml",
+        "size": 118905,
+        "type": "blob"
+      },
+      {
+        "path": "pnpm-workspace.yaml",
+        "size": 42,
+        "type": "blob"
+      },
+      {
+        "path": "scripts/build-event.mjs",
+        "size": 16188,
+        "type": "blob"
+      },
+      {
+        "path": "scripts/disclaim.c",
+        "size": 2517,
+        "type": "blob"
+      },
+      {
+        "path": "scripts/event-Info.plist",
+        "size": 1332,
+        "type": "blob"
+      },
+      {
+        "path": "scripts/event.entitlements",
+        "size": 330,
+        "type": "blob"
+      },
+      {
+        "path": "scripts/notarize.mjs",
+        "size": 4412,
+        "type": "blob"
+      },
+      {
+        "path": "scripts/postinstall.mjs",
+        "size": 3452,
+        "type": "blob"
+      },
+      {
+        "path": "src/__tests__/build-event.test.ts",
+        "size": 6550,
+        "type": "blob"
+      },
+      {
+        "path": "src/__tests__/notarize.test.ts",
+        "size": 2139,
+        "type": "blob"
+      },
+      {
+        "path": "src/__tests__/package-release.test.ts",
+        "size": 2097,
+        "type": "blob"
+      },
+      {
+        "path": "src/__tests__/postinstall.test.ts",
+        "size": 2228,
+        "type": "blob"
+      },
+      {
+        "path": "src/e2e.test.ts",
+        "size": 5575,
+        "type": "blob"
+      },
+      {
+        "path": "src/index.test.ts",
+        "size": 3727,
+        "type": "blob"
+      },
+      {
+        "path": "src/index.ts",
+        "size": 866,
+        "type": "blob"
+      },
+      {
+        "path": "src/publishedPackage.test.ts",
+        "size": 5872,
+        "type": "blob"
+      },
+      {
+        "path": "src/server/handlers.test.ts",
+        "size": 8646,
+        "type": "blob"
+      },
+      {
+        "path": "src/server/handlers.ts",
+        "size": 1915,
+        "type": "blob"
+      },
+      {
+        "path": "src/server/promptAbstractions.test.ts",
+        "size": 3737,
+        "type": "blob"
+      },
+      {
+        "path": "src/server/promptAbstractions.ts",
+        "size": 7021,
+        "type": "blob"
+      },
+      {
+        "path": "src/server/prompts.test.ts",
+        "size": 7521,
+        "type": "blob"
+      },
+      {
+        "path": "src/server/prompts.ts",
+        "size": 24669,
+        "type": "blob"
+      },
+      {
+        "path": "src/server/server.test.ts",
+        "size": 7389,
+        "type": "blob"
+      },
+      {
+        "path": "src/server/server.ts",
+        "size": 3629,
+        "type": "blob"
+      },
+      {
+        "path": "src/test-setup.ts",
+        "size": 643,
+        "type": "blob"
+      },
+      {
+        "path": "src/tools/definitions.test.ts",
+        "size": 5798,
+        "type": "blob"
+      },
+      {
+        "path": "src/tools/definitions.ts",
+        "size": 11968,
+        "type": "blob"
+      },
+      {
+        "path": "src/tools/handlers.test.ts",
+        "size": 29574,
+        "type": "blob"
+      },
+      {
+        "path": "src/tools/handlers/calendarHandlers.ts",
+        "size": 7088,
+        "type": "blob"
+      },
+      {
+        "path": "src/tools/handlers/formatters.test.ts",
+        "size": 4210,
+        "type": "blob"
+      },
+      {
+        "path": "src/tools/handlers/formatters.ts",
+        "size": 3869,
+        "type": "blob"
+      },
+      {
+        "path": "src/tools/handlers/index.ts",
+        "size": 715,
+        "type": "blob"
+      },
+      {
+        "path": "src/tools/handlers/listHandlers.ts",
+        "size": 2633,
+        "type": "blob"
+      },
+      {
+        "path": "src/tools/handlers/reminderHandlers.ts",
+        "size": 10573,
+        "type": "blob"
+      },
+      {
+        "path": "src/tools/handlers/shared.ts",
+        "size": 2604,
+        "type": "blob"
+      },
+      {
+        "path": "src/tools/handlers/subtaskHandlers.ts",
+        "size": 6065,
+        "type": "blob"
+      },
+      {
+        "path": "src/tools/index.test.ts",
+        "size": 13866,
+        "type": "blob"
+      },
+      {
+        "path": "src/tools/index.ts",
+        "size": 4561,
+        "type": "blob"
+      },
+      {
+        "path": "src/tools/reminders_subtasks.test.ts",
+        "size": 9655,
+        "type": "blob"
+      },
+      {
+        "path": "src/types/index.ts",
+        "size": 8381,
+        "type": "blob"
+      },
+      {
+        "path": "src/types/prompts.ts",
+        "size": 2643,
+        "type": "blob"
+      },
+      {
+        "path": "src/types/repository.ts",
+        "size": 5985,
+        "type": "blob"
+      },
+      {
+        "path": "src/utils/__mocks__/eventCli.ts",
+        "size": 146,
+        "type": "blob"
+      },
+      {
+        "path": "src/utils/binaryValidator.test.ts",
+        "size": 15897,
+        "type": "blob"
+      },
+      {
+        "path": "src/utils/binaryValidator.ts",
+        "size": 7188,
+        "type": "blob"
+      },
+      {
+        "path": "src/utils/calendarRepository.test.ts",
+        "size": 10723,
+        "type": "blob"
+      },
+      {
+        "path": "src/utils/calendarRepository.ts",
+        "size": 9782,
+        "type": "blob"
+      },
+      {
+        "path": "src/utils/constants.ts",
+        "size": 2353,
+        "type": "blob"
+      },
+      {
+        "path": "src/utils/dateFiltering.test.ts",
+        "size": 14127,
+        "type": "blob"
+      },
+      {
+        "path": "src/utils/dateFiltering.ts",
+        "size": 6107,
+        "type": "blob"
+      },
+      {
+        "path": "src/utils/dateUtils.test.ts",
+        "size": 1175,
+        "type": "blob"
+      },
+      {
+        "path": "src/utils/dateUtils.ts",
+        "size": 2430,
+        "type": "blob"
+      },
+      {
+        "path": "src/utils/errorHandling.test.ts",
+        "size": 17035,
+        "type": "blob"
+      },
+      {
+        "path": "src/utils/errorHandling.ts",
+        "size": 3164,
+        "type": "blob"
+      },
+      {
+        "path": "src/utils/eventCli.test.ts",
+        "size": 22867,
+        "type": "blob"
+      },
+      {
+        "path": "src/utils/eventCli.ts",
+        "size": 16601,
+        "type": "blob"
+      },
+      {
+        "path": "src/utils/helpers.test.ts",
+        "size": 4116,
+        "type": "blob"
+      },
+      {
+        "path": "src/utils/helpers.ts",
+        "size": 1756,
+        "type": "blob"
+      },
+      {
+        "path": "src/utils/projectUtils.ts",
+        "size": 3121,
+        "type": "blob"
+      },
+      {
+        "path": "src/utils/reminderDateParser.test.ts",
+        "size": 4426,
+        "type": "blob"
+      },
+      {
+        "path": "src/utils/reminderDateParser.ts",
+        "size": 3820,
+        "type": "blob"
+      },
+      {
+        "path": "src/utils/reminderRepository.test.ts",
+        "size": 14690,
+        "type": "blob"
+      },
+      {
+        "path": "src/utils/reminderRepository.ts",
+        "size": 11315,
+        "type": "blob"
+      },
+      {
+        "path": "src/utils/subtaskUtils.test.ts",
+        "size": 17003,
+        "type": "blob"
+      },
+      {
+        "path": "src/utils/subtaskUtils.ts",
+        "size": 9170,
+        "type": "blob"
+      },
+      {
+        "path": "src/utils/tagUtils.test.ts",
+        "size": 5735,
+        "type": "blob"
+      },
+      {
+        "path": "src/utils/tagUtils.ts",
+        "size": 6392,
+        "type": "blob"
+      },
+      {
+        "path": "src/utils/timeHelpers.test.ts",
+        "size": 7700,
+        "type": "blob"
+      },
+      {
+        "path": "src/utils/timeHelpers.ts",
+        "size": 5263,
+        "type": "blob"
+      },
+      {
+        "path": "src/utils/timezoneIntegration.test.ts",
+        "size": 2750,
+        "type": "blob"
+      },
+      {
+        "path": "src/validation/schemas.test.ts",
+        "size": 41122,
+        "type": "blob"
+      },
+      {
+        "path": "src/validation/schemas.ts",
+        "size": 24005,
+        "type": "blob"
+      },
+      {
+        "path": "tsconfig.build.json",
+        "size": 186,
+        "type": "blob"
+      },
+      {
+        "path": "tsconfig.json",
+        "size": 717,
+        "type": "blob"
+      }
+    ],
+    "expectedRetained": [
+      "package.json",
+      "src/index.ts",
+      "src/tools/index.ts",
+      "src/types/index.ts",
+      "src/server/server.ts",
+      "src/tools/handlers/index.ts",
+      "src/tools/definitions.ts",
+      "src/tools/handlers/shared.ts",
+      "src/tools/handlers/formatters.ts",
+      "src/tools/handlers/listHandlers.ts",
+      "src/tools/handlers/subtaskHandlers.ts",
+      "src/tools/handlers/calendarHandlers.ts"
+    ]
+  },
+  {
+    "ref": "AliKarami/MikroMCP",
+    "defaultBranch": "main",
+    "rootPkgName": "mikromcp",
+    "hasWorkspaces": false,
+    "tree": [
+      {
+        "path": ".claude/settings.json",
+        "size": 76,
+        "type": "blob"
+      },
+      {
+        "path": ".dockerignore",
+        "size": 133,
+        "type": "blob"
+      },
+      {
+        "path": ".env.example",
+        "size": 1399,
+        "type": "blob"
+      },
+      {
+        "path": ".github/workflows/ci.yml",
+        "size": 607,
+        "type": "blob"
+      },
+      {
+        "path": ".github/workflows/claude.yml",
+        "size": 1886,
+        "type": "blob"
+      },
+      {
+        "path": ".github/workflows/release.yml",
+        "size": 7795,
+        "type": "blob"
+      },
+      {
+        "path": ".github/workflows/sync-wiki.yml",
+        "size": 910,
+        "type": "blob"
+      },
+      {
+        "path": ".gitignore",
+        "size": 323,
+        "type": "blob"
+      },
+      {
+        "path": ".prettierrc",
+        "size": 107,
+        "type": "blob"
+      },
+      {
+        "path": "AGENTS.md",
+        "size": 360,
+        "type": "blob"
+      },
+      {
+        "path": "CHANGELOG.md",
+        "size": 22698,
+        "type": "blob"
+      },
+      {
+        "path": "CLAUDE.md",
+        "size": 17945,
+        "type": "blob"
+      },
+      {
+        "path": "Dockerfile",
+        "size": 337,
+        "type": "blob"
+      },
+      {
+        "path": "LICENSE",
+        "size": 1067,
+        "type": "blob"
+      },
+      {
+        "path": "README.md",
+        "size": 13836,
+        "type": "blob"
+      },
+      {
+        "path": "ROADMAP.md",
+        "size": 22271,
+        "type": "blob"
+      },
+      {
+        "path": "config/identities.example.yaml",
+        "size": 1670,
+        "type": "blob"
+      },
+      {
+        "path": "config/routers.example.yaml",
+        "size": 2905,
+        "type": "blob"
+      },
+      {
+        "path": "docker-compose.example.yml",
+        "size": 620,
+        "type": "blob"
+      },
+      {
+        "path": "docs/assets/MikroMCP-logo-dark.png",
+        "size": 759430,
+        "type": "blob"
+      },
+      {
+        "path": "docs/assets/MikroMCP-logo-light.png",
+        "size": 656095,
+        "type": "blob"
+      },
+      {
+        "path": "docs/assets/claude-review.png",
+        "size": 279317,
+        "type": "blob"
+      },
+      {
+        "path": "docs/assets/demo-1.gif",
+        "size": 6028802,
+        "type": "blob"
+      },
+      {
+        "path": "docs/assets/mcp-inspector-tools.png",
+        "size": 453825,
+        "type": "blob"
+      },
+      {
+        "path": "docs/assets/mikromcp-hero.png",
+        "size": 1490969,
+        "type": "blob"
+      },
+      {
+        "path": "docs/assets/quickstart.svg",
+        "size": 2356,
+        "type": "blob"
+      },
+      {
+        "path": "docs/security.md",
+        "size": 7610,
+        "type": "blob"
+      },
+      {
+        "path": "docs/stability-policy.md",
+        "size": 4852,
+        "type": "blob"
+      },
+      {
+        "path": "docs/superpowers/plans/2026-04-24-v0.2.md",
+        "size": 66746,
+        "type": "blob"
+      },
+      {
+        "path": "docs/superpowers/plans/2026-04-25-v0.3-diagnostics.md",
+        "size": 87367,
+        "type": "blob"
+      },
+      {
+        "path": "docs/superpowers/plans/2026-04-28-v0.4-network-services.md",
+        "size": 84450,
+        "type": "blob"
+      },
+      {
+        "path": "docs/superpowers/plans/2026-04-30-v0.5a-implementation.md",
+        "size": 80127,
+        "type": "blob"
+      },
+      {
+        "path": "docs/superpowers/plans/2026-04-30-v0.5b-security-hardening.md",
+        "size": 40516,
+        "type": "blob"
+      },
+      {
+        "path": "docs/superpowers/plans/2026-05-13-v0.6-automation.md",
+        "size": 100845,
+        "type": "blob"
+      },
+      {
+        "path": "docs/superpowers/plans/2026-05-14-v0.7-identity-auth-audit.md",
+        "size": 89993,
+        "type": "blob"
+      },
+      {
+        "path": "docs/superpowers/plans/2026-05-17-v0.8-change-safety-rollback.md",
+        "size": 70512,
+        "type": "blob"
+      },
+      {
+        "path": "docs/superpowers/plans/2026-05-19-v0.9-fleet-operations.md",
+        "size": 143225,
+        "type": "blob"
+      },
+      {
+        "path": "docs/superpowers/plans/2026-05-19-v1.0-distribution-onboarding.md",
+        "size": 15036,
+        "type": "blob"
+      },
+      {
+        "path": "docs/superpowers/plans/2026-05-21-v1.1.0-release.md",
+        "size": 92426,
+        "type": "blob"
+      },
+      {
+        "path": "docs/superpowers/plans/2026-05-23-v1.2.md",
+        "size": 86865,
+        "type": "blob"
+      },
+      {
+        "path": "docs/superpowers/plans/2026-05-23-v1.3.md",
+        "size": 87516,
+        "type": "blob"
+      },
+      {
+        "path": "docs/superpowers/plans/2026-05-24-v1.4.md",
+        "size": 99285,
+        "type": "blob"
+      },
+      {
+        "path": "docs/superpowers/plans/2026-05-27-v1.5.md",
+        "size": 146251,
+        "type": "blob"
+      },
+      {
+        "path": "docs/superpowers/plans/2026-05-29-phase3-mikromcp-skill.md",
+        "size": 24326,
+        "type": "blob"
+      },
+      {
+        "path": "docs/superpowers/plans/2026-05-30-phase4-docs-wiki-overhaul.md",
+        "size": 17816,
+        "type": "blob"
+      },
+      {
+        "path": "docs/superpowers/plans/2026-07-21-review-fixes.md",
+        "size": 32094,
+        "type": "blob"
+      },
+      {
+        "path": "docs/superpowers/specs/2026-04-25-v0.3-design.md",
+        "size": 11250,
+        "type": "blob"
+      },
+      {
+        "path": "docs/superpowers/specs/2026-04-28-v0.4-network-services-design.md",
+        "size": 13885,
+        "type": "blob"
+      },
+      {
+        "path": "docs/superpowers/specs/2026-04-30-v0.5a-design.md",
+        "size": 9554,
+        "type": "blob"
+      },
+      {
+        "path": "docs/superpowers/specs/2026-05-13-v0.6-automation-design.md",
+        "size": 7951,
+        "type": "blob"
+      },
+      {
+        "path": "docs/superpowers/specs/2026-05-14-v0.7-identity-auth-audit-design.md",
+        "size": 12843,
+        "type": "blob"
+      },
+      {
+        "path": "docs/superpowers/specs/2026-05-27-v1.5-design.md",
+        "size": 13049,
+        "type": "blob"
+      },
+      {
+        "path": "docs/superpowers/specs/2026-05-29-phase3-mikromcp-skill-design.md",
+        "size": 7840,
+        "type": "blob"
+      },
+      {
+        "path": "docs/superpowers/specs/2026-05-30-phase4-docs-wiki-overhaul-design.md",
+        "size": 7182,
+        "type": "blob"
+      },
+      {
+        "path": "docs/wiki/Architecture.md",
+        "size": 6700,
+        "type": "blob"
+      },
+      {
+        "path": "docs/wiki/Available-Tools.md",
+        "size": 79315,
+        "type": "blob"
+      },
+      {
+        "path": "docs/wiki/Configuration.md",
+        "size": 6220,
+        "type": "blob"
+      },
+      {
+        "path": "docs/wiki/Connecting-to-AI-Assistants.md",
+        "size": 7351,
+        "type": "blob"
+      },
+      {
+        "path": "docs/wiki/Connecting-to-Claude-Desktop.md",
+        "size": 5035,
+        "type": "blob"
+      },
+      {
+        "path": "docs/wiki/Contributing.md",
+        "size": 4445,
+        "type": "blob"
+      },
+      {
+        "path": "docs/wiki/Development.md",
+        "size": 8990,
+        "type": "blob"
+      },
+      {
+        "path": "docs/wiki/Error-Handling.md",
+        "size": 3762,
+        "type": "blob"
+      },
+      {
+        "path": "docs/wiki/Getting-Started.md",
+        "size": 7503,
+        "type": "blob"
+      },
+      {
+        "path": "docs/wiki/Home.md",
+        "size": 3143,
+        "type": "blob"
+      },
+      {
+        "path": "docs/wiki/Roadmap.md",
+        "size": 7612,
+        "type": "blob"
+      },
+      {
+        "path": "docs/wiki/RouterOS-API-Setup.md",
+        "size": 6102,
+        "type": "blob"
+      },
+      {
+        "path": "docs/wiki/Running.md",
+        "size": 2474,
+        "type": "blob"
+      },
+      {
+        "path": "docs/wiki/Security.md",
+        "size": 4393,
+        "type": "blob"
+      },
+      {
+        "path": "docs/wiki/Using-the-Skill.md",
+        "size": 1155,
+        "type": "blob"
+      },
+      {
+        "path": "eslint.config.js",
+        "size": 573,
+        "type": "blob"
+      },
+      {
+        "path": "glama.json",
+        "size": 100,
+        "type": "blob"
+      },
+      {
+        "path": "package-lock.json",
+        "size": 249812,
+        "type": "blob"
+      },
+      {
+        "path": "package.json",
+        "size": 2092,
+        "type": "blob"
+      },
+      {
+        "path": "scripts/sync-version.mjs",
+        "size": 861,
+        "type": "blob"
+      },
+      {
+        "path": "server.json",
+        "size": 1398,
+        "type": "blob"
+      },
+      {
+        "path": "skills/mikromcp/SKILL.md",
+        "size": 4470,
+        "type": "blob"
+      },
+      {
+        "path": "skills/mikromcp/references/routeros-docs.md",
+        "size": 2085,
+        "type": "blob"
+      },
+      {
+        "path": "skills/mikromcp/references/safety-and-recovery.md",
+        "size": 3211,
+        "type": "blob"
+      },
+      {
+        "path": "skills/mikromcp/references/tool-map.md",
+        "size": 11730,
+        "type": "blob"
+      },
+      {
+        "path": "src/adapter/adapter-factory.ts",
+        "size": 838,
+        "type": "blob"
+      },
+      {
+        "path": "src/adapter/circuit-breaker.ts",
+        "size": 4824,
+        "type": "blob"
+      },
+      {
+        "path": "src/adapter/connection-pool.ts",
+        "size": 2394,
+        "type": "blob"
+      },
+      {
+        "path": "src/adapter/ftp-client.ts",
+        "size": 2058,
+        "type": "blob"
+      },
+      {
+        "path": "src/adapter/query-builder.ts",
+        "size": 2417,
+        "type": "blob"
+      },
+      {
+        "path": "src/adapter/response-parser.ts",
+        "size": 2568,
+        "type": "blob"
+      },
+      {
+        "path": "src/adapter/rest-client.ts",
+        "size": 5717,
+        "type": "blob"
+      },
+      {
+        "path": "src/adapter/retry-engine.ts",
+        "size": 2757,
+        "type": "blob"
+      },
+      {
+        "path": "src/adapter/sftp-client.ts",
+        "size": 1857,
+        "type": "blob"
+      },
+      {
+        "path": "src/adapter/ssh-client.ts",
+        "size": 3676,
+        "type": "blob"
+      },
+      {
+        "path": "src/adapter/tls-manager.ts",
+        "size": 2177,
+        "type": "blob"
+      },
+      {
+        "path": "src/cli/doctor.ts",
+        "size": 15295,
+        "type": "blob"
+      },
+      {
+        "path": "src/cli/index.ts",
+        "size": 963,
+        "type": "blob"
+      },
+      {
+        "path": "src/cli/init.ts",
+        "size": 19055,
+        "type": "blob"
+      },
+      {
+        "path": "src/cli/serve.ts",
+        "size": 2221,
+        "type": "blob"
+      },
+      {
+        "path": "src/config/app-config.ts",
+        "size": 3461,
+        "type": "blob"
+      },
+      {
+        "path": "src/config/identity-registry.ts",
+        "size": 3271,
+        "type": "blob"
+      },
+      {
+        "path": "src/config/maintenance-window.ts",
+        "size": 1759,
+        "type": "blob"
+      },
+      {
+        "path": "src/config/router-registry.ts",
+        "size": 3683,
+        "type": "blob"
+      },
+      {
+        "path": "src/config/secrets.ts",
+        "size": 2363,
+        "type": "blob"
+      },
+      {
+        "path": "src/domain/errors/error-enricher.ts",
+        "size": 7319,
+        "type": "blob"
+      },
+      {
+        "path": "src/domain/errors/error-types.ts",
+        "size": 2379,
+        "type": "blob"
+      },
+      {
+        "path": "src/domain/snapshot/diff-engine.ts",
+        "size": 7105,
+        "type": "blob"
+      },
+      {
+        "path": "src/domain/snapshot/retention.ts",
+        "size": 1385,
+        "type": "blob"
+      },
+      {
+        "path": "src/domain/snapshot/snapshot-engine.ts",
+        "size": 1626,
+        "type": "blob"
+      },
+      {
+        "path": "src/domain/snapshot/write-journal.ts",
+        "size": 1564,
+        "type": "blob"
+      },
+      {
+        "path": "src/domain/tools/address-list-tools.ts",
+        "size": 6817,
+        "type": "blob"
+      },
+      {
+        "path": "src/domain/tools/backup-tools.ts",
+        "size": 4611,
+        "type": "blob"
+      },
+      {
+        "path": "src/domain/tools/bridge-tools.ts",
+        "size": 10417,
+        "type": "blob"
+      },
+      {
+        "path": "src/domain/tools/certificate-tools.ts",
+        "size": 6894,
+        "type": "blob"
+      },
+      {
+        "path": "src/domain/tools/change-management-tools.ts",
+        "size": 12170,
+        "type": "blob"
+      },
+      {
+        "path": "src/domain/tools/cidr.ts",
+        "size": 1084,
+        "type": "blob"
+      },
+      {
+        "path": "src/domain/tools/command-guard.ts",
+        "size": 3843,
+        "type": "blob"
+      },
+      {
+        "path": "src/domain/tools/container-config-tools.ts",
+        "size": 18537,
+        "type": "blob"
+      },
+      {
+        "path": "src/domain/tools/container-tools.ts",
+        "size": 10013,
+        "type": "blob"
+      },
+      {
+        "path": "src/domain/tools/dhcp-client-tools.ts",
+        "size": 8716,
+        "type": "blob"
+      },
+      {
+        "path": "src/domain/tools/dhcp-server-tools.ts",
+        "size": 10079,
+        "type": "blob"
+      },
+      {
+        "path": "src/domain/tools/dhcp-tools.ts",
+        "size": 8632,
+        "type": "blob"
+      },
+      {
+        "path": "src/domain/tools/diagnostic-tools.ts",
+        "size": 16175,
+        "type": "blob"
+      },
+      {
+        "path": "src/domain/tools/dns-tools.ts",
+        "size": 14169,
+        "type": "blob"
+      },
+      {
+        "path": "src/domain/tools/files-tools.ts",
+        "size": 10950,
+        "type": "blob"
+      },
+      {
+        "path": "src/domain/tools/firewall-tools.ts",
+        "size": 17632,
+        "type": "blob"
+      },
+      {
+        "path": "src/domain/tools/fleet-tools.ts",
+        "size": 18226,
+        "type": "blob"
+      },
+      {
+        "path": "src/domain/tools/index.ts",
+        "size": 3508,
+        "type": "blob"
+      },
+      {
+        "path": "src/domain/tools/interface-list-tools.ts",
+        "size": 9199,
+        "type": "blob"
+      },
+      {
+        "path": "src/domain/tools/interface-tools.ts",
+        "size": 4383,
+        "type": "blob"
+      },
+      {
+        "path": "src/domain/tools/ip-pool-tools.ts",
+        "size": 6942,
+        "type": "blob"
+      },
+      {
+        "path": "src/domain/tools/ip-service-tools.ts",
+        "size": 6372,
+        "type": "blob"
+      },
+      {
+        "path": "src/domain/tools/ip-tools.ts",
+        "size": 11538,
+        "type": "blob"
+      },
+      {
+        "path": "src/domain/tools/ipsec-tools.ts",
+        "size": 17955,
+        "type": "blob"
+      },
+      {
+        "path": "src/domain/tools/log-tools.ts",
+        "size": 15902,
+        "type": "blob"
+      },
+      {
+        "path": "src/domain/tools/mangle-tools.ts",
+        "size": 14201,
+        "type": "blob"
+      },
+      {
+        "path": "src/domain/tools/network-services-tools.ts",
+        "size": 21572,
+        "type": "blob"
+      },
+      {
+        "path": "src/domain/tools/network-test-tools.ts",
+        "size": 8528,
+        "type": "blob"
+      },
+      {
+        "path": "src/domain/tools/ovpn-tools.ts",
+        "size": 20454,
+        "type": "blob"
+      },
+      {
+        "path": "src/domain/tools/packages-tools.ts",
+        "size": 5247,
+        "type": "blob"
+      },
+      {
+        "path": "src/domain/tools/pagination.ts",
+        "size": 1854,
+        "type": "blob"
+      },
+      {
+        "path": "src/domain/tools/policy-routing-tools.ts",
+        "size": 15297,
+        "type": "blob"
+      },
+      {
+        "path": "src/domain/tools/ppp-tools.ts",
+        "size": 10191,
+        "type": "blob"
+      },
+      {
+        "path": "src/domain/tools/pppoe-tools.ts",
+        "size": 13086,
+        "type": "blob"
+      },
+      {
+        "path": "src/domain/tools/queue-tools.ts",
+        "size": 8852,
+        "type": "blob"
+      },
+      {
+        "path": "src/domain/tools/route-tools.ts",
+        "size": 11808,
+        "type": "blob"
+      },
+      {
+        "path": "src/domain/tools/routing-protocol-tools.ts",
+        "size": 3800,
+        "type": "blob"
+      },
+      {
+        "path": "src/domain/tools/scheduler-tools.ts",
+        "size": 11192,
+        "type": "blob"
+      },
+      {
+        "path": "src/domain/tools/schema-fields.ts",
+        "size": 993,
+        "type": "blob"
+      },
+      {
+        "path": "src/domain/tools/scripts-tools.ts",
+        "size": 10675,
+        "type": "blob"
+      },
+      {
+        "path": "src/domain/tools/system-ops-tools.ts",
+        "size": 10360,
+        "type": "blob"
+      },
+      {
+        "path": "src/domain/tools/system-tools.ts",
+        "size": 5696,
+        "type": "blob"
+      },
+      {
+        "path": "src/domain/tools/tool-definition.ts",
+        "size": 2824,
+        "type": "blob"
+      },
+      {
+        "path": "src/domain/tools/upgrade-tools.ts",
+        "size": 4931,
+        "type": "blob"
+      },
+      {
+        "path": "src/domain/tools/user-group-tools.ts",
+        "size": 8800,
+        "type": "blob"
+      },
+      {
+        "path": "src/domain/tools/user-tools.ts",
+        "size": 11879,
+        "type": "blob"
+      },
+      {
+        "path": "src/domain/tools/vlan-tools.ts",
+        "size": 8517,
+        "type": "blob"
+      },
+      {
+        "path": "src/domain/tools/vrrp-tools.ts",
+        "size": 10377,
+        "type": "blob"
+      },
+      {
+        "path": "src/domain/tools/wifi-tools.ts",
+        "size": 8094,
+        "type": "blob"
+      },
+      {
+        "path": "src/domain/tools/wireguard-tools.ts",
+        "size": 14339,
+        "type": "blob"
+      },
+      {
+        "path": "src/main.ts",
+        "size": 267,
+        "type": "blob"
+      },
+      {
+        "path": "src/mcp/response-formatter.ts",
+        "size": 1104,
+        "type": "blob"
+      },
+      {
+        "path": "src/mcp/server.ts",
+        "size": 2179,
+        "type": "blob"
+      },
+      {
+        "path": "src/mcp/tool-context.ts",
+        "size": 1406,
+        "type": "blob"
+      },
+      {
+        "path": "src/mcp/tool-executor.ts",
+        "size": 12528,
+        "type": "blob"
+      },
+      {
+        "path": "src/mcp/tool-registry.ts",
+        "size": 1822,
+        "type": "blob"
+      },
+      {
+        "path": "src/mcp/transports/http.ts",
+        "size": 10656,
+        "type": "blob"
+      },
+      {
+        "path": "src/mcp/transports/stdio.ts",
+        "size": 510,
+        "type": "blob"
+      },
+      {
+        "path": "src/middleware/auth.ts",
+        "size": 2720,
+        "type": "blob"
+      },
+      {
+        "path": "src/middleware/authz.ts",
+        "size": 1628,
+        "type": "blob"
+      },
+      {
+        "path": "src/middleware/confirmation.ts",
+        "size": 4100,
+        "type": "blob"
+      },
+      {
+        "path": "src/middleware/fleet-confirmation.ts",
+        "size": 3555,
+        "type": "blob"
+      },
+      {
+        "path": "src/observability/audit-log.ts",
+        "size": 1330,
+        "type": "blob"
+      },
+      {
+        "path": "src/observability/correlation.ts",
+        "size": 1282,
+        "type": "blob"
+      },
+      {
+        "path": "src/observability/logger.ts",
+        "size": 1169,
+        "type": "blob"
+      },
+      {
+        "path": "src/observability/metrics.ts",
+        "size": 967,
+        "type": "blob"
+      },
+      {
+        "path": "src/types.ts",
+        "size": 3016,
+        "type": "blob"
+      },
+      {
+        "path": "src/util/glob.ts",
+        "size": 372,
+        "type": "blob"
+      },
+      {
+        "path": "src/version.ts",
+        "size": 190,
+        "type": "blob"
+      },
+      {
+        "path": "test/unit/adapter/adapter-factory.test.ts",
+        "size": 1493,
+        "type": "blob"
+      },
+      {
+        "path": "test/unit/adapter/circuit-breaker.test.ts",
+        "size": 5542,
+        "type": "blob"
+      },
+      {
+        "path": "test/unit/adapter/connection-pool.test.ts",
+        "size": 1621,
+        "type": "blob"
+      },
+      {
+        "path": "test/unit/adapter/ftp-client.test.ts",
+        "size": 1961,
+        "type": "blob"
+      },
+      {
+        "path": "test/unit/adapter/query-builder.test.ts",
+        "size": 2158,
+        "type": "blob"
+      },
+      {
+        "path": "test/unit/adapter/response-parser.test.ts",
+        "size": 3330,
+        "type": "blob"
+      },
+      {
+        "path": "test/unit/adapter/retry-engine.test.ts",
+        "size": 2993,
+        "type": "blob"
+      },
+      {
+        "path": "test/unit/adapter/ssh-client.test.ts",
+        "size": 7782,
+        "type": "blob"
+      },
+      {
+        "path": "test/unit/adapter/tls-manager.test.ts",
+        "size": 2820,
+        "type": "blob"
+      },
+      {
+        "path": "test/unit/cli/cli-routing.test.ts",
+        "size": 798,
+        "type": "blob"
+      },
+      {
+        "path": "test/unit/cli/doctor.test.ts",
+        "size": 24079,
+        "type": "blob"
+      },
+      {
+        "path": "test/unit/cli/init.test.ts",
+        "size": 16887,
+        "type": "blob"
+      },
+      {
+        "path": "test/unit/config/app-config.test.ts",
+        "size": 4858,
+        "type": "blob"
+      },
+      {
+        "path": "test/unit/config/identity-registry.test.ts",
+        "size": 4271,
+        "type": "blob"
+      },
+      {
+        "path": "test/unit/config/maintenance-window.test.ts",
+        "size": 3313,
+        "type": "blob"
+      },
+      {
+        "path": "test/unit/config/router-registry-maintenance.test.ts",
+        "size": 1753,
+        "type": "blob"
+      },
+      {
+        "path": "test/unit/config/router-registry.test.ts",
+        "size": 3903,
+        "type": "blob"
+      },
+      {
+        "path": "test/unit/docs/available-tools-sync.test.ts",
+        "size": 1257,
+        "type": "blob"
+      },
+      {
+        "path": "test/unit/docs/tool-count-sync.test.ts",
+        "size": 1303,
+        "type": "blob"
+      },
+      {
+        "path": "test/unit/domain/address-list-tools.test.ts",
+        "size": 6436,
+        "type": "blob"
+      },
+      {
+        "path": "test/unit/domain/backup-tools.test.ts",
+        "size": 7330,
+        "type": "blob"
+      },
+      {
+        "path": "test/unit/domain/bridge-tools.test.ts",
+        "size": 4871,
+        "type": "blob"
+      },
+      {
+        "path": "test/unit/domain/certificate-tools.test.ts",
+        "size": 13315,
+        "type": "blob"
+      },
+      {
+        "path": "test/unit/domain/cidr.test.ts",
+        "size": 980,
+        "type": "blob"
+      },
+      {
+        "path": "test/unit/domain/command-guard.test.ts",
+        "size": 6674,
+        "type": "blob"
+      },
+      {
+        "path": "test/unit/domain/container-config-tools.test.ts",
+        "size": 11767,
+        "type": "blob"
+      },
+      {
+        "path": "test/unit/domain/container-tools.test.ts",
+        "size": 11057,
+        "type": "blob"
+      },
+      {
+        "path": "test/unit/domain/dhcp-client-tools.test.ts",
+        "size": 10922,
+        "type": "blob"
+      },
+      {
+        "path": "test/unit/domain/dhcp-server-tools.test.ts",
+        "size": 14801,
+        "type": "blob"
+      },
+      {
+        "path": "test/unit/domain/dhcp-tools.test.ts",
+        "size": 12396,
+        "type": "blob"
+      },
+      {
+        "path": "test/unit/domain/diagnostic-tools.test.ts",
+        "size": 19547,
+        "type": "blob"
+      },
+      {
+        "path": "test/unit/domain/dns-tools.test.ts",
+        "size": 8354,
+        "type": "blob"
+      },
+      {
+        "path": "test/unit/domain/error-enricher.test.ts",
+        "size": 937,
+        "type": "blob"
+      },
+      {
+        "path": "test/unit/domain/error-types.test.ts",
+        "size": 2375,
+        "type": "blob"
+      },
+      {
+        "path": "test/unit/domain/files-tools.test.ts",
+        "size": 13136,
+        "type": "blob"
+      },
+      {
+        "path": "test/unit/domain/firewall-tools.test.ts",
+        "size": 18591,
+        "type": "blob"
+      },
+      {
+        "path": "test/unit/domain/fleet-tools.test.ts",
+        "size": 31677,
+        "type": "blob"
+      },
+      {
+        "path": "test/unit/domain/interface-list-tools.test.ts",
+        "size": 9333,
+        "type": "blob"
+      },
+      {
+        "path": "test/unit/domain/interface-tools.test.ts",
+        "size": 7541,
+        "type": "blob"
+      },
+      {
+        "path": "test/unit/domain/ip-pool-tools.test.ts",
+        "size": 7958,
+        "type": "blob"
+      },
+      {
+        "path": "test/unit/domain/ip-service-tools.test.ts",
+        "size": 7625,
+        "type": "blob"
+      },
+      {
+        "path": "test/unit/domain/ipsec-tools.test.ts",
+        "size": 21710,
+        "type": "blob"
+      },
+      {
+        "path": "test/unit/domain/log-tools.test.ts",
+        "size": 12713,
+        "type": "blob"
+      },
+      {
+        "path": "test/unit/domain/mangle-tools.test.ts",
+        "size": 10712,
+        "type": "blob"
+      },
+      {
+        "path": "test/unit/domain/network-services-tools.test.ts",
+        "size": 26176,
+        "type": "blob"
+      },
+      {
+        "path": "test/unit/domain/network-test-tools.test.ts",
+        "size": 8621,
+        "type": "blob"
+      },
+      {
+        "path": "test/unit/domain/ovpn-tools.test.ts",
+        "size": 17054,
+        "type": "blob"
+      },
+      {
+        "path": "test/unit/domain/packages-tools.test.ts",
+        "size": 7149,
+        "type": "blob"
+      },
+      {
+        "path": "test/unit/domain/pagination.test.ts",
+        "size": 2569,
+        "type": "blob"
+      },
+      {
+        "path": "test/unit/domain/policy-routing-tools.test.ts",
+        "size": 12054,
+        "type": "blob"
+      },
+      {
+        "path": "test/unit/domain/ppp-tools.test.ts",
+        "size": 9223,
+        "type": "blob"
+      },
+      {
+        "path": "test/unit/domain/pppoe-tools.test.ts",
+        "size": 13804,
+        "type": "blob"
+      },
+      {
+        "path": "test/unit/domain/queue-tools.test.ts",
+        "size": 12349,
+        "type": "blob"
+      },
+      {
+        "path": "test/unit/domain/route-tools.test.ts",
+        "size": 12396,
+        "type": "blob"
+      },
+      {
+        "path": "test/unit/domain/routing-protocol-tools.test.ts",
+        "size": 4983,
+        "type": "blob"
+      },
+      {
+        "path": "test/unit/domain/scheduler-tools.test.ts",
+        "size": 10955,
+        "type": "blob"
+      },
+      {
+        "path": "test/unit/domain/scripts-tools.test.ts",
+        "size": 11108,
+        "type": "blob"
+      },
+      {
+        "path": "test/unit/domain/snapshot/diff-engine.test.ts",
+        "size": 10319,
+        "type": "blob"
+      },
+      {
+        "path": "test/unit/domain/snapshot/retention.test.ts",
+        "size": 1290,
+        "type": "blob"
+      },
+      {
+        "path": "test/unit/domain/snapshot/snapshot-engine.test.ts",
+        "size": 2353,
+        "type": "blob"
+      },
+      {
+        "path": "test/unit/domain/snapshot/write-journal.test.ts",
+        "size": 3135,
+        "type": "blob"
+      },
+      {
+        "path": "test/unit/domain/system-ops-tools.test.ts",
+        "size": 12620,
+        "type": "blob"
+      },
+      {
+        "path": "test/unit/domain/tools/change-management-tools.test.ts",
+        "size": 11599,
+        "type": "blob"
+      },
+      {
+        "path": "test/unit/domain/upgrade-tools.test.ts",
+        "size": 6585,
+        "type": "blob"
+      },
+      {
+        "path": "test/unit/domain/user-group-tools.test.ts",
+        "size": 9424,
+        "type": "blob"
+      },
+      {
+        "path": "test/unit/domain/user-tools.test.ts",
+        "size": 16213,
+        "type": "blob"
+      },
+      {
+        "path": "test/unit/domain/vlan-tools.test.ts",
+        "size": 8666,
+        "type": "blob"
+      },
+      {
+        "path": "test/unit/domain/vrrp-tools.test.ts",
+        "size": 16005,
+        "type": "blob"
+      },
+      {
+        "path": "test/unit/domain/wifi-tools.test.ts",
+        "size": 7017,
+        "type": "blob"
+      },
+      {
+        "path": "test/unit/domain/wireguard-tools.test.ts",
+        "size": 9168,
+        "type": "blob"
+      },
+      {
+        "path": "test/unit/mcp/server.test.ts",
+        "size": 2598,
+        "type": "blob"
+      },
+      {
+        "path": "test/unit/mcp/tool-context.test.ts",
+        "size": 1184,
+        "type": "blob"
+      },
+      {
+        "path": "test/unit/mcp/tool-executor.test.ts",
+        "size": 10102,
+        "type": "blob"
+      },
+      {
+        "path": "test/unit/mcp/tool-registry-retry.test.ts",
+        "size": 1224,
+        "type": "blob"
+      },
+      {
+        "path": "test/unit/middleware/auth.test.ts",
+        "size": 4724,
+        "type": "blob"
+      },
+      {
+        "path": "test/unit/middleware/authz.test.ts",
+        "size": 3779,
+        "type": "blob"
+      },
+      {
+        "path": "test/unit/middleware/confirmation.test.ts",
+        "size": 6177,
+        "type": "blob"
+      },
+      {
+        "path": "test/unit/middleware/fleet-confirmation.test.ts",
+        "size": 1685,
+        "type": "blob"
+      },
+      {
+        "path": "test/unit/observability/audit-log.test.ts",
+        "size": 4769,
+        "type": "blob"
+      },
+      {
+        "path": "test/unit/observability/metrics.test.ts",
+        "size": 927,
+        "type": "blob"
+      },
+      {
+        "path": "test/unit/skill/tool-map-sync.test.ts",
+        "size": 1793,
+        "type": "blob"
+      },
+      {
+        "path": "test/unit/transports/http-hardening.test.ts",
+        "size": 7931,
+        "type": "blob"
+      },
+      {
+        "path": "tsconfig.json",
+        "size": 514,
+        "type": "blob"
+      },
+      {
+        "path": "tsup.bundle.config.ts",
+        "size": 1314,
+        "type": "blob"
+      },
+      {
+        "path": "tsup.config.ts",
+        "size": 476,
+        "type": "blob"
+      },
+      {
+        "path": "vitest.config.ts",
+        "size": 465,
+        "type": "blob"
+      }
+    ],
+    "expectedRetained": [
+      ".env.example",
+      "server.json",
+      "package.json",
+      "src/main.ts",
+      "src/cli/index.ts",
+      "src/mcp/server.ts",
+      "src/domain/tools/index.ts",
+      "src/mcp/tool-registry.ts",
+      "src/domain/tools/cidr.ts",
+      "src/domain/tools/ip-tools.ts",
+      "src/domain/tools/dns-tools.ts",
+      "src/domain/tools/log-tools.ts"
+    ]
+  },
+  {
+    "ref": "PantelisGeorgiadis/dicomweb-mcp-server",
+    "defaultBranch": "main",
+    "rootPkgName": "dicomweb-mcp-server",
+    "hasWorkspaces": false,
+    "tree": [
+      {
+        "path": ".env.example",
+        "size": 364,
+        "type": "blob"
+      },
+      {
+        "path": ".github/workflows/build-test.yml",
+        "size": 873,
+        "type": "blob"
+      },
+      {
+        "path": ".github/workflows/publish.yml",
+        "size": 655,
+        "type": "blob"
+      },
+      {
+        "path": ".gitignore",
+        "size": 38,
+        "type": "blob"
+      },
+      {
+        "path": "LICENSE.txt",
+        "size": 1086,
+        "type": "blob"
+      },
+      {
+        "path": "README.md",
+        "size": 10747,
+        "type": "blob"
+      },
+      {
+        "path": "eslint.config.mjs",
+        "size": 705,
+        "type": "blob"
+      },
+      {
+        "path": "glama.json",
+        "size": 101,
+        "type": "blob"
+      },
+      {
+        "path": "package-lock.json",
+        "size": 189115,
+        "type": "blob"
+      },
+      {
+        "path": "package.json",
+        "size": 2081,
+        "type": "blob"
+      },
+      {
+        "path": "prettier.config.mjs",
+        "size": 263,
+        "type": "blob"
+      },
+      {
+        "path": "server.json",
+        "size": 2488,
+        "type": "blob"
+      },
+      {
+        "path": "src/index.js",
+        "size": 17802,
+        "type": "blob"
+      },
+      {
+        "path": "src/polyfill.js",
+        "size": 3350,
+        "type": "blob"
+      },
+      {
+        "path": "src/tools/getEncapsulatedPdfReportText.js",
+        "size": 2722,
+        "type": "blob"
+      },
+      {
+        "path": "src/tools/getInstanceMetadata.js",
+        "size": 2295,
+        "type": "blob"
+      },
+      {
+        "path": "src/tools/getStructuredReportText.js",
+        "size": 2659,
+        "type": "blob"
+      },
+      {
+        "path": "src/tools/renderInstanceFrame.js",
+        "size": 3013,
+        "type": "blob"
+      },
+      {
+        "path": "src/tools/searchEncapsulatedPdfReports.js",
+        "size": 1725,
+        "type": "blob"
+      },
+      {
+        "path": "src/tools/searchInstances.js",
+        "size": 2943,
+        "type": "blob"
+      },
+      {
+        "path": "src/tools/searchSeries.js",
+        "size": 2489,
+        "type": "blob"
+      },
+      {
+        "path": "src/tools/searchStructuredReports.js",
+        "size": 2007,
+        "type": "blob"
+      },
+      {
+        "path": "src/tools/searchStudies.js",
+        "size": 2267,
+        "type": "blob"
+      },
+      {
+        "path": "src/utils/dataDictionary.js",
+        "size": 321396,
+        "type": "blob"
+      },
+      {
+        "path": "src/utils/multipart.js",
+        "size": 3531,
+        "type": "blob"
+      },
+      {
+        "path": "src/utils/parseDA.js",
+        "size": 2046,
+        "type": "blob"
+      },
+      {
+        "path": "src/utils/parseTM.js",
+        "size": 2024,
+        "type": "blob"
+      },
+      {
+        "path": "src/utils/pdfToText.js",
+        "size": 4737,
+        "type": "blob"
+      },
+      {
+        "path": "src/utils/query.js",
+        "size": 5243,
+        "type": "blob"
+      },
+      {
+        "path": "src/utils/queryParser.js",
+        "size": 5741,
+        "type": "blob"
+      },
+      {
+        "path": "src/utils/resultsFormatter.js",
+        "size": 2126,
+        "type": "blob"
+      },
+      {
+        "path": "src/utils/resultsMapper.js",
+        "size": 3137,
+        "type": "blob"
+      },
+      {
+        "path": "src/utils/srToText.js",
+        "size": 7298,
+        "type": "blob"
+      },
+      {
+        "path": "src/utils/url.js",
+        "size": 5252,
+        "type": "blob"
+      },
+      {
+        "path": "src/utils/utils.js",
+        "size": 2858,
+        "type": "blob"
+      },
+      {
+        "path": "test/FakeDicomWebServer.js",
+        "size": 2952,
+        "type": "blob"
+      },
+      {
+        "path": "test/buildMakeQuery.test.js",
+        "size": 6064,
+        "type": "blob"
+      },
+      {
+        "path": "test/getInstanceMetadata.test.js",
+        "size": 5724,
+        "type": "blob"
+      },
+      {
+        "path": "test/getStructuredReportText.test.js",
+        "size": 8475,
+        "type": "blob"
+      },
+      {
+        "path": "test/multipart.test.js",
+        "size": 4024,
+        "type": "blob"
+      },
+      {
+        "path": "test/parseDA.test.js",
+        "size": 4920,
+        "type": "blob"
+      },
+      {
+        "path": "test/parseTM.test.js",
+        "size": 3315,
+        "type": "blob"
+      },
+      {
+        "path": "test/pdfToText.test.js",
+        "size": 10866,
+        "type": "blob"
+      },
+      {
+        "path": "test/polyfill.test.js",
+        "size": 9349,
+        "type": "blob"
+      },
+      {
+        "path": "test/query.test.js",
+        "size": 6064,
+        "type": "blob"
+      },
+      {
+        "path": "test/queryParser.test.js",
+        "size": 8197,
+        "type": "blob"
+      },
+      {
+        "path": "test/renderInstanceFrame.test.js",
+        "size": 6547,
+        "type": "blob"
+      },
+      {
+        "path": "test/resultsFormatter.test.js",
+        "size": 5338,
+        "type": "blob"
+      },
+      {
+        "path": "test/resultsMapper.test.js",
+        "size": 5579,
+        "type": "blob"
+      },
+      {
+        "path": "test/searchEncapsulatedPdfReports.test.js",
+        "size": 6569,
+        "type": "blob"
+      },
+      {
+        "path": "test/searchInstances.test.js",
+        "size": 6644,
+        "type": "blob"
+      },
+      {
+        "path": "test/searchSeries.test.js",
+        "size": 6160,
+        "type": "blob"
+      },
+      {
+        "path": "test/searchStructuredReports.test.js",
+        "size": 6656,
+        "type": "blob"
+      },
+      {
+        "path": "test/searchStudies.test.js",
+        "size": 5903,
+        "type": "blob"
+      },
+      {
+        "path": "test/srToText.test.js",
+        "size": 9601,
+        "type": "blob"
+      },
+      {
+        "path": "test/url.test.js",
+        "size": 5996,
+        "type": "blob"
+      },
+      {
+        "path": "test/utils.test.js",
+        "size": 5287,
+        "type": "blob"
+      },
+      {
+        "path": "webpack.config.mjs",
+        "size": 1899,
+        "type": "blob"
+      }
+    ],
+    "expectedRetained": [
+      ".env.example",
+      "server.json",
+      "package.json",
+      "src/index.js",
+      "src/tools/searchSeries.js",
+      "src/tools/searchStudies.js",
+      "src/tools/searchInstances.js",
+      "src/tools/getInstanceMetadata.js",
+      "src/tools/renderInstanceFrame.js",
+      "src/tools/getStructuredReportText.js",
+      "src/tools/searchStructuredReports.js",
+      "src/tools/getEncapsulatedPdfReportText.js"
+    ]
+  },
+  {
+    "ref": "mroops0111/openapi-mcp-gateway",
+    "defaultBranch": "master",
+    "rootPkgName": null,
+    "hasWorkspaces": false,
+    "tree": [
+      {
+        "path": ".github/dependabot.yml",
+        "size": 237,
+        "type": "blob"
+      },
+      {
+        "path": ".github/release.yml",
+        "size": 431,
+        "type": "blob"
+      },
+      {
+        "path": ".github/workflows/ci.yml",
+        "size": 2058,
+        "type": "blob"
+      },
+      {
+        "path": ".github/workflows/pr.yml",
+        "size": 2400,
+        "type": "blob"
+      },
+      {
+        "path": ".github/workflows/release.yml",
+        "size": 1862,
+        "type": "blob"
+      },
+      {
+        "path": ".gitignore",
+        "size": 354,
+        "type": "blob"
+      },
+      {
+        "path": "LICENSE",
+        "size": 1067,
+        "type": "blob"
+      },
+      {
+        "path": "README.md",
+        "size": 20906,
+        "type": "blob"
+      },
+      {
+        "path": "architecture.pen",
+        "size": 56181,
+        "type": "blob"
+      },
+      {
+        "path": "architecture.png",
+        "size": 461727,
+        "type": "blob"
+      },
+      {
+        "path": "examples/asana.yml",
+        "size": 1184,
+        "type": "blob"
+      },
+      {
+        "path": "examples/github-dynamic.yml",
+        "size": 789,
+        "type": "blob"
+      },
+      {
+        "path": "examples/github.yml",
+        "size": 581,
+        "type": "blob"
+      },
+      {
+        "path": "examples/multi-server.yml",
+        "size": 1520,
+        "type": "blob"
+      },
+      {
+        "path": "examples/petstore-auto.yml",
+        "size": 890,
+        "type": "blob"
+      },
+      {
+        "path": "examples/petstore-override.yml",
+        "size": 1206,
+        "type": "blob"
+      },
+      {
+        "path": "examples/petstore.yml",
+        "size": 245,
+        "type": "blob"
+      },
+      {
+        "path": "pyproject.toml",
+        "size": 3258,
+        "type": "blob"
+      },
+      {
+        "path": "src/openapi_mcp_gateway/__init__.py",
+        "size": 647,
+        "type": "blob"
+      },
+      {
+        "path": "src/openapi_mcp_gateway/app.py",
+        "size": 8169,
+        "type": "blob"
+      },
+      {
+        "path": "src/openapi_mcp_gateway/auth/__init__.py",
+        "size": 1061,
+        "type": "blob"
+      },
+      {
+        "path": "src/openapi_mcp_gateway/auth/detector.py",
+        "size": 3055,
+        "type": "blob"
+      },
+      {
+        "path": "src/openapi_mcp_gateway/auth/flows/__init__.py",
+        "size": 597,
+        "type": "blob"
+      },
+      {
+        "path": "src/openapi_mcp_gateway/auth/flows/authorization_code.py",
+        "size": 20503,
+        "type": "blob"
+      },
+      {
+        "path": "src/openapi_mcp_gateway/auth/flows/base.py",
+        "size": 1800,
+        "type": "blob"
+      },
+      {
+        "path": "src/openapi_mcp_gateway/auth/flows/client_credentials.py",
+        "size": 2035,
+        "type": "blob"
+      },
+      {
+        "path": "src/openapi_mcp_gateway/auth/flows/factory.py",
+        "size": 6849,
+        "type": "blob"
+      },
+      {
+        "path": "src/openapi_mcp_gateway/auth/flows/passthrough.py",
+        "size": 1395,
+        "type": "blob"
+      },
+      {
+        "path": "src/openapi_mcp_gateway/auth/resolver.py",
+        "size": 4356,
+        "type": "blob"
+      },
+      {
+        "path": "src/openapi_mcp_gateway/auth/token_source.py",
+        "size": 4263,
+        "type": "blob"
+      },
+      {
+        "path": "src/openapi_mcp_gateway/cli.py",
+        "size": 9271,
+        "type": "blob"
+      },
+      {
+        "path": "src/openapi_mcp_gateway/client.py",
+        "size": 3501,
+        "type": "blob"
+      },
+      {
+        "path": "src/openapi_mcp_gateway/exposure/__init__.py",
+        "size": 751,
+        "type": "blob"
+      },
+      {
+        "path": "src/openapi_mcp_gateway/exposure/_shared.py",
+        "size": 7644,
+        "type": "blob"
+      },
+      {
+        "path": "src/openapi_mcp_gateway/exposure/_upstream.py",
+        "size": 10403,
+        "type": "blob"
+      },
+      {
+        "path": "src/openapi_mcp_gateway/exposure/resource.py",
+        "size": 7211,
+        "type": "blob"
+      },
+      {
+        "path": "src/openapi_mcp_gateway/exposure/tool.py",
+        "size": 10881,
+        "type": "blob"
+      },
+      {
+        "path": "src/openapi_mcp_gateway/fastapi.py",
+        "size": 6405,
+        "type": "blob"
+      },
+      {
+        "path": "src/openapi_mcp_gateway/gateway.py",
+        "size": 24308,
+        "type": "blob"
+      },
+      {
+        "path": "src/openapi_mcp_gateway/logger.py",
+        "size": 3652,
+        "type": "blob"
+      },
+      {
+        "path": "src/openapi_mcp_gateway/openapi.py",
+        "size": 11515,
+        "type": "blob"
+      },
+      {
+        "path": "src/openapi_mcp_gateway/policy.py",
+        "size": 1290,
+        "type": "blob"
+      },
+      {
+        "path": "src/openapi_mcp_gateway/settings.py",
+        "size": 10066,
+        "type": "blob"
+      },
+      {
+        "path": "src/openapi_mcp_gateway/stores/__init__.py",
+        "size": 936,
+        "type": "blob"
+      },
+      {
+        "path": "src/openapi_mcp_gateway/stores/base.py",
+        "size": 1635,
+        "type": "blob"
+      },
+      {
+        "path": "src/openapi_mcp_gateway/stores/memory.py",
+        "size": 1785,
+        "type": "blob"
+      },
+      {
+        "path": "src/openapi_mcp_gateway/stores/redis.py",
+        "size": 1969,
+        "type": "blob"
+      },
+      {
+        "path": "tests/__init__.py",
+        "size": 0,
+        "type": "blob"
+      },
+      {
+        "path": "tests/conftest.py",
+        "size": 1981,
+        "type": "blob"
+      },
+      {
+        "path": "tests/fixtures/petstore.json",
+        "size": 5366,
+        "type": "blob"
+      },
+      {
+        "path": "tests/fixtures/petstore.yml",
+        "size": 3295,
+        "type": "blob"
+      },
+      {
+        "path": "tests/integration/__init__.py",
+        "size": 0,
+        "type": "blob"
+      },
+      {
+        "path": "tests/integration/test_fastapi.py",
+        "size": 12648,
+        "type": "blob"
+      },
+      {
+        "path": "tests/integration/test_gateway.py",
+        "size": 20843,
+        "type": "blob"
+      },
+      {
+        "path": "tests/integration/test_oauth_flow.py",
+        "size": 12714,
+        "type": "blob"
+      },
+      {
+        "path": "tests/integration/test_resources.py",
+        "size": 14176,
+        "type": "blob"
+      },
+      {
+        "path": "tests/smoke/__init__.py",
+        "size": 0,
+        "type": "blob"
+      },
+      {
+        "path": "tests/smoke/conftest.py",
+        "size": 891,
+        "type": "blob"
+      },
+      {
+        "path": "tests/smoke/test_examples.py",
+        "size": 1807,
+        "type": "blob"
+      },
+      {
+        "path": "tests/smoke/test_fastapi_docs_src.py",
+        "size": 6121,
+        "type": "blob"
+      },
+      {
+        "path": "tests/unit/__init__.py",
+        "size": 0,
+        "type": "blob"
+      },
+      {
+        "path": "tests/unit/test_cli.py",
+        "size": 10860,
+        "type": "blob"
+      },
+      {
+        "path": "tests/unit/test_client.py",
+        "size": 2531,
+        "type": "blob"
+      },
+      {
+        "path": "tests/unit/test_detector.py",
+        "size": 5222,
+        "type": "blob"
+      },
+      {
+        "path": "tests/unit/test_exposure.py",
+        "size": 46962,
+        "type": "blob"
+      },
+      {
+        "path": "tests/unit/test_fastapi.py",
+        "size": 7093,
+        "type": "blob"
+      },
+      {
+        "path": "tests/unit/test_flows.py",
+        "size": 15687,
+        "type": "blob"
+      },
+      {
+        "path": "tests/unit/test_logger.py",
+        "size": 4388,
+        "type": "blob"
+      },
+      {
+        "path": "tests/unit/test_openapi.py",
+        "size": 13275,
+        "type": "blob"
+      },
+      {
+        "path": "tests/unit/test_policy.py",
+        "size": 4650,
+        "type": "blob"
+      },
+      {
+        "path": "tests/unit/test_resolver.py",
+        "size": 7020,
+        "type": "blob"
+      },
+      {
+        "path": "tests/unit/test_resource_exposure.py",
+        "size": 26275,
+        "type": "blob"
+      },
+      {
+        "path": "tests/unit/test_settings.py",
+        "size": 12860,
+        "type": "blob"
+      },
+      {
+        "path": "tests/unit/test_stores.py",
+        "size": 5739,
+        "type": "blob"
+      },
+      {
+        "path": "tests/unit/test_token_source.py",
+        "size": 6560,
+        "type": "blob"
+      },
+      {
+        "path": "tests/unit/test_yaml_overrides.py",
+        "size": 4408,
+        "type": "blob"
+      },
+      {
+        "path": "uv.lock",
+        "size": 233477,
+        "type": "blob"
+      }
+    ],
+    "expectedRetained": [
+      "pyproject.toml",
+      "src/openapi_mcp_gateway/exposure/tool.py",
+      "src/openapi_mcp_gateway/app.py",
+      "src/openapi_mcp_gateway/cli.py",
+      "src/openapi_mcp_gateway/client.py",
+      "src/openapi_mcp_gateway/logger.py",
+      "src/openapi_mcp_gateway/policy.py",
+      "src/openapi_mcp_gateway/fastapi.py",
+      "src/openapi_mcp_gateway/gateway.py",
+      "src/openapi_mcp_gateway/openapi.py",
+      "src/openapi_mcp_gateway/__init__.py",
+      "src/openapi_mcp_gateway/settings.py"
+    ]
+  },
+  {
+    "ref": "codex-curator/studiomcphub",
+    "defaultBranch": "master",
+    "rootPkgName": null,
+    "hasWorkspaces": false,
+    "tree": [
+      {
+        "path": ".firebaserc",
+        "size": 223,
+        "type": "blob"
+      },
+      {
+        "path": ".gitignore",
+        "size": 337,
+        "type": "blob"
+      },
+      {
+        "path": "CLAUDE.md",
+        "size": 8017,
+        "type": "blob"
+      },
+      {
+        "path": "Dockerfile",
+        "size": 962,
+        "type": "blob"
+      },
+      {
+        "path": "LICENSE",
+        "size": 1103,
+        "type": "blob"
+      },
+      {
+        "path": "README.md",
+        "size": 5033,
+        "type": "blob"
+      },
+      {
+        "path": "SECURITY.md",
+        "size": 1528,
+        "type": "blob"
+      },
+      {
+        "path": "contracts/AeternumCollection.sol",
+        "size": 3503,
+        "type": "blob"
+      },
+      {
+        "path": "contracts/abi/AeternumCollection.json",
+        "size": 4215,
+        "type": "blob"
+      },
+      {
+        "path": "deploy.sh",
+        "size": 1754,
+        "type": "blob"
+      },
+      {
+        "path": "docs/GROK_TEST_PROMPT.md",
+        "size": 10798,
+        "type": "blob"
+      },
+      {
+        "path": "firebase.json",
+        "size": 1604,
+        "type": "blob"
+      },
+      {
+        "path": "firestore.indexes.json",
+        "size": 511,
+        "type": "blob"
+      },
+      {
+        "path": "firestore.rules",
+        "size": 1693,
+        "type": "blob"
+      },
+      {
+        "path": "glama.json",
+        "size": 1456,
+        "type": "blob"
+      },
+      {
+        "path": "requirements.txt",
+        "size": 815,
+        "type": "blob"
+      },
+      {
+        "path": "server.json",
+        "size": 507,
+        "type": "blob"
+      },
+      {
+        "path": "site/.well-known/agent.json",
+        "size": 10160,
+        "type": "blob"
+      },
+      {
+        "path": "site/.well-known/glama.json",
+        "size": 149,
+        "type": "blob"
+      },
+      {
+        "path": "site/.well-known/mcp.json",
+        "size": 4241,
+        "type": "blob"
+      },
+      {
+        "path": "site/favicon.svg",
+        "size": 278,
+        "type": "blob"
+      },
+      {
+        "path": "site/guide.html",
+        "size": 13726,
+        "type": "blob"
+      },
+      {
+        "path": "site/index.html",
+        "size": 43475,
+        "type": "blob"
+      },
+      {
+        "path": "site/llms.txt",
+        "size": 16008,
+        "type": "blob"
+      },
+      {
+        "path": "site/og-image.svg",
+        "size": 2054,
+        "type": "blob"
+      },
+      {
+        "path": "site/pricing.json",
+        "size": 3721,
+        "type": "blob"
+      },
+      {
+        "path": "site/privacy.html",
+        "size": 9269,
+        "type": "blob"
+      },
+      {
+        "path": "site/support.html",
+        "size": 11316,
+        "type": "blob"
+      },
+      {
+        "path": "site/templates/admin/dashboard.html",
+        "size": 25929,
+        "type": "blob"
+      },
+      {
+        "path": "site/templates/admin/data.html",
+        "size": 7860,
+        "type": "blob"
+      },
+      {
+        "path": "site/templates/admin/login.html",
+        "size": 1523,
+        "type": "blob"
+      },
+      {
+        "path": "site/templates/admin/logs.html",
+        "size": 5584,
+        "type": "blob"
+      },
+      {
+        "path": "site/templates/index.html",
+        "size": 183,
+        "type": "blob"
+      },
+      {
+        "path": "site/templates/oauth/consent.html",
+        "size": 4194,
+        "type": "blob"
+      },
+      {
+        "path": "site/templates/oauth/error.html",
+        "size": 1176,
+        "type": "blob"
+      },
+      {
+        "path": "site/terms.html",
+        "size": 13919,
+        "type": "blob"
+      },
+      {
+        "path": "smithery.yaml",
+        "size": 1857,
+        "type": "blob"
+      },
+      {
+        "path": "src/__init__.py",
+        "size": 0,
+        "type": "blob"
+      },
+      {
+        "path": "src/api/__init__.py",
+        "size": 0,
+        "type": "blob"
+      },
+      {
+        "path": "src/api/support.py",
+        "size": 3273,
+        "type": "blob"
+      },
+      {
+        "path": "src/auth/__init__.py",
+        "size": 320,
+        "type": "blob"
+      },
+      {
+        "path": "src/auth/clients.py",
+        "size": 5484,
+        "type": "blob"
+      },
+      {
+        "path": "src/auth/consent.py",
+        "size": 8913,
+        "type": "blob"
+      },
+      {
+        "path": "src/auth/oauth.py",
+        "size": 12549,
+        "type": "blob"
+      },
+      {
+        "path": "src/auth/pkce.py",
+        "size": 892,
+        "type": "blob"
+      },
+      {
+        "path": "src/auth/tokens.py",
+        "size": 3748,
+        "type": "blob"
+      },
+      {
+        "path": "src/mcp_server/__init__.py",
+        "size": 0,
+        "type": "blob"
+      },
+      {
+        "path": "src/mcp_server/admin.py",
+        "size": 67615,
+        "type": "blob"
+      },
+      {
+        "path": "src/mcp_server/config.py",
+        "size": 9237,
+        "type": "blob"
+      },
+      {
+        "path": "src/mcp_server/mcp_tools.py",
+        "size": 34781,
+        "type": "blob"
+      },
+      {
+        "path": "src/mcp_server/server.py",
+        "size": 56539,
+        "type": "blob"
+      },
+      {
+        "path": "src/payment/__init__.py",
+        "size": 0,
+        "type": "blob"
+      },
+      {
+        "path": "src/payment/agent_tiers.py",
+        "size": 2626,
+        "type": "blob"
+      },
+      {
+        "path": "src/payment/gcx_credits.py",
+        "size": 5798,
+        "type": "blob"
+      },
+      {
+        "path": "src/payment/loyalty.py",
+        "size": 5729,
+        "type": "blob"
+      },
+      {
+        "path": "src/payment/stripe_pay.py",
+        "size": 1841,
+        "type": "blob"
+      },
+      {
+        "path": "src/payment/x402.py",
+        "size": 4280,
+        "type": "blob"
+      },
+      {
+        "path": "src/tools/__init__.py",
+        "size": 20511,
+        "type": "blob"
+      },
+      {
+        "path": "src/tools/color_profile.py",
+        "size": 2988,
+        "type": "blob"
+      },
+      {
+        "path": "src/tools/dataset.py",
+        "size": 2896,
+        "type": "blob"
+      },
+      {
+        "path": "src/tools/enrich.py",
+        "size": 6165,
+        "type": "blob"
+      },
+      {
+        "path": "src/tools/gcs_staging.py",
+        "size": 3063,
+        "type": "blob"
+      },
+      {
+        "path": "src/tools/generate.py",
+        "size": 3886,
+        "type": "blob"
+      },
+      {
+        "path": "src/tools/generate_nano.py",
+        "size": 3631,
+        "type": "blob"
+      },
+      {
+        "path": "src/tools/infuse.py",
+        "size": 3077,
+        "type": "blob"
+      },
+      {
+        "path": "src/tools/mint.py",
+        "size": 6965,
+        "type": "blob"
+      },
+      {
+        "path": "src/tools/mockup.py",
+        "size": 5589,
+        "type": "blob"
+      },
+      {
+        "path": "src/tools/palette.py",
+        "size": 5045,
+        "type": "blob"
+      },
+      {
+        "path": "src/tools/pipeline.py",
+        "size": 5437,
+        "type": "blob"
+      },
+      {
+        "path": "src/tools/print_ready.py",
+        "size": 6847,
+        "type": "blob"
+      },
+      {
+        "path": "src/tools/prompt_enhancer.py",
+        "size": 4262,
+        "type": "blob"
+      },
+      {
+        "path": "src/tools/register.py",
+        "size": 1744,
+        "type": "blob"
+      },
+      {
+        "path": "src/tools/remove_bg.py",
+        "size": 1861,
+        "type": "blob"
+      },
+      {
+        "path": "src/tools/resize.py",
+        "size": 3929,
+        "type": "blob"
+      },
+      {
+        "path": "src/tools/storage.py",
+        "size": 9726,
+        "type": "blob"
+      },
+      {
+        "path": "src/tools/store.py",
+        "size": 1215,
+        "type": "blob"
+      },
+      {
+        "path": "src/tools/upscale.py",
+        "size": 4052,
+        "type": "blob"
+      },
+      {
+        "path": "src/tools/vectorize.py",
+        "size": 2509,
+        "type": "blob"
+      },
+      {
+        "path": "src/tools/verify.py",
+        "size": 1897,
+        "type": "blob"
+      },
+      {
+        "path": "src/tools/watermark.py",
+        "size": 7826,
+        "type": "blob"
+      },
+      {
+        "path": "studio/README.md",
+        "size": 413,
+        "type": "blob"
+      },
+      {
+        "path": "studio/SKILL.md",
+        "size": 2155,
+        "type": "blob"
+      },
+      {
+        "path": "studio/pyproject.toml",
+        "size": 1153,
+        "type": "blob"
+      },
+      {
+        "path": "studio/studio.example.json",
+        "size": 830,
+        "type": "blob"
+      },
+      {
+        "path": "studio/studio/__init__.py",
+        "size": 304,
+        "type": "blob"
+      },
+      {
+        "path": "studio/studio/__main__.py",
+        "size": 74,
+        "type": "blob"
+      },
+      {
+        "path": "studio/studio/cli.py",
+        "size": 7267,
+        "type": "blob"
+      },
+      {
+        "path": "studio/studio/client.py",
+        "size": 3555,
+        "type": "blob"
+      },
+      {
+        "path": "studio/studio/config.py",
+        "size": 2060,
+        "type": "blob"
+      },
+      {
+        "path": "studio/studio/connectors/__init__.py",
+        "size": 700,
+        "type": "blob"
+      },
+      {
+        "path": "studio/studio/connectors/gooten.py",
+        "size": 871,
+        "type": "blob"
+      },
+      {
+        "path": "studio/studio/connectors/printful.py",
+        "size": 743,
+        "type": "blob"
+      },
+      {
+        "path": "studio/studio/connectors/printify.py",
+        "size": 736,
+        "type": "blob"
+      },
+      {
+        "path": "studio/studio/dam.py",
+        "size": 4249,
+        "type": "blob"
+      },
+      {
+        "path": "studio/studio/models.py",
+        "size": 2207,
+        "type": "blob"
+      },
+      {
+        "path": "studio/studio/pipeline.py",
+        "size": 3320,
+        "type": "blob"
+      },
+      {
+        "path": "studio/studio/preview.py",
+        "size": 1745,
+        "type": "blob"
+      },
+      {
+        "path": "studio/studio/stages/__init__.py",
+        "size": 2591,
+        "type": "blob"
+      },
+      {
+        "path": "studio/studio/stages/color_profile.py",
+        "size": 1095,
+        "type": "blob"
+      },
+      {
+        "path": "studio/studio/stages/enrich.py",
+        "size": 1418,
+        "type": "blob"
+      },
+      {
+        "path": "studio/studio/stages/mockup.py",
+        "size": 1604,
+        "type": "blob"
+      },
+      {
+        "path": "studio/studio/stages/palette.py",
+        "size": 1012,
+        "type": "blob"
+      },
+      {
+        "path": "studio/studio/stages/print_ready.py",
+        "size": 2188,
+        "type": "blob"
+      },
+      {
+        "path": "studio/studio/stages/remove_bg.py",
+        "size": 1115,
+        "type": "blob"
+      },
+      {
+        "path": "studio/studio/stages/resize.py",
+        "size": 1381,
+        "type": "blob"
+      },
+      {
+        "path": "studio/studio/stages/upscale.py",
+        "size": 1193,
+        "type": "blob"
+      },
+      {
+        "path": "studio/studio/stages/vectorize.py",
+        "size": 1042,
+        "type": "blob"
+      },
+      {
+        "path": "studio/studio/stages/watermark.py",
+        "size": 1217,
+        "type": "blob"
+      },
+      {
+        "path": "studio/studio/templates/gallery.html",
+        "size": 4981,
+        "type": "blob"
+      },
+      {
+        "path": "studio/tests/__init__.py",
+        "size": 0,
+        "type": "blob"
+      },
+      {
+        "path": "studio/tests/conftest.py",
+        "size": 1763,
+        "type": "blob"
+      },
+      {
+        "path": "studio/tests/test_client.py",
+        "size": 1279,
+        "type": "blob"
+      },
+      {
+        "path": "studio/tests/test_dam.py",
+        "size": 1920,
+        "type": "blob"
+      },
+      {
+        "path": "studio/tests/test_pipeline.py",
+        "size": 2664,
+        "type": "blob"
+      }
+    ],
+    "expectedRetained": [
+      "server.json",
+      "smithery.yaml",
+      "requirements.txt",
+      "studio/pyproject.toml",
+      "site/.well-known/mcp.json",
+      "src/mcp_server/server.py",
+      "src/tools/mint.py",
+      "src/tools/store.py",
+      "src/tools/enrich.py",
+      "src/tools/infuse.py",
+      "src/tools/mockup.py",
+      "src/tools/resize.py",
+      "src/tools/verify.py",
+      "src/tools/dataset.py",
+      "src/tools/palette.py",
+      "src/tools/storage.py",
+      "src/tools/upscale.py",
+      "src/tools/__init__.py",
+      "src/tools/generate.py",
+      "src/tools/pipeline.py",
+      "src/tools/register.py",
+      "src/tools/remove_bg.py",
+      "src/tools/vectorize.py",
+      "src/tools/watermark.py"
+    ]
+  },
+  {
+    "ref": "protostatis/unbrowser",
+    "defaultBranch": "main",
+    "rootPkgName": null,
+    "hasWorkspaces": false,
+    "tree": [
+      {
+        "path": ".dockerignore",
+        "size": 589,
+        "type": "blob"
+      },
+      {
+        "path": ".github/workflows/ci.yml",
+        "size": 2364,
+        "type": "blob"
+      },
+      {
+        "path": ".github/workflows/release.yml",
+        "size": 28807,
+        "type": "blob"
+      },
+      {
+        "path": ".gitignore",
+        "size": 740,
+        "type": "blob"
+      },
+      {
+        "path": "CLAUDE.md",
+        "size": 20074,
+        "type": "blob"
+      },
+      {
+        "path": "Cargo.lock",
+        "size": 49852,
+        "type": "blob"
+      },
+      {
+        "path": "Cargo.toml",
+        "size": 907,
+        "type": "blob"
+      },
+      {
+        "path": "Dockerfile",
+        "size": 133,
+        "type": "blob"
+      },
+      {
+        "path": "LICENSE",
+        "size": 11358,
+        "type": "blob"
+      },
+      {
+        "path": "README.md",
+        "size": 5902,
+        "type": "blob"
+      },
+      {
+        "path": "blog-chrome-tax.md",
+        "size": 5165,
+        "type": "blob"
+      },
+      {
+        "path": "chrome-tax-calculator.html",
+        "size": 44778,
+        "type": "blob"
+      },
+      {
+        "path": "chrome-tax-chart.svg",
+        "size": 4335,
+        "type": "blob"
+      },
+      {
+        "path": "docker/Dockerfile.release",
+        "size": 2732,
+        "type": "blob"
+      },
+      {
+        "path": "docs/benchmark-21-sites-draft.md",
+        "size": 3217,
+        "type": "blob"
+      },
+      {
+        "path": "docs/chrome-tax-distribution-loop.md",
+        "size": 4528,
+        "type": "blob"
+      },
+      {
+        "path": "docs/compatibility.md",
+        "size": 5074,
+        "type": "blob"
+      },
+      {
+        "path": "docs/distribution.md",
+        "size": 15006,
+        "type": "blob"
+      },
+      {
+        "path": "docs/info-discovery-plan.md",
+        "size": 20918,
+        "type": "blob"
+      },
+      {
+        "path": "docs/probabilistic-policy.md",
+        "size": 50491,
+        "type": "blob"
+      },
+      {
+        "path": "docs/publishing.md",
+        "size": 5433,
+        "type": "blob"
+      },
+      {
+        "path": "docs/roadmap.md",
+        "size": 8019,
+        "type": "blob"
+      },
+      {
+        "path": "docs/usage.md",
+        "size": 6635,
+        "type": "blob"
+      },
+      {
+        "path": "docs/webvoyager-baseline-v1-2026-05-16.jsonl",
+        "size": 15636,
+        "type": "blob"
+      },
+      {
+        "path": "docs/webvoyager-data-format.md",
+        "size": 8536,
+        "type": "blob"
+      },
+      {
+        "path": "docs/webvoyager-site-coverage-run-v1-2026-05-17.jsonl",
+        "size": 15321,
+        "type": "blob"
+      },
+      {
+        "path": "docs/webvoyager-site-coverage-run-v2-2026-05-17.jsonl",
+        "size": 16867,
+        "type": "blob"
+      },
+      {
+        "path": "docs/webvoyager-site-coverage-run-v3-2026-05-17.jsonl",
+        "size": 22089,
+        "type": "blob"
+      },
+      {
+        "path": "docs/webvoyager-site-coverage-run-v4-2026-05-17.jsonl",
+        "size": 17911,
+        "type": "blob"
+      },
+      {
+        "path": "docs/webvoyager-site-coverage-run-v5-2026-05-17.jsonl",
+        "size": 17667,
+        "type": "blob"
+      },
+      {
+        "path": "docs/webvoyager-site-coverage-v1.jsonl",
+        "size": 6005,
+        "type": "blob"
+      },
+      {
+        "path": "docs/webvoyager-usability-plan.md",
+        "size": 39605,
+        "type": "blob"
+      },
+      {
+        "path": "glama.json",
+        "size": 94,
+        "type": "blob"
+      },
+      {
+        "path": "prefit/v1.bundle.json",
+        "size": 48997,
+        "type": "blob"
+      },
+      {
+        "path": "profiles/chrome_131.toml",
+        "size": 712,
+        "type": "blob"
+      },
+      {
+        "path": "profiles/chrome_134.toml",
+        "size": 894,
+        "type": "blob"
+      },
+      {
+        "path": "profiles/chrome_147.toml",
+        "size": 1189,
+        "type": "blob"
+      },
+      {
+        "path": "python/LICENSE",
+        "size": 11358,
+        "type": "blob"
+      },
+      {
+        "path": "python/README.md",
+        "size": 4243,
+        "type": "blob"
+      },
+      {
+        "path": "python/pyproject.toml",
+        "size": 3872,
+        "type": "blob"
+      },
+      {
+        "path": "python/unbrowser/__init__.py",
+        "size": 17648,
+        "type": "blob"
+      },
+      {
+        "path": "python/unbrowser/_bin/.gitkeep",
+        "size": 0,
+        "type": "blob"
+      },
+      {
+        "path": "python/unbrowser/_cli.py",
+        "size": 3889,
+        "type": "blob"
+      },
+      {
+        "path": "scripts/_before_after_compare.py",
+        "size": 9614,
+        "type": "blob"
+      },
+      {
+        "path": "scripts/blockmap_forms_smoke.py",
+        "size": 4232,
+        "type": "blob"
+      },
+      {
+        "path": "scripts/bytecode_cache_smoke.py",
+        "size": 6561,
+        "type": "blob"
+      },
+      {
+        "path": "scripts/cookie_service.py",
+        "size": 21257,
+        "type": "blob"
+      },
+      {
+        "path": "scripts/cookie_service_smoke.py",
+        "size": 9474,
+        "type": "blob"
+      },
+      {
+        "path": "scripts/discovery_routing_smoke.py",
+        "size": 8783,
+        "type": "blob"
+      },
+      {
+        "path": "scripts/discovery_smoke.py",
+        "size": 12404,
+        "type": "blob"
+      },
+      {
+        "path": "scripts/dynamic_script_smoke.py",
+        "size": 7197,
+        "type": "blob"
+      },
+      {
+        "path": "scripts/fp_check.py",
+        "size": 4782,
+        "type": "blob"
+      },
+      {
+        "path": "scripts/generalization_smoke.py",
+        "size": 7370,
+        "type": "blob"
+      },
+      {
+        "path": "scripts/hosted_mcp_smoke.py",
+        "size": 6639,
+        "type": "blob"
+      },
+      {
+        "path": "scripts/innerhtml_smoke.py",
+        "size": 4949,
+        "type": "blob"
+      },
+      {
+        "path": "scripts/module_loader_smoke.py",
+        "size": 6854,
+        "type": "blob"
+      },
+      {
+        "path": "scripts/network_extract_activate_smoke.py",
+        "size": 5058,
+        "type": "blob"
+      },
+      {
+        "path": "scripts/network_stores_smoke.py",
+        "size": 7962,
+        "type": "blob"
+      },
+      {
+        "path": "scripts/observers_smoke.py",
+        "size": 9512,
+        "type": "blob"
+      },
+      {
+        "path": "scripts/page_model_smoke.py",
+        "size": 5290,
+        "type": "blob"
+      },
+      {
+        "path": "scripts/policy_baseline.json",
+        "size": 14572,
+        "type": "blob"
+      },
+      {
+        "path": "scripts/policy_baseline.py",
+        "size": 5554,
+        "type": "blob"
+      },
+      {
+        "path": "scripts/policy_e2e.json",
+        "size": 4978,
+        "type": "blob"
+      },
+      {
+        "path": "scripts/policy_e2e.py",
+        "size": 4531,
+        "type": "blob"
+      },
+      {
+        "path": "scripts/prefit_smoke.py",
+        "size": 4777,
+        "type": "blob"
+      },
+      {
+        "path": "scripts/release_check.py",
+        "size": 8522,
+        "type": "blob"
+      },
+      {
+        "path": "scripts/route_discover_smoke.py",
+        "size": 3992,
+        "type": "blob"
+      },
+      {
+        "path": "scripts/router.py",
+        "size": 23623,
+        "type": "blob"
+      },
+      {
+        "path": "scripts/settle_reason_smoke.py",
+        "size": 4852,
+        "type": "blob"
+      },
+      {
+        "path": "scripts/shim_ab.py",
+        "size": 6475,
+        "type": "blob"
+      },
+      {
+        "path": "scripts/text_cards_smoke.py",
+        "size": 3904,
+        "type": "blob"
+      },
+      {
+        "path": "scripts/watch.py",
+        "size": 4028,
+        "type": "blob"
+      },
+      {
+        "path": "server.json",
+        "size": 1308,
+        "type": "blob"
+      },
+      {
+        "path": "skills/unbrowser/SKILL.md",
+        "size": 23693,
+        "type": "blob"
+      },
+      {
+        "path": "src/bytecode_cache.rs",
+        "size": 13809,
+        "type": "blob"
+      },
+      {
+        "path": "src/challenge.rs",
+        "size": 33875,
+        "type": "blob"
+      },
+      {
+        "path": "src/js/blockmap.js",
+        "size": 24664,
+        "type": "blob"
+      },
+      {
+        "path": "src/js/dom.js",
+        "size": 53852,
+        "type": "blob"
+      },
+      {
+        "path": "src/js/extract.js",
+        "size": 39443,
+        "type": "blob"
+      },
+      {
+        "path": "src/js/interact.js",
+        "size": 4988,
+        "type": "blob"
+      },
+      {
+        "path": "src/js/page_model.js",
+        "size": 31117,
+        "type": "blob"
+      },
+      {
+        "path": "src/js/shims.js",
+        "size": 81483,
+        "type": "blob"
+      },
+      {
+        "path": "src/main.rs",
+        "size": 359355,
+        "type": "blob"
+      },
+      {
+        "path": "src/network_store.rs",
+        "size": 26289,
+        "type": "blob"
+      },
+      {
+        "path": "src/policy.rs",
+        "size": 18923,
+        "type": "blob"
+      },
+      {
+        "path": "src/prefit.rs",
+        "size": 30562,
+        "type": "blob"
+      },
+      {
+        "path": "src/profile.rs",
+        "size": 4640,
+        "type": "blob"
+      },
+      {
+        "path": "tests/test_release_check.py",
+        "size": 2029,
+        "type": "blob"
+      },
+      {
+        "path": "train/.gitignore",
+        "size": 233,
+        "type": "blob"
+      },
+      {
+        "path": "train/README.md",
+        "size": 10245,
+        "type": "blob"
+      },
+      {
+        "path": "train/aggregate.py",
+        "size": 17117,
+        "type": "blob"
+      },
+      {
+        "path": "train/collect.py",
+        "size": 29846,
+        "type": "blob"
+      },
+      {
+        "path": "train/corpus/seed_sites.json",
+        "size": 19918,
+        "type": "blob"
+      },
+      {
+        "path": "train/corpus/subagent_tasks.json",
+        "size": 1688,
+        "type": "blob"
+      },
+      {
+        "path": "train/corpus/tool_likelihoods_ab.json",
+        "size": 660,
+        "type": "blob"
+      },
+      {
+        "path": "train/corpus_v1.txt",
+        "size": 1024,
+        "type": "blob"
+      },
+      {
+        "path": "train/eval_subagent_tasks.py",
+        "size": 3429,
+        "type": "blob"
+      },
+      {
+        "path": "train/eval_tool_likelihoods.py",
+        "size": 3791,
+        "type": "blob"
+      },
+      {
+        "path": "train/pack.py",
+        "size": 7604,
+        "type": "blob"
+      },
+      {
+        "path": "train/test_collect.py",
+        "size": 6305,
+        "type": "blob"
+      },
+      {
+        "path": "train/test_webvoyager_eval.py",
+        "size": 7294,
+        "type": "blob"
+      },
+      {
+        "path": "train/webvoyager_eval.py",
+        "size": 11134,
+        "type": "blob"
+      }
+    ],
+    "expectedRetained": [
+      "Cargo.toml",
+      "server.json",
+      "python/pyproject.toml",
+      "src/js/dom.js",
+      "src/js/shims.js",
+      "src/js/extract.js",
+      "src/js/blockmap.js",
+      "src/js/interact.js",
+      "src/js/page_model.js",
+      "scripts/observers_smoke.py",
+      "train/eval_tool_likelihoods.py",
+      "src/policy.rs"
+    ]
+  },
+  {
+    "ref": "upstash/context7",
+    "defaultBranch": "master",
+    "rootPkgName": "@upstash/context7",
+    "hasWorkspaces": true,
+    "tree": [
+      {
+        "path": ".agents/plugins/marketplace.json",
+        "size": 391,
+        "type": "blob"
+      },
+      {
+        "path": ".changeset/README.md",
+        "size": 510,
+        "type": "blob"
+      },
+      {
+        "path": ".changeset/config.json",
+        "size": 373,
+        "type": "blob"
+      },
+      {
+        "path": ".claude-plugin/marketplace.json",
+        "size": 373,
+        "type": "blob"
+      },
+      {
+        "path": ".env.example",
+        "size": 404,
+        "type": "blob"
+      },
+      {
+        "path": ".github/ISSUE_TEMPLATE/bug_report.yml",
+        "size": 3063,
+        "type": "blob"
+      },
+      {
+        "path": ".github/ISSUE_TEMPLATE/documentation.yml",
+        "size": 1254,
+        "type": "blob"
+      },
+      {
+        "path": ".github/ISSUE_TEMPLATE/feature_request.yml",
+        "size": 1338,
+        "type": "blob"
+      },
+      {
+        "path": ".github/dependabot.yml",
+        "size": 362,
+        "type": "blob"
+      },
+      {
+        "path": ".github/plugin/marketplace.json",
+        "size": 537,
+        "type": "blob"
+      },
+      {
+        "path": ".github/workflows/canary-release.yml",
+        "size": 1056,
+        "type": "blob"
+      },
+      {
+        "path": ".github/workflows/ecr-deploy.yml",
+        "size": 1844,
+        "type": "blob"
+      },
+      {
+        "path": ".github/workflows/mcp-registry.yml",
+        "size": 1728,
+        "type": "blob"
+      },
+      {
+        "path": ".github/workflows/release.yml",
+        "size": 1162,
+        "type": "blob"
+      },
+      {
+        "path": ".github/workflows/test.yml",
+        "size": 1667,
+        "type": "blob"
+      },
+      {
+        "path": ".github/workflows/triage-library-report.yml",
+        "size": 1723,
+        "type": "blob"
+      },
+      {
+        "path": ".gitignore",
+        "size": 2364,
+        "type": "blob"
+      },
+      {
+        "path": ".prettierignore",
+        "size": 253,
+        "type": "blob"
+      },
+      {
+        "path": "LICENSE",
+        "size": 1079,
+        "type": "blob"
+      },
+      {
+        "path": "README.md",
+        "size": 9905,
+        "type": "blob"
+      },
+      {
+        "path": "SECURITY.md",
+        "size": 1642,
+        "type": "blob"
+      },
+      {
+        "path": "docs/adding-libraries.mdx",
+        "size": 3554,
+        "type": "blob"
+      },
+      {
+        "path": "docs/agentic-tools/ai-sdk/agents/context7-agent.mdx",
+        "size": 5858,
+        "type": "blob"
+      },
+      {
+        "path": "docs/agentic-tools/ai-sdk/getting-started.mdx",
+        "size": 4610,
+        "type": "blob"
+      },
+      {
+        "path": "docs/agentic-tools/ai-sdk/tools/query-docs.mdx",
+        "size": 5707,
+        "type": "blob"
+      },
+      {
+        "path": "docs/agentic-tools/ai-sdk/tools/resolve-library-id.mdx",
+        "size": 4929,
+        "type": "blob"
+      },
+      {
+        "path": "docs/agentic-tools/overview.mdx",
+        "size": 4473,
+        "type": "blob"
+      },
+      {
+        "path": "docs/api-guide.mdx",
+        "size": 9536,
+        "type": "blob"
+      },
+      {
+        "path": "docs/clients/claude-code.mdx",
+        "size": 5998,
+        "type": "blob"
+      },
+      {
+        "path": "docs/clients/cli.mdx",
+        "size": 9513,
+        "type": "blob"
+      },
+      {
+        "path": "docs/clients/codex.mdx",
+        "size": 5298,
+        "type": "blob"
+      },
+      {
+        "path": "docs/clients/copilot-cli.mdx",
+        "size": 4075,
+        "type": "blob"
+      },
+      {
+        "path": "docs/clients/cursor.mdx",
+        "size": 3539,
+        "type": "blob"
+      },
+      {
+        "path": "docs/clients/opencode.mdx",
+        "size": 2190,
+        "type": "blob"
+      },
+      {
+        "path": "docs/clients/pi.mdx",
+        "size": 2511,
+        "type": "blob"
+      },
+      {
+        "path": "docs/clients/vscode.mdx",
+        "size": 3006,
+        "type": "blob"
+      },
+      {
+        "path": "docs/contact.mdx",
+        "size": 57,
+        "type": "blob"
+      },
+      {
+        "path": "docs/docs.json",
+        "size": 7866,
+        "type": "blob"
+      },
+      {
+        "path": "docs/enterprise.mdx",
+        "size": 5159,
+        "type": "blob"
+      },
+      {
+        "path": "docs/enterprise/api/authentication.mdx",
+        "size": 2374,
+        "type": "blob"
+      },
+      {
+        "path": "docs/enterprise/api/context/get-documentation-context.mdx",
+        "size": 189,
+        "type": "blob"
+      },
+      {
+        "path": "docs/enterprise/api/parse/get-parse-status.mdx",
+        "size": 157,
+        "type": "blob"
+      },
+      {
+        "path": "docs/enterprise/api/parse/import-libraries.mdx",
+        "size": 227,
+        "type": "blob"
+      },
+      {
+        "path": "docs/enterprise/api/parse/parse-a-git-repository.mdx",
+        "size": 163,
+        "type": "blob"
+      },
+      {
+        "path": "docs/enterprise/api/parse/parse-a-website.mdx",
+        "size": 164,
+        "type": "blob"
+      },
+      {
+        "path": "docs/enterprise/api/parse/parse-an-openapi-spec-by-url.mdx",
+        "size": 193,
+        "type": "blob"
+      },
+      {
+        "path": "docs/enterprise/api/parse/refresh-a-library.mdx",
+        "size": 175,
+        "type": "blob"
+      },
+      {
+        "path": "docs/enterprise/api/parse/upload-an-openapi-spec-file.mdx",
+        "size": 193,
+        "type": "blob"
+      },
+      {
+        "path": "docs/enterprise/api/search/search-for-libraries.mdx",
+        "size": 149,
+        "type": "blob"
+      },
+      {
+        "path": "docs/enterprise/backup-restore.mdx",
+        "size": 6737,
+        "type": "blob"
+      },
+      {
+        "path": "docs/enterprise/changelog.mdx",
+        "size": 3763,
+        "type": "blob"
+      },
+      {
+        "path": "docs/enterprise/deployment/docker.mdx",
+        "size": 3609,
+        "type": "blob"
+      },
+      {
+        "path": "docs/enterprise/deployment/kubernetes.mdx",
+        "size": 10751,
+        "type": "blob"
+      },
+      {
+        "path": "docs/enterprise/deployment/scaling.mdx",
+        "size": 16069,
+        "type": "blob"
+      },
+      {
+        "path": "docs/enterprise/deployment/vector-stores.mdx",
+        "size": 6321,
+        "type": "blob"
+      },
+      {
+        "path": "docs/enterprise/enterprise-managed-auth/entra.mdx",
+        "size": 38970,
+        "type": "blob"
+      },
+      {
+        "path": "docs/enterprise/enterprise-managed-auth/okta.mdx",
+        "size": 7325,
+        "type": "blob"
+      },
+      {
+        "path": "docs/enterprise/gitops.mdx",
+        "size": 9932,
+        "type": "blob"
+      },
+      {
+        "path": "docs/enterprise/integrations/confluence.mdx",
+        "size": 6017,
+        "type": "blob"
+      },
+      {
+        "path": "docs/enterprise/integrations/github.mdx",
+        "size": 6183,
+        "type": "blob"
+      },
+      {
+        "path": "docs/enterprise/integrations/other-git.mdx",
+        "size": 5556,
+        "type": "blob"
+      },
+      {
+        "path": "docs/enterprise/library-import.mdx",
+        "size": 7374,
+        "type": "blob"
+      },
+      {
+        "path": "docs/enterprise/on-premise.mdx",
+        "size": 7402,
+        "type": "blob"
+      },
+      {
+        "path": "docs/enterprise/security/entra-sso.mdx",
+        "size": 13844,
+        "type": "blob"
+      },
+      {
+        "path": "docs/enterprise/security/library-access.mdx",
+        "size": 4141,
+        "type": "blob"
+      },
+      {
+        "path": "docs/enterprise/security/oidc-sso.mdx",
+        "size": 10767,
+        "type": "blob"
+      },
+      {
+        "path": "docs/howto/api-keys.mdx",
+        "size": 1511,
+        "type": "blob"
+      },
+      {
+        "path": "docs/howto/chat-widget.mdx",
+        "size": 7087,
+        "type": "blob"
+      },
+      {
+        "path": "docs/howto/claiming-libraries.mdx",
+        "size": 12571,
+        "type": "blob"
+      },
+      {
+        "path": "docs/howto/oauth.mdx",
+        "size": 1758,
+        "type": "blob"
+      },
+      {
+        "path": "docs/howto/policies.mdx",
+        "size": 3427,
+        "type": "blob"
+      },
+      {
+        "path": "docs/howto/private-sources.mdx",
+        "size": 3457,
+        "type": "blob"
+      },
+      {
+        "path": "docs/howto/rules.mdx",
+        "size": 1654,
+        "type": "blob"
+      },
+      {
+        "path": "docs/howto/teamspace.mdx",
+        "size": 2403,
+        "type": "blob"
+      },
+      {
+        "path": "docs/howto/usage.mdx",
+        "size": 1315,
+        "type": "blob"
+      },
+      {
+        "path": "docs/howto/verification.mdx",
+        "size": 6893,
+        "type": "blob"
+      },
+      {
+        "path": "docs/images/clients/claude-code/mcp-details.png",
+        "size": 50376,
+        "type": "blob"
+      },
+      {
+        "path": "docs/images/clients/claude-code/mcp-list.png",
+        "size": 30130,
+        "type": "blob"
+      },
+      {
+        "path": "docs/images/clients/claude-code/mcp-unauthenticated.png",
+        "size": 38798,
+        "type": "blob"
+      },
+      {
+        "path": "docs/images/clients/cursor/logo.png",
+        "size": 40415,
+        "type": "blob"
+      },
+      {
+        "path": "docs/images/clients/cursor/mcp-settings.png",
+        "size": 69202,
+        "type": "blob"
+      },
+      {
+        "path": "docs/images/clients/cursor/rules.png",
+        "size": 126692,
+        "type": "blob"
+      },
+      {
+        "path": "docs/images/clients/manus/connector.png",
+        "size": 99162,
+        "type": "blob"
+      },
+      {
+        "path": "docs/images/clients/manus/custom-mcp.png",
+        "size": 61241,
+        "type": "blob"
+      },
+      {
+        "path": "docs/images/dashboard/add-payment-method.png",
+        "size": 611888,
+        "type": "blob"
+      },
+      {
+        "path": "docs/images/dashboard/admin/claim-library-button.png",
+        "size": 170672,
+        "type": "blob"
+      },
+      {
+        "path": "docs/images/dashboard/admin/claim-modal.png",
+        "size": 283206,
+        "type": "blob"
+      },
+      {
+        "path": "docs/images/dashboard/admin/config-overview.png",
+        "size": 285112,
+        "type": "blob"
+      },
+      {
+        "path": "docs/images/dashboard/admin/library-manage-button.png",
+        "size": 385672,
+        "type": "blob"
+      },
+      {
+        "path": "docs/images/dashboard/admin/library-metrics.png",
+        "size": 194639,
+        "type": "blob"
+      },
+      {
+        "path": "docs/images/dashboard/admin/managing-versions.png",
+        "size": 199167,
+        "type": "blob"
+      },
+      {
+        "path": "docs/images/dashboard/api-keys-card.png",
+        "size": 437054,
+        "type": "blob"
+      },
+      {
+        "path": "docs/images/dashboard/billing-page.png",
+        "size": 620497,
+        "type": "blob"
+      },
+      {
+        "path": "docs/images/dashboard/chat-widget.png",
+        "size": 408090,
+        "type": "blob"
+      },
+      {
+        "path": "docs/images/dashboard/manage-cards.png",
+        "size": 295197,
+        "type": "blob"
+      },
+      {
+        "path": "docs/images/dashboard/members-tab.png",
+        "size": 432342,
+        "type": "blob"
+      },
+      {
+        "path": "docs/images/dashboard/private-sources-card.png",
+        "size": 542440,
+        "type": "blob"
+      },
+      {
+        "path": "docs/images/dashboard/public-repository-filters.png",
+        "size": 262159,
+        "type": "blob"
+      },
+      {
+        "path": "docs/images/dashboard/source-type-access.png",
+        "size": 225607,
+        "type": "blob"
+      },
+      {
+        "path": "docs/images/dashboard/teamspace-management.png",
+        "size": 300993,
+        "type": "blob"
+      },
+      {
+        "path": "docs/images/dashboard/usage-stats.png",
+        "size": 311385,
+        "type": "blob"
+      },
+      {
+        "path": "docs/images/dashboard/user-dropdown.png",
+        "size": 598314,
+        "type": "blob"
+      },
+      {
+        "path": "docs/images/enterprise/api-keys/api-keys-create-dialog.png",
+        "size": 361656,
+        "type": "blob"
+      },
+      {
+        "path": "docs/images/enterprise/api-keys/api-keys-created.png",
+        "size": 373780,
+        "type": "blob"
+      },
+      {
+        "path": "docs/images/enterprise/api-keys/api-keys-empty.png",
+        "size": 127982,
+        "type": "blob"
+      },
+      {
+        "path": "docs/images/enterprise/enterprise-managed-auth/context7-ema-config.png",
+        "size": 236211,
+        "type": "blob"
+      },
+      {
+        "path": "docs/images/enterprise/enterprise-managed-auth/okta-assignments.png",
+        "size": 122038,
+        "type": "blob"
+      },
+      {
+        "path": "docs/images/enterprise/enterprise-managed-auth/okta-enable-feature.png",
+        "size": 219072,
+        "type": "blob"
+      },
+      {
+        "path": "docs/images/enterprise/enterprise-managed-auth/okta-manage-connections.png",
+        "size": 141040,
+        "type": "blob"
+      },
+      {
+        "path": "docs/images/enterprise/enterprise-managed-auth/okta-requesting-app.png",
+        "size": 86287,
+        "type": "blob"
+      },
+      {
+        "path": "docs/images/enterprise/enterprise-managed-auth/okta-resource-app.png",
+        "size": 74592,
+        "type": "blob"
+      },
+      {
+        "path": "docs/images/enterprise/entra-sso/01-register-app.png",
+        "size": 400247,
+        "type": "blob"
+      },
+      {
+        "path": "docs/images/enterprise/entra-sso/02-app-overview.png",
+        "size": 593643,
+        "type": "blob"
+      },
+      {
+        "path": "docs/images/enterprise/entra-sso/03-client-secret.png",
+        "size": 493574,
+        "type": "blob"
+      },
+      {
+        "path": "docs/images/enterprise/entra-sso/04-app-roles.png",
+        "size": 469869,
+        "type": "blob"
+      },
+      {
+        "path": "docs/images/enterprise/entra-sso/05-assignment-required.png",
+        "size": 536302,
+        "type": "blob"
+      },
+      {
+        "path": "docs/images/enterprise/entra-sso/06-assign-user-role.png",
+        "size": 344497,
+        "type": "blob"
+      },
+      {
+        "path": "docs/images/enterprise/entra-sso/07-context7-settings-card.png",
+        "size": 369557,
+        "type": "blob"
+      },
+      {
+        "path": "docs/images/enterprise/entra-sso/08-filled-credentials.png",
+        "size": 435636,
+        "type": "blob"
+      },
+      {
+        "path": "docs/images/enterprise/entra-sso/10-login-page.png",
+        "size": 232473,
+        "type": "blob"
+      },
+      {
+        "path": "docs/images/enterprise/entra-sso/11-users-tab.png",
+        "size": 330347,
+        "type": "blob"
+      },
+      {
+        "path": "docs/images/enterprise/entra-sso/README.md",
+        "size": 5917,
+        "type": "blob"
+      },
+      {
+        "path": "docs/images/enterprise/gitops/gitops-settings.png",
+        "size": 187278,
+        "type": "blob"
+      },
+      {
+        "path": "docs/images/enterprise/integrations/confluence-add.png",
+        "size": 150245,
+        "type": "blob"
+      },
+      {
+        "path": "docs/images/enterprise/integrations/confluence-by-url.png",
+        "size": 103383,
+        "type": "blob"
+      },
+      {
+        "path": "docs/images/enterprise/integrations/confluence-settings.png",
+        "size": 102444,
+        "type": "blob"
+      },
+      {
+        "path": "docs/images/enterprise/integrations/confluence-source.png",
+        "size": 66431,
+        "type": "blob"
+      },
+      {
+        "path": "docs/images/enterprise/integrations/git-tokens.png",
+        "size": 64220,
+        "type": "blob"
+      },
+      {
+        "path": "docs/images/enterprise/integrations/github-app.png",
+        "size": 38424,
+        "type": "blob"
+      },
+      {
+        "path": "docs/images/enterprise/integrations/github-permissions.png",
+        "size": 96151,
+        "type": "blob"
+      },
+      {
+        "path": "docs/images/enterprise/integrations/github-webhook.png",
+        "size": 43398,
+        "type": "blob"
+      },
+      {
+        "path": "docs/images/enterprise/integrations/other-git-https.png",
+        "size": 139931,
+        "type": "blob"
+      },
+      {
+        "path": "docs/images/enterprise/integrations/other-git-ssh.png",
+        "size": 151089,
+        "type": "blob"
+      },
+      {
+        "path": "docs/images/enterprise/library-access/01-restricted-access.png",
+        "size": 56033,
+        "type": "blob"
+      },
+      {
+        "path": "docs/images/enterprise/library-access/02-everyone-access.png",
+        "size": 38746,
+        "type": "blob"
+      },
+      {
+        "path": "docs/images/enterprise/library-access/03-default-posture.png",
+        "size": 29879,
+        "type": "blob"
+      },
+      {
+        "path": "docs/images/enterprise/library-access/04-access-overview.png",
+        "size": 65367,
+        "type": "blob"
+      },
+      {
+        "path": "docs/images/enterprise/library-import/export-menu.png",
+        "size": 126029,
+        "type": "blob"
+      },
+      {
+        "path": "docs/images/enterprise/library-import/export-select.png",
+        "size": 108729,
+        "type": "blob"
+      },
+      {
+        "path": "docs/images/enterprise/library-import/import-source.png",
+        "size": 58999,
+        "type": "blob"
+      },
+      {
+        "path": "docs/images/enterprise/library-import/import-upload.png",
+        "size": 77290,
+        "type": "blob"
+      },
+      {
+        "path": "docs/images/enterprise/library-import/imported-badge.png",
+        "size": 76133,
+        "type": "blob"
+      },
+      {
+        "path": "docs/images/enterprise/oidc-sso/01-login-page.png",
+        "size": 52359,
+        "type": "blob"
+      },
+      {
+        "path": "docs/images/enterprise/oidc-sso/02-sso-card-oidc.png",
+        "size": 214116,
+        "type": "blob"
+      },
+      {
+        "path": "docs/images/enterprise/oidc-sso/03-group-mapping.png",
+        "size": 41917,
+        "type": "blob"
+      },
+      {
+        "path": "docs/images/enterprise/oidc-sso/04-password-card.png",
+        "size": 60105,
+        "type": "blob"
+      },
+      {
+        "path": "docs/images/enterprise/oidc-sso/05-users-tab.png",
+        "size": 165257,
+        "type": "blob"
+      },
+      {
+        "path": "docs/images/howto/verification/apply-button.png",
+        "size": 49050,
+        "type": "blob"
+      },
+      {
+        "path": "docs/images/howto/verification/apply-modal.png",
+        "size": 73218,
+        "type": "blob"
+      },
+      {
+        "path": "docs/images/howto/verification/verification-badge.png",
+        "size": 45180,
+        "type": "blob"
+      },
+      {
+        "path": "docs/images/integrations/coderabbit/add-server-modal.png",
+        "size": 593193,
+        "type": "blob"
+      },
+      {
+        "path": "docs/images/integrations/coderabbit/integrations-tab.png",
+        "size": 568068,
+        "type": "blob"
+      },
+      {
+        "path": "docs/images/integrations/coderabbit/server-connected.png",
+        "size": 584276,
+        "type": "blob"
+      },
+      {
+        "path": "docs/images/integrations/coderabbit/update-mcp-settings.png",
+        "size": 357125,
+        "type": "blob"
+      },
+      {
+        "path": "docs/images/integrations/tembo/integrations-page.png",
+        "size": 449146,
+        "type": "blob"
+      },
+      {
+        "path": "docs/images/integrations/tembo/server-connected.png",
+        "size": 226669,
+        "type": "blob"
+      },
+      {
+        "path": "docs/images/on-premise-architecture.png",
+        "size": 121457,
+        "type": "blob"
+      },
+      {
+        "path": "docs/images/scaling-multi-replica.png",
+        "size": 68515,
+        "type": "blob"
+      },
+      {
+        "path": "docs/images/scaling-settings.png",
+        "size": 223783,
+        "type": "blob"
+      },
+      {
+        "path": "docs/images/security/classifier_pipeline.png",
+        "size": 35744,
+        "type": "blob"
+      },
+      {
+        "path": "docs/installation.mdx",
+        "size": 83,
+        "type": "blob"
+      },
+      {
+        "path": "docs/integrations/code-rabbit.mdx",
+        "size": 2348,
+        "type": "blob"
+      },
+      {
+        "path": "docs/integrations/factory-ai.mdx",
+        "size": 1647,
+        "type": "blob"
+      },
+      {
+        "path": "docs/integrations/github-actions.mdx",
+        "size": 2865,
+        "type": "blob"
+      },
+      {
+        "path": "docs/integrations/mastra.mdx",
+        "size": 2253,
+        "type": "blob"
+      },
+      {
+        "path": "docs/integrations/tembo.mdx",
+        "size": 1420,
+        "type": "blob"
+      },
+      {
+        "path": "docs/library-owners.mdx",
+        "size": 6639,
+        "type": "blob"
+      },
+      {
+        "path": "docs/library-updates.mdx",
+        "size": 2907,
+        "type": "blob"
+      },
+      {
+        "path": "docs/openapi-enterprise.json",
+        "size": 31116,
+        "type": "blob"
+      },
+      {
+        "path": "docs/openapi.json",
+        "size": 92442,
+        "type": "blob"
+      },
+      {
+        "path": "docs/overview.mdx",
+        "size": 1888,
+        "type": "blob"
+      },
+      {
+        "path": "docs/plans-pricing.mdx",
+        "size": 64,
+        "type": "blob"
+      },
+      {
+        "path": "docs/public/favicon.ico",
+        "size": 1489,
+        "type": "blob"
+      },
+      {
+        "path": "docs/public/logo/logo-dark.svg",
+        "size": 3287,
+        "type": "blob"
+      },
+      {
+        "path": "docs/public/logo/logo.png",
+        "size": 9380,
+        "type": "blob"
+      },
+      {
+        "path": "docs/public/logo/logo.svg",
+        "size": 3287,
+        "type": "blob"
+      },
+      {
+        "path": "docs/resources/all-clients.mdx",
+        "size": 33934,
+        "type": "blob"
+      },
+      {
+        "path": "docs/resources/developer.mdx",
+        "size": 2500,
+        "type": "blob"
+      },
+      {
+        "path": "docs/resources/troubleshooting.mdx",
+        "size": 8470,
+        "type": "blob"
+      },
+      {
+        "path": "docs/sdks/ts/commands/get-context.mdx",
+        "size": 3494,
+        "type": "blob"
+      },
+      {
+        "path": "docs/sdks/ts/commands/search-library.mdx",
+        "size": 3752,
+        "type": "blob"
+      },
+      {
+        "path": "docs/sdks/ts/getting-started.mdx",
+        "size": 3381,
+        "type": "blob"
+      },
+      {
+        "path": "docs/security/auth-and-access-control.mdx",
+        "size": 1184,
+        "type": "blob"
+      },
+      {
+        "path": "docs/security/best-practices.mdx",
+        "size": 982,
+        "type": "blob"
+      },
+      {
+        "path": "docs/security/compliance-and-reporting.mdx",
+        "size": 981,
+        "type": "blob"
+      },
+      {
+        "path": "docs/security/data-privacy.mdx",
+        "size": 6520,
+        "type": "blob"
+      },
+      {
+        "path": "docs/security/data-safety.mdx",
+        "size": 1034,
+        "type": "blob"
+      },
+      {
+        "path": "docs/security/infrastructure.mdx",
+        "size": 1924,
+        "type": "blob"
+      },
+      {
+        "path": "docs/security/overview.mdx",
+        "size": 2986,
+        "type": "blob"
+      },
+      {
+        "path": "docs/tips.mdx",
+        "size": 1190,
+        "type": "blob"
+      },
+      {
+        "path": "eslint.config.js",
+        "size": 1058,
+        "type": "blob"
+      },
+      {
+        "path": "gemini-extension.json",
+        "size": 441,
+        "type": "blob"
+      },
+      {
+        "path": "i18n/README.ar.md",
+        "size": 8399,
+        "type": "blob"
+      },
+      {
+        "path": "i18n/README.de.md",
+        "size": 12828,
+        "type": "blob"
+      },
+      {
+        "path": "i18n/README.es.md",
+        "size": 9339,
+        "type": "blob"
+      },
+      {
+        "path": "i18n/README.fr.md",
+        "size": 13317,
+        "type": "blob"
+      },
+      {
+        "path": "i18n/README.id-ID.md",
+        "size": 30064,
+        "type": "blob"
+      },
+      {
+        "path": "i18n/README.it.md",
+        "size": 13043,
+        "type": "blob"
+      },
+      {
+        "path": "i18n/README.ja.md",
+        "size": 25967,
+        "type": "blob"
+      },
+      {
+        "path": "i18n/README.ko.md",
+        "size": 11519,
+        "type": "blob"
+      },
+      {
+        "path": "i18n/README.pt-BR.md",
+        "size": 32710,
+        "type": "blob"
+      },
+      {
+        "path": "i18n/README.ru.md",
+        "size": 19158,
+        "type": "blob"
+      },
+      {
+        "path": "i18n/README.tr.md",
+        "size": 13191,
+        "type": "blob"
+      },
+      {
+        "path": "i18n/README.uk.md",
+        "size": 35278,
+        "type": "blob"
+      },
+      {
+        "path": "i18n/README.vi.md",
+        "size": 31950,
+        "type": "blob"
+      },
+      {
+        "path": "i18n/README.zh-CN.md",
+        "size": 8743,
+        "type": "blob"
+      },
+      {
+        "path": "i18n/README.zh-TW.md",
+        "size": 10873,
+        "type": "blob"
+      },
+      {
+        "path": "package.json",
+        "size": 1936,
+        "type": "blob"
+      },
+      {
+        "path": "packages/cli/.gitignore",
+        "size": 25,
+        "type": "blob"
+      },
+      {
+        "path": "packages/cli/CHANGELOG.md",
+        "size": 17189,
+        "type": "blob"
+      },
+      {
+        "path": "packages/cli/README.md",
+        "size": 3778,
+        "type": "blob"
+      },
+      {
+        "path": "packages/cli/eslint.config.js",
+        "size": 1388,
+        "type": "blob"
+      },
+      {
+        "path": "packages/cli/package.json",
+        "size": 1617,
+        "type": "blob"
+      },
+      {
+        "path": "packages/cli/src/__tests__/auth-commands.test.ts",
+        "size": 10940,
+        "type": "blob"
+      },
+      {
+        "path": "packages/cli/src/__tests__/auth-utils.test.ts",
+        "size": 16283,
+        "type": "blob"
+      },
+      {
+        "path": "packages/cli/src/__tests__/find-docs-skill-alignment.test.ts",
+        "size": 1509,
+        "type": "blob"
+      },
+      {
+        "path": "packages/cli/src/__tests__/github.test.ts",
+        "size": 5666,
+        "type": "blob"
+      },
+      {
+        "path": "packages/cli/src/__tests__/installer.test.ts",
+        "size": 4683,
+        "type": "blob"
+      },
+      {
+        "path": "packages/cli/src/__tests__/library-id.test.ts",
+        "size": 1648,
+        "type": "blob"
+      },
+      {
+        "path": "packages/cli/src/__tests__/plugin-manifests.test.ts",
+        "size": 1025,
+        "type": "blob"
+      },
+      {
+        "path": "packages/cli/src/__tests__/remove.test.ts",
+        "size": 13872,
+        "type": "blob"
+      },
+      {
+        "path": "packages/cli/src/__tests__/setup.test.ts",
+        "size": 46921,
+        "type": "blob"
+      },
+      {
+        "path": "packages/cli/src/__tests__/skill-list.test.ts",
+        "size": 2307,
+        "type": "blob"
+      },
+      {
+        "path": "packages/cli/src/__tests__/storage-paths.test.ts",
+        "size": 2444,
+        "type": "blob"
+      },
+      {
+        "path": "packages/cli/src/__tests__/update-check.test.ts",
+        "size": 8664,
+        "type": "blob"
+      },
+      {
+        "path": "packages/cli/src/__tests__/upgrade-command.test.ts",
+        "size": 10320,
+        "type": "blob"
+      },
+      {
+        "path": "packages/cli/src/commands/auth.ts",
+        "size": 8234,
+        "type": "blob"
+      },
+      {
+        "path": "packages/cli/src/commands/docs.ts",
+        "size": 7460,
+        "type": "blob"
+      },
+      {
+        "path": "packages/cli/src/commands/generate.ts",
+        "size": 18218,
+        "type": "blob"
+      },
+      {
+        "path": "packages/cli/src/commands/remove.ts",
+        "size": 15772,
+        "type": "blob"
+      },
+      {
+        "path": "packages/cli/src/commands/setup.ts",
+        "size": 17826,
+        "type": "blob"
+      },
+      {
+        "path": "packages/cli/src/commands/skill.ts",
+        "size": 33740,
+        "type": "blob"
+      },
+      {
+        "path": "packages/cli/src/commands/upgrade.ts",
+        "size": 6080,
+        "type": "blob"
+      },
+      {
+        "path": "packages/cli/src/constants.ts",
+        "size": 385,
+        "type": "blob"
+      },
+      {
+        "path": "packages/cli/src/index.ts",
+        "size": 2712,
+        "type": "blob"
+      },
+      {
+        "path": "packages/cli/src/setup/agents.ts",
+        "size": 9884,
+        "type": "blob"
+      },
+      {
+        "path": "packages/cli/src/setup/mcp-writer.ts",
+        "size": 10865,
+        "type": "blob"
+      },
+      {
+        "path": "packages/cli/src/setup/templates.ts",
+        "size": 5975,
+        "type": "blob"
+      },
+      {
+        "path": "packages/cli/src/types.ts",
+        "size": 5466,
+        "type": "blob"
+      },
+      {
+        "path": "packages/cli/src/utils/api.ts",
+        "size": 10226,
+        "type": "blob"
+      },
+      {
+        "path": "packages/cli/src/utils/auth.ts",
+        "size": 9451,
+        "type": "blob"
+      },
+      {
+        "path": "packages/cli/src/utils/deps.ts",
+        "size": 2867,
+        "type": "blob"
+      },
+      {
+        "path": "packages/cli/src/utils/github.ts",
+        "size": 11580,
+        "type": "blob"
+      },
+      {
+        "path": "packages/cli/src/utils/ide.ts",
+        "size": 8041,
+        "type": "blob"
+      },
+      {
+        "path": "packages/cli/src/utils/installer.ts",
+        "size": 1399,
+        "type": "blob"
+      },
+      {
+        "path": "packages/cli/src/utils/library-id.ts",
+        "size": 956,
+        "type": "blob"
+      },
+      {
+        "path": "packages/cli/src/utils/logger.ts",
+        "size": 1409,
+        "type": "blob"
+      },
+      {
+        "path": "packages/cli/src/utils/parse-input.ts",
+        "size": 634,
+        "type": "blob"
+      },
+      {
+        "path": "packages/cli/src/utils/prompts.ts",
+        "size": 4441,
+        "type": "blob"
+      },
+      {
+        "path": "packages/cli/src/utils/selectOrInput.ts",
+        "size": 3166,
+        "type": "blob"
+      },
+      {
+        "path": "packages/cli/src/utils/skill-name.ts",
+        "size": 863,
+        "type": "blob"
+      },
+      {
+        "path": "packages/cli/src/utils/storage-paths.ts",
+        "size": 4045,
+        "type": "blob"
+      },
+      {
+        "path": "packages/cli/src/utils/tracking.ts",
+        "size": 360,
+        "type": "blob"
+      },
+      {
+        "path": "packages/cli/src/utils/update-check.ts",
+        "size": 8333,
+        "type": "blob"
+      },
+      {
+        "path": "packages/cli/tsconfig.json",
+        "size": 501,
+        "type": "blob"
+      },
+      {
+        "path": "packages/cli/tsup.config.ts",
+        "size": 352,
+        "type": "blob"
+      },
+      {
+        "path": "packages/cli/vitest.config.ts",
+        "size": 175,
+        "type": "blob"
+      },
+      {
+        "path": "packages/mcp/.prettierignore",
+        "size": 97,
+        "type": "blob"
+      },
+      {
+        "path": "packages/mcp/CHANGELOG.md",
+        "size": 12042,
+        "type": "blob"
+      },
+      {
+        "path": "packages/mcp/Dockerfile",
+        "size": 867,
+        "type": "blob"
+      },
+      {
+        "path": "packages/mcp/LICENSE",
+        "size": 1079,
+        "type": "blob"
+      },
+      {
+        "path": "packages/mcp/README.md",
+        "size": 45997,
+        "type": "blob"
+      },
+      {
+        "path": "packages/mcp/eslint.config.js",
+        "size": 1376,
+        "type": "blob"
+      },
+      {
+        "path": "packages/mcp/mcpb/.mcpbignore",
+        "size": 270,
+        "type": "blob"
+      },
+      {
+        "path": "packages/mcp/mcpb/context7.mcpb",
+        "size": 20484,
+        "type": "blob"
+      },
+      {
+        "path": "packages/mcp/mcpb/manifest.json",
+        "size": 1542,
+        "type": "blob"
+      },
+      {
+        "path": "packages/mcp/package.json",
+        "size": 1821,
+        "type": "blob"
+      },
+      {
+        "path": "packages/mcp/prettier.config.mjs",
+        "size": 213,
+        "type": "blob"
+      },
+      {
+        "path": "packages/mcp/schema/context7.json",
+        "size": 4345,
+        "type": "blob"
+      },
+      {
+        "path": "packages/mcp/smithery.yaml",
+        "size": 266,
+        "type": "blob"
+      },
+      {
+        "path": "packages/mcp/src/index.ts",
+        "size": 24707,
+        "type": "blob"
+      },
+      {
+        "path": "packages/mcp/src/lib/api.ts",
+        "size": 6015,
+        "type": "blob"
+      },
+      {
+        "path": "packages/mcp/src/lib/auth/auth-prompt.ts",
+        "size": 3612,
+        "type": "blob"
+      },
+      {
+        "path": "packages/mcp/src/lib/client-ip.ts",
+        "size": 2081,
+        "type": "blob"
+      },
+      {
+        "path": "packages/mcp/src/lib/constants.ts",
+        "size": 1076,
+        "type": "blob"
+      },
+      {
+        "path": "packages/mcp/src/lib/encryption.ts",
+        "size": 2093,
+        "type": "blob"
+      },
+      {
+        "path": "packages/mcp/src/lib/jwt.ts",
+        "size": 3877,
+        "type": "blob"
+      },
+      {
+        "path": "packages/mcp/src/lib/redis.ts",
+        "size": 495,
+        "type": "blob"
+      },
+      {
+        "path": "packages/mcp/src/lib/sessionStore.ts",
+        "size": 1805,
+        "type": "blob"
+      },
+      {
+        "path": "packages/mcp/src/lib/types.ts",
+        "size": 1064,
+        "type": "blob"
+      },
+      {
+        "path": "packages/mcp/src/lib/utils.ts",
+        "size": 3404,
+        "type": "blob"
+      },
+      {
+        "path": "packages/mcp/test/certificate.test.ts",
+        "size": 1688,
+        "type": "blob"
+      },
+      {
+        "path": "packages/mcp/test/client-ip.test.ts",
+        "size": 2427,
+        "type": "blob"
+      },
+      {
+        "path": "packages/mcp/test/jwt.test.ts",
+        "size": 6740,
+        "type": "blob"
+      },
+      {
+        "path": "packages/mcp/tsconfig.json",
+        "size": 265,
+        "type": "blob"
+      },
+      {
+        "path": "packages/mcp/tsconfig.test.json",
+        "size": 203,
+        "type": "blob"
+      },
+      {
+        "path": "packages/pi/.prettierignore",
+        "size": 75,
+        "type": "blob"
+      },
+      {
+        "path": "packages/pi/CHANGELOG.md",
+        "size": 1236,
+        "type": "blob"
+      },
+      {
+        "path": "packages/pi/LICENSE",
+        "size": 1080,
+        "type": "blob"
+      },
+      {
+        "path": "packages/pi/README.md",
+        "size": 1512,
+        "type": "blob"
+      },
+      {
+        "path": "packages/pi/__tests__/extension.test.ts",
+        "size": 1833,
+        "type": "blob"
+      },
+      {
+        "path": "packages/pi/eslint.config.js",
+        "size": 1162,
+        "type": "blob"
+      },
+      {
+        "path": "packages/pi/extensions/context7.ts",
+        "size": 346,
+        "type": "blob"
+      },
+      {
+        "path": "packages/pi/lib/api.ts",
+        "size": 2704,
+        "type": "blob"
+      },
+      {
+        "path": "packages/pi/lib/format.ts",
+        "size": 2162,
+        "type": "blob"
+      },
+      {
+        "path": "packages/pi/lib/prompts.ts",
+        "size": 4708,
+        "type": "blob"
+      },
+      {
+        "path": "packages/pi/lib/result.ts",
+        "size": 227,
+        "type": "blob"
+      },
+      {
+        "path": "packages/pi/lib/tools/query-docs.ts",
+        "size": 899,
+        "type": "blob"
+      },
+      {
+        "path": "packages/pi/lib/tools/resolve-library-id.ts",
+        "size": 1278,
+        "type": "blob"
+      },
+      {
+        "path": "packages/pi/lib/types.ts",
+        "size": 655,
+        "type": "blob"
+      },
+      {
+        "path": "packages/pi/package.json",
+        "size": 1567,
+        "type": "blob"
+      },
+      {
+        "path": "packages/pi/prompts/c7-docs.md",
+        "size": 694,
+        "type": "blob"
+      },
+      {
+        "path": "packages/pi/skills/context7-docs/SKILL.md",
+        "size": 2780,
+        "type": "blob"
+      },
+      {
+        "path": "packages/pi/tsconfig.json",
+        "size": 542,
+        "type": "blob"
+      },
+      {
+        "path": "packages/pi/vitest.config.ts",
+        "size": 297,
+        "type": "blob"
+      },
+      {
+        "path": "packages/sdk/CHANGELOG.md",
+        "size": 1492,
+        "type": "blob"
+      },
+      {
+        "path": "packages/sdk/LICENSE",
+        "size": 1079,
+        "type": "blob"
+      },
+      {
+        "path": "packages/sdk/README.md",
+        "size": 2089,
+        "type": "blob"
+      },
+      {
+        "path": "packages/sdk/eslint.config.js",
+        "size": 1350,
+        "type": "blob"
+      },
+      {
+        "path": "packages/sdk/package.json",
+        "size": 1216,
+        "type": "blob"
+      },
+      {
+        "path": "packages/sdk/prettier.config.mjs",
+        "size": 213,
+        "type": "blob"
+      },
+      {
+        "path": "packages/sdk/src/client.test.ts",
+        "size": 6156,
+        "type": "blob"
+      },
+      {
+        "path": "packages/sdk/src/client.ts",
+        "size": 3622,
+        "type": "blob"
+      },
+      {
+        "path": "packages/sdk/src/commands/command.ts",
+        "size": 1013,
+        "type": "blob"
+      },
+      {
+        "path": "packages/sdk/src/commands/get-context/index.test.ts",
+        "size": 2223,
+        "type": "blob"
+      },
+      {
+        "path": "packages/sdk/src/commands/get-context/index.ts",
+        "size": 1655,
+        "type": "blob"
+      },
+      {
+        "path": "packages/sdk/src/commands/get-context/types.ts",
+        "size": 457,
+        "type": "blob"
+      },
+      {
+        "path": "packages/sdk/src/commands/index.ts",
+        "size": 65,
+        "type": "blob"
+      },
+      {
+        "path": "packages/sdk/src/commands/search-library/index.test.ts",
+        "size": 1634,
+        "type": "blob"
+      },
+      {
+        "path": "packages/sdk/src/commands/search-library/index.ts",
+        "size": 1483,
+        "type": "blob"
+      },
+      {
+        "path": "packages/sdk/src/commands/search-library/types.ts",
+        "size": 260,
+        "type": "blob"
+      },
+      {
+        "path": "packages/sdk/src/commands/types.ts",
+        "size": 1379,
+        "type": "blob"
+      },
+      {
+        "path": "packages/sdk/src/error/index.ts",
+        "size": 135,
+        "type": "blob"
+      },
+      {
+        "path": "packages/sdk/src/http/index.test.ts",
+        "size": 2278,
+        "type": "blob"
+      },
+      {
+        "path": "packages/sdk/src/http/index.ts",
+        "size": 5451,
+        "type": "blob"
+      },
+      {
+        "path": "packages/sdk/src/utils/format.ts",
+        "size": 2527,
+        "type": "blob"
+      },
+      {
+        "path": "packages/sdk/src/utils/test-utils.ts",
+        "size": 561,
+        "type": "blob"
+      },
+      {
+        "path": "packages/sdk/tsconfig.json",
+        "size": 690,
+        "type": "blob"
+      },
+      {
+        "path": "packages/sdk/tsup.config.ts",
+        "size": 156,
+        "type": "blob"
+      },
+      {
+        "path": "packages/sdk/vitest.config.ts",
+        "size": 696,
+        "type": "blob"
+      },
+      {
+        "path": "packages/tools-ai-sdk/CHANGELOG.md",
+        "size": 1962,
+        "type": "blob"
+      },
+      {
+        "path": "packages/tools-ai-sdk/README.md",
+        "size": 2335,
+        "type": "blob"
+      },
+      {
+        "path": "packages/tools-ai-sdk/eslint.config.js",
+        "size": 1350,
+        "type": "blob"
+      },
+      {
+        "path": "packages/tools-ai-sdk/package.json",
+        "size": 1564,
+        "type": "blob"
+      },
+      {
+        "path": "packages/tools-ai-sdk/src/agents/context7.ts",
+        "size": 1653,
+        "type": "blob"
+      },
+      {
+        "path": "packages/tools-ai-sdk/src/agents/index.ts",
+        "size": 70,
+        "type": "blob"
+      },
+      {
+        "path": "packages/tools-ai-sdk/src/index.test.ts",
+        "size": 7865,
+        "type": "blob"
+      },
+      {
+        "path": "packages/tools-ai-sdk/src/index.ts",
+        "size": 449,
+        "type": "blob"
+      },
+      {
+        "path": "packages/tools-ai-sdk/src/prompts/index.ts",
+        "size": 121,
+        "type": "blob"
+      },
+      {
+        "path": "packages/tools-ai-sdk/src/prompts/system.ts",
+        "size": 3975,
+        "type": "blob"
+      },
+      {
+        "path": "packages/tools-ai-sdk/src/tools/index.ts",
+        "size": 151,
+        "type": "blob"
+      },
+      {
+        "path": "packages/tools-ai-sdk/src/tools/query-docs.ts",
+        "size": 3111,
+        "type": "blob"
+      },
+      {
+        "path": "packages/tools-ai-sdk/src/tools/resolve-library-id.ts",
+        "size": 2623,
+        "type": "blob"
+      },
+      {
+        "path": "packages/tools-ai-sdk/src/tools/types.ts",
+        "size": 204,
+        "type": "blob"
+      },
+      {
+        "path": "packages/tools-ai-sdk/tsconfig.json",
+        "size": 724,
+        "type": "blob"
+      },
+      {
+        "path": "packages/tools-ai-sdk/tsup.config.ts",
+        "size": 395,
+        "type": "blob"
+      },
+      {
+        "path": "packages/tools-ai-sdk/vitest.config.ts",
+        "size": 530,
+        "type": "blob"
+      },
+      {
+        "path": "plugins/claude/context7/.claude-plugin/plugin.json",
+        "size": 262,
+        "type": "blob"
+      },
+      {
+        "path": "plugins/claude/context7/.mcp.json",
+        "size": 193,
+        "type": "blob"
+      },
+      {
+        "path": "plugins/claude/context7/README.md",
+        "size": 2611,
+        "type": "blob"
+      },
+      {
+        "path": "plugins/claude/context7/agents/docs-researcher.md",
+        "size": 2146,
+        "type": "blob"
+      },
+      {
+        "path": "plugins/claude/context7/commands/docs.md",
+        "size": 1224,
+        "type": "blob"
+      },
+      {
+        "path": "plugins/claude/context7/skills/context7-mcp/SKILL.md",
+        "size": 2727,
+        "type": "blob"
+      },
+      {
+        "path": "plugins/codex/context7/.codex-plugin/plugin.json",
+        "size": 1271,
+        "type": "blob"
+      },
+      {
+        "path": "plugins/codex/context7/.mcp.json",
+        "size": 116,
+        "type": "blob"
+      },
+      {
+        "path": "plugins/codex/context7/README.md",
+        "size": 2446,
+        "type": "blob"
+      },
+      {
+        "path": "plugins/codex/context7/skills/context7-mcp/SKILL.md",
+        "size": 2727,
+        "type": "blob"
+      },
+      {
+        "path": "plugins/context7-power/POWER.md",
+        "size": 3767,
+        "type": "blob"
+      },
+      {
+        "path": "plugins/context7-power/mcp.json",
+        "size": 94,
+        "type": "blob"
+      },
+      {
+        "path": "plugins/copilot/context7/.mcp.json",
+        "size": 193,
+        "type": "blob"
+      },
+      {
+        "path": "plugins/copilot/context7/README.md",
+        "size": 2634,
+        "type": "blob"
+      },
+      {
+        "path": "plugins/copilot/context7/agents/docs-researcher.agent.md",
+        "size": 2132,
+        "type": "blob"
+      },
+      {
+        "path": "plugins/copilot/context7/commands/docs.md",
+        "size": 1191,
+        "type": "blob"
+      },
+      {
+        "path": "plugins/copilot/context7/plugin.json",
+        "size": 528,
+        "type": "blob"
+      },
+      {
+        "path": "plugins/copilot/context7/skills/context7-mcp/SKILL.md",
+        "size": 2727,
+        "type": "blob"
+      },
+      {
+        "path": "plugins/cursor/context7/.cursor/plugin.json",
+        "size": 529,
+        "type": "blob"
+      },
+      {
+        "path": "plugins/cursor/context7/README.md",
+        "size": 1727,
+        "type": "blob"
+      },
+      {
+        "path": "plugins/cursor/context7/agents/docs-researcher.md",
+        "size": 2132,
+        "type": "blob"
+      },
+      {
+        "path": "plugins/cursor/context7/mcp.json",
+        "size": 72,
+        "type": "blob"
+      },
+      {
+        "path": "plugins/cursor/context7/rules/use-context7.mdc",
+        "size": 961,
+        "type": "blob"
+      },
+      {
+        "path": "plugins/cursor/context7/skills/context7-mcp/SKILL.md",
+        "size": 2727,
+        "type": "blob"
+      },
+      {
+        "path": "pnpm-lock.yaml",
+        "size": 201763,
+        "type": "blob"
+      },
+      {
+        "path": "pnpm-workspace.yaml",
+        "size": 83,
+        "type": "blob"
+      },
+      {
+        "path": "prettier.config.mjs",
+        "size": 213,
+        "type": "blob"
+      },
+      {
+        "path": "public/context7-icon-green.svg",
+        "size": 1154,
+        "type": "blob"
+      },
+      {
+        "path": "public/context7-icon.svg",
+        "size": 1106,
+        "type": "blob"
+      },
+      {
+        "path": "public/context7-logo.svg",
+        "size": 3287,
+        "type": "blob"
+      },
+      {
+        "path": "public/cover.png",
+        "size": 688329,
+        "type": "blob"
+      },
+      {
+        "path": "public/icon.png",
+        "size": 9380,
+        "type": "blob"
+      },
+      {
+        "path": "rules/context7-cli.md",
+        "size": 2306,
+        "type": "blob"
+      },
+      {
+        "path": "rules/context7-mcp.md",
+        "size": 1679,
+        "type": "blob"
+      },
+      {
+        "path": "server.json",
+        "size": 1809,
+        "type": "blob"
+      },
+      {
+        "path": "skills/context7-cli/SKILL.md",
+        "size": 2939,
+        "type": "blob"
+      },
+      {
+        "path": "skills/context7-cli/references/docs.md",
+        "size": 5541,
+        "type": "blob"
+      },
+      {
+        "path": "skills/context7-cli/references/setup.md",
+        "size": 2066,
+        "type": "blob"
+      },
+      {
+        "path": "skills/context7-cli/references/skills.md",
+        "size": 3785,
+        "type": "blob"
+      },
+      {
+        "path": "skills/context7-mcp/SKILL.md",
+        "size": 2727,
+        "type": "blob"
+      },
+      {
+        "path": "skills/find-docs/SKILL.md",
+        "size": 7429,
+        "type": "blob"
+      },
+      {
+        "path": "tsconfig.json",
+        "size": 304,
+        "type": "blob"
+      }
+    ],
+    "expectedRetained": [
+      ".env.example",
+      "server.json",
+      "package.json",
+      "packages/pi/package.json",
+      "packages/cli/src/index.ts",
+      "packages/mcp/src/index.ts",
+      "packages/tools-ai-sdk/src/index.ts",
+      "packages/sdk/src/http/index.ts",
+      "packages/sdk/src/error/index.ts",
+      "packages/sdk/src/commands/index.ts",
+      "packages/tools-ai-sdk/src/tools/index.ts",
+      "packages/pi/lib/tools/query-docs.ts",
+      "packages/tools-ai-sdk/src/tools/types.ts",
+      "packages/pi/lib/tools/resolve-library-id.ts",
+      "packages/tools-ai-sdk/src/tools/query-docs.ts",
+      "packages/tools-ai-sdk/src/tools/resolve-library-id.ts",
+      "packages/mcp/src/lib/api.ts",
+      "packages/mcp/src/lib/jwt.ts",
+      "packages/mcp/src/lib/redis.ts",
+      "packages/mcp/src/lib/types.ts",
+      "packages/mcp/src/lib/utils.ts",
+      "packages/mcp/src/lib/client-ip.ts",
+      "packages/mcp/src/lib/constants.ts",
+      "packages/mcp/src/lib/encryption.ts"
+    ]
+  },
+  {
+    "ref": "cyclops-ui/mcp-cyclops",
+    "defaultBranch": "main",
+    "rootPkgName": null,
+    "hasWorkspaces": false,
+    "tree": [
+      {
+        "path": ".env",
+        "size": 194,
+        "type": "blob"
+      },
+      {
+        "path": ".github/ISSUE_TEMPLATE/bug_report.md",
+        "size": 535,
+        "type": "blob"
+      },
+      {
+        "path": ".github/ISSUE_TEMPLATE/feature_request.md",
+        "size": 595,
+        "type": "blob"
+      },
+      {
+        "path": ".github/pull_request_template.md",
+        "size": 213,
+        "type": "blob"
+      },
+      {
+        "path": ".github/workflows/build.yaml",
+        "size": 3241,
+        "type": "blob"
+      },
+      {
+        "path": ".github/workflows/test.yml",
+        "size": 268,
+        "type": "blob"
+      },
+      {
+        "path": ".gitignore",
+        "size": 10,
+        "type": "blob"
+      },
+      {
+        "path": "Dockerfile",
+        "size": 383,
+        "type": "blob"
+      },
+      {
+        "path": "Makefile",
+        "size": 182,
+        "type": "blob"
+      },
+      {
+        "path": "README.md",
+        "size": 7896,
+        "type": "blob"
+      },
+      {
+        "path": "cmd/mcp-cyclops/main.go",
+        "size": 3552,
+        "type": "blob"
+      },
+      {
+        "path": "cyclops-addon.md",
+        "size": 2846,
+        "type": "blob"
+      },
+      {
+        "path": "go.mod",
+        "size": 6256,
+        "type": "blob"
+      },
+      {
+        "path": "go.sum",
+        "size": 45314,
+        "type": "blob"
+      },
+      {
+        "path": "install/mcp-server.yaml",
+        "size": 1726,
+        "type": "blob"
+      },
+      {
+        "path": "internal/mapper/modules.go",
+        "size": 2938,
+        "type": "blob"
+      },
+      {
+        "path": "internal/modules/controller.go",
+        "size": 1586,
+        "type": "blob"
+      },
+      {
+        "path": "internal/modules/create.go",
+        "size": 3014,
+        "type": "blob"
+      },
+      {
+        "path": "internal/modules/get.go",
+        "size": 733,
+        "type": "blob"
+      },
+      {
+        "path": "internal/modules/list.go",
+        "size": 554,
+        "type": "blob"
+      },
+      {
+        "path": "internal/modules/manifest.go",
+        "size": 3006,
+        "type": "blob"
+      },
+      {
+        "path": "internal/modules/resources.go",
+        "size": 806,
+        "type": "blob"
+      },
+      {
+        "path": "internal/modules/update.go",
+        "size": 2052,
+        "type": "blob"
+      },
+      {
+        "path": "internal/templates/controller.go",
+        "size": 488,
+        "type": "blob"
+      },
+      {
+        "path": "internal/templates/getschema.go",
+        "size": 1604,
+        "type": "blob"
+      },
+      {
+        "path": "internal/templatestores/controller.go",
+        "size": 661,
+        "type": "blob"
+      },
+      {
+        "path": "internal/templatestores/create.go",
+        "size": 2304,
+        "type": "blob"
+      },
+      {
+        "path": "internal/templatestores/get.go",
+        "size": 843,
+        "type": "blob"
+      },
+      {
+        "path": "internal/templatestores/list.go",
+        "size": 627,
+        "type": "blob"
+      }
+    ],
+    "expectedRetained": [
+      ".env",
+      "go.mod",
+      "cmd/mcp-cyclops/main.go"
+    ]
+  }
+]

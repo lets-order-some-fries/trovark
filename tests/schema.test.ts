@@ -1719,3 +1719,86 @@ server.addTool({ name: 'real_tool', description: 'divides a / b' })
     expect(r.tools.map(t => t.name)).toEqual(['real_tool'])
   })
 })
+
+// W5 (coverage-v1.5, wave2-spec §2.3): partial-surface honesty.
+describe('extractSchema — surfacePartial (W5)', () => {
+  const toolFile = (n: number) => ({
+    path: `src/tools/tool${n}.ts`,
+    content: `server.tool('tool_${n}', 'desc', {}, handler)`,
+  })
+
+  it('detected (full tree) > sampled (fetched files) among tool-fanout-shaped paths -> surfacePartial true (figwright shape: 133 tool files, ~20 sampled)', () => {
+    // 3 files actually fetched/sampled...
+    const files = [toolFile(0), toolFile(1), toolFile(2)]
+    // ...but the full tree (treePaths) shows 5 tool-fanout-shaped paths exist
+    // in the repo — 2 were never reached by the sampler's FILE_CAP.
+    const treePaths = [
+      'src/tools/tool0.ts', 'src/tools/tool1.ts', 'src/tools/tool2.ts',
+      'src/tools/tool3.ts', 'src/tools/tool4.ts',
+    ]
+    const r = extractSchema(files, treePaths)
+    expect(r.extracted).toBe(true)
+    expect(r.tools).toHaveLength(3) // the sample itself is untouched — still grades on what WAS sampled
+    expect(r.surfacePartial).toBe(true)
+  })
+
+  it('detected === sampled (every tool-fanout path in the tree was fetched) -> surfacePartial false', () => {
+    const files = [toolFile(0), toolFile(1), toolFile(2)]
+    const treePaths = ['src/tools/tool0.ts', 'src/tools/tool1.ts', 'src/tools/tool2.ts']
+    const r = extractSchema(files, treePaths)
+    expect(r.surfacePartial).toBe(false)
+  })
+
+  it('no treePaths argument (tree fetch failed, or a pre-W5 call site) -> surfacePartial defaults to false, never crashes', () => {
+    const files = [toolFile(0)]
+    const r = extractSchema(files)
+    expect(r.extracted).toBe(true)
+    expect(r.surfacePartial).toBe(false)
+  })
+
+  it('a file OUTSIDE any tools?/ directory does not count toward the fanout comparison, even if unsampled', () => {
+    const files = [toolFile(0), toolFile(1)]
+    const treePaths = ['src/tools/tool0.ts', 'src/tools/tool1.ts', 'docs/unrelated.md', 'src/notes.txt']
+    const r = extractSchema(files, treePaths)
+    expect(r.surfacePartial).toBe(false)
+  })
+
+  it('surfacePartial is still computed when extraction finds zero tools', () => {
+    const files = [{ path: 'README.md', content: '# hi' }]
+    const treePaths = ['src/tools/tool0.ts', 'src/tools/tool1.ts'] // detected=2, sampled=0
+    const r = extractSchema(files, treePaths)
+    expect(r.extracted).toBe(false)
+    expect(r.surfacePartial).toBe(true)
+  })
+})
+
+describe('extractSchema (D1 integrity-v1, trap #6): evidence is retained on returned tools, but never leaks into schemaTokenEstimate', () => {
+  it('r.tools now carries evidence (D1 needs it to cite each hit\'s source file)', () => {
+    const r = extractSchema([{
+      path: 'mcp.json',
+      content: JSON.stringify({ tools: [{ name: 'add_numbers', description: 'Add two numbers' }] }),
+    }])
+    expect(r.extracted).toBe(true)
+    expect(r.tools[0].evidence).toBe('mcp.json')
+  })
+
+  it('schemaTokenEstimate is byte-identical to the pre-trap-6 formula (evidence stripped before stringify), regardless of tools[] carrying it', async () => {
+    const { encode } = await import('gpt-tokenizer')
+    const files = [{
+      path: 'mcp.json',
+      content: JSON.stringify({ tools: [
+        { name: 'search_docs', description: 'Search documentation' },
+        { name: 'run_command', description: 'Execute a shell command', inputSchema: { type: 'object' } },
+      ] }),
+    }]
+    const r = extractSchema(files)
+    expect(r.extracted).toBe(true)
+    // Recompute independently from ONLY the name/description/schemaText a
+    // consumer is meant to token-cost — if `evidence` (or any other field)
+    // ever leaks into the real schemaTokenEstimate, this diverges and every
+    // cost score in the index would have silently shifted.
+    const canonical = r.tools.map(t => ({ name: t.name, description: t.description, schemaText: t.schemaText }))
+    const expected = encode(JSON.stringify(canonical)).length
+    expect(r.schemaTokenEstimate).toBe(expected)
+  })
+})

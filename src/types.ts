@@ -23,6 +23,26 @@ export interface ToolInfo {
   schemaText: string    // raw extracted source/manifest slice for this tool
 }
 
+// D1 (integrity-v1, docs/superpowers/plans/2026-08-04-integrity-v1.md): a
+// decode-confirmed invisible-payload hit, or a lower-severity observation (a
+// qualifying run that didn't decode, or a bidi override — never called a
+// payload). Every field exists so a third party can independently re-derive
+// the finding from published evidence alone (ship gate G2).
+export type IntegrityKind = 'hidden-payload' | 'invisible-chars-observed' | 'bidi-override-observed'
+export type IntegrityEncoding = 'variation-selector' | 'tag-block' | 'bidi-override'
+
+export interface IntegrityHit {
+  kind: IntegrityKind
+  encoding: IntegrityEncoding
+  surface: string          // human label: which tool/field, or which file
+  path: string              // evidence locator: file path, or '<sourceFile-or-tool>#<field>'
+  line: number               // 1-based, within the scanned text (see src/derive/integrity.ts)
+  col: number                 // 1-based UTF-16 column of the run's first codepoint
+  runLength: number
+  codepoints: number[]
+  decoded?: string            // present only when kind === 'hidden-payload'
+}
+
 export interface Signals {
   // health
   daysSinceLastCommit?: number
@@ -63,6 +83,13 @@ export interface Signals {
   // collectGithub throws RepoNotFoundError; carried through to Scorecard so
   // score.ts can null overall/grade the same way it does for notServer.
   unresolved?: boolean
+  // D1 (integrity-v1): decode-confirmed invisible-payload hits across tool
+  // metadata + fetched files. Absence != clean — this stays undefined
+  // (never []) when no files were fetched (snap.treePaths absent), so
+  // report/terminal.ts can print "not checked" instead of a false "clean".
+  // A real scan, even a clean one, always sets integrityScanned too.
+  integrityHits?: IntegrityHit[]
+  integrityScanned?: { files: number; chars: number; tools: number }
 }
 
 export interface DimensionScore {
@@ -77,6 +104,12 @@ export interface DimensionScore {
 export interface Scorecard {
   ref: string
   rubricVersion: string
+  // D1 (integrity-v1): records which check set produced this card, distinct
+  // from rubricVersion (which means "the version that GRADED it" — nothing
+  // integrity-related grades anything; findings are display-only).
+  checksVersion?: string
+  integrityHits?: IntegrityHit[]
+  integrityScanned?: { files: number; chars: number; tools: number }
   // I9: null when notServer — a library/SDK/proxy/stub has no tool surface
   // to grade, so no headline score/letter grade is reported (dimensions are
   // still populated below when useful). Only ever number/string together

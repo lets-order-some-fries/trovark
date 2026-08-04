@@ -10,6 +10,7 @@ import { specEra } from './derive/specEra.js'
 import { extractSchema } from './derive/schema.js'
 import { classifyLibrary } from './derive/classify.js'
 import { scanSecrets } from './derive/secrets.js'
+import { scanIntegrity } from './derive/integrity.js'
 import { parseLockfile } from './derive/lockfile.js'
 
 const days = (fromIso: string, now: Date) =>
@@ -36,11 +37,32 @@ export async function assemble(
       if (snap.treePaths) {
         Object.assign(s, repoChecks(snap.treePaths))
         s.specEra = specEra(snap.files)
-        const schema = extractSchema(snap.files)
+        const schema = extractSchema(snap.files, snap.treePaths, snap.toolFanoutCount)
         s.schemaExtracted = schema.extracted
         s.toolSurfaceRisk = schema.toolSurfaceRisk
-        s.schemaTokenEstimate = schema.schemaTokenEstimate
-        if (schema.extracted) s.toolCount = schema.tools.length
+        // W5 (coverage-v1.5, wave2-spec §2.3): partial-surface honesty. When
+        // the full tree has more tool-fanout-shaped files than the sample
+        // reached (schema.surfacePartial), a toolCount/schemaTokenEstimate
+        // derived from that sample would be a confidently WRONG count
+        // (figwright: 133 tool files on disk, ~20 fetched under the cap —
+        // publishing "20" reads as complete, not partial). Cost signals
+        // decline to answer instead of lying; both stay `undefined`, which
+        // the rubric already treats as "signal not computable" (band()
+        // returns undefined for undefined input — see src/scoring/rubric.ts).
+        //
+        // Security is NOT withheld: it still grades on the sampled tools
+        // below. That's safe in this one direction because max-risk
+        // classification is MONOTONE under sampling — toolSurfaceRisk is the
+        // max risk tier across whatever tools were seen, and seeing fewer
+        // tools can only ever omit a risk finding, never invent one that
+        // isn't there. A partial sample can therefore understate risk but
+        // can never overstate it, so grading security on it is the safe
+        // direction to be incomplete in — unlike toolCount/token estimate,
+        // which would be actively wrong (not just incomplete) if published.
+        if (!schema.surfacePartial) {
+          s.schemaTokenEstimate = schema.schemaTokenEstimate
+          if (schema.extracted) s.toolCount = schema.tools.length
+        }
         s.findings.push(...schema.findings)
         // V2/V6 (library/SDK/proxy classifier, coverage-spec §3.1): ALWAYS
         // call classifyLibrary and let it pick the tier via `toolsExtracted`
@@ -74,6 +96,16 @@ export async function assemble(
         const secrets = scanSecrets(snap.files)
         s.secretsFound = secrets.count
         s.findings.push(...secrets.findings)
+        // D1 (integrity-v1): findings-only, provably zero grade effect (see
+        // score.ts / src/scoring/rubric.ts — nothing reads s.integrityHits).
+        // Gated on the same snap.treePaths branch as everything else above,
+        // so "absence != clean" holds: if this branch didn't run,
+        // integrityHits stays undefined and report/terminal.ts prints "not
+        // checked" rather than a false "clean".
+        const integrity = scanIntegrity(snap.files, schema.tools)
+        s.findings.push(...integrity.findings)
+        s.integrityHits = integrity.hits
+        s.integrityScanned = integrity.scanned
       } else {
         s.errors.push('github: file tree unavailable; repo-content signals skipped')
       }

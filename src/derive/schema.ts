@@ -1,5 +1,5 @@
 import { encode } from 'gpt-tokenizer'
-import { SPEC_BASENAME_RE } from '../collectors/github.js'
+import { SPEC_BASENAME_RE, isToolFanoutPath } from '../collectors/github.js'
 import type { RepoFile } from '../collectors/github.js'
 import type { Finding, ToolInfo } from '../types.js'
 import { fromGoSource } from './lang/go.js'
@@ -7,10 +7,24 @@ import { fromOpenApi, fromToolDefinitions } from './openapi.js'
 
 export interface SchemaResult {
   extracted: boolean
-  tools: ToolInfo[]
+  // D1 (integrity-v1, trap #6): evidence (the source file each tool was
+  // extracted from) is retained here — D1 (src/derive/integrity.ts) cites it
+  // so a tool-surface hit can point at the file it came from. It must NOT
+  // leak into schemaTokenEstimate's JSON.stringify (see the return
+  // statement below) or every cost score in the index would shift.
+  tools: Array<ToolInfo & { evidence: string }>
   toolSurfaceRisk: 'none' | 'low' | 'medium' | 'high' | undefined
   schemaTokenEstimate: number | undefined
   findings: Finding[]
+  // W5 (coverage-v1.5, wave2-spec §2.3): true when the full repo tree
+  // contains MORE tool-fanout-shaped files than were actually sampled (e.g.
+  // figwright's 133 one-tool-per-file modules vs. ~20 reachable under a
+  // 24-file cap). assemble.ts reads this and leaves toolCount/
+  // schemaTokenEstimate undefined rather than publishing a count derived
+  // from a provably incomplete sample — see assemble.ts for the security-
+  // stays-graded reasoning (max-risk classification is monotone under
+  // sampling, so it is safe to keep grading security on the partial sample).
+  surfacePartial: boolean
 }
 
 type Risk = 'none' | 'low' | 'medium' | 'high'
@@ -1204,7 +1218,38 @@ const MANIFEST_JSON_BASENAME_RE = /^(mcp|server|toolDefinitions|tools)\.json$/i
 // gracefully by JSON.parse failing closed).
 const SPEC_JSON_BASENAME_RE = SPEC_BASENAME_RE
 
-export function extractSchema(files: RepoFile[]): SchemaResult {
+// W5 (coverage-v1.5, wave2-spec §2.3): partial-surface honesty. `treePaths`
+// is the repo's FULL tree (every blob GitHub reports, never truncated by
+// FILE_CAP) — `undefined` when the tree fetch itself failed, in which case
+// there is nothing to compare against and the sample can never look partial.
+// `isToolFanoutPath` (src/collectors/github.ts) is the SAME "one-tool-per-
+// file `tools/`-shaped source file" test github.ts uses to decide whether
+// FILE_CAP should widen to 24 in the first place — reusing it here means the
+// count of files that COULD have carried tools is measured identically on
+// both sides (full tree vs. sampled set), not by two definitions that could
+// silently drift apart.
+// Cleanup: `detected` used to always be recomputed here via a full pass over
+// `treePaths` — but github.ts's collectGithub already runs this exact same
+// scan (it needs the identical count for its own FILE_CAP decision) and
+// exposes the result as RepoSnapshot.toolFanoutCount. When the caller passes
+// it through (the normal collectGithub -> assemble.ts -> extractSchema path),
+// reuse it instead of re-scanning the whole tree a second time. Falls back to
+// recomputing from treePaths when omitted (e.g. tests that call extractSchema
+// directly without a RepoSnapshot) so behavior is unchanged for those callers.
+function detectSurfacePartial(
+  files: RepoFile[], treePaths: string[] | undefined, toolFanoutCount: number | undefined,
+): boolean {
+  if (!treePaths) return false
+  const detected = toolFanoutCount ?? treePaths.filter(isToolFanoutPath).length
+  const sampled = files.filter(f => isToolFanoutPath(f.path)).length
+  return detected > sampled
+}
+
+export function extractSchema(files: RepoFile[], treePaths?: string[], toolFanoutCount?: number): SchemaResult {
+  // W5 §2.3: computed once, up front, and threaded into every return branch
+  // below — a partial sample is still partial whether extraction ultimately
+  // found zero tools, a shell-import risk floor, or a real tool list.
+  const surfacePartial = detectSurfacePartial(files, treePaths, toolFanoutCount)
   const serverFiles = files.filter(f => !isNonServerPath(f.path))
   // Fix (review, Critical): re-scoped from ANY fetched .json file back to a
   // known manifest/spec basename allowlist. The any-.json bucket let an
@@ -1258,9 +1303,10 @@ export function extractSchema(files: RepoFile[]): SchemaResult {
           message: 'A fetched file imports a shell/process-execution API but no tool schema could be extracted; tool surface risk is floored at medium so this cannot score a clean security bill on secrets-absence alone.',
           evidence: shellFile.path,
         }],
+        surfacePartial,
       }
     }
-    return { extracted: false, tools: [], toolSurfaceRisk: undefined, schemaTokenEstimate: undefined, findings: [] }
+    return { extracted: false, tools: [], toolSurfaceRisk: undefined, schemaTokenEstimate: undefined, findings: [], surfacePartial }
   }
 
   const findings: Finding[] = []
@@ -1283,9 +1329,15 @@ export function extractSchema(files: RepoFile[]): SchemaResult {
 
   return {
     extracted: true,
-    tools: tools.map(({ evidence: _e, ...t }) => t),
+    // D1 (integrity-v1, trap #6): evidence is now RETAINED here (D1 needs it
+    // to cite each tool's source file) — but schemaTokenEstimate below
+    // MUST keep stripping it via the same destructure, or every cost score
+    // in the index would shift the moment a tool carries an `evidence`
+    // field. See tests/schema.test.ts's byte-identical regression test.
+    tools,
     toolSurfaceRisk: worst,
     schemaTokenEstimate: encode(JSON.stringify(tools.map(({ evidence: _e, ...t }) => t))).length,
     findings,
+    surfacePartial,
   }
 }

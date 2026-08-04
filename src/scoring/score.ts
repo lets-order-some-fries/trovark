@@ -107,10 +107,20 @@ export function score(
   const withheld = notServer || unresolved
   return {
     ref, rubricVersion: RUBRIC_VERSION,
+    // D1 (integrity-v1): checksVersion records which CHECK set produced this
+    // card — distinct from rubricVersion, which records which set of
+    // signals GRADED it. integrityHits/integrityScanned are display-only
+    // passthroughs from Signals; nothing above (overall/grade/dimensions)
+    // reads them, so this is provably zero grade effect. integrityHits
+    // stays undefined (never []) when assemble.ts never called
+    // scanIntegrity — see its "absence != clean" note.
+    checksVersion: '1.0.0',
     overall: withheld ? null : overall,
     grade: withheld ? null : grade(overall),
     dimensions, notes, generatedAt,
     insufficientData,
+    integrityHits: signals.integrityHits,
+    integrityScanned: signals.integrityScanned,
     ...(resolved ? { resolved } : {}),
     ...(notServer ? { notServer: true, notServerReason: signals.notServerReason } : {}),
     ...(unresolved ? { unresolved: true } : {}),

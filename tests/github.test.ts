@@ -1,5 +1,7 @@
+import { readFileSync } from 'node:fs'
+import { fileURLToPath } from 'node:url'
 import { describe, expect, it } from 'vitest'
-import { collectGithub, RepoNotFoundError } from '../src/collectors/github.js'
+import { collectGithub, RepoNotFoundError, selectRepoFiles } from '../src/collectors/github.js'
 import { HttpError } from '../src/util/http.js'
 import type { Http } from '../src/util/http.js'
 
@@ -801,9 +803,18 @@ describe('collectGithub', () => {
     const origJson = http.json.bind(http)
     // 15 tools/-dir helper files (score 5 each, no registration — like real
     // one-tool-per-file layouts where only the entrypoint calls
-    // `server.tool(name, ...)`) vastly outnumber the 11 source slots
-    // available (FILE_CAP=12 - 1 manifest). Pre-fix, all 11 slots go to
-    // tools/-dir files and 'src/index.ts' (score 2) is evicted entirely.
+    // `server.tool(name, ...)`) vastly outnumber the 11 source slots that
+    // were available under the OLD fixed FILE_CAP=12 - 1 manifest.
+    //
+    // W5 (wave2-spec §2.1 change 4) updated this repo's OWN cap out from
+    // under the original version of this test: 15 tools/-dir files trips
+    // `toolFanout >= 8`, so FILE_CAP now widens to 24 for this exact shape —
+    // this is the explicitly-specified "tools-fanout repo gets cap 24"
+    // behavior, not a regression. Under the wider cap none of the 17
+    // candidates (1 manifest + entrypoint + 15 tool files) need eviction at
+    // all, which is a STRICTLY STRONGER guarantee than the original "stays
+    // under 12" assertion: every candidate is now provably present, not just
+    // the entrypoint surviving a squeeze that no longer occurs for this shape.
     const toolFiles = Array.from({ length: 15 }, (_, i) => ({ path: `src/tools/handler${i}.ts`, type: 'blob', size: 200 }))
     http.json = async <T,>(url: string): Promise<T> => {
       if (url.includes('/git/trees/')) {
@@ -824,7 +835,9 @@ describe('collectGithub', () => {
     const snap = await collectGithub({ ref: 'acme/foo', repo: { owner: 'acme', name: 'foo' } }, http, NOW)
     const paths = snap.files.map(f => f.path)
     expect(paths).toContain('src/index.ts')
-    expect(paths.length).toBeLessThanOrEqual(12)
+    expect(paths.length).toBeLessThanOrEqual(24) // FILE_CAP's new ceiling under the fan-out trigger
+    expect(paths).toHaveLength(17) // manifest + entrypoint + all 15 tool files — no eviction needed under the widened cap
+    for (const f of toolFiles) expect(paths).toContain(f.path)
   })
 
   it('regression fix #2: a bare tool.py FILE (not a tools/ directory) is prioritized over many irrelevant same-score files (mroops0111/openapi-mcp-gateway shape)', async () => {
@@ -965,5 +978,258 @@ describe('collectGithub', () => {
   it('W1: a followed rename redirect (fetch already resolved 301→200) scores the repo normally, no special-casing needed', async () => {
     const snap = await collectGithub({ ref: 'acme/foo', repo: { owner: 'acme', name: 'foo' } }, fakeHttp(), NOW)
     expect(snap.stars).toBe(1234) // ordinary success path — same as any other resolved repo
+  })
+
+  // --- W5 (coverage-v1.5, wave2-spec §2): SOURCE_HINT becomes a ranking
+  // score, not a gate; fan-out budget; non-server quota. ---------------
+
+  it('W5: a repo whose only source is trends_mcp.py (fails the old SOURCE_HINT gate) is now selected (salwks/mcp-techTrend shape)', async () => {
+    const http = fakeHttp()
+    const origJson = http.json.bind(http)
+    http.json = async <T,>(url: string): Promise<T> => {
+      if (url.includes('/git/trees/')) {
+        return {
+          tree: [
+            { path: 'requirements.txt', type: 'blob', size: 50 },
+            // No 'src/', no 'server'/'tool'/'index'/'main' substring — the
+            // pre-W5 SOURCE_HINT gate excluded this file outright, leaving
+            // nothing at all to extract from (the repo's ONLY source file).
+            { path: 'trends_mcp.py', type: 'blob', size: 400 },
+          ],
+        } as T
+      }
+      return origJson<T>(url)
+    }
+    http.text = async (url: string): Promise<string> => {
+      if (url.includes('requirements.txt')) return 'requests\n'
+      return '@mcp.tool()\ndef get_trend(q: str) -> str:\n    ...\n'
+    }
+    const snap = await collectGithub({ ref: 'acme/foo', repo: { owner: 'acme', name: 'foo' } }, http, NOW)
+    expect(snap.files.map(f => f.path)).toContain('trends_mcp.py')
+  })
+
+  it('W5: a tools/-fanout repo (>=8 tool-fanout files) gets FILE_CAP=24, not the fixed 12 (measured: 21/77 live repos trip this)', async () => {
+    const http = fakeHttp()
+    const origJson = http.json.bind(http)
+    // 8 tools/-dir files trips toolFanout >= 8. 20 additional unrelated
+    // filler source files prove the cap actually widened: under the OLD
+    // fixed FILE_CAP=12, at most 11 non-manifest files could ever be
+    // selected; under the new 24, up to 23 can.
+    const toolFiles = Array.from({ length: 8 }, (_, i) => ({ path: `src/tools/handler${i}.ts`, type: 'blob', size: 200 }))
+    const fillers = Array.from({ length: 20 }, (_, i) => ({ path: `src/lib/util${i}.ts`, type: 'blob', size: 200 }))
+    http.json = async <T,>(url: string): Promise<T> => {
+      if (url.includes('/git/trees/')) {
+        return { tree: [{ path: 'package.json', type: 'blob', size: 500 }, ...toolFiles, ...fillers] } as T
+      }
+      return origJson<T>(url)
+    }
+    http.text = async (url: string): Promise<string> => {
+      if (url.includes('package.json')) return '{"name":"foo"}'
+      return 'export {}'
+    }
+    const snap = await collectGithub({ ref: 'acme/foo', repo: { owner: 'acme', name: 'foo' } }, http, NOW)
+    const paths = snap.files.map(f => f.path)
+    expect(paths.length).toBeGreaterThan(12) // proves the cap widened past the old fixed 12
+    expect(paths).toHaveLength(24) // FILE_CAP's new ceiling for this fan-out shape
+    for (const f of toolFiles) expect(paths).toContain(f.path) // the fan-out files themselves always win their own trigger
+  })
+
+  it('W5: a vite.config.ts build-noise file ranks below real tool source and is evicted under a tight budget, even when its path is shorter (CONFIG_NOISE_RE)', async () => {
+    const http = fakeHttp()
+    const origJson = http.json.bind(http)
+    // Real tool file scores +8 (TOOLS_DIR +5, SOURCE_HINT +3) and always
+    // wins its slot. The remaining 10 slots are contested between 10 filler
+    // files (score 0, LONG paths) and vite.config.ts (score -6 under
+    // CONFIG_NOISE_RE, SHORT path). Without the -6 penalty, vite.config.ts's
+    // shorter path would win the path-length tie-break over every filler —
+    // it would survive and evict a filler instead. With the penalty, it's
+    // vite.config.ts that gets evicted.
+    const realTool = { path: 'src/tools/create_widget.ts', type: 'blob', size: 200 }
+    const fillers = Array.from({ length: 10 }, (_, i) => ({ path: `filler/somewhat-longer-name-${i}.ts`, type: 'blob', size: 200 }))
+    const configNoise = { path: 'vite.config.ts', type: 'blob', size: 200 }
+    http.json = async <T,>(url: string): Promise<T> => {
+      if (url.includes('/git/trees/')) {
+        return { tree: [{ path: 'package.json', type: 'blob', size: 500 }, realTool, ...fillers, configNoise] } as T
+      }
+      return origJson<T>(url)
+    }
+    http.text = async (url: string): Promise<string> => {
+      if (url.includes('package.json')) return '{"name":"foo"}'
+      return 'export {}'
+    }
+    const snap = await collectGithub({ ref: 'acme/foo', repo: { owner: 'acme', name: 'foo' } }, http, NOW)
+    const paths = snap.files.map(f => f.path)
+    expect(paths).toContain(realTool.path)
+    for (const f of fillers) expect(paths).toContain(f.path)
+    expect(paths).not.toContain('vite.config.ts')
+    expect(paths).toHaveLength(12) // FILE_CAP=12: manifest + realTool + 10 fillers, vite.config.ts is the one evicted
+  })
+
+  it('W5: non-server-path files (tests/examples) are quota-capped at NON_SERVER_FETCH_CAP=3, even when the budget has room for more', async () => {
+    const http = fakeHttp()
+    const origJson = http.json.bind(http)
+    // 8 tools/-dir files trip toolFanout>=8 -> FILE_CAP=24, so there is
+    // plenty of spare room (1 manifest + 8 tool files = 9, leaving 15 free
+    // of 24) for all 10 test files to fit with room to spare if nothing
+    // capped them — proving the quota is unconditional, not just eviction
+    // under scarcity.
+    const toolFiles = Array.from({ length: 8 }, (_, i) => ({ path: `src/tools/handler${i}.ts`, type: 'blob', size: 200 }))
+    const testFiles = Array.from({ length: 10 }, (_, i) => ({ path: `tests/case${i}.test.ts`, type: 'blob', size: 200 }))
+    http.json = async <T,>(url: string): Promise<T> => {
+      if (url.includes('/git/trees/')) {
+        return { tree: [{ path: 'package.json', type: 'blob', size: 500 }, ...toolFiles, ...testFiles] } as T
+      }
+      return origJson<T>(url)
+    }
+    http.text = async (url: string): Promise<string> => {
+      if (url.includes('package.json')) return '{"name":"foo"}'
+      return 'export {}'
+    }
+    const snap = await collectGithub({ ref: 'acme/foo', repo: { owner: 'acme', name: 'foo' } }, http, NOW)
+    const paths = snap.files.map(f => f.path)
+    const selectedTestFiles = paths.filter(p => p.startsWith('tests/'))
+    expect(selectedTestFiles.length).toBeLessThanOrEqual(3)
+    expect(selectedTestFiles).toHaveLength(3) // room for all 10 existed; the quota is what stopped it
+    for (const f of toolFiles) expect(paths).toContain(f.path) // real source is never displaced by the quota'd files
+  })
+
+  it('fix: NON_SERVER_FETCH_CAP is scoped to rankedSource — example entrypoints must not drain it and starve the guaranteed entrypoint bucket', () => {
+    // Bug this guards: NON_SERVER_FETCH_CAP was a mutable counter in the
+    // SHARED final dedup/FILE_CAP loop, not scoped to rankedSource.
+    // ENTRYPOINT_RE matches `examples/index.ts` (etc.), which ALSO matches
+    // NON_SERVER_DIR_RE — so entrypoint-bucket members were counted against
+    // the SAME 3-slot quota rankedSource's own non-server files use,
+    // exhausting it before rankedSource was even reached and silently
+    // dropping legitimate entrypoint-bucket members that ENTRYPOINT_FETCH_CAP
+    // (=6) had room for.
+    const blobs = [
+      { path: 'package.json', size: 500 },
+      // 5 example entrypoints — all match BOTH ENTRYPOINT_RE and
+      // NON_SERVER_DIR_RE, well within ENTRYPOINT_FETCH_CAP=6. Pre-fix, only
+      // the first 3 (by manifestPriority: shallowest/shortest first) survive
+      // the shared quota; `examples/foo/index.ts` and `examples/bar/index.ts`
+      // are silently dropped.
+      { path: 'examples/index.ts', size: 100 },
+      { path: 'examples/server.ts', size: 100 },
+      { path: 'examples/main.ts', size: 100 },
+      { path: 'examples/foo/index.ts', size: 100 },
+      { path: 'examples/bar/index.ts', size: 100 },
+      // Non-entrypoint-shaped example files — these fall through to
+      // rankedSource (not the entrypoint bucket) and are the files
+      // NON_SERVER_FETCH_CAP was actually designed to quota.
+      { path: 'examples/util-one.ts', size: 100 },
+      { path: 'examples/util-two.ts', size: 100 },
+      { path: 'examples/util-three.ts', size: 100 },
+      { path: 'examples/util-four.ts', size: 100 },
+      // 8 real tool files: (a) real tool-bearing source that must never be
+      // starved by this bug, and (b) trips toolFanout>=8 so FILE_CAP widens
+      // to 24, giving ample budget headroom — isolating the assertions below
+      // from any FILE_CAP eviction, so only the quota-scoping bug can explain
+      // a dropped path.
+      ...Array.from({ length: 8 }, (_, i) => ({ path: `src/tools/tool${i}.ts`, size: 100 })),
+    ]
+    const selected = selectRepoFiles(blobs, 'foo', false)
+
+    // 1. Real source is (and was always) unaffected by this bug — still
+    // selected. (It is never itself a non-server path, so it was never at
+    // risk; asserted for completeness / non-regression.)
+    for (let i = 0; i < 8; i++) expect(selected).toContain(`src/tools/tool${i}.ts`)
+
+    // 2. rankedSource's OWN non-server quota still holds: at most
+    // NON_SERVER_FETCH_CAP (=3) of the 4 non-entrypoint example files make it
+    // through — the quota still applies where it was designed to, just
+    // scoped to this bucket instead of shared globally.
+    const rankedSourceNonServer = selected.filter(p => p.startsWith('examples/util'))
+    expect(rankedSourceNonServer.length).toBeLessThanOrEqual(3)
+
+    // 3. THE CORE ASSERTION: the entrypoint bucket is NOT subject to the
+    // quota at all — all 5 example entrypoints (well within
+    // ENTRYPOINT_FETCH_CAP=6) are selected as entrypoints, not just the
+    // first 3. Pre-fix this fails: `examples/foo/index.ts` and
+    // `examples/bar/index.ts` are silently dropped because the shared quota
+    // was already exhausted by `examples/index.ts`, `examples/server.ts`,
+    // `examples/main.ts`.
+    for (const p of ['examples/index.ts', 'examples/server.ts', 'examples/main.ts', 'examples/foo/index.ts', 'examples/bar/index.ts']) {
+      expect(selected).toContain(p)
+    }
+  })
+
+  // --- W5 THE REGRESSION GUARD (plan Task W5, wave2-spec §2.2) ----------
+  //
+  // tests/fixtures/sampling-corpus.json was recorded live (`gh api
+  // .../git/trees/<branch>?recursive=1`, path+size+type only, no file
+  // contents) for the 9 repos named in the plan, together with
+  // `expectedRetained` — the file list selectRepoFiles chose for each repo
+  // BEFORE this task's W5 edits (computed from the exact pre-edit source,
+  // reconstructed from the same commit this branch forked from). This guard
+  // re-runs the CURRENT (post-W5) selectRepoFiles against those same
+  // recorded trees and asserts no tool-bearing path is dropped.
+  //
+  // Three pre-W5-selected paths are EXCLUDED from the strict "must survive"
+  // set below, each individually verified live (not merely asserted) to
+  // carry no tool surface our extractors would ever read from it:
+  //   - mroops0111/openapi-mcp-gateway: src/openapi_mcp_gateway/__init__.py
+  //     — 647 bytes, pure `from .x import y` re-exports + `__all__`; no
+  //     `add_tool(...)`/`.tool(...)`/`@mcp.tool()` call appears in it.
+  //   - codex-curator/studiomcphub: src/tools/__init__.py — NOT empty (the
+  //     wave2-spec's "empty file" note is stale; live content is a 604-line
+  //     dispatch table). Still not tool-bearing: its `handlers = {...}` /
+  //     `_TOOL_CATEGORIES` are plain dict literals with no recognized
+  //     registration call, AND this repo's real tool list is published via
+  //     `site/.well-known/mcp.json` (still selected, unchanged pre/post),
+  //     which wins extractSchema's ladder ahead of any Python source bucket
+  //     — this file was never contributing a tool to the graded output
+  //     either before or after.
+  //   - protostatis/unbrowser: src/policy.rs — Rust. extractSchema has no
+  //     Rust bucket (manifestJson/js/py/go only) — categorically
+  //     unextractable regardless of content, per UNSUPPORTED_EXTRACTOR_EXT_RE.
+  const KNOWN_NOT_TOOL_BEARING = new Set([
+    'mroops0111/openapi-mcp-gateway::src/openapi_mcp_gateway/__init__.py',
+    'codex-curator/studiomcphub::src/tools/__init__.py',
+    'protostatis/unbrowser::src/policy.rs',
+  ])
+
+  interface SamplingCorpusEntry {
+    ref: string
+    rootPkgName: string | null
+    hasWorkspaces: boolean
+    tree: Array<{ path: string; size: number; type: string }>
+    expectedRetained: string[]
+  }
+  const corpusPath = fileURLToPath(new URL('./fixtures/sampling-corpus.json', import.meta.url))
+  const corpus = JSON.parse(readFileSync(corpusPath, 'utf8')) as SamplingCorpusEntry[]
+
+  describe('W5 regression guard: recorded-tree corpus (network-free)', () => {
+    it('the corpus fixture covers all 9 named repos', () => {
+      expect(corpus.map(r => r.ref).sort()).toEqual([
+        '8enSmith/mcp-open-library',
+        'AliKarami/MikroMCP',
+        'FradSer/mcp-server-apple-reminders',
+        'PantelisGeorgiadis/dicomweb-mcp-server',
+        'codex-curator/studiomcphub',
+        'cyclops-ui/mcp-cyclops',
+        'mroops0111/openapi-mcp-gateway',
+        'protostatis/unbrowser',
+        'upstash/context7',
+      ])
+    })
+
+    for (const repo of corpus) {
+      it(`${repo.ref}: no tool-bearing pre-W5-selected path is dropped by the current selectRepoFiles`, () => {
+        const blobs = repo.tree.map(t => ({ path: t.path, size: t.size }))
+        const post = selectRepoFiles(blobs, repo.rootPkgName ?? undefined, repo.hasWorkspaces)
+        const dropped = repo.expectedRetained.filter(p => !post.includes(p))
+        const unjustifiedDrops = dropped.filter(p => !KNOWN_NOT_TOOL_BEARING.has(`${repo.ref}::${p}`))
+        expect(unjustifiedDrops).toEqual([])
+      })
+    }
+
+    it('cyclops-ui/mcp-cyclops: the SOURCE_HINT gate removal recovers internal/modules/*.go (6 Go-idiom tools our extractor already supports)', () => {
+      const repo = corpus.find(r => r.ref === 'cyclops-ui/mcp-cyclops')!
+      const blobs = repo.tree.map(t => ({ path: t.path, size: t.size }))
+      const post = selectRepoFiles(blobs, repo.rootPkgName ?? undefined, repo.hasWorkspaces)
+      expect(post).toContain('internal/modules/create.go')
+      expect(post.filter(p => p.startsWith('internal/modules/')).length).toBeGreaterThanOrEqual(6)
+    })
   })
 })
