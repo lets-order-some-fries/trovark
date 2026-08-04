@@ -1,5 +1,7 @@
 # trovark
 
+[![CI](https://github.com/lets-order-some-fries/trovark/actions/workflows/ci.yml/badge.svg)](https://github.com/lets-order-some-fries/trovark/actions/workflows/ci.yml) [![npm](https://img.shields.io/npm/v/trovark)](https://www.npmjs.com/package/trovark) [![license](https://img.shields.io/badge/license-Apache--2.0-blue)](LICENSE) ![node](https://img.shields.io/badge/node-%3E%3D20-brightgreen)
+
 **Trust score for MCP servers.** One command answers: *should I adopt this server?*
 
     npx trovark github/github-mcp-server
