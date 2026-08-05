@@ -70,6 +70,18 @@ export interface Signals {
   hasTests?: boolean
   hasLockfile?: boolean
   schemaExtracted?: boolean
+  // W6 review remediation item M2 (.superpowers/sdd/w6-review-findings.md):
+  // a README-sourced tool surface is a maintainer's CLAIM, not verified
+  // extraction — previously carried only by `schemaExtracted=false`
+  // (indistinguishable from "extraction failed") plus one info finding.
+  // This is the structured, machine-readable version of that fact, threaded
+  // through to Scorecard and IndexEntry so a JSON consumer (and a human, via
+  // report/terminal.ts and index/site.ts) can tell claimed-from-README apart
+  // from extracted-from-code without parsing findings. Set (true or false)
+  // whenever schema extraction ran at all; stays undefined when it never ran
+  // (no repo tree — same "absence != a known value" discipline as every
+  // other conditionally-set Signals field here).
+  readmeSourced?: boolean
   // security
   toolSurfaceRisk?: 'none' | 'low' | 'medium' | 'high'
   secretsFound?: number
@@ -135,6 +147,10 @@ export interface Scorecard {
   // (never notServer) or null/null together (notServer) — see score.ts.
   overall: number | null       // 0-100
   grade: string | null         // 'A+' | 'A' | 'A-' | ... | 'F'
+  // W6 review remediation item M2: structured passthrough of
+  // Signals.readmeSourced — see that field's comment for the full
+  // rationale. Undefined when extraction never ran at all.
+  readmeSourced?: boolean
   dimensions: DimensionScore[]
   notes: string[]
   generatedAt: string   // ISO string, passed in by caller (determinism)

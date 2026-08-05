@@ -123,6 +123,22 @@ describe('renderSite', () => {
     const out = renderSite(withUnresolved)
     expect(out).toMatch(/<b>3<\/b><span>repo unavailable<\/span>/)
   })
+  // W6 review remediation item M2 (.superpowers/sdd/w6-review-findings.md):
+  // a README-sourced tool surface is a maintainer's CLAIM, not verified
+  // extraction — flagged visibly in the table so a human can tell it apart
+  // from a code-extracted row.
+  it('M2: shows a README-sourced badge for entries with readmeSourced === true, and not for a code-extracted row', () => {
+    const withReadme = {
+      ...results,
+      entries: [
+        { ref: 'acme/shim', ok: true, overall: 70, grade: 'B', readmeSourced: true, dims: { health: { score: 70, confidence: 'high' }, reliability: { score: 70, confidence: 'high' }, security: { score: 70, confidence: 'high' }, cost: { score: 70, confidence: 'high' } } },
+        { ref: 'acme/coded', ok: true, overall: 80, grade: 'B', readmeSourced: false, dims: { health: { score: 80, confidence: 'high' }, reliability: { score: 80, confidence: 'high' }, security: { score: 80, confidence: 'high' }, cost: { score: 80, confidence: 'high' } } },
+      ],
+    } as never
+    const out = renderSite(withReadme)
+    expect(out).toMatch(/acme\/shim[\s\S]{0,120}README<\/span>/)
+    expect(out).not.toMatch(/acme\/coded[\s\S]{0,120}README<\/span>/)
+  })
   it('rejects non-http(s) repoUrl schemes', () => {
     const evil = {
       ...results,

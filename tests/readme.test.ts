@@ -413,6 +413,11 @@ describe('assemble — README catalog end-to-end (W6 Part A)', () => {
     // source (wave2-spec §3 R6).
     expect(s.schemaExtracted).toBe(false)
     expect(s.findings.some(f => f.id === 'reliability/readme-sourced-tools')).toBe(true)
+    // W6 review remediation item M2: the structured, machine-readable
+    // provenance flag — distinct from schemaExtracted (which is merely
+    // false, indistinguishable from "extraction failed") and from the
+    // findings list (which a JSON consumer would have to parse by id).
+    expect(s.readmeSourced).toBe(true)
   })
 
   it('a prose-only README (no real catalog) stays a genuine zero-tools miss — no fabricated surface', async () => {
@@ -423,5 +428,8 @@ describe('assemble — README catalog end-to-end (W6 Part A)', () => {
     )
     expect(s.toolCount).toBeUndefined()
     expect(s.schemaExtracted).toBe(false)
+    // M2: no README catalog was actually parsed — readmeSourced is false,
+    // not merely absent (extraction genuinely ran and genuinely found none).
+    expect(s.readmeSourced).toBe(false)
   })
 })

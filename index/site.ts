@@ -63,7 +63,15 @@ function row(e: IndexEntry): string {
       `<td class="muted">—</td>${dim('health')}${dim('reliability')}${securityCell}${dim('cost')}</tr>`
   }
   const flags = (e.topFindings ?? []).map(f => `<span class="flag ${esc(f.severity)}" title="${esc(f.id)}">⚑</span>`).join('')
-  return `<tr data-overall="${e.overall}"><td>${name} ${flags}</td>` +
+  // W6 review remediation item M2: a README-sourced tool surface is a
+  // maintainer's CLAIM, not verified extraction (see src/types.ts) — flagged
+  // structurally here so a human scanning the table can tell it apart from
+  // extracted-from-code, distinct from (and in addition to) the info finding
+  // already carried in topFindings.
+  const readmeBadge = e.readmeSourced
+    ? '<span class="chip muted-chip" title="tool surface read from README catalog — not verified against source">README</span> '
+    : ''
+  return `<tr data-overall="${e.overall}"><td>${name} ${readmeBadge}${flags}</td>` +
     `<td><span class="chip" style="background:${gradeColor(e.grade)}">${esc(e.grade ?? '?')}</span></td>` +
     `<td>${e.overall}</td>${dim('health')}${dim('reliability')}${dim('security')}${dim('cost')}</tr>`
 }

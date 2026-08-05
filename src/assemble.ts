@@ -82,9 +82,13 @@ export async function assemble(
 
         let schema = staticSchema
         // W6 (Task W6 Part B): set only when the dynamic-surface classifier
-        // fires — read below to floor (never renormalize) the security
-        // dimension's primary signal instead of letting it drop out.
+        // fires. W6 review remediation item I5 (.superpowers/sdd/w6-review-
+        // findings.md): previously used to floor toolSurfaceRisk to a
+        // fabricated 'high' — that pin is gone (see below); these are now
+        // read only to attach the evidence-bearing `security/dynamic-tool-
+        // surface` finding.
         let dynamicNote: string | undefined
+        let dynamicEvidence: string | undefined
         if (classification) {
           s.notServer = true
           s.notServerReason = classification.reason
@@ -113,6 +117,7 @@ export async function assemble(
             s.notServerReason = 'dynamic'
             s.notServerNote = dyn.note
             dynamicNote = dyn.note
+            dynamicEvidence = dyn.evidence
           } else {
             // W6 (Task W6 Part A): the README-catalog rung — reachable only
             // once we know this repo is neither a library nor dynamic-shaped.
@@ -125,18 +130,44 @@ export async function assemble(
         }
 
         s.schemaExtracted = schema.extracted && !schema.readmeSourced
-        // W6 (Task W6 Part B point 3): do NOT let the tool-surface signal
-        // drop out (undefined) for a dynamic server and let security
-        // renormalize onto no-secrets/dependency-cves alone — a gateway
-        // exposing an unbounded, unknown upstream tool surface is the
-        // highest-risk shape in the corpus, not a neutral one (this is
-        // exactly what securityPrimaryAbsent in score.ts exists to prevent
-        // for every OTHER zero-signal case; notServer already bypasses that
-        // gate, so the floor has to be applied here instead). `schema` is
-        // `staticSchema` in this branch (0 tools, toolSurfaceRisk normally
-        // undefined unless the shell-import fallback already floored it to
-        // 'medium' — 'high' is the stronger, structural signal and wins).
-        s.toolSurfaceRisk = dynamicNote !== undefined ? 'high' : schema.toolSurfaceRisk
+        // W6 review remediation item M2: structured, machine-readable
+        // provenance — see the field's comment in types.ts. Set alongside
+        // schemaExtracted (same `schema` this run resolved to, whichever
+        // rung produced it) so the two can never drift apart.
+        s.readmeSourced = schema.readmeSourced
+        // W6 review remediation item I5 (.superpowers/sdd/w6-review-findings.
+        // md): the W6-era pin `toolSurfaceRisk = 'high'` for dynamic servers
+        // is REMOVED. It was published as a measured, confidently-scored
+        // security dimension with no evidence finding attached — a verdict,
+        // not a fact. We genuinely cannot read a dynamic server's tool
+        // surface, so the signal stays whatever `schema.toolSurfaceRisk`
+        // already resolved to (`staticSchema` in the dynamic branch: 0
+        // tools, so `undefined` unless the shell-import structural floor —
+        // see I1 / findShellImportFile in schema.ts — already set it to
+        // 'medium', which is untouched here and applies regardless of
+        // rung). This is NOT a renormalization: the governing spec
+        // (wave2-spec §1a, restated in .superpowers/sdd/threat-spec.md
+        // §Part B) forbids letting security score clean by dropping the
+        // primary signal and pretending the remaining no-secrets/
+        // dependency-cves signals are the whole picture — but it does not
+        // license inventing a number either. Leaving it undefined and
+        // reusing the EXISTING coverage/confidence machinery (score.ts's
+        // `confidence()` — dropping the weight-3 primary signal out of
+        // security's 3-signal denominator caps the best achievable ratio at
+        // 2/3 ≈ 0.67, below the 0.75 'high' threshold, so confidence can
+        // land 'medium' or 'low' but never 'high') is that machinery already
+        // doing its job, not a parallel mechanism. `overall`/`grade` stay
+        // null for dynamic regardless (notServer bypasses score.ts's gate,
+        // unchanged). The evidence-bearing finding below is what replaces
+        // the old fabricated pin as the honest published fact.
+        s.toolSurfaceRisk = schema.toolSurfaceRisk
+        if (dynamicNote !== undefined) {
+          s.findings.push({
+            id: 'security/dynamic-tool-surface', dimension: 'security', severity: 'low',
+            message: 'Tool registrations are resolved at runtime, so the tool surface cannot be enumerated by static analysis; its risk is unassessed rather than clean.',
+            evidence: dynamicEvidence ?? 'tool registrations resolved at runtime (no static evidence file)',
+          })
+        }
         // W5 (coverage-v1.5, wave2-spec §2.3): partial-surface honesty. When
         // the full tree has more tool-fanout-shaped files than the sample
         // reached (schema.surfacePartial), a toolCount/schemaTokenEstimate

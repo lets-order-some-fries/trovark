@@ -26,6 +26,11 @@ export interface IndexEntry {
   dims?: Record<'health' | 'reliability' | 'security' | 'cost', { score: number; confidence: string }>
   topFindings?: Array<{ id: string; severity: string }>
   daysSinceLastCommit?: number
+  // W6 review remediation item M2: structured passthrough of
+  // Scorecard.readmeSourced — a README-sourced tool surface is a
+  // maintainer's CLAIM, not verified extraction. See src/types.ts for the
+  // full rationale. Omitted (not false) when never computed.
+  readmeSourced?: boolean
   // D1 (integrity-v1): undefined when not checked (no files fetched) — same
   // absence != clean discipline as Scorecard.integrityHits. Stats (below)
   // are deliberately left untouched for now; this is a per-entry count only.
@@ -101,7 +106,11 @@ export function summarize(entries: IndexEntry[]): IndexStats {
   }
 }
 
-function toEntry(ref: string, card: Scorecard, daysSinceLastCommit?: number): IndexEntry {
+// Exported (was module-private) so tests/scan.test.ts can assert the
+// Scorecard -> IndexEntry passthrough directly (W6 review remediation item
+// M2 — readmeSourced threading) without going through the network-dependent
+// main() pipeline.
+export function toEntry(ref: string, card: Scorecard, daysSinceLastCommit?: number): IndexEntry {
   const dims = Object.fromEntries(card.dimensions.map(d => [d.id, { score: d.score, confidence: d.confidence }])) as IndexEntry['dims']
   const findings = card.dimensions.flatMap(d => d.findings)
     .sort((a, b) => ['high', 'medium', 'low', 'info'].indexOf(a.severity) - ['high', 'medium', 'low', 'info'].indexOf(b.severity))
@@ -117,6 +126,7 @@ function toEntry(ref: string, card: Scorecard, daysSinceLastCommit?: number): In
     repoUrl: card.resolved?.repo ? `https://github.com/${card.resolved.repo.owner}/${card.resolved.repo.name}` : undefined,
     dims, topFindings: findings.length > 0 ? findings : undefined,
     daysSinceLastCommit,
+    readmeSourced: card.readmeSourced || undefined,
     integrity: card.integrityHits ? {
       payloads: card.integrityHits.filter(h => h.kind === 'hidden-payload').length,
       observations: card.integrityHits.filter(h => h.kind !== 'hidden-payload').length,

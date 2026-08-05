@@ -97,6 +97,14 @@ export interface DynamicContext {
 export interface DynamicResult {
   dynamic: true
   note: string
+  // W6 review remediation item I5 (.superpowers/sdd/w6-review-findings.md):
+  // the file path(s) that actually satisfied the firing signal — assemble.ts
+  // attaches this to the new `security/dynamic-tool-surface` finding so the
+  // "tool surface is unassessed" statement is evidence-linked like every
+  // other finding, not a bare assertion. Comma-joined when more than one
+  // file corroborates (signal A's register+persist pair; signal C's
+  // migrations-dir+model-tool-file pair).
+  evidence: string
 }
 
 const NOTE = 'Tools are registered at runtime from upstream servers; no static list exists. Health/reliability signals shown; no trust grade issued.'
@@ -120,19 +128,20 @@ export function detectDynamic(ctx: DynamicContext): DynamicResult | null {
   // DIFFERENT files in the same directory, unless the persistence marker's
   // own file already reads as a tool registry/store (corroborating by
   // construction, even alone).
-  const signalA = registerFiles.some(r => {
+  for (const r of registerFiles) {
     const dir = dirOf(r.path)
-    return persistFiles.some(p => dirOf(p.path) === dir && (p.path !== r.path || DYN_STORE_FILE_RE.test(p.path)))
-  })
-  if (signalA) return { dynamic: true, note: NOTE }
+    const persist = persistFiles.find(pf => dirOf(pf.path) === dir && (pf.path !== r.path || DYN_STORE_FILE_RE.test(pf.path)))
+    if (persist) return { dynamic: true, note: NOTE, evidence: [...new Set([r.path, persist.path])].join(', ') }
+  }
 
   const metaText = `${ctx.description ?? ''} ${(ctx.topics ?? []).join(' ')}`
   const signalB = DYN_META_RE.test(metaText)
   if (!signalB) return null
 
   const paths = ctx.treePaths ?? ctx.files.map(f => f.path)
-  const signalC = paths.some(p => DYN_MIGRATIONS_DIR_RE.test(p)) && paths.some(p => DYN_MODEL_TOOL_FILE_RE.test(p))
-  if (!signalC) return null
+  const migrationsPath = paths.find(p => DYN_MIGRATIONS_DIR_RE.test(p))
+  const modelToolPath = paths.find(p => DYN_MODEL_TOOL_FILE_RE.test(p))
+  if (!migrationsPath || !modelToolPath) return null
 
-  return { dynamic: true, note: NOTE }
+  return { dynamic: true, note: NOTE, evidence: [migrationsPath, modelToolPath].join(', ') }
 }

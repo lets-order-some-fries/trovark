@@ -33,6 +33,25 @@ describe('score()', () => {
     expect(card.rubricVersion).toBe('1.5.0')
     for (const d of card.dimensions) expect(d.confidence).toBe('high')
   })
+  // W6 review remediation item M2 (.superpowers/sdd/w6-review-findings.md):
+  // Signals.readmeSourced is a structured passthrough to Scorecard, not
+  // renamed/dropped/recomputed along the way.
+  it('M2: readmeSourced threads through from Signals to Scorecard unchanged', () => {
+    const s = healthy()
+    s.readmeSourced = true
+    const card = score('x', s, '2026-07-31T00:00:00Z')
+    expect(card.readmeSourced).toBe(true)
+  })
+  it('M2: a code-extracted card (readmeSourced false) carries false, not absent', () => {
+    const s = healthy()
+    s.readmeSourced = false
+    const card = score('x', s, '2026-07-31T00:00:00Z')
+    expect(card.readmeSourced).toBe(false)
+  })
+  it('M2: readmeSourced stays undefined on the card when extraction never ran at all', () => {
+    const card = score('x', empty(), '2026-07-31T00:00:00Z')
+    expect(card.readmeSourced).toBeUndefined()
+  })
   it('missing signals lower confidence, never throw, never zero the score', () => {
     const s = empty()
     s.daysSinceLastCommit = 10 // one health signal only

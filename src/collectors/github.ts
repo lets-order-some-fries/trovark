@@ -502,11 +502,16 @@ export function selectRepoFiles(
   // would otherwise fall below SOURCE_FLOOR, and never below MANIFEST_QUOTA.
   let manifestsSelected = manifestCandidates
   const sourceTarget = Math.min(SOURCE_FLOOR, rankedSource.length)
-  // W6: readmeCandidates.length folded into the same budget accounting as
-  // every other guaranteed-slot bucket (env/manifests/spec/entrypoint) — see
-  // the README bucket's comment above for why this must never become a
-  // mutable counter in the shared dedup loop instead.
-  const availableSourceSlots = () => Math.max(0, FILE_CAP - envBlobs.length - manifestsSelected.length - specCandidates.length - readmeCandidates.length - entrypointCandidates.length)
+  // W6 review remediation item C4 (.superpowers/sdd/w6-review-findings.md,
+  // "C4 VERIFIED BY HAND"): readmeCandidates.length is deliberately EXCLUDED
+  // from this subtraction — the README now occupies a DEDICATED slot outside
+  // the source budget (see the final selection cap below, which widens by
+  // exactly readmeCandidates.length), so it must never be treated as
+  // consuming budget that would otherwise trigger extra manifest eviction to
+  // protect the source floor. Every OTHER guaranteed-slot bucket
+  // (env/manifests/spec/entrypoint) still competes for the shared FILE_CAP
+  // budget and stays subtracted here.
+  const availableSourceSlots = () => Math.max(0, FILE_CAP - envBlobs.length - manifestsSelected.length - specCandidates.length - entrypointCandidates.length)
   while (availableSourceSlots() < sourceTarget && manifestsSelected.length > MANIFEST_QUOTA) {
     manifestsSelected = manifestsSelected.slice(0, -1)
   }
@@ -530,8 +535,15 @@ export function selectRepoFiles(
   ]
   const selected: string[] = []
   const seen = new Set<string>()
+  // W6 review remediation item C4: the README's cap (readmeCandidates.length,
+  // currently 0 or 1 — see README_FETCH_CAP) widens the final selection cap
+  // by exactly that many, so the README is fetched as a genuine EXTRA file
+  // rather than displacing a ranked-source (or any other) candidate that
+  // would otherwise fit under FILE_CAP. One extra fetched file per repo is
+  // an acceptable cost; silently dropping a tool-bearing source file is not.
+  const finalCap = FILE_CAP + readmeCandidates.length
   for (const b of wanted) {
-    if (selected.length >= FILE_CAP) break
+    if (selected.length >= finalCap) break
     if (seen.has(b.path)) continue
     seen.add(b.path)
     selected.push(b.path)

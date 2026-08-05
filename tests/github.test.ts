@@ -1211,25 +1211,58 @@ describe('collectGithub', () => {
     expect(readmes).toEqual(['README.md'])
   })
 
-  it('W6: the README bucket is ranked AFTER spec files and BEFORE ranked source, and is accounted in the SAME availableSourceSlots budget as every other guaranteed bucket (never a shared-loop counter)', () => {
-    // A saturated FILE_CAP=12 budget: 1 manifest + 1 spec + README + as many
-    // ranked-source files as fit. If README were NOT budgeted through
-    // availableSourceSlots (e.g. bolted on as an extra, uncounted fetch), the
-    // total selected count would exceed FILE_CAP; if it displaced the spec
-    // bucket instead of ranked source, the spec file would be missing.
-    // NOTE: deliberately generic (non-`tools/`) source paths — a `tools/`-dir
-    // shape would itself trip the toolFanout>=8 trigger and widen FILE_CAP to
-    // 24, defeating the point of this saturation test.
+  it('W6: the README bucket is ranked AFTER spec files and BEFORE ranked source', () => {
     const blobs = [
       { path: 'package.json', size: 500 },
       { path: 'openapi.json', size: 500 },
       { path: 'README.md', size: 500 },
-      ...Array.from({ length: 20 }, (_, i) => ({ path: `src/file${i}.ts`, size: 100 })),
+      ...Array.from({ length: 5 }, (_, i) => ({ path: `src/file${i}.ts`, size: 100 })),
     ]
     const selected = selectRepoFiles(blobs, 'foo', false)
-    expect(selected.length).toBe(12) // FILE_CAP=12, fully saturated
     expect(selected).toContain('README.md')
     expect(selected).toContain('openapi.json')
+  })
+
+  // W6 review remediation item C4 (.superpowers/sdd/w6-review-findings.md,
+  // "C4 VERIFIED BY HAND"): the README bucket was budgeted through the SAME
+  // availableSourceSlots() accounting as every other guaranteed bucket
+  // (manifests/spec/entrypoint) — which meant on a budget-SATURATED repo it
+  // displaced the single lowest-ranked rankedSource file, one slot for one
+  // slot. Demonstrated live on 3 real corpus repos (see the
+  // KNOWN_NOT_TOOL_BEARING history below this block): all 3 displaced files
+  // happened to be non-tool-bearing, but that was luck, not a guarantee — on
+  // any repo whose budget is already full, the evicted file COULD be
+  // tool-bearing. Fix: the README now occupies a DEDICATED slot outside the
+  // source budget (it is no longer subtracted in availableSourceSlots(), and
+  // the final FILE_CAP is widened by exactly readmeCandidates.length — 0 or
+  // 1 — so it is fetched as a genuine EXTRA file, never a swap).
+  it('C4: a saturated budget gets the README as an EXTRA file — the ranked-source COUNT is identical whether or not a README exists', () => {
+    // Deliberately generic (non-`tools/`) source paths — a `tools/`-dir shape
+    // would itself trip the toolFanout>=8 trigger and widen FILE_CAP to 24,
+    // defeating the point of this saturation test.
+    const baseBlobs = [
+      { path: 'package.json', size: 500 },
+      { path: 'openapi.json', size: 500 },
+      ...Array.from({ length: 20 }, (_, i) => ({ path: `src/file${i}.ts`, size: 100 })),
+    ]
+    const blobsWithReadme = [...baseBlobs, { path: 'README.md', size: 500 }]
+
+    const selectedNoReadme = selectRepoFiles(baseBlobs, 'foo', false)
+    const selectedWithReadme = selectRepoFiles(blobsWithReadme, 'foo', false)
+
+    const sourceNoReadme = selectedNoReadme.filter(p => p.startsWith('src/file'))
+    const sourceWithReadme = selectedWithReadme.filter(p => p.startsWith('src/file'))
+
+    // THE CORE ASSERTION: adding a README to an already-saturated tree must
+    // not shrink the set of ranked-source files selected — pre-fix, this
+    // drops from 9 to 8 (one rankedSource file evicted to pay for the
+    // README's slot inside the shared FILE_CAP=12 budget).
+    expect(sourceWithReadme.length).toBe(sourceNoReadme.length)
+    // The README is a genuine EXTRA file (FILE_CAP + 1), not a swap.
+    expect(selectedWithReadme).toContain('README.md')
+    expect(selectedWithReadme.length).toBe(selectedNoReadme.length + 1)
+    expect(selectedNoReadme.length).toBe(12) // FILE_CAP=12, fully saturated pre-README
+    expect(selectedWithReadme.length).toBe(13) // dedicated +1 slot, never subtracted from source
   })
 
   // --- W5 THE REGRESSION GUARD (plan Task W5, wave2-spec §2.2) ----------
@@ -1262,34 +1295,27 @@ describe('collectGithub', () => {
   //     Rust bucket (manifestJson/js/py/go only) — categorically
   //     unextractable regardless of content, per UNSUPPORTED_EXTRACTOR_EXT_RE.
   //
-  // W6 (Task W6 Part A): three more paths join this list — not because a
-  // tool-bearing file became unextractable, but because the new 1-slot
-  // README bucket (ranked ahead of rankedSource, budgeted through the SAME
-  // availableSourceSlots() accounting as every other guaranteed bucket — see
-  // src/collectors/github.ts) now costs exactly one rankedSource slot on a
-  // repo whose budget was already saturated, displacing the single
-  // lowest-ranked rankedSource candidate. Each was fetched live and verified
-  // to carry no tool-registration idiom at all (confirmed by direct content
-  // inspection, not inference from the filename):
-  //   - codex-curator/studiomcphub: src/tools/watermark.py — a DCT-domain
-  //     image-watermarking helper (embed/detect), no `.tool(`/`add_tool(`
-  //     call anywhere; this repo's real tool list is published via
-  //     `site/.well-known/mcp.json` regardless (same rationale as the
-  //     sibling `src/tools/__init__.py` entry above).
-  //   - protostatis/unbrowser: train/eval_tool_likelihoods.py — a dev-only
-  //     A/B eval harness script for a separately-built Rust binary; no MCP
-  //     tool registration of any kind.
-  //   - upstash/context7: packages/mcp/src/lib/encryption.ts — a client-IP
-  //     encryption/header utility; no tool registration. (context7's actual
-  //     tool surface already lives under docs/openapi.json, correctly
-  //     excluded by isNonServerPath per the original W5 rank_sim finding.)
+  // W6 review remediation item C4 (.superpowers/sdd/w6-review-findings.md,
+  // "C4 VERIFIED BY HAND"): W6 (Task W6 Part A) originally added three more
+  // entries here — codex-curator/studiomcphub::src/tools/watermark.py,
+  // protostatis/unbrowser::train/eval_tool_likelihoods.py, and
+  // upstash/context7::packages/mcp/src/lib/encryption.ts — because the
+  // 1-slot README bucket was budgeted through the SAME availableSourceSlots()
+  // accounting as every other guaranteed bucket, so on a budget-saturated
+  // repo it displaced the single lowest-ranked rankedSource candidate
+  // (verified live: all 3 happened to be non-tool-bearing, but that was
+  // never guaranteed by construction). The README now occupies a DEDICATED
+  // slot outside the source budget (src/collectors/github.ts:
+  // availableSourceSlots() no longer subtracts readmeCandidates.length, and
+  // the final selection cap is widened by that same count) — so the README
+  // is fetched as a genuine EXTRA file and can no longer evict a
+  // rankedSource candidate at all. These three entries are gone: their
+  // absence, with the guard below still passing, IS the regression test for
+  // the fix (see the C4 test above and .superpowers/sdd/w6-review-findings.md).
   const KNOWN_NOT_TOOL_BEARING = new Set([
     'mroops0111/openapi-mcp-gateway::src/openapi_mcp_gateway/__init__.py',
     'codex-curator/studiomcphub::src/tools/__init__.py',
     'protostatis/unbrowser::src/policy.rs',
-    'codex-curator/studiomcphub::src/tools/watermark.py',
-    'protostatis/unbrowser::train/eval_tool_likelihoods.py',
-    'upstash/context7::packages/mcp/src/lib/encryption.ts',
   ])
 
   interface SamplingCorpusEntry {

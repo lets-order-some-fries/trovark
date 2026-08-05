@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
-import { summarize, type IndexEntry } from '../index/scan.js'
+import { summarize, toEntry, type IndexEntry } from '../index/scan.js'
+import type { Scorecard } from '../src/types.js'
 
 const e = (over: Partial<IndexEntry>): IndexEntry => ({ ref: 'a/b', ok: true, ...over })
 
@@ -117,5 +118,29 @@ describe('summarize — unresolved repos (W1): a GitHub 404 must never count as 
     const s = summarize(entries)
     expect(s.unresolved).toBe(1)
     expect(s.notServer).toBe(1)
+  })
+})
+
+// W6 review remediation item M2 (.superpowers/sdd/w6-review-findings.md):
+// Scorecard.readmeSourced must thread through toEntry into IndexEntry
+// unchanged, so a JSON consumer of index/results.json can tell a
+// README-sourced tool surface (a maintainer's claim) apart from a
+// code-extracted one without parsing findings.
+describe('toEntry — readmeSourced passthrough (M2)', () => {
+  const baseCard: Scorecard = {
+    ref: 'a/b', rubricVersion: '1.5.0', overall: 80, grade: 'B',
+    dimensions: [], notes: [], generatedAt: '2026-08-06T00:00:00Z', insufficientData: false,
+  }
+  it('a README-sourced scorecard produces an IndexEntry with readmeSourced === true', () => {
+    const entry = toEntry('a/b', { ...baseCard, readmeSourced: true })
+    expect(entry.readmeSourced).toBe(true)
+  })
+  it('a code-extracted scorecard (readmeSourced false) produces an IndexEntry with readmeSourced false/absent', () => {
+    const entry = toEntry('a/b', { ...baseCard, readmeSourced: false })
+    expect(entry.readmeSourced).toBeFalsy()
+  })
+  it('a scorecard with no readmeSourced at all produces an IndexEntry with it absent', () => {
+    const entry = toEntry('a/b', baseCard)
+    expect(entry.readmeSourced).toBeUndefined()
   })
 })

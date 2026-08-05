@@ -162,6 +162,10 @@ export function score(
     insufficientData,
     integrityHits: signals.integrityHits,
     integrityScanned: signals.integrityScanned,
+    // W6 review remediation item M2: structured passthrough, undefined only
+    // when extraction never ran at all (mirrors integrityHits' own
+    // absence-vs-value discipline above).
+    ...(signals.readmeSourced !== undefined ? { readmeSourced: signals.readmeSourced } : {}),
     ...(resolved ? { resolved } : {}),
     ...(notServer ? { notServer: true, notServerReason: signals.notServerReason } : {}),
     ...(unresolved ? { unresolved: true } : {}),

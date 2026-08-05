@@ -62,6 +62,24 @@ describe('renderTerminal', () => {
   })
 })
 
+// W6 review remediation item M2 (.superpowers/sdd/w6-review-findings.md): a
+// README-sourced tool surface is a maintainer's CLAIM, not verified
+// extraction — surfaced explicitly in the terminal report (in addition to
+// the existing 'reliability/readme-sourced-tools' info finding) so a human
+// reading the CLI output can't miss it.
+describe('renderTerminal — readmeSourced (M2)', () => {
+  it('prints a distinct line when readmeSourced is true', () => {
+    const out = renderTerminal({ ...card, readmeSourced: true }, { color: false })
+    expect(out).toMatch(/README catalog.*not verified against source/i)
+  })
+  it('omits the line when readmeSourced is false or absent', () => {
+    const falseOut = renderTerminal({ ...card, readmeSourced: false }, { color: false })
+    const absentOut = renderTerminal(card, { color: false })
+    expect(falseOut).not.toMatch(/README catalog.*not verified against source/i)
+    expect(absentOut).not.toMatch(/README catalog.*not verified against source/i)
+  })
+})
+
 describe('renderJson', () => {
   it('round-trips the scorecard', () => {
     expect(JSON.parse(renderJson(card))).toEqual(card)

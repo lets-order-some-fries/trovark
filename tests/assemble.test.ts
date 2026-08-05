@@ -83,6 +83,10 @@ describe('assemble', () => {
     expect(s.hasLockfile).toBe(true)
     expect(s.specEra).toBe('modern')
     expect(s.schemaExtracted).toBe(true)
+    // W6 review remediation item M2: a code-extracted tool surface carries
+    // readmeSourced === false (not merely absent) — extraction genuinely ran
+    // via a non-README rung.
+    expect(s.readmeSourced).toBe(false)
     expect(s.toolCount).toBe(1)
     expect(s.toolSurfaceRisk).toBe('none')
     expect(s.secretsFound).toBe(0)

@@ -238,13 +238,24 @@ describe('assemble — dynamic tool surface end-to-end (W6 Part B)', () => {
     })
   }
 
-  it('an MCPJungle-shaped repo is classified dynamic: notServer/notServerReason set, toolSurfaceRisk floored at high, tool count/token estimate absent', async () => {
+  it('W6 review remediation I5: an MCPJungle-shaped repo is classified dynamic: notServer/notServerReason set, toolSurfaceRisk left UNDEFINED (never a fabricated pin), tool count/token estimate absent', async () => {
     const s = await assemble({ ref: 'mcpjungle', repo: { owner: 'duaraghav8', name: 'MCPJungle' } }, mcpJungleShapedHttp(), NOW)
     expect(s.notServer).toBe(true)
     expect(s.notServerReason).toBe('dynamic')
     expect(s.notServerNote).toContain('registered at runtime')
-    expect(s.toolSurfaceRisk).toBe('high')
+    // I5: the security dimension's primary signal is genuinely unreadable
+    // for a dynamic server — it must stay undefined, never a fabricated
+    // 'high' verdict.
+    expect(s.toolSurfaceRisk).toBeUndefined()
     expect(s.toolCount).toBeUndefined()
+    // I5: an explicit evidence-bearing finding replaces the old pin — a fact
+    // ("the surface is unassessed"), not a scored verdict.
+    const finding = s.findings.find(f => f.id === 'security/dynamic-tool-surface')
+    expect(finding).toBeDefined()
+    expect(finding?.dimension).toBe('security')
+    expect(finding?.message).not.toMatch(/dangerous|risky|suspicious/i)
+    expect(finding?.evidence).toContain('internal/service/mcp/proxy.go')
+    expect(finding?.evidence).toContain('internal/service/mcp/tool.go')
   })
 
   it('ORDERING: a proxy README (included_tools/excluded_tools shape) must NOT suppress the dynamic outcome — dynamic wins over README', async () => {
@@ -422,7 +433,9 @@ describe('score() — dynamic tool surface (W6 Part B)', () => {
     s.notServer = true
     s.notServerReason = 'dynamic'
     s.notServerNote = 'Tools are registered at runtime from upstream servers; no static list exists. Health/reliability signals shown; no trust grade issued.'
-    s.toolSurfaceRisk = 'high'
+    // I5 (W6 review remediation): real dynamic servers never carry a
+    // toolSurfaceRisk value at all — left unset here, matching what
+    // assemble.ts now actually produces (no fabricated pin).
     const card = score('duaraghav8/MCPJungle', s, NOW.toISOString())
     expect(card.overall).toBeNull()
     expect(card.grade).toBeNull()
@@ -431,17 +444,26 @@ describe('score() — dynamic tool surface (W6 Part B)', () => {
     expect(card.insufficientData).toBe(false)
   })
 
-  it('dimensions are still populated (health/reliability/security/cost all present) for a dynamic card', () => {
+  // I5 (W6 review remediation — .superpowers/sdd/w6-review-findings.md):
+  // dimensions are still populated for a dynamic card, but security must
+  // reflect the genuinely reduced coverage (toolSurfaceRisk undefined)
+  // rather than a fabricated 'high' pin. The EXISTING confidence()
+  // machinery in score.ts is what's reused here — an unavailable primary
+  // signal caps confidence at 'medium' (2 of 3 security signals available:
+  // no-secrets + dependency-cves), it can never reach 'high'.
+  it('dimensions are still populated (health/reliability/security/cost all present) for a dynamic card, and security never reports high confidence', () => {
     const s = baseSignals()
     s.notServer = true
     s.notServerReason = 'dynamic'
-    s.toolSurfaceRisk = 'high'
     const card = score('duaraghav8/MCPJungle', s, NOW.toISOString())
     expect(card.dimensions.map(d => d.id).sort()).toEqual(['cost', 'health', 'reliability', 'security'])
     const security = card.dimensions.find(d => d.id === 'security')!
-    // The floored 'high' toolSurfaceRisk is what keeps security's primary
-    // signal available (not renormalized away onto no-secrets/dependency-cves).
+    // no-secrets + dependency-cves are still available even with the
+    // tool-surface signal undefined — the dimension is not fully dropped.
     expect(security.available).toBeGreaterThan(0)
+    // THE CORE ASSERTION: with the primary signal missing, confidence can
+    // never reach 'high' — reused coverage machinery, not a parallel check.
+    expect(security.confidence).not.toBe('high')
   })
 
   it('the note text explains runtime registration, not the generic "Library / not an MCP server" wording', () => {
@@ -449,7 +471,6 @@ describe('score() — dynamic tool surface (W6 Part B)', () => {
     s.notServer = true
     s.notServerReason = 'dynamic'
     s.notServerNote = 'Tools are registered at runtime from upstream servers; no static list exists. Health/reliability signals shown; no trust grade issued.'
-    s.toolSurfaceRisk = 'high'
     const card = score('duaraghav8/MCPJungle', s, NOW.toISOString())
     expect(card.notes.some(n => n.includes('registered at runtime'))).toBe(true)
     expect(card.notes.some(n => n.startsWith('Library / not an MCP server'))).toBe(false)

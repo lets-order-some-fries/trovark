@@ -47,6 +47,13 @@ export function renderTerminal(card: Scorecard, opts: { color?: boolean } = {}):
     const overall = card.overall ?? 0
     lines.push(paint(colorFor(overall), `Trust Score: ${overall}/100 (${card.grade ?? '?'})`, c) + `   rubric v${card.rubricVersion}`)
   }
+  // W6 review remediation item M2: a README-sourced tool surface is a
+  // maintainer's CLAIM, not verified extraction — surfaced explicitly here
+  // (in addition to the existing 'reliability/readme-sourced-tools' info
+  // finding below) so a human reading the report can't miss it.
+  if (card.readmeSourced) {
+    lines.push(paint(33, 'Tool surface read from README catalog — not verified against source', c))
+  }
   lines.push('')
   for (const d of card.dimensions) {
     lines.push(
