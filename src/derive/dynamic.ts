@@ -24,6 +24,7 @@
 // real static surface. Only MCPJungle scores A (and, separately, would also
 // score B).
 import type { RepoFile } from '../collectors/github.js'
+import { isNonServerPath } from './schema.js'
 
 // Signal A — structural, REQUIRED unless B&&C. A registration call whose
 // FIRST argument is a bare identifier (not a string/template literal — a
@@ -34,9 +35,39 @@ import type { RepoFile } from '../collectors/github.js'
 const DYN_REGISTER_RE = /\b(?:AddTool|AddTools|registerTool|add_tool)\(\s*(?!["'`])[A-Za-z_$][\w$.]*\s*[,)]/
 const DYN_PERSIST_RE = /json\.Unmarshal|gorm\.io|\bdb\.(?:Find|First|Where)\(|\.Model\(|prisma\.|SELECT\s+.*\s+FROM/i
 
+// W6 review remediation item 2 (C2 — CRITICAL): FastMCP's documented
+// `mcp.add_tool(my_func)` (bare function reference; the tool name comes from
+// the function) is a perfectly normal STATIC server — and it is exactly the
+// shape that defeats extractSchema, so the "0 static tools" gate does not
+// de-correlate the two signals from each other. Without the checks below, a
+// single ordinary source file (`server.py`, registering via `add_tool` and
+// also running a `SELECT ... FROM` query) satisfied BOTH halves of Signal A
+// and minted a false public "no static list exists" verdict about a real,
+// statically-registered vendor.
+//
+// Fix: the persistence/deserialize marker must now come from a REAL,
+// non-test/example/doc SOURCE file — `isNonServerPath` is schema.ts's own
+// notion of "not part of the shipped server" (imported, never copied, so the
+// two can never drift) — with a genuine code extension. That alone still
+// isn't enough: a single normal file (FastMCP's server.py) must not be able
+// to supply both halves of Signal A by itself. Correlation is strengthened
+// so EITHER the registration call and the persistence marker come from
+// DIFFERENT files in the same directory (MCPJungle: proxy.go + tool.go), OR
+// the persistence marker sits in a file whose own name/shape already reads
+// as a tool registry/store (e.g. a lone `toolstore.go` combining both) — in
+// which case the file is corroborating evidence by construction, even alone.
+const CODE_EXT_RE = /\.(ts|js|mjs|py|go|rs|java|cs|kt)$/i
+const DYN_STORE_FILE_RE = /(^|\/)[\w.-]*(?:tool|tools|registry|store)[\w.-]*\.\w+$/i
+
 // Signal B — weak, NEVER sufficient alone (see the false-positive list
 // above). Repo description/topics reading as a gateway/registry/proxy shape.
-const DYN_META_RE = /(gateway|registry|aggregat|proxy|hub|router|multiplex|federat)/i
+// W6 review remediation item M1 (MINOR): word-boundaries added — bare `hub`
+// used to match inside "GitHub", silently widening B far past the measured
+// 10/77 population that justified the never-B-alone rule below. `aggregat`/
+// `federat` keep matching as prefixes (aggregator/aggregated/aggregation,
+// federate/federated/federation, ...) via `\w*` so real hits are unaffected;
+// only the boundary-less substring matches (GitHub, etc.) are excluded.
+const DYN_META_RE = /\b(?:gateway|registry|proxy|hub|router|multiplex|aggregat\w*|federat\w*)\b/i
 
 // Signal C — structural corroboration for B. Both a migrations directory AND
 // a models/*tool*-shaped source file must be present (the AND is deliberate
@@ -76,9 +107,23 @@ const NOTE = 'Tools are registered at runtime from upstream servers; no static l
  * static tool extractor has already returned zero tools for this repo.
  */
 export function detectDynamic(ctx: DynamicContext): DynamicResult | null {
-  const registerDirs = new Set(ctx.files.filter(f => DYN_REGISTER_RE.test(f.content)).map(f => dirOf(f.path)))
-  const persistDirs = new Set(ctx.files.filter(f => DYN_PERSIST_RE.test(f.content)).map(f => dirOf(f.path)))
-  const signalA = [...registerDirs].some(dir => persistDirs.has(dir))
+  const registerFiles = ctx.files.filter(f => DYN_REGISTER_RE.test(f.content))
+  // C2: the persistence half must come from a real, non-test/example/doc
+  // SOURCE file — a test fixture or example snippet can prove a project
+  // TALKS ABOUT persistence, never that the shipped server itself is dynamic.
+  const persistFiles = ctx.files.filter(
+    f => DYN_PERSIST_RE.test(f.content) && CODE_EXT_RE.test(f.path) && !isNonServerPath(f.path),
+  )
+  // C2: a lone "normal" file supplying both halves (FastMCP's documented
+  // `mcp.add_tool(my_func)` next to a `SELECT ... FROM` in the same
+  // server.py) is not enough — require the two halves to come from
+  // DIFFERENT files in the same directory, unless the persistence marker's
+  // own file already reads as a tool registry/store (corroborating by
+  // construction, even alone).
+  const signalA = registerFiles.some(r => {
+    const dir = dirOf(r.path)
+    return persistFiles.some(p => dirOf(p.path) === dir && (p.path !== r.path || DYN_STORE_FILE_RE.test(p.path)))
+  })
   if (signalA) return { dynamic: true, note: NOTE }
 
   const metaText = `${ctx.description ?? ''} ${(ctx.topics ?? []).join(' ')}`

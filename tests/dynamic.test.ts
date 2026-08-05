@@ -59,6 +59,71 @@ describe('detectDynamic (W6 Part B): signal A — same-directory bare-ident regi
   })
 })
 
+// ---------------------------------------------------------------------------
+// W6 review remediation item 2 (C2 — CRITICAL): Signal A must not fire on
+// legal STATIC registration idioms. FastMCP's documented `mcp.add_tool(my_func)`
+// (bare function reference; the tool name comes from the function) is a
+// normal STATIC server — and it is exactly the shape that defeats
+// extractSchema, so the "0 static tools" gate does not de-correlate it from
+// Signal A. A single normal source file touching a database must not be
+// enough to mint a false "dynamic" verdict.
+// ---------------------------------------------------------------------------
+
+describe('detectDynamic (W6 review C2): Signal A requires real, non-test cross-file (or store-shaped) evidence', () => {
+  it('FastMCP-shaped: mcp.add_tool(my_func) + SELECT * FROM in the SAME normal file → NOT dynamic', () => {
+    const files = [{
+      path: 'server.py',
+      content: `from fastmcp import FastMCP\nmcp = FastMCP()\n\ndef my_func():\n    return db.execute("SELECT * FROM items")\n\nmcp.add_tool(my_func)\n`,
+    }]
+    expect(detectDynamic({ files, treePaths: files.map(f => f.path) })).toBeNull()
+  })
+
+  it('same shape, but the SQL only appears in tests/test_server.py → NOT dynamic (test files cannot supply evidence)', () => {
+    const files = [
+      { path: 'server.py', content: `mcp.add_tool(my_func)` },
+      { path: 'tests/test_server.py', content: `SELECT * FROM items` },
+    ]
+    expect(detectDynamic({ files, treePaths: files.map(f => f.path) })).toBeNull()
+  })
+
+  it('SAME-DIRECTORY Go idiom: pkg/server_test.go supplying the persistence half next to pkg/server.go → NOT dynamic (directory-scoping alone would NOT catch this — only the file-level isNonServerPath check does)', () => {
+    const files = [
+      { path: 'pkg/server.go', content: `AddTool(tool, handler)` },
+      { path: 'pkg/server_test.go', content: `db.Find(&tools)` },
+    ]
+    expect(detectDynamic({ files, treePaths: files.map(f => f.path) })).toBeNull()
+  })
+
+  it('same shape, but the SQL only appears in examples/demo.py or docs/guide.py → NOT dynamic', () => {
+    for (const persistPath of ['examples/demo.py', 'docs/guide.py']) {
+      const files = [
+        { path: 'server.py', content: `mcp.add_tool(my_func)` },
+        { path: persistPath, content: `SELECT * FROM items` },
+      ]
+      expect(detectDynamic({ files, treePaths: files.map(f => f.path) })).toBeNull()
+    }
+  })
+
+  it('the MCPJungle shape MUST STILL FIRE: bare-ident AddTool in proxy.go + db.Find in tool.go, same dir → dynamic', () => {
+    const files = [
+      { path: 'internal/service/mcp/proxy.go', content: `func (m *Server) register() {\n\tm.AddTool(tool, m.MCPProxyToolCallHandler)\n}` },
+      { path: 'internal/service/mcp/tool.go', content: `func (m *Server) loadTools() {\n\tvar tools []Tool\n\tm.db.Find(&tools)\n}` },
+    ]
+    const result = detectDynamic({ files, treePaths: files.map(f => f.path) })
+    expect(result).not.toBeNull()
+    expect(result?.dynamic).toBe(true)
+  })
+
+  it('a single store-shaped file (e.g. toolstore.go) supplying both halves alone still fires — the file itself IS the registry', () => {
+    const files = [{
+      path: 'internal/service/mcp/toolstore.go',
+      content: `func (s *Store) register() {\n\tAddTool(tool, handler)\n}\nfunc (s *Store) load() {\n\tvar tools []Tool\n\ts.db.Find(&tools)\n}`,
+    }]
+    const result = detectDynamic({ files, treePaths: files.map(f => f.path) })
+    expect(result).not.toBeNull()
+  })
+})
+
 describe('detectDynamic — signal B (weak) must never fire alone', () => {
   it('GUARD: description reads as a "gateway" with no structural corroboration → NOT dynamic', () => {
     const files = [{ path: 'src/index.ts', content: `export const tools = [{name:'a'}]` }]
@@ -103,6 +168,18 @@ describe('detectDynamic — signal B (weak) must never fire alone', () => {
     }]
     const result = detectDynamic({
       files, treePaths: files.map(f => f.path), description: 'A lightweight MCP aggregator/router', topics: ['aggregator'],
+    })
+    expect(result).toBeNull()
+  })
+
+  // W6 review remediation item M1: DYN_META_RE had no word boundaries, so
+  // "hub" matched inside "GitHub". Word boundaries must be added WITHOUT
+  // breaking the never-B-alone rule above (still gated behind signal C).
+  it('M1: "MCP server for GitHub repositories" must NOT satisfy signal B (word-boundary — "hub" inside "GitHub")', () => {
+    const files = [{ path: 'src/index.ts', content: 'noop' }]
+    const treePaths = ['db/migrations/0001_init.sql', 'src/models/tool.go', 'src/index.ts']
+    const result = detectDynamic({
+      files, treePaths, description: 'MCP server for GitHub repositories', topics: [],
     })
     expect(result).toBeNull()
   })
@@ -268,6 +345,61 @@ server.registerTool(myCustomTool)
     // ('' root) directory, satisfying Signal A from the README alone.
     expect(s.notServer).toBeUndefined()
     expect(s.notServerReason).not.toBe('dynamic')
+  })
+})
+
+// ---------------------------------------------------------------------------
+// W6 review remediation item I6 (IMPORTANT): `dynamic` must never contradict
+// the repo's own tree. A figwright-shaped repo (many one-tool-per-file
+// modules; the sampler only reaches a subset) that trips Signal A must come
+// back insufficientData, not a false "no static list exists" — the scan
+// itself knows unsampled tool-bearing files exist.
+// ---------------------------------------------------------------------------
+
+describe('assemble — surfacePartial gates dynamic (W6 review I6)', () => {
+  it('surfacePartial (unsampled tool-fanout files known to exist) + otherwise-firing Signal A → NOT dynamic', async () => {
+    const FANOUT_COUNT = 30
+    const routes: Record<string, unknown> = {
+      'https://api.github.com/repos/acme/bigfanout/commits?since': [],
+      'https://api.github.com/repos/acme/bigfanout/releases/latest': {},
+      'https://api.github.com/repos/acme/bigfanout/git/trees/main?recursive=1': {
+        tree: [
+          { path: 'go.mod', type: 'blob', size: 100 },
+          // Both entrypoint-bucket-guaranteed (ENTRYPOINT_RE / BARE_TOOL_FILE_RE)
+          // so they are fetched regardless of how the 30 fanout files below
+          // rank — same directory, different files, real Signal A evidence.
+          { path: 'internal/service/mcp/server.go', type: 'blob', size: 200 },
+          { path: 'internal/service/mcp/tool.go', type: 'blob', size: 200 },
+          // 30 tool-fanout-shaped files (src/tools?/) — far more than the
+          // ~21 rankedSource slots left under FILE_CAP=24, so some are
+          // provably never sampled: this is what makes surfacePartial true.
+          ...Array.from({ length: FANOUT_COUNT }, (_, i) => ({ path: `src/tools/tool${i}.go`, type: 'blob', size: 100 })),
+        ],
+      },
+      'https://api.github.com/repos/acme/bigfanout': {
+        stargazers_count: 50, archived: false, pushed_at: iso(3), default_branch: 'main',
+        description: 'A self-hosted tool proxy',
+      },
+    }
+    const http = makeRoutedHttp(routes, (url) => {
+      if (url.endsWith('go.mod')) return 'module bigfanout\n\nrequire github.com/mark3labs/mcp-go v0.1.0'
+      if (url.endsWith('server.go')) return `package mcp\n\nfunc (m *Server) register() {\n\tm.AddTool(tool, m.MCPProxyToolCallHandler)\n}`
+      if (url.endsWith('tool.go')) return `package mcp\n\nfunc (m *Server) loadTools() {\n\tvar tools []Tool\n\tm.db.Find(&tools)\n}`
+      if (/\/src\/tools\/tool\d+\.go$/.test(url)) return 'package tools\n'
+      throw new Error(`HTTP 404 for ${url}`)
+    })
+    const s = await assemble({ ref: 'bigfanout', repo: { owner: 'acme', name: 'bigfanout' } }, http, NOW)
+    // Pre-fix: Signal A fires from server.go/tool.go exactly like MCPJungle,
+    // publishing a false "no static list exists" while the scan's own tree
+    // shows 30 tool-fanout files with only a partial sample fetched.
+    expect(s.notServer).toBeUndefined()
+    expect(s.notServerReason).not.toBe('dynamic')
+    // toolCount/schemaTokenEstimate already decline to answer under
+    // surfacePartial (pre-existing W5 behavior) — the score-level assertion
+    // below is the one this fix is actually responsible for: no confident
+    // grade gets issued off a security signal the scan knows is incomplete.
+    const card = score('acme/bigfanout', s, NOW.toISOString())
+    expect(card.notServer).toBeUndefined()
   })
 })
 

@@ -94,7 +94,18 @@ export async function assemble(
           // dynamic-surface check runs BEFORE the README rung, and ONLY once
           // classifyLibrary declined (a library/SDK is never "dynamic" — it
           // has no tool surface by design, not an unknowable one).
-          const dyn = detectDynamic({
+          // W6 review remediation item I6 (IMPORTANT): never emit `dynamic`
+          // when staticSchema.surfacePartial is true — that already folds in
+          // toolFanoutCount vs. what was actually sampled (see
+          // detectSurfacePartial in schema.ts), so a figwright-shaped repo
+          // (100+ one-tool-per-file modules, sampler reaches ~20) that trips
+          // Signal A would otherwise be published as "no static list exists"
+          // while the same scan's own tree knows unsampled tool-bearing
+          // files exist. That case is honestly insufficientData (via
+          // securityPrimaryAbsent in score.ts, since toolSurfaceRisk stays
+          // undefined below), not dynamic — skip straight to the README rung
+          // instead of asking a detector that can't see the whole tree.
+          const dyn = staticSchema.surfacePartial ? null : detectDynamic({
             files: snap.files, treePaths: snap.treePaths, description: snap.description, topics: snap.topics,
           })
           if (dyn) {
