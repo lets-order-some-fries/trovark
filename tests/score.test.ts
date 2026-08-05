@@ -133,6 +133,152 @@ describe('score()', () => {
   })
 })
 
+// W6 (fabricated-dimension-value fix): "absence lowers confidence, never
+// fakes a value" applied to the DIMENSION scores themselves. The
+// coverage gate already withheld the GRADE, but the dimension numbers were
+// published regardless — and notServer/dynamic/unresolved bypass the gate
+// entirely, so a dynamic gateway whose tool surface is explicitly unreadable
+// was publishing security 100/100 (from the lone low-weight no-secrets
+// signal, its primary absent) and cost 0/100 (from zero signals). Zero is
+// not "unknown" — it is the worst possible score, published as a
+// measurement.
+describe('score() — a dimension with no measurement reports null, never a number', () => {
+  const mixed = (): Signals => ({
+    daysSinceLastCommit: 45, daysSinceLastRelease: 200, commitsLast90Days: 12,
+    busFactor: 3, medianIssueResponseDays: 5, stars: 300, weeklyDownloads: 2000,
+    archived: false, specEra: 'modern', hasCI: true, hasTests: false, hasLockfile: true,
+    schemaExtracted: true, toolSurfaceRisk: 'medium', secretsFound: 0, cveWorst: 'low',
+    schemaTokenEstimate: 12000, toolCount: 30, findings: [], errors: [],
+  })
+
+  // Rule A: available === 0 → there is no measurement, so say so. 0 is the
+  // WORST possible score, not "unknown".
+  it('Rule A: a dimension with available === 0 reports score null — explicitly not 0', () => {
+    const s = healthy()
+    s.schemaTokenEstimate = undefined; s.toolCount = undefined  // cost: 0 of 2
+    const card = score('x', s, 'T')
+    const cost = card.dimensions.find(d => d.id === 'cost')!
+    expect(cost.available).toBe(0)
+    expect(cost.score).toBeNull()
+    expect(cost.score).not.toBe(0)
+  })
+  it('Rule A: the existing "No X signals could be collected" note still appears', () => {
+    const s = healthy()
+    s.schemaTokenEstimate = undefined; s.toolCount = undefined
+    const card = score('x', s, 'T')
+    expect(card.notes.join(' ')).toContain('No cost signals could be collected')
+  })
+  it('Rule A: a null dimension is excluded from overall, never averaged in as 0', () => {
+    const s = healthy()
+    s.schemaTokenEstimate = undefined; s.toolCount = undefined
+    const card = score('x', s, 'T')
+    expect(card.overall).toBe(100)  // health/reliability/security perfect; cost not counted as 0
+  })
+
+  // Rule B: the security PRIMARY (tool-surface risk, weight 3 of 6) is what
+  // the dimension is actually about. Without it, security renormalizes onto
+  // the low-weight no-secrets candidate signal and reads as a clean bill.
+  // This is the v1.2 bug (unreadable repo → confident A+) reappearing at
+  // dimension level.
+  it('Rule B: toolSurfaceRisk undefined → security score is null, not renormalized onto the remaining low-weight signals', () => {
+    const s = healthy()
+    s.toolSurfaceRisk = undefined
+    const card = score('x', s, 'T')
+    const sec = card.dimensions.find(d => d.id === 'security')!
+    expect(sec.available).toBe(2)     // no-secrets + dependency-cves still collected
+    expect(sec.score).toBeNull()      // ...but the dimension is not measured
+    expect(sec.score).not.toBe(100)
+  })
+  it('Rule B: confidence is untouched — absence lowers confidence AND withholds the number', () => {
+    const s = healthy()
+    s.toolSurfaceRisk = undefined
+    const card = score('x', s, 'T')
+    const sec = card.dimensions.find(d => d.id === 'security')!
+    expect(sec.confidence).toBe('medium')   // 2/3 signals — unchanged by the withhold
+    expect(sec.score).toBeNull()
+  })
+  it('Rule B: the existing "Low confidence in security" note still appears when coverage is low (1/3)', () => {
+    const s = healthy()
+    s.toolSurfaceRisk = undefined; s.cveWorst = undefined  // only no-secrets survives → 1/3
+    const card = score('x', s, 'T')
+    const sec = card.dimensions.find(d => d.id === 'security')!
+    expect(sec.confidence).toBe('low')
+    expect(sec.score).toBeNull()
+    expect(card.notes.join(' ')).toMatch(/Low confidence in security: only 1\/3 signals available/)
+  })
+  it('Rule B: a readable tool surface scores security normally — no behaviour change', () => {
+    for (const risk of ['none', 'low', 'medium', 'high'] as const) {
+      const s = healthy()
+      s.toolSurfaceRisk = risk
+      const sec = score('x', s, 'T').dimensions.find(d => d.id === 'security')!
+      expect(typeof sec.score).toBe('number')
+    }
+    const clean = healthy()
+    expect(score('x', clean, 'T').dimensions.find(d => d.id === 'security')!.score).toBe(100)
+  })
+
+  // The live defect, reproduced exactly (duaraghav8/MCPJungle, 2026-08-06):
+  // health 92/7-of-7, reliability 70/5-of-5, security 100 from 1 of 3,
+  // cost 0 from 0 of 2.
+  it('a dynamic gateway: security null + cost null, health/reliability untouched and numeric, overall/grade still null', () => {
+    const s: Signals = {
+      daysSinceLastCommit: 3, daysSinceLastRelease: 20, commitsLast90Days: 40,
+      busFactor: 6, medianIssueResponseDays: 1, stars: 5000, weeklyDownloads: 50000,
+      archived: false, specEra: 'modern', hasCI: true, hasTests: true, hasLockfile: true,
+      schemaExtracted: true, secretsFound: 0,
+      notServer: true, notServerReason: 'dynamic', findings: [], errors: [],
+    }
+    const card = score('duaraghav8/MCPJungle', s, 'T')
+    const dim = (id: string) => card.dimensions.find(d => d.id === id)!
+    expect(dim('security').score).toBeNull()
+    expect(dim('cost').score).toBeNull()
+    expect(dim('health').score).toBe(100)
+    expect(dim('reliability').score).toBe(100)
+    expect(card.overall).toBeNull()
+    expect(card.grade).toBeNull()
+    // all four dimensions are still present, with their coverage denominators
+    expect(dim('security').available).toBe(1)
+    expect(dim('cost').available).toBe(0)
+  })
+
+  // A graded server by definition had a readable tool surface, so Rule B can
+  // never fire on one, and Rule A only ever drops a dimension that was
+  // already excluded from `overall`. Pinned numbers so a future regression
+  // is caught by value, not just by shape.
+  it('regression: a fully-graded server is unchanged — all four dimensions numeric, exact pinned values', () => {
+    const card = score('x', mixed(), 'T')
+    const dim = (id: string) => card.dimensions.find(d => d.id === id)!
+    expect(dim('health').score).toBe(77)
+    expect(dim('reliability').score).toBe(78)
+    expect(dim('security').score).toBe(62)
+    expect(dim('cost').score).toBe(47)
+    expect(card.overall).toBe(69)
+    expect(card.grade).toBe('C+')
+    expect(card.insufficientData).toBe(false)
+    for (const d of card.dimensions) expect(typeof d.score).toBe('number')
+  })
+  it('regression: the healthy fixture still scores a perfect 100/A+ with four numeric dimensions', () => {
+    const card = score('x', healthy(), 'T')
+    expect(card.overall).toBe(100)
+    expect(card.grade).toBe('A+')
+    for (const d of card.dimensions) expect(d.score).toBe(100)
+  })
+
+  // Absence withholds; positive EVIDENCE still speaks. A decode-confirmed
+  // hidden payload is a measurement (deliberate concealment), so the D2
+  // disqualifying override must still force security to 0 even when the
+  // primary signal is missing — otherwise the worst servers hide behind the
+  // withhold.
+  it('the hidden-payload override still forces security 0 when the primary is absent — evidence beats absence', () => {
+    const s = healthy()
+    s.toolSurfaceRisk = undefined
+    s.hiddenPayloadDecoded = 2
+    const card = score('x', s, 'T')
+    expect(card.dimensions.find(d => d.id === 'security')!.score).toBe(0)
+    expect(card.notes.join(' ')).toMatch(/decode-confirmed hidden payload/i)
+  })
+})
+
 describe('score() — notServer (V2): a distinct terminal state, not insufficientData', () => {
   it('a notServer scorecard is NOT insufficientData, even though its coverage would otherwise withhold', () => {
     const s = empty() // sparse signals — would normally trip the <4-signals / dimensions-dropped gate

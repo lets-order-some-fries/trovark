@@ -144,3 +144,55 @@ describe('toEntry — readmeSourced passthrough (M2)', () => {
     expect(entry.readmeSourced).toBeUndefined()
   })
 })
+
+// W6 (fabricated-dimension-value fix): a dimension with no measurement
+// carries score: null all the way into index/results.json. It must arrive
+// as null — never coerced to 0 (the worst possible score) or dropped — and
+// no aggregate may consume it as a number.
+describe('toEntry / summarize — null dimension scores must never be coerced', () => {
+  const dynamicCard: Scorecard = {
+    ref: 'duaraghav8/MCPJungle', rubricVersion: '1.5.0', overall: null, grade: null,
+    dimensions: [
+      { id: 'health', score: 92, confidence: 'high', available: 7, total: 7, findings: [] },
+      { id: 'reliability', score: 70, confidence: 'high', available: 5, total: 5, findings: [] },
+      { id: 'security', score: null, confidence: 'low', available: 1, total: 3, findings: [] },
+      { id: 'cost', score: null, confidence: 'low', available: 0, total: 2, findings: [] },
+    ],
+    notes: [], generatedAt: '2026-08-06T00:00:00Z', insufficientData: false,
+    notServer: true, notServerReason: 'dynamic',
+  }
+  it('toEntry threads null through to IndexEntry.dims unchanged — not 0, not undefined', () => {
+    const entry = toEntry('duaraghav8/MCPJungle', dynamicCard)
+    expect(entry.dims!.security.score).toBeNull()
+    expect(entry.dims!.cost.score).toBeNull()
+    expect(entry.dims!.health.score).toBe(92)
+    expect(entry.dims!.security.confidence).toBe('low')
+  })
+  it('summarize tolerates null dimension scores and produces no NaN in any numeric stat', () => {
+    const entries: IndexEntry[] = [
+      toEntry('duaraghav8/MCPJungle', dynamicCard, 10),
+      e({ ref: 'a/real', overall: 90, grade: 'A', dims: { health: { score: 90, confidence: 'high' }, reliability: { score: 90, confidence: 'high' }, security: { score: 90, confidence: 'high' }, cost: { score: 90, confidence: 'high' } } }),
+    ]
+    const s = summarize(entries)
+    for (const [k, v] of Object.entries(s)) {
+      if (typeof v === 'number') expect(Number.isFinite(v), `${k} is not finite`).toBe(true)
+    }
+    // the dynamic entry is excluded from the graded aggregates entirely — a
+    // null dimension can neither be averaged in nor counted as 0.
+    expect(s.avgOverall).toBe(90)
+    expect(s.dynamic).toBe(1)
+    expect(s.gradeDist).toEqual({ A: 1 })
+  })
+  it('an all-null-dimension entry cannot drag any average toward zero', () => {
+    const allNull: Scorecard = {
+      ...dynamicCard,
+      dimensions: dynamicCard.dimensions.map(d => ({ ...d, score: null, available: 0 })),
+    }
+    const s = summarize([
+      toEntry('a/gone', allNull),
+      e({ ref: 'a/real', overall: 80, grade: 'B' }),
+    ])
+    expect(s.avgOverall).toBe(80)
+    expect(Number.isFinite(s.avgOverall)).toBe(true)
+  })
+})

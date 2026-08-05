@@ -23,7 +23,14 @@ export interface IndexEntry {
   // grade. See src/collectors/github.ts's RepoNotFoundError.
   unresolved?: boolean
   repoUrl?: string
-  dims?: Record<'health' | 'reliability' | 'security' | 'cost', { score: number; confidence: string }>
+  // W6 (fabricated-dimension-value fix): `score` is null when the dimension
+  // had no measurement (zero collectible signals, or — for security — an
+  // absent primary tool-surface signal). Null must survive into
+  // index/results.json as null: coercing it to 0 would publish the worst
+  // possible score as a measurement. No aggregate in summarize() consumes
+  // dimension scores; if one is ever added it must skip nulls, not default
+  // them. See src/types.ts DimensionScore.
+  dims?: Record<'health' | 'reliability' | 'security' | 'cost', { score: number | null; confidence: string }>
   topFindings?: Array<{ id: string; severity: string }>
   daysSinceLastCommit?: number
   // W6 review remediation item M2: structured passthrough of

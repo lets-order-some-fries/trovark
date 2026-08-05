@@ -26,8 +26,21 @@ function row(e: IndexEntry): string {
     return `<tr class="failed" data-overall="-1" title="repo unavailable — not found on GitHub (renamed or deleted)"><td>${name}</td><td colspan="6" class="muted">repo unavailable — not found on GitHub (renamed or deleted)</td></tr>`
   }
   const d = e.dims
-  const dim = (k: 'health' | 'reliability' | 'security' | 'cost') =>
-    d ? `<td>${d[k].score}<span class="conf">${esc(d[k].confidence[0])}</span></td>` : '<td>—</td>'
+  // W6 (fabricated-dimension-value fix): dims[k].score is null when the
+  // dimension had no measurement. Render it as a muted em dash with a
+  // "not measured" title — never as `0` (the worst possible score, published
+  // as a fact) and never as the literal string "null". This also keeps the
+  // client-side sorter honest: its `parseFloat(cell.textContent) || -1` reads
+  // an em dash as NaN -> -1 ("no value"), whereas a 0 cell would rank the
+  // unmeasured dimension as the worst measured one.
+  const dim = (k: 'health' | 'reliability' | 'security' | 'cost') => {
+    const v = d?.[k]
+    if (!v) return '<td>—</td>'
+    if (v.score === null || v.score === undefined) {
+      return `<td class="muted" title="not measured — no signals could be collected for this dimension">—<span class="conf">${esc(v.confidence[0] ?? '')}</span></td>`
+    }
+    return `<td>${v.score}<span class="conf">${esc(v.confidence[0])}</span></td>`
+  }
   // W6 (coverage-v1.5, Task W6 Part B): rendered distinctly from the generic
   // notServer/"LIB" branch below — this IS a real MCP server, just one whose
   // tool list is built at runtime from upstream servers/a DB and therefore

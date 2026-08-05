@@ -86,6 +86,59 @@ describe('renderJson', () => {
   })
 })
 
+// W6 (fabricated-dimension-value fix): a dimension with no measurement
+// carries score: null. The terminal report must say so honestly rather than
+// printing `null/100`, `0/100`, `NaN`, or an empty bar that reads as a real
+// (and terrible) measurement.
+describe('renderTerminal — a dimension with no measurement (score: null)', () => {
+  const dynamicCard: Scorecard = {
+    ...card, overall: null, grade: null, notServer: true, notServerReason: 'dynamic',
+    dimensions: [
+      { id: 'health', score: 92, confidence: 'high', available: 7, total: 7, findings: [] },
+      { id: 'reliability', score: 70, confidence: 'high', available: 5, total: 5, findings: [] },
+      { id: 'security', score: null, confidence: 'low', available: 1, total: 3, findings: [] },
+      { id: 'cost', score: null, confidence: 'low', available: 0, total: 2, findings: [] },
+    ],
+    notes: ['No cost signals could be collected; cost is excluded from the overall score.'],
+  }
+  const out = renderTerminal(dynamicCard, { color: false })
+
+  it('prints an honest label for the unmeasured dimensions, not a number', () => {
+    expect(out).toMatch(/security\s+not measured/)
+    expect(out).toMatch(/cost\s+not measured/)
+  })
+  it('never renders a null score as 0, null or NaN', () => {
+    expect(out).not.toMatch(/security\s+0\/100/)
+    expect(out).not.toMatch(/cost\s+0\/100/)
+    expect(out).not.toContain('NaN')
+    expect(out).not.toContain('null')
+    expect(out).not.toMatch(/security\s+100\/100/)
+  })
+  it('omits the bar for an unmeasured dimension — an empty bar reads as a measured zero', () => {
+    const securityLine = out.split('\n').find(l => l.includes('security'))!
+    expect(securityLine).not.toContain('░')
+    expect(securityLine).not.toContain('█')
+  })
+  it('still names the dimension and its confidence', () => {
+    expect(out).toMatch(/security\s+not measured\s+low confidence/)
+  })
+  it('measured dimensions on the same card still render their number and bar', () => {
+    expect(out).toMatch(/health\s+92\/100\s+[█░]{10}\s+high confidence/)
+    expect(out).toMatch(/reliability\s+70\/100/)
+  })
+  it('color=true still emits ANSI paint for an unmeasured dimension (no crash on null)', () => {
+    const painted = renderTerminal(dynamicCard)
+    expect(painted).toMatch(/\x1b\[3[0-9]m/)
+    expect(painted).not.toContain('NaN')
+  })
+  it('renderJson round-trips a null dimension score as null, not 0', () => {
+    const round = JSON.parse(renderJson(dynamicCard)) as Scorecard
+    expect(round.dimensions.find(d => d.id === 'security')!.score).toBeNull()
+    expect(round.dimensions.find(d => d.id === 'cost')!.score).toBeNull()
+    expect(round).toEqual(dynamicCard)
+  })
+})
+
 describe('renderTerminal — notServer (V2): rendered distinctly from INSUFFICIENT DATA', () => {
   const notServerCard: Scorecard = {
     ...card, insufficientData: false, notServer: true, notServerReason: 'sdk',

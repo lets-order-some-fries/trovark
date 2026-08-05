@@ -56,10 +56,18 @@ export function renderTerminal(card: Scorecard, opts: { color?: boolean } = {}):
   }
   lines.push('')
   for (const d of card.dimensions) {
-    lines.push(
-      '  ' + paint(colorFor(d.score), `${d.id.padEnd(13)} ${String(d.score).padStart(3)}/100  ${bar(d.score)}`, c)
-      + `  ${d.confidence} confidence`,
-    )
+    // W6 (fabricated-dimension-value fix): a dimension with no measurement
+    // carries score: null (see src/types.ts). Print that honestly — no
+    // number, and NO BAR: an all-empty bar is visually indistinguishable
+    // from a measured 0/100, which is the worst possible score, not
+    // "unknown". Painted with the same amber this file already uses for
+    // withheld outcomes (LIBRARY / DYNAMIC TOOL SURFACE banners above), and
+    // padded to the numeric column width so the confidence column still
+    // lines up.
+    const body = d.score === null
+      ? paint(33, `${d.id.padEnd(13)} ${'not measured'.padEnd(20)}`, c)
+      : paint(colorFor(d.score), `${d.id.padEnd(13)} ${String(d.score).padStart(3)}/100  ${bar(d.score)}`, c)
+    lines.push('  ' + body + `  ${d.confidence} confidence`)
   }
   const findings = card.dimensions.flatMap(d => d.findings)
   if (findings.length > 0) {

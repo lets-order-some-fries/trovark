@@ -125,7 +125,14 @@ export interface Signals {
 
 export interface DimensionScore {
   id: DimensionId
-  score: number         // 0-100
+  // W6 (fabricated-dimension-value fix): null when the dimension has NO
+  // measurement — either zero collectible signals (Rule A) or, for security,
+  // an absent PRIMARY tool-surface signal (Rule B). It is never 0 in those
+  // cases: 0 is the WORST possible score, and publishing it as a measurement
+  // is exactly the fabrication the coverage gate exists to prevent. Consumers
+  // must render/aggregate null as "no measurement", never coerce it to a
+  // number — see report/terminal.ts, index/scan.ts and index/site.ts.
+  score: number | null  // 0-100, or null when not measured
   confidence: Confidence
   available: number     // signals computable
   total: number         // signals defined

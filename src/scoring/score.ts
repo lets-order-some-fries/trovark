@@ -27,6 +27,10 @@ export function score(
   resolved?: Scorecard['resolved'],
 ): Scorecard {
   const ids = Object.keys(DIMENSION_WEIGHTS) as DimensionId[]
+  // Coverage gate input, hoisted above the dimension loop so Rule B below and
+  // the grade-withholding gate further down read the SAME computation — one
+  // definition of "the security primary is missing", not two that can drift.
+  const securityPrimaryAbsent = signals.toolSurfaceRisk === undefined
   const dimensions: DimensionScore[] = ids.map(id => {
     const defs = SIGNALS.filter(d => d.dimension === id)
     let wSum = 0, vSum = 0, available = 0
@@ -37,9 +41,35 @@ export function score(
       wSum += d.weight
       vSum += d.weight * v
     }
+    // W6 (fabricated-dimension-value fix): absence lowers confidence AND
+    // withholds the dimension score — it never fakes a value.
+    //
+    // Rule A: zero collectible signals means there is no measurement. The old
+    // `wSum === 0 ? 0` published 0/100 — the WORST possible score — conjured
+    // from nothing (measured live: a dynamic gateway reported cost 0/100 off
+    // 0 of 2 signals).
+    //
+    // Rule B: security's PRIMARY signal is tool-surface risk (weight 3 of the
+    // dimension's 6). Without it the weighted mean renormalizes onto the
+    // remaining low-weight signals — chiefly the no-secrets candidate — and
+    // reads as a clean bill of health for a server we just said we cannot
+    // analyze (measured live: security 100/100 from 1 of 3 signals on a
+    // gateway whose tool surface is explicitly unreadable). This is the v1.2
+    // bug reappearing at dimension level — see
+    // docs/superpowers/plans/2026-08-01-precision-v1.2.md ("when schema
+    // extraction fails, security renormalizes onto the lone weight-1
+    // no-secrets candidate → security=100, confident A+") — and
+    // docs/superpowers/plans/2026-08-03-coverage-v1.4.md forbids exactly this
+    // for the dynamic path: "Do NOT renormalize security onto the remaining
+    // signals — a gateway with unknown tools is the highest-risk shape in the
+    // corpus, not a neutral one."
+    // The gate below already withholds the GRADE on this condition —
+    // but notServer/dynamic/unresolved bypass that gate entirely, so the
+    // withhold has to live on the dimension itself to cover every path.
+    const unmeasured = available === 0 || (id === 'security' && securityPrimaryAbsent)
     return {
       id,
-      score: wSum === 0 ? 0 : Math.round((vSum / wSum) * 100),
+      score: unmeasured ? null : Math.round((vSum / wSum) * 100),
       confidence: confidence(available, defs.length),
       available,
       total: defs.length,
@@ -69,6 +99,13 @@ export function score(
   // across 56.7M characters, so this cannot fire on benign content.
   // Weights, denominators, and every other dimension are untouched — see
   // src/scoring/rubric.ts, which this override does not modify.
+  //
+  // W6 (fabricated-dimension-value fix): this override deliberately runs
+  // AFTER the Rule A/B withhold above and outranks it. Withholding is for
+  // ABSENCE of evidence; a decode-confirmed payload is positive EVIDENCE of
+  // deliberate concealment. A server that hides a payload AND has an
+  // unreadable tool surface must score 0, not "not measured" — otherwise the
+  // worst servers hide behind the withhold.
   let hiddenPayloadNote: string | undefined
   if (signals.hiddenPayloadDecoded !== undefined && signals.hiddenPayloadDecoded > 0) {
     const sec = dimensions.find(d => d.id === 'security')
@@ -81,7 +118,8 @@ export function score(
   // signal (tool-surface risk) couldn't be determined — without it, security
   // renormalizes onto the low-weight no-secrets candidate signal and can read
   // as a false clean bill (e.g. 100/A+) even for dangerous servers.
-  const securityPrimaryAbsent = signals.toolSurfaceRisk === undefined
+  // W6: `securityPrimaryAbsent` is computed once, above the dimension loop —
+  // the SAME value Rule B uses to withhold the security dimension score.
   const dimensionsFullyDropped = dimensions.filter(d => d.available === 0).length
   // V2: notServer is a DISTINCT terminal state, not insufficientData — a
   // library/SDK/proxy/stub was never going to have a coverage-gate-passing
@@ -132,10 +170,16 @@ export function score(
     }
   }
 
-  const scored = dimensions.filter(d => d.available > 0)
+  // W6: an unmeasured dimension (score null) is EXCLUDED from the weighted
+  // mean, never coerced — `null * weight` is 0 in JS, which would silently
+  // deflate the overall by the missing dimension's full weight. `available >
+  // 0` is kept alongside so the D2 override (which can force a 0 onto a
+  // dimension with no collectible signals) still cannot enter the mean, as
+  // before.
+  const scored = dimensions.filter(d => d.available > 0 && d.score !== null)
   const wTotal = scored.reduce((a, d) => a + DIMENSION_WEIGHTS[d.id], 0)
   const overall = wTotal === 0 ? 0
-    : Math.round(scored.reduce((a, d) => a + d.score * DIMENSION_WEIGHTS[d.id], 0) / wTotal)
+    : Math.round(scored.reduce((a, d) => a + (d.score ?? 0) * DIMENSION_WEIGHTS[d.id], 0) / wTotal)
 
   // I9: a notServer card carries no headline score/grade — there is no tool
   // surface to grade, so a real-looking number (e.g. 100/A+ for

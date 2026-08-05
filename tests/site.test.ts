@@ -139,6 +139,74 @@ describe('renderSite', () => {
     expect(out).toMatch(/acme\/shim[\s\S]{0,120}README<\/span>/)
     expect(out).not.toMatch(/acme\/coded[\s\S]{0,120}README<\/span>/)
   })
+  // W6 (fabricated-dimension-value fix): dims[k].score is null when the
+  // dimension had no measurement. The card must never print that as 0 (the
+  // worst possible score), as the literal string "null", or let it sort as a
+  // numeric 0 in the client-side sorter.
+  it('renders a null dimension score as an honest blank, never as 0 or "null"', () => {
+    const withNulls = {
+      ...results,
+      stats: { ...results.stats, dynamic: 1 },
+      entries: [{
+        ref: 'duaraghav8/MCPJungle', ok: true, notServer: true, notServerReason: 'dynamic',
+        dims: {
+          health: { score: 92, confidence: 'high' },
+          reliability: { score: 70, confidence: 'high' },
+          security: { score: null, confidence: 'low' },
+          cost: { score: null, confidence: 'low' },
+        },
+      }],
+    } as never
+    const out = renderSite(withNulls)
+    expect(out).toContain('MCPJungle')
+    expect(out).not.toContain('>null<')
+    expect(out).not.toContain('null<span')
+    // the measured dimensions are still shown with their real numbers
+    expect(out).toMatch(/<td>92<span class="conf">h<\/span><\/td>/)
+    expect(out).toMatch(/<td>70<span class="conf">h<\/span><\/td>/)
+    // ...the unmeasured ones are not rendered as a numeric 0 cell
+    expect(out).not.toMatch(/<td>0<span class="conf">/)
+    expect(out).toMatch(/not measured/i)
+  })
+  it('a null dimension cell holds no parseable number, so the sorter cannot rank it as 0', () => {
+    const withNulls = {
+      ...results,
+      entries: [{
+        ref: 'a/partial', ok: true, overall: 80, grade: 'B',
+        dims: {
+          health: { score: 80, confidence: 'high' },
+          reliability: { score: 80, confidence: 'high' },
+          security: { score: 80, confidence: 'high' },
+          cost: { score: null, confidence: 'low' },
+        },
+      }],
+    } as never
+    const out = renderSite(withNulls)
+    const cells = out.match(/<td[^>]*>(?:(?!<\/td>).)*<\/td>/g) ?? []
+    const nullCell = cells.find(c => /not measured/i.test(c))!
+    expect(nullCell).toBeDefined()
+    // the sorter does parseFloat(textContent) || -1 — the cell text must not
+    // parse to 0, or an unmeasured dimension would rank as the worst score.
+    const text = nullCell.replace(/<[^>]*>/g, '')
+    expect(Number.parseFloat(text) || -1).toBe(-1)
+  })
+  it('a graded row with a null dimension still renders its grade chip and overall (Rule A does not withhold the grade)', () => {
+    const withNulls = {
+      ...results,
+      entries: [{
+        ref: 'a/partial', ok: true, overall: 80, grade: 'B',
+        dims: {
+          health: { score: 80, confidence: 'high' },
+          reliability: { score: 80, confidence: 'high' },
+          security: { score: 80, confidence: 'high' },
+          cost: { score: null, confidence: 'low' },
+        },
+      }],
+    } as never
+    const out = renderSite(withNulls)
+    expect(out).toMatch(/class="chip" style="background:[^"]*">B</)
+    expect(out).toContain('<td>80</td>')
+  })
   it('rejects non-http(s) repoUrl schemes', () => {
     const evil = {
       ...results,
