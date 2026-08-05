@@ -1174,7 +1174,16 @@ describe('collectGithub', () => {
       return '{}'
     }
     const snap = await collectGithub({ ref: 'acme/foo', repo: { owner: 'acme', name: 'foo' } }, http, NOW)
-    expect(snap.files.map(f => f.path)).toContain('README.md')
+    // W6 review remediation item 1 (.superpowers/sdd/w6-review-findings.md):
+    // the README is still fetched through the SAME 1-slot budget-accounted
+    // bucket as before (selectRepoFiles is unchanged by this fix) — but it
+    // is quarantined onto its own RepoSnapshot.readme field, never appended
+    // to `files`, so the five assemble.ts consumers that receive `files`
+    // (four of which were written for source code, not documentation) can
+    // no longer see it.
+    expect(snap.files.map(f => f.path)).not.toContain('README.md')
+    expect(snap.readme?.path).toBe('README.md')
+    expect(snap.readme?.content).toBe('# foo')
   })
 
   it('W6: a README.rst is also recognized', () => {

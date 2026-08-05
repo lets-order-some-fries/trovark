@@ -1,7 +1,7 @@
 import type { Http } from './util/http.js'
 import type { ServerIdentity } from './resolver.js'
 import type { Signals } from './types.js'
-import { collectGithub, RepoNotFoundError, isRootReadme, type RepoFile } from './collectors/github.js'
+import { collectGithub, RepoNotFoundError, type RepoFile } from './collectors/github.js'
 import { collectNpm } from './collectors/npm.js'
 import { collectPypi } from './collectors/pypi.js'
 import { collectOsv, depsFromManifest, type Dep } from './collectors/osv.js'
@@ -105,7 +105,10 @@ export async function assemble(
           } else {
             // W6 (Task W6 Part A): the README-catalog rung — reachable only
             // once we know this repo is neither a library nor dynamic-shaped.
-            const readmeFile = snap.files.find(f => isRootReadme(f.path))
+            // W6 review remediation item 1: read from snap.readme (the
+            // quarantined field), never snap.files — this is the ONE place
+            // in this whole function that is meant to see the README at all.
+            const readmeFile = snap.readme
             if (readmeFile) schema = extractSchema(snap.files, snap.treePaths, snap.toolFanoutCount, readmeFile)
           }
         }
@@ -166,7 +169,17 @@ export async function assemble(
         // dimension (see the rationale comment there); it stays undefined
         // (not 0) whenever this branch didn't run, so the override provably
         // cannot fire on a server we never scanned.
-        const integrity = scanIntegrity(snap.files, schema.tools)
+        // W6 review remediation item 1: README-derived tool DESCRIPTIONS
+        // already reach this scan via schema.tools (readmeSourced tools
+        // carry name/description/schemaText same as any other tool) — that
+        // path is untouched. Separately, the raw README TEXT is real fetched
+        // content and integrity scanning is offline/deterministic/display-
+        // only (never feeds score.ts), so it is scanned too — passed here
+        // explicitly via snap.readme (never implicitly via snap.files) so
+        // integrityScanned's `files` denominator honestly counts it when
+        // present. See integrity.ts's trap #5 for the up-to-date statement
+        // of what is and isn't fetched/scanned.
+        const integrity = scanIntegrity(snap.files, schema.tools, snap.readme)
         s.findings.push(...integrity.findings)
         s.integrityHits = integrity.hits
         s.integrityScanned = integrity.scanned

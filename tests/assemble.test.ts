@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { assemble } from '../src/assemble.js'
+import { collectGithub } from '../src/collectors/github.js'
 import { HttpError } from '../src/util/http.js'
 import type { Http } from '../src/util/http.js'
 
@@ -346,5 +347,73 @@ describe('assemble — partial-surface honesty (W5)', () => {
     expect(s.toolSurfaceRisk).toBe('none')     // security still grades on the sampled tools
     expect(s.toolCount).toBeUndefined()        // cost declines to publish a count from a partial sample
     expect(s.schemaTokenEstimate).toBeUndefined()
+  })
+})
+
+// ---------------------------------------------------------------------------
+// W6 review remediation item 1 — THE LOAD-BEARING STRUCTURAL TEST.
+//
+// W6 put the root README into snap.files, and assemble.ts handed that same
+// array to five consumers written for source code (extractSchema intended;
+// classifyLibrary, detectDynamic, scanSecrets, scanIntegrity not). The fix
+// is architectural, not a filter at each call site: RepoSnapshot.files goes
+// back to code-only semantics, and the fetched README (when present) is
+// carried on its own RepoSnapshot.readme field instead — so no consumer
+// that only ever receives `files` can see it, by construction, regardless
+// of what any individual consumer does or doesn't filter internally.
+// ---------------------------------------------------------------------------
+
+describe('assemble — README quarantine (W6 review remediation item 1): structural invariant', () => {
+  function readmeCatalogHttp(): Http {
+    const routes: Record<string, unknown> = {
+      'https://api.github.com/repos/acme/shim/commits?since': [],
+      'https://api.github.com/repos/acme/shim/releases/latest': {},
+      'https://api.github.com/repos/acme/shim/git/trees/main?recursive=1': {
+        tree: [
+          // Declares the MCP SDK dependency (so classifyLibrary's "no MCP
+          // anywhere" signal correctly declines) but registers no tools in a
+          // shape any static extractor recognizes ("no parseable code") — a
+          // playwright-mcp-shaped distribution shim.
+          { path: 'package.json', type: 'blob', size: 300 },
+          { path: 'src/index.ts', type: 'blob', size: 200 },
+          { path: 'README.md', type: 'blob', size: 3000 },
+        ],
+      },
+      'https://api.github.com/repos/acme/shim': {
+        stargazers_count: 10, archived: false, pushed_at: iso(3), default_branch: 'main',
+        description: 'A distribution shim',
+      },
+    }
+    return makeRoutedHttp(routes, (url) => {
+      if (url.endsWith('package.json')) return JSON.stringify({ dependencies: { '@modelcontextprotocol/sdk': '^1.0.0' } })
+      if (url.endsWith('src/index.ts')) return `import { connect } from './shim-runtime.js'\nconnect()`
+      if (url.endsWith('README.md')) {
+        return `## Tools
+
+- **do_a**
+  - Description: does a
+
+- **do_b**
+  - Description: does b
+
+- **do_c**
+  - Description: does c
+`
+      }
+      throw new Error(`HTTP 404 for ${url}`)
+    })
+  }
+
+  it('snap.files never contains a path matching /^README\\.(md|rst)$/i — the README is carried on snap.readme instead', async () => {
+    const snap = await collectGithub({ ref: 'acme/shim', repo: { owner: 'acme', name: 'shim' } }, readmeCatalogHttp(), NOW)
+    expect(snap.files.some(f => /^README\.(md|rst)$/i.test(f.path))).toBe(false)
+    expect(snap.readme?.path).toBe('README.md')
+    expect(snap.readme?.content).toContain('do_a')
+  })
+
+  it('the README rung still works end-to-end: a repo with no parseable code but a valid >=3-tool README catalog still extracts those tools', async () => {
+    const s = await assemble({ ref: 'acme/shim', repo: { owner: 'acme', name: 'shim' } }, readmeCatalogHttp(), NOW)
+    expect(s.toolCount).toBe(3)
+    expect(s.findings.some(f => f.id === 'reliability/readme-sourced-tools')).toBe(true)
   })
 })

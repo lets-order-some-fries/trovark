@@ -43,6 +43,19 @@ export interface RepoSnapshot {
   // it instead of re-scanning treePaths itself. Undefined when the tree
   // fetch failed (mirrors treePaths' own undefined-on-failure semantics).
   toolFanoutCount?: number
+  // W6 review remediation item 1 (C1/I3/I4/M3 — .superpowers/sdd/w6-review-
+  // findings.md): `files` is CODE-ONLY again (pre-W6 semantics). The fetched
+  // root README (see README_FETCH_CAP/isRootReadme below — still fetched
+  // through the SAME 1-slot budget-accounted bucket as before, unchanged)
+  // is carried here instead, on its own field, so the FIVE consumers
+  // assemble.ts hands `files` to (extractSchema, classifyLibrary,
+  // detectDynamic, scanSecrets, scanIntegrity) — four of which were written
+  // assuming source code, not documentation prose — provably cannot see it
+  // unless a caller explicitly opts in (assemble.ts's README rung passes
+  // this to extractSchema's 4th `readmeFile` parameter; scanIntegrity takes
+  // it as an explicit 3rd parameter too). Undefined when no root README.md/
+  // .rst exists in the tree, or none was selected within budget.
+  readme?: RepoFile
   files: RepoFile[]
 }
 
@@ -652,12 +665,22 @@ export async function collectGithub(
 
   const selectedPaths = selectRepoFiles(blobs, rootPkgName, hasWorkspaces, toolFanoutCount)
   const files: RepoFile[] = []
+  // W6 review remediation item 1: the README bucket still costs exactly the
+  // same budget slot it always did (selectRepoFiles/availableSourceSlots is
+  // untouched by this fix — item 4 in the review's ordered remediation list
+  // handles the eviction issue separately). The ONLY change here is where
+  // the fetched README ends up once selected: quarantined onto its own
+  // `readme` field instead of appended to `files`, so every consumer that
+  // only ever receives `files` provably cannot see it.
+  let readme: RepoFile | undefined
   for (const path of selectedPaths) {
     try {
       const content = path === 'package.json' && rootPkgContent !== undefined
         ? rootPkgContent
         : await http.text(rawUrl(path))
-      files.push({ path, content: content.length > SIZE_CAP ? content.slice(0, SIZE_CAP) : content })
+      const file: RepoFile = { path, content: content.length > SIZE_CAP ? content.slice(0, SIZE_CAP) : content }
+      if (isRootReadme(path)) readme = file
+      else files.push(file)
     } catch { /* skip unfetchable file */ }
   }
 
@@ -667,6 +690,6 @@ export async function collectGithub(
     description: meta.description ?? undefined, topics: meta.topics ?? [],
     pushedAt: meta.pushed_at,
     latestReleaseAt, commitsLast90Days, busFactor, medianIssueResponseDays,
-    treePaths, toolFanoutCount, files,
+    treePaths, toolFanoutCount, files, readme,
   }
 }

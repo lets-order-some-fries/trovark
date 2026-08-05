@@ -215,6 +215,63 @@ describe('assemble — dynamic tool surface end-to-end (W6 Part B)', () => {
 })
 
 // ---------------------------------------------------------------------------
+// W6 review remediation item 1 (C1 — CRITICAL): the root README must be
+// quarantined out of snap.files before it ever reaches detectDynamic.
+// dirOf('README.md') === '' — a SINGLE README file can satisfy BOTH halves
+// of Signal A (a docs code fence matching DYN_REGISTER_RE + prose matching
+// DYN_PERSIST_RE) purely because there is only one directory ('') for a
+// root-level file, minting a false public "dynamic" verdict on a real
+// server whose actual source never trips either marker.
+// ---------------------------------------------------------------------------
+
+describe('assemble — README quarantine (W6 review C1): detectDynamic must never see README content', () => {
+  function readmeFenceHttp(readmeContent: string): Http {
+    const routes: Record<string, unknown> = {
+      'https://api.github.com/repos/acme/dynguard/commits?since': [],
+      'https://api.github.com/repos/acme/dynguard/releases/latest': {},
+      'https://api.github.com/repos/acme/dynguard/git/trees/main?recursive=1': {
+        tree: [
+          { path: 'package.json', type: 'blob', size: 300 },
+          { path: 'src/index.ts', type: 'blob', size: 300 },
+          { path: 'README.md', type: 'blob', size: 2000 },
+        ],
+      },
+      'https://api.github.com/repos/acme/dynguard': {
+        stargazers_count: 5, archived: false, pushed_at: iso(3), default_branch: 'main',
+        description: 'A demo MCP server',
+      },
+    }
+    return makeRoutedHttp(routes, (url) => {
+      if (url.endsWith('package.json')) return JSON.stringify({ dependencies: { '@modelcontextprotocol/sdk': '^1.0.0' } })
+      // Imports the MCP SDK (so classifyLibrary declines) but registers via
+      // an idiom none of the static extractors recognize (so the 0-tools
+      // gate passes) — mirrors the review's verified repro shape. Contains
+      // NEITHER a DYN_REGISTER_RE nor a DYN_PERSIST_RE match on its own.
+      if (url.endsWith('src/index.ts')) return `import { Server } from '@modelcontextprotocol/sdk'\nconst server = new Server()\nregisterAllTheThings(weirdCustomRegistry)`
+      if (url.endsWith('README.md')) return readmeContent
+      throw new Error(`HTTP 404 for ${url}`)
+    })
+  }
+
+  it('a README fence with server.registerTool(myCustomTool) + prose "backed by Prisma." must NOT mint a false dynamic verdict', async () => {
+    const readme = `# dynguard
+
+This server is backed by Prisma. Exposes a small set of tools.
+
+\`\`\`js
+server.registerTool(myCustomTool)
+\`\`\`
+`
+    const s = await assemble({ ref: 'dynguard', repo: { owner: 'acme', name: 'dynguard' } }, readmeFenceHttp(readme), NOW)
+    // Today (pre-fix) this fires: dirOf('README.md') === '' puts the fence's
+    // registerTool( bare-ident) call and the "Prisma." prose in the SAME
+    // ('' root) directory, satisfying Signal A from the README alone.
+    expect(s.notServer).toBeUndefined()
+    expect(s.notServerReason).not.toBe('dynamic')
+  })
+})
+
+// ---------------------------------------------------------------------------
 // Plumbing: score.ts / report/terminal.ts / index/scan.ts / index/site.ts.
 // ---------------------------------------------------------------------------
 
