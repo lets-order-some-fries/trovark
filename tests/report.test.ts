@@ -157,6 +157,71 @@ describe('renderTerminal — notServer (V2): rendered distinctly from INSUFFICIE
   })
 })
 
+// W6 (false-published-claim fix): an insufficientData card now carries
+// overall/grade null, exactly like notServer and unresolved already did. The
+// human-facing presentation must be UNCHANGED — the same "INSUFFICIENT DATA"
+// banner it printed when the fields were still populated — and nothing may
+// leak the nulls as `null`, `NaN` or `0`.
+describe('renderTerminal — insufficientData with a truly withheld headline (overall/grade null)', () => {
+  const withheldCard: Scorecard = {
+    ...card, overall: null, grade: null, insufficientData: true,
+    dimensions: [
+      { id: 'health', score: 97, confidence: 'high', available: 7, total: 7, findings: [] },
+      { id: 'reliability', score: 92, confidence: 'high', available: 5, total: 5, findings: [] },
+      { id: 'security', score: null, confidence: 'medium', available: 2, total: 3, findings: [] },
+      { id: 'cost', score: null, confidence: 'low', available: 0, total: 2, findings: [] },
+    ],
+    notes: [
+      'Security tool surface could not be determined — grade withheld to avoid a false clean bill.',
+      'No cost signals could be collected; cost is excluded from the overall score.',
+    ],
+  }
+  const out = renderTerminal(withheldCard, { color: false })
+
+  it('prints the unchanged INSUFFICIENT DATA presentation', () => {
+    expect(out).toContain('Trust Score: INSUFFICIENT DATA')
+    expect(out).toContain('rubric v1.0.0')
+  })
+  it('is byte-identical to the pre-fix rendering of the same card with a populated headline', () => {
+    // The old shape: identical card that still carried overall 95 / grade 'A'.
+    // The banner branch never read those fields, so the human output must not
+    // have moved by a single character.
+    const prefixShape: Scorecard = { ...withheldCard, overall: 95, grade: 'A' }
+    expect(out).toBe(renderTerminal(prefixShape, { color: false }))
+  })
+  it('leaks no null / NaN / fabricated 0 anywhere in the output', () => {
+    expect(out).not.toContain('null')
+    expect(out).not.toContain('NaN')
+    expect(out).not.toContain('undefined')
+    expect(out).not.toMatch(/Trust Score: \d/)
+    expect(out).not.toMatch(/0\/100/)
+  })
+  it('never prints a letter grade for a withheld card', () => {
+    expect(out).not.toMatch(/\((?:A|B|C|D|F)[+-]?\)/)
+  })
+  it('still shows the partial dimensions it does have, and the withholding reason', () => {
+    expect(out).toMatch(/health\s+97\/100/)
+    expect(out).toMatch(/reliability\s+92\/100/)
+    expect(out).toMatch(/security\s+not measured/)
+    expect(out).toContain('grade withheld')
+  })
+  it('color=true does not crash on the null headline', () => {
+    const painted = renderTerminal(withheldCard)
+    expect(painted).toContain('INSUFFICIENT DATA')
+    expect(painted).not.toContain('NaN')
+  })
+  it('renderJson publishes overall/grade as null — the machine-readable withhold', () => {
+    const round = JSON.parse(renderJson(withheldCard)) as Scorecard
+    expect(round.overall).toBeNull()
+    expect(round.grade).toBeNull()
+    expect(round.insufficientData).toBe(true)
+    expect(round).toEqual(withheldCard)
+    // the JSON must not contain a grade string at the top level at all
+    expect(renderJson(withheldCard)).toMatch(/"grade": null/)
+    expect(renderJson(withheldCard)).toMatch(/"overall": null/)
+  })
+})
+
 describe('renderTerminal — unresolved repo (W1): rendered distinctly, never as a graded F', () => {
   const unresolvedCard: Scorecard = {
     ...card, overall: null, grade: null, insufficientData: false, unresolved: true,

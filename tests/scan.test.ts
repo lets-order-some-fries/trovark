@@ -145,6 +145,93 @@ describe('toEntry — readmeSourced passthrough (M2)', () => {
   })
 })
 
+// W6 (false-published-claim fix): an insufficientData Scorecard now carries
+// overall/grade null. That must arrive in index/results.json as ABSENT (the
+// IndexEntry convention for "no value" — same as notServer/unresolved), never
+// as a number, and summarize()'s graded aggregates must be provably untouched
+// by the change.
+describe('toEntry / summarize — a withheld grade must not reach index/results.json', () => {
+  const withheldCard: Scorecard = {
+    ref: 'eat-pray-ai/yutu', rubricVersion: '1.5.0', overall: null, grade: null,
+    dimensions: [
+      { id: 'health', score: 97, confidence: 'high', available: 7, total: 7, findings: [] },
+      { id: 'reliability', score: 92, confidence: 'high', available: 5, total: 5, findings: [] },
+      { id: 'security', score: null, confidence: 'medium', available: 2, total: 3, findings: [] },
+      { id: 'cost', score: null, confidence: 'low', available: 0, total: 2, findings: [] },
+    ],
+    notes: ['Security tool surface could not be determined — grade withheld to avoid a false clean bill.'],
+    generatedAt: '2026-08-06T00:00:00Z', insufficientData: true,
+  }
+
+  it('IndexEntry.overall and .grade are undefined for a withheld card — no "A" in the published dataset', () => {
+    const entry = toEntry('eat-pray-ai/yutu', withheldCard, 2)
+    expect(entry.overall).toBeUndefined()
+    expect(entry.grade).toBeUndefined()
+    expect(entry.insufficientData).toBe(true)
+  })
+  it('the serialized entry contains no overall/grade keys with a value', () => {
+    const entry = toEntry('eat-pray-ai/yutu', withheldCard, 2)
+    const round = JSON.parse(JSON.stringify(entry)) as IndexEntry
+    expect('overall' in round).toBe(false)
+    expect('grade' in round).toBe(false)
+  })
+  it('the partial dimensions it DOES have still publish — withholding the headline is not withholding the evidence', () => {
+    const entry = toEntry('eat-pray-ai/yutu', withheldCard, 2)
+    expect(entry.dims!.health.score).toBe(97)
+    expect(entry.dims!.reliability.score).toBe(92)
+    expect(entry.dims!.security.score).toBeNull()
+    expect(entry.dims!.cost.score).toBeNull()
+  })
+  // summarize() already filtered on `!e.insufficientData`, so the graded
+  // aggregates were correct even while the bogus grades were being published.
+  // Pinned here so the fix is provably a no-op for every published statistic.
+  it('summarize: avgOverall and gradeDist are computed over GRADED servers only and are unchanged by the fix', () => {
+    const graded: IndexEntry[] = [
+      e({ ref: 'a/one', overall: 96, grade: 'A+' }),
+      e({ ref: 'a/two', overall: 61, grade: 'C' }),
+      e({ ref: 'a/three', overall: 72, grade: 'B-' }),
+    ]
+    // pre-fix shape: withheld entries still carried overall 95 / grade 'A'
+    const before = summarize([...graded, e({ ref: 'w/one', insufficientData: true, overall: 95, grade: 'A' })])
+    // post-fix shape: the same entries, headline withheld
+    const after = summarize([...graded, e({ ref: 'w/one', insufficientData: true })])
+    expect(after.avgOverall).toEqual(before.avgOverall)
+    expect(after.gradeDist).toEqual(before.gradeDist)
+    expect(after.insufficient).toBe(before.insufficient)
+    // ...and the values are the graded-only ones
+    expect(after.avgOverall).toBe(Math.round((96 + 61 + 72) / 3))
+    expect(after.gradeDist).toEqual({ A: 1, C: 1, B: 1 })
+    expect(after.insufficient).toBe(1)
+  })
+  it('summarize: all 29 withheld entries dropping their grade moves no published statistic', () => {
+    const graded = Array.from({ length: 10 }, (_, i) => e({ ref: `g/${i}`, overall: 70 + i, grade: 'B' }))
+    const withheldOld = Array.from({ length: 29 }, (_, i) => e({ ref: `w/${i}`, insufficientData: true, overall: 90, grade: 'A' }))
+    const withheldNew = Array.from({ length: 29 }, (_, i) => e({ ref: `w/${i}`, insufficientData: true }))
+    const before = summarize([...graded, ...withheldOld])
+    const after = summarize([...graded, ...withheldNew])
+    expect(after).toEqual(before)
+    expect(after.gradeDist).toEqual({ B: 10 })
+    expect(after.avgOverall).toBe(Math.round((70 + 79) / 2))
+    expect(Number.isFinite(after.avgOverall)).toBe(true)
+  })
+  it('summarize: an index made ONLY of withheld entries reports avgOverall 0 and an empty gradeDist, no NaN', () => {
+    const s = summarize(Array.from({ length: 5 }, (_, i) => e({ ref: `w/${i}`, insufficientData: true })))
+    expect(s.avgOverall).toBe(0)
+    expect(s.gradeDist).toEqual({})
+    expect(s.insufficient).toBe(5)
+    for (const [k, v] of Object.entries(s)) {
+      if (typeof v === 'number') expect(Number.isFinite(v), `${k} is not finite`).toBe(true)
+    }
+  })
+  it('a graded card still threads its overall/grade through toEntry untouched (regression)', () => {
+    const gradedCard: Scorecard = { ...withheldCard, ref: 'github/github-mcp-server', overall: 96, grade: 'A+', insufficientData: false }
+    const entry = toEntry('github/github-mcp-server', gradedCard, 1)
+    expect(entry.overall).toBe(96)
+    expect(entry.grade).toBe('A+')
+    expect(entry.insufficientData).toBeUndefined()
+  })
+})
+
 // W6 (fabricated-dimension-value fix): a dimension with no measurement
 // carries score: null all the way into index/results.json. It must arrive
 // as null — never coerced to 0 (the worst possible score) or dropped — and

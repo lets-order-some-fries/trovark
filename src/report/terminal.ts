@@ -41,9 +41,11 @@ export function renderTerminal(card: Scorecard, opts: { color?: boolean } = {}):
   } else if (card.insufficientData) {
     lines.push(paint(31, 'Trust Score: INSUFFICIENT DATA', c) + `   rubric v${card.rubricVersion}`)
   } else {
-    // I9: overall/grade are only ever null when notServer (handled above) —
-    // this branch always has real values, but the type is nullable to
-    // reflect that case, so fall back defensively rather than asserting.
+    // I9 / W1 / W6: overall/grade are null for every withheld terminal state
+    // — notServer, unresolved and insufficientData, all handled by the
+    // branches above — so this branch only ever runs on a genuinely graded
+    // card and always has real values. The type stays nullable to reflect
+    // those cases, so fall back defensively rather than asserting.
     const overall = card.overall ?? 0
     lines.push(paint(colorFor(overall), `Trust Score: ${overall}/100 (${card.grade ?? '?'})`, c) + `   rubric v${card.rubricVersion}`)
   }

@@ -207,6 +207,70 @@ describe('renderSite', () => {
     expect(out).toMatch(/class="chip" style="background:[^"]*">B</)
     expect(out).toContain('<td>80</td>')
   })
+  // W6 (false-published-claim fix): a withheld entry no longer carries
+  // overall/grade at all (they are undefined, not a number). The card must
+  // render identically to before — grade chip "—", score cell "—", partial
+  // dimensions shown — and must never print `undefined`, `null` or `0`, nor
+  // let the client-side sorter rank the row as a real 0.
+  it('renders a withheld entry with NO overall/grade exactly as it rendered with them — no undefined/null/0 leakage', () => {
+    const withheld = {
+      ...results,
+      stats: { ...results.stats, insufficient: 1 },
+      entries: [{
+        ref: 'eat-pray-ai/yutu',
+        ok: true,
+        insufficientData: true,
+        repoUrl: 'https://github.com/eat-pray-ai/yutu',
+        dims: {
+          health: { score: 97, confidence: 'high' },
+          reliability: { score: 92, confidence: 'high' },
+          security: { score: null, confidence: 'medium' },
+          cost: { score: null, confidence: 'low' },
+        },
+      }],
+    } as never
+    const out = renderSite(withheld)
+    expect(out).toContain('eat-pray-ai/yutu')
+    // the withheld presentation is intact
+    expect(out).toMatch(/grade withheld/i)
+    expect(out).toContain('<td class="muted">—</td>')
+    // no fabricated letter-grade chip, and no leaked sentinels in the row
+    expect(out).not.toMatch(/class="chip" style="background:[^"]*">[A-F][+-]?</)
+    expect(out).not.toContain('>undefined<')
+    expect(out).not.toContain('>null<')
+    expect(out).not.toMatch(/data-overall="(?:undefined|null|NaN)"/)
+    // partial dimensions still published
+    expect(out).toMatch(/<td>97<span class="conf">h<\/span><\/td>/)
+    expect(out).toMatch(/<td>92<span class="conf">h<\/span><\/td>/)
+  })
+  it('a withheld row sorts as "no value" (-1), never as a real 0, with or without a stale overall', () => {
+    const mk = (extra: Record<string, unknown>) => ({
+      ...results,
+      entries: [
+        { ref: 'a/graded', ok: true, overall: 80, grade: 'B', dims: { health: { score: 80, confidence: 'high' }, reliability: { score: 80, confidence: 'high' }, security: { score: 80, confidence: 'high' }, cost: { score: 80, confidence: 'high' } } },
+        { ref: 'w/held', ok: true, insufficientData: true, dims: { health: { score: 97, confidence: 'high' }, reliability: { score: 92, confidence: 'high' }, security: { score: null, confidence: 'medium' }, cost: { score: null, confidence: 'low' } }, ...extra },
+      ],
+    }) as never
+    // post-fix (no overall/grade) and pre-fix (stale 95/'A') must render the same row
+    const after = renderSite(mk({}))
+    const before = renderSite(mk({ overall: 95, grade: 'A' }))
+    expect(after).toBe(before)
+    // the withheld row carries the sink sentinel; the graded row keeps its number
+    expect(after).toMatch(/<tr class="failed" data-overall="-1"[^>]*>[\s\S]*w\/held/)
+    expect(after).toMatch(/<tr data-overall="80">/)
+    // exactly one grade chip in the table — the graded row's
+    expect(after.match(/class="chip" style="background:/g) ?? []).toHaveLength(1)
+  })
+  it('a withheld entry with no dims at all still renders its explanatory row', () => {
+    const bare = {
+      ...results,
+      entries: [{ ref: 'w/bare', ok: true, insufficientData: true }],
+    } as never
+    const out = renderSite(bare)
+    expect(out).toMatch(/insufficient data to score/i)
+    expect(out).not.toContain('>undefined<')
+    expect(out).not.toContain('NaN')
+  })
   it('rejects non-http(s) repoUrl schemes', () => {
     const evil = {
       ...results,

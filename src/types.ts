@@ -150,10 +150,18 @@ export interface Scorecard {
   integrityScanned?: { files: number; chars: number; tools: number }
   // I9: null when notServer — a library/SDK/proxy/stub has no tool surface
   // to grade, so no headline score/letter grade is reported (dimensions are
-  // still populated below when useful). Only ever number/string together
-  // (never notServer) or null/null together (notServer) — see score.ts.
-  overall: number | null       // 0-100
-  grade: string | null         // 'A+' | 'A' | 'A-' | ... | 'F'
+  // still populated below when useful).
+  // W1: null when unresolved — the repo 404s, nothing was ever fetched.
+  // W6 (false-published-claim fix): null when insufficientData too. A
+  // withheld grade must be withheld in the DATA, not merely hidden by the
+  // renderer — previously these fields stayed populated and a "grade": "A"
+  // shipped in `trovark --json` and index/results.json for servers the gate
+  // had explicitly declined to assess. All three withheld terminal states now
+  // go through ONE `withheld` computation in score.ts.
+  // Invariant: number/string together (graded) or null/null together
+  // (withheld) — never one without the other.
+  overall: number | null       // 0-100, null when withheld
+  grade: string | null         // 'A+' | 'A' | 'A-' | ... | 'F', null when withheld
   // W6 review remediation item M2: structured passthrough of
   // Signals.readmeSourced — see that field's comment for the full
   // rationale. Undefined when extraction never ran at all.

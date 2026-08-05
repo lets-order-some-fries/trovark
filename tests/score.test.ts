@@ -66,9 +66,26 @@ describe('score()', () => {
     s.archived = false; s.stars = 2000; s.daysSinceLastRelease = 10; s.medianIssueResponseDays = 1
     const card = score('x', s, '2026-07-31T00:00:00Z')
     const sec = card.dimensions.find(d => d.id === 'security')!
+    const health = card.dimensions.find(d => d.id === 'health')!
     expect(sec.available).toBe(0)
     expect(card.notes.join(' ')).toMatch(/security/)
-    expect(card.overall).toBe(100) // health-only, perfect health signals
+    // The dropped dimensions are EXCLUDED from the weighted mean rather than
+    // averaged in as 0 — health, the only measured dimension, still reports a
+    // perfect 100 and is not deflated by the three empty ones.
+    expect(health.score).toBe(100)
+    // W6 (false-published-claim fix): this fixture is health-only —
+    // reliability, security and cost all have zero collectible signals, so it
+    // trips the coverage gate on two independent conditions (security primary
+    // absent, and 3 dimensions fully dropped). It previously published
+    // overall 100 / grade "A+" while ALSO reporting insufficientData: true —
+    // a confident top grade for a server we had explicitly declined to
+    // assess, which is precisely the claim the gate exists to suppress. The
+    // headline is now withheld in the data, not just in the display.
+    // (Exclusion-from-the-mean on a genuinely GRADED card — where the
+    // headline survives — is pinned separately by the Rule A tests below.)
+    expect(card.insufficientData).toBe(true)
+    expect(card.overall).toBeNull()
+    expect(card.grade).toBeNull()
   })
   it('archived repo tanks health', () => {
     const s = healthy(); s.archived = true
@@ -276,6 +293,150 @@ describe('score() — a dimension with no measurement reports null, never a numb
     const card = score('x', s, 'T')
     expect(card.dimensions.find(d => d.id === 'security')!.score).toBe(0)
     expect(card.notes.join(' ')).toMatch(/decode-confirmed hidden payload/i)
+  })
+})
+
+// W6 (false-published-claim fix): the insufficientData gate is a GRADE-
+// WITHHOLDING gate. Before this fix it withheld the grade only in the
+// RENDERING (terminal banner / site chip) while `Scorecard.overall` and
+// `.grade` stayed populated — so the withheld claim shipped anyway, into
+// `trovark --json` and into the committed, publicly served
+// `index/results.json`. Measured on the published index (2026-08-06):
+// 29 of 29 insufficientData entries carried a numeric overall AND a letter
+// grade, several of them "A" (eat-pray-ai/yutu 94/A, ndthanhdev/mcp-browser-kit
+// 93/A, sitbon/magg 91/A). notServer and unresolved already nulled both
+// fields; this gate did not. A machine consumer reading the public dataset
+// saw grade A for a server we explicitly said we could not assess — exactly
+// the v1.2 "unreadable repo scores a confident A+" bug, one layer down.
+describe('score() — a withheld grade is withheld in the DATA, not just the display', () => {
+  // Reproduces the live shape of eat-pray-ai/yutu / sitbon/magg: an active,
+  // well-maintained repo whose tool schema could NOT be extracted — so the
+  // security PRIMARY is absent and cost has nothing to measure, yet health
+  // and reliability are strong enough that the weighted mean over the two
+  // surviving dimensions lands at 95/A. That "A" is the false published claim.
+  const unreadableToolSurface = (): Signals => ({
+    daysSinceLastCommit: 2, daysSinceLastRelease: 15, commitsLast90Days: 60,
+    busFactor: 4, medianIssueResponseDays: 1, stars: 1200,
+    archived: false,
+    specEra: 'modern', hasCI: true, hasTests: true, hasLockfile: true, schemaExtracted: false,
+    // security PRIMARY absent — this is what trips the gate
+    toolSurfaceRisk: undefined, secretsFound: 0, cveWorst: 'none',
+    // cost: no schema was extracted, so there is nothing to measure
+    schemaTokenEstimate: undefined, toolCount: undefined,
+    findings: [], errors: ['tool schema extraction failed'],
+  })
+
+  it('the gate fires AND overall/grade are null — no letter grade escapes into the data', () => {
+    const card = score('eat-pray-ai/yutu', unreadableToolSurface(), 'T')
+    expect(card.insufficientData).toBe(true)
+    expect(card.overall).toBeNull()
+    expect(card.grade).toBeNull()
+  })
+  it('specifically does not publish the pre-fix 95/"A" for a server whose surface we could not read', () => {
+    const card = score('eat-pray-ai/yutu', unreadableToolSurface(), 'T')
+    expect(card.grade).not.toBe('A')
+    expect(card.overall).not.toBe(95)
+    expect(typeof card.overall).not.toBe('number')
+    expect(typeof card.grade).not.toBe('string')
+  })
+  it('notes still explain WHY the grade was withheld', () => {
+    const card = score('eat-pray-ai/yutu', unreadableToolSurface(), 'T')
+    expect(card.notes.join(' ')).toMatch(/tool surface could not be determined/i)
+    expect(card.notes.join(' ')).toMatch(/grade withheld/i)
+  })
+  it('dimensions remain populated exactly as before — withholding the headline is not withholding the evidence', () => {
+    const card = score('eat-pray-ai/yutu', unreadableToolSurface(), 'T')
+    const dim = (id: string) => card.dimensions.find(d => d.id === id)!
+    expect(card.dimensions).toHaveLength(4)
+    expect(dim('health').score).toBe(97)
+    expect(dim('reliability').score).toBe(92)
+    expect(dim('security').score).toBeNull()   // Rule B — primary absent
+    expect(dim('cost').score).toBeNull()       // Rule A — zero signals
+    expect(dim('health').available).toBe(7)
+    expect(dim('security').available).toBe(2)
+    expect(dim('security').confidence).toBe('medium')
+  })
+
+  // The gate has three independent trip conditions; all three must null the
+  // headline, not just the security-primary one.
+  it('trip condition: fewer than 4 signals available → overall/grade null (was 100/"A+")', () => {
+    const s = empty()
+    s.daysSinceLastCommit = 10 // one signal in the whole card
+    const card = score('x', s, 'T')
+    expect(card.insufficientData).toBe(true)
+    expect(card.overall).toBeNull()
+    expect(card.grade).toBeNull()
+    expect(card.notes.join(' ')).toMatch(/not enough to score/i)
+  })
+  it('trip condition: two or more dimensions fully dropped → overall/grade null', () => {
+    const s = healthy()
+    s.specEra = undefined; s.hasCI = undefined; s.hasTests = undefined
+    s.hasLockfile = undefined; s.schemaExtracted = undefined
+    s.schemaTokenEstimate = undefined; s.toolCount = undefined
+    const card = score('x', s, 'T')
+    expect(card.insufficientData).toBe(true)
+    expect(card.overall).toBeNull()
+    expect(card.grade).toBeNull()
+    expect(card.notes.join(' ')).toMatch(/not enough coverage to score confidently/i)
+  })
+  it('trip condition: security primary absent on an otherwise perfect card → null, never 100/"A+"', () => {
+    const s = healthy(); s.toolSurfaceRisk = undefined
+    const card = score('x', s, 'T')
+    expect(card.insufficientData).toBe(true)
+    expect(card.overall).toBeNull()
+    expect(card.grade).toBeNull()
+  })
+
+  // The whole point of the fix is that it touches ONLY withheld cards.
+  it('regression: a fully-graded server is byte-identical — exact pinned overall and grade', () => {
+    const card = score('x', healthy(), 'T')
+    expect(card.insufficientData).toBe(false)
+    expect(card.overall).toBe(100)
+    expect(card.grade).toBe('A+')
+    for (const d of card.dimensions) expect(d.score).toBe(100)
+  })
+  it('regression: a mid-range graded server is unchanged — 69/"C+" with four numeric dimensions', () => {
+    const s: Signals = {
+      daysSinceLastCommit: 45, daysSinceLastRelease: 200, commitsLast90Days: 12,
+      busFactor: 3, medianIssueResponseDays: 5, stars: 300, weeklyDownloads: 2000,
+      archived: false, specEra: 'modern', hasCI: true, hasTests: false, hasLockfile: true,
+      schemaExtracted: true, toolSurfaceRisk: 'medium', secretsFound: 0, cveWorst: 'low',
+      schemaTokenEstimate: 12000, toolCount: 30, findings: [], errors: [],
+    }
+    const card = score('x', s, 'T')
+    expect(card.insufficientData).toBe(false)
+    expect(card.overall).toBe(69)
+    expect(card.grade).toBe('C+')
+  })
+  it('regression: a graded server with ONE null dimension (Rule A) still keeps its grade — Rule A does not withhold the headline', () => {
+    const s = healthy()
+    s.schemaTokenEstimate = undefined; s.toolCount = undefined // cost dropped, only 1 dimension
+    const card = score('x', s, 'T')
+    expect(card.insufficientData).toBe(false)
+    expect(card.overall).toBe(100)
+    expect(card.grade).toBe('A+')
+  })
+
+  // The other two terminal states already did this correctly — pinned here so
+  // the three withholding paths stay identical and can't drift apart.
+  it('the three withheld terminal states are indistinguishable in the headline: all null/null', () => {
+    const ins = score('x', unreadableToolSurface(), 'T')
+    const lib = (() => { const s = empty(); s.notServer = true; s.notServerReason = 'sdk'; return score('x', s, 'T') })()
+    const gone = (() => { const s = empty(); s.unresolved = true; return score('x', s, 'T') })()
+    for (const card of [ins, lib, gone]) {
+      expect(card.overall).toBeNull()
+      expect(card.grade).toBeNull()
+    }
+    // ...but they remain DISTINCT terminal states, each with its own flag
+    expect(ins.insufficientData).toBe(true)
+    expect(lib.notServer).toBe(true)
+    expect(gone.unresolved).toBe(true)
+  })
+  it('a graded card is the ONLY shape that carries a non-null headline (overall and grade move together)', () => {
+    for (const s of [healthy(), unreadableToolSurface(), empty()]) {
+      const card = score('x', s, 'T')
+      expect(card.overall === null).toBe(card.grade === null)
+    }
   })
 })
 

@@ -11,6 +11,16 @@ export interface IndexEntry {
   ref: string
   ok: boolean
   error?: string
+  // W6 (false-published-claim fix): ABSENT (not 0, not a stale number) for
+  // every withheld terminal state — insufficientData, notServer and
+  // unresolved alike. Scorecard.overall/.grade are null for all three (see
+  // src/scoring/score.ts's single `withheld` computation) and toEntry below
+  // converts null -> undefined, which JSON.stringify omits. Before the fix,
+  // insufficientData entries still published a numeric overall and a letter
+  // grade here — 29 of 29 in the committed index, several "A" — so a machine
+  // consumer of the public dataset read a confident grade for a server we had
+  // explicitly declined to assess. summarize() already filtered these out of
+  // gradeDist/avgOverall, so no published statistic moves.
   overall?: number
   grade?: string
   insufficientData?: boolean
@@ -123,8 +133,10 @@ export function toEntry(ref: string, card: Scorecard, daysSinceLastCommit?: numb
     .sort((a, b) => ['high', 'medium', 'low', 'info'].indexOf(a.severity) - ['high', 'medium', 'low', 'info'].indexOf(b.severity))
     .slice(0, 3).map(f => ({ id: f.id, severity: f.severity }))
   return {
-    // I9: card.overall/grade are null for notServer cards — IndexEntry keeps
-    // them optional (number|undefined), so convert null -> undefined here.
+    // I9/W1/W6: card.overall/grade are null for EVERY withheld card
+    // (notServer, unresolved, insufficientData) — IndexEntry keeps them
+    // optional (number|undefined), so convert null -> undefined here, which
+    // JSON.stringify then omits from results.json entirely.
     ref, ok: true, overall: card.overall ?? undefined, grade: card.grade ?? undefined,
     insufficientData: card.insufficientData || undefined,
     notServer: card.notServer || undefined,

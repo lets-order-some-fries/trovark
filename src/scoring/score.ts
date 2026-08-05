@@ -186,7 +186,29 @@ export function score(
   // typescript-sdk) misrepresents "nothing to check" as "checked and clean".
   // W1: unresolved cards get the same treatment — a repo we never fetched
   // must never carry a numeric overall or letter grade (the 18-false-F-card bug).
-  const withheld = notServer || unresolved
+  //
+  // W6 (false-published-claim fix): `insufficientData` joins them, which is
+  // what the gate was always supposed to mean. Until now it withheld the
+  // grade only in the RENDERING — report/terminal.ts printed "INSUFFICIENT
+  // DATA", index/site.ts printed a "—" chip — while `overall`/`grade` stayed
+  // populated on the Scorecard and therefore shipped in `trovark --json` and
+  // in the committed, publicly served index/results.json. Measured on the
+  // published index (2026-08-06): 29 of 29 insufficientData entries carried a
+  // numeric overall AND a letter grade, several of them "A" (eat-pray-ai/yutu
+  // 94/A, ndthanhdev/mcp-browser-kit 93/A, sitbon/magg 91/A). A machine
+  // consumer reading the public dataset saw grade "A" for servers we
+  // explicitly said we could not assess — the exact v1.2 "unreadable repo
+  // scores a confident A+" failure this gate exists to prevent, surviving one
+  // layer below the display.
+  //
+  // This is deliberately the SAME mechanism notServer/unresolved already use,
+  // not a parallel one: there is one definition of "withheld", so the three
+  // terminal states cannot drift apart. Dimensions are untouched — the
+  // partial evidence we DO have still publishes (see the Rule A/B withholds
+  // above, which are about individual dimensions, not the headline).
+  // `insufficientData` itself stays on the card, so consumers can still tell
+  // the three states apart and keep their distinct presentations.
+  const withheld = notServer || unresolved || insufficientData
   return {
     ref, rubricVersion: RUBRIC_VERSION,
     // D1 (integrity-v1): checksVersion records which CHECK set produced this
