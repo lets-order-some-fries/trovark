@@ -1239,17 +1239,25 @@ const SPEC_JSON_BASENAME_RE = SPEC_BASENAME_RE
 //
 // (1) The playwright-mcp bullet+Description shape — a bold, column-0 bullet
 // naming the tool, followed (within the same bullet block) by an indented
-// `- Description: ...` line. Deliberately UNSCOPED (not gated on a heading)
-// — this exact two-line shape is specific enough on its own that a prose
-// README cannot accidentally produce it, and it is the one shape verified
-// (wave2-spec) NOT to generalize to a "convention" (it matches exactly one
-// repo in the measured corpus) — kept anyway because it recovers that one
-// repo's full 69-tool surface.
+// `- Description: ...` line. This exact two-line shape is specific enough
+// on its own that a prose README cannot accidentally produce it, and it is
+// the one shape verified (wave2-spec) NOT to generalize to a "convention"
+// (it matches exactly one repo in the measured corpus) — kept anyway
+// because it recovers that one repo's full 69-tool surface.
+//
+// I2 (W6 review, IMPORTANT): this shape used to be applied UNSCOPED (matched
+// over the whole README, not just an accepted tool section) and exempt from
+// TYPE_ANNOT_RE below — a `## Configuration` section of jsonschema2md-
+// generated property docs (`- **timeout_seconds**` / `  - Description:
+// (number) How long to wait…`) matches this exact two-line shape and
+// fabricated a 3-tool surface of config keys. It is now scoped to
+// readmeToolSections exactly like (2)/(3), and TYPE_ANNOT_RE is applied to
+// it exactly like (2)/(3) — see fromReadmeCatalog below.
 const README_BULLET_BOLD_DESC_RE = /^-\s\*\*([a-z][\w-]*)\*\*[ \t]*\n(?:[ \t]+-\s.*\n)*?[ \t]+-\s*Description:\s*(.+)$/gim
 
-// (2)/(3) below are the shapes that DO generalize (wave2-spec §3 R6), but
-// both are scoped to a heading-bounded "this is a tool section" region —
-// see readmeToolSections — and additionally reject a candidate whose
+// (1)/(2)/(3) all generalize (wave2-spec §3 R6, I2), and all three are
+// scoped to a heading-bounded "this is a tool section" region — see
+// readmeToolSections — and additionally reject a candidate whose
 // description opens with a type/optionality annotation (a parameter-table
 // row shape: "`user_id` | string | (required) the user's id").
 const TYPE_ANNOT_RE = /^[([]\s*(?:string|number|boolean|object|array|integer|int|bool|float|required|optional|enum|null)\b/i
@@ -1264,14 +1272,23 @@ const README_BULLET_CODE_RE = /^[-*]\s+`([a-z][a-z0-9]*(?:[_-][a-z0-9]+)+)`\s*[-
 const README_TABLE_ROW_RE = /^\|\s*`?([a-z][a-z0-9]*(?:[_-][a-z0-9]+)+)`?\s*\|\s*([^|]{10,}?)\s*\|/gm
 const README_TABLE_HEADER_RE = /^\|[^\n]*\b(tool|name)\b[^\n]*\|[ \t]*\n[ \t]*\|[\s:|-]+\|/im
 
-// Section scoping for (2)/(3): a "tool section" is any heading-bounded chunk
-// (split at EVERY heading, any level — see readmeToolSections) whose OWN
-// heading text mentions tools/commands/capabilities and does not itself read
-// as a parameter/config/usage heading. Splitting at every heading (not just
-// top-level ones) is what carves a nested "### Parameters" sub-heading back
-// out of an accepted "## Tools" section — the sub-heading becomes its own
-// chunk and is rejected by NEG_HEAD_RE on its own merits.
-const TOOL_HEAD_RE = /\b(tools?|commands?|capabilities)\b/i
+// Section scoping for (1)/(2)/(3): a "tool section" is any heading-bounded
+// chunk (split at EVERY heading, any level — see readmeToolSections) whose
+// OWN heading text mentions tools/commands and does not itself read as a
+// parameter/config/usage/planned/removed heading. Splitting at every heading
+// (not just top-level ones) is what carves a nested "### Parameters"
+// sub-heading back out of an accepted "## Tools" section — the sub-heading
+// becomes its own chunk and is rejected by NEG_HEAD_RE on its own merits.
+//
+// C3 (W6 review): `capabilities` was DROPPED from this regex — a `##
+// Capabilities` heading is generic marketing/feature-list language (e.g. a
+// table of `multi-tenant`/`auto-sync`/`rate-limiting` feature names), not a
+// tool catalog, and there is no reliable way to tell a genuine capabilities-
+// as-tools README from a feature list by heading text alone. Recall loss
+// (a real "## Capabilities" tool catalog, if one exists, is no longer
+// recovered) is acceptable; fabricating a tool surface from a feature table
+// is not.
+const TOOL_HEAD_RE = /\b(tools?|commands?)\b/i
 // GUARD (false-positive verification, W6 Part A #3): measured against the 32
 // live `notServer` repos in index/results.json — modelcontextprotocol/
 // ruby-sdk's `### Tool Annotations` section (documenting the
@@ -1286,7 +1303,26 @@ const TOOL_HEAD_RE = /\b(tools?|commands?|capabilities)\b/i
 // `### Tool Output Schemas` that the singular-only forms would have missed
 // (`\bresponse\b` does not match inside "Responses" — no word boundary
 // before the trailing `s`).
-const NEG_HEAD_RE = /\b(param(eter)?s?|arguments?|options?|inputs?|config\w*|env|environment|responses?|outputs?|fields?|schemas?|install|setup|usage|examples?|annotations?|errors?|metadata|types?)\b/i
+//
+// C3 (W6 review, CRITICAL): a section is only a CURRENT tool surface if it
+// is neither a future promise nor a historical record. Added
+// planned/upcoming/roadmap/future (a `## Planned Tools` section listing
+// `execute_shell` previously published a real security/shell-exec-tool
+// finding — a false public accusation against a repo for a tool that does
+// not exist in its shipped code) and deprecated/removed/changelog/
+// comparison (a `### Removed tools` changelog subsection was previously
+// published as the CURRENT surface). Prefer rejecting a real catalog over
+// inventing one — recall loss here is acceptable, a fabricated accusation
+// is not.
+const NEG_HEAD_RE = /\b(param(eter)?s?|arguments?|options?|inputs?|config\w*|env|environment|responses?|outputs?|fields?|schemas?|install|setup|usage|examples?|annotations?|errors?|metadata|types?|planned|upcoming|roadmap|future|deprecated|removed|changelog|comparison)\b/i
+// C3 (W6 review, CRITICAL): reject an individual entry — even one sitting
+// inside an otherwise-accepted tool section — whose OWN description marks
+// it as not-current. A single mislabeled row ("`execute_shell` — Planned:
+// run arbitrary shell commands" under an otherwise-legitimate "## Tools"
+// heading) must not fabricate a false accusation just because its siblings
+// are genuine. Checked against the description only (not the name), so a
+// tool legitimately named e.g. `remove_deprecated_files` is unaffected.
+const ENTRY_REJECT_RE = /\b(planned|coming soon|not yet|removed|deprecated|no longer)\b/i
 
 function readmeToolSections(content: string): string[] {
   const marks: Array<{ index: number; heading: string }> = []
@@ -1319,15 +1355,24 @@ export function fromReadmeCatalog(file: RepoFile): ToolInfo[] {
   const tools: ToolInfo[] = []
   const push = (name: string, description: string | undefined, schemaText: string) => {
     if (seen.has(name)) return
+    // C3: an individual entry marked planned/removed/deprecated in its own
+    // description is rejected even inside an otherwise-accepted section —
+    // deliberately does NOT add `name` to `seen`, so a later, genuine entry
+    // with the same name (a different shape/section) can still be accepted.
+    if (description && ENTRY_REJECT_RE.test(description)) return
     seen.add(name)
     tools.push({ name, description: description?.trim(), schemaText })
   }
 
-  for (const m of content.matchAll(README_BULLET_BOLD_DESC_RE)) {
-    push(m[1], m[2], m[0])
-  }
-
+  // I2: shape (1) is now scoped to accepted tool sections and TYPE_ANNOT_RE-
+  // guarded exactly like shapes (2)/(3) — see the comment on
+  // README_BULLET_BOLD_DESC_RE above.
   for (const section of readmeToolSections(content)) {
+    for (const m of section.matchAll(README_BULLET_BOLD_DESC_RE)) {
+      if (TYPE_ANNOT_RE.test(m[2].trim())) continue
+      push(m[1], m[2], m[0])
+    }
+
     const isTable = README_TABLE_HEADER_RE.test(section)
     if (isTable) {
       for (const m of section.matchAll(README_TABLE_ROW_RE)) {
@@ -1452,8 +1497,19 @@ export function extractSchema(
     return true
   })
 
+  // I1 (W6 review, IMPORTANT): the shell-import floor is a STRUCTURAL signal
+  // (does a fetched source file import a shell/process-execution API) and
+  // must never be silently overridden by a WEAKER, prose-derived signal —
+  // in particular a README-sourced tool list, whose descriptions are
+  // maintainer copy, not verified against the shipped code. Computed once,
+  // up front, and applied below regardless of which rung (or no rung)
+  // produced `tools` — previously this lived INSIDE the `tools.length === 0`
+  // branch, so the README rung (which runs first and populates `tools`)
+  // skipped it entirely: a shim whose src/index.ts imports execSync scored a
+  // clean security bill whenever its README listed benign-sounding tools.
+  const shellFile = findShellImportFile(files)
+
   if (tools.length === 0) {
-    const shellFile = findShellImportFile(files)
     if (shellFile) {
       return {
         extracted: false, tools: [], toolSurfaceRisk: 'medium', schemaTokenEstimate: undefined,
@@ -1495,6 +1551,23 @@ export function extractSchema(
         message: `Tool "${t.name}" appears to write or delete data.`, evidence: t.evidence,
       })
     }
+  }
+
+  // I1: the structural floor applies here too, whether `tools` came from
+  // source/manifest extraction or the README rung. A real tool list
+  // (however sourced) does not change what the fetched source imports, and
+  // maintainer-authored descriptions (README prose in particular) must not
+  // be able to launder a shell-import risk down to a clean bill. The finding
+  // id stays `security/shell-import-no-tools` (already published in
+  // index/results.json) even though tools DID extract in this branch — only
+  // the message differs from the tools.length===0 case above.
+  if (shellFile) {
+    if (RISK_ORDER.indexOf('medium') > RISK_ORDER.indexOf(worst)) worst = 'medium'
+    findings.push({
+      id: 'security/shell-import-no-tools', dimension: 'security', severity: 'medium',
+      message: 'A fetched file imports a shell/process-execution API; tool surface risk is floored at medium regardless of which rung produced the tool list, so a maintainer-authored README or manifest cannot override this structural code signal.',
+      evidence: shellFile.path,
+    })
   }
 
   return {

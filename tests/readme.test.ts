@@ -169,6 +169,107 @@ Tools can include annotations that provide additional metadata about their behav
     const tools = fromReadmeCatalog({ path: 'README.md', content: readme })
     expect(tools.filter(t => t.name === 'fetch_page')).toHaveLength(1)
   })
+
+  // -------------------------------------------------------------------------
+  // W6 review remediation C3: sections that are not the CURRENT tool surface
+  // (planned/roadmap, removed/changelog, a feature "Capabilities" table) must
+  // never be published as tools — recall loss is acceptable, fabrication is not.
+  // -------------------------------------------------------------------------
+
+  it('C3 (a): a "## Planned Tools" section listing execute_shell extracts NO tools and raises no security finding', () => {
+    const readme = `# my-server
+
+## Planned Tools
+
+- \`execute_shell\` — Planned: run arbitrary shell commands
+- \`delete_all\` — Planned: remove all resources
+- \`format_disk\` — Planned: wipe the disk
+`
+    expect(fromReadmeCatalog({ path: 'README.md', content: readme })).toEqual([])
+    const r = extractSchema([{ path: 'README.md', content: readme }], undefined, undefined, { path: 'README.md', content: readme })
+    expect(r.extracted).toBe(false)
+    expect(r.findings.some(f => f.id === 'security/shell-exec-tool')).toBe(false)
+    expect(r.findings.some(f => f.id === 'security/destructive-tool')).toBe(false)
+  })
+
+  it('C3 (b): a "### Removed tools" changelog subsection extracts NO tools', () => {
+    const readme = `# my-server
+
+## Changelog
+
+### Removed tools
+
+- \`legacy_export\` — no longer available as of v2.0
+- \`legacy_import\` — no longer available as of v2.0
+- \`legacy_sync\` — no longer available as of v2.0
+`
+    expect(fromReadmeCatalog({ path: 'README.md', content: readme })).toEqual([])
+  })
+
+  it('C3 (c): a "## Capabilities" feature table extracts NO tools (kebab-case feature names, not tool names)', () => {
+    const readme = `# my-server
+
+## Capabilities
+
+| Name | Description |
+| --- | --- |
+| multi-tenant | Supports multiple tenants |
+| auto-sync | Automatically syncs data |
+| rate-limiting | Limits request rate |
+`
+    expect(fromReadmeCatalog({ path: 'README.md', content: readme })).toEqual([])
+  })
+
+  it('C3: an entry whose description starts "Planned: …" inside an otherwise-valid Tools section is rejected entry-by-entry, and the surface disappears once fewer than 3 remain', () => {
+    const readme = `# my-server
+
+## Tools
+
+- \`real_tool_a\` — Does a real thing
+- \`real_tool_b\` — Does another real thing
+- \`execute_shell\` — Planned: run arbitrary shell commands
+`
+    // Only 2 genuine entries remain once the planned one is rejected — below
+    // README_MIN_TOOLS, so no surface at all (per the >=3 guard).
+    expect(fromReadmeCatalog({ path: 'README.md', content: readme })).toEqual([])
+  })
+
+  it('C3: rejected "planned" entry does not suppress sibling real entries when >=3 genuine ones remain', () => {
+    const readme = `# my-server
+
+## Tools
+
+- \`real_tool_a\` — Does a real thing
+- \`real_tool_b\` — Does another real thing
+- \`real_tool_c\` — Does a third real thing
+- \`execute_shell\` — Planned: run arbitrary shell commands
+`
+    const tools = fromReadmeCatalog({ path: 'README.md', content: readme })
+    expect(tools.map(t => t.name).sort()).toEqual(['real_tool_a', 'real_tool_b', 'real_tool_c'])
+  })
+
+  // -------------------------------------------------------------------------
+  // W6 review remediation I2: shape 1 (bold bullet + "- Description:") was
+  // unscoped and exempt from TYPE_ANNOT_RE — a jsonschema2md-style
+  // "## Configuration" property list must not become a fabricated tool surface.
+  // -------------------------------------------------------------------------
+
+  it('I2: a "## Configuration" section of jsonschema2md property bullets (shape 1) extracts NO tools', () => {
+    const readme = `# my-server
+
+## Configuration
+
+- **timeout_seconds**
+  - Description: (number) How long to wait before timing out
+
+- **retry_count**
+  - Description: (number) How many times to retry
+
+- **max_connections**
+  - Description: (number) Maximum number of connections
+`
+    expect(fromReadmeCatalog({ path: 'README.md', content: readme })).toEqual([])
+  })
 })
 
 // ---------------------------------------------------------------------------
@@ -218,6 +319,24 @@ describe('extractSchema — README as the LAST rung (W6 Part A)', () => {
     const r = extractSchema([readmeFile], undefined, undefined, readmeFile)
     expect(r.extracted).toBe(false)
     expect(r.readmeSourced).toBe(false)
+  })
+
+  // W6 review remediation I1: the shell-import security floor must apply
+  // regardless of which rung produced `tools` — a README-sourced surface
+  // (maintainer prose) must never let a structural code signal (a fetched
+  // source file importing a shell/process-execution API) score a clean
+  // security bill.
+  it('I1: a repo whose src/index.ts imports execSync AND ships a valid >=3-tool README catalog still gets the shell-import floor (prose cannot override a structural code signal)', () => {
+    const readmeFile = { path: 'README.md', content: readmeContent } // do_a/do_b/do_c — all benign descriptions
+    const shellFile = { path: 'src/index.ts', content: `import { execSync } from 'child_process'\nexecSync('ls')\n` }
+    const r = extractSchema([shellFile, readmeFile], undefined, undefined, readmeFile)
+    expect(r.extracted).toBe(true)
+    expect(r.readmeSourced).toBe(true)
+    expect(r.tools.map(t => t.name).sort()).toEqual(['do_a', 'do_b', 'do_c'])
+    // Without the floor, benign descriptions ("does a"/"does b"/"does c")
+    // classify to 'none' — the floor must raise this to at least 'medium'.
+    expect(r.toolSurfaceRisk).toBe('medium')
+    expect(r.findings.some(f => f.id === 'security/shell-import-no-tools')).toBe(true)
   })
 })
 
