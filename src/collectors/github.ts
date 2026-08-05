@@ -123,6 +123,29 @@ const TOOL_DEFINITIONS_BASENAME_RE = /^toolDefinitions\.json$/
 // rung) — rather than adding a new uncapped ALWAYS_FETCH entry.
 const TOOL_MANIFEST_BASENAME_RE = /^tools\.json$/i
 const SPEC_FETCH_CAP = 2
+// W6 (coverage-v1.5, wave2-spec §3 R6 / Task W6 Part A): a capped 1-slot
+// bucket for the repo's OWN root README — some servers ship no parseable
+// registration code but DO ship a machine-generated tool catalog in their
+// README (microsoft/playwright-mcp: a distribution shim whose real source
+// lives in another repo, carries a verified 69-tool catalog in README.md).
+// Depth-0 only (no path separator) — a nested README (docs/README.md,
+// packages/x/README.md) documents a sub-package, not the repo's own surface.
+// Ranked AFTER specCandidates and BEFORE rankedSource (see the `wanted`
+// concatenation below) and computed as its OWN filter().slice() bucket, the
+// same shape as specCandidates/entrypointCandidates — never a mutable
+// counter folded into the shared dedup loop. NON_SERVER_FETCH_CAP's comment
+// above explains exactly why a shared-counter cap is the wrong pattern here:
+// it makes a bucket's slot consumption depend on iteration order instead of
+// being a pure function of the recorded tree.
+const README_BASENAME_RE = /^README\.(md|rst)$/i
+const README_FETCH_CAP = 1
+// Exported so src/assemble.ts can find the SAME file the collector fetched
+// for this purpose when it decides whether to attempt the README-catalog
+// extraction rung (src/derive/schema.ts's fromReadmeCatalog) — one shared
+// predicate instead of two copies that could drift.
+export function isRootReadme(path: string): boolean {
+  return !path.includes('/') && README_BASENAME_RE.test(path)
+}
 // I8: mirrors SPEC_FETCH_CAP/ENTRYPOINT_FETCH_CAP — envBlobs previously had no
 // cap and was never evicted. Reviewer verified 10 .env.example files + 8
 // src/tools/*.ts files at FILE_CAP=12 left zero budget for ranked source, so
@@ -400,6 +423,15 @@ export function selectRepoFiles(
     .filter(b => fetchable(b) && isSpecFile(b.path) && !isNonServerPath(b.path))
     .sort(byPriority)
     .slice(0, SPEC_FETCH_CAP)
+  // W6 (Task W6 Part A): 1-slot README bucket, ranked right after
+  // specCandidates and before rankedSource — see README_FETCH_CAP above.
+  // isRootReadme already excludes anything but a depth-0 README.md/.rst, so
+  // no separate isNonServerPath check is needed here (a root README is never
+  // under tests/examples/docs/samples by definition).
+  const readmeCandidates = blobs
+    .filter(b => fetchable(b) && isRootReadme(b.path))
+    .sort(byPriority)
+    .slice(0, README_FETCH_CAP)
   // Regression fix: guaranteed entrypoint bucket, computed BEFORE rankedSource
   // (and excluded from it below) so the two buckets never double-count the
   // same path against the budget. Prioritized root/shallow-first then
@@ -457,7 +489,11 @@ export function selectRepoFiles(
   // would otherwise fall below SOURCE_FLOOR, and never below MANIFEST_QUOTA.
   let manifestsSelected = manifestCandidates
   const sourceTarget = Math.min(SOURCE_FLOOR, rankedSource.length)
-  const availableSourceSlots = () => Math.max(0, FILE_CAP - envBlobs.length - manifestsSelected.length - specCandidates.length - entrypointCandidates.length)
+  // W6: readmeCandidates.length folded into the same budget accounting as
+  // every other guaranteed-slot bucket (env/manifests/spec/entrypoint) — see
+  // the README bucket's comment above for why this must never become a
+  // mutable counter in the shared dedup loop instead.
+  const availableSourceSlots = () => Math.max(0, FILE_CAP - envBlobs.length - manifestsSelected.length - specCandidates.length - readmeCandidates.length - entrypointCandidates.length)
   while (availableSourceSlots() < sourceTarget && manifestsSelected.length > MANIFEST_QUOTA) {
     manifestsSelected = manifestsSelected.slice(0, -1)
   }
@@ -474,6 +510,7 @@ export function selectRepoFiles(
     ...envBlobs,
     ...manifestsSelected,
     ...specCandidates,
+    ...readmeCandidates,
     ...entrypointCandidates,
     ...rankedSource,
     ...blobs.filter(b => fetchable(b) && isLockfile(b.path)),

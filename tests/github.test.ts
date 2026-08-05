@@ -1154,6 +1154,75 @@ describe('collectGithub', () => {
     }
   })
 
+  // --- W6 (Task W6 Part A): 1-slot README bucket ---------------------------
+
+  it('W6: a root README.md is fetched (1-slot README bucket)', async () => {
+    const http = fakeHttp()
+    const origJson = http.json.bind(http)
+    http.json = async <T,>(url: string): Promise<T> => {
+      if (url.includes('/git/trees/')) {
+        return { tree: [
+          { path: 'package.json', type: 'blob', size: 500 },
+          { path: 'README.md', type: 'blob', size: 2000 },
+        ] } as T
+      }
+      return origJson<T>(url)
+    }
+    http.text = async (url: string): Promise<string> => {
+      if (url.includes('package.json')) return '{"name":"foo"}'
+      if (url.includes('README.md')) return '# foo'
+      return '{}'
+    }
+    const snap = await collectGithub({ ref: 'acme/foo', repo: { owner: 'acme', name: 'foo' } }, http, NOW)
+    expect(snap.files.map(f => f.path)).toContain('README.md')
+  })
+
+  it('W6: a README.rst is also recognized', () => {
+    const blobs = [{ path: 'package.json', size: 500 }, { path: 'README.rst', size: 500 }]
+    const selected = selectRepoFiles(blobs, 'foo', false)
+    expect(selected).toContain('README.rst')
+  })
+
+  it('W6: a NESTED README (docs/README.md, packages/x/README.md) is never treated as the root catalog source (depth-0 only)', () => {
+    const blobs = [
+      { path: 'package.json', size: 500 },
+      { path: 'docs/README.md', size: 500 },
+      { path: 'packages/x/README.md', size: 500 },
+    ]
+    const selected = selectRepoFiles(blobs, 'foo', false)
+    expect(selected).not.toContain('docs/README.md')
+    expect(selected).not.toContain('packages/x/README.md')
+  })
+
+  it('W6: the README bucket is capped at 1 slot even with both README.md and README.rst present (prefers .md)', () => {
+    const blobs = [{ path: 'package.json', size: 500 }, { path: 'README.md', size: 500 }, { path: 'README.rst', size: 500 }]
+    const selected = selectRepoFiles(blobs, 'foo', false)
+    const readmes = selected.filter(p => p === 'README.md' || p === 'README.rst')
+    expect(readmes).toHaveLength(1)
+    expect(readmes).toEqual(['README.md'])
+  })
+
+  it('W6: the README bucket is ranked AFTER spec files and BEFORE ranked source, and is accounted in the SAME availableSourceSlots budget as every other guaranteed bucket (never a shared-loop counter)', () => {
+    // A saturated FILE_CAP=12 budget: 1 manifest + 1 spec + README + as many
+    // ranked-source files as fit. If README were NOT budgeted through
+    // availableSourceSlots (e.g. bolted on as an extra, uncounted fetch), the
+    // total selected count would exceed FILE_CAP; if it displaced the spec
+    // bucket instead of ranked source, the spec file would be missing.
+    // NOTE: deliberately generic (non-`tools/`) source paths — a `tools/`-dir
+    // shape would itself trip the toolFanout>=8 trigger and widen FILE_CAP to
+    // 24, defeating the point of this saturation test.
+    const blobs = [
+      { path: 'package.json', size: 500 },
+      { path: 'openapi.json', size: 500 },
+      { path: 'README.md', size: 500 },
+      ...Array.from({ length: 20 }, (_, i) => ({ path: `src/file${i}.ts`, size: 100 })),
+    ]
+    const selected = selectRepoFiles(blobs, 'foo', false)
+    expect(selected.length).toBe(12) // FILE_CAP=12, fully saturated
+    expect(selected).toContain('README.md')
+    expect(selected).toContain('openapi.json')
+  })
+
   // --- W5 THE REGRESSION GUARD (plan Task W5, wave2-spec §2.2) ----------
   //
   // tests/fixtures/sampling-corpus.json was recorded live (`gh api
@@ -1183,10 +1252,35 @@ describe('collectGithub', () => {
   //   - protostatis/unbrowser: src/policy.rs — Rust. extractSchema has no
   //     Rust bucket (manifestJson/js/py/go only) — categorically
   //     unextractable regardless of content, per UNSUPPORTED_EXTRACTOR_EXT_RE.
+  //
+  // W6 (Task W6 Part A): three more paths join this list — not because a
+  // tool-bearing file became unextractable, but because the new 1-slot
+  // README bucket (ranked ahead of rankedSource, budgeted through the SAME
+  // availableSourceSlots() accounting as every other guaranteed bucket — see
+  // src/collectors/github.ts) now costs exactly one rankedSource slot on a
+  // repo whose budget was already saturated, displacing the single
+  // lowest-ranked rankedSource candidate. Each was fetched live and verified
+  // to carry no tool-registration idiom at all (confirmed by direct content
+  // inspection, not inference from the filename):
+  //   - codex-curator/studiomcphub: src/tools/watermark.py — a DCT-domain
+  //     image-watermarking helper (embed/detect), no `.tool(`/`add_tool(`
+  //     call anywhere; this repo's real tool list is published via
+  //     `site/.well-known/mcp.json` regardless (same rationale as the
+  //     sibling `src/tools/__init__.py` entry above).
+  //   - protostatis/unbrowser: train/eval_tool_likelihoods.py — a dev-only
+  //     A/B eval harness script for a separately-built Rust binary; no MCP
+  //     tool registration of any kind.
+  //   - upstash/context7: packages/mcp/src/lib/encryption.ts — a client-IP
+  //     encryption/header utility; no tool registration. (context7's actual
+  //     tool surface already lives under docs/openapi.json, correctly
+  //     excluded by isNonServerPath per the original W5 rank_sim finding.)
   const KNOWN_NOT_TOOL_BEARING = new Set([
     'mroops0111/openapi-mcp-gateway::src/openapi_mcp_gateway/__init__.py',
     'codex-curator/studiomcphub::src/tools/__init__.py',
     'protostatis/unbrowser::src/policy.rs',
+    'codex-curator/studiomcphub::src/tools/watermark.py',
+    'protostatis/unbrowser::train/eval_tool_likelihoods.py',
+    'upstash/context7::packages/mcp/src/lib/encryption.ts',
   ])
 
   interface SamplingCorpusEntry {

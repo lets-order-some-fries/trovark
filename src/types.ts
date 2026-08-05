@@ -7,7 +7,18 @@ export type Severity = 'info' | 'low' | 'medium' | 'high'
 // MCP surface at all ('not-server'), a remote-proxy that registers tools only
 // at runtime ('proxy'), or a distribution stub pointing at an external
 // package ('stub'). See src/derive/classify.ts for the detector.
-export type NotServerReason = 'sdk' | 'not-server' | 'proxy' | 'stub'
+// W6 (coverage-v1.5, wave2-spec §1a): 'dynamic' added — a REAL MCP server
+// (not a library, not a stub) whose tool list is built at runtime from
+// upstream servers or a DB and therefore has no static surface to grade
+// (duaraghav8/MCPJungle). Distinct from every reason above: those describe
+// "there is nothing here to check"; 'dynamic' describes "there is a real
+// server here, but its surface is unknowable from source alone" — see
+// src/derive/dynamic.ts. Reuses the SAME notServer/notServerReason plumbing
+// (score.ts nulls overall/grade for it exactly like the others) but is
+// rendered with its own distinct label everywhere a human reads it
+// (report/terminal.ts, index/site.ts) and counted in its own IndexStats
+// counter (index/scan.ts) rather than folded into "library / not a server".
+export type NotServerReason = 'sdk' | 'not-server' | 'proxy' | 'stub' | 'dynamic'
 
 export interface Finding {
   id: string            // e.g. 'security/shell-exec-tool'

@@ -26,6 +26,12 @@ export function renderTerminal(card: Scorecard, opts: { color?: boolean } = {}):
     // is nothing to grade. Must never render as a Trust Score / F card (the
     // 18-false-F-card bug this fixes).
     lines.push(paint(31, 'REPO UNAVAILABLE — not found on GitHub (renamed or deleted)', c) + `   rubric v${card.rubricVersion}`)
+  } else if (card.notServer && card.notServerReason === 'dynamic') {
+    // W6 (coverage-v1.5, Task W6 Part B): a DISTINCT label from "LIBRARY" —
+    // this IS a real MCP server, just one whose tool list is built at
+    // runtime from upstream servers/a DB and therefore has no static
+    // surface. See src/derive/dynamic.ts.
+    lines.push(paint(33, 'DYNAMIC TOOL SURFACE — not statically analyzable', c) + `   rubric v${card.rubricVersion}`)
   } else if (card.notServer) {
     // V2: a DISTINCT terminal state from INSUFFICIENT DATA — this repo was
     // never going to have tools to grade (library/SDK/proxy/stub), not a

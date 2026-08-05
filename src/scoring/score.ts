@@ -107,7 +107,15 @@ export function score(
     else if (d.confidence === 'low') notes.push(`Low confidence in ${d.id}: only ${d.available}/${d.total} signals available.`)
   }
   for (const e of signals.errors) notes.push(`Collector issue: ${e}`)
-  if (notServer) {
+  // W6 (coverage-v1.5, Task W6 Part B): 'dynamic' reuses the notServer
+  // plumbing (overall/grade null, same as every other notServer reason —
+  // see the `withheld` computation below) but is NOT a library: it is a
+  // real MCP server whose tool list is unknowable from source, not "nothing
+  // here to grade". Given its own note wording rather than the generic
+  // "Library / not an MCP server" phrasing every other reason gets.
+  if (notServer && signals.notServerReason === 'dynamic') {
+    notes.push(signals.notServerNote ?? 'Tools are registered at runtime from upstream servers; no static list exists.')
+  } else if (notServer) {
     const reasonPart = signals.notServerReason ? ` (${signals.notServerReason})` : ''
     notes.push(`Library / not an MCP server${reasonPart}: ${signals.notServerNote ?? 'no tools to grade.'}`)
   } else if (unresolved) {

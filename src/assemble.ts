@@ -1,7 +1,7 @@
 import type { Http } from './util/http.js'
 import type { ServerIdentity } from './resolver.js'
 import type { Signals } from './types.js'
-import { collectGithub, RepoNotFoundError, type RepoFile } from './collectors/github.js'
+import { collectGithub, RepoNotFoundError, isRootReadme, type RepoFile } from './collectors/github.js'
 import { collectNpm } from './collectors/npm.js'
 import { collectPypi } from './collectors/pypi.js'
 import { collectOsv, depsFromManifest, type Dep } from './collectors/osv.js'
@@ -9,6 +9,7 @@ import { repoChecks } from './derive/repoChecks.js'
 import { specEra } from './derive/specEra.js'
 import { extractSchema } from './derive/schema.js'
 import { classifyLibrary } from './derive/classify.js'
+import { detectDynamic } from './derive/dynamic.js'
 import { scanSecrets } from './derive/secrets.js'
 import { scanIntegrity } from './derive/integrity.js'
 import { parseLockfile } from './derive/lockfile.js'
@@ -37,9 +38,91 @@ export async function assemble(
       if (snap.treePaths) {
         Object.assign(s, repoChecks(snap.treePaths))
         s.specEra = specEra(snap.files)
-        const schema = extractSchema(snap.files, snap.treePaths, snap.toolFanoutCount)
-        s.schemaExtracted = schema.extracted
-        s.toolSurfaceRisk = schema.toolSurfaceRisk
+        // W6 (Task W6): STATIC-only extraction first (manifest/js/py/go/spec
+        // — no README rung yet). This is the ladder result classifyLibrary
+        // and the dynamic-surface classifier both key off of: README-derived
+        // tools must never feed classifyLibrary's toolsExtracted (verified
+        // regression, wave2-spec §3 R6 — modelcontextprotocol/ruby-sdk's
+        // README yields 11 fake "tools" like destructive_hint/redirect_uri
+        // and would flip a correct `notServer(sdk)` verdict into a graded
+        // card), and the dynamic classifier is gated on "every STATIC
+        // extractor returned 0" specifically so a proxy's own README
+        // (MCPJungle: included_tools/excluded_tools/included_servers) can
+        // never masquerade as a real tool surface and suppress it.
+        const staticSchema = extractSchema(snap.files, snap.treePaths, snap.toolFanoutCount)
+        // V2/V6 (library/SDK/proxy classifier, coverage-spec §3.1): ALWAYS
+        // call classifyLibrary and let it pick the tier via `toolsExtracted`
+        // (see the V6 note atop classify.ts). At zero tools it runs the
+        // unchanged Tier A signals (any one suffices); once tools WERE
+        // extracted it runs ONLY Tier B's corroborated-identity check (name
+        // ends `-sdk` AND an official-SDK description/topic) — added because
+        // V3-V5's better extraction started reading python-sdk/typescript-
+        // sdk/go-sdk/kotlin-sdk's own API-definition code as tool-shaped, so
+        // the old zero-tools-only guard stopped firing for exactly those
+        // repos. assemble.ts (not schema.ts) is the wiring seam:
+        // classifyLibrary needs repo metadata (name/description/topics, only
+        // on RepoSnapshot) alongside the FULL fetched file set, both of
+        // which live on `snap` here — routing this through schema.ts would
+        // need schema.ts to import classify.ts while classify.ts imports
+        // schema.ts's idiom detectors, a cycle.
+        // W6: moved ahead of the schema-derived signal assignments below
+        // (previously ran after them) — it only ever needed
+        // staticSchema.tools.length, so reordering is behavior-preserving
+        // for every pre-W6 call site, and it must run before the
+        // dynamic/README branch below can decide anything.
+        const classification = classifyLibrary({
+          name: snap.name, description: snap.description, topics: snap.topics, files: snap.files,
+          // Cross-language MCP SDK detection (already computed above for
+          // s.specEra) protects non-JS servers whose import-bearing file
+          // wasn't sampled from a false 'not a server' verdict — see
+          // ClassifyContext.mcpSdkDetected in classify.ts.
+          mcpSdkDetected: s.specEra !== undefined,
+          toolsExtracted: staticSchema.tools.length > 0,
+        })
+
+        let schema = staticSchema
+        // W6 (Task W6 Part B): set only when the dynamic-surface classifier
+        // fires — read below to floor (never renormalize) the security
+        // dimension's primary signal instead of letting it drop out.
+        let dynamicNote: string | undefined
+        if (classification) {
+          s.notServer = true
+          s.notServerReason = classification.reason
+          s.notServerNote = classification.note
+        } else if (staticSchema.tools.length === 0) {
+          // W6 (Task W6 Part B / wave2-spec §3 R6 ordering rule 2): the
+          // dynamic-surface check runs BEFORE the README rung, and ONLY once
+          // classifyLibrary declined (a library/SDK is never "dynamic" — it
+          // has no tool surface by design, not an unknowable one).
+          const dyn = detectDynamic({
+            files: snap.files, treePaths: snap.treePaths, description: snap.description, topics: snap.topics,
+          })
+          if (dyn) {
+            s.notServer = true
+            s.notServerReason = 'dynamic'
+            s.notServerNote = dyn.note
+            dynamicNote = dyn.note
+          } else {
+            // W6 (Task W6 Part A): the README-catalog rung — reachable only
+            // once we know this repo is neither a library nor dynamic-shaped.
+            const readmeFile = snap.files.find(f => isRootReadme(f.path))
+            if (readmeFile) schema = extractSchema(snap.files, snap.treePaths, snap.toolFanoutCount, readmeFile)
+          }
+        }
+
+        s.schemaExtracted = schema.extracted && !schema.readmeSourced
+        // W6 (Task W6 Part B point 3): do NOT let the tool-surface signal
+        // drop out (undefined) for a dynamic server and let security
+        // renormalize onto no-secrets/dependency-cves alone — a gateway
+        // exposing an unbounded, unknown upstream tool surface is the
+        // highest-risk shape in the corpus, not a neutral one (this is
+        // exactly what securityPrimaryAbsent in score.ts exists to prevent
+        // for every OTHER zero-signal case; notServer already bypasses that
+        // gate, so the floor has to be applied here instead). `schema` is
+        // `staticSchema` in this branch (0 tools, toolSurfaceRisk normally
+        // undefined unless the shell-import fallback already floored it to
+        // 'medium' — 'high' is the stronger, structural signal and wins).
+        s.toolSurfaceRisk = dynamicNote !== undefined ? 'high' : schema.toolSurfaceRisk
         // W5 (coverage-v1.5, wave2-spec §2.3): partial-surface honesty. When
         // the full tree has more tool-fanout-shaped files than the sample
         // reached (schema.surfacePartial), a toolCount/schemaTokenEstimate
@@ -64,35 +147,6 @@ export async function assemble(
           if (schema.extracted) s.toolCount = schema.tools.length
         }
         s.findings.push(...schema.findings)
-        // V2/V6 (library/SDK/proxy classifier, coverage-spec §3.1): ALWAYS
-        // call classifyLibrary and let it pick the tier via `toolsExtracted`
-        // (see the V6 note atop classify.ts). At zero tools it runs the
-        // unchanged Tier A signals (any one suffices); once tools WERE
-        // extracted it runs ONLY Tier B's corroborated-identity check (name
-        // ends `-sdk` AND an official-SDK description/topic) — added because
-        // V3-V5's better extraction started reading python-sdk/typescript-
-        // sdk/go-sdk/kotlin-sdk's own API-definition code as tool-shaped, so
-        // the old zero-tools-only guard stopped firing for exactly those
-        // repos. assemble.ts (not schema.ts) is the wiring seam:
-        // classifyLibrary needs repo metadata (name/description/topics, only
-        // on RepoSnapshot) alongside the FULL fetched file set, both of
-        // which live on `snap` here — routing this through schema.ts would
-        // need schema.ts to import classify.ts while classify.ts imports
-        // schema.ts's idiom detectors, a cycle.
-        const classification = classifyLibrary({
-          name: snap.name, description: snap.description, topics: snap.topics, files: snap.files,
-          // Cross-language MCP SDK detection (already computed above for
-          // s.specEra) protects non-JS servers whose import-bearing file
-          // wasn't sampled from a false 'not a server' verdict — see
-          // ClassifyContext.mcpSdkDetected in classify.ts.
-          mcpSdkDetected: s.specEra !== undefined,
-          toolsExtracted: schema.tools.length > 0,
-        })
-        if (classification) {
-          s.notServer = true
-          s.notServerReason = classification.reason
-          s.notServerNote = classification.note
-        }
         const secrets = scanSecrets(snap.files)
         s.secretsFound = secrets.count
         s.findings.push(...secrets.findings)

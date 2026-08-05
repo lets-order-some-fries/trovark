@@ -28,6 +28,21 @@ function row(e: IndexEntry): string {
   const d = e.dims
   const dim = (k: 'health' | 'reliability' | 'security' | 'cost') =>
     d ? `<td>${d[k].score}<span class="conf">${esc(d[k].confidence[0])}</span></td>` : '<td>—</td>'
+  // W6 (coverage-v1.5, Task W6 Part B): rendered distinctly from the generic
+  // notServer/"LIB" branch below — this IS a real MCP server, just one whose
+  // tool list is built at runtime from upstream servers/a DB and therefore
+  // has no static surface (src/derive/dynamic.ts). Checked BEFORE the
+  // general notServer branch since Scorecard reuses notServer:true for this
+  // reason too (see src/scoring/score.ts). Unlike the library branch, the
+  // security cell is rendered normally (not "not applicable") — dimensions
+  // are still shown and security is NOT renormalized away, per the plan's
+  // explicit "highest-risk shape in the corpus" note.
+  if (e.notServer && e.notServerReason === 'dynamic') {
+    if (!d) return `<tr class="failed" data-overall="-1"><td>${name}</td><td colspan="6" class="muted">dynamic tool surface — not statically analyzable</td></tr>`
+    return `<tr class="failed" data-overall="-1" title="dynamic tool surface — tools registered at runtime from upstream; no static list exists"><td>${name}</td>` +
+      `<td><span class="chip muted-chip" title="dynamic tool surface — not statically analyzable">DYN</span></td>` +
+      `<td class="muted">—</td>${dim('health')}${dim('reliability')}${dim('security')}${dim('cost')}</tr>`
+  }
   // V2: rendered distinctly from insufficientData — this is a library/SDK/
   // proxy/stub repo (correctly classified as having no tools to grade), not
   // a server the scanner failed to check. Mutually exclusive with
@@ -84,7 +99,7 @@ footer{margin:28px 0;color:#8b949e;font-size:13px}
 <h1>Trovark</h1>
 <p class="tag">Trust scores for MCP servers — evidence-linked grades from static public signals. <code>npx trovark &lt;server&gt;</code></p>
 <div class="stats">
-${stat(s.total, 'servers scanned')}${stat(s.scored - s.insufficient - (s.notServer ?? 0) - (s.unresolved ?? 0), 'graded')}${stat(s.avgOverall, 'avg score')}${stat(s.gradeDist['A'] ?? 0, 'A grades')}${stat(s.staleOver180, 'stale / abandoned')}${stat(s.shellExecTools, 'expose exec/shell tools')}${stat(s.insufficient, 'insufficient data')}${stat(s.notServer ?? 0, 'library / not a server')}${stat(s.unresolved ?? 0, 'repo unavailable')}${stat(s.failed, 'failed / unreachable')}
+${stat(s.total, 'servers scanned')}${stat(s.scored - s.insufficient - (s.notServer ?? 0) - (s.dynamic ?? 0) - (s.unresolved ?? 0), 'graded')}${stat(s.avgOverall, 'avg score')}${stat(s.gradeDist['A'] ?? 0, 'A grades')}${stat(s.staleOver180, 'stale / abandoned')}${stat(s.shellExecTools, 'expose exec/shell tools')}${stat(s.insufficient, 'insufficient data')}${stat(s.notServer ?? 0, 'library / not a server')}${stat(s.dynamic ?? 0, 'dynamic tool surface')}${stat(s.unresolved ?? 0, 'repo unavailable')}${stat(s.failed, 'failed / unreachable')}
 </div>
 <table id="t"><thead><tr>
 <th data-k="0">server</th><th data-k="1">grade</th><th data-k="2">score</th><th data-k="3">health</th><th data-k="4">reliability</th><th data-k="5">security</th><th data-k="6">cost</th>

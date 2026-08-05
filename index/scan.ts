@@ -36,7 +36,19 @@ export interface IndexStats {
   total: number; scored: number; failed: number; insufficient: number
   // V2: count of repos classified as library/SDK/proxy/stub (the correct
   // terminal outcome, not a withhold) — tracked separately from `insufficient`.
+  // W6: EXCLUDES notServerReason==='dynamic' — a dynamic-surface server is
+  // NOT a library, it's a real server with an unknowable static surface, so
+  // it must not inflate the "library / not a server" tile. See `dynamic`
+  // below.
   notServer: number
+  // W6 (coverage-v1.5, Task W6 Part B): repos whose tool surface is built at
+  // runtime from upstream servers/a DB (src/derive/dynamic.ts) — a THIRD
+  // distinct terminal state, alongside notServer ("library, nothing to
+  // grade") and unresolved ("repo doesn't exist"). Also excluded from
+  // gradeDist/avgOverall/staleOver180/secretsFindings/shellExecTools (same
+  // `!e.notServer` filters already cover it, since dynamic entries still set
+  // IndexEntry.notServer=true — see toEntry below).
+  dynamic: number
   // W1: repos GitHub 404s (deleted/renamed/never existed) — never graded,
   // never counted in gradeDist/avgOverall/staleOver180/secretsFindings/
   // shellExecTools (see summarize() below).
@@ -74,7 +86,11 @@ export function summarize(entries: IndexEntry[]): IndexStats {
     scored: scoredOk.length,
     failed: entries.length - scoredOk.length,
     insufficient: scoredOk.filter(e => e.insufficientData).length,
-    notServer: scoredOk.filter(e => e.notServer).length,
+    // W6: notServer excludes the dynamic-reason subset (tracked separately
+    // below) so the "library / not a server" tile never counts a real,
+    // just-unanalyzable-statically server as a library.
+    notServer: scoredOk.filter(e => e.notServer && e.notServerReason !== 'dynamic').length,
+    dynamic: scoredOk.filter(e => e.notServerReason === 'dynamic').length,
     unresolved: scoredOk.filter(e => e.unresolved).length,
     gradeDist,
     avgOverall: graded.length === 0 ? 0 : Math.round(graded.reduce((a, e) => a + (e.overall ?? 0), 0) / graded.length),
