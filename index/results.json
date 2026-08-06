@@ -1,25 +1,26 @@
 {
-  "generatedAt": "2026-08-04T15:54:21.482Z",
+  "generatedAt": "2026-08-06T15:38:42.646Z",
   "rubricVersion": "1.5.0",
   "stats": {
     "total": 400,
     "scored": 400,
     "failed": 0,
-    "insufficient": 29,
+    "insufficient": 31,
     "notServer": 32,
+    "dynamic": 1,
     "unresolved": 18,
     "gradeDist": {
-      "A": 59,
-      "B": 152,
+      "A": 50,
+      "B": 158,
       "C": 91,
-      "D": 17,
-      "F": 2
+      "D": 18,
+      "F": 1
     },
-    "avgOverall": 74,
-    "staleOver180": 51,
-    "secretsFindings": 15,
+    "avgOverall": 73,
+    "staleOver180": 52,
+    "secretsFindings": 14,
     "deprecated": 0,
-    "shellExecTools": 66
+    "shellExecTools": 69
   },
   "entries": [
     {
@@ -53,36 +54,6 @@
       }
     },
     {
-      "ref": "1mcp-app/agent",
-      "ok": true,
-      "overall": 98,
-      "grade": "A+",
-      "repoUrl": "https://github.com/1mcp-app/agent",
-      "dims": {
-        "health": {
-          "score": 95,
-          "confidence": "high"
-        },
-        "reliability": {
-          "score": 100,
-          "confidence": "high"
-        },
-        "security": {
-          "score": 100,
-          "confidence": "medium"
-        },
-        "cost": {
-          "score": 0,
-          "confidence": "low"
-        }
-      },
-      "daysSinceLastCommit": 0,
-      "integrity": {
-        "payloads": 0,
-        "observations": 0
-      }
-    },
-    {
       "ref": "LvcidPsyche/auto-browser",
       "ok": true,
       "overall": 98,
@@ -106,7 +77,7 @@
           "confidence": "high"
         }
       },
-      "daysSinceLastCommit": 0,
+      "daysSinceLastCommit": 2,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -136,7 +107,7 @@
           "confidence": "high"
         }
       },
-      "daysSinceLastCommit": 4,
+      "daysSinceLastCommit": 6,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -162,7 +133,7 @@
           "confidence": "medium"
         },
         "cost": {
-          "score": 0,
+          "score": null,
           "confidence": "low"
         }
       },
@@ -192,7 +163,7 @@
           "confidence": "medium"
         },
         "cost": {
-          "score": 0,
+          "score": null,
           "confidence": "low"
         }
       },
@@ -256,7 +227,7 @@
           "confidence": "high"
         }
       },
-      "daysSinceLastCommit": 1,
+      "daysSinceLastCommit": 0,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -316,37 +287,7 @@
           "confidence": "high"
         }
       },
-      "daysSinceLastCommit": 4,
-      "integrity": {
-        "payloads": 0,
-        "observations": 0
-      }
-    },
-    {
-      "ref": "arikusi/deepseek-mcp-server",
-      "ok": true,
-      "overall": 95,
-      "grade": "A",
-      "repoUrl": "https://github.com/arikusi/deepseek-mcp-server",
-      "dims": {
-        "health": {
-          "score": 87,
-          "confidence": "high"
-        },
-        "reliability": {
-          "score": 100,
-          "confidence": "high"
-        },
-        "security": {
-          "score": 100,
-          "confidence": "medium"
-        },
-        "cost": {
-          "score": 0,
-          "confidence": "low"
-        }
-      },
-      "daysSinceLastCommit": 0,
+      "daysSinceLastCommit": 6,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -402,38 +343,7 @@
           "confidence": "medium"
         },
         "cost": {
-          "score": 0,
-          "confidence": "low"
-        }
-      },
-      "daysSinceLastCommit": 0,
-      "integrity": {
-        "payloads": 0,
-        "observations": 0
-      }
-    },
-    {
-      "ref": "eat-pray-ai/yutu",
-      "ok": true,
-      "overall": 94,
-      "grade": "A",
-      "insufficientData": true,
-      "repoUrl": "https://github.com/eat-pray-ai/yutu",
-      "dims": {
-        "health": {
-          "score": 92,
-          "confidence": "high"
-        },
-        "reliability": {
-          "score": 92,
-          "confidence": "high"
-        },
-        "security": {
-          "score": 100,
-          "confidence": "low"
-        },
-        "cost": {
-          "score": 0,
+          "score": null,
           "confidence": "low"
         }
       },
@@ -467,38 +377,7 @@
           "confidence": "high"
         }
       },
-      "daysSinceLastCommit": 0,
-      "integrity": {
-        "payloads": 0,
-        "observations": 0
-      }
-    },
-    {
-      "ref": "ndthanhdev/mcp-browser-kit",
-      "ok": true,
-      "overall": 93,
-      "grade": "A",
-      "insufficientData": true,
-      "repoUrl": "https://github.com/ndthanhdev/mcp-browser-kit",
-      "dims": {
-        "health": {
-          "score": 89,
-          "confidence": "high"
-        },
-        "reliability": {
-          "score": 92,
-          "confidence": "high"
-        },
-        "security": {
-          "score": 100,
-          "confidence": "low"
-        },
-        "cost": {
-          "score": 0,
-          "confidence": "low"
-        }
-      },
-      "daysSinceLastCommit": 0,
+      "daysSinceLastCommit": 2,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -528,7 +407,7 @@
           "confidence": "high"
         }
       },
-      "daysSinceLastCommit": 21,
+      "daysSinceLastCommit": 23,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -554,37 +433,7 @@
           "confidence": "medium"
         },
         "cost": {
-          "score": 0,
-          "confidence": "low"
-        }
-      },
-      "daysSinceLastCommit": 1,
-      "integrity": {
-        "payloads": 0,
-        "observations": 0
-      }
-    },
-    {
-      "ref": "cafferychen777/ChatSpatial",
-      "ok": true,
-      "overall": 92,
-      "grade": "A",
-      "repoUrl": "https://github.com/cafferychen777/ChatSpatial",
-      "dims": {
-        "health": {
-          "score": 88,
-          "confidence": "high"
-        },
-        "reliability": {
-          "score": 89,
-          "confidence": "high"
-        },
-        "security": {
-          "score": 100,
-          "confidence": "medium"
-        },
-        "cost": {
-          "score": 0,
+          "score": null,
           "confidence": "low"
         }
       },
@@ -614,7 +463,7 @@
           "confidence": "medium"
         },
         "cost": {
-          "score": 0,
+          "score": null,
           "confidence": "low"
         }
       },
@@ -684,43 +533,7 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 2,
-      "integrity": {
-        "payloads": 0,
-        "observations": 0
-      }
-    },
-    {
-      "ref": "juspay/neurolink",
-      "ok": true,
-      "overall": 91,
-      "grade": "A",
-      "repoUrl": "https://github.com/juspay/neurolink",
-      "dims": {
-        "health": {
-          "score": 97,
-          "confidence": "high"
-        },
-        "reliability": {
-          "score": 100,
-          "confidence": "high"
-        },
-        "security": {
-          "score": 75,
-          "confidence": "medium"
-        },
-        "cost": {
-          "score": 0,
-          "confidence": "low"
-        }
-      },
-      "topFindings": [
-        {
-          "id": "security/committed-secret",
-          "severity": "medium"
-        }
-      ],
-      "daysSinceLastCommit": 0,
+      "daysSinceLastCommit": 4,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -750,7 +563,7 @@
           "confidence": "high"
         }
       },
-      "daysSinceLastCommit": 1,
+      "daysSinceLastCommit": 0,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -780,38 +593,7 @@
           "confidence": "high"
         }
       },
-      "daysSinceLastCommit": 3,
-      "integrity": {
-        "payloads": 0,
-        "observations": 0
-      }
-    },
-    {
-      "ref": "sitbon/magg",
-      "ok": true,
-      "overall": 91,
-      "grade": "A",
-      "insufficientData": true,
-      "repoUrl": "https://github.com/sitbon/magg",
-      "dims": {
-        "health": {
-          "score": 83,
-          "confidence": "high"
-        },
-        "reliability": {
-          "score": 92,
-          "confidence": "high"
-        },
-        "security": {
-          "score": 100,
-          "confidence": "low"
-        },
-        "cost": {
-          "score": 0,
-          "confidence": "low"
-        }
-      },
-      "daysSinceLastCommit": 1,
+      "daysSinceLastCommit": 5,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -837,11 +619,11 @@
           "confidence": "medium"
         },
         "cost": {
-          "score": 0,
+          "score": null,
           "confidence": "low"
         }
       },
-      "daysSinceLastCommit": 1,
+      "daysSinceLastCommit": 0,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -871,7 +653,7 @@
           "confidence": "high"
         }
       },
-      "daysSinceLastCommit": 23,
+      "daysSinceLastCommit": 25,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -901,37 +683,7 @@
           "confidence": "high"
         }
       },
-      "daysSinceLastCommit": 14,
-      "integrity": {
-        "payloads": 0,
-        "observations": 0
-      }
-    },
-    {
-      "ref": "neptun2000/heor-agent-mcp",
-      "ok": true,
-      "overall": 90,
-      "grade": "A",
-      "repoUrl": "https://github.com/neptun2000/heor-agent-mcp",
-      "dims": {
-        "health": {
-          "score": 75,
-          "confidence": "medium"
-        },
-        "reliability": {
-          "score": 100,
-          "confidence": "high"
-        },
-        "security": {
-          "score": 100,
-          "confidence": "medium"
-        },
-        "cost": {
-          "score": 0,
-          "confidence": "low"
-        }
-      },
-      "daysSinceLastCommit": 37,
+      "daysSinceLastCommit": 16,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -957,7 +709,7 @@
           "confidence": "medium"
         },
         "cost": {
-          "score": 0,
+          "score": null,
           "confidence": "low"
         }
       },
@@ -975,7 +727,7 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 0,
+      "daysSinceLastCommit": 2,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -1001,7 +753,7 @@
           "confidence": "medium"
         },
         "cost": {
-          "score": 0,
+          "score": null,
           "confidence": "low"
         }
       },
@@ -1037,7 +789,7 @@
           "confidence": "medium"
         },
         "cost": {
-          "score": 0,
+          "score": null,
           "confidence": "low"
         }
       },
@@ -1081,7 +833,7 @@
           "confidence": "medium"
         },
         "cost": {
-          "score": 0,
+          "score": null,
           "confidence": "low"
         }
       },
@@ -1099,66 +851,6 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 0,
-      "integrity": {
-        "payloads": 0,
-        "observations": 0
-      }
-    },
-    {
-      "ref": "netlify/netlify-mcp",
-      "ok": true,
-      "overall": 89,
-      "grade": "A-",
-      "repoUrl": "https://github.com/netlify/netlify-mcp",
-      "dims": {
-        "health": {
-          "score": 88,
-          "confidence": "medium"
-        },
-        "reliability": {
-          "score": 78,
-          "confidence": "high"
-        },
-        "security": {
-          "score": 100,
-          "confidence": "medium"
-        },
-        "cost": {
-          "score": 0,
-          "confidence": "low"
-        }
-      },
-      "daysSinceLastCommit": 0,
-      "integrity": {
-        "payloads": 0,
-        "observations": 0
-      }
-    },
-    {
-      "ref": "Rendeverance/toolfunnel",
-      "ok": true,
-      "overall": 89,
-      "grade": "A-",
-      "repoUrl": "https://github.com/Rendeverance/toolfunnel",
-      "dims": {
-        "health": {
-          "score": 80,
-          "confidence": "high"
-        },
-        "reliability": {
-          "score": 89,
-          "confidence": "high"
-        },
-        "security": {
-          "score": 100,
-          "confidence": "medium"
-        },
-        "cost": {
-          "score": 0,
-          "confidence": "low"
-        }
-      },
       "daysSinceLastCommit": 1,
       "integrity": {
         "payloads": 0,
@@ -1203,38 +895,7 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 0,
-      "integrity": {
-        "payloads": 0,
-        "observations": 0
-      }
-    },
-    {
-      "ref": "alex-on-ai/WebReaper",
-      "ok": true,
-      "overall": 88,
-      "grade": "A-",
-      "insufficientData": true,
-      "repoUrl": "https://github.com/alex-on-ai/WebReaper",
-      "dims": {
-        "health": {
-          "score": 93,
-          "confidence": "high"
-        },
-        "reliability": {
-          "score": 70,
-          "confidence": "high"
-        },
-        "security": {
-          "score": 100,
-          "confidence": "low"
-        },
-        "cost": {
-          "score": 0,
-          "confidence": "low"
-        }
-      },
-      "daysSinceLastCommit": 24,
+      "daysSinceLastCommit": 1,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -1271,37 +932,6 @@
       }
     },
     {
-      "ref": "duaraghav8/MCPJungle",
-      "ok": true,
-      "overall": 88,
-      "grade": "A-",
-      "insufficientData": true,
-      "repoUrl": "https://github.com/duaraghav8/MCPJungle",
-      "dims": {
-        "health": {
-          "score": 92,
-          "confidence": "high"
-        },
-        "reliability": {
-          "score": 70,
-          "confidence": "high"
-        },
-        "security": {
-          "score": 100,
-          "confidence": "low"
-        },
-        "cost": {
-          "score": 0,
-          "confidence": "low"
-        }
-      },
-      "daysSinceLastCommit": 2,
-      "integrity": {
-        "payloads": 0,
-        "observations": 0
-      }
-    },
-    {
       "ref": "freema/firefox-devtools-mcp",
       "ok": true,
       "overall": 88,
@@ -1321,7 +951,7 @@
           "confidence": "medium"
         },
         "cost": {
-          "score": 0,
+          "score": null,
           "confidence": "low"
         }
       },
@@ -1335,38 +965,7 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 0,
-      "integrity": {
-        "payloads": 0,
-        "observations": 0
-      }
-    },
-    {
-      "ref": "HalidSaglam/saglitzdesign-mcp",
-      "ok": true,
-      "overall": 88,
-      "grade": "A-",
-      "insufficientData": true,
-      "repoUrl": "https://github.com/HalidSaglam/saglitzdesign-mcp",
-      "dims": {
-        "health": {
-          "score": 77,
-          "confidence": "medium"
-        },
-        "reliability": {
-          "score": 92,
-          "confidence": "high"
-        },
-        "security": {
-          "score": 100,
-          "confidence": "low"
-        },
-        "cost": {
-          "score": 0,
-          "confidence": "low"
-        }
-      },
-      "daysSinceLastCommit": 0,
+      "daysSinceLastCommit": 1,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -1410,7 +1009,7 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 1,
+      "daysSinceLastCommit": 3,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -1440,7 +1039,51 @@
           "confidence": "high"
         }
       },
-      "daysSinceLastCommit": 4,
+      "daysSinceLastCommit": 6,
+      "integrity": {
+        "payloads": 0,
+        "observations": 0
+      }
+    },
+    {
+      "ref": "redis/mcp-redis",
+      "ok": true,
+      "overall": 88,
+      "grade": "A-",
+      "repoUrl": "https://github.com/redis/mcp-redis",
+      "dims": {
+        "health": {
+          "score": 98,
+          "confidence": "high"
+        },
+        "reliability": {
+          "score": 100,
+          "confidence": "high"
+        },
+        "security": {
+          "score": 63,
+          "confidence": "medium"
+        },
+        "cost": {
+          "score": null,
+          "confidence": "low"
+        }
+      },
+      "topFindings": [
+        {
+          "id": "security/destructive-tool",
+          "severity": "medium"
+        },
+        {
+          "id": "security/destructive-tool",
+          "severity": "medium"
+        },
+        {
+          "id": "security/destructive-tool",
+          "severity": "medium"
+        }
+      ],
+      "daysSinceLastCommit": 1,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -1470,7 +1113,7 @@
           "confidence": "high"
         }
       },
-      "daysSinceLastCommit": 26,
+      "daysSinceLastCommit": 28,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -1500,43 +1143,7 @@
           "confidence": "high"
         }
       },
-      "daysSinceLastCommit": 7,
-      "integrity": {
-        "payloads": 0,
-        "observations": 0
-      }
-    },
-    {
-      "ref": "Flux159/mcp-server-kubernetes",
-      "ok": true,
-      "overall": 87,
-      "grade": "A-",
-      "repoUrl": "https://github.com/Flux159/mcp-server-kubernetes",
-      "dims": {
-        "health": {
-          "score": 100,
-          "confidence": "high"
-        },
-        "reliability": {
-          "score": 92,
-          "confidence": "high"
-        },
-        "security": {
-          "score": 63,
-          "confidence": "medium"
-        },
-        "cost": {
-          "score": 0,
-          "confidence": "low"
-        }
-      },
-      "topFindings": [
-        {
-          "id": "security/shell-import-no-tools",
-          "severity": "medium"
-        }
-      ],
-      "daysSinceLastCommit": 6,
+      "daysSinceLastCommit": 9,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -1562,152 +1169,11 @@
           "confidence": "medium"
         },
         "cost": {
-          "score": 0,
+          "score": null,
           "confidence": "low"
         }
       },
-      "daysSinceLastCommit": 1,
-      "integrity": {
-        "payloads": 0,
-        "observations": 0
-      }
-    },
-    {
-      "ref": "microsoft/playwright-mcp",
-      "ok": true,
-      "overall": 87,
-      "grade": "A-",
-      "repoUrl": "https://github.com/microsoft/playwright-mcp",
-      "dims": {
-        "health": {
-          "score": 100,
-          "confidence": "high"
-        },
-        "reliability": {
-          "score": 92,
-          "confidence": "high"
-        },
-        "security": {
-          "score": 63,
-          "confidence": "medium"
-        },
-        "cost": {
-          "score": 0,
-          "confidence": "low"
-        }
-      },
-      "topFindings": [
-        {
-          "id": "security/shell-import-no-tools",
-          "severity": "medium"
-        }
-      ],
-      "daysSinceLastCommit": 0,
-      "integrity": {
-        "payloads": 0,
-        "observations": 0
-      }
-    },
-    {
-      "ref": "OHNLP/omop_mcp",
-      "ok": true,
-      "overall": 87,
-      "grade": "A-",
-      "repoUrl": "https://github.com/OHNLP/omop_mcp",
-      "dims": {
-        "health": {
-          "score": 62,
-          "confidence": "high"
-        },
-        "reliability": {
-          "score": 100,
-          "confidence": "high"
-        },
-        "security": {
-          "score": 100,
-          "confidence": "medium"
-        },
-        "cost": {
-          "score": 100,
-          "confidence": "high"
-        }
-      },
-      "daysSinceLastCommit": 85,
-      "integrity": {
-        "payloads": 0,
-        "observations": 0
-      }
-    },
-    {
-      "ref": "redis/mcp-redis",
-      "ok": true,
-      "overall": 87,
-      "grade": "A-",
-      "repoUrl": "https://github.com/redis/mcp-redis",
-      "dims": {
-        "health": {
-          "score": 94,
-          "confidence": "high"
-        },
-        "reliability": {
-          "score": 100,
-          "confidence": "high"
-        },
-        "security": {
-          "score": 63,
-          "confidence": "medium"
-        },
-        "cost": {
-          "score": 0,
-          "confidence": "low"
-        }
-      },
-      "topFindings": [
-        {
-          "id": "security/destructive-tool",
-          "severity": "medium"
-        },
-        {
-          "id": "security/destructive-tool",
-          "severity": "medium"
-        },
-        {
-          "id": "security/destructive-tool",
-          "severity": "medium"
-        }
-      ],
-      "daysSinceLastCommit": 0,
-      "integrity": {
-        "payloads": 0,
-        "observations": 0
-      }
-    },
-    {
-      "ref": "tatsuju/opdstar-nhi-mcp",
-      "ok": true,
-      "overall": 87,
-      "grade": "A-",
-      "insufficientData": true,
-      "repoUrl": "https://github.com/tatsuju/opdstar-nhi-mcp",
-      "dims": {
-        "health": {
-          "score": 73,
-          "confidence": "high"
-        },
-        "reliability": {
-          "score": 92,
-          "confidence": "high"
-        },
-        "security": {
-          "score": 100,
-          "confidence": "low"
-        },
-        "cost": {
-          "score": 0,
-          "confidence": "low"
-        }
-      },
-      "daysSinceLastCommit": 2,
+      "daysSinceLastCommit": 3,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -1733,7 +1199,7 @@
           "confidence": "medium"
         },
         "cost": {
-          "score": 0,
+          "score": null,
           "confidence": "low"
         }
       },
@@ -1751,7 +1217,7 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 1,
+      "daysSinceLastCommit": 3,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -1817,7 +1283,7 @@
           "confidence": "high"
         }
       },
-      "daysSinceLastCommit": 8,
+      "daysSinceLastCommit": 10,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -1853,7 +1319,7 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 2,
+      "daysSinceLastCommit": 1,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -1883,7 +1349,7 @@
           "confidence": "high"
         }
       },
-      "daysSinceLastCommit": 1,
+      "daysSinceLastCommit": 3,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -1913,7 +1379,7 @@
           "confidence": "high"
         }
       },
-      "daysSinceLastCommit": 8,
+      "daysSinceLastCommit": 10,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -1987,7 +1453,7 @@
           "confidence": "high"
         }
       },
-      "daysSinceLastCommit": 11,
+      "daysSinceLastCommit": 13,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -2013,7 +1479,7 @@
           "confidence": "medium"
         },
         "cost": {
-          "score": 0,
+          "score": null,
           "confidence": "low"
         }
       },
@@ -2023,7 +1489,7 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 11,
+      "daysSinceLastCommit": 1,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -2053,7 +1519,7 @@
           "confidence": "high"
         }
       },
-      "daysSinceLastCommit": 63,
+      "daysSinceLastCommit": 65,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -2079,7 +1545,7 @@
           "confidence": "medium"
         },
         "cost": {
-          "score": 0,
+          "score": null,
           "confidence": "low"
         }
       },
@@ -2089,7 +1555,7 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 3,
+      "daysSinceLastCommit": 5,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -2133,69 +1599,37 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 5,
+      "daysSinceLastCommit": 7,
       "integrity": {
         "payloads": 0,
         "observations": 0
       }
     },
     {
-      "ref": "Retio-ai/Retio-pagemap",
+      "ref": "OHNLP/omop_mcp",
       "ok": true,
       "overall": 85,
       "grade": "A-",
-      "insufficientData": true,
-      "repoUrl": "https://github.com/Retio-ai/Retio-pagemap",
+      "repoUrl": "https://github.com/OHNLP/omop_mcp",
       "dims": {
         "health": {
-          "score": 70,
+          "score": 57,
           "confidence": "high"
         },
         "reliability": {
-          "score": 92,
+          "score": 100,
           "confidence": "high"
         },
         "security": {
           "score": 100,
-          "confidence": "low"
-        },
-        "cost": {
-          "score": 0,
-          "confidence": "low"
-        }
-      },
-      "daysSinceLastCommit": 75,
-      "integrity": {
-        "payloads": 0,
-        "observations": 0
-      }
-    },
-    {
-      "ref": "RNVizion/rnv-color-mcp",
-      "ok": true,
-      "overall": 85,
-      "grade": "A-",
-      "insufficientData": true,
-      "repoUrl": "https://github.com/RNVizion/rnv-color-mcp",
-      "dims": {
-        "health": {
-          "score": 77,
           "confidence": "medium"
         },
-        "reliability": {
-          "score": 81,
-          "confidence": "high"
-        },
-        "security": {
-          "score": 100,
-          "confidence": "low"
-        },
         "cost": {
-          "score": 0,
-          "confidence": "low"
+          "score": 100,
+          "confidence": "high"
         }
       },
-      "daysSinceLastCommit": 7,
+      "daysSinceLastCommit": 87,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -2225,7 +1659,7 @@
           "confidence": "high"
         }
       },
-      "daysSinceLastCommit": 5,
+      "daysSinceLastCommit": 7,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -2255,7 +1689,7 @@
           "confidence": "high"
         }
       },
-      "daysSinceLastCommit": 7,
+      "daysSinceLastCommit": 9,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -2299,7 +1733,7 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 11,
+      "daysSinceLastCommit": 13,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -2335,7 +1769,7 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 2,
+      "daysSinceLastCommit": 4,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -2379,7 +1813,7 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 26,
+      "daysSinceLastCommit": 28,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -2409,7 +1843,7 @@
           "confidence": "high"
         }
       },
-      "daysSinceLastCommit": 9,
+      "daysSinceLastCommit": 11,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -2439,7 +1873,7 @@
           "confidence": "high"
         }
       },
-      "daysSinceLastCommit": 6,
+      "daysSinceLastCommit": 8,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -2469,51 +1903,7 @@
           "confidence": "high"
         }
       },
-      "daysSinceLastCommit": 14,
-      "integrity": {
-        "payloads": 0,
-        "observations": 0
-      }
-    },
-    {
-      "ref": "delmas41/gradusnotation",
-      "ok": true,
-      "overall": 84,
-      "grade": "B+",
-      "repoUrl": "https://github.com/delmas41/gradusnotation",
-      "dims": {
-        "health": {
-          "score": 79,
-          "confidence": "high"
-        },
-        "reliability": {
-          "score": 78,
-          "confidence": "high"
-        },
-        "security": {
-          "score": 87,
-          "confidence": "high"
-        },
-        "cost": {
-          "score": 100,
-          "confidence": "high"
-        }
-      },
-      "topFindings": [
-        {
-          "id": "security/dependency-cve",
-          "severity": "medium"
-        },
-        {
-          "id": "security/dependency-cve",
-          "severity": "medium"
-        },
-        {
-          "id": "security/dependency-cve",
-          "severity": "medium"
-        }
-      ],
-      "daysSinceLastCommit": 11,
+      "daysSinceLastCommit": 16,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -2543,7 +1933,7 @@
           "confidence": "high"
         }
       },
-      "daysSinceLastCommit": 61,
+      "daysSinceLastCommit": 63,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -2573,7 +1963,7 @@
           "confidence": "high"
         }
       },
-      "daysSinceLastCommit": 0,
+      "daysSinceLastCommit": 2,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -2603,7 +1993,7 @@
           "confidence": "high"
         }
       },
-      "daysSinceLastCommit": 18,
+      "daysSinceLastCommit": 20,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -2633,7 +2023,7 @@
           "confidence": "high"
         }
       },
-      "daysSinceLastCommit": 1,
+      "daysSinceLastCommit": 0,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -2663,38 +2053,7 @@
           "confidence": "high"
         }
       },
-      "daysSinceLastCommit": 6,
-      "integrity": {
-        "payloads": 0,
-        "observations": 0
-      }
-    },
-    {
-      "ref": "whiteknightonhorse/APIbase",
-      "ok": true,
-      "overall": 84,
-      "grade": "B+",
-      "insufficientData": true,
-      "repoUrl": "https://github.com/whiteknightonhorse/APIbase",
-      "dims": {
-        "health": {
-          "score": 66,
-          "confidence": "high"
-        },
-        "reliability": {
-          "score": 92,
-          "confidence": "high"
-        },
-        "security": {
-          "score": 100,
-          "confidence": "low"
-        },
-        "cost": {
-          "score": 0,
-          "confidence": "low"
-        }
-      },
-      "daysSinceLastCommit": 32,
+      "daysSinceLastCommit": 0,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -2728,17 +2087,9 @@
         {
           "id": "security/dependency-cve",
           "severity": "medium"
-        },
-        {
-          "id": "security/dependency-cve",
-          "severity": "medium"
-        },
-        {
-          "id": "security/dependency-cve",
-          "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 0,
+      "daysSinceLastCommit": 1,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -2768,7 +2119,52 @@
           "confidence": "high"
         }
       },
-      "daysSinceLastCommit": 2,
+      "daysSinceLastCommit": 4,
+      "integrity": {
+        "payloads": 0,
+        "observations": 0
+      }
+    },
+    {
+      "ref": "Flux159/mcp-server-kubernetes",
+      "ok": true,
+      "overall": 83,
+      "grade": "B+",
+      "repoUrl": "https://github.com/Flux159/mcp-server-kubernetes",
+      "dims": {
+        "health": {
+          "score": 100,
+          "confidence": "high"
+        },
+        "reliability": {
+          "score": 92,
+          "confidence": "high"
+        },
+        "security": {
+          "score": 40,
+          "confidence": "medium"
+        },
+        "cost": {
+          "score": 100,
+          "confidence": "high"
+        }
+      },
+      "topFindings": [
+        {
+          "id": "security/shell-exec-tool",
+          "severity": "high"
+        },
+        {
+          "id": "security/destructive-tool",
+          "severity": "medium"
+        },
+        {
+          "id": "security/shell-import-no-tools",
+          "severity": "medium"
+        }
+      ],
+      "daysSinceLastCommit": 8,
+      "readmeSourced": true,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -2798,7 +2194,88 @@
           "confidence": "high"
         }
       },
-      "daysSinceLastCommit": 3,
+      "daysSinceLastCommit": 5,
+      "integrity": {
+        "payloads": 0,
+        "observations": 0
+      }
+    },
+    {
+      "ref": "humanforai/humanforai-mcp",
+      "ok": true,
+      "overall": 83,
+      "grade": "B+",
+      "repoUrl": "https://github.com/humanforai/humanforai-mcp",
+      "dims": {
+        "health": {
+          "score": 73,
+          "confidence": "high"
+        },
+        "reliability": {
+          "score": 92,
+          "confidence": "high"
+        },
+        "security": {
+          "score": 77,
+          "confidence": "high"
+        },
+        "cost": {
+          "score": 100,
+          "confidence": "high"
+        }
+      },
+      "topFindings": [
+        {
+          "id": "security/dependency-cve",
+          "severity": "medium"
+        },
+        {
+          "id": "security/dependency-cve",
+          "severity": "medium"
+        },
+        {
+          "id": "security/dependency-cve",
+          "severity": "medium"
+        }
+      ],
+      "daysSinceLastCommit": 17,
+      "readmeSourced": true,
+      "integrity": {
+        "payloads": 0,
+        "observations": 0
+      }
+    },
+    {
+      "ref": "kushaim/practice-fusion-mcp",
+      "ok": true,
+      "overall": 83,
+      "grade": "B+",
+      "repoUrl": "https://github.com/kushaim/practice-fusion-mcp",
+      "dims": {
+        "health": {
+          "score": 89,
+          "confidence": "high"
+        },
+        "reliability": {
+          "score": 100,
+          "confidence": "high"
+        },
+        "security": {
+          "score": 60,
+          "confidence": "medium"
+        },
+        "cost": {
+          "score": 77,
+          "confidence": "high"
+        }
+      },
+      "topFindings": [
+        {
+          "id": "security/committed-secret",
+          "severity": "medium"
+        }
+      ],
+      "daysSinceLastCommit": 0,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -2828,7 +2305,7 @@
           "confidence": "high"
         }
       },
-      "daysSinceLastCommit": 2,
+      "daysSinceLastCommit": 0,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -2872,7 +2349,7 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 27,
+      "daysSinceLastCommit": 29,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -2902,38 +2379,7 @@
           "confidence": "high"
         }
       },
-      "daysSinceLastCommit": 79,
-      "integrity": {
-        "payloads": 0,
-        "observations": 0
-      }
-    },
-    {
-      "ref": "prufa-dev/prufa-mcp",
-      "ok": true,
-      "overall": 83,
-      "grade": "B+",
-      "insufficientData": true,
-      "repoUrl": "https://github.com/prufa-dev/prufa-mcp",
-      "dims": {
-        "health": {
-          "score": 73,
-          "confidence": "high"
-        },
-        "reliability": {
-          "score": 81,
-          "confidence": "high"
-        },
-        "security": {
-          "score": 100,
-          "confidence": "low"
-        },
-        "cost": {
-          "score": 0,
-          "confidence": "low"
-        }
-      },
-      "daysSinceLastCommit": 33,
+      "daysSinceLastCommit": 81,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -2999,43 +2445,7 @@
           "confidence": "high"
         }
       },
-      "daysSinceLastCommit": 33,
-      "integrity": {
-        "payloads": 0,
-        "observations": 0
-      }
-    },
-    {
-      "ref": "ViperJuice/mcp-gateway",
-      "ok": true,
-      "overall": 83,
-      "grade": "B+",
-      "repoUrl": "https://github.com/ViperJuice/mcp-gateway",
-      "dims": {
-        "health": {
-          "score": 91,
-          "confidence": "high"
-        },
-        "reliability": {
-          "score": 92,
-          "confidence": "high"
-        },
-        "security": {
-          "score": 63,
-          "confidence": "medium"
-        },
-        "cost": {
-          "score": 0,
-          "confidence": "low"
-        }
-      },
-      "topFindings": [
-        {
-          "id": "security/shell-import-no-tools",
-          "severity": "medium"
-        }
-      ],
-      "daysSinceLastCommit": 0,
+      "daysSinceLastCommit": 35,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -3071,7 +2481,7 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 1,
+      "daysSinceLastCommit": 3,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -3115,7 +2525,51 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 28,
+      "daysSinceLastCommit": 30,
+      "integrity": {
+        "payloads": 0,
+        "observations": 0
+      }
+    },
+    {
+      "ref": "delmas41/gradusnotation",
+      "ok": true,
+      "overall": 82,
+      "grade": "B+",
+      "repoUrl": "https://github.com/delmas41/gradusnotation",
+      "dims": {
+        "health": {
+          "score": 73,
+          "confidence": "high"
+        },
+        "reliability": {
+          "score": 78,
+          "confidence": "high"
+        },
+        "security": {
+          "score": 87,
+          "confidence": "high"
+        },
+        "cost": {
+          "score": 100,
+          "confidence": "high"
+        }
+      },
+      "topFindings": [
+        {
+          "id": "security/dependency-cve",
+          "severity": "medium"
+        },
+        {
+          "id": "security/dependency-cve",
+          "severity": "medium"
+        },
+        {
+          "id": "security/dependency-cve",
+          "severity": "medium"
+        }
+      ],
+      "daysSinceLastCommit": 13,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -3141,7 +2595,7 @@
           "confidence": "medium"
         },
         "cost": {
-          "score": 0,
+          "score": null,
           "confidence": "low"
         }
       },
@@ -3159,7 +2613,7 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 2,
+      "daysSinceLastCommit": 4,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -3185,7 +2639,7 @@
           "confidence": "medium"
         },
         "cost": {
-          "score": 0,
+          "score": null,
           "confidence": "low"
         }
       },
@@ -3201,42 +2655,6 @@
         {
           "id": "security/shell-exec-tool",
           "severity": "high"
-        }
-      ],
-      "daysSinceLastCommit": 0,
-      "integrity": {
-        "payloads": 0,
-        "observations": 0
-      }
-    },
-    {
-      "ref": "kushaim/practice-fusion-mcp",
-      "ok": true,
-      "overall": 82,
-      "grade": "B+",
-      "repoUrl": "https://github.com/kushaim/practice-fusion-mcp",
-      "dims": {
-        "health": {
-          "score": 88,
-          "confidence": "high"
-        },
-        "reliability": {
-          "score": 100,
-          "confidence": "high"
-        },
-        "security": {
-          "score": 60,
-          "confidence": "medium"
-        },
-        "cost": {
-          "score": 77,
-          "confidence": "high"
-        }
-      },
-      "topFindings": [
-        {
-          "id": "security/committed-secret",
-          "severity": "medium"
         }
       ],
       "daysSinceLastCommit": 0,
@@ -3283,7 +2701,7 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 42,
+      "daysSinceLastCommit": 44,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -3309,7 +2727,7 @@
           "confidence": "medium"
         },
         "cost": {
-          "score": 0,
+          "score": null,
           "confidence": "low"
         }
       },
@@ -3363,7 +2781,7 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 13,
+      "daysSinceLastCommit": 15,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -3389,7 +2807,7 @@
           "confidence": "medium"
         },
         "cost": {
-          "score": 0,
+          "score": null,
           "confidence": "low"
         }
       },
@@ -3433,7 +2851,7 @@
           "confidence": "medium"
         },
         "cost": {
-          "score": 0,
+          "score": null,
           "confidence": "low"
         }
       },
@@ -3491,7 +2909,7 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 6,
+      "daysSinceLastCommit": 8,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -3575,7 +2993,7 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 16,
+      "daysSinceLastCommit": 18,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -3611,7 +3029,7 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 4,
+      "daysSinceLastCommit": 6,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -3655,7 +3073,7 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 3,
+      "daysSinceLastCommit": 5,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -3681,7 +3099,7 @@
           "confidence": "medium"
         },
         "cost": {
-          "score": 0,
+          "score": null,
           "confidence": "low"
         }
       },
@@ -3692,6 +3110,90 @@
         }
       ],
       "daysSinceLastCommit": 0,
+      "integrity": {
+        "payloads": 0,
+        "observations": 0
+      }
+    },
+    {
+      "ref": "jau123/MeiGen-AI-Design-MCP",
+      "ok": true,
+      "overall": 81,
+      "grade": "B+",
+      "repoUrl": "https://github.com/jau123/MeiGen-AI-Design-MCP",
+      "dims": {
+        "health": {
+          "score": 88,
+          "confidence": "high"
+        },
+        "reliability": {
+          "score": 78,
+          "confidence": "high"
+        },
+        "security": {
+          "score": 63,
+          "confidence": "medium"
+        },
+        "cost": {
+          "score": 100,
+          "confidence": "high"
+        }
+      },
+      "topFindings": [
+        {
+          "id": "security/destructive-tool",
+          "severity": "medium"
+        },
+        {
+          "id": "security/destructive-tool",
+          "severity": "medium"
+        }
+      ],
+      "daysSinceLastCommit": 1,
+      "integrity": {
+        "payloads": 0,
+        "observations": 0
+      }
+    },
+    {
+      "ref": "makenotion/notion-mcp-server",
+      "ok": true,
+      "overall": 81,
+      "grade": "B+",
+      "repoUrl": "https://github.com/makenotion/notion-mcp-server",
+      "dims": {
+        "health": {
+          "score": 83,
+          "confidence": "high"
+        },
+        "reliability": {
+          "score": 100,
+          "confidence": "high"
+        },
+        "security": {
+          "score": 63,
+          "confidence": "medium"
+        },
+        "cost": {
+          "score": 77,
+          "confidence": "high"
+        }
+      },
+      "topFindings": [
+        {
+          "id": "security/destructive-tool",
+          "severity": "medium"
+        },
+        {
+          "id": "security/destructive-tool",
+          "severity": "medium"
+        },
+        {
+          "id": "security/destructive-tool",
+          "severity": "medium"
+        }
+      ],
+      "daysSinceLastCommit": 11,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -3717,7 +3219,7 @@
           "confidence": "medium"
         },
         "cost": {
-          "score": 0,
+          "score": null,
           "confidence": "low"
         }
       },
@@ -3735,7 +3237,7 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 3,
+      "daysSinceLastCommit": 5,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -3779,7 +3281,48 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 4,
+      "daysSinceLastCommit": 6,
+      "integrity": {
+        "payloads": 0,
+        "observations": 0
+      }
+    },
+    {
+      "ref": "sitbon/magg",
+      "ok": true,
+      "overall": 81,
+      "grade": "B+",
+      "repoUrl": "https://github.com/sitbon/magg",
+      "dims": {
+        "health": {
+          "score": 83,
+          "confidence": "high"
+        },
+        "reliability": {
+          "score": 92,
+          "confidence": "high"
+        },
+        "security": {
+          "score": 63,
+          "confidence": "medium"
+        },
+        "cost": {
+          "score": 90,
+          "confidence": "high"
+        }
+      },
+      "topFindings": [
+        {
+          "id": "security/destructive-tool",
+          "severity": "medium"
+        },
+        {
+          "id": "reliability/readme-sourced-tools",
+          "severity": "info"
+        }
+      ],
+      "daysSinceLastCommit": 3,
+      "readmeSourced": true,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -3819,7 +3362,7 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 0,
+      "daysSinceLastCommit": 1,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -3859,7 +3402,7 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 21,
+      "daysSinceLastCommit": 23,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -3895,7 +3438,7 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 50,
+      "daysSinceLastCommit": 52,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -3925,7 +3468,7 @@
           "confidence": "high"
         }
       },
-      "daysSinceLastCommit": 2,
+      "daysSinceLastCommit": 4,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -3955,7 +3498,7 @@
           "confidence": "high"
         }
       },
-      "daysSinceLastCommit": 69,
+      "daysSinceLastCommit": 71,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -3985,7 +3528,7 @@
           "confidence": "high"
         }
       },
-      "daysSinceLastCommit": 5,
+      "daysSinceLastCommit": 7,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -4021,7 +3564,7 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 0,
+      "daysSinceLastCommit": 2,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -4095,51 +3638,7 @@
           "confidence": "high"
         }
       },
-      "daysSinceLastCommit": 30,
-      "integrity": {
-        "payloads": 0,
-        "observations": 0
-      }
-    },
-    {
-      "ref": "makenotion/notion-mcp-server",
-      "ok": true,
-      "overall": 80,
-      "grade": "B+",
-      "repoUrl": "https://github.com/makenotion/notion-mcp-server",
-      "dims": {
-        "health": {
-          "score": 80,
-          "confidence": "high"
-        },
-        "reliability": {
-          "score": 100,
-          "confidence": "high"
-        },
-        "security": {
-          "score": 63,
-          "confidence": "medium"
-        },
-        "cost": {
-          "score": 77,
-          "confidence": "high"
-        }
-      },
-      "topFindings": [
-        {
-          "id": "security/destructive-tool",
-          "severity": "medium"
-        },
-        {
-          "id": "security/destructive-tool",
-          "severity": "medium"
-        },
-        {
-          "id": "security/destructive-tool",
-          "severity": "medium"
-        }
-      ],
-      "daysSinceLastCommit": 9,
+      "daysSinceLastCommit": 1,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -4179,7 +3678,7 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 17,
+      "daysSinceLastCommit": 19,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -4209,7 +3708,7 @@
           "confidence": "high"
         }
       },
-      "daysSinceLastCommit": 158,
+      "daysSinceLastCommit": 160,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -4239,7 +3738,7 @@
           "confidence": "high"
         }
       },
-      "daysSinceLastCommit": 141,
+      "daysSinceLastCommit": 143,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -4269,7 +3768,7 @@
           "confidence": "high"
         }
       },
-      "daysSinceLastCommit": 140,
+      "daysSinceLastCommit": 142,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -4299,52 +3798,7 @@
           "confidence": "high"
         }
       },
-      "daysSinceLastCommit": 2,
-      "integrity": {
-        "payloads": 0,
-        "observations": 0
-      }
-    },
-    {
-      "ref": "humanforai/humanforai-mcp",
-      "ok": true,
-      "overall": 79,
-      "grade": "B",
-      "insufficientData": true,
-      "repoUrl": "https://github.com/humanforai/humanforai-mcp",
-      "dims": {
-        "health": {
-          "score": 73,
-          "confidence": "high"
-        },
-        "reliability": {
-          "score": 92,
-          "confidence": "high"
-        },
-        "security": {
-          "score": 73,
-          "confidence": "medium"
-        },
-        "cost": {
-          "score": 0,
-          "confidence": "low"
-        }
-      },
-      "topFindings": [
-        {
-          "id": "security/dependency-cve",
-          "severity": "medium"
-        },
-        {
-          "id": "security/dependency-cve",
-          "severity": "medium"
-        },
-        {
-          "id": "security/dependency-cve",
-          "severity": "medium"
-        }
-      ],
-      "daysSinceLastCommit": 15,
+      "daysSinceLastCommit": 4,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -4388,7 +3842,7 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 61,
+      "daysSinceLastCommit": 63,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -4432,7 +3886,7 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 28,
+      "daysSinceLastCommit": 30,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -4476,7 +3930,7 @@
           "severity": "high"
         }
       ],
-      "daysSinceLastCommit": 2,
+      "daysSinceLastCommit": 1,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -4520,7 +3974,7 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 8,
+      "daysSinceLastCommit": 0,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -4550,7 +4004,7 @@
           "confidence": "high"
         }
       },
-      "daysSinceLastCommit": 1,
+      "daysSinceLastCommit": 3,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -4580,51 +4034,7 @@
           "confidence": "high"
         }
       },
-      "daysSinceLastCommit": 12,
-      "integrity": {
-        "payloads": 0,
-        "observations": 0
-      }
-    },
-    {
-      "ref": "User0856/snaprender-integrations",
-      "ok": true,
-      "overall": 79,
-      "grade": "B",
-      "repoUrl": "https://github.com/User0856/snaprender-integrations",
-      "dims": {
-        "health": {
-          "score": 65,
-          "confidence": "high"
-        },
-        "reliability": {
-          "score": 78,
-          "confidence": "high"
-        },
-        "security": {
-          "score": 87,
-          "confidence": "high"
-        },
-        "cost": {
-          "score": 100,
-          "confidence": "high"
-        }
-      },
-      "topFindings": [
-        {
-          "id": "security/dependency-cve",
-          "severity": "medium"
-        },
-        {
-          "id": "security/dependency-cve",
-          "severity": "medium"
-        },
-        {
-          "id": "security/dependency-cve",
-          "severity": "medium"
-        }
-      ],
-      "daysSinceLastCommit": 55,
+      "daysSinceLastCommit": 14,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -4654,7 +4064,7 @@
           "confidence": "high"
         }
       },
-      "daysSinceLastCommit": 1,
+      "daysSinceLastCommit": 3,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -4680,11 +4090,55 @@
           "confidence": "medium"
         },
         "cost": {
-          "score": 0,
+          "score": null,
           "confidence": "low"
         }
       },
       "topFindings": [
+        {
+          "id": "security/destructive-tool",
+          "severity": "medium"
+        }
+      ],
+      "daysSinceLastCommit": 2,
+      "integrity": {
+        "payloads": 0,
+        "observations": 0
+      }
+    },
+    {
+      "ref": "Custodia-Admin/pagebolt-mcp",
+      "ok": true,
+      "overall": 78,
+      "grade": "B",
+      "repoUrl": "https://github.com/Custodia-Admin/pagebolt-mcp",
+      "dims": {
+        "health": {
+          "score": 85,
+          "confidence": "high"
+        },
+        "reliability": {
+          "score": 100,
+          "confidence": "high"
+        },
+        "security": {
+          "score": 47,
+          "confidence": "high"
+        },
+        "cost": {
+          "score": 77,
+          "confidence": "high"
+        }
+      },
+      "topFindings": [
+        {
+          "id": "security/shell-exec-tool",
+          "severity": "high"
+        },
+        {
+          "id": "security/destructive-tool",
+          "severity": "medium"
+        },
         {
           "id": "security/destructive-tool",
           "severity": "medium"
@@ -4730,47 +4184,7 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 18,
-      "integrity": {
-        "payloads": 0,
-        "observations": 0
-      }
-    },
-    {
-      "ref": "jau123/MeiGen-AI-Design-MCP",
-      "ok": true,
-      "overall": 78,
-      "grade": "B",
-      "repoUrl": "https://github.com/jau123/MeiGen-AI-Design-MCP",
-      "dims": {
-        "health": {
-          "score": 80,
-          "confidence": "high"
-        },
-        "reliability": {
-          "score": 78,
-          "confidence": "high"
-        },
-        "security": {
-          "score": 63,
-          "confidence": "medium"
-        },
-        "cost": {
-          "score": 100,
-          "confidence": "high"
-        }
-      },
-      "topFindings": [
-        {
-          "id": "security/destructive-tool",
-          "severity": "medium"
-        },
-        {
-          "id": "security/destructive-tool",
-          "severity": "medium"
-        }
-      ],
-      "daysSinceLastCommit": 42,
+      "daysSinceLastCommit": 0,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -4814,7 +4228,7 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 7,
+      "daysSinceLastCommit": 0,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -4854,7 +4268,7 @@
           "severity": "high"
         }
       ],
-      "daysSinceLastCommit": 53,
+      "daysSinceLastCommit": 55,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -4880,7 +4294,7 @@
           "confidence": "medium"
         },
         "cost": {
-          "score": 0,
+          "score": null,
           "confidence": "low"
         }
       },
@@ -4890,7 +4304,7 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 0,
+      "daysSinceLastCommit": 1,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -4934,7 +4348,7 @@
           "severity": "high"
         }
       ],
-      "daysSinceLastCommit": 0,
+      "daysSinceLastCommit": 1,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -4964,7 +4378,7 @@
           "confidence": "high"
         }
       },
-      "daysSinceLastCommit": 169,
+      "daysSinceLastCommit": 171,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -4994,7 +4408,7 @@
           "confidence": "high"
         }
       },
-      "daysSinceLastCommit": 55,
+      "daysSinceLastCommit": 57,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -5038,7 +4452,7 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 1,
+      "daysSinceLastCommit": 3,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -5078,7 +4492,48 @@
           "severity": "medium"
         }
       ],
+      "daysSinceLastCommit": 1,
+      "integrity": {
+        "payloads": 0,
+        "observations": 0
+      }
+    },
+    {
+      "ref": "elastic/mcp-server-elasticsearch",
+      "ok": true,
+      "overall": 77,
+      "grade": "B",
+      "repoUrl": "https://github.com/elastic/mcp-server-elasticsearch",
+      "dims": {
+        "health": {
+          "score": 70,
+          "confidence": "high"
+        },
+        "reliability": {
+          "score": 88,
+          "confidence": "high"
+        },
+        "security": {
+          "score": 63,
+          "confidence": "medium"
+        },
+        "cost": {
+          "score": 100,
+          "confidence": "high"
+        }
+      },
+      "topFindings": [
+        {
+          "id": "security/shell-import-no-tools",
+          "severity": "medium"
+        },
+        {
+          "id": "reliability/readme-sourced-tools",
+          "severity": "info"
+        }
+      ],
       "daysSinceLastCommit": 0,
+      "readmeSourced": true,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -5114,7 +4569,7 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 48,
+      "daysSinceLastCommit": 50,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -5158,7 +4613,7 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 42,
+      "daysSinceLastCommit": 44,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -5188,7 +4643,7 @@
           "confidence": "high"
         }
       },
-      "daysSinceLastCommit": 61,
+      "daysSinceLastCommit": 63,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -5232,7 +4687,52 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 54,
+      "daysSinceLastCommit": 56,
+      "integrity": {
+        "payloads": 0,
+        "observations": 0
+      }
+    },
+    {
+      "ref": "microsoft/playwright-mcp",
+      "ok": true,
+      "overall": 77,
+      "grade": "B",
+      "repoUrl": "https://github.com/microsoft/playwright-mcp",
+      "dims": {
+        "health": {
+          "score": 100,
+          "confidence": "high"
+        },
+        "reliability": {
+          "score": 92,
+          "confidence": "high"
+        },
+        "security": {
+          "score": 40,
+          "confidence": "medium"
+        },
+        "cost": {
+          "score": 60,
+          "confidence": "high"
+        }
+      },
+      "topFindings": [
+        {
+          "id": "security/shell-exec-tool",
+          "severity": "high"
+        },
+        {
+          "id": "security/destructive-tool",
+          "severity": "medium"
+        },
+        {
+          "id": "security/destructive-tool",
+          "severity": "medium"
+        }
+      ],
+      "daysSinceLastCommit": 0,
+      "readmeSourced": true,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -5258,7 +4758,7 @@
           "confidence": "medium"
         },
         "cost": {
-          "score": 0,
+          "score": null,
           "confidence": "low"
         }
       },
@@ -5268,7 +4768,92 @@
           "severity": "high"
         }
       ],
-      "daysSinceLastCommit": 2,
+      "daysSinceLastCommit": 0,
+      "integrity": {
+        "payloads": 0,
+        "observations": 0
+      }
+    },
+    {
+      "ref": "thehealthai/clarity-mcp",
+      "ok": true,
+      "overall": 77,
+      "grade": "B",
+      "repoUrl": "https://github.com/thehealthai/clarity-mcp",
+      "dims": {
+        "health": {
+          "score": 70,
+          "confidence": "high"
+        },
+        "reliability": {
+          "score": 88,
+          "confidence": "high"
+        },
+        "security": {
+          "score": 63,
+          "confidence": "medium"
+        },
+        "cost": {
+          "score": 100,
+          "confidence": "high"
+        }
+      },
+      "topFindings": [
+        {
+          "id": "security/shell-import-no-tools",
+          "severity": "medium"
+        },
+        {
+          "id": "reliability/readme-sourced-tools",
+          "severity": "info"
+        }
+      ],
+      "daysSinceLastCommit": 8,
+      "readmeSourced": true,
+      "integrity": {
+        "payloads": 0,
+        "observations": 0
+      }
+    },
+    {
+      "ref": "User0856/snaprender-integrations",
+      "ok": true,
+      "overall": 77,
+      "grade": "B",
+      "repoUrl": "https://github.com/User0856/snaprender-integrations",
+      "dims": {
+        "health": {
+          "score": 60,
+          "confidence": "high"
+        },
+        "reliability": {
+          "score": 78,
+          "confidence": "high"
+        },
+        "security": {
+          "score": 87,
+          "confidence": "high"
+        },
+        "cost": {
+          "score": 100,
+          "confidence": "high"
+        }
+      },
+      "topFindings": [
+        {
+          "id": "security/dependency-cve",
+          "severity": "medium"
+        },
+        {
+          "id": "security/dependency-cve",
+          "severity": "medium"
+        },
+        {
+          "id": "security/dependency-cve",
+          "severity": "medium"
+        }
+      ],
+      "daysSinceLastCommit": 57,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -5294,7 +4879,7 @@
           "confidence": "medium"
         },
         "cost": {
-          "score": 0,
+          "score": null,
           "confidence": "low"
         }
       },
@@ -5304,7 +4889,7 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 1,
+      "daysSinceLastCommit": 3,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -5340,7 +4925,7 @@
           "severity": "high"
         }
       ],
-      "daysSinceLastCommit": 4,
+      "daysSinceLastCommit": 6,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -5384,7 +4969,7 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 127,
+      "daysSinceLastCommit": 129,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -5428,7 +5013,7 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 57,
+      "daysSinceLastCommit": 59,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -5472,7 +5057,7 @@
           "severity": "high"
         }
       ],
-      "daysSinceLastCommit": 24,
+      "daysSinceLastCommit": 26,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -5516,7 +5101,7 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 5,
+      "daysSinceLastCommit": 7,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -5542,7 +5127,7 @@
           "confidence": "medium"
         },
         "cost": {
-          "score": 0,
+          "score": null,
           "confidence": "low"
         }
       },
@@ -5590,7 +5175,7 @@
           "confidence": "high"
         }
       },
-      "daysSinceLastCommit": 10,
+      "daysSinceLastCommit": 12,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -5601,7 +5186,6 @@
       "ok": true,
       "overall": 76,
       "grade": "B",
-      "insufficientData": true,
       "repoUrl": "https://github.com/pkotecha-eng/aria-mcp-server",
       "dims": {
         "health": {
@@ -5613,46 +5197,22 @@
           "confidence": "high"
         },
         "security": {
-          "score": 100,
-          "confidence": "low"
-        },
-        "cost": {
-          "score": 0,
-          "confidence": "low"
-        }
-      },
-      "daysSinceLastCommit": 22,
-      "integrity": {
-        "payloads": 0,
-        "observations": 0
-      }
-    },
-    {
-      "ref": "RightOnPar-LLC/mesh-connector",
-      "ok": true,
-      "overall": 76,
-      "grade": "B",
-      "insufficientData": true,
-      "repoUrl": "https://github.com/RightOnPar-LLC/mesh-connector",
-      "dims": {
-        "health": {
           "score": 85,
-          "confidence": "high"
-        },
-        "reliability": {
-          "score": 38,
-          "confidence": "high"
-        },
-        "security": {
-          "score": 100,
-          "confidence": "low"
+          "confidence": "medium"
         },
         "cost": {
-          "score": 0,
-          "confidence": "low"
+          "score": 100,
+          "confidence": "high"
         }
       },
-      "daysSinceLastCommit": 1,
+      "topFindings": [
+        {
+          "id": "reliability/readme-sourced-tools",
+          "severity": "info"
+        }
+      ],
+      "daysSinceLastCommit": 24,
+      "readmeSourced": true,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -5678,7 +5238,7 @@
           "confidence": "medium"
         },
         "cost": {
-          "score": 0,
+          "score": null,
           "confidence": "low"
         }
       },
@@ -5688,7 +5248,7 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 3,
+      "daysSinceLastCommit": 5,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -5714,7 +5274,7 @@
           "confidence": "medium"
         },
         "cost": {
-          "score": 0,
+          "score": null,
           "confidence": "low"
         }
       },
@@ -5732,7 +5292,7 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 14,
+      "daysSinceLastCommit": 16,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -5762,7 +5322,7 @@
           "confidence": "high"
         }
       },
-      "daysSinceLastCommit": 300,
+      "daysSinceLastCommit": 302,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -5788,7 +5348,7 @@
           "confidence": "medium"
         },
         "cost": {
-          "score": 0,
+          "score": null,
           "confidence": "low"
         }
       },
@@ -5798,7 +5358,7 @@
           "severity": "high"
         }
       ],
-      "daysSinceLastCommit": 2,
+      "daysSinceLastCommit": 1,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -5824,7 +5384,7 @@
           "confidence": "medium"
         },
         "cost": {
-          "score": 0,
+          "score": null,
           "confidence": "low"
         }
       },
@@ -5878,7 +5438,95 @@
           "severity": "high"
         }
       ],
-      "daysSinceLastCommit": 13,
+      "daysSinceLastCommit": 15,
+      "integrity": {
+        "payloads": 0,
+        "observations": 0
+      }
+    },
+    {
+      "ref": "firecrawl/firecrawl-mcp-server",
+      "ok": true,
+      "overall": 75,
+      "grade": "B",
+      "repoUrl": "https://github.com/firecrawl/firecrawl-mcp-server",
+      "dims": {
+        "health": {
+          "score": 95,
+          "confidence": "high"
+        },
+        "reliability": {
+          "score": 100,
+          "confidence": "high"
+        },
+        "security": {
+          "score": 40,
+          "confidence": "medium"
+        },
+        "cost": {
+          "score": 47,
+          "confidence": "high"
+        }
+      },
+      "topFindings": [
+        {
+          "id": "security/shell-exec-tool",
+          "severity": "high"
+        },
+        {
+          "id": "security/shell-exec-tool",
+          "severity": "high"
+        },
+        {
+          "id": "security/shell-exec-tool",
+          "severity": "high"
+        }
+      ],
+      "daysSinceLastCommit": 0,
+      "integrity": {
+        "payloads": 0,
+        "observations": 0
+      }
+    },
+    {
+      "ref": "ikoskela/wisepanel-mcp",
+      "ok": true,
+      "overall": 75,
+      "grade": "B",
+      "repoUrl": "https://github.com/ikoskela/wisepanel-mcp",
+      "dims": {
+        "health": {
+          "score": 70,
+          "confidence": "high"
+        },
+        "reliability": {
+          "score": 56,
+          "confidence": "high"
+        },
+        "security": {
+          "score": 87,
+          "confidence": "high"
+        },
+        "cost": {
+          "score": 100,
+          "confidence": "high"
+        }
+      },
+      "topFindings": [
+        {
+          "id": "security/dependency-cve",
+          "severity": "medium"
+        },
+        {
+          "id": "security/dependency-cve",
+          "severity": "medium"
+        },
+        {
+          "id": "security/dependency-cve",
+          "severity": "medium"
+        }
+      ],
+      "daysSinceLastCommit": 0,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -5922,7 +5570,7 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 14,
+      "daysSinceLastCommit": 16,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -5952,7 +5600,7 @@
           "confidence": "high"
         }
       },
-      "daysSinceLastCommit": 91,
+      "daysSinceLastCommit": 93,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -6003,6 +5651,50 @@
       }
     },
     {
+      "ref": "mendableai/firecrawl-mcp-server",
+      "ok": true,
+      "overall": 75,
+      "grade": "B",
+      "repoUrl": "https://github.com/mendableai/firecrawl-mcp-server",
+      "dims": {
+        "health": {
+          "score": 95,
+          "confidence": "high"
+        },
+        "reliability": {
+          "score": 100,
+          "confidence": "high"
+        },
+        "security": {
+          "score": 40,
+          "confidence": "medium"
+        },
+        "cost": {
+          "score": 47,
+          "confidence": "high"
+        }
+      },
+      "topFindings": [
+        {
+          "id": "security/shell-exec-tool",
+          "severity": "high"
+        },
+        {
+          "id": "security/shell-exec-tool",
+          "severity": "high"
+        },
+        {
+          "id": "security/shell-exec-tool",
+          "severity": "high"
+        }
+      ],
+      "daysSinceLastCommit": 0,
+      "integrity": {
+        "payloads": 0,
+        "observations": 0
+      }
+    },
+    {
       "ref": "Pantani/ableton-mind",
       "ok": true,
       "overall": 75,
@@ -6040,81 +5732,7 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 41,
-      "integrity": {
-        "payloads": 0,
-        "observations": 0
-      }
-    },
-    {
-      "ref": "rupinder2/mcp-orchestrator",
-      "ok": true,
-      "overall": 75,
-      "grade": "B",
-      "repoUrl": "https://github.com/rupinder2/mcp-orchestrator",
-      "dims": {
-        "health": {
-          "score": 39,
-          "confidence": "medium"
-        },
-        "reliability": {
-          "score": 100,
-          "confidence": "high"
-        },
-        "security": {
-          "score": 100,
-          "confidence": "medium"
-        },
-        "cost": {
-          "score": 0,
-          "confidence": "low"
-        }
-      },
-      "daysSinceLastCommit": 159,
-      "integrity": {
-        "payloads": 0,
-        "observations": 0
-      }
-    },
-    {
-      "ref": "sF1nX/x402station-mcp",
-      "ok": true,
-      "overall": 75,
-      "grade": "B",
-      "repoUrl": "https://github.com/sF1nX/x402station-mcp",
-      "dims": {
-        "health": {
-          "score": 65,
-          "confidence": "high"
-        },
-        "reliability": {
-          "score": 78,
-          "confidence": "high"
-        },
-        "security": {
-          "score": 77,
-          "confidence": "high"
-        },
-        "cost": {
-          "score": 87,
-          "confidence": "high"
-        }
-      },
-      "topFindings": [
-        {
-          "id": "security/dependency-cve",
-          "severity": "medium"
-        },
-        {
-          "id": "security/dependency-cve",
-          "severity": "medium"
-        },
-        {
-          "id": "security/dependency-cve",
-          "severity": "medium"
-        }
-      ],
-      "daysSinceLastCommit": 63,
+      "daysSinceLastCommit": 43,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -6158,7 +5776,96 @@
           "severity": "high"
         }
       ],
+      "daysSinceLastCommit": 3,
+      "integrity": {
+        "payloads": 0,
+        "observations": 0
+      }
+    },
+    {
+      "ref": "TwelveTake-Studios/reaper-mcp",
+      "ok": true,
+      "overall": 75,
+      "grade": "B",
+      "repoUrl": "https://github.com/TwelveTake-Studios/reaper-mcp",
+      "dims": {
+        "health": {
+          "score": 80,
+          "confidence": "high"
+        },
+        "reliability": {
+          "score": 89,
+          "confidence": "high"
+        },
+        "security": {
+          "score": 63,
+          "confidence": "medium"
+        },
+        "cost": {
+          "score": 60,
+          "confidence": "high"
+        }
+      },
+      "topFindings": [
+        {
+          "id": "security/destructive-tool",
+          "severity": "medium"
+        },
+        {
+          "id": "security/destructive-tool",
+          "severity": "medium"
+        },
+        {
+          "id": "security/destructive-tool",
+          "severity": "medium"
+        }
+      ],
       "daysSinceLastCommit": 1,
+      "integrity": {
+        "payloads": 0,
+        "observations": 0
+      }
+    },
+    {
+      "ref": "anythink-cloud/anythink-cli",
+      "ok": true,
+      "overall": 74,
+      "grade": "B-",
+      "repoUrl": "https://github.com/anythink-cloud/anythink-cli",
+      "dims": {
+        "health": {
+          "score": 70,
+          "confidence": "high"
+        },
+        "reliability": {
+          "score": 81,
+          "confidence": "high"
+        },
+        "security": {
+          "score": 63,
+          "confidence": "medium"
+        },
+        "cost": {
+          "score": 90,
+          "confidence": "high"
+        }
+      },
+      "topFindings": [
+        {
+          "id": "security/destructive-tool",
+          "severity": "medium"
+        },
+        {
+          "id": "security/destructive-tool",
+          "severity": "medium"
+        },
+        {
+          "id": "security/destructive-tool",
+          "severity": "medium"
+        }
+      ],
+      "daysSinceLastCommit": 39,
+      "readmeSourced": true,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -6188,7 +5895,7 @@
           "confidence": "high"
         }
       },
-      "daysSinceLastCommit": 302,
+      "daysSinceLastCommit": 304,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -6222,50 +5929,6 @@
         {
           "id": "security/destructive-tool",
           "severity": "medium"
-        }
-      ],
-      "daysSinceLastCommit": 3,
-      "integrity": {
-        "payloads": 0,
-        "observations": 0
-      }
-    },
-    {
-      "ref": "firecrawl/firecrawl-mcp-server",
-      "ok": true,
-      "overall": 74,
-      "grade": "B-",
-      "repoUrl": "https://github.com/firecrawl/firecrawl-mcp-server",
-      "dims": {
-        "health": {
-          "score": 92,
-          "confidence": "high"
-        },
-        "reliability": {
-          "score": 100,
-          "confidence": "high"
-        },
-        "security": {
-          "score": 40,
-          "confidence": "medium"
-        },
-        "cost": {
-          "score": 47,
-          "confidence": "high"
-        }
-      },
-      "topFindings": [
-        {
-          "id": "security/shell-exec-tool",
-          "severity": "high"
-        },
-        {
-          "id": "security/shell-exec-tool",
-          "severity": "high"
-        },
-        {
-          "id": "security/shell-exec-tool",
-          "severity": "high"
         }
       ],
       "daysSinceLastCommit": 0,
@@ -6312,7 +5975,7 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 39,
+      "daysSinceLastCommit": 41,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -6356,7 +6019,7 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 46,
+      "daysSinceLastCommit": 48,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -6386,7 +6049,7 @@
           "confidence": "high"
         }
       },
-      "daysSinceLastCommit": 27,
+      "daysSinceLastCommit": 29,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -6430,51 +6093,7 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 28,
-      "integrity": {
-        "payloads": 0,
-        "observations": 0
-      }
-    },
-    {
-      "ref": "mendableai/firecrawl-mcp-server",
-      "ok": true,
-      "overall": 74,
-      "grade": "B-",
-      "repoUrl": "https://github.com/mendableai/firecrawl-mcp-server",
-      "dims": {
-        "health": {
-          "score": 92,
-          "confidence": "high"
-        },
-        "reliability": {
-          "score": 100,
-          "confidence": "high"
-        },
-        "security": {
-          "score": 40,
-          "confidence": "medium"
-        },
-        "cost": {
-          "score": 47,
-          "confidence": "high"
-        }
-      },
-      "topFindings": [
-        {
-          "id": "security/shell-exec-tool",
-          "severity": "high"
-        },
-        {
-          "id": "security/shell-exec-tool",
-          "severity": "high"
-        },
-        {
-          "id": "security/shell-exec-tool",
-          "severity": "high"
-        }
-      ],
-      "daysSinceLastCommit": 0,
+      "daysSinceLastCommit": 30,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -6518,7 +6137,7 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 26,
+      "daysSinceLastCommit": 28,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -6548,7 +6167,7 @@
           "confidence": "high"
         }
       },
-      "daysSinceLastCommit": 56,
+      "daysSinceLastCommit": 57,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -6574,7 +6193,7 @@
           "confidence": "medium"
         },
         "cost": {
-          "score": 0,
+          "score": null,
           "confidence": "low"
         }
       },
@@ -6588,7 +6207,7 @@
           "severity": "high"
         }
       ],
-      "daysSinceLastCommit": 1,
+      "daysSinceLastCommit": 3,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -6632,7 +6251,7 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 2,
+      "daysSinceLastCommit": 4,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -6672,7 +6291,7 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 25,
+      "daysSinceLastCommit": 27,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -6702,7 +6321,7 @@
           "confidence": "high"
         }
       },
-      "daysSinceLastCommit": 285,
+      "daysSinceLastCommit": 287,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -6746,7 +6365,7 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 1,
+      "daysSinceLastCommit": 3,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -6790,38 +6409,44 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 8,
+      "daysSinceLastCommit": 10,
       "integrity": {
         "payloads": 0,
         "observations": 0
       }
     },
     {
-      "ref": "copperline-labs/rendex-mcp",
+      "ref": "corralimited/snapdiff-mcp",
       "ok": true,
       "overall": 73,
       "grade": "B-",
-      "insufficientData": true,
-      "repoUrl": "https://github.com/copperline-labs/rendex-mcp",
+      "repoUrl": "https://github.com/corralimited/snapdiff-mcp",
       "dims": {
         "health": {
-          "score": 79,
-          "confidence": "high"
+          "score": 62,
+          "confidence": "medium"
         },
         "reliability": {
-          "score": 37,
+          "score": 59,
           "confidence": "high"
         },
         "security": {
-          "score": 100,
-          "confidence": "low"
+          "score": 85,
+          "confidence": "medium"
         },
         "cost": {
-          "score": 0,
-          "confidence": "low"
+          "score": 100,
+          "confidence": "high"
         }
       },
-      "daysSinceLastCommit": 0,
+      "topFindings": [
+        {
+          "id": "reliability/readme-sourced-tools",
+          "severity": "info"
+        }
+      ],
+      "daysSinceLastCommit": 49,
+      "readmeSourced": true,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -6865,7 +6490,7 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 308,
+      "daysSinceLastCommit": 310,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -6891,7 +6516,7 @@
           "confidence": "medium"
         },
         "cost": {
-          "score": 0,
+          "score": null,
           "confidence": "low"
         }
       },
@@ -6899,45 +6524,14 @@
         {
           "id": "security/shell-import-no-tools",
           "severity": "medium"
-        }
-      ],
-      "daysSinceLastCommit": 41,
-      "integrity": {
-        "payloads": 0,
-        "observations": 0
-      }
-    },
-    {
-      "ref": "elastic/mcp-server-elasticsearch",
-      "ok": true,
-      "overall": 73,
-      "grade": "B-",
-      "repoUrl": "https://github.com/elastic/mcp-server-elasticsearch",
-      "dims": {
-        "health": {
-          "score": 70,
-          "confidence": "high"
         },
-        "reliability": {
-          "score": 88,
-          "confidence": "high"
-        },
-        "security": {
-          "score": 63,
-          "confidence": "medium"
-        },
-        "cost": {
-          "score": 0,
-          "confidence": "low"
-        }
-      },
-      "topFindings": [
         {
-          "id": "security/shell-import-no-tools",
-          "severity": "medium"
+          "id": "reliability/readme-sourced-tools",
+          "severity": "info"
         }
       ],
-      "daysSinceLastCommit": 3,
+      "daysSinceLastCommit": 43,
+      "readmeSourced": true,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -6951,7 +6545,7 @@
       "repoUrl": "https://github.com/elisymlabs/elisym",
       "dims": {
         "health": {
-          "score": 87,
+          "score": 88,
           "confidence": "high"
         },
         "reliability": {
@@ -6981,7 +6575,7 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 5,
+      "daysSinceLastCommit": 7,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -7025,7 +6619,7 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 38,
+      "daysSinceLastCommit": 40,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -7069,7 +6663,7 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 10,
+      "daysSinceLastCommit": 12,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -7113,38 +6707,7 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 20,
-      "integrity": {
-        "payloads": 0,
-        "observations": 0
-      }
-    },
-    {
-      "ref": "helbertparanhos/cloudflare-mcp-pro",
-      "ok": true,
-      "overall": 73,
-      "grade": "B-",
-      "insufficientData": true,
-      "repoUrl": "https://github.com/helbertparanhos/cloudflare-mcp-pro",
-      "dims": {
-        "health": {
-          "score": 55,
-          "confidence": "high"
-        },
-        "reliability": {
-          "score": 70,
-          "confidence": "high"
-        },
-        "security": {
-          "score": 100,
-          "confidence": "low"
-        },
-        "cost": {
-          "score": 0,
-          "confidence": "low"
-        }
-      },
-      "daysSinceLastCommit": 42,
+      "daysSinceLastCommit": 22,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -7170,7 +6733,7 @@
           "confidence": "medium"
         },
         "cost": {
-          "score": 0,
+          "score": null,
           "confidence": "low"
         }
       },
@@ -7188,7 +6751,7 @@
           "severity": "high"
         }
       ],
-      "daysSinceLastCommit": 0,
+      "daysSinceLastCommit": 1,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -7214,7 +6777,7 @@
           "confidence": "medium"
         },
         "cost": {
-          "score": 0,
+          "score": null,
           "confidence": "low"
         }
       },
@@ -7254,7 +6817,7 @@
           "confidence": "medium"
         },
         "cost": {
-          "score": 0,
+          "score": null,
           "confidence": "low"
         }
       },
@@ -7272,7 +6835,51 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 3,
+      "daysSinceLastCommit": 5,
+      "integrity": {
+        "payloads": 0,
+        "observations": 0
+      }
+    },
+    {
+      "ref": "sF1nX/x402station-mcp",
+      "ok": true,
+      "overall": 73,
+      "grade": "B-",
+      "repoUrl": "https://github.com/sF1nX/x402station-mcp",
+      "dims": {
+        "health": {
+          "score": 60,
+          "confidence": "high"
+        },
+        "reliability": {
+          "score": 78,
+          "confidence": "high"
+        },
+        "security": {
+          "score": 77,
+          "confidence": "high"
+        },
+        "cost": {
+          "score": 87,
+          "confidence": "high"
+        }
+      },
+      "topFindings": [
+        {
+          "id": "security/dependency-cve",
+          "severity": "medium"
+        },
+        {
+          "id": "security/dependency-cve",
+          "severity": "medium"
+        },
+        {
+          "id": "security/dependency-cve",
+          "severity": "medium"
+        }
+      ],
+      "daysSinceLastCommit": 65,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -7316,87 +6923,7 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 65,
-      "integrity": {
-        "payloads": 0,
-        "observations": 0
-      }
-    },
-    {
-      "ref": "thehealthai/clarity-mcp",
-      "ok": true,
-      "overall": 73,
-      "grade": "B-",
-      "repoUrl": "https://github.com/thehealthai/clarity-mcp",
-      "dims": {
-        "health": {
-          "score": 70,
-          "confidence": "high"
-        },
-        "reliability": {
-          "score": 88,
-          "confidence": "high"
-        },
-        "security": {
-          "score": 63,
-          "confidence": "medium"
-        },
-        "cost": {
-          "score": 0,
-          "confidence": "low"
-        }
-      },
-      "topFindings": [
-        {
-          "id": "security/shell-import-no-tools",
-          "severity": "medium"
-        }
-      ],
-      "daysSinceLastCommit": 6,
-      "integrity": {
-        "payloads": 0,
-        "observations": 0
-      }
-    },
-    {
-      "ref": "TwelveTake-Studios/reaper-mcp",
-      "ok": true,
-      "overall": 73,
-      "grade": "B-",
-      "repoUrl": "https://github.com/TwelveTake-Studios/reaper-mcp",
-      "dims": {
-        "health": {
-          "score": 75,
-          "confidence": "high"
-        },
-        "reliability": {
-          "score": 89,
-          "confidence": "high"
-        },
-        "security": {
-          "score": 63,
-          "confidence": "medium"
-        },
-        "cost": {
-          "score": 60,
-          "confidence": "high"
-        }
-      },
-      "topFindings": [
-        {
-          "id": "security/destructive-tool",
-          "severity": "medium"
-        },
-        {
-          "id": "security/destructive-tool",
-          "severity": "medium"
-        },
-        {
-          "id": "security/destructive-tool",
-          "severity": "medium"
-        }
-      ],
-      "daysSinceLastCommit": 17,
+      "daysSinceLastCommit": 67,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -7440,82 +6967,7 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 43,
-      "integrity": {
-        "payloads": 0,
-        "observations": 0
-      }
-    },
-    {
-      "ref": "corralimited/snapdiff-mcp",
-      "ok": true,
-      "overall": 72,
-      "grade": "B-",
-      "insufficientData": true,
-      "repoUrl": "https://github.com/corralimited/snapdiff-mcp",
-      "dims": {
-        "health": {
-          "score": 62,
-          "confidence": "medium"
-        },
-        "reliability": {
-          "score": 59,
-          "confidence": "high"
-        },
-        "security": {
-          "score": 100,
-          "confidence": "low"
-        },
-        "cost": {
-          "score": 0,
-          "confidence": "low"
-        }
-      },
-      "daysSinceLastCommit": 48,
-      "integrity": {
-        "payloads": 0,
-        "observations": 0
-      }
-    },
-    {
-      "ref": "ikoskela/wisepanel-mcp",
-      "ok": true,
-      "overall": 72,
-      "grade": "B-",
-      "repoUrl": "https://github.com/ikoskela/wisepanel-mcp",
-      "dims": {
-        "health": {
-          "score": 61,
-          "confidence": "high"
-        },
-        "reliability": {
-          "score": 56,
-          "confidence": "high"
-        },
-        "security": {
-          "score": 87,
-          "confidence": "high"
-        },
-        "cost": {
-          "score": 100,
-          "confidence": "high"
-        }
-      },
-      "topFindings": [
-        {
-          "id": "security/dependency-cve",
-          "severity": "medium"
-        },
-        {
-          "id": "security/dependency-cve",
-          "severity": "medium"
-        },
-        {
-          "id": "security/dependency-cve",
-          "severity": "medium"
-        }
-      ],
-      "daysSinceLastCommit": 66,
+      "daysSinceLastCommit": 45,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -7545,7 +6997,7 @@
           "confidence": "high"
         }
       },
-      "daysSinceLastCommit": 5,
+      "daysSinceLastCommit": 7,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -7585,7 +7037,7 @@
           "severity": "high"
         }
       ],
-      "daysSinceLastCommit": 16,
+      "daysSinceLastCommit": 18,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -7629,43 +7081,7 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 13,
-      "integrity": {
-        "payloads": 0,
-        "observations": 0
-      }
-    },
-    {
-      "ref": "anythink-cloud/anythink-cli",
-      "ok": true,
-      "overall": 71,
-      "grade": "B-",
-      "repoUrl": "https://github.com/anythink-cloud/anythink-cli",
-      "dims": {
-        "health": {
-          "score": 70,
-          "confidence": "high"
-        },
-        "reliability": {
-          "score": 81,
-          "confidence": "high"
-        },
-        "security": {
-          "score": 63,
-          "confidence": "medium"
-        },
-        "cost": {
-          "score": 0,
-          "confidence": "low"
-        }
-      },
-      "topFindings": [
-        {
-          "id": "security/shell-import-no-tools",
-          "severity": "medium"
-        }
-      ],
-      "daysSinceLastCommit": 37,
+      "daysSinceLastCommit": 15,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -7709,7 +7125,7 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 3,
+      "daysSinceLastCommit": 5,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -7753,7 +7169,7 @@
           "severity": "info"
         }
       ],
-      "daysSinceLastCommit": 0,
+      "daysSinceLastCommit": 2,
       "integrity": {
         "payloads": 0,
         "observations": 2
@@ -7797,38 +7213,7 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 75,
-      "integrity": {
-        "payloads": 0,
-        "observations": 0
-      }
-    },
-    {
-      "ref": "erajasekar/ai-diagram-maker-mcp",
-      "ok": true,
-      "overall": 71,
-      "grade": "B-",
-      "insufficientData": true,
-      "repoUrl": "https://github.com/erajasekar/ai-diagram-maker-mcp",
-      "dims": {
-        "health": {
-          "score": 50,
-          "confidence": "high"
-        },
-        "reliability": {
-          "score": 70,
-          "confidence": "high"
-        },
-        "security": {
-          "score": 100,
-          "confidence": "low"
-        },
-        "cost": {
-          "score": 0,
-          "confidence": "low"
-        }
-      },
-      "daysSinceLastCommit": 92,
+      "daysSinceLastCommit": 77,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -7864,51 +7249,7 @@
           "severity": "high"
         }
       ],
-      "daysSinceLastCommit": 55,
-      "integrity": {
-        "payloads": 0,
-        "observations": 0
-      }
-    },
-    {
-      "ref": "hashgraph-online/hashnet-mcp-js",
-      "ok": true,
-      "overall": 71,
-      "grade": "B-",
-      "repoUrl": "https://github.com/hashgraph-online/hashnet-mcp-js",
-      "dims": {
-        "health": {
-          "score": 63,
-          "confidence": "high"
-        },
-        "reliability": {
-          "score": 100,
-          "confidence": "high"
-        },
-        "security": {
-          "score": 40,
-          "confidence": "medium"
-        },
-        "cost": {
-          "score": 90,
-          "confidence": "high"
-        }
-      },
-      "topFindings": [
-        {
-          "id": "security/shell-exec-tool",
-          "severity": "high"
-        },
-        {
-          "id": "security/destructive-tool",
-          "severity": "medium"
-        },
-        {
-          "id": "security/destructive-tool",
-          "severity": "medium"
-        }
-      ],
-      "daysSinceLastCommit": 88,
+      "daysSinceLastCommit": 57,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -7952,7 +7293,7 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 19,
+      "daysSinceLastCommit": 21,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -7978,7 +7319,7 @@
           "confidence": "medium"
         },
         "cost": {
-          "score": 0,
+          "score": null,
           "confidence": "low"
         }
       },
@@ -8026,7 +7367,7 @@
           "confidence": "high"
         }
       },
-      "daysSinceLastCommit": 293,
+      "daysSinceLastCommit": 295,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -8056,7 +7397,7 @@
           "confidence": "high"
         }
       },
-      "daysSinceLastCommit": 343,
+      "daysSinceLastCommit": 345,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -8100,7 +7441,7 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 115,
+      "daysSinceLastCommit": 117,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -8130,7 +7471,96 @@
           "confidence": "high"
         }
       },
-      "daysSinceLastCommit": 216,
+      "daysSinceLastCommit": 218,
+      "integrity": {
+        "payloads": 0,
+        "observations": 0
+      }
+    },
+    {
+      "ref": "PhungXuanAnh/selenium-mcp-server",
+      "ok": true,
+      "overall": 71,
+      "grade": "B-",
+      "repoUrl": "https://github.com/PhungXuanAnh/selenium-mcp-server",
+      "dims": {
+        "health": {
+          "score": 73,
+          "confidence": "medium"
+        },
+        "reliability": {
+          "score": 67,
+          "confidence": "high"
+        },
+        "security": {
+          "score": 62,
+          "confidence": "high"
+        },
+        "cost": {
+          "score": 90,
+          "confidence": "high"
+        }
+      },
+      "topFindings": [
+        {
+          "id": "security/destructive-tool",
+          "severity": "medium"
+        },
+        {
+          "id": "security/destructive-tool",
+          "severity": "medium"
+        },
+        {
+          "id": "security/dependency-cve",
+          "severity": "medium"
+        }
+      ],
+      "daysSinceLastCommit": 1,
+      "integrity": {
+        "payloads": 0,
+        "observations": 0
+      }
+    },
+    {
+      "ref": "Retio-ai/Retio-pagemap",
+      "ok": true,
+      "overall": 71,
+      "grade": "B-",
+      "repoUrl": "https://github.com/Retio-ai/Retio-pagemap",
+      "dims": {
+        "health": {
+          "score": 70,
+          "confidence": "high"
+        },
+        "reliability": {
+          "score": 92,
+          "confidence": "high"
+        },
+        "security": {
+          "score": 40,
+          "confidence": "medium"
+        },
+        "cost": {
+          "score": 90,
+          "confidence": "high"
+        }
+      },
+      "topFindings": [
+        {
+          "id": "security/shell-exec-tool",
+          "severity": "high"
+        },
+        {
+          "id": "security/shell-exec-tool",
+          "severity": "high"
+        },
+        {
+          "id": "reliability/readme-sourced-tools",
+          "severity": "info"
+        }
+      ],
+      "daysSinceLastCommit": 77,
+      "readmeSourced": true,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -8160,7 +7590,7 @@
           "confidence": "high"
         }
       },
-      "daysSinceLastCommit": 128,
+      "daysSinceLastCommit": 130,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -8204,7 +7634,7 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 23,
+      "daysSinceLastCommit": 25,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -8234,7 +7664,7 @@
           "confidence": "high"
         }
       },
-      "daysSinceLastCommit": 273,
+      "daysSinceLastCommit": 275,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -8278,7 +7708,7 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 5,
+      "daysSinceLastCommit": 7,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -8304,7 +7734,7 @@
           "confidence": "medium"
         },
         "cost": {
-          "score": 0,
+          "score": null,
           "confidence": "low"
         }
       },
@@ -8322,7 +7752,7 @@
           "severity": "high"
         }
       ],
-      "daysSinceLastCommit": 56,
+      "daysSinceLastCommit": 58,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -8362,7 +7792,7 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 6,
+      "daysSinceLastCommit": 8,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -8406,7 +7836,7 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 22,
+      "daysSinceLastCommit": 24,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -8432,7 +7862,7 @@
           "confidence": "medium"
         },
         "cost": {
-          "score": 0,
+          "score": null,
           "confidence": "low"
         }
       },
@@ -8442,38 +7872,7 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 0,
-      "integrity": {
-        "payloads": 0,
-        "observations": 0
-      }
-    },
-    {
-      "ref": "aidc2026ai-melon/aidc-ai-mcp",
-      "ok": true,
-      "overall": 69,
-      "grade": "C+",
-      "insufficientData": true,
-      "repoUrl": "https://github.com/aidc2026ai-melon/aidc-ai-mcp",
-      "dims": {
-        "health": {
-          "score": 68,
-          "confidence": "high"
-        },
-        "reliability": {
-          "score": 38,
-          "confidence": "high"
-        },
-        "security": {
-          "score": 100,
-          "confidence": "low"
-        },
-        "cost": {
-          "score": 0,
-          "confidence": "low"
-        }
-      },
-      "daysSinceLastCommit": 15,
+      "daysSinceLastCommit": 2,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -8503,7 +7902,7 @@
           "confidence": "high"
         }
       },
-      "daysSinceLastCommit": 33,
+      "daysSinceLastCommit": 35,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -8547,51 +7946,7 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 50,
-      "integrity": {
-        "payloads": 0,
-        "observations": 0
-      }
-    },
-    {
-      "ref": "Custodia-Admin/pagebolt-mcp",
-      "ok": true,
-      "overall": 69,
-      "grade": "C+",
-      "repoUrl": "https://github.com/Custodia-Admin/pagebolt-mcp",
-      "dims": {
-        "health": {
-          "score": 75,
-          "confidence": "medium"
-        },
-        "reliability": {
-          "score": 78,
-          "confidence": "high"
-        },
-        "security": {
-          "score": 47,
-          "confidence": "high"
-        },
-        "cost": {
-          "score": 77,
-          "confidence": "high"
-        }
-      },
-      "topFindings": [
-        {
-          "id": "security/shell-exec-tool",
-          "severity": "high"
-        },
-        {
-          "id": "security/destructive-tool",
-          "severity": "medium"
-        },
-        {
-          "id": "security/destructive-tool",
-          "severity": "medium"
-        }
-      ],
-      "daysSinceLastCommit": 31,
+      "daysSinceLastCommit": 52,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -8635,38 +7990,7 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 36,
-      "integrity": {
-        "payloads": 0,
-        "observations": 0
-      }
-    },
-    {
-      "ref": "kimtth/mcp-aoai-web-browsing",
-      "ok": true,
-      "overall": 69,
-      "grade": "C+",
-      "insufficientData": true,
-      "repoUrl": "https://github.com/kimtth/mcp-aoai-web-browsing",
-      "dims": {
-        "health": {
-          "score": 53,
-          "confidence": "high"
-        },
-        "reliability": {
-          "score": 59,
-          "confidence": "high"
-        },
-        "security": {
-          "score": 100,
-          "confidence": "low"
-        },
-        "cost": {
-          "score": 0,
-          "confidence": "low"
-        }
-      },
-      "daysSinceLastCommit": 19,
+      "daysSinceLastCommit": 38,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -8696,7 +8020,7 @@
           "confidence": "high"
         }
       },
-      "daysSinceLastCommit": 281,
+      "daysSinceLastCommit": 283,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -8726,7 +8050,7 @@
           "confidence": "high"
         }
       },
-      "daysSinceLastCommit": 66,
+      "daysSinceLastCommit": 68,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -8752,7 +8076,7 @@
           "confidence": "medium"
         },
         "cost": {
-          "score": 0,
+          "score": null,
           "confidence": "low"
         }
       },
@@ -8770,7 +8094,7 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 92,
+      "daysSinceLastCommit": 94,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -8800,7 +8124,7 @@
           "confidence": "high"
         }
       },
-      "daysSinceLastCommit": 39,
+      "daysSinceLastCommit": 41,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -8844,7 +8168,7 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 85,
+      "daysSinceLastCommit": 87,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -8874,7 +8198,7 @@
           "confidence": "high"
         }
       },
-      "daysSinceLastCommit": 23,
+      "daysSinceLastCommit": 25,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -8918,7 +8242,7 @@
           "severity": "high"
         }
       ],
-      "daysSinceLastCommit": 158,
+      "daysSinceLastCommit": 159,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -8948,7 +8272,7 @@
           "confidence": "high"
         }
       },
-      "daysSinceLastCommit": 59,
+      "daysSinceLastCommit": 61,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -8992,7 +8316,51 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 320,
+      "daysSinceLastCommit": 322,
+      "integrity": {
+        "payloads": 0,
+        "observations": 0
+      }
+    },
+    {
+      "ref": "hashgraph-online/hashnet-mcp-js",
+      "ok": true,
+      "overall": 68,
+      "grade": "C+",
+      "repoUrl": "https://github.com/hashgraph-online/hashnet-mcp-js",
+      "dims": {
+        "health": {
+          "score": 56,
+          "confidence": "high"
+        },
+        "reliability": {
+          "score": 100,
+          "confidence": "high"
+        },
+        "security": {
+          "score": 40,
+          "confidence": "medium"
+        },
+        "cost": {
+          "score": 90,
+          "confidence": "high"
+        }
+      },
+      "topFindings": [
+        {
+          "id": "security/shell-exec-tool",
+          "severity": "high"
+        },
+        {
+          "id": "security/destructive-tool",
+          "severity": "medium"
+        },
+        {
+          "id": "security/destructive-tool",
+          "severity": "medium"
+        }
+      ],
+      "daysSinceLastCommit": 90,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -9036,47 +8404,7 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 10,
-      "integrity": {
-        "payloads": 0,
-        "observations": 0
-      }
-    },
-    {
-      "ref": "julien040/anyquery",
-      "ok": true,
-      "overall": 68,
-      "grade": "C+",
-      "repoUrl": "https://github.com/julien040/anyquery",
-      "dims": {
-        "health": {
-          "score": 86,
-          "confidence": "high"
-        },
-        "reliability": {
-          "score": 78,
-          "confidence": "high"
-        },
-        "security": {
-          "score": 15,
-          "confidence": "medium"
-        },
-        "cost": {
-          "score": 100,
-          "confidence": "high"
-        }
-      },
-      "topFindings": [
-        {
-          "id": "security/shell-exec-tool",
-          "severity": "high"
-        },
-        {
-          "id": "security/committed-secret",
-          "severity": "medium"
-        }
-      ],
-      "daysSinceLastCommit": 24,
+      "daysSinceLastCommit": 12,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -9112,7 +8440,7 @@
           "severity": "high"
         }
       ],
-      "daysSinceLastCommit": 75,
+      "daysSinceLastCommit": 77,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -9156,7 +8484,7 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 17,
+      "daysSinceLastCommit": 19,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -9196,7 +8524,7 @@
           "severity": "high"
         }
       ],
-      "daysSinceLastCommit": 151,
+      "daysSinceLastCommit": 153,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -9240,7 +8568,7 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 50,
+      "daysSinceLastCommit": 52,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -9270,7 +8598,52 @@
           "confidence": "high"
         }
       },
-      "daysSinceLastCommit": 150,
+      "daysSinceLastCommit": 152,
+      "integrity": {
+        "payloads": 0,
+        "observations": 0
+      }
+    },
+    {
+      "ref": "dashi96/chromium-bridge",
+      "ok": true,
+      "overall": 67,
+      "grade": "C+",
+      "repoUrl": "https://github.com/dashi96/chromium-bridge",
+      "dims": {
+        "health": {
+          "score": 73,
+          "confidence": "high"
+        },
+        "reliability": {
+          "score": 48,
+          "confidence": "high"
+        },
+        "security": {
+          "score": 62,
+          "confidence": "high"
+        },
+        "cost": {
+          "score": 90,
+          "confidence": "high"
+        }
+      },
+      "topFindings": [
+        {
+          "id": "security/destructive-tool",
+          "severity": "medium"
+        },
+        {
+          "id": "security/dependency-cve",
+          "severity": "medium"
+        },
+        {
+          "id": "security/dependency-cve",
+          "severity": "medium"
+        }
+      ],
+      "daysSinceLastCommit": 15,
+      "readmeSourced": true,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -9306,7 +8679,47 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 11,
+      "daysSinceLastCommit": 13,
+      "integrity": {
+        "payloads": 0,
+        "observations": 0
+      }
+    },
+    {
+      "ref": "julien040/anyquery",
+      "ok": true,
+      "overall": 67,
+      "grade": "C+",
+      "repoUrl": "https://github.com/julien040/anyquery",
+      "dims": {
+        "health": {
+          "score": 83,
+          "confidence": "high"
+        },
+        "reliability": {
+          "score": 78,
+          "confidence": "high"
+        },
+        "security": {
+          "score": 15,
+          "confidence": "medium"
+        },
+        "cost": {
+          "score": 100,
+          "confidence": "high"
+        }
+      },
+      "topFindings": [
+        {
+          "id": "security/shell-exec-tool",
+          "severity": "high"
+        },
+        {
+          "id": "security/committed-secret",
+          "severity": "medium"
+        }
+      ],
+      "daysSinceLastCommit": 0,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -9350,7 +8763,7 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 93,
+      "daysSinceLastCommit": 94,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -9376,7 +8789,7 @@
           "confidence": "medium"
         },
         "cost": {
-          "score": 0,
+          "score": null,
           "confidence": "low"
         }
       },
@@ -9394,7 +8807,7 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 32,
+      "daysSinceLastCommit": 34,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -9434,7 +8847,7 @@
           "severity": "high"
         }
       ],
-      "daysSinceLastCommit": 146,
+      "daysSinceLastCommit": 148,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -9478,7 +8891,7 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 146,
+      "daysSinceLastCommit": 148,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -9522,52 +8935,7 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 91,
-      "integrity": {
-        "payloads": 0,
-        "observations": 0
-      }
-    },
-    {
-      "ref": "dashi96/chromium-bridge",
-      "ok": true,
-      "overall": 66,
-      "grade": "C+",
-      "insufficientData": true,
-      "repoUrl": "https://github.com/dashi96/chromium-bridge",
-      "dims": {
-        "health": {
-          "score": 73,
-          "confidence": "high"
-        },
-        "reliability": {
-          "score": 48,
-          "confidence": "high"
-        },
-        "security": {
-          "score": 73,
-          "confidence": "medium"
-        },
-        "cost": {
-          "score": 0,
-          "confidence": "low"
-        }
-      },
-      "topFindings": [
-        {
-          "id": "security/dependency-cve",
-          "severity": "medium"
-        },
-        {
-          "id": "security/dependency-cve",
-          "severity": "medium"
-        },
-        {
-          "id": "security/dependency-cve",
-          "severity": "medium"
-        }
-      ],
-      "daysSinceLastCommit": 13,
+      "daysSinceLastCommit": 93,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -9611,7 +8979,7 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 60,
+      "daysSinceLastCommit": 62,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -9655,38 +9023,7 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 105,
-      "integrity": {
-        "payloads": 0,
-        "observations": 0
-      }
-    },
-    {
-      "ref": "mikechao/metmuseum-mcp",
-      "ok": true,
-      "overall": 66,
-      "grade": "C+",
-      "insufficientData": true,
-      "repoUrl": "https://github.com/mikechao/metmuseum-mcp",
-      "dims": {
-        "health": {
-          "score": 39,
-          "confidence": "high"
-        },
-        "reliability": {
-          "score": 70,
-          "confidence": "high"
-        },
-        "security": {
-          "score": 100,
-          "confidence": "low"
-        },
-        "cost": {
-          "score": 0,
-          "confidence": "low"
-        }
-      },
-      "daysSinceLastCommit": 98,
+      "daysSinceLastCommit": 107,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -9730,51 +9067,7 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 93,
-      "integrity": {
-        "payloads": 0,
-        "observations": 0
-      }
-    },
-    {
-      "ref": "PhungXuanAnh/selenium-mcp-server",
-      "ok": true,
-      "overall": 66,
-      "grade": "C+",
-      "repoUrl": "https://github.com/PhungXuanAnh/selenium-mcp-server",
-      "dims": {
-        "health": {
-          "score": 57,
-          "confidence": "medium"
-        },
-        "reliability": {
-          "score": 67,
-          "confidence": "high"
-        },
-        "security": {
-          "score": 62,
-          "confidence": "high"
-        },
-        "cost": {
-          "score": 90,
-          "confidence": "high"
-        }
-      },
-      "topFindings": [
-        {
-          "id": "security/destructive-tool",
-          "severity": "medium"
-        },
-        {
-          "id": "security/destructive-tool",
-          "severity": "medium"
-        },
-        {
-          "id": "security/dependency-cve",
-          "severity": "medium"
-        }
-      ],
-      "daysSinceLastCommit": 56,
+      "daysSinceLastCommit": 95,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -9804,7 +9097,7 @@
           "confidence": "high"
         }
       },
-      "daysSinceLastCommit": 104,
+      "daysSinceLastCommit": 106,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -9844,7 +9137,7 @@
           "severity": "high"
         }
       ],
-      "daysSinceLastCommit": 33,
+      "daysSinceLastCommit": 35,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -9880,7 +9173,7 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 34,
+      "daysSinceLastCommit": 36,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -9910,7 +9203,7 @@
           "confidence": "high"
         }
       },
-      "daysSinceLastCommit": 140,
+      "daysSinceLastCommit": 142,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -9954,7 +9247,7 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 203,
+      "daysSinceLastCommit": 205,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -9998,7 +9291,7 @@
           "severity": "high"
         }
       ],
-      "daysSinceLastCommit": 16,
+      "daysSinceLastCommit": 18,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -10028,38 +9321,7 @@
           "confidence": "high"
         }
       },
-      "daysSinceLastCommit": 195,
-      "integrity": {
-        "payloads": 0,
-        "observations": 0
-      }
-    },
-    {
-      "ref": "BB-fat/browser-use-rs",
-      "ok": true,
-      "overall": 64,
-      "grade": "C",
-      "insufficientData": true,
-      "repoUrl": "https://github.com/BB-fat/browser-use-rs",
-      "dims": {
-        "health": {
-          "score": 35,
-          "confidence": "high"
-        },
-        "reliability": {
-          "score": 70,
-          "confidence": "high"
-        },
-        "security": {
-          "score": 100,
-          "confidence": "low"
-        },
-        "cost": {
-          "score": 0,
-          "confidence": "low"
-        }
-      },
-      "daysSinceLastCommit": 257,
+      "daysSinceLastCommit": 197,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -10085,11 +9347,11 @@
           "confidence": "medium"
         },
         "cost": {
-          "score": 0,
+          "score": null,
           "confidence": "low"
         }
       },
-      "daysSinceLastCommit": 82,
+      "daysSinceLastCommit": 84,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -10133,7 +9395,7 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 43,
+      "daysSinceLastCommit": 45,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -10184,50 +9446,6 @@
       }
     },
     {
-      "ref": "Metadrama/obscura-mcp",
-      "ok": true,
-      "overall": 64,
-      "grade": "C",
-      "repoUrl": "https://github.com/Metadrama/obscura-mcp",
-      "dims": {
-        "health": {
-          "score": 41,
-          "confidence": "medium"
-        },
-        "reliability": {
-          "score": 78,
-          "confidence": "high"
-        },
-        "security": {
-          "score": 62,
-          "confidence": "high"
-        },
-        "cost": {
-          "score": 100,
-          "confidence": "high"
-        }
-      },
-      "topFindings": [
-        {
-          "id": "security/destructive-tool",
-          "severity": "medium"
-        },
-        {
-          "id": "security/dependency-cve",
-          "severity": "medium"
-        },
-        {
-          "id": "security/dependency-cve",
-          "severity": "medium"
-        }
-      ],
-      "daysSinceLastCommit": 79,
-      "integrity": {
-        "payloads": 0,
-        "observations": 0
-      }
-    },
-    {
       "ref": "r-huijts/oorlogsbronnen-mcp",
       "ok": true,
       "overall": 64,
@@ -10265,7 +9483,7 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 438,
+      "daysSinceLastCommit": 440,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -10309,7 +9527,7 @@
           "severity": "high"
         }
       ],
-      "daysSinceLastCommit": 8,
+      "daysSinceLastCommit": 10,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -10353,7 +9571,7 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 297,
+      "daysSinceLastCommit": 299,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -10397,7 +9615,7 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 72,
+      "daysSinceLastCommit": 74,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -10423,7 +9641,7 @@
           "confidence": "medium"
         },
         "cost": {
-          "score": 0,
+          "score": null,
           "confidence": "low"
         }
       },
@@ -10441,7 +9659,7 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 234,
+      "daysSinceLastCommit": 236,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -10485,7 +9703,7 @@
           "severity": "high"
         }
       ],
-      "daysSinceLastCommit": 52,
+      "daysSinceLastCommit": 54,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -10515,7 +9733,7 @@
           "confidence": "high"
         }
       },
-      "daysSinceLastCommit": 272,
+      "daysSinceLastCommit": 274,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -10545,7 +9763,7 @@
           "confidence": "high"
         }
       },
-      "daysSinceLastCommit": 164,
+      "daysSinceLastCommit": 166,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -10589,7 +9807,7 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 127,
+      "daysSinceLastCommit": 129,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -10633,7 +9851,7 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 383,
+      "daysSinceLastCommit": 385,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -10677,7 +9895,7 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 69,
+      "daysSinceLastCommit": 71,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -10721,7 +9939,51 @@
           "severity": "high"
         }
       ],
-      "daysSinceLastCommit": 41,
+      "daysSinceLastCommit": 43,
+      "integrity": {
+        "payloads": 0,
+        "observations": 0
+      }
+    },
+    {
+      "ref": "Metadrama/obscura-mcp",
+      "ok": true,
+      "overall": 62,
+      "grade": "C",
+      "repoUrl": "https://github.com/Metadrama/obscura-mcp",
+      "dims": {
+        "health": {
+          "score": 35,
+          "confidence": "medium"
+        },
+        "reliability": {
+          "score": 78,
+          "confidence": "high"
+        },
+        "security": {
+          "score": 62,
+          "confidence": "high"
+        },
+        "cost": {
+          "score": 100,
+          "confidence": "high"
+        }
+      },
+      "topFindings": [
+        {
+          "id": "security/destructive-tool",
+          "severity": "medium"
+        },
+        {
+          "id": "security/dependency-cve",
+          "severity": "medium"
+        },
+        {
+          "id": "security/dependency-cve",
+          "severity": "medium"
+        }
+      ],
+      "daysSinceLastCommit": 81,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -10765,7 +10027,7 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 47,
+      "daysSinceLastCommit": 48,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -10809,7 +10071,7 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 21,
+      "daysSinceLastCommit": 23,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -10839,7 +10101,7 @@
           "confidence": "high"
         }
       },
-      "daysSinceLastCommit": 144,
+      "daysSinceLastCommit": 146,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -10883,7 +10145,7 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 340,
+      "daysSinceLastCommit": 342,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -10909,7 +10171,7 @@
           "confidence": "medium"
         },
         "cost": {
-          "score": 0,
+          "score": null,
           "confidence": "low"
         }
       },
@@ -10919,38 +10181,7 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 50,
-      "integrity": {
-        "payloads": 0,
-        "observations": 0
-      }
-    },
-    {
-      "ref": "djalal/quran-mcp-server",
-      "ok": true,
-      "overall": 61,
-      "grade": "C",
-      "insufficientData": true,
-      "repoUrl": "https://github.com/djalal/quran-mcp-server",
-      "dims": {
-        "health": {
-          "score": 26,
-          "confidence": "medium"
-        },
-        "reliability": {
-          "score": 70,
-          "confidence": "high"
-        },
-        "security": {
-          "score": 100,
-          "confidence": "low"
-        },
-        "cost": {
-          "score": 0,
-          "confidence": "low"
-        }
-      },
-      "daysSinceLastCommit": 417,
+      "daysSinceLastCommit": 52,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -10986,7 +10217,7 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 165,
+      "daysSinceLastCommit": 167,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -11030,7 +10261,7 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 126,
+      "daysSinceLastCommit": 128,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -11074,7 +10305,7 @@
           "severity": "high"
         }
       ],
-      "daysSinceLastCommit": 32,
+      "daysSinceLastCommit": 34,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -11118,7 +10349,7 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 590,
+      "daysSinceLastCommit": 592,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -11162,7 +10393,7 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 80,
+      "daysSinceLastCommit": 82,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -11206,7 +10437,7 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 146,
+      "daysSinceLastCommit": 148,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -11236,7 +10467,7 @@
           "confidence": "high"
         }
       },
-      "daysSinceLastCommit": 123,
+      "daysSinceLastCommit": 125,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -11280,7 +10511,7 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 328,
+      "daysSinceLastCommit": 330,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -11324,7 +10555,7 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 237,
+      "daysSinceLastCommit": 239,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -11360,7 +10591,7 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 104,
+      "daysSinceLastCommit": 106,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -11400,7 +10631,7 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 385,
+      "daysSinceLastCommit": 387,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -11440,7 +10671,7 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 82,
+      "daysSinceLastCommit": 84,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -11470,7 +10701,7 @@
           "confidence": "high"
         }
       },
-      "daysSinceLastCommit": 145,
+      "daysSinceLastCommit": 147,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -11500,7 +10731,7 @@
           "confidence": "high"
         }
       },
-      "daysSinceLastCommit": 143,
+      "daysSinceLastCommit": 145,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -11536,7 +10767,7 @@
           "severity": "high"
         }
       ],
-      "daysSinceLastCommit": 52,
+      "daysSinceLastCommit": 54,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -11566,7 +10797,7 @@
           "confidence": "high"
         }
       },
-      "daysSinceLastCommit": 150,
+      "daysSinceLastCommit": 152,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -11596,7 +10827,7 @@
           "confidence": "high"
         }
       },
-      "daysSinceLastCommit": 148,
+      "daysSinceLastCommit": 150,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -11626,7 +10857,7 @@
           "confidence": "high"
         }
       },
-      "daysSinceLastCommit": 133,
+      "daysSinceLastCommit": 135,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -11670,7 +10901,7 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 405,
+      "daysSinceLastCommit": 407,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -11714,7 +10945,7 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 325,
+      "daysSinceLastCommit": 327,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -11744,7 +10975,7 @@
           "confidence": "high"
         }
       },
-      "daysSinceLastCommit": 543,
+      "daysSinceLastCommit": 545,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -11788,7 +11019,7 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 468,
+      "daysSinceLastCommit": 470,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -11832,7 +11063,7 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 257,
+      "daysSinceLastCommit": 259,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -11876,7 +11107,7 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 299,
+      "daysSinceLastCommit": 301,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -11920,7 +11151,7 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 430,
+      "daysSinceLastCommit": 432,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -11950,82 +11181,7 @@
           "confidence": "high"
         }
       },
-      "daysSinceLastCommit": 454,
-      "integrity": {
-        "payloads": 0,
-        "observations": 0
-      }
-    },
-    {
-      "ref": "imprvhub/mcp-browser-agent",
-      "ok": true,
-      "overall": 56,
-      "grade": "C-",
-      "repoUrl": "https://github.com/imprvhub/mcp-browser-agent",
-      "dims": {
-        "health": {
-          "score": 44,
-          "confidence": "high"
-        },
-        "reliability": {
-          "score": 67,
-          "confidence": "high"
-        },
-        "security": {
-          "score": 40,
-          "confidence": "medium"
-        },
-        "cost": {
-          "score": 90,
-          "confidence": "high"
-        }
-      },
-      "topFindings": [
-        {
-          "id": "security/shell-exec-tool",
-          "severity": "high"
-        },
-        {
-          "id": "security/destructive-tool",
-          "severity": "medium"
-        },
-        {
-          "id": "security/destructive-tool",
-          "severity": "medium"
-        }
-      ],
-      "daysSinceLastCommit": 180,
-      "integrity": {
-        "payloads": 0,
-        "observations": 0
-      }
-    },
-    {
-      "ref": "MastadoonPrime/sylex-search",
-      "ok": true,
-      "overall": 56,
-      "grade": "C-",
-      "insufficientData": true,
-      "repoUrl": "https://github.com/MastadoonPrime/sylex-search",
-      "dims": {
-        "health": {
-          "score": 39,
-          "confidence": "medium"
-        },
-        "reliability": {
-          "score": 37,
-          "confidence": "high"
-        },
-        "security": {
-          "score": 100,
-          "confidence": "low"
-        },
-        "cost": {
-          "score": 0,
-          "confidence": "low"
-        }
-      },
-      "daysSinceLastCommit": 101,
+      "daysSinceLastCommit": 456,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -12061,7 +11217,7 @@
           "severity": "high"
         }
       ],
-      "daysSinceLastCommit": 174,
+      "daysSinceLastCommit": 176,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -12091,7 +11247,7 @@
           "confidence": "high"
         }
       },
-      "daysSinceLastCommit": 411,
+      "daysSinceLastCommit": 413,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -12135,7 +11291,51 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 121,
+      "daysSinceLastCommit": 123,
+      "integrity": {
+        "payloads": 0,
+        "observations": 0
+      }
+    },
+    {
+      "ref": "imprvhub/mcp-browser-agent",
+      "ok": true,
+      "overall": 55,
+      "grade": "C-",
+      "repoUrl": "https://github.com/imprvhub/mcp-browser-agent",
+      "dims": {
+        "health": {
+          "score": 43,
+          "confidence": "high"
+        },
+        "reliability": {
+          "score": 67,
+          "confidence": "high"
+        },
+        "security": {
+          "score": 40,
+          "confidence": "medium"
+        },
+        "cost": {
+          "score": 90,
+          "confidence": "high"
+        }
+      },
+      "topFindings": [
+        {
+          "id": "security/shell-exec-tool",
+          "severity": "high"
+        },
+        {
+          "id": "security/destructive-tool",
+          "severity": "medium"
+        },
+        {
+          "id": "security/destructive-tool",
+          "severity": "medium"
+        }
+      ],
+      "daysSinceLastCommit": 182,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -12161,7 +11361,7 @@
           "confidence": "medium"
         },
         "cost": {
-          "score": 0,
+          "score": null,
           "confidence": "low"
         }
       },
@@ -12179,7 +11379,7 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 53,
+      "daysSinceLastCommit": 55,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -12219,7 +11419,7 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 429,
+      "daysSinceLastCommit": 431,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -12259,38 +11459,7 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 151,
-      "integrity": {
-        "payloads": 0,
-        "observations": 0
-      }
-    },
-    {
-      "ref": "Automata-Labs-team/MCP-Server-Playwright",
-      "ok": true,
-      "overall": 54,
-      "grade": "D+",
-      "insufficientData": true,
-      "repoUrl": "https://github.com/Automata-Labs-team/MCP-Server-Playwright",
-      "dims": {
-        "health": {
-          "score": 33,
-          "confidence": "high"
-        },
-        "reliability": {
-          "score": 37,
-          "confidence": "high"
-        },
-        "security": {
-          "score": 100,
-          "confidence": "low"
-        },
-        "cost": {
-          "score": 0,
-          "confidence": "low"
-        }
-      },
-      "daysSinceLastCommit": 424,
+      "daysSinceLastCommit": 153,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -12316,11 +11485,11 @@
           "confidence": "medium"
         },
         "cost": {
-          "score": 0,
+          "score": null,
           "confidence": "low"
         }
       },
-      "daysSinceLastCommit": 204,
+      "daysSinceLastCommit": 206,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -12364,7 +11533,7 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 163,
+      "daysSinceLastCommit": 165,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -12408,7 +11577,7 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 142,
+      "daysSinceLastCommit": 144,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -12452,7 +11621,7 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 14,
+      "daysSinceLastCommit": 16,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -12478,7 +11647,7 @@
           "confidence": "medium"
         },
         "cost": {
-          "score": 0,
+          "score": null,
           "confidence": "low"
         }
       },
@@ -12488,7 +11657,7 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 458,
+      "daysSinceLastCommit": 460,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -12532,7 +11701,7 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 582,
+      "daysSinceLastCommit": 584,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -12576,7 +11745,7 @@
           "severity": "high"
         }
       ],
-      "daysSinceLastCommit": 139,
+      "daysSinceLastCommit": 141,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -12620,7 +11789,7 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 574,
+      "daysSinceLastCommit": 576,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -12646,7 +11815,7 @@
           "confidence": "high"
         },
         "cost": {
-          "score": 0,
+          "score": null,
           "confidence": "low"
         }
       },
@@ -12664,7 +11833,7 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 481,
+      "daysSinceLastCommit": 483,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -12694,7 +11863,7 @@
           "confidence": "high"
         }
       },
-      "daysSinceLastCommit": 264,
+      "daysSinceLastCommit": 266,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -12730,7 +11899,7 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 196,
+      "daysSinceLastCommit": 198,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -12770,7 +11939,7 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 280,
+      "daysSinceLastCommit": 282,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -12810,38 +11979,7 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 399,
-      "integrity": {
-        "payloads": 0,
-        "observations": 0
-      }
-    },
-    {
-      "ref": "mikan-atomoki/text-to-model",
-      "ok": true,
-      "overall": 47,
-      "grade": "D",
-      "insufficientData": true,
-      "repoUrl": "https://github.com/mikan-atomoki/text-to-model",
-      "dims": {
-        "health": {
-          "score": 40,
-          "confidence": "high"
-        },
-        "reliability": {
-          "score": 5,
-          "confidence": "high"
-        },
-        "security": {
-          "score": 100,
-          "confidence": "low"
-        },
-        "cost": {
-          "score": 0,
-          "confidence": "low"
-        }
-      },
-      "daysSinceLastCommit": 141,
+      "daysSinceLastCommit": 401,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -12885,7 +12023,52 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 432,
+      "daysSinceLastCommit": 434,
+      "integrity": {
+        "payloads": 0,
+        "observations": 0
+      }
+    },
+    {
+      "ref": "Pantheon-Security/chrome-mcp-secure",
+      "ok": true,
+      "overall": 47,
+      "grade": "D",
+      "repoUrl": "https://github.com/Pantheon-Security/chrome-mcp-secure",
+      "dims": {
+        "health": {
+          "score": 33,
+          "confidence": "high"
+        },
+        "reliability": {
+          "score": 48,
+          "confidence": "high"
+        },
+        "security": {
+          "score": 38,
+          "confidence": "medium"
+        },
+        "cost": {
+          "score": 90,
+          "confidence": "high"
+        }
+      },
+      "topFindings": [
+        {
+          "id": "security/destructive-tool",
+          "severity": "medium"
+        },
+        {
+          "id": "security/destructive-tool",
+          "severity": "medium"
+        },
+        {
+          "id": "security/shell-import-no-tools",
+          "severity": "medium"
+        }
+      ],
+      "daysSinceLastCommit": 194,
+      "readmeSourced": true,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -12911,7 +12094,7 @@
           "confidence": "medium"
         },
         "cost": {
-          "score": 0,
+          "score": null,
           "confidence": "low"
         }
       },
@@ -12921,69 +12104,7 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 466,
-      "integrity": {
-        "payloads": 0,
-        "observations": 0
-      }
-    },
-    {
-      "ref": "PatrickPalmer/MayaMCP",
-      "ok": true,
-      "overall": 44,
-      "grade": "D-",
-      "insufficientData": true,
-      "repoUrl": "https://github.com/PatrickPalmer/MayaMCP",
-      "dims": {
-        "health": {
-          "score": 31,
-          "confidence": "high"
-        },
-        "reliability": {
-          "score": 5,
-          "confidence": "high"
-        },
-        "security": {
-          "score": 100,
-          "confidence": "low"
-        },
-        "cost": {
-          "score": 0,
-          "confidence": "low"
-        }
-      },
-      "daysSinceLastCommit": 449,
-      "integrity": {
-        "payloads": 0,
-        "observations": 0
-      }
-    },
-    {
-      "ref": "peek-travel/mcp-intro",
-      "ok": true,
-      "overall": 44,
-      "grade": "D-",
-      "insufficientData": true,
-      "repoUrl": "https://github.com/peek-travel/mcp-intro",
-      "dims": {
-        "health": {
-          "score": 31,
-          "confidence": "medium"
-        },
-        "reliability": {
-          "score": 5,
-          "confidence": "high"
-        },
-        "security": {
-          "score": 100,
-          "confidence": "low"
-        },
-        "cost": {
-          "score": 0,
-          "confidence": "low"
-        }
-      },
-      "daysSinceLastCommit": 314,
+      "daysSinceLastCommit": 468,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -13019,47 +12140,7 @@
           "severity": "high"
         }
       ],
-      "daysSinceLastCommit": 441,
-      "integrity": {
-        "payloads": 0,
-        "observations": 0
-      }
-    },
-    {
-      "ref": "Pantheon-Security/chrome-mcp-secure",
-      "ok": true,
-      "overall": 39,
-      "grade": "F",
-      "repoUrl": "https://github.com/Pantheon-Security/chrome-mcp-secure",
-      "dims": {
-        "health": {
-          "score": 33,
-          "confidence": "high"
-        },
-        "reliability": {
-          "score": 48,
-          "confidence": "high"
-        },
-        "security": {
-          "score": 38,
-          "confidence": "medium"
-        },
-        "cost": {
-          "score": 0,
-          "confidence": "low"
-        }
-      },
-      "topFindings": [
-        {
-          "id": "security/shell-import-no-tools",
-          "severity": "medium"
-        },
-        {
-          "id": "security/committed-secret",
-          "severity": "medium"
-        }
-      ],
-      "daysSinceLastCommit": 192,
+      "daysSinceLastCommit": 443,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -13103,7 +12184,152 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 466,
+      "daysSinceLastCommit": 468,
+      "integrity": {
+        "payloads": 0,
+        "observations": 0
+      }
+    },
+    {
+      "ref": "1mcp-app/agent",
+      "ok": true,
+      "insufficientData": true,
+      "repoUrl": "https://github.com/1mcp-app/agent",
+      "dims": {
+        "health": {
+          "score": 95,
+          "confidence": "high"
+        },
+        "reliability": {
+          "score": 100,
+          "confidence": "high"
+        },
+        "security": {
+          "score": null,
+          "confidence": "low"
+        },
+        "cost": {
+          "score": null,
+          "confidence": "low"
+        }
+      },
+      "daysSinceLastCommit": 0,
+      "integrity": {
+        "payloads": 0,
+        "observations": 0
+      }
+    },
+    {
+      "ref": "aidc2026ai-melon/aidc-ai-mcp",
+      "ok": true,
+      "insufficientData": true,
+      "repoUrl": "https://github.com/aidc2026ai-melon/aidc-ai-mcp",
+      "dims": {
+        "health": {
+          "score": 68,
+          "confidence": "high"
+        },
+        "reliability": {
+          "score": 38,
+          "confidence": "high"
+        },
+        "security": {
+          "score": null,
+          "confidence": "low"
+        },
+        "cost": {
+          "score": null,
+          "confidence": "low"
+        }
+      },
+      "daysSinceLastCommit": 17,
+      "integrity": {
+        "payloads": 0,
+        "observations": 0
+      }
+    },
+    {
+      "ref": "alex-on-ai/WebReaper",
+      "ok": true,
+      "insufficientData": true,
+      "repoUrl": "https://github.com/alex-on-ai/WebReaper",
+      "dims": {
+        "health": {
+          "score": 93,
+          "confidence": "high"
+        },
+        "reliability": {
+          "score": 70,
+          "confidence": "high"
+        },
+        "security": {
+          "score": null,
+          "confidence": "low"
+        },
+        "cost": {
+          "score": null,
+          "confidence": "low"
+        }
+      },
+      "daysSinceLastCommit": 26,
+      "integrity": {
+        "payloads": 0,
+        "observations": 0
+      }
+    },
+    {
+      "ref": "arikusi/deepseek-mcp-server",
+      "ok": true,
+      "insufficientData": true,
+      "repoUrl": "https://github.com/arikusi/deepseek-mcp-server",
+      "dims": {
+        "health": {
+          "score": 87,
+          "confidence": "high"
+        },
+        "reliability": {
+          "score": 100,
+          "confidence": "high"
+        },
+        "security": {
+          "score": null,
+          "confidence": "low"
+        },
+        "cost": {
+          "score": null,
+          "confidence": "low"
+        }
+      },
+      "daysSinceLastCommit": 0,
+      "integrity": {
+        "payloads": 0,
+        "observations": 0
+      }
+    },
+    {
+      "ref": "Automata-Labs-team/MCP-Server-Playwright",
+      "ok": true,
+      "insufficientData": true,
+      "repoUrl": "https://github.com/Automata-Labs-team/MCP-Server-Playwright",
+      "dims": {
+        "health": {
+          "score": 33,
+          "confidence": "high"
+        },
+        "reliability": {
+          "score": 37,
+          "confidence": "high"
+        },
+        "security": {
+          "score": null,
+          "confidence": "low"
+        },
+        "cost": {
+          "score": null,
+          "confidence": "low"
+        }
+      },
+      "daysSinceLastCommit": 426,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -13129,7 +12355,7 @@
           "confidence": "medium"
         },
         "cost": {
-          "score": 0,
+          "score": null,
           "confidence": "low"
         }
       },
@@ -13139,7 +12365,36 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 179,
+      "daysSinceLastCommit": 180,
+      "integrity": {
+        "payloads": 0,
+        "observations": 0
+      }
+    },
+    {
+      "ref": "BB-fat/browser-use-rs",
+      "ok": true,
+      "insufficientData": true,
+      "repoUrl": "https://github.com/BB-fat/browser-use-rs",
+      "dims": {
+        "health": {
+          "score": 35,
+          "confidence": "high"
+        },
+        "reliability": {
+          "score": 70,
+          "confidence": "high"
+        },
+        "security": {
+          "score": null,
+          "confidence": "low"
+        },
+        "cost": {
+          "score": null,
+          "confidence": "low"
+        }
+      },
+      "daysSinceLastCommit": 259,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -13152,21 +12407,50 @@
       "repoUrl": "https://github.com/betterhyq/mermaid_grammer_inspector_mcp",
       "dims": {
         "health": {
-          "score": 0,
+          "score": null,
           "confidence": "low"
         },
         "reliability": {
-          "score": 0,
+          "score": null,
           "confidence": "low"
         },
         "security": {
-          "score": 0,
+          "score": null,
           "confidence": "low"
         },
         "cost": {
-          "score": 0,
+          "score": null,
           "confidence": "low"
         }
+      }
+    },
+    {
+      "ref": "cafferychen777/ChatSpatial",
+      "ok": true,
+      "insufficientData": true,
+      "repoUrl": "https://github.com/cafferychen777/ChatSpatial",
+      "dims": {
+        "health": {
+          "score": 88,
+          "confidence": "high"
+        },
+        "reliability": {
+          "score": 89,
+          "confidence": "high"
+        },
+        "security": {
+          "score": null,
+          "confidence": "low"
+        },
+        "cost": {
+          "score": null,
+          "confidence": "low"
+        }
+      },
+      "daysSinceLastCommit": 2,
+      "integrity": {
+        "payloads": 0,
+        "observations": 0
       }
     },
     {
@@ -13185,14 +12469,20 @@
           "confidence": "high"
         },
         "security": {
-          "score": 100,
-          "confidence": "low"
+          "score": 63,
+          "confidence": "medium"
         },
         "cost": {
-          "score": 0,
+          "score": null,
           "confidence": "low"
         }
       },
+      "topFindings": [
+        {
+          "id": "security/shell-import-no-tools",
+          "severity": "medium"
+        }
+      ],
       "daysSinceLastCommit": 0,
       "integrity": {
         "payloads": 0,
@@ -13206,19 +12496,19 @@
       "repoUrl": "https://github.com/codeislaw101/katzilla",
       "dims": {
         "health": {
-          "score": 0,
+          "score": null,
           "confidence": "low"
         },
         "reliability": {
-          "score": 0,
+          "score": null,
           "confidence": "low"
         },
         "security": {
-          "score": 0,
+          "score": null,
           "confidence": "low"
         },
         "cost": {
-          "score": 0,
+          "score": null,
           "confidence": "low"
         }
       }
@@ -13243,7 +12533,7 @@
           "confidence": "medium"
         },
         "cost": {
-          "score": 0,
+          "score": null,
           "confidence": "low"
         }
       },
@@ -13253,7 +12543,36 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 169,
+      "daysSinceLastCommit": 171,
+      "integrity": {
+        "payloads": 0,
+        "observations": 0
+      }
+    },
+    {
+      "ref": "copperline-labs/rendex-mcp",
+      "ok": true,
+      "insufficientData": true,
+      "repoUrl": "https://github.com/copperline-labs/rendex-mcp",
+      "dims": {
+        "health": {
+          "score": 79,
+          "confidence": "high"
+        },
+        "reliability": {
+          "score": 37,
+          "confidence": "high"
+        },
+        "security": {
+          "score": null,
+          "confidence": "low"
+        },
+        "cost": {
+          "score": null,
+          "confidence": "low"
+        }
+      },
+      "daysSinceLastCommit": 2,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -13266,21 +12585,50 @@
       "repoUrl": "https://github.com/Correctover/mcp-server",
       "dims": {
         "health": {
-          "score": 0,
+          "score": null,
           "confidence": "low"
         },
         "reliability": {
-          "score": 0,
+          "score": null,
           "confidence": "low"
         },
         "security": {
-          "score": 0,
+          "score": null,
           "confidence": "low"
         },
         "cost": {
-          "score": 0,
+          "score": null,
           "confidence": "low"
         }
+      }
+    },
+    {
+      "ref": "djalal/quran-mcp-server",
+      "ok": true,
+      "insufficientData": true,
+      "repoUrl": "https://github.com/djalal/quran-mcp-server",
+      "dims": {
+        "health": {
+          "score": 26,
+          "confidence": "medium"
+        },
+        "reliability": {
+          "score": 70,
+          "confidence": "high"
+        },
+        "security": {
+          "score": null,
+          "confidence": "low"
+        },
+        "cost": {
+          "score": null,
+          "confidence": "low"
+        }
+      },
+      "daysSinceLastCommit": 419,
+      "integrity": {
+        "payloads": 0,
+        "observations": 0
       }
     },
     {
@@ -13299,15 +12647,15 @@
           "confidence": "high"
         },
         "security": {
-          "score": 100,
+          "score": null,
           "confidence": "low"
         },
         "cost": {
-          "score": 0,
+          "score": null,
           "confidence": "low"
         }
       },
-      "daysSinceLastCommit": 23,
+      "daysSinceLastCommit": 25,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -13320,21 +12668,86 @@
       "repoUrl": "https://github.com/docker/mcp-servers",
       "dims": {
         "health": {
-          "score": 0,
+          "score": null,
           "confidence": "low"
         },
         "reliability": {
-          "score": 0,
+          "score": null,
           "confidence": "low"
         },
         "security": {
-          "score": 0,
+          "score": null,
           "confidence": "low"
         },
         "cost": {
-          "score": 0,
+          "score": null,
           "confidence": "low"
         }
+      }
+    },
+    {
+      "ref": "duaraghav8/MCPJungle",
+      "ok": true,
+      "notServer": true,
+      "notServerReason": "dynamic",
+      "repoUrl": "https://github.com/duaraghav8/MCPJungle",
+      "dims": {
+        "health": {
+          "score": 92,
+          "confidence": "high"
+        },
+        "reliability": {
+          "score": 70,
+          "confidence": "high"
+        },
+        "security": {
+          "score": null,
+          "confidence": "low"
+        },
+        "cost": {
+          "score": null,
+          "confidence": "low"
+        }
+      },
+      "topFindings": [
+        {
+          "id": "security/dynamic-tool-surface",
+          "severity": "low"
+        }
+      ],
+      "daysSinceLastCommit": 4,
+      "integrity": {
+        "payloads": 0,
+        "observations": 0
+      }
+    },
+    {
+      "ref": "eat-pray-ai/yutu",
+      "ok": true,
+      "insufficientData": true,
+      "repoUrl": "https://github.com/eat-pray-ai/yutu",
+      "dims": {
+        "health": {
+          "score": 92,
+          "confidence": "high"
+        },
+        "reliability": {
+          "score": 92,
+          "confidence": "high"
+        },
+        "security": {
+          "score": null,
+          "confidence": "low"
+        },
+        "cost": {
+          "score": null,
+          "confidence": "low"
+        }
+      },
+      "daysSinceLastCommit": 0,
+      "integrity": {
+        "payloads": 0,
+        "observations": 0
       }
     },
     {
@@ -13344,21 +12757,50 @@
       "repoUrl": "https://github.com/edgarriba/prolink",
       "dims": {
         "health": {
-          "score": 0,
+          "score": null,
           "confidence": "low"
         },
         "reliability": {
-          "score": 0,
+          "score": null,
           "confidence": "low"
         },
         "security": {
-          "score": 0,
+          "score": null,
           "confidence": "low"
         },
         "cost": {
-          "score": 0,
+          "score": null,
           "confidence": "low"
         }
+      }
+    },
+    {
+      "ref": "erajasekar/ai-diagram-maker-mcp",
+      "ok": true,
+      "insufficientData": true,
+      "repoUrl": "https://github.com/erajasekar/ai-diagram-maker-mcp",
+      "dims": {
+        "health": {
+          "score": 50,
+          "confidence": "high"
+        },
+        "reliability": {
+          "score": 70,
+          "confidence": "high"
+        },
+        "security": {
+          "score": null,
+          "confidence": "low"
+        },
+        "cost": {
+          "score": null,
+          "confidence": "low"
+        }
+      },
+      "daysSinceLastCommit": 94,
+      "integrity": {
+        "payloads": 0,
+        "observations": 0
       }
     },
     {
@@ -13368,19 +12810,19 @@
       "repoUrl": "https://github.com/getrupt/ashra-mcp",
       "dims": {
         "health": {
-          "score": 0,
+          "score": null,
           "confidence": "low"
         },
         "reliability": {
-          "score": 0,
+          "score": null,
           "confidence": "low"
         },
         "security": {
-          "score": 0,
+          "score": null,
           "confidence": "low"
         },
         "cost": {
-          "score": 0,
+          "score": null,
           "confidence": "low"
         }
       }
@@ -13401,15 +12843,15 @@
           "confidence": "high"
         },
         "security": {
-          "score": 100,
+          "score": null,
           "confidence": "low"
         },
         "cost": {
-          "score": 0,
+          "score": null,
           "confidence": "low"
         }
       },
-      "daysSinceLastCommit": 50,
+      "daysSinceLastCommit": 52,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -13431,15 +12873,73 @@
           "confidence": "high"
         },
         "security": {
-          "score": 100,
+          "score": null,
           "confidence": "low"
         },
         "cost": {
-          "score": 0,
+          "score": null,
           "confidence": "low"
         }
       },
-      "daysSinceLastCommit": 467,
+      "daysSinceLastCommit": 469,
+      "integrity": {
+        "payloads": 0,
+        "observations": 0
+      }
+    },
+    {
+      "ref": "HalidSaglam/saglitzdesign-mcp",
+      "ok": true,
+      "insufficientData": true,
+      "repoUrl": "https://github.com/HalidSaglam/saglitzdesign-mcp",
+      "dims": {
+        "health": {
+          "score": 77,
+          "confidence": "medium"
+        },
+        "reliability": {
+          "score": 92,
+          "confidence": "high"
+        },
+        "security": {
+          "score": null,
+          "confidence": "low"
+        },
+        "cost": {
+          "score": null,
+          "confidence": "low"
+        }
+      },
+      "daysSinceLastCommit": 0,
+      "integrity": {
+        "payloads": 0,
+        "observations": 0
+      }
+    },
+    {
+      "ref": "helbertparanhos/cloudflare-mcp-pro",
+      "ok": true,
+      "insufficientData": true,
+      "repoUrl": "https://github.com/helbertparanhos/cloudflare-mcp-pro",
+      "dims": {
+        "health": {
+          "score": 55,
+          "confidence": "high"
+        },
+        "reliability": {
+          "score": 70,
+          "confidence": "high"
+        },
+        "security": {
+          "score": null,
+          "confidence": "low"
+        },
+        "cost": {
+          "score": null,
+          "confidence": "low"
+        }
+      },
+      "daysSinceLastCommit": 44,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -13452,19 +12952,19 @@
       "repoUrl": "https://github.com/HelixGenomics/Genomic-Agent-Discovery",
       "dims": {
         "health": {
-          "score": 0,
+          "score": null,
           "confidence": "low"
         },
         "reliability": {
-          "score": 0,
+          "score": null,
           "confidence": "low"
         },
         "security": {
-          "score": 0,
+          "score": null,
           "confidence": "low"
         },
         "cost": {
-          "score": 0,
+          "score": null,
           "confidence": "low"
         }
       }
@@ -13476,19 +12976,19 @@
       "repoUrl": "https://github.com/IO-Aerospace-software-engineering/mcp-server",
       "dims": {
         "health": {
-          "score": 0,
+          "score": null,
           "confidence": "low"
         },
         "reliability": {
-          "score": 0,
+          "score": null,
           "confidence": "low"
         },
         "security": {
-          "score": 0,
+          "score": null,
           "confidence": "low"
         },
         "cost": {
-          "score": 0,
+          "score": null,
           "confidence": "low"
         }
       }
@@ -13509,15 +13009,15 @@
           "confidence": "high"
         },
         "security": {
-          "score": 100,
+          "score": null,
           "confidence": "low"
         },
         "cost": {
-          "score": 0,
+          "score": null,
           "confidence": "low"
         }
       },
-      "daysSinceLastCommit": 55,
+      "daysSinceLastCommit": 57,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -13539,15 +13039,15 @@
           "confidence": "high"
         },
         "security": {
-          "score": 100,
+          "score": null,
           "confidence": "low"
         },
         "cost": {
-          "score": 0,
+          "score": null,
           "confidence": "low"
         }
       },
-      "daysSinceLastCommit": 55,
+      "daysSinceLastCommit": 57,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -13569,15 +13069,15 @@
           "confidence": "high"
         },
         "security": {
-          "score": 100,
+          "score": null,
           "confidence": "low"
         },
         "cost": {
-          "score": 0,
+          "score": null,
           "confidence": "low"
         }
       },
-      "daysSinceLastCommit": 55,
+      "daysSinceLastCommit": 57,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -13590,19 +13090,19 @@
       "repoUrl": "https://github.com/jdubois/azure-cli-mcp",
       "dims": {
         "health": {
-          "score": 0,
+          "score": null,
           "confidence": "low"
         },
         "reliability": {
-          "score": 0,
+          "score": null,
           "confidence": "low"
         },
         "security": {
-          "score": 0,
+          "score": null,
           "confidence": "low"
         },
         "cost": {
-          "score": 0,
+          "score": null,
           "confidence": "low"
         }
       }
@@ -13623,15 +13123,79 @@
           "confidence": "high"
         },
         "security": {
-          "score": 100,
+          "score": null,
           "confidence": "low"
         },
         "cost": {
-          "score": 0,
+          "score": null,
           "confidence": "low"
         }
       },
+      "daysSinceLastCommit": 2,
+      "integrity": {
+        "payloads": 0,
+        "observations": 0
+      }
+    },
+    {
+      "ref": "juspay/neurolink",
+      "ok": true,
+      "insufficientData": true,
+      "repoUrl": "https://github.com/juspay/neurolink",
+      "dims": {
+        "health": {
+          "score": 96,
+          "confidence": "high"
+        },
+        "reliability": {
+          "score": 100,
+          "confidence": "high"
+        },
+        "security": {
+          "score": null,
+          "confidence": "low"
+        },
+        "cost": {
+          "score": null,
+          "confidence": "low"
+        }
+      },
+      "topFindings": [
+        {
+          "id": "security/committed-secret",
+          "severity": "medium"
+        }
+      ],
       "daysSinceLastCommit": 0,
+      "integrity": {
+        "payloads": 0,
+        "observations": 0
+      }
+    },
+    {
+      "ref": "kimtth/mcp-aoai-web-browsing",
+      "ok": true,
+      "insufficientData": true,
+      "repoUrl": "https://github.com/kimtth/mcp-aoai-web-browsing",
+      "dims": {
+        "health": {
+          "score": 53,
+          "confidence": "high"
+        },
+        "reliability": {
+          "score": 59,
+          "confidence": "high"
+        },
+        "security": {
+          "score": null,
+          "confidence": "low"
+        },
+        "cost": {
+          "score": null,
+          "confidence": "low"
+        }
+      },
+      "daysSinceLastCommit": 21,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -13644,19 +13208,19 @@
       "repoUrl": "https://github.com/kubernetes-mcp-server/kubernetes-mcp-server",
       "dims": {
         "health": {
-          "score": 0,
+          "score": null,
           "confidence": "low"
         },
         "reliability": {
-          "score": 0,
+          "score": null,
           "confidence": "low"
         },
         "security": {
-          "score": 0,
+          "score": null,
           "confidence": "low"
         },
         "cost": {
-          "score": 0,
+          "score": null,
           "confidence": "low"
         }
       }
@@ -13677,15 +13241,15 @@
           "confidence": "high"
         },
         "security": {
-          "score": 100,
+          "score": null,
           "confidence": "low"
         },
         "cost": {
-          "score": 0,
+          "score": null,
           "confidence": "low"
         }
       },
-      "daysSinceLastCommit": 0,
+      "daysSinceLastCommit": 2,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -13698,21 +13262,108 @@
       "repoUrl": "https://github.com/malamutemayhem/unclick",
       "dims": {
         "health": {
-          "score": 0,
+          "score": null,
           "confidence": "low"
         },
         "reliability": {
-          "score": 0,
+          "score": null,
           "confidence": "low"
         },
         "security": {
-          "score": 0,
+          "score": null,
           "confidence": "low"
         },
         "cost": {
-          "score": 0,
+          "score": null,
           "confidence": "low"
         }
+      }
+    },
+    {
+      "ref": "MastadoonPrime/sylex-search",
+      "ok": true,
+      "insufficientData": true,
+      "repoUrl": "https://github.com/MastadoonPrime/sylex-search",
+      "dims": {
+        "health": {
+          "score": 39,
+          "confidence": "medium"
+        },
+        "reliability": {
+          "score": 37,
+          "confidence": "high"
+        },
+        "security": {
+          "score": null,
+          "confidence": "low"
+        },
+        "cost": {
+          "score": null,
+          "confidence": "low"
+        }
+      },
+      "daysSinceLastCommit": 103,
+      "integrity": {
+        "payloads": 0,
+        "observations": 0
+      }
+    },
+    {
+      "ref": "mikan-atomoki/text-to-model",
+      "ok": true,
+      "insufficientData": true,
+      "repoUrl": "https://github.com/mikan-atomoki/text-to-model",
+      "dims": {
+        "health": {
+          "score": 40,
+          "confidence": "high"
+        },
+        "reliability": {
+          "score": 5,
+          "confidence": "high"
+        },
+        "security": {
+          "score": null,
+          "confidence": "low"
+        },
+        "cost": {
+          "score": null,
+          "confidence": "low"
+        }
+      },
+      "daysSinceLastCommit": 143,
+      "integrity": {
+        "payloads": 0,
+        "observations": 0
+      }
+    },
+    {
+      "ref": "mikechao/metmuseum-mcp",
+      "ok": true,
+      "insufficientData": true,
+      "repoUrl": "https://github.com/mikechao/metmuseum-mcp",
+      "dims": {
+        "health": {
+          "score": 39,
+          "confidence": "high"
+        },
+        "reliability": {
+          "score": 70,
+          "confidence": "high"
+        },
+        "security": {
+          "score": null,
+          "confidence": "low"
+        },
+        "cost": {
+          "score": null,
+          "confidence": "low"
+        }
+      },
+      "daysSinceLastCommit": 100,
+      "integrity": {
+        "payloads": 0,
+        "observations": 0
       }
     },
     {
@@ -13723,7 +13374,7 @@
       "repoUrl": "https://github.com/mindsdb/mindsdb",
       "dims": {
         "health": {
-          "score": 96,
+          "score": 94,
           "confidence": "high"
         },
         "reliability": {
@@ -13731,15 +13382,15 @@
           "confidence": "high"
         },
         "security": {
-          "score": 100,
+          "score": null,
           "confidence": "low"
         },
         "cost": {
-          "score": 0,
+          "score": null,
           "confidence": "low"
         }
       },
-      "daysSinceLastCommit": 24,
+      "daysSinceLastCommit": 26,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -13761,15 +13412,15 @@
           "confidence": "high"
         },
         "security": {
-          "score": 100,
+          "score": null,
           "confidence": "low"
         },
         "cost": {
-          "score": 0,
+          "score": null,
           "confidence": "low"
         }
       },
-      "daysSinceLastCommit": 4,
+      "daysSinceLastCommit": 6,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -13783,7 +13434,7 @@
       "repoUrl": "https://github.com/modelcontextprotocol/csharp-sdk",
       "dims": {
         "health": {
-          "score": 100,
+          "score": 98,
           "confidence": "high"
         },
         "reliability": {
@@ -13791,11 +13442,11 @@
           "confidence": "high"
         },
         "security": {
-          "score": 100,
+          "score": null,
           "confidence": "low"
         },
         "cost": {
-          "score": 0,
+          "score": null,
           "confidence": "low"
         }
       },
@@ -13857,15 +13508,15 @@
           "confidence": "high"
         },
         "security": {
-          "score": 100,
+          "score": null,
           "confidence": "low"
         },
         "cost": {
-          "score": 0,
+          "score": null,
           "confidence": "low"
         }
       },
-      "daysSinceLastCommit": 25,
+      "daysSinceLastCommit": 26,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -13917,15 +13568,15 @@
           "confidence": "high"
         },
         "security": {
-          "score": 100,
+          "score": null,
           "confidence": "low"
         },
         "cost": {
-          "score": 0,
+          "score": null,
           "confidence": "low"
         }
       },
-      "daysSinceLastCommit": 7,
+      "daysSinceLastCommit": 9,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -13951,11 +13602,11 @@
           "confidence": "medium"
         },
         "cost": {
-          "score": 0,
+          "score": null,
           "confidence": "low"
         }
       },
-      "daysSinceLastCommit": 0,
+      "daysSinceLastCommit": 1,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -13977,15 +13628,15 @@
           "confidence": "high"
         },
         "security": {
-          "score": 100,
+          "score": null,
           "confidence": "low"
         },
         "cost": {
-          "score": 0,
+          "score": null,
           "confidence": "low"
         }
       },
-      "daysSinceLastCommit": 1,
+      "daysSinceLastCommit": 3,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -14011,7 +13662,7 @@
           "confidence": "medium"
         },
         "cost": {
-          "score": 0,
+          "score": null,
           "confidence": "low"
         }
       },
@@ -14035,7 +13686,7 @@
       "repoUrl": "https://github.com/modelcontextprotocol/swift-sdk",
       "dims": {
         "health": {
-          "score": 65,
+          "score": 53,
           "confidence": "high"
         },
         "reliability": {
@@ -14043,15 +13694,15 @@
           "confidence": "high"
         },
         "security": {
-          "score": 100,
+          "score": null,
           "confidence": "low"
         },
         "cost": {
-          "score": 0,
+          "score": null,
           "confidence": "low"
         }
       },
-      "daysSinceLastCommit": 89,
+      "daysSinceLastCommit": 91,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -14088,6 +13739,93 @@
       }
     },
     {
+      "ref": "ndthanhdev/mcp-browser-kit",
+      "ok": true,
+      "insufficientData": true,
+      "repoUrl": "https://github.com/ndthanhdev/mcp-browser-kit",
+      "dims": {
+        "health": {
+          "score": 89,
+          "confidence": "high"
+        },
+        "reliability": {
+          "score": 92,
+          "confidence": "high"
+        },
+        "security": {
+          "score": null,
+          "confidence": "low"
+        },
+        "cost": {
+          "score": null,
+          "confidence": "low"
+        }
+      },
+      "daysSinceLastCommit": 0,
+      "integrity": {
+        "payloads": 0,
+        "observations": 0
+      }
+    },
+    {
+      "ref": "neptun2000/heor-agent-mcp",
+      "ok": true,
+      "insufficientData": true,
+      "repoUrl": "https://github.com/neptun2000/heor-agent-mcp",
+      "dims": {
+        "health": {
+          "score": 75,
+          "confidence": "medium"
+        },
+        "reliability": {
+          "score": 100,
+          "confidence": "high"
+        },
+        "security": {
+          "score": null,
+          "confidence": "low"
+        },
+        "cost": {
+          "score": null,
+          "confidence": "low"
+        }
+      },
+      "daysSinceLastCommit": 39,
+      "integrity": {
+        "payloads": 0,
+        "observations": 0
+      }
+    },
+    {
+      "ref": "netlify/netlify-mcp",
+      "ok": true,
+      "insufficientData": true,
+      "repoUrl": "https://github.com/netlify/netlify-mcp",
+      "dims": {
+        "health": {
+          "score": 88,
+          "confidence": "medium"
+        },
+        "reliability": {
+          "score": 78,
+          "confidence": "high"
+        },
+        "security": {
+          "score": null,
+          "confidence": "low"
+        },
+        "cost": {
+          "score": null,
+          "confidence": "low"
+        }
+      },
+      "daysSinceLastCommit": 2,
+      "integrity": {
+        "payloads": 0,
+        "observations": 0
+      }
+    },
+    {
       "ref": "OctoEverywhere/mcp",
       "ok": true,
       "notServer": true,
@@ -14103,15 +13841,73 @@
           "confidence": "high"
         },
         "security": {
-          "score": 100,
+          "score": null,
           "confidence": "low"
         },
         "cost": {
-          "score": 0,
+          "score": null,
           "confidence": "low"
         }
       },
-      "daysSinceLastCommit": 396,
+      "daysSinceLastCommit": 398,
+      "integrity": {
+        "payloads": 0,
+        "observations": 0
+      }
+    },
+    {
+      "ref": "PatrickPalmer/MayaMCP",
+      "ok": true,
+      "insufficientData": true,
+      "repoUrl": "https://github.com/PatrickPalmer/MayaMCP",
+      "dims": {
+        "health": {
+          "score": 31,
+          "confidence": "high"
+        },
+        "reliability": {
+          "score": 5,
+          "confidence": "high"
+        },
+        "security": {
+          "score": null,
+          "confidence": "low"
+        },
+        "cost": {
+          "score": null,
+          "confidence": "low"
+        }
+      },
+      "daysSinceLastCommit": 451,
+      "integrity": {
+        "payloads": 0,
+        "observations": 0
+      }
+    },
+    {
+      "ref": "peek-travel/mcp-intro",
+      "ok": true,
+      "insufficientData": true,
+      "repoUrl": "https://github.com/peek-travel/mcp-intro",
+      "dims": {
+        "health": {
+          "score": 31,
+          "confidence": "medium"
+        },
+        "reliability": {
+          "score": 5,
+          "confidence": "high"
+        },
+        "security": {
+          "score": null,
+          "confidence": "low"
+        },
+        "cost": {
+          "score": null,
+          "confidence": "low"
+        }
+      },
+      "daysSinceLastCommit": 316,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -14137,7 +13933,7 @@
           "confidence": "medium"
         },
         "cost": {
-          "score": 0,
+          "score": null,
           "confidence": "low"
         }
       },
@@ -14173,7 +13969,7 @@
           "confidence": "medium"
         },
         "cost": {
-          "score": 0,
+          "score": null,
           "confidence": "low"
         }
       },
@@ -14183,7 +13979,7 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 1,
+      "daysSinceLastCommit": 3,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -14209,7 +14005,7 @@
           "confidence": "medium"
         },
         "cost": {
-          "score": 0,
+          "score": null,
           "confidence": "low"
         }
       },
@@ -14219,7 +14015,36 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 1,
+      "daysSinceLastCommit": 3,
+      "integrity": {
+        "payloads": 0,
+        "observations": 0
+      }
+    },
+    {
+      "ref": "prufa-dev/prufa-mcp",
+      "ok": true,
+      "insufficientData": true,
+      "repoUrl": "https://github.com/prufa-dev/prufa-mcp",
+      "dims": {
+        "health": {
+          "score": 73,
+          "confidence": "high"
+        },
+        "reliability": {
+          "score": 81,
+          "confidence": "high"
+        },
+        "security": {
+          "score": null,
+          "confidence": "low"
+        },
+        "cost": {
+          "score": null,
+          "confidence": "low"
+        }
+      },
+      "daysSinceLastCommit": 35,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -14232,21 +14057,137 @@
       "repoUrl": "https://github.com/pulumi/mcp-server",
       "dims": {
         "health": {
-          "score": 0,
+          "score": null,
           "confidence": "low"
         },
         "reliability": {
-          "score": 0,
+          "score": null,
           "confidence": "low"
         },
         "security": {
-          "score": 0,
+          "score": null,
           "confidence": "low"
         },
         "cost": {
-          "score": 0,
+          "score": null,
           "confidence": "low"
         }
+      }
+    },
+    {
+      "ref": "Rendeverance/toolfunnel",
+      "ok": true,
+      "insufficientData": true,
+      "repoUrl": "https://github.com/Rendeverance/toolfunnel",
+      "dims": {
+        "health": {
+          "score": 80,
+          "confidence": "high"
+        },
+        "reliability": {
+          "score": 89,
+          "confidence": "high"
+        },
+        "security": {
+          "score": null,
+          "confidence": "low"
+        },
+        "cost": {
+          "score": null,
+          "confidence": "low"
+        }
+      },
+      "daysSinceLastCommit": 0,
+      "integrity": {
+        "payloads": 0,
+        "observations": 0
+      }
+    },
+    {
+      "ref": "RightOnPar-LLC/mesh-connector",
+      "ok": true,
+      "insufficientData": true,
+      "repoUrl": "https://github.com/RightOnPar-LLC/mesh-connector",
+      "dims": {
+        "health": {
+          "score": 85,
+          "confidence": "high"
+        },
+        "reliability": {
+          "score": 38,
+          "confidence": "high"
+        },
+        "security": {
+          "score": null,
+          "confidence": "low"
+        },
+        "cost": {
+          "score": null,
+          "confidence": "low"
+        }
+      },
+      "daysSinceLastCommit": 0,
+      "integrity": {
+        "payloads": 0,
+        "observations": 0
+      }
+    },
+    {
+      "ref": "RNVizion/rnv-color-mcp",
+      "ok": true,
+      "insufficientData": true,
+      "repoUrl": "https://github.com/RNVizion/rnv-color-mcp",
+      "dims": {
+        "health": {
+          "score": 77,
+          "confidence": "medium"
+        },
+        "reliability": {
+          "score": 81,
+          "confidence": "high"
+        },
+        "security": {
+          "score": null,
+          "confidence": "low"
+        },
+        "cost": {
+          "score": null,
+          "confidence": "low"
+        }
+      },
+      "daysSinceLastCommit": 9,
+      "integrity": {
+        "payloads": 0,
+        "observations": 0
+      }
+    },
+    {
+      "ref": "rupinder2/mcp-orchestrator",
+      "ok": true,
+      "insufficientData": true,
+      "repoUrl": "https://github.com/rupinder2/mcp-orchestrator",
+      "dims": {
+        "health": {
+          "score": 39,
+          "confidence": "medium"
+        },
+        "reliability": {
+          "score": 100,
+          "confidence": "high"
+        },
+        "security": {
+          "score": null,
+          "confidence": "low"
+        },
+        "cost": {
+          "score": null,
+          "confidence": "low"
+        }
+      },
+      "daysSinceLastCommit": 161,
+      "integrity": {
+        "payloads": 0,
+        "observations": 0
       }
     },
     {
@@ -14256,19 +14197,19 @@
       "repoUrl": "https://github.com/scotia1973-bot/api-hub",
       "dims": {
         "health": {
-          "score": 0,
+          "score": null,
           "confidence": "low"
         },
         "reliability": {
-          "score": 0,
+          "score": null,
           "confidence": "low"
         },
         "security": {
-          "score": 0,
+          "score": null,
           "confidence": "low"
         },
         "cost": {
-          "score": 0,
+          "score": null,
           "confidence": "low"
         }
       }
@@ -14280,19 +14221,19 @@
       "repoUrl": "https://github.com/sentry-mcp/sentry-mcp",
       "dims": {
         "health": {
-          "score": 0,
+          "score": null,
           "confidence": "low"
         },
         "reliability": {
-          "score": 0,
+          "score": null,
           "confidence": "low"
         },
         "security": {
-          "score": 0,
+          "score": null,
           "confidence": "low"
         },
         "cost": {
-          "score": 0,
+          "score": null,
           "confidence": "low"
         }
       }
@@ -14304,19 +14245,19 @@
       "repoUrl": "https://github.com/serkan-ozal/browser-devtools-mcp",
       "dims": {
         "health": {
-          "score": 0,
+          "score": null,
           "confidence": "low"
         },
         "reliability": {
-          "score": 0,
+          "score": null,
           "confidence": "low"
         },
         "security": {
-          "score": 0,
+          "score": null,
           "confidence": "low"
         },
         "cost": {
-          "score": 0,
+          "score": null,
           "confidence": "low"
         }
       }
@@ -14328,19 +14269,19 @@
       "repoUrl": "https://github.com/slackapi/slack-mcp-server",
       "dims": {
         "health": {
-          "score": 0,
+          "score": null,
           "confidence": "low"
         },
         "reliability": {
-          "score": 0,
+          "score": null,
           "confidence": "low"
         },
         "security": {
-          "score": 0,
+          "score": null,
           "confidence": "low"
         },
         "cost": {
-          "score": 0,
+          "score": null,
           "confidence": "low"
         }
       }
@@ -14352,19 +14293,19 @@
       "repoUrl": "https://github.com/softvoyagers/pageshot-api",
       "dims": {
         "health": {
-          "score": 0,
+          "score": null,
           "confidence": "low"
         },
         "reliability": {
-          "score": 0,
+          "score": null,
           "confidence": "low"
         },
         "security": {
-          "score": 0,
+          "score": null,
           "confidence": "low"
         },
         "cost": {
-          "score": 0,
+          "score": null,
           "confidence": "low"
         }
       }
@@ -14385,15 +14326,44 @@
           "confidence": "high"
         },
         "security": {
-          "score": 100,
+          "score": null,
           "confidence": "low"
         },
         "cost": {
-          "score": 0,
+          "score": null,
           "confidence": "low"
         }
       },
-      "daysSinceLastCommit": 0,
+      "daysSinceLastCommit": 1,
+      "integrity": {
+        "payloads": 0,
+        "observations": 0
+      }
+    },
+    {
+      "ref": "tatsuju/opdstar-nhi-mcp",
+      "ok": true,
+      "insufficientData": true,
+      "repoUrl": "https://github.com/tatsuju/opdstar-nhi-mcp",
+      "dims": {
+        "health": {
+          "score": 73,
+          "confidence": "high"
+        },
+        "reliability": {
+          "score": 92,
+          "confidence": "high"
+        },
+        "security": {
+          "score": null,
+          "confidence": "low"
+        },
+        "cost": {
+          "score": null,
+          "confidence": "low"
+        }
+      },
+      "daysSinceLastCommit": 4,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -14415,15 +14385,15 @@
           "confidence": "high"
         },
         "security": {
-          "score": 100,
+          "score": null,
           "confidence": "low"
         },
         "cost": {
-          "score": 0,
+          "score": null,
           "confidence": "low"
         }
       },
-      "daysSinceLastCommit": 114,
+      "daysSinceLastCommit": 116,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -14449,7 +14419,7 @@
           "confidence": "medium"
         },
         "cost": {
-          "score": 0,
+          "score": null,
           "confidence": "low"
         }
       },
@@ -14459,7 +14429,36 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 170,
+      "daysSinceLastCommit": 172,
+      "integrity": {
+        "payloads": 0,
+        "observations": 0
+      }
+    },
+    {
+      "ref": "ViperJuice/mcp-gateway",
+      "ok": true,
+      "insufficientData": true,
+      "repoUrl": "https://github.com/ViperJuice/mcp-gateway",
+      "dims": {
+        "health": {
+          "score": 91,
+          "confidence": "high"
+        },
+        "reliability": {
+          "score": 100,
+          "confidence": "high"
+        },
+        "security": {
+          "score": null,
+          "confidence": "low"
+        },
+        "cost": {
+          "score": null,
+          "confidence": "low"
+        }
+      },
+      "daysSinceLastCommit": 0,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -14481,15 +14480,44 @@
           "confidence": "high"
         },
         "security": {
-          "score": 100,
+          "score": null,
           "confidence": "low"
         },
         "cost": {
-          "score": 0,
+          "score": null,
           "confidence": "low"
         }
       },
-      "daysSinceLastCommit": 4,
+      "daysSinceLastCommit": 6,
+      "integrity": {
+        "payloads": 0,
+        "observations": 0
+      }
+    },
+    {
+      "ref": "whiteknightonhorse/APIbase",
+      "ok": true,
+      "insufficientData": true,
+      "repoUrl": "https://github.com/whiteknightonhorse/APIbase",
+      "dims": {
+        "health": {
+          "score": 66,
+          "confidence": "high"
+        },
+        "reliability": {
+          "score": 92,
+          "confidence": "high"
+        },
+        "security": {
+          "score": null,
+          "confidence": "low"
+        },
+        "cost": {
+          "score": null,
+          "confidence": "low"
+        }
+      },
+      "daysSinceLastCommit": 34,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -14511,15 +14539,15 @@
           "confidence": "high"
         },
         "security": {
-          "score": 100,
+          "score": null,
           "confidence": "low"
         },
         "cost": {
-          "score": 0,
+          "score": null,
           "confidence": "low"
         }
       },
-      "daysSinceLastCommit": 36,
+      "daysSinceLastCommit": 38,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -14532,19 +14560,19 @@
       "repoUrl": "https://github.com/yuvalsuede/agent-media",
       "dims": {
         "health": {
-          "score": 0,
+          "score": null,
           "confidence": "low"
         },
         "reliability": {
-          "score": 0,
+          "score": null,
           "confidence": "low"
         },
         "security": {
-          "score": 0,
+          "score": null,
           "confidence": "low"
         },
         "cost": {
-          "score": 0,
+          "score": null,
           "confidence": "low"
         }
       }
