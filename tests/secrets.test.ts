@@ -112,3 +112,28 @@ Example AWS credentials for testing::
     expect(s.secretsFound).toBe(0)
   })
 })
+
+// W6 review I4 (defence-in-depth): documentation extensions are skipped, not
+// just `.md`. AWS's own published documentation key matches the AWS PROVIDER
+// pattern exactly and is tested before any placeholder heuristic, so a doc
+// file handed to this scanner produces a "Possible AWS access key" finding
+// against a repo whose only sin is documenting AWS. The root README is
+// quarantined upstream so this is unreachable in the current pipeline; this
+// test exists so the next feature that fetches documentation cannot silently
+// re-open it.
+describe('documentation files are never secret-scanned', () => {
+  const doc = (path: string) => scanSecrets([
+    { path, content: 'Config example:\n\n    aws_access_key_id = AKIAIOSFODNN7EXAMPLE\n', size: 80 },
+  ]).findings
+  for (const ext of ['md', 'markdown', 'rst', 'txt', 'adoc', 'asciidoc']) {
+    it(`skips README.${ext}`, () => {
+      expect(doc(`README.${ext}`)).toEqual([])
+    })
+  }
+  it('still scans real source for the same key', () => {
+    const found = scanSecrets([
+      { path: 'src/config.ts', content: 'const k = "AKIAIOSFODNN7EXAMPLE"', size: 40 },
+    ]).findings
+    expect(found.some(f => f.id === 'security/committed-secret')).toBe(true)
+  })
+})
