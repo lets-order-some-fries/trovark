@@ -31,6 +31,58 @@ A bare package name that exists on both npm and PyPI is rejected as ambiguous �
 Missing data lowers *confidence* — it is never silently scored as zero.
 Full methodology: [docs/methodology.md](docs/methodology.md). Rubric is versioned; the scorecard records the version that graded it.
 
+## Reading a scorecard
+
+    npx trovark acme/weather-mcp
+
+    trovark  ·  acme/weather-mcp
+      resolved: github.com/acme/weather-mcp
+    Trust Score: 74/100 (B-)   rubric v1.5.0
+
+      health         75/100  ████████░░  high confidence
+      reliability    44/100  ████░░░░░░  high confidence
+      security       85/100  █████████░  medium confidence
+      cost          100/100  ██████████  high confidence
+
+    Metadata Integrity: 0 findings across 2 files / 239 characters / 1 tool descriptions.
+
+- **`Trust Score: 74/100 (B-)`** — the overall 0–100 score and letter grade, the weighted sum
+  of the four dimensions above. `rubric v1.5.0` is the rubric version that produced this
+  scorecard; scorecards from different rubric versions aren't directly comparable.
+- **Dimension rows** (`health 75/100 ... high confidence`) — each dimension's own 0–100 score
+  plus a confidence level (`high` ≥75%, `medium` ≥40%, `low` <40% of that dimension's signals
+  were collectible). Low confidence means the score rests on fewer inputs, not that the server
+  scored badly.
+- **Findings** (printed only when a dimension surfaces one), e.g. for a server exposing a
+  `run_bash_command` tool:
+
+      [high] security/shell-exec-tool — Tool "run_bash_command" appears to execute commands or code.
+             evidence: src/server.js
+
+  `security/shell-exec-tool` is the finding's stable id, `[high]` its severity, and `evidence:`
+  a file path or URL — check it yourself, trovark never asks you to take a finding on faith.
+- **`Metadata Integrity`** — a static scan of tool metadata and fetched files for hidden Unicode
+  payloads (invisible characters that can smuggle instructions). "0 findings across N files" is
+  a clean scan, not an unset one; a separate `not checked — no files fetched` line means the
+  scan never ran because no files were retrieved.
+- **`Notes`** (printed only when relevant) — plain-language reasons a signal was missing, a
+  dimension was excluded, or a grade was withheld.
+
+Not every ref gets a Trust Score — trovark distinguishes "we don't know" from "there's nothing
+to grade":
+
+- **`Trust Score: INSUFFICIENT DATA`** — the grade is withheld rather than computed from partial
+  signals. This happens when the tool surface can't be statically determined, or two or more
+  whole dimensions have zero collectible signals; `Notes` explains why.
+- **`LIBRARY — not an MCP server`** — the ref is an SDK, proxy, or distribution stub with no
+  tools of its own to grade. No score is computed, and `--fail-under` is a no-op against it.
+- **`REPO UNAVAILABLE`** — the reference doesn't resolve to an existing, accessible GitHub repo
+  (renamed, deleted, or never existed). No score, no findings.
+
+`--json` carries the same information as structured fields (`overall`, `grade`,
+`dimensions[].confidence`, `insufficientData`, `notServer`, `unresolved`) instead of prose — see
+[`src/types.ts`](src/types.ts) for the full `Scorecard` shape.
+
 ## What trovark is not
 
 - It does not run or sandbox servers (static analysis only — v1).
