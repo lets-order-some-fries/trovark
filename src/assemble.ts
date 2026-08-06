@@ -160,7 +160,29 @@ export async function assemble(
         // null for dynamic regardless (notServer bypasses score.ts's gate,
         // unchanged). The evidence-bearing finding below is what replaces
         // the old fabricated pin as the honest published fact.
-        s.toolSurfaceRisk = schema.toolSurfaceRisk
+        // W6 corpus-scan finding: a partial surface may not publish `'none'`.
+        // `'none'` means "we examined the tool surface and nothing is risky";
+        // on a partial sample the true statement is "we examined SOME of the
+        // tool surface and that part is not risky" — which is not evidence of
+        // absence, because an unexamined tool is precisely where risk would
+        // hide. Measured: ViperJuice/mcp-gateway extracted 1 tool from a tree
+        // with more tool-bearing files than the sampler reached, and the
+        // resulting 'none' scored security 100/100 -> overall A+ 96 — a
+        // confident clean bill for a surface we admit we did not fully read,
+        // and the same shape as the v1.2 bug where an unreadable repo scored
+        // a confident A+.
+        //
+        // The monotonicity argument in the W5 comment below is kept where it
+        // is valid and dropped where it is not: finding a low/medium/high
+        // tool in a partial sample IS positive evidence and survives (a
+        // sample can only omit risk, never invent it), but the ABSENCE of a
+        // finding in an incomplete read is not a measurement. Leaving this
+        // undefined routes it through score.ts's existing securityPrimaryAbsent
+        // path — security is withheld rather than fabricated, and the grade
+        // gate handles the rest.
+        s.toolSurfaceRisk = schema.surfacePartial && schema.toolSurfaceRisk === 'none'
+          ? undefined
+          : schema.toolSurfaceRisk
         if (dynamicNote !== undefined) {
           s.findings.push({
             id: 'security/dynamic-tool-surface', dimension: 'security', severity: 'low',

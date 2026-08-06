@@ -345,10 +345,21 @@ describe('assemble — partial-surface honesty (W5)', () => {
     })
   }
 
-  it('a repo with more detected tool-fanout files than the sampler reached leaves toolCount/schemaTokenEstimate undefined, but still grades security on the sampled tools', async () => {
+  // W6 corpus-scan finding — this test's SECURITY clause was corrected; its
+  // count assertions are unchanged and still right. It previously asserted
+  // toolSurfaceRisk === 'none' ("security still grades on the sampled
+  // tools"). Measured on the live corpus, that is exactly how
+  // ViperJuice/mcp-gateway — 1 tool extracted from a tree holding more
+  // tool-bearing files than the sampler reached — scored security 100/100
+  // and rose to overall A+ 96: a confident clean bill for a surface we
+  // simultaneously admitted we had not fully read. A benign PARTIAL sample
+  // is not evidence of a benign surface; unexamined tools are precisely
+  // where risk would hide. Positive risk found in a partial sample still
+  // counts (see the riskForPartial cases below) — only 'none' is withheld.
+  it('a repo with more tool-fanout files than the sampler reached withholds BOTH the counts and any clean risk verdict', async () => {
     const s = await assemble({ ref: 'acme/foo', repo: { owner: 'acme', name: 'foo' } }, figwrightShapedHttp(), NOW)
     expect(s.schemaExtracted).toBe(true)       // extraction itself succeeded on the sample
-    expect(s.toolSurfaceRisk).toBe('none')     // security still grades on the sampled tools
+    expect(s.toolSurfaceRisk).toBeUndefined()  // 'none' from a partial read is not a measurement
     expect(s.toolCount).toBeUndefined()        // cost declines to publish a count from a partial sample
     expect(s.schemaTokenEstimate).toBeUndefined()
   })
@@ -421,3 +432,33 @@ describe('assemble — README quarantine (W6 review remediation item 1): structu
     expect(s.findings.some(f => f.id === 'reliability/readme-sourced-tools')).toBe(true)
   })
 })
+
+// W6 corpus-scan finding: a PARTIAL tool surface may not publish 'none'.
+// Measured on the live corpus: ViperJuice/mcp-gateway extracted 1 tool from a
+// tree containing more tool-bearing files than the sampler reached; the
+// resulting toolSurfaceRisk 'none' scored security 100/100 and lifted the repo
+// to A+ 96 — a confident clean bill for a surface we admit we did not fully
+// read. Positive risk evidence from a partial sample still counts (sampling
+// can omit risk but never invent it); the absence of evidence does not.
+describe('partial tool surface never publishes a clean risk verdict', () => {
+  it("drops 'none' to undefined when the surface is partial", () => {
+    expect(riskForPartial('none', true)).toBeUndefined()
+  })
+  it("keeps 'none' when the surface is complete", () => {
+    expect(riskForPartial('none', false)).toBe('none')
+  })
+  for (const risk of ['low', 'medium', 'high'] as const) {
+    it(`keeps '${risk}' even on a partial surface (positive evidence survives)`, () => {
+      expect(riskForPartial(risk, true)).toBe(risk)
+    })
+  }
+})
+
+// Mirrors the expression in src/assemble.ts so the rule is pinned independently
+// of the surrounding network-dependent assemble() path.
+function riskForPartial(
+  risk: 'none' | 'low' | 'medium' | 'high' | undefined,
+  surfacePartial: boolean,
+): 'none' | 'low' | 'medium' | 'high' | undefined {
+  return surfacePartial && risk === 'none' ? undefined : risk
+}
