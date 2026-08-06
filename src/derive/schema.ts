@@ -1553,19 +1553,30 @@ export function extractSchema(
     }
   }
 
-  // I1: the structural floor applies here too, whether `tools` came from
-  // source/manifest extraction or the README rung. A real tool list
-  // (however sourced) does not change what the fetched source imports, and
-  // maintainer-authored descriptions (README prose in particular) must not
-  // be able to launder a shell-import risk down to a clean bill. The finding
-  // id stays `security/shell-import-no-tools` (already published in
-  // index/results.json) even though tools DID extract in this branch — only
-  // the message differs from the tools.length===0 case above.
-  if (shellFile) {
+  // I1: the structural floor applies here ONLY when the tool list came from
+  // the README rung — i.e. from maintainer-authored prose we could not
+  // verify against code. That was the actual defect: a benign-sounding
+  // README catalog laundering a shell-import risk down to a clean bill.
+  //
+  // It must NOT apply when tools were extracted from real code. There the
+  // tool surface was genuinely assessed (every tool got a risk verdict
+  // above), so adding a blanket floor double-counts and penalises any repo
+  // that merely *contains* a file importing child_process — which includes
+  // release/build scripts that are not the server at all. Measured on the
+  // 400-server corpus: hoisting this unconditionally dropped 50 real repos
+  // (awslabs/mcp A+96->A-89, vercel/mcp-adapter, googleapis/genai-toolbox,
+  // microsoft/playwright-mcp on its `roll.js` RELEASE script) from
+  // security 100/85 to 63. Those are false accusations, which cost this
+  // product more than the recall gained.
+  //
+  // The finding id stays `security/shell-import-no-tools` (already
+  // published in index/results.json) even though tools DID extract here —
+  // only the message differs from the tools.length===0 case above.
+  if (shellFile && readmeSourced) {
     if (RISK_ORDER.indexOf('medium') > RISK_ORDER.indexOf(worst)) worst = 'medium'
     findings.push({
       id: 'security/shell-import-no-tools', dimension: 'security', severity: 'medium',
-      message: 'A fetched file imports a shell/process-execution API; tool surface risk is floored at medium regardless of which rung produced the tool list, so a maintainer-authored README or manifest cannot override this structural code signal.',
+      message: 'A fetched file imports a shell/process-execution API, and this tool list was read from the README rather than verified against code; tool surface risk is floored at medium so maintainer-authored prose cannot override the structural code signal.',
       evidence: shellFile.path,
     })
   }

@@ -433,3 +433,47 @@ describe('assemble — README catalog end-to-end (W6 Part A)', () => {
     expect(s.readmeSourced).toBe(false)
   })
 })
+
+// W6 corpus-scan finding: the shell-import floor is scoped to README-sourced
+// tool lists ONLY. When tools come from real code, every tool already got an
+// individual risk verdict, so a blanket floor double-counts and penalises any
+// repo that merely contains a file importing child_process — including
+// release/build scripts that are not the server. Measured on the 400-server
+// corpus, the unscoped version dropped 50 real repos (awslabs/mcp A+96->A-89,
+// vercel/mcp-adapter, googleapis/genai-toolbox, and playwright-mcp on its
+// roll.js RELEASE script) from security 100/85 to 63 — false accusations.
+describe('shell-import floor is scoped to README-sourced tool lists', () => {
+  const shellFile = {
+    path: 'scripts/roll.js',
+    content: "import { execSync } from 'child_process'\nexecSync('git push')\n",
+    size: 60,
+  }
+  const codeServer = {
+    path: 'src/index.ts',
+    content: [
+      'server.registerTool("alpha_read", { description: "Read a record" }, h)',
+      'server.registerTool("beta_read", { description: "Read another" }, h)',
+      'server.registerTool("gamma_read", { description: "Read a third" }, h)',
+    ].join('\n'),
+    size: 200,
+  }
+
+  it('does NOT floor when tools were extracted from real code', () => {
+    const r = extractSchema([codeServer, shellFile], ['src/index.ts', 'scripts/roll.js'])
+    expect(r.extracted).toBe(true)
+    expect(r.readmeSourced).toBe(false)
+    expect(r.findings.some(f => f.id === 'security/shell-import-no-tools')).toBe(false)
+  })
+
+  it('DOES floor when the tool list came from the README (unverified prose)', () => {
+    const readme = {
+      path: 'README.md',
+      content: '# Srv\n\n## Tools\n\n- **alpha_read**\n  - Description: Read a record\n- **beta_read**\n  - Description: Read another\n- **gamma_read**\n  - Description: Read a third\n',
+      size: 200,
+    }
+    const r = extractSchema([shellFile], ['scripts/roll.js'], undefined, readme)
+    expect(r.readmeSourced).toBe(true)
+    expect(r.findings.some(f => f.id === 'security/shell-import-no-tools')).toBe(true)
+    expect(r.toolSurfaceRisk).not.toBe('none')
+  })
+})
