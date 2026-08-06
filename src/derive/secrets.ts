@@ -36,10 +36,23 @@ function looksLikeSecret(v: string): boolean {
 
 const SKIP = /(^|\/)(tests?|fixtures?|examples?|samples?|specs?|mocks?|__mocks__)(\/|[._-]|$)|\.(test|spec|example|sample|min)\.|\.(example|sample)$/i
 
+// W6 review (I4, defence-in-depth): documentation is where placeholder and
+// vendor-published example credentials live — AWS's own docs use
+// AKIAIOSFODNN7EXAMPLE, which matches the AWS PROVIDER pattern exactly and
+// is checked BEFORE any placeholder heuristic. Skipping only `.md` was an
+// asymmetry that fired on a README.rst the moment W6 started fetching
+// READMEs; the root README is now quarantined out of `files` upstream
+// (src/collectors/github.ts), so this is not reachable today — but "docs
+// reached a code scanner" is a mistake this codebase has now made once, and
+// the next doc-fetching feature must not silently re-open it. Secret
+// scanning is already a deliberately low-confidence candidate signal
+// (~13% measured precision), so declining to scan prose costs nothing real.
+const DOC_EXT = /\.(md|markdown|rst|txt|adoc|asciidoc)$/i
+
 export function scanSecrets(files: RepoFile[]): { count: number; findings: Finding[] } {
   const findings: Finding[] = []
   for (const f of files) {
-    if (SKIP.test(f.path) || f.path.endsWith('.md')) continue
+    if (SKIP.test(f.path) || DOC_EXT.test(f.path)) continue
     let label: string | undefined
     outer: for (const line of f.content.split('\n')) {
       if (COMMENT.test(line)) continue

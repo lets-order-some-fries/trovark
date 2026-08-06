@@ -7,7 +7,18 @@ export type Severity = 'info' | 'low' | 'medium' | 'high'
 // MCP surface at all ('not-server'), a remote-proxy that registers tools only
 // at runtime ('proxy'), or a distribution stub pointing at an external
 // package ('stub'). See src/derive/classify.ts for the detector.
-export type NotServerReason = 'sdk' | 'not-server' | 'proxy' | 'stub'
+// W6 (coverage-v1.5, wave2-spec §1a): 'dynamic' added — a REAL MCP server
+// (not a library, not a stub) whose tool list is built at runtime from
+// upstream servers or a DB and therefore has no static surface to grade
+// (duaraghav8/MCPJungle). Distinct from every reason above: those describe
+// "there is nothing here to check"; 'dynamic' describes "there is a real
+// server here, but its surface is unknowable from source alone" — see
+// src/derive/dynamic.ts. Reuses the SAME notServer/notServerReason plumbing
+// (score.ts nulls overall/grade for it exactly like the others) but is
+// rendered with its own distinct label everywhere a human reads it
+// (report/terminal.ts, index/site.ts) and counted in its own IndexStats
+// counter (index/scan.ts) rather than folded into "library / not a server".
+export type NotServerReason = 'sdk' | 'not-server' | 'proxy' | 'stub' | 'dynamic'
 
 export interface Finding {
   id: string            // e.g. 'security/shell-exec-tool'
@@ -59,6 +70,18 @@ export interface Signals {
   hasTests?: boolean
   hasLockfile?: boolean
   schemaExtracted?: boolean
+  // W6 review remediation item M2 (.superpowers/sdd/w6-review-findings.md):
+  // a README-sourced tool surface is a maintainer's CLAIM, not verified
+  // extraction — previously carried only by `schemaExtracted=false`
+  // (indistinguishable from "extraction failed") plus one info finding.
+  // This is the structured, machine-readable version of that fact, threaded
+  // through to Scorecard and IndexEntry so a JSON consumer (and a human, via
+  // report/terminal.ts and index/site.ts) can tell claimed-from-README apart
+  // from extracted-from-code without parsing findings. Set (true or false)
+  // whenever schema extraction ran at all; stays undefined when it never ran
+  // (no repo tree — same "absence != a known value" discipline as every
+  // other conditionally-set Signals field here).
+  readmeSourced?: boolean
   // security
   toolSurfaceRisk?: 'none' | 'low' | 'medium' | 'high'
   secretsFound?: number
@@ -102,7 +125,14 @@ export interface Signals {
 
 export interface DimensionScore {
   id: DimensionId
-  score: number         // 0-100
+  // W6 (fabricated-dimension-value fix): null when the dimension has NO
+  // measurement — either zero collectible signals (Rule A) or, for security,
+  // an absent PRIMARY tool-surface signal (Rule B). It is never 0 in those
+  // cases: 0 is the WORST possible score, and publishing it as a measurement
+  // is exactly the fabrication the coverage gate exists to prevent. Consumers
+  // must render/aggregate null as "no measurement", never coerce it to a
+  // number — see report/terminal.ts, index/scan.ts and index/site.ts.
+  score: number | null  // 0-100, or null when not measured
   confidence: Confidence
   available: number     // signals computable
   total: number         // signals defined
@@ -120,10 +150,22 @@ export interface Scorecard {
   integrityScanned?: { files: number; chars: number; tools: number }
   // I9: null when notServer — a library/SDK/proxy/stub has no tool surface
   // to grade, so no headline score/letter grade is reported (dimensions are
-  // still populated below when useful). Only ever number/string together
-  // (never notServer) or null/null together (notServer) — see score.ts.
-  overall: number | null       // 0-100
-  grade: string | null         // 'A+' | 'A' | 'A-' | ... | 'F'
+  // still populated below when useful).
+  // W1: null when unresolved — the repo 404s, nothing was ever fetched.
+  // W6 (false-published-claim fix): null when insufficientData too. A
+  // withheld grade must be withheld in the DATA, not merely hidden by the
+  // renderer — previously these fields stayed populated and a "grade": "A"
+  // shipped in `trovark --json` and index/results.json for servers the gate
+  // had explicitly declined to assess. All three withheld terminal states now
+  // go through ONE `withheld` computation in score.ts.
+  // Invariant: number/string together (graded) or null/null together
+  // (withheld) — never one without the other.
+  overall: number | null       // 0-100, null when withheld
+  grade: string | null         // 'A+' | 'A' | 'A-' | ... | 'F', null when withheld
+  // W6 review remediation item M2: structured passthrough of
+  // Signals.readmeSourced — see that field's comment for the full
+  // rationale. Undefined when extraction never ran at all.
+  readmeSourced?: boolean
   dimensions: DimensionScore[]
   notes: string[]
   generatedAt: string   // ISO string, passed in by caller (determinism)

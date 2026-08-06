@@ -26,6 +26,12 @@ export function renderTerminal(card: Scorecard, opts: { color?: boolean } = {}):
     // is nothing to grade. Must never render as a Trust Score / F card (the
     // 18-false-F-card bug this fixes).
     lines.push(paint(31, 'REPO UNAVAILABLE — not found on GitHub (renamed or deleted)', c) + `   rubric v${card.rubricVersion}`)
+  } else if (card.notServer && card.notServerReason === 'dynamic') {
+    // W6 (coverage-v1.5, Task W6 Part B): a DISTINCT label from "LIBRARY" —
+    // this IS a real MCP server, just one whose tool list is built at
+    // runtime from upstream servers/a DB and therefore has no static
+    // surface. See src/derive/dynamic.ts.
+    lines.push(paint(33, 'DYNAMIC TOOL SURFACE — not statically analyzable', c) + `   rubric v${card.rubricVersion}`)
   } else if (card.notServer) {
     // V2: a DISTINCT terminal state from INSUFFICIENT DATA — this repo was
     // never going to have tools to grade (library/SDK/proxy/stub), not a
@@ -35,18 +41,35 @@ export function renderTerminal(card: Scorecard, opts: { color?: boolean } = {}):
   } else if (card.insufficientData) {
     lines.push(paint(31, 'Trust Score: INSUFFICIENT DATA', c) + `   rubric v${card.rubricVersion}`)
   } else {
-    // I9: overall/grade are only ever null when notServer (handled above) —
-    // this branch always has real values, but the type is nullable to
-    // reflect that case, so fall back defensively rather than asserting.
+    // I9 / W1 / W6: overall/grade are null for every withheld terminal state
+    // — notServer, unresolved and insufficientData, all handled by the
+    // branches above — so this branch only ever runs on a genuinely graded
+    // card and always has real values. The type stays nullable to reflect
+    // those cases, so fall back defensively rather than asserting.
     const overall = card.overall ?? 0
     lines.push(paint(colorFor(overall), `Trust Score: ${overall}/100 (${card.grade ?? '?'})`, c) + `   rubric v${card.rubricVersion}`)
   }
+  // W6 review remediation item M2: a README-sourced tool surface is a
+  // maintainer's CLAIM, not verified extraction — surfaced explicitly here
+  // (in addition to the existing 'reliability/readme-sourced-tools' info
+  // finding below) so a human reading the report can't miss it.
+  if (card.readmeSourced) {
+    lines.push(paint(33, 'Tool surface read from README catalog — not verified against source', c))
+  }
   lines.push('')
   for (const d of card.dimensions) {
-    lines.push(
-      '  ' + paint(colorFor(d.score), `${d.id.padEnd(13)} ${String(d.score).padStart(3)}/100  ${bar(d.score)}`, c)
-      + `  ${d.confidence} confidence`,
-    )
+    // W6 (fabricated-dimension-value fix): a dimension with no measurement
+    // carries score: null (see src/types.ts). Print that honestly — no
+    // number, and NO BAR: an all-empty bar is visually indistinguishable
+    // from a measured 0/100, which is the worst possible score, not
+    // "unknown". Painted with the same amber this file already uses for
+    // withheld outcomes (LIBRARY / DYNAMIC TOOL SURFACE banners above), and
+    // padded to the numeric column width so the confidence column still
+    // lines up.
+    const body = d.score === null
+      ? paint(33, `${d.id.padEnd(13)} ${'not measured'.padEnd(20)}`, c)
+      : paint(colorFor(d.score), `${d.id.padEnd(13)} ${String(d.score).padStart(3)}/100  ${bar(d.score)}`, c)
+    lines.push('  ' + body + `  ${d.confidence} confidence`)
   }
   const findings = card.dimensions.flatMap(d => d.findings)
   if (findings.length > 0) {

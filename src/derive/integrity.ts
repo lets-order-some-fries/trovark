@@ -17,8 +17,17 @@
 //     accumulates ch.length so every line/col offset is correct.
 //  4. SIZE_CAP truncates file content upstream — this module makes no
 //     completeness claim; scanned{} only ever reports what it was given.
-//  5. README.md is not fetched by the sampler — callers must not describe
-//     this as "scanning the repository".
+//  5. UPDATED (W6 review remediation item 1, M3 — .superpowers/sdd/
+//     w6-review-findings.md): the root README.md/.rst IS fetched by the
+//     sampler (RepoSnapshot.readme, see src/collectors/github.ts) and IS
+//     scanned here by deliberate choice — it is real fetched content, and
+//     this module's scan is offline/deterministic/display-only (score.ts
+//     never reads its output), so there is no fabrication risk in scanning
+//     it. What changed is HOW it reaches this function: quarantined off
+//     RepoSnapshot.files (four of assemble.ts's other five README.md/.rst
+//     consumers were written for source code and must never see it) and
+//     passed here explicitly as the 3rd `readme` parameter instead, so
+//     `scanned.files` stays an honest count of everything actually scanned.
 //  6. extractSchema's per-tool `evidence` is threaded through so a
 //     tool-surface hit can cite its source file (see schema.ts).
 
@@ -261,12 +270,21 @@ function toolFieldLocator(tool: ToolInfo & { evidence?: string }, field: ToolFie
 /**
  * scanIntegrity — pure, offline, deterministic. Scans four surfaces per the
  * pre-registered plan: each tool's name/description/schemaText, plus every
- * fetched file's content. Never claims completeness: `files`/`tools` are
- * exactly what the caller fetched/extracted (see SIZE_CAP and
+ * fetched file's content (including the root README, when the caller passes
+ * one — see trap #5 above). Never claims completeness: `files`/`tools`/
+ * `readme` are exactly what the caller fetched/extracted (see SIZE_CAP and
  * selectRepoFiles in src/collectors/github.ts — this module has no
  * knowledge of what was skipped).
  */
-export function scanIntegrity(files: RepoFile[], tools: Array<ToolInfo & { evidence?: string }>): IntegrityScanResult {
+export function scanIntegrity(
+  files: RepoFile[], tools: Array<ToolInfo & { evidence?: string }>,
+  // W6 review remediation item 1: the quarantined root README, passed
+  // EXPLICITLY (never implicitly via `files`) so this module's own
+  // `scanned.files` denominator can count it honestly when present, the
+  // same discipline assemble.ts's README rung already applies to
+  // extractSchema's 4th parameter.
+  readme?: RepoFile,
+): IntegrityScanResult {
   const hits: IntegrityHit[] = []
   const findings: Finding[] = []
   let chars = 0
@@ -285,14 +303,15 @@ export function scanIntegrity(files: RepoFile[], tools: Array<ToolInfo & { evide
     }
   }
 
-  for (const f of files) {
+  const scannedFiles = readme ? [...files, readme] : files
+  for (const f of scannedFiles) {
     chars += f.content.length
     const r = safeScanText(f.content, f.path, `File "${f.path}"`)
     hits.push(...r.hits)
     findings.push(...r.findings)
   }
 
-  return { hits, findings, scanned: { files: files.length, chars, tools: tools.length } }
+  return { hits, findings, scanned: { files: scannedFiles.length, chars, tools: tools.length } }
 }
 
 // ---- exported for index/audit.ts (corpus-measurement harness only) ----

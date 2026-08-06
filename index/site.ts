@@ -26,8 +26,36 @@ function row(e: IndexEntry): string {
     return `<tr class="failed" data-overall="-1" title="repo unavailable — not found on GitHub (renamed or deleted)"><td>${name}</td><td colspan="6" class="muted">repo unavailable — not found on GitHub (renamed or deleted)</td></tr>`
   }
   const d = e.dims
-  const dim = (k: 'health' | 'reliability' | 'security' | 'cost') =>
-    d ? `<td>${d[k].score}<span class="conf">${esc(d[k].confidence[0])}</span></td>` : '<td>—</td>'
+  // W6 (fabricated-dimension-value fix): dims[k].score is null when the
+  // dimension had no measurement. Render it as a muted em dash with a
+  // "not measured" title — never as `0` (the worst possible score, published
+  // as a fact) and never as the literal string "null". This also keeps the
+  // client-side sorter honest: its `parseFloat(cell.textContent) || -1` reads
+  // an em dash as NaN -> -1 ("no value"), whereas a 0 cell would rank the
+  // unmeasured dimension as the worst measured one.
+  const dim = (k: 'health' | 'reliability' | 'security' | 'cost') => {
+    const v = d?.[k]
+    if (!v) return '<td>—</td>'
+    if (v.score === null || v.score === undefined) {
+      return `<td class="muted" title="not measured — no signals could be collected for this dimension">—<span class="conf">${esc(v.confidence[0] ?? '')}</span></td>`
+    }
+    return `<td>${v.score}<span class="conf">${esc(v.confidence[0])}</span></td>`
+  }
+  // W6 (coverage-v1.5, Task W6 Part B): rendered distinctly from the generic
+  // notServer/"LIB" branch below — this IS a real MCP server, just one whose
+  // tool list is built at runtime from upstream servers/a DB and therefore
+  // has no static surface (src/derive/dynamic.ts). Checked BEFORE the
+  // general notServer branch since Scorecard reuses notServer:true for this
+  // reason too (see src/scoring/score.ts). Unlike the library branch, the
+  // security cell is rendered normally (not "not applicable") — dimensions
+  // are still shown and security is NOT renormalized away, per the plan's
+  // explicit "highest-risk shape in the corpus" note.
+  if (e.notServer && e.notServerReason === 'dynamic') {
+    if (!d) return `<tr class="failed" data-overall="-1"><td>${name}</td><td colspan="6" class="muted">dynamic tool surface — not statically analyzable</td></tr>`
+    return `<tr class="failed" data-overall="-1" title="dynamic tool surface — tools registered at runtime from upstream; no static list exists"><td>${name}</td>` +
+      `<td><span class="chip muted-chip" title="dynamic tool surface — not statically analyzable">DYN</span></td>` +
+      `<td class="muted">—</td>${dim('health')}${dim('reliability')}${dim('security')}${dim('cost')}</tr>`
+  }
   // V2: rendered distinctly from insufficientData — this is a library/SDK/
   // proxy/stub repo (correctly classified as having no tools to grade), not
   // a server the scanner failed to check. Mutually exclusive with
@@ -48,7 +76,15 @@ function row(e: IndexEntry): string {
       `<td class="muted">—</td>${dim('health')}${dim('reliability')}${securityCell}${dim('cost')}</tr>`
   }
   const flags = (e.topFindings ?? []).map(f => `<span class="flag ${esc(f.severity)}" title="${esc(f.id)}">⚑</span>`).join('')
-  return `<tr data-overall="${e.overall}"><td>${name} ${flags}</td>` +
+  // W6 review remediation item M2: a README-sourced tool surface is a
+  // maintainer's CLAIM, not verified extraction (see src/types.ts) — flagged
+  // structurally here so a human scanning the table can tell it apart from
+  // extracted-from-code, distinct from (and in addition to) the info finding
+  // already carried in topFindings.
+  const readmeBadge = e.readmeSourced
+    ? '<span class="chip muted-chip" title="tool surface read from README catalog — not verified against source">README</span> '
+    : ''
+  return `<tr data-overall="${e.overall}"><td>${name} ${readmeBadge}${flags}</td>` +
     `<td><span class="chip" style="background:${gradeColor(e.grade)}">${esc(e.grade ?? '?')}</span></td>` +
     `<td>${e.overall}</td>${dim('health')}${dim('reliability')}${dim('security')}${dim('cost')}</tr>`
 }
@@ -84,7 +120,7 @@ footer{margin:28px 0;color:#8b949e;font-size:13px}
 <h1>Trovark</h1>
 <p class="tag">Trust scores for MCP servers — evidence-linked grades from static public signals. <code>npx trovark &lt;server&gt;</code></p>
 <div class="stats">
-${stat(s.total, 'servers scanned')}${stat(s.scored - s.insufficient - (s.notServer ?? 0) - (s.unresolved ?? 0), 'graded')}${stat(s.avgOverall, 'avg score')}${stat(s.gradeDist['A'] ?? 0, 'A grades')}${stat(s.staleOver180, 'stale / abandoned')}${stat(s.shellExecTools, 'expose exec/shell tools')}${stat(s.insufficient, 'insufficient data')}${stat(s.notServer ?? 0, 'library / not a server')}${stat(s.unresolved ?? 0, 'repo unavailable')}${stat(s.failed, 'failed / unreachable')}
+${stat(s.total, 'servers scanned')}${stat(s.scored - s.insufficient - (s.notServer ?? 0) - (s.dynamic ?? 0) - (s.unresolved ?? 0), 'graded')}${stat(s.avgOverall, 'avg score')}${stat(s.gradeDist['A'] ?? 0, 'A grades')}${stat(s.staleOver180, 'stale / abandoned')}${stat(s.shellExecTools, 'expose exec/shell tools')}${stat(s.insufficient, 'insufficient data')}${stat(s.notServer ?? 0, 'library / not a server')}${stat(s.dynamic ?? 0, 'dynamic tool surface')}${stat(s.unresolved ?? 0, 'repo unavailable')}${stat(s.failed, 'failed / unreachable')}
 </div>
 <table id="t"><thead><tr>
 <th data-k="0">server</th><th data-k="1">grade</th><th data-k="2">score</th><th data-k="3">health</th><th data-k="4">reliability</th><th data-k="5">security</th><th data-k="6">cost</th>

@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { assemble } from '../src/assemble.js'
+import { collectGithub } from '../src/collectors/github.js'
 import { HttpError } from '../src/util/http.js'
 import type { Http } from '../src/util/http.js'
 
@@ -82,6 +83,10 @@ describe('assemble', () => {
     expect(s.hasLockfile).toBe(true)
     expect(s.specEra).toBe('modern')
     expect(s.schemaExtracted).toBe(true)
+    // W6 review remediation item M2: a code-extracted tool surface carries
+    // readmeSourced === false (not merely absent) — extraction genuinely ran
+    // via a non-README rung.
+    expect(s.readmeSourced).toBe(false)
     expect(s.toolCount).toBe(1)
     expect(s.toolSurfaceRisk).toBe('none')
     expect(s.secretsFound).toBe(0)
@@ -340,11 +345,120 @@ describe('assemble — partial-surface honesty (W5)', () => {
     })
   }
 
-  it('a repo with more detected tool-fanout files than the sampler reached leaves toolCount/schemaTokenEstimate undefined, but still grades security on the sampled tools', async () => {
+  // W6 corpus-scan finding — this test's SECURITY clause was corrected; its
+  // count assertions are unchanged and still right. It previously asserted
+  // toolSurfaceRisk === 'none' ("security still grades on the sampled
+  // tools"). Measured on the live corpus, that is exactly how
+  // ViperJuice/mcp-gateway — 1 tool extracted from a tree holding more
+  // tool-bearing files than the sampler reached — scored security 100/100
+  // and rose to overall A+ 96: a confident clean bill for a surface we
+  // simultaneously admitted we had not fully read. A benign PARTIAL sample
+  // is not evidence of a benign surface; unexamined tools are precisely
+  // where risk would hide. Positive risk found in a partial sample still
+  // counts (see the riskForPartial cases below) — only 'none' is withheld.
+  it('a repo with more tool-fanout files than the sampler reached withholds BOTH the counts and any clean risk verdict', async () => {
     const s = await assemble({ ref: 'acme/foo', repo: { owner: 'acme', name: 'foo' } }, figwrightShapedHttp(), NOW)
     expect(s.schemaExtracted).toBe(true)       // extraction itself succeeded on the sample
-    expect(s.toolSurfaceRisk).toBe('none')     // security still grades on the sampled tools
+    expect(s.toolSurfaceRisk).toBeUndefined()  // 'none' from a partial read is not a measurement
     expect(s.toolCount).toBeUndefined()        // cost declines to publish a count from a partial sample
     expect(s.schemaTokenEstimate).toBeUndefined()
   })
 })
+
+// ---------------------------------------------------------------------------
+// W6 review remediation item 1 — THE LOAD-BEARING STRUCTURAL TEST.
+//
+// W6 put the root README into snap.files, and assemble.ts handed that same
+// array to five consumers written for source code (extractSchema intended;
+// classifyLibrary, detectDynamic, scanSecrets, scanIntegrity not). The fix
+// is architectural, not a filter at each call site: RepoSnapshot.files goes
+// back to code-only semantics, and the fetched README (when present) is
+// carried on its own RepoSnapshot.readme field instead — so no consumer
+// that only ever receives `files` can see it, by construction, regardless
+// of what any individual consumer does or doesn't filter internally.
+// ---------------------------------------------------------------------------
+
+describe('assemble — README quarantine (W6 review remediation item 1): structural invariant', () => {
+  function readmeCatalogHttp(): Http {
+    const routes: Record<string, unknown> = {
+      'https://api.github.com/repos/acme/shim/commits?since': [],
+      'https://api.github.com/repos/acme/shim/releases/latest': {},
+      'https://api.github.com/repos/acme/shim/git/trees/main?recursive=1': {
+        tree: [
+          // Declares the MCP SDK dependency (so classifyLibrary's "no MCP
+          // anywhere" signal correctly declines) but registers no tools in a
+          // shape any static extractor recognizes ("no parseable code") — a
+          // playwright-mcp-shaped distribution shim.
+          { path: 'package.json', type: 'blob', size: 300 },
+          { path: 'src/index.ts', type: 'blob', size: 200 },
+          { path: 'README.md', type: 'blob', size: 3000 },
+        ],
+      },
+      'https://api.github.com/repos/acme/shim': {
+        stargazers_count: 10, archived: false, pushed_at: iso(3), default_branch: 'main',
+        description: 'A distribution shim',
+      },
+    }
+    return makeRoutedHttp(routes, (url) => {
+      if (url.endsWith('package.json')) return JSON.stringify({ dependencies: { '@modelcontextprotocol/sdk': '^1.0.0' } })
+      if (url.endsWith('src/index.ts')) return `import { connect } from './shim-runtime.js'\nconnect()`
+      if (url.endsWith('README.md')) {
+        return `## Tools
+
+- **do_a**
+  - Description: does a
+
+- **do_b**
+  - Description: does b
+
+- **do_c**
+  - Description: does c
+`
+      }
+      throw new Error(`HTTP 404 for ${url}`)
+    })
+  }
+
+  it('snap.files never contains a path matching /^README\\.(md|rst)$/i — the README is carried on snap.readme instead', async () => {
+    const snap = await collectGithub({ ref: 'acme/shim', repo: { owner: 'acme', name: 'shim' } }, readmeCatalogHttp(), NOW)
+    expect(snap.files.some(f => /^README\.(md|rst)$/i.test(f.path))).toBe(false)
+    expect(snap.readme?.path).toBe('README.md')
+    expect(snap.readme?.content).toContain('do_a')
+  })
+
+  it('the README rung still works end-to-end: a repo with no parseable code but a valid >=3-tool README catalog still extracts those tools', async () => {
+    const s = await assemble({ ref: 'acme/shim', repo: { owner: 'acme', name: 'shim' } }, readmeCatalogHttp(), NOW)
+    expect(s.toolCount).toBe(3)
+    expect(s.findings.some(f => f.id === 'reliability/readme-sourced-tools')).toBe(true)
+  })
+})
+
+// W6 corpus-scan finding: a PARTIAL tool surface may not publish 'none'.
+// Measured on the live corpus: ViperJuice/mcp-gateway extracted 1 tool from a
+// tree containing more tool-bearing files than the sampler reached; the
+// resulting toolSurfaceRisk 'none' scored security 100/100 and lifted the repo
+// to A+ 96 — a confident clean bill for a surface we admit we did not fully
+// read. Positive risk evidence from a partial sample still counts (sampling
+// can omit risk but never invent it); the absence of evidence does not.
+describe('partial tool surface never publishes a clean risk verdict', () => {
+  it("drops 'none' to undefined when the surface is partial", () => {
+    expect(riskForPartial('none', true)).toBeUndefined()
+  })
+  it("keeps 'none' when the surface is complete", () => {
+    expect(riskForPartial('none', false)).toBe('none')
+  })
+  for (const risk of ['low', 'medium', 'high'] as const) {
+    it(`keeps '${risk}' even on a partial surface (positive evidence survives)`, () => {
+      expect(riskForPartial(risk, true)).toBe(risk)
+    })
+  }
+})
+
+// Mirrors the expression in src/assemble.ts so the rule is pinned independently
+// of the surrounding network-dependent assemble() path.
+function riskForPartial(
+  risk: 'none' | 'low' | 'medium' | 'high' | undefined,
+  surfacePartial: boolean,
+): 'none' | 'low' | 'medium' | 'high' | undefined {
+  return surfacePartial && risk === 'none' ? undefined : risk
+}

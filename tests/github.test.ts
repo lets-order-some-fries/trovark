@@ -1154,6 +1154,117 @@ describe('collectGithub', () => {
     }
   })
 
+  // --- W6 (Task W6 Part A): 1-slot README bucket ---------------------------
+
+  it('W6: a root README.md is fetched (1-slot README bucket)', async () => {
+    const http = fakeHttp()
+    const origJson = http.json.bind(http)
+    http.json = async <T,>(url: string): Promise<T> => {
+      if (url.includes('/git/trees/')) {
+        return { tree: [
+          { path: 'package.json', type: 'blob', size: 500 },
+          { path: 'README.md', type: 'blob', size: 2000 },
+        ] } as T
+      }
+      return origJson<T>(url)
+    }
+    http.text = async (url: string): Promise<string> => {
+      if (url.includes('package.json')) return '{"name":"foo"}'
+      if (url.includes('README.md')) return '# foo'
+      return '{}'
+    }
+    const snap = await collectGithub({ ref: 'acme/foo', repo: { owner: 'acme', name: 'foo' } }, http, NOW)
+    // W6 review remediation item 1 (.superpowers/sdd/w6-review-findings.md):
+    // the README is still fetched through the SAME 1-slot budget-accounted
+    // bucket as before (selectRepoFiles is unchanged by this fix) — but it
+    // is quarantined onto its own RepoSnapshot.readme field, never appended
+    // to `files`, so the five assemble.ts consumers that receive `files`
+    // (four of which were written for source code, not documentation) can
+    // no longer see it.
+    expect(snap.files.map(f => f.path)).not.toContain('README.md')
+    expect(snap.readme?.path).toBe('README.md')
+    expect(snap.readme?.content).toBe('# foo')
+  })
+
+  it('W6: a README.rst is also recognized', () => {
+    const blobs = [{ path: 'package.json', size: 500 }, { path: 'README.rst', size: 500 }]
+    const selected = selectRepoFiles(blobs, 'foo', false)
+    expect(selected).toContain('README.rst')
+  })
+
+  it('W6: a NESTED README (docs/README.md, packages/x/README.md) is never treated as the root catalog source (depth-0 only)', () => {
+    const blobs = [
+      { path: 'package.json', size: 500 },
+      { path: 'docs/README.md', size: 500 },
+      { path: 'packages/x/README.md', size: 500 },
+    ]
+    const selected = selectRepoFiles(blobs, 'foo', false)
+    expect(selected).not.toContain('docs/README.md')
+    expect(selected).not.toContain('packages/x/README.md')
+  })
+
+  it('W6: the README bucket is capped at 1 slot even with both README.md and README.rst present (prefers .md)', () => {
+    const blobs = [{ path: 'package.json', size: 500 }, { path: 'README.md', size: 500 }, { path: 'README.rst', size: 500 }]
+    const selected = selectRepoFiles(blobs, 'foo', false)
+    const readmes = selected.filter(p => p === 'README.md' || p === 'README.rst')
+    expect(readmes).toHaveLength(1)
+    expect(readmes).toEqual(['README.md'])
+  })
+
+  it('W6: the README bucket is ranked AFTER spec files and BEFORE ranked source', () => {
+    const blobs = [
+      { path: 'package.json', size: 500 },
+      { path: 'openapi.json', size: 500 },
+      { path: 'README.md', size: 500 },
+      ...Array.from({ length: 5 }, (_, i) => ({ path: `src/file${i}.ts`, size: 100 })),
+    ]
+    const selected = selectRepoFiles(blobs, 'foo', false)
+    expect(selected).toContain('README.md')
+    expect(selected).toContain('openapi.json')
+  })
+
+  // W6 review remediation item C4 (.superpowers/sdd/w6-review-findings.md,
+  // "C4 VERIFIED BY HAND"): the README bucket was budgeted through the SAME
+  // availableSourceSlots() accounting as every other guaranteed bucket
+  // (manifests/spec/entrypoint) — which meant on a budget-SATURATED repo it
+  // displaced the single lowest-ranked rankedSource file, one slot for one
+  // slot. Demonstrated live on 3 real corpus repos (see the
+  // KNOWN_NOT_TOOL_BEARING history below this block): all 3 displaced files
+  // happened to be non-tool-bearing, but that was luck, not a guarantee — on
+  // any repo whose budget is already full, the evicted file COULD be
+  // tool-bearing. Fix: the README now occupies a DEDICATED slot outside the
+  // source budget (it is no longer subtracted in availableSourceSlots(), and
+  // the final FILE_CAP is widened by exactly readmeCandidates.length — 0 or
+  // 1 — so it is fetched as a genuine EXTRA file, never a swap).
+  it('C4: a saturated budget gets the README as an EXTRA file — the ranked-source COUNT is identical whether or not a README exists', () => {
+    // Deliberately generic (non-`tools/`) source paths — a `tools/`-dir shape
+    // would itself trip the toolFanout>=8 trigger and widen FILE_CAP to 24,
+    // defeating the point of this saturation test.
+    const baseBlobs = [
+      { path: 'package.json', size: 500 },
+      { path: 'openapi.json', size: 500 },
+      ...Array.from({ length: 20 }, (_, i) => ({ path: `src/file${i}.ts`, size: 100 })),
+    ]
+    const blobsWithReadme = [...baseBlobs, { path: 'README.md', size: 500 }]
+
+    const selectedNoReadme = selectRepoFiles(baseBlobs, 'foo', false)
+    const selectedWithReadme = selectRepoFiles(blobsWithReadme, 'foo', false)
+
+    const sourceNoReadme = selectedNoReadme.filter(p => p.startsWith('src/file'))
+    const sourceWithReadme = selectedWithReadme.filter(p => p.startsWith('src/file'))
+
+    // THE CORE ASSERTION: adding a README to an already-saturated tree must
+    // not shrink the set of ranked-source files selected — pre-fix, this
+    // drops from 9 to 8 (one rankedSource file evicted to pay for the
+    // README's slot inside the shared FILE_CAP=12 budget).
+    expect(sourceWithReadme.length).toBe(sourceNoReadme.length)
+    // The README is a genuine EXTRA file (FILE_CAP + 1), not a swap.
+    expect(selectedWithReadme).toContain('README.md')
+    expect(selectedWithReadme.length).toBe(selectedNoReadme.length + 1)
+    expect(selectedNoReadme.length).toBe(12) // FILE_CAP=12, fully saturated pre-README
+    expect(selectedWithReadme.length).toBe(13) // dedicated +1 slot, never subtracted from source
+  })
+
   // --- W5 THE REGRESSION GUARD (plan Task W5, wave2-spec §2.2) ----------
   //
   // tests/fixtures/sampling-corpus.json was recorded live (`gh api
@@ -1183,6 +1294,24 @@ describe('collectGithub', () => {
   //   - protostatis/unbrowser: src/policy.rs — Rust. extractSchema has no
   //     Rust bucket (manifestJson/js/py/go only) — categorically
   //     unextractable regardless of content, per UNSUPPORTED_EXTRACTOR_EXT_RE.
+  //
+  // W6 review remediation item C4 (.superpowers/sdd/w6-review-findings.md,
+  // "C4 VERIFIED BY HAND"): W6 (Task W6 Part A) originally added three more
+  // entries here — codex-curator/studiomcphub::src/tools/watermark.py,
+  // protostatis/unbrowser::train/eval_tool_likelihoods.py, and
+  // upstash/context7::packages/mcp/src/lib/encryption.ts — because the
+  // 1-slot README bucket was budgeted through the SAME availableSourceSlots()
+  // accounting as every other guaranteed bucket, so on a budget-saturated
+  // repo it displaced the single lowest-ranked rankedSource candidate
+  // (verified live: all 3 happened to be non-tool-bearing, but that was
+  // never guaranteed by construction). The README now occupies a DEDICATED
+  // slot outside the source budget (src/collectors/github.ts:
+  // availableSourceSlots() no longer subtracts readmeCandidates.length, and
+  // the final selection cap is widened by that same count) — so the README
+  // is fetched as a genuine EXTRA file and can no longer evict a
+  // rankedSource candidate at all. These three entries are gone: their
+  // absence, with the guard below still passing, IS the regression test for
+  // the fix (see the C4 test above and .superpowers/sdd/w6-review-findings.md).
   const KNOWN_NOT_TOOL_BEARING = new Set([
     'mroops0111/openapi-mcp-gateway::src/openapi_mcp_gateway/__init__.py',
     'codex-curator/studiomcphub::src/tools/__init__.py',

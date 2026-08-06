@@ -1,5 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import { classifyLibrary } from '../src/derive/classify.js'
+import { assemble } from '../src/assemble.js'
+import type { Http } from '../src/util/http.js'
 
 describe('classifyLibrary — signal 1: name/topic/description SDK', () => {
   it('a repo named "foo-sdk" with "The official Foo SDK" description → notServer sdk', () => {
@@ -317,5 +319,91 @@ describe('classifyLibrary — Tier B: corroborated SDK identity overrides extrac
       toolsExtracted: false,
     })
     expect(r?.reason).toBe('sdk')
+  })
+})
+
+// ---------------------------------------------------------------------------
+// W6 review remediation item 1 (I3): classifyLibrary's content signals
+// (signal 2's idiom scan in particular) read whatever `ctx.files` the caller
+// hands it, with no path filter. Signal 2 requires EVERY idiom hit to be
+// under an excluded (example/doc/sample) path; a root README.md is NOT an
+// excluded path, so a README fence matching the same idiom that trips
+// signal 2 from real source actually SUPPRESSES signal 2 (idiomHitPaths is
+// no longer "every" under an excluded path), flipping the verdict.
+// assemble.ts must hand classifyLibrary the SAME files regardless of
+// whether the repo happens to have a matching README fence.
+// ---------------------------------------------------------------------------
+
+describe('assemble — README quarantine (W6 review I3): classification unaffected by README content', () => {
+  function makeRoutedHttp(routes: Record<string, unknown>, textFn: (url: string) => string): Http {
+    return {
+      async json<T>(url: string): Promise<T> {
+        for (const [prefix, body] of Object.entries(routes)) if (url.startsWith(prefix)) return body as T
+        throw new Error(`HTTP 404 for ${url}`)
+      },
+      async jsonWithHeaders<T>(url: string): Promise<{ data: T; headers: Headers }> {
+        for (const [prefix, body] of Object.entries(routes)) {
+          if (url.startsWith(prefix)) return { data: body as T, headers: new Headers() }
+        }
+        throw new Error(`HTTP 404 for ${url}`)
+      },
+      async postJson<T>(url: string): Promise<T> {
+        if (url.includes('osv.dev')) return { results: [] } as T
+        throw new Error(`HTTP 404 for ${url}`)
+      },
+      async text(url: string): Promise<string> { return textFn(url) },
+    }
+  }
+
+  const NOW = new Date('2026-08-06T00:00:00Z')
+  const iso = (daysAgo: number) => new Date(NOW.getTime() - daysAgo * 86_400_000).toISOString()
+
+  // Real source's only tool-registration idiom lives under examples/ (an
+  // excluded path) — extraction correctly finds zero tools, and signal 2
+  // ("idiom-only-in-excluded-paths") correctly classifies this as a library
+  // whose registrations exist only under example paths.
+  function repoHttp(withReadme: boolean): Http {
+    const tree: Array<{ path: string; type: string; size: number }> = [
+      { path: 'package.json', type: 'blob', size: 200 },
+      { path: 'examples/demo.ts', type: 'blob', size: 200 },
+    ]
+    if (withReadme) tree.push({ path: 'README.md', type: 'blob', size: 500 })
+    const routes: Record<string, unknown> = {
+      'https://api.github.com/repos/acme/classifyguard/commits?since': [],
+      'https://api.github.com/repos/acme/classifyguard/releases/latest': {},
+      'https://api.github.com/repos/acme/classifyguard/git/trees/main?recursive=1': { tree },
+      'https://api.github.com/repos/acme/classifyguard': {
+        stargazers_count: 5, archived: false, pushed_at: iso(3), default_branch: 'main',
+      },
+    }
+    return makeRoutedHttp(routes, (url) => {
+      if (url.endsWith('package.json')) return JSON.stringify({ name: 'classifyguard' })
+      if (url.endsWith('examples/demo.ts')) return `server.tool("demo_tool", "does a demo thing", {}, handler)`
+      if (url.endsWith('README.md')) {
+        return `# classifyguard
+
+Example usage:
+
+\`\`\`js
+server.tool("example_tool", "an example tool", {}, handler)
+\`\`\`
+`
+      }
+      throw new Error(`HTTP 404 for ${url}`)
+    })
+  }
+
+  it('a repo with real source that extracts zero tools classifies identically whether or not its README contains a matching tool-call fence', async () => {
+    const without = await assemble({ ref: 'classifyguard', repo: { owner: 'acme', name: 'classifyguard' } }, repoHttp(false), NOW)
+    const withReadme = await assemble({ ref: 'classifyguard', repo: { owner: 'acme', name: 'classifyguard' } }, repoHttp(true), NOW)
+    expect(without.schemaExtracted).toBe(false)
+    // Today (pre-fix): the README's own `server.tool("example_tool", ...)`
+    // fence is picked up by classifyLibrary's raw content scan too, but at a
+    // NON-excluded path (root README.md), which makes idiomHitPaths.every()
+    // false and SUPPRESSES signal 2 — flipping notServerReason away from
+    // 'sdk' (usually to 'not-server'). The README's presence must be inert.
+    expect(withReadme.notServerReason).toBe(without.notServerReason)
+    expect(withReadme.notServer).toBe(without.notServer)
+    expect(without.notServerReason).toBe('sdk')
   })
 })

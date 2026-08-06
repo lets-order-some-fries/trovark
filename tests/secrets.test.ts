@@ -1,5 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import { scanSecrets } from '../src/derive/secrets.js'
+import { assemble } from '../src/assemble.js'
+import type { Http } from '../src/util/http.js'
 
 describe('scanSecrets — true positives', () => {
   it('flags an AWS access key', () => {
@@ -45,4 +47,93 @@ describe('scanSecrets — false positives from the live audit must NOT flag', ()
   it('angle-bracket placeholder', () => clean('a.ts', 'const api_key = "<your-key-goes-here>"'))
   it('clean source', () => clean('src/i.ts', 'export const x = 1'))
   it('skips .test. infix files (test-file skip gap closed)', () => clean('foo.test.ts', 'const apiKey = "8Kx9mVq2LpZ7nWfR3tYbQ1c"'))
+})
+
+// ---------------------------------------------------------------------------
+// W6 review remediation item 1 (I4): scanSecrets skips `.md` but never
+// learned to skip `.rst` — README_BASENAME_RE fetches either. AWS's own
+// canonical documentation example key must never be published as a
+// "possible hardcoded credential" against a repo whose only sin is
+// documenting AWS. Fixed by construction: the root README (.md or .rst) is
+// quarantined onto RepoSnapshot.readme before assemble.ts ever calls
+// scanSecrets(snap.files, ...), so scanSecrets never sees it, regardless of
+// extension.
+// ---------------------------------------------------------------------------
+
+const NOW = new Date('2026-08-06T00:00:00Z')
+const iso = (daysAgo: number) => new Date(NOW.getTime() - daysAgo * 86_400_000).toISOString()
+
+function makeRoutedHttp(routes: Record<string, unknown>, textFn: (url: string) => string): Http {
+  return {
+    async json<T>(url: string): Promise<T> {
+      for (const [prefix, body] of Object.entries(routes)) if (url.startsWith(prefix)) return body as T
+      throw new Error(`HTTP 404 for ${url}`)
+    },
+    async jsonWithHeaders<T>(url: string): Promise<{ data: T; headers: Headers }> {
+      for (const [prefix, body] of Object.entries(routes)) {
+        if (url.startsWith(prefix)) return { data: body as T, headers: new Headers() }
+      }
+      throw new Error(`HTTP 404 for ${url}`)
+    },
+    async postJson<T>(url: string): Promise<T> {
+      if (url.includes('osv.dev')) return { results: [] } as T
+      throw new Error(`HTTP 404 for ${url}`)
+    },
+    async text(url: string): Promise<string> { return textFn(url) },
+  }
+}
+
+describe('assemble — README quarantine (W6 review I4): a README.rst credential example must never reach scanSecrets', () => {
+  it('AWS doc example key AKIAIOSFODNN7EXAMPLE in README.rst produces no security/committed-secret finding', async () => {
+    const routes: Record<string, unknown> = {
+      'https://api.github.com/repos/acme/rstdocs/commits?since': [],
+      'https://api.github.com/repos/acme/rstdocs/releases/latest': {},
+      'https://api.github.com/repos/acme/rstdocs/git/trees/main?recursive=1': {
+        tree: [{ path: 'README.rst', type: 'blob', size: 1000 }],
+      },
+      'https://api.github.com/repos/acme/rstdocs': {
+        stargazers_count: 5, archived: false, pushed_at: iso(3), default_branch: 'main',
+      },
+    }
+    const http = makeRoutedHttp(routes, (url) => {
+      if (url.endsWith('README.rst')) {
+        return `My MCP Server
+=============
+
+Example AWS credentials for testing::
+
+    AWS_ACCESS_KEY_ID = AKIAIOSFODNN7EXAMPLE
+`
+      }
+      throw new Error(`HTTP 404 for ${url}`)
+    })
+    const s = await assemble({ ref: 'rstdocs', repo: { owner: 'acme', name: 'rstdocs' } }, http, NOW)
+    expect(s.findings.some(f => f.id === 'security/committed-secret')).toBe(false)
+    expect(s.secretsFound).toBe(0)
+  })
+})
+
+// W6 review I4 (defence-in-depth): documentation extensions are skipped, not
+// just `.md`. AWS's own published documentation key matches the AWS PROVIDER
+// pattern exactly and is tested before any placeholder heuristic, so a doc
+// file handed to this scanner produces a "Possible AWS access key" finding
+// against a repo whose only sin is documenting AWS. The root README is
+// quarantined upstream so this is unreachable in the current pipeline; this
+// test exists so the next feature that fetches documentation cannot silently
+// re-open it.
+describe('documentation files are never secret-scanned', () => {
+  const doc = (path: string) => scanSecrets([
+    { path, content: 'Config example:\n\n    aws_access_key_id = AKIAIOSFODNN7EXAMPLE\n', size: 80 },
+  ]).findings
+  for (const ext of ['md', 'markdown', 'rst', 'txt', 'adoc', 'asciidoc']) {
+    it(`skips README.${ext}`, () => {
+      expect(doc(`README.${ext}`)).toEqual([])
+    })
+  }
+  it('still scans real source for the same key', () => {
+    const found = scanSecrets([
+      { path: 'src/config.ts', content: 'const k = "AKIAIOSFODNN7EXAMPLE"', size: 40 },
+    ]).findings
+    expect(found.some(f => f.id === 'security/committed-secret')).toBe(true)
+  })
 })

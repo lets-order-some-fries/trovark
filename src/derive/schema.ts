@@ -25,6 +25,14 @@ export interface SchemaResult {
   // stays-graded reasoning (max-risk classification is monotone under
   // sampling, so it is safe to keep grading security on the partial sample).
   surfacePartial: boolean
+  // W6 (Task W6 Part A): true when `tools` came from the LAST-rung README
+  // catalog extractor (fromReadmeCatalog) rather than any code/manifest/spec
+  // source. assemble.ts reads this to keep reliability's schema-parseable
+  // signal at its "not verified against source" value even though a list
+  // was technically extracted — README prose can drift from the shipped
+  // surface in a way a parsed manifest/source file cannot (wave2-spec §3
+  // R6). Also used to attach a transparency finding pointing at the README.
+  readmeSourced: boolean
 }
 
 type Risk = 'none' | 'low' | 'medium' | 'high'
@@ -1218,6 +1226,170 @@ const MANIFEST_JSON_BASENAME_RE = /^(mcp|server|toolDefinitions|tools)\.json$/i
 // gracefully by JSON.parse failing closed).
 const SPEC_JSON_BASENAME_RE = SPEC_BASENAME_RE
 
+// W6 (coverage-v1.5, wave2-spec §3 R6 / Task W6 Part A): README tool
+// catalog — the LAST extraction rung (see extractSchema below), reached only
+// when every code/manifest/spec extractor above returned zero tools. Some
+// servers ship no parseable registration code but DO ship a machine-
+// generated tool catalog in their README (microsoft/playwright-mcp: a
+// distribution shim whose real source lives in another repo, carries a
+// verified 69-tool catalog in README.md).
+//
+// Three shapes, each independently guarded against reading prose/parameter
+// docs as a tool list:
+//
+// (1) The playwright-mcp bullet+Description shape — a bold, column-0 bullet
+// naming the tool, followed (within the same bullet block) by an indented
+// `- Description: ...` line. This exact two-line shape is specific enough
+// on its own that a prose README cannot accidentally produce it, and it is
+// the one shape verified (wave2-spec) NOT to generalize to a "convention"
+// (it matches exactly one repo in the measured corpus) — kept anyway
+// because it recovers that one repo's full 69-tool surface.
+//
+// I2 (W6 review, IMPORTANT): this shape used to be applied UNSCOPED (matched
+// over the whole README, not just an accepted tool section) and exempt from
+// TYPE_ANNOT_RE below — a `## Configuration` section of jsonschema2md-
+// generated property docs (`- **timeout_seconds**` / `  - Description:
+// (number) How long to wait…`) matches this exact two-line shape and
+// fabricated a 3-tool surface of config keys. It is now scoped to
+// readmeToolSections exactly like (2)/(3), and TYPE_ANNOT_RE is applied to
+// it exactly like (2)/(3) — see fromReadmeCatalog below.
+const README_BULLET_BOLD_DESC_RE = /^-\s\*\*([a-z][\w-]*)\*\*[ \t]*\n(?:[ \t]+-\s.*\n)*?[ \t]+-\s*Description:\s*(.+)$/gim
+
+// (1)/(2)/(3) all generalize (wave2-spec §3 R6, I2), and all three are
+// scoped to a heading-bounded "this is a tool section" region — see
+// readmeToolSections — and additionally reject a candidate whose
+// description opens with a type/optionality annotation (a parameter-table
+// row shape: "`user_id` | string | (required) the user's id").
+const TYPE_ANNOT_RE = /^[([]\s*(?:string|number|boolean|object|array|integer|int|bool|float|required|optional|enum|null)\b/i
+
+// (2) A code-span bullet: `- \`tool_name\` — description` / `* \`tool_name\`: description`.
+// Requires an `_`/`-` inside the name (snake_case/kebab-case identifier
+// shape) so a parameter's bare English-word type name can't match.
+const README_BULLET_CODE_RE = /^[-*]\s+`([a-z][a-z0-9]*(?:[_-][a-z0-9]+)+)`\s*[-–—:]\s*(.{10,})$/gm
+
+// (3) A markdown table row: `| \`tool_name\` | description |`, only inside a
+// table whose header row names a tool/name column (README_TABLE_HEADER_RE).
+const README_TABLE_ROW_RE = /^\|\s*`?([a-z][a-z0-9]*(?:[_-][a-z0-9]+)+)`?\s*\|\s*([^|]{10,}?)\s*\|/gm
+const README_TABLE_HEADER_RE = /^\|[^\n]*\b(tool|name)\b[^\n]*\|[ \t]*\n[ \t]*\|[\s:|-]+\|/im
+
+// Section scoping for (1)/(2)/(3): a "tool section" is any heading-bounded
+// chunk (split at EVERY heading, any level — see readmeToolSections) whose
+// OWN heading text mentions tools/commands and does not itself read as a
+// parameter/config/usage/planned/removed heading. Splitting at every heading
+// (not just top-level ones) is what carves a nested "### Parameters"
+// sub-heading back out of an accepted "## Tools" section — the sub-heading
+// becomes its own chunk and is rejected by NEG_HEAD_RE on its own merits.
+//
+// C3 (W6 review): `capabilities` was DROPPED from this regex — a `##
+// Capabilities` heading is generic marketing/feature-list language (e.g. a
+// table of `multi-tenant`/`auto-sync`/`rate-limiting` feature names), not a
+// tool catalog, and there is no reliable way to tell a genuine capabilities-
+// as-tools README from a feature list by heading text alone. Recall loss
+// (a real "## Capabilities" tool catalog, if one exists, is no longer
+// recovered) is acceptable; fabricating a tool surface from a feature table
+// is not.
+const TOOL_HEAD_RE = /\b(tools?|commands?)\b/i
+// GUARD (false-positive verification, W6 Part A #3): measured against the 32
+// live `notServer` repos in index/results.json — modelcontextprotocol/
+// ruby-sdk's `### Tool Annotations` section (documenting the
+// destructive_hint/idempotent_hint/open_world_hint/read_only_hint FIELD
+// NAMES a tool's `annotations:` hash can carry, each as a
+// `- \`field_name\`: description` code-span bullet) passed the OLD version
+// of this guard — "Tool" alone satisfied TOOL_HEAD_RE and "Annotations" was
+// not excluded, so 4 field names were fabricated as "tools". Fixed by adding
+// `annotations?`. Also widened the other single-word entries to accept their
+// plural form (`response` -> `responses?`, `schema` -> `schemas?`) — the
+// SAME README has sibling headings `### Tool Responses with Errors` and
+// `### Tool Output Schemas` that the singular-only forms would have missed
+// (`\bresponse\b` does not match inside "Responses" — no word boundary
+// before the trailing `s`).
+//
+// C3 (W6 review, CRITICAL): a section is only a CURRENT tool surface if it
+// is neither a future promise nor a historical record. Added
+// planned/upcoming/roadmap/future (a `## Planned Tools` section listing
+// `execute_shell` previously published a real security/shell-exec-tool
+// finding — a false public accusation against a repo for a tool that does
+// not exist in its shipped code) and deprecated/removed/changelog/
+// comparison (a `### Removed tools` changelog subsection was previously
+// published as the CURRENT surface). Prefer rejecting a real catalog over
+// inventing one — recall loss here is acceptable, a fabricated accusation
+// is not.
+const NEG_HEAD_RE = /\b(param(eter)?s?|arguments?|options?|inputs?|config\w*|env|environment|responses?|outputs?|fields?|schemas?|install|setup|usage|examples?|annotations?|errors?|metadata|types?|planned|upcoming|roadmap|future|deprecated|removed|changelog|comparison)\b/i
+// C3 (W6 review, CRITICAL): reject an individual entry — even one sitting
+// inside an otherwise-accepted tool section — whose OWN description marks
+// it as not-current. A single mislabeled row ("`execute_shell` — Planned:
+// run arbitrary shell commands" under an otherwise-legitimate "## Tools"
+// heading) must not fabricate a false accusation just because its siblings
+// are genuine. Checked against the description only (not the name), so a
+// tool legitimately named e.g. `remove_deprecated_files` is unaffected.
+const ENTRY_REJECT_RE = /\b(planned|coming soon|not yet|removed|deprecated|no longer)\b/i
+
+function readmeToolSections(content: string): string[] {
+  const marks: Array<{ index: number; heading: string }> = []
+  for (const m of content.matchAll(/^#{1,6}\s*([^\n]+)$/gm)) marks.push({ index: m.index, heading: m[1] })
+  const sections: string[] = []
+  for (let i = 0; i < marks.length; i++) {
+    if (!TOOL_HEAD_RE.test(marks[i].heading) || NEG_HEAD_RE.test(marks[i].heading)) continue
+    const start = content.indexOf('\n', marks[i].index) + 1
+    const end = i + 1 < marks.length ? marks[i + 1].index : content.length
+    sections.push(content.slice(start, end))
+  }
+  return sections
+}
+
+// GUARD (required): a README catalog is trusted only once it has produced at
+// least this many distinct tool names — a prose README with one bolded word,
+// or a single incidental code-span, must never fabricate a tool surface.
+// Measured (wave2-spec §3 R6): this is what keeps a normal prose/parameter
+// README from ever reaching a "surface".
+const README_MIN_TOOLS = 3
+
+/**
+ * Extracts a tool catalog from a repo's root README, per the three shapes
+ * above. Returns [] (never fabricates) when fewer than README_MIN_TOOLS
+ * distinct names are found. Pure — no I/O.
+ */
+export function fromReadmeCatalog(file: RepoFile): ToolInfo[] {
+  const content = file.content
+  const seen = new Set<string>()
+  const tools: ToolInfo[] = []
+  const push = (name: string, description: string | undefined, schemaText: string) => {
+    if (seen.has(name)) return
+    // C3: an individual entry marked planned/removed/deprecated in its own
+    // description is rejected even inside an otherwise-accepted section —
+    // deliberately does NOT add `name` to `seen`, so a later, genuine entry
+    // with the same name (a different shape/section) can still be accepted.
+    if (description && ENTRY_REJECT_RE.test(description)) return
+    seen.add(name)
+    tools.push({ name, description: description?.trim(), schemaText })
+  }
+
+  // I2: shape (1) is now scoped to accepted tool sections and TYPE_ANNOT_RE-
+  // guarded exactly like shapes (2)/(3) — see the comment on
+  // README_BULLET_BOLD_DESC_RE above.
+  for (const section of readmeToolSections(content)) {
+    for (const m of section.matchAll(README_BULLET_BOLD_DESC_RE)) {
+      if (TYPE_ANNOT_RE.test(m[2].trim())) continue
+      push(m[1], m[2], m[0])
+    }
+
+    const isTable = README_TABLE_HEADER_RE.test(section)
+    if (isTable) {
+      for (const m of section.matchAll(README_TABLE_ROW_RE)) {
+        if (TYPE_ANNOT_RE.test(m[2].trim())) continue
+        push(m[1], m[2], m[0])
+      }
+    }
+    for (const m of section.matchAll(README_BULLET_CODE_RE)) {
+      if (TYPE_ANNOT_RE.test(m[2].trim())) continue
+      push(m[1], m[2], m[0])
+    }
+  }
+
+  if (tools.length < README_MIN_TOOLS) return []
+  return tools
+}
+
 // W5 (coverage-v1.5, wave2-spec §2.3): partial-surface honesty. `treePaths`
 // is the repo's FULL tree (every blob GitHub reports, never truncated by
 // FILE_CAP) — `undefined` when the tree fetch itself failed, in which case
@@ -1245,7 +1417,23 @@ function detectSurfacePartial(
   return detected > sampled
 }
 
-export function extractSchema(files: RepoFile[], treePaths?: string[], toolFanoutCount?: number): SchemaResult {
+export function extractSchema(
+  files: RepoFile[], treePaths?: string[], toolFanoutCount?: number,
+  // W6 (Task W6 Part A): the repo's root README, when the caller has already
+  // decided this repo is eligible for the last-rung README-catalog
+  // extraction (assemble.ts only passes this once every static extractor is
+  // known to be at zero AND — per wave2-spec §3 R6's non-negotiable ordering
+  // rule — the dynamic-surface classifier (src/derive/dynamic.ts) has
+  // already run and declined to fire; otherwise a proxy/gateway's own README
+  // (MCPJungle: included_tools/excluded_tools/included_servers) would
+  // populate a fake tool surface and the dynamic classifier, itself gated on
+  // zero tools, would never get a chance to see zero). Omitted (the default)
+  // for every other call site — the README rung is then simply never
+  // reached, preserving prior behavior byte-for-byte (see the "nothing
+  // extractable" regression test in tests/schema.test.ts, which fetches a
+  // README.md with no 4th argument and still expects extracted:false).
+  readmeFile?: RepoFile,
+): SchemaResult {
   // W5 §2.3: computed once, up front, and threaded into every return branch
   // below — a partial sample is still partial whether extraction ultimately
   // found zero tools, a shell-import risk floor, or a real tool list.
@@ -1283,6 +1471,22 @@ export function extractSchema(files: RepoFile[], treePaths?: string[], toolFanou
     if (tools.length > 0) break
   }
 
+  // W6 (Task W6 Part A): the README-catalog rung — LITERALLY the last rung,
+  // reached only when every rung above (manifest/js/py/go/spec) returned
+  // zero AND the caller opted in by passing `readmeFile` (see its param
+  // comment above for the dynamic-classifier ordering this depends on).
+  // fromReadmeCatalog itself never fabricates (>=3-tool guard, see its own
+  // comment) — an empty result here just leaves `tools` at [] and the ladder
+  // falls through to the same "nothing extractable" branch as today.
+  let readmeSourced = false
+  if (tools.length === 0 && readmeFile) {
+    const readmeTools = fromReadmeCatalog(readmeFile).map(t => ({ ...t, evidence: readmeFile.path }))
+    if (readmeTools.length > 0) {
+      tools = readmeTools
+      readmeSourced = true
+    }
+  }
+
   // Fix 5 (dedup half): the same tool name registered in multiple files (or
   // matched by more than one pattern in the same file) counts once for
   // tool-surface classification and token estimation.
@@ -1293,8 +1497,19 @@ export function extractSchema(files: RepoFile[], treePaths?: string[], toolFanou
     return true
   })
 
+  // I1 (W6 review, IMPORTANT): the shell-import floor is a STRUCTURAL signal
+  // (does a fetched source file import a shell/process-execution API) and
+  // must never be silently overridden by a WEAKER, prose-derived signal —
+  // in particular a README-sourced tool list, whose descriptions are
+  // maintainer copy, not verified against the shipped code. Computed once,
+  // up front, and applied below regardless of which rung (or no rung)
+  // produced `tools` — previously this lived INSIDE the `tools.length === 0`
+  // branch, so the README rung (which runs first and populates `tools`)
+  // skipped it entirely: a shim whose src/index.ts imports execSync scored a
+  // clean security bill whenever its README listed benign-sounding tools.
+  const shellFile = findShellImportFile(files)
+
   if (tools.length === 0) {
-    const shellFile = findShellImportFile(files)
     if (shellFile) {
       return {
         extracted: false, tools: [], toolSurfaceRisk: 'medium', schemaTokenEstimate: undefined,
@@ -1303,13 +1518,24 @@ export function extractSchema(files: RepoFile[], treePaths?: string[], toolFanou
           message: 'A fetched file imports a shell/process-execution API but no tool schema could be extracted; tool surface risk is floored at medium so this cannot score a clean security bill on secrets-absence alone.',
           evidence: shellFile.path,
         }],
-        surfacePartial,
+        surfacePartial, readmeSourced: false,
       }
     }
-    return { extracted: false, tools: [], toolSurfaceRisk: undefined, schemaTokenEstimate: undefined, findings: [], surfacePartial }
+    return { extracted: false, tools: [], toolSurfaceRisk: undefined, schemaTokenEstimate: undefined, findings: [], surfacePartial, readmeSourced: false }
   }
 
   const findings: Finding[] = []
+  // W6 (Task W6 Part A / wave2-spec §3 R6): transparency finding — a README-
+  // derived surface was parsed from documentation, not the shipped source,
+  // so it is flagged the same way any other lower-confidence signal is
+  // (evidence-linked, per the plan's Global Constraints).
+  if (readmeSourced) {
+    findings.push({
+      id: 'reliability/readme-sourced-tools', dimension: 'reliability', severity: 'info',
+      message: 'Tool surface read from README catalog — not verified against source.',
+      evidence: readmeFile?.path ?? 'README.md',
+    })
+  }
   let worst: Risk = 'none'
   for (const t of tools) {
     const risk = classify(t.name, t.description ?? '', t.schemaText)
@@ -1327,6 +1553,34 @@ export function extractSchema(files: RepoFile[], treePaths?: string[], toolFanou
     }
   }
 
+  // I1: the structural floor applies here ONLY when the tool list came from
+  // the README rung — i.e. from maintainer-authored prose we could not
+  // verify against code. That was the actual defect: a benign-sounding
+  // README catalog laundering a shell-import risk down to a clean bill.
+  //
+  // It must NOT apply when tools were extracted from real code. There the
+  // tool surface was genuinely assessed (every tool got a risk verdict
+  // above), so adding a blanket floor double-counts and penalises any repo
+  // that merely *contains* a file importing child_process — which includes
+  // release/build scripts that are not the server at all. Measured on the
+  // 400-server corpus: hoisting this unconditionally dropped 50 real repos
+  // (awslabs/mcp A+96->A-89, vercel/mcp-adapter, googleapis/genai-toolbox,
+  // microsoft/playwright-mcp on its `roll.js` RELEASE script) from
+  // security 100/85 to 63. Those are false accusations, which cost this
+  // product more than the recall gained.
+  //
+  // The finding id stays `security/shell-import-no-tools` (already
+  // published in index/results.json) even though tools DID extract here —
+  // only the message differs from the tools.length===0 case above.
+  if (shellFile && readmeSourced) {
+    if (RISK_ORDER.indexOf('medium') > RISK_ORDER.indexOf(worst)) worst = 'medium'
+    findings.push({
+      id: 'security/shell-import-no-tools', dimension: 'security', severity: 'medium',
+      message: 'A fetched file imports a shell/process-execution API, and this tool list was read from the README rather than verified against code; tool surface risk is floored at medium so maintainer-authored prose cannot override the structural code signal.',
+      evidence: shellFile.path,
+    })
+  }
+
   return {
     extracted: true,
     // D1 (integrity-v1, trap #6): evidence is now RETAINED here (D1 needs it
@@ -1339,5 +1593,6 @@ export function extractSchema(files: RepoFile[], treePaths?: string[], toolFanou
     schemaTokenEstimate: encode(JSON.stringify(tools.map(({ evidence: _e, ...t }) => t))).length,
     findings,
     surfacePartial,
+    readmeSourced,
   }
 }

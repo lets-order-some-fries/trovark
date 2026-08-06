@@ -43,6 +43,19 @@ export interface RepoSnapshot {
   // it instead of re-scanning treePaths itself. Undefined when the tree
   // fetch failed (mirrors treePaths' own undefined-on-failure semantics).
   toolFanoutCount?: number
+  // W6 review remediation item 1 (C1/I3/I4/M3 — .superpowers/sdd/w6-review-
+  // findings.md): `files` is CODE-ONLY again (pre-W6 semantics). The fetched
+  // root README (see README_FETCH_CAP/isRootReadme below — still fetched
+  // through the SAME 1-slot budget-accounted bucket as before, unchanged)
+  // is carried here instead, on its own field, so the FIVE consumers
+  // assemble.ts hands `files` to (extractSchema, classifyLibrary,
+  // detectDynamic, scanSecrets, scanIntegrity) — four of which were written
+  // assuming source code, not documentation prose — provably cannot see it
+  // unless a caller explicitly opts in (assemble.ts's README rung passes
+  // this to extractSchema's 4th `readmeFile` parameter; scanIntegrity takes
+  // it as an explicit 3rd parameter too). Undefined when no root README.md/
+  // .rst exists in the tree, or none was selected within budget.
+  readme?: RepoFile
   files: RepoFile[]
 }
 
@@ -123,6 +136,29 @@ const TOOL_DEFINITIONS_BASENAME_RE = /^toolDefinitions\.json$/
 // rung) — rather than adding a new uncapped ALWAYS_FETCH entry.
 const TOOL_MANIFEST_BASENAME_RE = /^tools\.json$/i
 const SPEC_FETCH_CAP = 2
+// W6 (coverage-v1.5, wave2-spec §3 R6 / Task W6 Part A): a capped 1-slot
+// bucket for the repo's OWN root README — some servers ship no parseable
+// registration code but DO ship a machine-generated tool catalog in their
+// README (microsoft/playwright-mcp: a distribution shim whose real source
+// lives in another repo, carries a verified 69-tool catalog in README.md).
+// Depth-0 only (no path separator) — a nested README (docs/README.md,
+// packages/x/README.md) documents a sub-package, not the repo's own surface.
+// Ranked AFTER specCandidates and BEFORE rankedSource (see the `wanted`
+// concatenation below) and computed as its OWN filter().slice() bucket, the
+// same shape as specCandidates/entrypointCandidates — never a mutable
+// counter folded into the shared dedup loop. NON_SERVER_FETCH_CAP's comment
+// above explains exactly why a shared-counter cap is the wrong pattern here:
+// it makes a bucket's slot consumption depend on iteration order instead of
+// being a pure function of the recorded tree.
+const README_BASENAME_RE = /^README\.(md|rst)$/i
+const README_FETCH_CAP = 1
+// Exported so src/assemble.ts can find the SAME file the collector fetched
+// for this purpose when it decides whether to attempt the README-catalog
+// extraction rung (src/derive/schema.ts's fromReadmeCatalog) — one shared
+// predicate instead of two copies that could drift.
+export function isRootReadme(path: string): boolean {
+  return !path.includes('/') && README_BASENAME_RE.test(path)
+}
 // I8: mirrors SPEC_FETCH_CAP/ENTRYPOINT_FETCH_CAP — envBlobs previously had no
 // cap and was never evicted. Reviewer verified 10 .env.example files + 8
 // src/tools/*.ts files at FILE_CAP=12 left zero budget for ranked source, so
@@ -400,6 +436,15 @@ export function selectRepoFiles(
     .filter(b => fetchable(b) && isSpecFile(b.path) && !isNonServerPath(b.path))
     .sort(byPriority)
     .slice(0, SPEC_FETCH_CAP)
+  // W6 (Task W6 Part A): 1-slot README bucket, ranked right after
+  // specCandidates and before rankedSource — see README_FETCH_CAP above.
+  // isRootReadme already excludes anything but a depth-0 README.md/.rst, so
+  // no separate isNonServerPath check is needed here (a root README is never
+  // under tests/examples/docs/samples by definition).
+  const readmeCandidates = blobs
+    .filter(b => fetchable(b) && isRootReadme(b.path))
+    .sort(byPriority)
+    .slice(0, README_FETCH_CAP)
   // Regression fix: guaranteed entrypoint bucket, computed BEFORE rankedSource
   // (and excluded from it below) so the two buckets never double-count the
   // same path against the budget. Prioritized root/shallow-first then
@@ -457,6 +502,15 @@ export function selectRepoFiles(
   // would otherwise fall below SOURCE_FLOOR, and never below MANIFEST_QUOTA.
   let manifestsSelected = manifestCandidates
   const sourceTarget = Math.min(SOURCE_FLOOR, rankedSource.length)
+  // W6 review remediation item C4 (.superpowers/sdd/w6-review-findings.md,
+  // "C4 VERIFIED BY HAND"): readmeCandidates.length is deliberately EXCLUDED
+  // from this subtraction — the README now occupies a DEDICATED slot outside
+  // the source budget (see the final selection cap below, which widens by
+  // exactly readmeCandidates.length), so it must never be treated as
+  // consuming budget that would otherwise trigger extra manifest eviction to
+  // protect the source floor. Every OTHER guaranteed-slot bucket
+  // (env/manifests/spec/entrypoint) still competes for the shared FILE_CAP
+  // budget and stays subtracted here.
   const availableSourceSlots = () => Math.max(0, FILE_CAP - envBlobs.length - manifestsSelected.length - specCandidates.length - entrypointCandidates.length)
   while (availableSourceSlots() < sourceTarget && manifestsSelected.length > MANIFEST_QUOTA) {
     manifestsSelected = manifestsSelected.slice(0, -1)
@@ -474,14 +528,22 @@ export function selectRepoFiles(
     ...envBlobs,
     ...manifestsSelected,
     ...specCandidates,
+    ...readmeCandidates,
     ...entrypointCandidates,
     ...rankedSource,
     ...blobs.filter(b => fetchable(b) && isLockfile(b.path)),
   ]
   const selected: string[] = []
   const seen = new Set<string>()
+  // W6 review remediation item C4: the README's cap (readmeCandidates.length,
+  // currently 0 or 1 — see README_FETCH_CAP) widens the final selection cap
+  // by exactly that many, so the README is fetched as a genuine EXTRA file
+  // rather than displacing a ranked-source (or any other) candidate that
+  // would otherwise fit under FILE_CAP. One extra fetched file per repo is
+  // an acceptable cost; silently dropping a tool-bearing source file is not.
+  const finalCap = FILE_CAP + readmeCandidates.length
   for (const b of wanted) {
-    if (selected.length >= FILE_CAP) break
+    if (selected.length >= finalCap) break
     if (seen.has(b.path)) continue
     seen.add(b.path)
     selected.push(b.path)
@@ -615,12 +677,22 @@ export async function collectGithub(
 
   const selectedPaths = selectRepoFiles(blobs, rootPkgName, hasWorkspaces, toolFanoutCount)
   const files: RepoFile[] = []
+  // W6 review remediation item 1: the README bucket still costs exactly the
+  // same budget slot it always did (selectRepoFiles/availableSourceSlots is
+  // untouched by this fix — item 4 in the review's ordered remediation list
+  // handles the eviction issue separately). The ONLY change here is where
+  // the fetched README ends up once selected: quarantined onto its own
+  // `readme` field instead of appended to `files`, so every consumer that
+  // only ever receives `files` provably cannot see it.
+  let readme: RepoFile | undefined
   for (const path of selectedPaths) {
     try {
       const content = path === 'package.json' && rootPkgContent !== undefined
         ? rootPkgContent
         : await http.text(rawUrl(path))
-      files.push({ path, content: content.length > SIZE_CAP ? content.slice(0, SIZE_CAP) : content })
+      const file: RepoFile = { path, content: content.length > SIZE_CAP ? content.slice(0, SIZE_CAP) : content }
+      if (isRootReadme(path)) readme = file
+      else files.push(file)
     } catch { /* skip unfetchable file */ }
   }
 
@@ -630,6 +702,6 @@ export async function collectGithub(
     description: meta.description ?? undefined, topics: meta.topics ?? [],
     pushedAt: meta.pushed_at,
     latestReleaseAt, commitsLast90Days, busFactor, medianIssueResponseDays,
-    treePaths, toolFanoutCount, files,
+    treePaths, toolFanoutCount, files, readme,
   }
 }

@@ -11,6 +11,16 @@ export interface IndexEntry {
   ref: string
   ok: boolean
   error?: string
+  // W6 (false-published-claim fix): ABSENT (not 0, not a stale number) for
+  // every withheld terminal state — insufficientData, notServer and
+  // unresolved alike. Scorecard.overall/.grade are null for all three (see
+  // src/scoring/score.ts's single `withheld` computation) and toEntry below
+  // converts null -> undefined, which JSON.stringify omits. Before the fix,
+  // insufficientData entries still published a numeric overall and a letter
+  // grade here — 29 of 29 in the committed index, several "A" — so a machine
+  // consumer of the public dataset read a confident grade for a server we had
+  // explicitly declined to assess. summarize() already filtered these out of
+  // gradeDist/avgOverall, so no published statistic moves.
   overall?: number
   grade?: string
   insufficientData?: boolean
@@ -23,9 +33,21 @@ export interface IndexEntry {
   // grade. See src/collectors/github.ts's RepoNotFoundError.
   unresolved?: boolean
   repoUrl?: string
-  dims?: Record<'health' | 'reliability' | 'security' | 'cost', { score: number; confidence: string }>
+  // W6 (fabricated-dimension-value fix): `score` is null when the dimension
+  // had no measurement (zero collectible signals, or — for security — an
+  // absent primary tool-surface signal). Null must survive into
+  // index/results.json as null: coercing it to 0 would publish the worst
+  // possible score as a measurement. No aggregate in summarize() consumes
+  // dimension scores; if one is ever added it must skip nulls, not default
+  // them. See src/types.ts DimensionScore.
+  dims?: Record<'health' | 'reliability' | 'security' | 'cost', { score: number | null; confidence: string }>
   topFindings?: Array<{ id: string; severity: string }>
   daysSinceLastCommit?: number
+  // W6 review remediation item M2: structured passthrough of
+  // Scorecard.readmeSourced — a README-sourced tool surface is a
+  // maintainer's CLAIM, not verified extraction. See src/types.ts for the
+  // full rationale. Omitted (not false) when never computed.
+  readmeSourced?: boolean
   // D1 (integrity-v1): undefined when not checked (no files fetched) — same
   // absence != clean discipline as Scorecard.integrityHits. Stats (below)
   // are deliberately left untouched for now; this is a per-entry count only.
@@ -36,7 +58,19 @@ export interface IndexStats {
   total: number; scored: number; failed: number; insufficient: number
   // V2: count of repos classified as library/SDK/proxy/stub (the correct
   // terminal outcome, not a withhold) — tracked separately from `insufficient`.
+  // W6: EXCLUDES notServerReason==='dynamic' — a dynamic-surface server is
+  // NOT a library, it's a real server with an unknowable static surface, so
+  // it must not inflate the "library / not a server" tile. See `dynamic`
+  // below.
   notServer: number
+  // W6 (coverage-v1.5, Task W6 Part B): repos whose tool surface is built at
+  // runtime from upstream servers/a DB (src/derive/dynamic.ts) — a THIRD
+  // distinct terminal state, alongside notServer ("library, nothing to
+  // grade") and unresolved ("repo doesn't exist"). Also excluded from
+  // gradeDist/avgOverall/staleOver180/secretsFindings/shellExecTools (same
+  // `!e.notServer` filters already cover it, since dynamic entries still set
+  // IndexEntry.notServer=true — see toEntry below).
+  dynamic: number
   // W1: repos GitHub 404s (deleted/renamed/never existed) — never graded,
   // never counted in gradeDist/avgOverall/staleOver180/secretsFindings/
   // shellExecTools (see summarize() below).
@@ -74,7 +108,11 @@ export function summarize(entries: IndexEntry[]): IndexStats {
     scored: scoredOk.length,
     failed: entries.length - scoredOk.length,
     insufficient: scoredOk.filter(e => e.insufficientData).length,
-    notServer: scoredOk.filter(e => e.notServer).length,
+    // W6: notServer excludes the dynamic-reason subset (tracked separately
+    // below) so the "library / not a server" tile never counts a real,
+    // just-unanalyzable-statically server as a library.
+    notServer: scoredOk.filter(e => e.notServer && e.notServerReason !== 'dynamic').length,
+    dynamic: scoredOk.filter(e => e.notServerReason === 'dynamic').length,
     unresolved: scoredOk.filter(e => e.unresolved).length,
     gradeDist,
     avgOverall: graded.length === 0 ? 0 : Math.round(graded.reduce((a, e) => a + (e.overall ?? 0), 0) / graded.length),
@@ -85,14 +123,20 @@ export function summarize(entries: IndexEntry[]): IndexStats {
   }
 }
 
-function toEntry(ref: string, card: Scorecard, daysSinceLastCommit?: number): IndexEntry {
+// Exported (was module-private) so tests/scan.test.ts can assert the
+// Scorecard -> IndexEntry passthrough directly (W6 review remediation item
+// M2 — readmeSourced threading) without going through the network-dependent
+// main() pipeline.
+export function toEntry(ref: string, card: Scorecard, daysSinceLastCommit?: number): IndexEntry {
   const dims = Object.fromEntries(card.dimensions.map(d => [d.id, { score: d.score, confidence: d.confidence }])) as IndexEntry['dims']
   const findings = card.dimensions.flatMap(d => d.findings)
     .sort((a, b) => ['high', 'medium', 'low', 'info'].indexOf(a.severity) - ['high', 'medium', 'low', 'info'].indexOf(b.severity))
     .slice(0, 3).map(f => ({ id: f.id, severity: f.severity }))
   return {
-    // I9: card.overall/grade are null for notServer cards — IndexEntry keeps
-    // them optional (number|undefined), so convert null -> undefined here.
+    // I9/W1/W6: card.overall/grade are null for EVERY withheld card
+    // (notServer, unresolved, insufficientData) — IndexEntry keeps them
+    // optional (number|undefined), so convert null -> undefined here, which
+    // JSON.stringify then omits from results.json entirely.
     ref, ok: true, overall: card.overall ?? undefined, grade: card.grade ?? undefined,
     insufficientData: card.insufficientData || undefined,
     notServer: card.notServer || undefined,
@@ -101,6 +145,7 @@ function toEntry(ref: string, card: Scorecard, daysSinceLastCommit?: number): In
     repoUrl: card.resolved?.repo ? `https://github.com/${card.resolved.repo.owner}/${card.resolved.repo.name}` : undefined,
     dims, topFindings: findings.length > 0 ? findings : undefined,
     daysSinceLastCommit,
+    readmeSourced: card.readmeSourced || undefined,
     integrity: card.integrityHits ? {
       payloads: card.integrityHits.filter(h => h.kind === 'hidden-payload').length,
       observations: card.integrityHits.filter(h => h.kind !== 'hidden-payload').length,
