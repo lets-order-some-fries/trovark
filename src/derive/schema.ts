@@ -1590,9 +1590,52 @@ export function extractSchema(
     // field. See tests/schema.test.ts's byte-identical regression test.
     tools,
     toolSurfaceRisk: worst,
-    schemaTokenEstimate: encode(JSON.stringify(tools.map(({ evidence: _e, ...t }) => t))).length,
+    schemaTokenEstimate: tokenFootprint(tools),
     findings,
     surfacePartial,
     readmeSourced,
   }
+}
+
+/**
+ * Tokens a client actually pays to load this server's `tools/list` response.
+ *
+ * This used to be `encode(JSON.stringify(tools))` over `ToolInfo.schemaText` —
+ * but schemaText is the RAW SOURCE SLICE the extractor captured, not the
+ * serialized JSON a client receives. Those are unrelated quantities:
+ * measured against a realistic tools/list payload, the old estimate was wrong
+ * by up to 7.5x in BOTH directions (upstash/context7 reported 1252 tokens for
+ * a payload of ~74-160; qdrant reported 59 for ~108). It was measuring how
+ * much surrounding code our own regexes happened to grab — an artifact of the
+ * extractor, published as a property of the server, at weight 2 of the cost
+ * dimension's 3.
+ *
+ * The honest quantity needs the real `inputSchema`. We only have that when a
+ * tool came from a manifest/OpenAPI source, where schemaText IS serialized
+ * JSON. Measured on a deterministic 1-in-7 corpus sample (58 refs, 42 with
+ * extracted tools): 2 had JSON-parseable schemas for every tool, 40 had none —
+ * for ~95% of servers, schemaText is zod/TS source.
+ *
+ * So: compute a true estimate where every tool carries a real schema, and
+ * return undefined otherwise. Name+description alone is a strict LOWER bound,
+ * and since the rubric maps fewer tokens to a BETTER score, publishing a lower
+ * bound would systematically flatter servers — the same "absence rendered as a
+ * favourable measurement" fault as scoring a partial tool surface `none`.
+ * `undefined` drops the signal, the rubric lowers cost's confidence, and the
+ * dimension rests on tool-count, which we can always honestly count.
+ */
+export function tokenFootprint(tools: Array<ToolInfo & { evidence?: string }>): number | undefined {
+  const payload: Array<Record<string, unknown>> = []
+  for (const t of tools) {
+    let inputSchema: unknown
+    try {
+      const parsed: unknown = JSON.parse(t.schemaText)
+      if (parsed && typeof parsed === 'object') inputSchema = parsed
+    } catch { /* source text, not a serialized schema */ }
+    // One unparseable tool makes the total a lower bound, so the whole
+    // estimate is withheld rather than partially fabricated.
+    if (inputSchema === undefined) return undefined
+    payload.push({ name: t.name, ...(t.description !== undefined ? { description: t.description } : {}), inputSchema })
+  }
+  return payload.length > 0 ? encode(JSON.stringify(payload)).length : undefined
 }

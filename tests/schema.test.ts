@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { extractSchema, hasPythonToolRegistrationSurface } from '../src/derive/schema.js'
+import { extractSchema, tokenFootprint, hasPythonToolRegistrationSurface } from '../src/derive/schema.js'
 
 describe('extractSchema ladder', () => {
   it('level 1: reads tools from mcp.json manifest', () => {
@@ -1782,23 +1782,52 @@ describe('extractSchema (D1 integrity-v1, trap #6): evidence is retained on retu
     expect(r.tools[0].evidence).toBe('mcp.json')
   })
 
-  it('schemaTokenEstimate is byte-identical to the pre-trap-6 formula (evidence stripped before stringify), regardless of tools[] carrying it', async () => {
-    const { encode } = await import('gpt-tokenizer')
-    const files = [{
+  // Trap #6's INTENT — `evidence` (or any other internal field) must never
+  // influence the published cost estimate — is preserved and now holds by
+  // construction: tokenFootprint builds its payload from name/description/
+  // inputSchema explicitly, so there is no stray field to leak. The previous
+  // assertion pinned the estimate to encode(JSON.stringify(tools)) over
+  // ToolInfo.schemaText, which measured the raw SOURCE SLICE the extractor
+  // captured rather than the JSON a client actually receives (measured wrong
+  // by up to 7.5x in BOTH directions), so that formula was replaced.
+  it('evidence never influences schemaTokenEstimate (trap #6 invariant, now by construction)', () => {
+    const r = extractSchema([{
       path: 'mcp.json',
       content: JSON.stringify({ tools: [
-        { name: 'search_docs', description: 'Search documentation' },
+        { name: 'search_docs', description: 'Search documentation', inputSchema: { type: 'object' } },
         { name: 'run_command', description: 'Execute a shell command', inputSchema: { type: 'object' } },
       ] }),
-    }]
-    const r = extractSchema(files)
+    }])
     expect(r.extracted).toBe(true)
-    // Recompute independently from ONLY the name/description/schemaText a
-    // consumer is meant to token-cost — if `evidence` (or any other field)
-    // ever leaks into the real schemaTokenEstimate, this diverges and every
-    // cost score in the index would have silently shifted.
-    const canonical = r.tools.map(t => ({ name: t.name, description: t.description, schemaText: t.schemaText }))
-    const expected = encode(JSON.stringify(canonical)).length
-    expect(r.schemaTokenEstimate).toBe(expected)
+    expect(r.tools.every(t => t.evidence === 'mcp.json')).toBe(true)
+    expect(tokenFootprint(r.tools.map(({ evidence: _e, ...t }) => t))).toBe(r.schemaTokenEstimate)
+  })
+
+  it('is a real number when every tool carries a serialized schema', () => {
+    const r = extractSchema([{
+      path: 'mcp.json',
+      content: JSON.stringify({ tools: [
+        { name: 'a_tool', description: 'A', inputSchema: { type: 'object', properties: { q: { type: 'string' } } } },
+        { name: 'b_tool', description: 'B', inputSchema: { type: 'object' } },
+      ] }),
+    }])
+    expect(r.schemaTokenEstimate).toBeGreaterThan(0)
+  })
+
+  // ~95% of the corpus (40 of 42 sampled servers with tools) extracts from
+  // source, where schemaText is zod/TS text whose token count is unrelated to
+  // the serialized payload. Name+description alone is a strict LOWER bound,
+  // and the rubric scores fewer tokens BETTER — publishing it would
+  // systematically flatter exactly those servers. Withhold instead.
+  it('is withheld when tools came from source rather than a serialized schema', () => {
+    const r = extractSchema([{
+      path: 'src/index.ts',
+      content: [
+        'server.registerTool("alpha_read", { description: "Read a record" }, h)',
+        'server.registerTool("beta_read", { description: "Read another" }, h)',
+      ].join('\n'),
+    }])
+    expect(r.extracted).toBe(true)
+    expect(r.schemaTokenEstimate).toBeUndefined()
   })
 })

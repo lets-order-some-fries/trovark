@@ -30,7 +30,7 @@ describe('score()', () => {
     const card = score('x', healthy(), '2026-07-31T00:00:00Z')
     expect(card.overall).toBe(100)
     expect(card.grade).toBe('A+')
-    expect(card.rubricVersion).toBe('1.5.0')
+    expect(card.rubricVersion).toBe('1.6.0')
     for (const d of card.dimensions) expect(d.confidence).toBe('high')
   })
   // W6 review remediation item M2 (.superpowers/sdd/w6-review-findings.md):
