@@ -89,6 +89,21 @@ describe('cli main', () => {
     expect(r.code).toBe(2)
     expect(r.err).toMatch(/requires a value/)
   })
+  it('invalid --fail-under value (not a grade letter or number) errors, exit 2', async () => {
+    const r = await run(['acme/foo', '--fail-under', 'Z'])
+    expect(r.code).toBe(2)
+    expect(r.err).toMatch(/Invalid --fail-under/)
+  })
+  it('--fail-under exactly at the grade passes — "meets" counts as beating it', async () => {
+    const json = JSON.parse((await run(['acme/foo', '--json'])).out)
+    const r = await run(['acme/foo', '--fail-under', String(json.overall)])
+    expect(r.code).toBe(0)
+  })
+  it('--fail-under one point above the grade fails', async () => {
+    const json = JSON.parse((await run(['acme/foo', '--json'])).out)
+    const r = await run(['acme/foo', '--fail-under', String(json.overall + 1)])
+    expect(r.code).toBe(1)
+  })
 })
 
 describe('cli main — notServer (I9)', () => {
@@ -157,6 +172,11 @@ describe('cli main — insufficient data', () => {
     expect(code).toBe(2)
     expect(logs.join('\n')).toContain('INSUFFICIENT DATA')
     expect(errs.join('\n')).toMatch(/insufficient data/i)
+  })
+  it('--fail-under cannot turn insufficient data into a pass — exits 2 regardless of threshold', async () => {
+    const logs: string[] = [], errs: string[] = []
+    const code = await main(['acme/foo', '--fail-under', '0'], { http: unfetchable, now: NOW, log: s => logs.push(s), err: s => errs.push(s) })
+    expect(code).toBe(2)
   })
 })
 
