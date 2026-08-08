@@ -66,7 +66,21 @@ export function score(
     // The gate below already withholds the GRADE on this condition —
     // but notServer/dynamic/unresolved bypass that gate entirely, so the
     // withhold has to live on the dimension itself to cover every path.
-    const unmeasured = available === 0 || (id === 'security' && securityPrimaryAbsent)
+    // Rule C (fault hunt 2026-08-08): the same reasoning applies to cost.
+    // `token-footprint` is the DOMINANT cost signal (weight 2 of 3) and is
+    // withheld whenever the tools did not come from a serialized schema —
+    // ~95% of the corpus. Renormalizing onto tool-count alone does not just
+    // lose precision, it REMOVES A PENALTY: a server whose schemas would
+    // have hit the 25k-token band at 0.5 rises from (2*0.5 + 0.7)/3 = 57 to
+    // 0.7 = 70 purely because we could not read it. Absence must never
+    // render as a FAVOURABLE measurement — precisely the fault this block
+    // exists to prevent, which the cost fix reintroduced through the back
+    // door. tool-count still counts toward `available`, so confidence
+    // reflects that something was measured; only the composite is withheld.
+    const costPrimaryAbsent = signals.schemaTokenEstimate === undefined
+    const unmeasured = available === 0
+      || (id === 'security' && securityPrimaryAbsent)
+      || (id === 'cost' && costPrimaryAbsent)
     return {
       id,
       score: unmeasured ? null : Math.round((vSum / wSum) * 100),

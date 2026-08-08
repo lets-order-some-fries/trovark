@@ -1627,15 +1627,54 @@ export function extractSchema(
 export function tokenFootprint(tools: Array<ToolInfo & { evidence?: string }>): number | undefined {
   const payload: Array<Record<string, unknown>> = []
   for (const t of tools) {
-    let inputSchema: unknown
-    try {
-      const parsed: unknown = JSON.parse(t.schemaText)
-      if (parsed && typeof parsed === 'object') inputSchema = parsed
-    } catch { /* source text, not a serialized schema */ }
-    // One unparseable tool makes the total a lower bound, so the whole
-    // estimate is withheld rather than partially fabricated.
-    if (inputSchema === undefined) return undefined
-    payload.push({ name: t.name, ...(t.description !== undefined ? { description: t.description } : {}), inputSchema })
+    const found = declaredSchema(t.schemaText)
+    // A tool whose schema we cannot read makes the total a lower bound, so
+    // the whole estimate is withheld rather than partly fabricated.
+    if (!found.known) return undefined
+    payload.push({
+      name: t.name,
+      ...(t.description !== undefined ? { description: t.description } : {}),
+      ...(found.schema !== undefined ? { inputSchema: found.schema } : {}),
+    })
   }
   return payload.length > 0 ? encode(JSON.stringify(payload)).length : undefined
+}
+
+type SchemaLookup = { known: true; schema?: unknown } | { known: false }
+
+/** Does this look like an actual JSON Schema, rather than any old JSON? */
+function isSchemaShaped(v: unknown): boolean {
+  if (!v || typeof v !== 'object' || Array.isArray(v)) return false
+  const o = v as Record<string, unknown>
+  // `{}` and `[]` carry no schema information; counting them as a "real
+  // serialized schema" would let a tool with no declared inputs masquerade
+  // as measured. Require at least one JSON Schema keyword.
+  return o.type !== undefined || o.properties !== undefined || o.$ref !== undefined
+    || o.anyOf !== undefined || o.oneOf !== undefined || o.allOf !== undefined || o.enum !== undefined
+}
+
+/**
+ * The tool's declared input schema, or undefined when schemaText is not one.
+ *
+ * Fault hunt 2026-08-08: for a manifest-sourced tool, `schemaText` is the
+ * WHOLE tool record (`{name, description, inputSchema}`), not the schema — so
+ * wrapping it as `{name, description, inputSchema: <record>}` counted name and
+ * description TWICE. Measured: 44 tokens reported where the real tools/list
+ * entry costs 30.
+ */
+function declaredSchema(schemaText: string): SchemaLookup {
+  let parsed: unknown
+  try { parsed = JSON.parse(schemaText) } catch { return { known: false } }
+  if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) return { known: false }
+  const rec = parsed as Record<string, unknown>
+  const declared = rec.inputSchema ?? rec.input_schema ?? rec.parameters
+  if (declared !== undefined) return isSchemaShaped(declared) ? { known: true, schema: declared } : { known: false }
+  // A serialized tool RECORD that declares no input schema is a complete
+  // statement — this tool takes no inputs — so its payload cost is exactly
+  // name+description. That is a measurement, not a lower bound. Only
+  // source-extracted tools (where schemaText is zod/TS text and fails the
+  // parse above) are genuinely unknown.
+  if (typeof rec.name === 'string') return { known: true }
+  // Otherwise the object should BE the schema.
+  return isSchemaShaped(rec) ? { known: true, schema: rec } : { known: false }
 }

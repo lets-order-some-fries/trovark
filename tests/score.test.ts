@@ -574,3 +574,34 @@ describe('score() — hidden-payload disqualifying override (Phase 2)', () => {
     expect(base.grade).toBe('A+')
   })
 })
+
+// Fault hunt 2026-08-08, CRITICAL 2. token-footprint is the dominant cost
+// signal (weight 2 of 3) and is withheld for ~95% of the corpus. Letting cost
+// renormalize onto tool-count alone REMOVES A PENALTY: absence rendered as a
+// favourable measurement, which is the exact fault the null-dimension work
+// exists to prevent. The cost fix reintroduced it through the back door.
+describe('cost is withheld when its dominant signal is unmeasurable', () => {
+  const withTools = (over: Partial<Signals> = {}): Signals => ({
+    findings: [], errors: [], toolSurfaceRisk: 'none', toolCount: 12, ...over,
+  })
+  const cost = (s: Signals) => score('o/r', s, '2026-08-08T00:00:00.000Z').dimensions.find(d => d.id === 'cost')!
+
+  it('withholds the cost score when schemaTokenEstimate is absent (never renormalizes upward)', () => {
+    const d = cost(withTools({ schemaTokenEstimate: undefined }))
+    expect(d.score).toBeNull()
+    expect(d.available).toBeGreaterThan(0)   // tool-count WAS measured; confidence reflects it
+  })
+
+  it('scores cost normally when the footprint is genuinely measured', () => {
+    const d = cost(withTools({ schemaTokenEstimate: 1500 }))
+    expect(typeof d.score).toBe('number')
+    expect(d.score).toBeGreaterThan(0)
+  })
+
+  it('absence never scores better than a measured expensive server', () => {
+    const measured = cost(withTools({ schemaTokenEstimate: 30_000 }))
+    const withheld = cost(withTools({ schemaTokenEstimate: undefined }))
+    expect(typeof measured.score).toBe('number')
+    expect(withheld.score).toBeNull()        // not a number that beats it
+  })
+})
