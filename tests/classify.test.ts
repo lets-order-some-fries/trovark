@@ -407,3 +407,43 @@ server.tool("example_tool", "an example tool", {}, handler)
     expect(without.notServerReason).toBe('sdk')
   })
 })
+
+// Fault hunt 2026-08-08, CRITICAL 1. Signal 3 is a conjunction of NEGATIVE
+// predicates, so it asserts absence — and because `notServer` bypasses
+// score.ts's insufficientData gate, the WORSE the coverage the more confident
+// the published verdict. Measured on the live index: 9 of 20 published
+// `not-server` entries contradicted the repo's own fetched GitHub
+// description, including Microsoft's official Azure/azure-mcp. An absence
+// claim now requires having looked somewhere it could have been found.
+describe('signal 3 may not assert absence from evidence it never had', () => {
+  const base = { name: 'thing', files: [] as Array<{ path: string; content: string; size: number }> }
+  const f = (path: string, content = 'export const x = 1') => ({ path, content, size: content.length })
+
+  it('never classifies from zero fetched files (OctoEverywhere/mcp: treePaths=5, files=0)', () => {
+    expect(classifyLibrary({ ...base, files: [] })).toBeNull()
+  })
+
+  it('never contradicts a repo that calls itself an MCP server in its description (Azure/azure-mcp)', () => {
+    const ctx = {
+      ...base,
+      description: 'The Azure MCP Server, bringing the power of Azure to your agents.',
+      files: [f('eng/vscode/extension.ts'), f('eng/npm/wrapper.js'), f('eng/tools/docgen.ts')],
+    }
+    expect(classifyLibrary(ctx)).toBeNull()
+  })
+
+  it('never contradicts a repo whose topics claim it is an MCP server', () => {
+    expect(classifyLibrary({ ...base, topics: ['mcp'], files: [f('src/main.ts')] })).toBeNull()
+    expect(classifyLibrary({ ...base, topics: ['mcp-server'], files: [f('src/main.ts')] })).toBeNull()
+  })
+
+  it('never asserts "no MCP import" for a language the import regex cannot read (dnaerys/onekgpd-mcp is Java)', () => {
+    const ctx = { ...base, files: [f('src/main/java/OneKGPdMCPServer.java', 'public class OneKGPdMCPServer {}')] }
+    expect(classifyLibrary(ctx)).toBeNull()
+  })
+
+  it('STILL fires on a genuine non-server with readable, representative source', () => {
+    const ctx = { ...base, name: 'random-utils', description: 'A string utility library', files: [f('src/index.ts', 'export const slug = (s: string) => s')] }
+    expect(classifyLibrary(ctx)?.reason).toBe('not-server')
+  })
+})

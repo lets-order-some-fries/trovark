@@ -111,6 +111,22 @@ const SOURCE_REDIRECT_RE = /where is the source\?/i
  * Tier A's five signals only run at zero tools; Tier B's single corroborated-
  * identity check only runs once tools were extracted.
  */
+// A repo asserting, in its own GitHub metadata, that it IS an MCP server.
+// Used ONLY as counter-evidence: it never makes something a server, it only
+// blocks us from publishing the opposite claim off a sample that may never
+// have touched the server's code.
+const SERVER_SELF_DESC_RE = /\b(?:mcp|model[\s-]?context[\s-]?protocol)\b[^.]{0,60}\bservers?\b|\bservers?\b[^.]{0,60}\b(?:mcp|model[\s-]?context[\s-]?protocol)\b/i
+const SERVER_SELF_TOPICS = new Set(['mcp', 'mcp-server', 'mcp-servers', 'model-context-protocol', 'modelcontextprotocol'])
+
+function selfDescribesAsServer(ctx: ClassifyContext): boolean {
+  if (SERVER_SELF_DESC_RE.test(ctx.description ?? '')) return true
+  return (ctx.topics ?? []).some(t => SERVER_SELF_TOPICS.has(t.toLowerCase()))
+}
+
+// Extensions MCP_IMPORT_RE cannot read. Absence of an "MCP import" in these
+// is a fact about the detector, not about the repository.
+const UNREADABLE_LANG_RE = /\.(?:java|kt|kts|cs|fs|rb|php|swift|scala|clj|cljs|ex|exs|dart|cpp|cc|hpp|erl|hs|ml|pl|r|jl)$/i
+
 export function classifyLibrary(ctx: ClassifyContext): NotServerResult | null {
   if (ctx.toolsExtracted) return classifyCorroboratedSdkIdentity(ctx)
 
@@ -156,7 +172,34 @@ export function classifyLibrary(ctx: ClassifyContext): NotServerResult | null {
   const hasPyToolRegistrationSurface = hasPythonToolRegistrationSurface(ctx.files)
   const hasManifest = ctx.files.some(f => ROOT_MANIFEST_RE.test(f.path))
   const isPipedreamComponent = ctx.files.some(f => PIPEDREAM_COMPONENT_RE.test(f.content))
+  // Every predicate above is NEGATIVE, so this signal asserts absence. An
+  // absence claim is only publishable when we actually looked somewhere it
+  // could have been found — otherwise thin coverage manufactures a confident
+  // verdict, and because `notServer` bypasses score.ts's insufficientData
+  // gate, the WORSE the coverage the more certain the published claim. That
+  // inverts "absence lowers confidence, never fakes a value". Measured on
+  // the live index: 9 of 20 published `not-server` entries contradicted the
+  // repo's own fetched GitHub description, including Microsoft's official
+  // Azure/azure-mcp. Each guard returns null so the repo falls through to
+  // the honest insufficientData state instead.
   if (!importsMcp && !ctx.mcpSdkDetected && !hasPyToolRegistrationSurface && (!hasManifest || isPipedreamComponent)) {
+    // (a) Nothing was fetched. OctoEverywhere/mcp reached this branch with
+    // files.length === 0, where every negative predicate is vacuously true:
+    // zero evidence produced a positive claim of absence.
+    if (ctx.files.length === 0) return null
+    // (b) The repo says it is an MCP server. Azure/azure-mcp's own fetched
+    // description reads "The Azure MCP Server, bringing the power of Azure
+    // to your agents", while the sampler drew 23 of 24 files from eng/ (a
+    // VS Code extension, an npm wrapper, a docgen template, test files) and
+    // not one file of the actual server. A vendor's claim is not proof they
+    // ship a server, but it is conclusive proof we must not publish the
+    // opposite from a sample that never looked at the server.
+    if (selfDescribesAsServer(ctx)) return null
+    // (c) The sample is in a language MCP_IMPORT_RE cannot read (TS/JS/
+    // Python/Rust only), so "no MCP import" describes our detector, not the
+    // repo. dnaerys/onekgpd-mcp is a Java server whose own fetched pom.xml
+    // declares quarkus-mcp-server-bom/-http/-stdio.
+    if (ctx.files.some(f => UNREADABLE_LANG_RE.test(f.path))) return null
     return {
       notServer: true, reason: 'not-server',
       note: 'No MCP SDK import and no tool manifest — not an MCP server.',
