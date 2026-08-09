@@ -207,9 +207,60 @@ async function main(): Promise<void> {
     return a.ref.localeCompare(b.ref)
   })
 
-  const payload = { generatedAt: now.toISOString(), rubricVersion: RUBRIC_VERSION, stats: summarize(entries), entries }
+  // Fault hunt 2026-08-08 (C7): the index write used to be all-or-nothing
+  // with no completeness gate, so a run that DIED partway wrote nothing at
+  // all — leaving the previous results.json in place, which diffs as a clean
+  // "zero changes" run. That is not a hypothetical: a 400-server scan exited
+  // at 150/400 on an unsettled fetch and the stale file read as a successful
+  // no-change result. A second run, starved by the GitHub rate limit,
+  // reported graded 321->94 as though it were a code regression.
+  //
+  // `coverage` makes the shape of the run part of the artifact, so a
+  // consumer can never mistake a partial run for a complete one. The two
+  // failure modes above are now separable: `completed < attempted` means the
+  // run did not finish; a spike in `collectorFailures` means it ran but
+  // could not read the servers.
+  const collectorFailures = entries.filter(e => !e.ok).length
+  const coverage = {
+    attempted: refs.length,
+    completed: entries.length,
+    collectorFailures,
+    complete: entries.length === refs.length,
+  }
+  if (!coverage.complete) {
+    console.error(`REFUSING TO WRITE ${outFile}: only ${entries.length}/${refs.length} refs completed.`)
+    console.error('A partial index would be indistinguishable from a clean scan. Re-run when the source is healthy.')
+    process.exitCode = 1
+    return
+  }
+  // A run that "completed" every ref but failed to collect most of them is
+  // an outage, not a measurement of the ecosystem. Publishing it would move
+  // hundreds of servers into withheld and read as a product regression.
+  const failureRate = collectorFailures / Math.max(1, refs.length)
+  if (failureRate > 0.25 && !process.argv.includes('--allow-degraded')) {
+    console.error(`REFUSING TO WRITE ${outFile}: ${collectorFailures}/${refs.length} refs failed to collect (${Math.round(failureRate * 100)}%).`)
+    console.error('This is an outage signature (rate limit or network), not a change in the servers. Pass --allow-degraded to override.')
+    process.exitCode = 1
+    return
+  }
+
+  const payload = { generatedAt: now.toISOString(), rubricVersion: RUBRIC_VERSION, coverage, stats: summarize(entries), entries }
   writeFileSync(outFile, JSON.stringify(payload, null, 2))
   console.error(`wrote ${outFile}: ${payload.stats.scored}/${payload.stats.total} scored, avg ${payload.stats.avgOverall}`)
 }
 
-if (process.argv[1]?.endsWith('scan.ts')) await main()
+if (process.argv[1]?.endsWith('scan.ts')) {
+  // The scan can only end two ways now: it writes an index, or it says why
+  // it did not. Silent death — the mode that produced two false measurements
+  // — is no longer one of them.
+  let finished = false
+  process.on('exit', code => {
+    if (!finished && code === 0) {
+      console.error('SCAN DID NOT COMPLETE: the process exited before the index was written, and nothing was changed on disk.')
+      console.error('Do NOT read the existing index as a result of this run.')
+      process.exitCode = 1
+    }
+  })
+  await main()
+  finished = true
+}

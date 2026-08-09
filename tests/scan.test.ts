@@ -283,3 +283,45 @@ describe('toEntry / summarize — null dimension scores must never be coerced', 
     expect(Number.isFinite(s.avgOverall)).toBe(true)
   })
 })
+
+// Fault hunt 2026-08-08 (C7). The scanner could fail in ways that were
+// indistinguishable from success: a run that died partway wrote nothing, so
+// the previous index stayed on disk and diffed as "zero changes"; a run
+// starved by the rate limit wrote a full index in which most servers had
+// simply failed to collect, which read as a product regression. Both
+// happened during real work. `coverage` now makes the shape of the run part
+// of the artifact.
+describe('scan coverage gate', () => {
+  const entry = (ref: string, ok: boolean) => (ok
+    ? { ref, ok: true as const, overall: 80, grade: 'B+' }
+    : { ref, ok: false as const, error: 'HTTP 403' })
+
+  it('reports a complete, healthy run as complete', () => {
+    const refs = ['a/b', 'c/d', 'e/f', 'g/h']
+    const entries = refs.map(r => entry(r, true))
+    const cov = coverageOf(refs.length, entries)
+    expect(cov.complete).toBe(true)
+    expect(cov.collectorFailures).toBe(0)
+  })
+
+  it('flags a run that did not finish every ref', () => {
+    const cov = coverageOf(400, Array.from({ length: 150 }, (_, i) => entry(`a/${i}`, true)))
+    expect(cov.complete).toBe(false)
+    expect(cov.attempted).toBe(400)
+    expect(cov.completed).toBe(150)
+  })
+
+  it('surfaces an outage: every ref completed but most failed to collect', () => {
+    const entries = Array.from({ length: 400 }, (_, i) => entry(`a/${i}`, i < 60))
+    const cov = coverageOf(400, entries)
+    expect(cov.complete).toBe(true)              // the loop finished...
+    expect(cov.collectorFailures).toBe(340)      // ...but it measured nothing
+    expect(cov.collectorFailures / cov.attempted).toBeGreaterThan(0.25)
+  })
+})
+
+// Mirrors the coverage computation in index/scan.ts's main().
+function coverageOf(attempted: number, entries: Array<{ ok: boolean }>) {
+  const collectorFailures = entries.filter(e => !e.ok).length
+  return { attempted, completed: entries.length, collectorFailures, complete: entries.length === attempted }
+}

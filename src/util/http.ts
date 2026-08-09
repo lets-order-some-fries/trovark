@@ -57,15 +57,38 @@ export function createHttp(opts: HttpOptions = {}): Http {
     let lastErr: unknown
     for (let attempt = 0; attempt <= retries; attempt++) {
       let res: Response | undefined
+      // Fault hunt 2026-08-08 (C6): this used AbortSignal.timeout(), whose
+      // internal timer is UNREF'd — Node does not count it as pending work.
+      // When every in-flight fetch stalls and nothing else keeps the loop
+      // alive, the process exits before any timeout can fire, and a
+      // top-level `await main()` never settles. Observed exactly that: a
+      // 400-server scan printed "Detected unsettled top-level await" at
+      // 150/400 and exited 0 having written nothing, which is
+      // indistinguishable from a clean no-change run. A ref'd setTimeout
+      // driving an AbortController keeps the loop alive so the deadline
+      // actually fires and the request rejects as a retryable error.
+      const ac = new AbortController()
+      let timer: ReturnType<typeof setTimeout> | undefined
+      // The deadline is a RACE, not just an abort signal. Aborting only ends
+      // the request if the fetch implementation honours the signal; racing a
+      // ref'd timer guarantees the attempt ends either way, which is what
+      // makes "the scan cannot hang forever" a property of this function
+      // rather than a property of whatever fetch it was handed.
+      const deadline = new Promise<never>((_, reject) => {
+        timer = setTimeout(() => {
+          ac.abort()   // best-effort cancellation of the underlying request
+          reject(new Error(`timeout after ${timeoutMs}ms: ${url}`))
+        }, timeoutMs)
+      })
       try {
-        res = await fetchImpl(url, {
-          method: init.method,
-          body: init.body,
-          headers,
-          signal: AbortSignal.timeout(timeoutMs),
-        })
+        res = await Promise.race([
+          fetchImpl(url, { method: init.method, body: init.body, headers, signal: ac.signal }),
+          deadline,
+        ])
       } catch (err) {
         lastErr = err // network / timeout errors are retryable
+      } finally {
+        if (timer !== undefined) clearTimeout(timer)
       }
       if (res) {
         if (res.ok) return res
