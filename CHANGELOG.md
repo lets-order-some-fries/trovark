@@ -3,6 +3,27 @@
 All notable changes to this project are documented in this file, reconstructed
 from git history. Format loosely follows [Keep a Changelog](https://keepachangelog.com/).
 
+## [0.1.7] - 2026-08-07
+
+Rubric 1.6.0: a number is measured or it is withheld.
+
+- Token footprint is now measured from real tool schemas or withheld entirely, rather than scored from an estimate (`dfc1d19`).
+- Classifying a repo as "not an MCP server" requires evidence the scanner actually looked, not mere absence of a signal (`1d92dac`).
+- Covered the CLI's `--fail-under` exit-code contract with tests, including that no threshold can turn INSUFFICIENT DATA into a pass (`a46c7f8`, #12).
+- Re-scanned all 400 servers under rubric 1.6.0 and published the index (`982a42b`).
+
+## [0.1.6] - 2026-08-06
+
+Hidden-payload override (rubric 1.5.0) + the W6 coverage wave: six published falsehoods removed.
+
+- Integrity phase 2: a decode-confirmed hidden-payload finding now disqualifies the grade outright, instead of the planned weight-3 signal — a check that fires for 0% or 100% of a corpus carries no information (`5f4deaf`).
+- A partial tool surface may no longer publish a clean risk verdict (`e0c807e`).
+- Withheld grades are withheld in the data itself, not just the display (`95c0e16`).
+- Secrets scanning skips all documentation extensions, not only `.md` (`b390dce`).
+- Shell-import risk floor scoped to README-sourced tool lists (`3814b38`).
+- README catalogs and dynamic tool surfaces recognised by extraction; corpus re-scanned (`a86adaf`, `677b40c`).
+- Added a README section on reading a scorecard (`eafc3df`, #11).
+
 ## [0.1.5] - 2026-08-04
 
 Sampling reach + metadata-integrity differentiator (`feat/coverage-v1.5`).
