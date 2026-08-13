@@ -52,6 +52,12 @@ export interface IndexEntry {
   // absence != clean discipline as Scorecard.integrityHits. Stats (below)
   // are deliberately left untouched for now; this is a per-entry count only.
   integrity?: { payloads: number; observations: number }
+  // Secondary-rate-limit postmortem (2026-08-13): count of collector errors
+  // absorbed into Signals.errors for this entry. A degraded entry looks
+  // healthy (ok: true) by design; this field is how the outage gate and any
+  // downstream consumer can tell "measured and withheld" from "never read".
+  // Omitted when zero.
+  collectorErrors?: number
 }
 
 export interface IndexStats {
@@ -127,12 +133,19 @@ export function summarize(entries: IndexEntry[]): IndexStats {
 // Scorecard -> IndexEntry passthrough directly (W6 review remediation item
 // M2 — readmeSourced threading) without going through the network-dependent
 // main() pipeline.
-export function toEntry(ref: string, card: Scorecard, daysSinceLastCommit?: number): IndexEntry {
+export function toEntry(ref: string, card: Scorecard, daysSinceLastCommit?: number, collectorErrors?: number): IndexEntry {
   const dims = Object.fromEntries(card.dimensions.map(d => [d.id, { score: d.score, confidence: d.confidence }])) as IndexEntry['dims']
   const findings = card.dimensions.flatMap(d => d.findings)
     .sort((a, b) => ['high', 'medium', 'low', 'info'].indexOf(a.severity) - ['high', 'medium', 'low', 'info'].indexOf(b.severity))
     .slice(0, 3).map(f => ({ id: f.id, severity: f.severity }))
   return {
+    // Secondary-rate-limit postmortem (2026-08-13): a gracefully-degraded
+    // entry (collector errors absorbed into Signals.errors) used to be
+    // indistinguishable from a healthy one in the published data — a scan
+    // run during a GitHub SECONDARY rate-limit outage reported
+    // collectorFailures: 0, coverage complete, while 242 servers silently
+    // drained into withheld. Non-zero only when collectors errored.
+    ...(collectorErrors ? { collectorErrors } : {}),
     // I9/W1/W6: card.overall/grade are null for EVERY withheld card
     // (notServer, unresolved, insufficientData) — IndexEntry keeps them
     // optional (number|undefined), so convert null -> undefined here, which
@@ -192,7 +205,7 @@ async function main(): Promise<void> {
         ...(identity.pypiPackage ? { pypiPackage: identity.pypiPackage } : {}),
         ...(identity.repo ? { repo: identity.repo } : {}),
       })
-      return toEntry(ref, card, signals.daysSinceLastCommit)
+      return toEntry(ref, card, signals.daysSinceLastCommit, signals.errors.length)
     } catch (err) {
       return { ref, ok: false, error: (err as Error).message }
     } finally {
@@ -221,10 +234,17 @@ async function main(): Promise<void> {
   // run did not finish; a spike in `collectorFailures` means it ran but
   // could not read the servers.
   const collectorFailures = entries.filter(e => !e.ok).length
+  // Secondary-rate-limit postmortem (2026-08-13): thrown failures are only
+  // half the outage signature — GitHub's secondary limit 403s degrade
+  // GRACEFULLY into ok:true entries with empty signals (the whole point of
+  // graceful degradation), so a scan can be mostly noise while reporting
+  // zero failures. Count entries whose collectors recorded errors as well.
+  const degradedEntries = entries.filter(e => (e as { collectorErrors?: number }).collectorErrors).length
   const coverage = {
     attempted: refs.length,
     completed: entries.length,
     collectorFailures,
+    degradedEntries,
     complete: entries.length === refs.length,
   }
   if (!coverage.complete) {
@@ -236,9 +256,9 @@ async function main(): Promise<void> {
   // A run that "completed" every ref but failed to collect most of them is
   // an outage, not a measurement of the ecosystem. Publishing it would move
   // hundreds of servers into withheld and read as a product regression.
-  const failureRate = collectorFailures / Math.max(1, refs.length)
+  const failureRate = (collectorFailures + degradedEntries) / Math.max(1, refs.length)
   if (failureRate > 0.25 && !process.argv.includes('--allow-degraded')) {
-    console.error(`REFUSING TO WRITE ${outFile}: ${collectorFailures}/${refs.length} refs failed to collect (${Math.round(failureRate * 100)}%).`)
+    console.error(`REFUSING TO WRITE ${outFile}: ${collectorFailures} failed + ${degradedEntries} degraded of ${refs.length} refs (${Math.round(failureRate * 100)}%).`)
     console.error('This is an outage signature (rate limit or network), not a change in the servers. Pass --allow-degraded to override.')
     process.exitCode = 1
     return

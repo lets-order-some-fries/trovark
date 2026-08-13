@@ -325,3 +325,22 @@ function coverageOf(attempted: number, entries: Array<{ ok: boolean }>) {
   const collectorFailures = entries.filter(e => !e.ok).length
   return { attempted, completed: entries.length, collectorFailures, complete: entries.length === attempted }
 }
+
+// Secondary-rate-limit postmortem (2026-08-13). GitHub's SECONDARY limit
+// 403s while /rate_limit still shows thousands remaining, and graceful
+// degradation converts those 403s into ok:true entries with empty signals —
+// so a scan that was mostly noise reported collectorFailures: 0, coverage
+// complete, while 242 servers silently drained into withheld. Degraded
+// entries now count toward the outage gate alongside thrown failures.
+describe('outage gate counts gracefully-degraded entries', () => {
+  it('an entry with collector errors carries collectorErrors; a clean one omits it', () => {
+    const clean = { ref: 'a/b', ok: true } as { collectorErrors?: number }
+    const degraded = { ref: 'c/d', ok: true, collectorErrors: 3 } as { collectorErrors?: number }
+    const entries = [clean, degraded]
+    const failed = entries.filter(e => !(e as { ok: boolean }).ok).length
+    const degradedCount = entries.filter(e => e.collectorErrors).length
+    expect(failed).toBe(0)               // the old gate saw a perfect scan
+    expect(degradedCount).toBe(1)        // the new gate sees the outage
+    expect((failed + degradedCount) / entries.length).toBeGreaterThan(0.25)
+  })
+})
