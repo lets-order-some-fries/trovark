@@ -377,7 +377,7 @@ describe('score() — a withheld grade is withheld in the DATA, not just the dis
     expect(card.insufficientData).toBe(true)
     expect(card.overall).toBeNull()
     expect(card.grade).toBeNull()
-    expect(card.notes.join(' ')).toMatch(/not enough coverage to score confidently/i)
+    expect(card.notes.join(' ')).toMatch(/a headline grade from the remainder would overstate what was read/i)
   })
   it('trip condition: security primary absent on an otherwise perfect card → null, never 100/"A+"', () => {
     const s = healthy(); s.toolSurfaceRisk = undefined
@@ -629,5 +629,39 @@ describe('reliability is withheld when spec-era is unmeasurable', () => {
     const legacy = rel({ ...base(), specEra: 'legacy' }).score
     expect(unknown).toBeNull()
     expect(typeof legacy).toBe('number')
+  })
+})
+
+// Fault hunt follow-up (2026-08-09). The coverage gate counted only
+// available===0, but Rules B/C/D withhold a dimension's SCORE while its
+// `available` stays positive — and `overall` silently renormalized onto the
+// remainder. Measured post-fix: 42 graded servers (13%) published letters
+// from TWO measured dimensions (Azure/azure-mcp: D+ 50 from health+security
+// with reliability and cost both withheld). Half the rubric is not a grade.
+describe('a headline grade requires at least 3 measured dimensions', () => {
+  it('withholds when two dimension scores are null (whatever the mechanism)', () => {
+    // specEra unknown -> reliability withheld; no footprint -> cost withheld
+    const card = score('o/r', {
+      findings: [], errors: [],
+      daysSinceLastCommit: 3, commitsLast90Days: 40, busFactor: 6, stars: 500, archived: false,
+      hasCI: true, hasTests: true, hasLockfile: true, schemaExtracted: true,
+      toolSurfaceRisk: 'medium', secretsFound: 0, cveWorst: 'none', toolCount: 5,
+    }, '2026-08-09T00:00:00.000Z')
+    expect(card.dimensions.filter(d => d.score === null).length).toBeGreaterThanOrEqual(2)
+    expect(card.insufficientData).toBe(true)
+    expect(card.overall).toBeNull()
+    expect(card.grade).toBeNull()
+  })
+  it('still grades with exactly one withheld dimension (the common cost case)', () => {
+    const card = score('o/r', {
+      findings: [], errors: [],
+      daysSinceLastCommit: 3, daysSinceLastRelease: 20, commitsLast90Days: 40, busFactor: 6,
+      medianIssueResponseDays: 1, stars: 500, archived: false, specEra: 'modern',
+      hasCI: true, hasTests: true, hasLockfile: true, schemaExtracted: true,
+      toolSurfaceRisk: 'none', secretsFound: 0, cveWorst: 'none', toolCount: 5,
+    }, '2026-08-09T00:00:00.000Z')
+    expect(card.dimensions.filter(d => d.score === null).length).toBe(1) // cost only
+    expect(card.insufficientData).toBe(false)
+    expect(typeof card.overall).toBe('number')
   })
 })

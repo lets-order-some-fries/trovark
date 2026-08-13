@@ -142,7 +142,18 @@ export function score(
   // as a false clean bill (e.g. 100/A+) even for dangerous servers.
   // W6: `securityPrimaryAbsent` is computed once, above the dimension loop —
   // the SAME value Rule B uses to withhold the security dimension score.
-  const dimensionsFullyDropped = dimensions.filter(d => d.available === 0).length
+  // Fault hunt follow-up (2026-08-09): this gate predates the null-score
+  // semantics and counted only `available === 0` — but Rules B/C/D withhold
+  // a dimension's SCORE while its `available` stays positive, and `overall`
+  // silently renormalized onto whatever dimensions remained. Measured on the
+  // post-fix corpus: 42 graded servers (13%) published letter grades from
+  // TWO measured dimensions — Azure/azure-mcp graded D+ 50 from health 40 +
+  // security 63 with reliability and cost both withheld, alongside
+  // cloudflare/mcp-server-cloudflare, supabase-mcp and upstash/context7. A
+  // letter grade from half the rubric is the v1.2 confident-A+ bug at the
+  // composite level. Count every dimension whose score is withheld, whatever
+  // the mechanism.
+  const dimensionsFullyDropped = dimensions.filter(d => d.score === null).length
   // V2: notServer is a DISTINCT terminal state, not insufficientData — a
   // library/SDK/proxy/stub was never going to have a coverage-gate-passing
   // tool surface (it has none by design), so the same sparse-signal shape
@@ -185,7 +196,7 @@ export function score(
       notes.push('Security tool surface could not be determined — grade withheld to avoid a false clean bill.')
     }
     if (dimensionsFullyDropped >= 2) {
-      notes.push(`${dimensionsFullyDropped} dimensions had zero collectible signals — not enough coverage to score confidently. Grade withheld.`)
+      notes.push(`${dimensionsFullyDropped} of 4 dimensions could not be measured — a headline grade from the remainder would overstate what was read. Grade withheld.`)
     }
     if (availableTotal < 4) {
       notes.push(`Only ${availableTotal} of ${SIGNALS.length} signals were collectable — not enough to score. Grade withheld.`)

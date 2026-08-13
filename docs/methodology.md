@@ -1,4 +1,4 @@
-# Methodology (rubric v1.5.0)
+# Methodology (rubric v1.6.0)
 
 trovark computes a 0–100 Trust Score from four dimensions: Health 35%,
 Reliability 25%, Security 25%, Cost 15%. Grade bands: A ≥ 85, B ≥ 70, C ≥ 55,
@@ -51,9 +51,16 @@ D ≥ 40, F < 40 (+/- at the top/bottom 5 points of each band).
   shown; ~13% true-positive rate in testing, so it carries a low rubric weight
   and findings are labeled "candidate, verify manually" — use a dedicated
   scanner (gitleaks, trufflehog) for authoritative secret detection.
-- **Cost:** estimated tokens of the serialized tool schema (gpt-tokenizer —
-  an estimate, so labeled; currently an under-estimate, see limitations); tool
-  count (deduplicated; test/example paths excluded).
+- **Cost:** tokens of a reconstructed `tools/list` payload (gpt-tokenizer),
+  computed **only when every tool carries a real serialized JSON schema**
+  (manifest/OpenAPI sources — ~5% of the corpus); tool count (deduplicated;
+  test/example paths excluded). For source-extracted tools the raw captured
+  text bears no fixed relation to the serialized payload — measured against
+  realistic payloads the old estimate was wrong by up to **7.5× in both
+  directions** (not a consistent under-estimate, as this page previously
+  claimed) — so the estimate is **withheld** rather than guessed, and the
+  cost dimension score is withheld with it. Absence lowers confidence; it
+  never renders as a favourable number.
 
 ## Multi-language tool extraction & the `notServer` outcome (v1.3)
 
@@ -154,8 +161,11 @@ for transparency only, exactly as in v1's findings-only integration.
 - Tool-schema extraction is best-effort static parsing across languages/idioms;
   it does not cover every framework, and a miss triggers the coverage gate
   (grade withheld) rather than a wrong score.
-- The cost token estimate omits nested `inputSchema` bodies, so it is an
-  under-estimate; slated for recalibration in a later version.
+- The cost token footprint is only computed from genuinely serialized
+  schemas; for the ~95% of servers whose tools are extracted from source,
+  cost rests on tool count alone and its dimension score is withheld. A
+  dimension (or headline grade) resting on unmeasured primaries is withheld
+  rather than renormalized — across ALL dimensions, not just cost.
 - CVE resolution covers `package-lock.json`/`uv.lock`/`poetry.lock`; other
   lockfiles (pnpm, yarn, Pipfile) still fall back to declared floors.
 - Monorepos are scored at repository granularity.

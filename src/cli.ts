@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+import { readFileSync } from 'node:fs'
 import { createHttp, type Http } from './util/http.js'
 import { ResolveError, resolve } from './resolver.js'
 import { assemble } from './assemble.js'
@@ -32,7 +33,13 @@ export async function main(argv: string[], deps: CliDeps): Promise<number> {
   }
 
   if (has('--help')) { deps.err(USAGE); return 2 }
-  if (has('--version')) { deps.log('0.1.0'); return 0 }
+  if (has('--version')) {
+    // Fault hunt 2026-08-08 (MINOR): this was a hardcoded '0.1.0' literal,
+    // shipped unchanged in the 0.1.7 package. Read the source of truth.
+    const pkg = JSON.parse(readFileSync(new URL('../package.json', import.meta.url), 'utf8')) as { version: string }
+    deps.log(pkg.version)
+    return 0
+  }
   const json = has('--json')
   const noColor = has('--no-color')
   const failUnderPresent = args.includes('--fail-under')
@@ -75,8 +82,17 @@ export async function main(argv: string[], deps: CliDeps): Promise<number> {
       for (const e of signals.errors) deps.err(`  - ${e}`)
       return 2
     }
-    // I9: --fail-under is a no-op for a notServer card (card.overall is
-    // null — there is no grade to compare against a threshold).
+    // Fault hunt 2026-08-08 (IMPORTANT): --fail-under used to be a silent
+    // no-op for a notServer/dynamic card, so a CI gate demanding "B or
+    // better" PASSED on a library or an unanalyzable gateway — while the
+    // sibling ungradeable states (unresolved, insufficientData) exit
+    // non-zero above. Without --fail-under, exit 0 stands: notServer is a
+    // correct, successful answer. Under a threshold, "no grade" can never
+    // satisfy "grade >= threshold".
+    if (threshold !== undefined && card.overall === null) {
+      deps.err('trovark: no grade to compare against --fail-under (library / dynamic tool surface)')
+      return 1
+    }
     if (threshold !== undefined && card.overall !== null && card.overall < threshold) return 1
     return 0
   } catch (err) {

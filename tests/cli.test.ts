@@ -148,9 +148,16 @@ describe('cli main — notServer (I9)', () => {
     expect(card.overall).toBeNull()
     expect(card.grade).toBeNull()
   })
-  it('--fail-under is a no-op (exit 0) on a notServer ref, even at the strictest threshold', async () => {
+  // Fault hunt 2026-08-08 (IMPORTANT) — this test previously asserted the
+  // OPPOSITE contract ("--fail-under is a no-op, exit 0"). That let a CI
+  // gate demanding a minimum grade silently PASS on a library or dynamic
+  // gateway, while the sibling ungradeable states (unresolved,
+  // insufficientData) both exit non-zero. A card with no grade cannot
+  // satisfy "grade >= threshold". Without --fail-under, exit 0 stands.
+  it('--fail-under fails (exit 1) on a notServer ref: no grade cannot pass a threshold', async () => {
     const r = await runSdk(['acme/foo-sdk', '--fail-under', 'A'])
-    expect(r.code).toBe(0)
+    expect(r.code).toBe(1)
+    expect(r.err).toContain('no grade to compare')
   })
   it('terminal output reports LIBRARY, not INSUFFICIENT DATA, and exits 0 with no --fail-under', async () => {
     const r = await runSdk(['acme/foo-sdk'])
