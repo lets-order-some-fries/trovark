@@ -64,6 +64,13 @@ function fullFake(): Http {
   return makeRoutedHttp(routes, (url) => {
     if (url.endsWith('package.json')) return JSON.stringify({ dependencies: { '@modelcontextprotocol/sdk': '^1.2.0' } })
     if (url.endsWith('src/index.ts')) return `server.tool('greet', 'Say hello', {}, h)`
+    // C5: every path this fixture's TREE lists must be servable — an
+    // unserved selected path now (correctly) counts as a fetch failure and
+    // forces surfacePartial, which is exactly the honesty behavior under
+    // test elsewhere, not what this healthy-repo fixture represents.
+    if (url.endsWith('.github/workflows/ci.yml')) return 'on: [push]'
+    if (url.endsWith('package-lock.json')) return '{"lockfileVersion": 3}'
+    if (url.endsWith('tests/x.test.ts')) return 'it("x", () => {})'
     throw new Error(`HTTP 404 for ${url}`)
   })
 }
@@ -96,7 +103,7 @@ describe('assemble', () => {
     // D1 (integrity-v1): wired alongside scanSecrets — a real scan (files
     // WERE fetched) always sets integrityHits (even to []) and scanned{}.
     expect(s.integrityHits).toEqual([])
-    expect(s.integrityScanned).toEqual({ files: 2, chars: expect.any(Number), tools: 1 })
+    expect(s.integrityScanned).toEqual({ files: 4, chars: expect.any(Number), tools: 1 })
     // D2 (integrity-phase2): a clean scan (no 'hidden-payload' kind hits)
     // sets hiddenPayloadDecoded to 0, not undefined — score.ts's override
     // relies on this to distinguish "checked, clean" from "never checked".
@@ -227,6 +234,9 @@ describe('assemble — notServer classification (V2)', () => {
     http.text = async (url: string): Promise<string> => {
       if (url.endsWith('package.json')) return JSON.stringify({ dependencies: {} })
       if (url.endsWith('src/index.ts')) return `export function helper() { return 1 }`
+      if (url.endsWith('.github/workflows/ci.yml')) return 'on: [push]'
+      if (url.endsWith('package-lock.json')) return '{"lockfileVersion": 3}'
+      if (url.endsWith('tests/x.test.ts')) return 'it("x", () => {})'
       throw new Error(`HTTP 404 for ${url}`)
     }
     return http
@@ -247,6 +257,9 @@ describe('assemble — notServer classification (V2)', () => {
     http.text = async (url: string): Promise<string> => {
       if (url.endsWith('package.json')) return JSON.stringify({ dependencies: { '@modelcontextprotocol/sdk': '^1.0.0' } })
       if (url.endsWith('src/index.ts')) return `server.tool('greet', 'Say hello', {}, h)`
+      if (url.endsWith('.github/workflows/ci.yml')) return 'on: [push]'
+      if (url.endsWith('package-lock.json')) return '{"lockfileVersion": 3}'
+      if (url.endsWith('tests/x.test.ts')) return 'it("x", () => {})'
       throw new Error(`HTTP 404 for ${url}`)
     }
     const s = await assemble(
@@ -462,3 +475,42 @@ function riskForPartial(
 ): 'none' | 'low' | 'medium' | 'high' | undefined {
   return surfacePartial && risk === 'none' ? undefined : risk
 }
+
+// Fault hunt 2026-08-08 (C5). A file the tree listed but the blob fetch could
+// not read (403/429/5xx after retries) was previously skipped with an empty
+// catch — a rate-limited run simply graded a SMALLER repo than the one that
+// exists, with no record anywhere that the sample was incomplete. The grade
+// this produces is not merely lower-confidence, it is a different verdict
+// derived from a sample we know is wrong.
+describe('C5: failed blob fetches are recorded and force a partial surface', () => {
+  function flakyHttp(failPath: string): Http {
+    const http = fullFake()
+    const origText = http.text.bind(http)
+    http.text = async (url: string): Promise<string> => {
+      if (url.endsWith(failPath)) throw new HttpError(403, url)
+      return origText(url)
+    }
+    return http
+  }
+
+  it('names the unfetchable path in errors and withholds the counts', async () => {
+    const s = await assemble(
+      { ref: 'foo-mcp', repo: { owner: 'acme', name: 'foo' } },
+      flakyHttp('src/index.ts'), NOW,
+    )
+    expect(s.errors.some(e => e.includes('src/index.ts'))).toBe(true)
+    // the sample is incomplete: no confident counts, no clean risk verdict
+    expect(s.toolCount).toBeUndefined()
+    expect(s.schemaTokenEstimate).toBeUndefined()
+    expect(s.toolSurfaceRisk).not.toBe('none')
+  })
+
+  it('a fully-fetched repo records no fetch failures and grades normally', async () => {
+    const s = await assemble(
+      { ref: 'foo-mcp', repo: { owner: 'acme', name: 'foo' } },
+      fullFake(), NOW,
+    )
+    expect(s.errors).toEqual([])
+    expect(s.toolCount).toBe(1)
+  })
+})

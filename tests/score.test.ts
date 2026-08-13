@@ -605,3 +605,29 @@ describe('cost is withheld when its dominant signal is unmeasurable', () => {
     expect(withheld.score).toBeNull()        // not a number that beats it
   })
 })
+
+// Fault hunt 2026-08-08 (C4). spec-era is reliability's weight-3 primary and
+// is BINARY: a legacy-SDK server loses the full 3, but a server whose SDK we
+// could not determine lost nothing after renormalization — publishing
+// 100/100 at high confidence for "we don't know what this targets". Unknown
+// must never outscore known-bad.
+describe('reliability is withheld when spec-era is unmeasurable', () => {
+  const rel = (s: Signals) => score('o/r', s, '2026-08-09T00:00:00.000Z').dimensions.find(d => d.id === 'reliability')!
+  const base = (): Signals => ({ findings: [], errors: [], hasCI: true, hasTests: true, hasLockfile: true, schemaExtracted: true })
+
+  it('withholds when specEra is undefined (never a confident 100 from not knowing)', () => {
+    expect(rel({ ...base() }).score).toBeNull()
+  })
+  it('scores normally when the era is known', () => {
+    expect(rel({ ...base(), specEra: 'modern' }).score).toBe(100)
+    const legacy = rel({ ...base(), specEra: 'legacy' }).score
+    expect(typeof legacy).toBe('number')
+    expect(legacy!).toBeLessThan(100)
+  })
+  it('unknown never outscores known-legacy', () => {
+    const unknown = rel({ ...base() }).score
+    const legacy = rel({ ...base(), specEra: 'legacy' }).score
+    expect(unknown).toBeNull()
+    expect(typeof legacy).toBe('number')
+  })
+})

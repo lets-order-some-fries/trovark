@@ -49,7 +49,21 @@ export async function assemble(
         // extractor returned 0" specifically so a proxy's own README
         // (MCPJungle: included_tools/excluded_tools/included_servers) can
         // never masquerade as a real tool surface and suppress it.
-        const staticSchema = extractSchema(snap.files, snap.treePaths, snap.toolFanoutCount)
+        // Fault hunt 2026-08-08 (C5): files the tree listed but the blob
+        // fetch could not read (403/429/5xx after retries). Previously
+        // dropped silently — a rate-limited run just graded a smaller repo
+        // than the one that exists, with no record. Now: named in errors
+        // (which reach the published notes), and the surface is forced
+        // PARTIAL below so every existing partial-read honesty rule engages
+        // (no clean risk verdict, no counts, no dynamic verdict).
+        const fetchesFailed = snap.fetchFailures.length > 0
+        if (fetchesFailed) {
+          s.errors.push(`could not fetch ${snap.fetchFailures.length} selected file(s): ${snap.fetchFailures.slice(0, 5).join(', ')}${snap.fetchFailures.length > 5 ? ', …' : ''}`)
+        }
+        const extractedSchema = extractSchema(snap.files, snap.treePaths, snap.toolFanoutCount)
+        const staticSchema = fetchesFailed && !extractedSchema.surfacePartial
+          ? { ...extractedSchema, surfacePartial: true }
+          : extractedSchema
         // V2/V6 (library/SDK/proxy classifier, coverage-spec §3.1): ALWAYS
         // call classifyLibrary and let it pick the tier via `toolsExtracted`
         // (see the V6 note atop classify.ts). At zero tools it runs the

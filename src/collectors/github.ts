@@ -57,6 +57,16 @@ export interface RepoSnapshot {
   // .rst exists in the tree, or none was selected within budget.
   readme?: RepoFile
   files: RepoFile[]
+  // Fault hunt 2026-08-08 (C5): paths that were SELECTED for fetching but
+  // whose blob fetch failed (403/429/5xx after retries, or a 404 on a path
+  // the tree said existed). Previously these were silently skipped, so a
+  // rate-limited run simply saw a smaller sample and published a different
+  // verdict with no record that anything was missing. Consumers must treat
+  // a non-empty list as an INCOMPLETE sample — assemble.ts records it in
+  // Signals.errors and forces surfacePartial, which routes through every
+  // existing partial-read honesty rule (no clean risk verdict, no counts,
+  // no dynamic).
+  fetchFailures: string[]
 }
 
 // v1.3 (V1 — monorepo sampling overhaul, coverage-spec §3.3 + §4): FILE_CAP is
@@ -685,6 +695,7 @@ export async function collectGithub(
   // `readme` field instead of appended to `files`, so every consumer that
   // only ever receives `files` provably cannot see it.
   let readme: RepoFile | undefined
+  const fetchFailures: string[] = []
   for (const path of selectedPaths) {
     try {
       const content = path === 'package.json' && rootPkgContent !== undefined
@@ -693,7 +704,12 @@ export async function collectGithub(
       const file: RepoFile = { path, content: content.length > SIZE_CAP ? content.slice(0, SIZE_CAP) : content }
       if (isRootReadme(path)) readme = file
       else files.push(file)
-    } catch { /* skip unfetchable file */ }
+    } catch {
+      // C5: a file the tree told us exists could not be read. The sample is
+      // now incomplete — record WHICH path so the caller can say so, instead
+      // of silently grading a smaller repo than the one that exists.
+      fetchFailures.push(path)
+    }
   }
 
   return {
@@ -702,6 +718,6 @@ export async function collectGithub(
     description: meta.description ?? undefined, topics: meta.topics ?? [],
     pushedAt: meta.pushed_at,
     latestReleaseAt, commitsLast90Days, busFactor, medianIssueResponseDays,
-    treePaths, toolFanoutCount, files, readme,
+    treePaths, toolFanoutCount, files, readme, fetchFailures,
   }
 }

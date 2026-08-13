@@ -78,9 +78,17 @@ export function score(
     // door. tool-count still counts toward `available`, so confidence
     // reflects that something was measured; only the composite is withheld.
     const costPrimaryAbsent = signals.schemaTokenEstimate === undefined
+    // Rule D (fault hunt 2026-08-08, C4): reliability's primary is spec-era
+    // (weight 3 of 9), and it is binary — a server on a LEGACY SDK loses the
+    // full 3, while one whose SDK we could not determine loses nothing after
+    // renormalization. So "we don't know what this targets" scored exactly
+    // like "targets the current spec", at high confidence. Unknown must not
+    // outscore known-bad: withhold, like security and cost above.
+    const reliabilityPrimaryAbsent = signals.specEra === undefined
     const unmeasured = available === 0
       || (id === 'security' && securityPrimaryAbsent)
       || (id === 'cost' && costPrimaryAbsent)
+      || (id === 'reliability' && reliabilityPrimaryAbsent)
     return {
       id,
       score: unmeasured ? null : Math.round((vSum / wSum) * 100),
