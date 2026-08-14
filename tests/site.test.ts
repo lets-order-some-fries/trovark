@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { renderSite } from '../index/site.js'
+import type { DriftLog } from '../index/surfaceStore.js'
 
 const results = {
   generatedAt: '2026-08-01T10:00:00.000Z',
@@ -272,6 +273,47 @@ describe('renderSite', () => {
     // The sorter SCRIPT legitimately contains the token `Number.isNaN`;
     // the honesty requirement is that no CELL renders NaN as content.
     expect(out).not.toMatch(/>NaN</)
+  })
+  // D2 (observatory, docs/superpowers/plans/2026-08-05-observatory-d2.md
+  // Task 6): the drift feed renders facts only. The mandated postmark-mcp
+  // scope note is the single sanctioned use of the word "malicious" on the
+  // page — the banned-language lint below removes that one verbatim sentence
+  // first, then asserts nothing else on the page uses verdict language.
+  it('renders the drift feed: baseline state when log is empty, neutral lines when not', () => {
+    const htmlEmpty = renderSite(results)
+    expect(htmlEmpty).toContain('Baseline recorded')
+    expect(htmlEmpty).toContain('postmark-mcp')          // the honest caveat is ALWAYS on the page
+    const log: DriftLog = { events: [{
+      kind: 'event', ref: 'a/b', prevScannedAt: '2026-08-05T00:00:00.000Z', scannedAt: '2026-09-14T00:00:00.000Z',
+      extractorVersion: '1.0.0', added: ['t1', 't2'], removed: [], descriptionChanged: ['t3'], definitionChanged: [],
+    }] }
+    const htmlWithEvent = renderSite(results, log)
+    expect(htmlWithEvent).toContain('Tool surface changed 2026-09-14: 2 tools added, 1 description edited.')
+    const caveat = 'the one confirmed in-the-wild malicious MCP server (postmark-mcp v1.0.16) added a BCC line in implementation code. Tool-surface diffing would not have caught it.'
+    expect(htmlWithEvent).toContain(caveat)
+    expect(/rug.?pull|malicious|suspicious/i.test(htmlWithEvent.split(caveat).join(''))).toBe(false)
+  })
+  it('drift feed lists the most recent 50 events newest first, with escaped refs', () => {
+    const many: DriftLog = { events: Array.from({ length: 60 }, (_, i) => ({
+      kind: 'event' as const, ref: `owner/repo-${i}`,
+      prevScannedAt: '2026-08-05T00:00:00.000Z',
+      scannedAt: `2026-09-${String((i % 28) + 1).padStart(2, '0')}T00:00:00.000Z`,
+      extractorVersion: '1.0.0', added: ['t'], removed: [], descriptionChanged: [], definitionChanged: [],
+    })) }
+    many.events.push({
+      kind: 'event', ref: 'x/<script>drift</script>', prevScannedAt: '2026-08-05T00:00:00.000Z',
+      scannedAt: '2026-09-30T00:00:00.000Z', extractorVersion: '1.0.0',
+      added: [], removed: ['gone'], descriptionChanged: [], definitionChanged: [],
+    })
+    const out = renderSite(results, many)
+    // the newest (last-appended) event renders first, escaped
+    expect(out).not.toContain('<script>drift</script>')
+    expect(out).toContain('x/&lt;script&gt;drift&lt;/script&gt;')
+    // only the most recent 50: the oldest 11 of the 61 events are absent
+    expect(out).not.toContain('owner/repo-0 ')
+    expect(out).not.toContain('owner/repo-10 ')
+    expect(out).toContain('owner/repo-11')
+    expect(out.indexOf('x/&lt;script&gt;')).toBeLessThan(out.indexOf('owner/repo-59'))
   })
   it('rejects non-http(s) repoUrl schemes', () => {
     const evil = {

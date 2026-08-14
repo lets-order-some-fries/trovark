@@ -31,6 +31,15 @@ A bare package name that exists on both npm and PyPI is rejected as ambiguous �
 Missing data lowers *confidence* — it is never silently scored as zero.
 Full methodology: [docs/methodology.md](docs/methodology.md). Rubric is versioned; the scorecard records the version that graded it.
 
+### The observatory
+
+The index also snapshots every scanned server's extracted tool surface on each
+scan and publishes changes as a neutral drift feed — the only public index that
+remembers what every server's tool surface looked like last month. Snapshots
+store hashes, not content; drift events carry zero findings and zero score
+impact. Details and honest scope limits:
+[Tool-surface observatory](docs/methodology.md#tool-surface-observatory-d2).
+
 ## Reading a scorecard
 
     npx trovark acme/weather-mcp

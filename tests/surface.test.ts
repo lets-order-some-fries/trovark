@@ -1,6 +1,9 @@
 import { describe, it, expect } from 'vitest'
 import { createHash } from 'node:crypto'
+import { readFileSync } from 'node:fs'
+import { fileURLToPath } from 'node:url'
 import { buildSurfaceSnapshot, EXTRACTOR_VERSION, diffSurfaces, formatDriftEvent, type DriftEvent } from '../src/derive/surface.js'
+import { extractSchema } from '../src/derive/schema.js'
 import type { ToolInfo } from '../src/types.js'
 
 const sha = (s: string) => createHash('sha256').update(Buffer.from(s, 'utf8')).digest('hex')
@@ -107,5 +110,30 @@ describe('formatDriftEvent', () => {
     // given; lint the rendered output of a benign event as a proxy for the
     // static template (the integrity-v1 lesson: never lint hostile content).
     expect(BANNED.test(formatDriftEvent(ev))).toBe(false)
+  })
+})
+
+describe('extractor-output guard (EXTRACTOR_VERSION discipline)', () => {
+  const guardPath = fileURLToPath(new URL('./fixtures/surface-guard.json', import.meta.url))
+  const guard = JSON.parse(readFileSync(guardPath, 'utf8')) as {
+    _comment: string
+    extractorVersion: string
+    surfaceSha256: string
+    files: Array<{ path: string; content: string }>
+  }
+  it('recorded fixture surface is stable — if this fails, extraction output changed: bump EXTRACTOR_VERSION in src/derive/surface.ts and re-record', () => {
+    // One extractSchema call PER file, not one call over all three: the
+    // extraction ladder stops at the first rung that yields tools, so a
+    // single call would only ever exercise the manifest rung and the TS/
+    // Python fixtures would contribute nothing to the recorded hash.
+    const tools = guard.files.flatMap(f => extractSchema([f]).tools)
+    const snap = buildSurfaceSnapshot('guard/fixture', tools, '2026-01-01T00:00:00.000Z', 'n/a', 'code')
+    expect(tools.length).toBeGreaterThanOrEqual(3) // all three extractors contributed
+    if (guard.extractorVersion === EXTRACTOR_VERSION) {
+      expect(snap.surfaceSha256).toBe(guard.surfaceSha256)
+    } else {
+      // version was bumped: re-record and update the fixture in the same commit
+      expect(guard.surfaceSha256).not.toBe(snap.surfaceSha256)
+    }
   })
 })

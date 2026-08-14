@@ -1,0 +1,19 @@
+{
+  "_comment": "D2 extractor-output guard (tests/surface.test.ts). Scope, honestly: this guard covers schema.ts-layer changes (manifest, TS registerTool, Python @mcp.tool rungs, one extractSchema call per file since the ladder stops at the first non-empty rung). Sampler (selectRepoFiles) changes are caught by tests/fixtures/sampling-corpus.json instead. If the guard fails and the change is intentional, bump EXTRACTOR_VERSION in src/derive/surface.ts and re-record with the one-off script from the D2 plan, updating this fixture in the same commit.",
+  "extractorVersion": "1.0.0",
+  "surfaceSha256": "6971c4199d73757ed9673d12c0ff4bb3a465b414c588a17644c83d9e80293061",
+  "files": [
+    {
+      "path": "mcp.json",
+      "content": "{\"tools\":[{\"name\":\"search_docs\",\"description\":\"Search documentation\"},{\"name\":\"run_command\",\"description\":\"Execute a shell command\",\"inputSchema\":{\"type\":\"object\"}}]}"
+    },
+    {
+      "path": "src/index.ts",
+      "content": "server.registerTool(\"delete_file\", {\n  description: \"Delete a file at the given path\",\n  inputSchema: { path: z.string() },\n}, async ({ path }) => { /* ... */ })"
+    },
+    {
+      "path": "server.py",
+      "content": "@mcp.tool()\ndef fetch_page(url: str) -> str:\n    \"\"\"Fetch a web page.\"\"\"\n    ...\n"
+    }
+  ]
+}

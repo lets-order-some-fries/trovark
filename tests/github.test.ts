@@ -1349,7 +1349,7 @@ describe('collectGithub', () => {
         const post = selectRepoFiles(blobs, repo.rootPkgName ?? undefined, repo.hasWorkspaces)
         const dropped = repo.expectedRetained.filter(p => !post.includes(p))
         const unjustifiedDrops = dropped.filter(p => !KNOWN_NOT_TOOL_BEARING.has(`${repo.ref}::${p}`))
-        expect(unjustifiedDrops).toEqual([])
+        expect(unjustifiedDrops, 'sampler selection changed — if intentional, also bump EXTRACTOR_VERSION (D2)').toEqual([])
       })
     }
 
