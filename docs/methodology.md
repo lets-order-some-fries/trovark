@@ -172,3 +172,47 @@ for transparency only, exactly as in v1's findings-only integration.
 - The committed-secret heuristic is a candidate signal, not a real secret scan.
 - Bare package names found on both npm and PyPI are rejected as ambiguous rather
   than guessed — use the `npm:`/`pypi:` prefix.
+
+## Tool-surface observatory (D2)
+
+On every index scan, Trovark records a per-server **snapshot** of the tool
+surface it extracted, under `index/surfaces/` (one JSON file per server), and
+publishes changes between consecutive snapshots as a **drift feed**
+(`index/drift.json`, rendered on the index page). The git history of the
+committed snapshot files is the longitudinal dataset.
+
+**What a snapshot contains — hashes, not content.** Each snapshot lists the
+extracted tool names plus a `descriptionSha256` and `definitionSha256` per
+tool (sha256 over the UTF-8 bytes of the description and of the extracted
+definition slice), and a `surfaceSha256` over the canonical, name-sorted tool
+list. No description text, no schema text, and no repository file paths are
+stored — a snapshot can tell you *that* a description changed, never *what it
+says now*.
+
+**The `EXTRACTOR_VERSION` suppression rule.** Every snapshot records the
+`EXTRACTOR_VERSION` (`src/derive/surface.ts`) it was taken under, and diffs
+across differing extractor versions — or differing sources
+(code-extracted vs. README-catalog) — are **suppressed, not rendered**. The
+reason is this repository's own history: the v1.2→v1.4 extraction expansion
+moved the index from 211 to 270 graded servers by parsing more idioms. Every
+one of those newly parsed surfaces would have rendered as fake "drift" had the
+differ compared across parser versions — parser churn is a fact about
+Trovark, not about the server. Any change to what extraction emits requires an
+`EXTRACTOR_VERSION` bump (enforced by the recorded-fixture guard in
+`tests/surface.test.ts`), and the first scan under a new version silently
+re-baselines every server.
+
+**A missing snapshot is not a removal.** A server that becomes unreadable in
+a later scan — classified `notServer`, `dynamic`, `unresolved`, or
+`insufficientData` — produces no new snapshot and **no drift event**. Its
+last snapshot simply stands. "We could not read the surface this time" is
+never published as "the tools were removed."
+
+**Scope, honestly.** The one confirmed in-the-wild malicious MCP server
+(postmark-mcp v1.0.16) added a BCC line in implementation code. Tool-surface
+diffing would not have caught it. The observatory is a transparency artifact,
+not a detector: drift events carry **zero findings and zero score impact**,
+and no signal in the scoring rubric reads the snapshot data.
+
+The drift feed publishes facts about change — counts, names, dates. It never
+characterizes intent.

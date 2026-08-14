@@ -227,6 +227,27 @@ export async function assemble(
           s.schemaTokenEstimate = schema.schemaTokenEstimate
           if (schema.extracted) s.toolCount = schema.tools.length
         }
+        // D2 (observatory, docs/superpowers/plans/2026-08-05-observatory-d2.md
+        // Task 3): thread the resolved rung's tool surface through Signals for
+        // SNAPSHOTTING only — an artifact, never a signal (rubric.ts provably
+        // never reads these fields; tests/assemble.test.ts asserts it). Set
+        // together iff extraction produced >=1 tool; both stay undefined
+        // otherwise — absence != an empty surface. The single resolved
+        // `schema` here covers BOTH extraction sites: provenance comes from
+        // schema.readmeSourced, the same flag s.readmeSourced records above,
+        // so the snapshot source can never drift from the published one.
+        // D2 review (IMPORTANT): gated on !surfacePartial, aligned with the
+        // toolCount/schemaTokenEstimate withhold below. A partial extraction
+        // snapshots whichever SUBSET the sampler happened to fetch, so two
+        // scans of the same unchanged repo could snapshot different subsets
+        // and the drift feed would report fake "tools added/removed" within
+        // one EXTRACTOR_VERSION — manufacturing exactly the false drift the
+        // suppression rules exist to prevent. No snapshot for partial reads;
+        // missing-snapshot-is-not-removal already keeps that honest.
+        if (schema.tools.length > 0 && !schema.surfacePartial) {
+          s.tools = schema.tools.map(({ evidence: _evidence, ...t }) => t)  // strip evidence: hashes must cover tool content, not our file paths
+          s.toolSource = schema.readmeSourced ? 'readme-catalog' : 'code'
+        }
         s.findings.push(...schema.findings)
         const secrets = scanSecrets(snap.files)
         s.secretsFound = secrets.count

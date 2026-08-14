@@ -1,6 +1,9 @@
 // results.json → one self-contained static page (docs/index.html)
 import { readFileSync, writeFileSync } from 'node:fs'
+import { dirname, join } from 'node:path'
+import { formatDriftEvent } from '../src/derive/surface.js'
 import type { IndexEntry, IndexStats } from './scan.js'
+import type { DriftLog } from './surfaceStore.js'
 
 export interface Results {
   generatedAt: string
@@ -93,7 +96,24 @@ function row(e: IndexEntry): string {
     `<td>${e.overall}</td>${dim('health')}${dim('reliability')}${dim('security')}${dim('cost')}</tr>`
 }
 
-export function renderSite(r: Results): string {
+// D2 (observatory, docs/superpowers/plans/2026-08-05-observatory-d2.md
+// Task 6): the drift feed. An artifact, not a detector — facts only (counts,
+// names, dates), never characterizations. The postmark-mcp scope note is
+// mandated verbatim wherever the feed is published and is the ONLY sanctioned
+// use of the word "malicious" on the page (tests/site.test.ts lints the rest
+// of the page against verdict language with that one sentence removed).
+function driftSection(r: Results, drift: DriftLog): string {
+  const body = drift.events.length === 0
+    ? `<p>Baseline recorded ${esc(r.generatedAt.slice(0, 10))}. Drift reporting begins with the next scan.</p>`
+    : `<ul class="drift">\n${drift.events.slice(-50).reverse()
+        .map(e => `<li>${esc(e.ref)} — ${esc(formatDriftEvent(e))}</li>`).join('\n')}\n</ul>`
+  return `<h2>Tool-surface drift</h2>
+<p class="tag">The index remembers what every server's tool surface looked like on each scan. Changes between scans of the same extractor version are listed here as facts — counts and dates, nothing more.</p>
+${body}
+<p class="muted">Scope note: The one confirmed in-the-wild malicious MCP server (postmark-mcp v1.0.16) added a BCC line in implementation code. Tool-surface diffing would not have caught it.</p>`
+}
+
+export function renderSite(r: Results, drift: DriftLog = { events: [] }): string {
   const s = r.stats
   const stat = (n: string | number, label: string) => `<div class="stat"><b>${n}</b><span>${label}</span></div>`
   return `<!doctype html><html lang="en"><head><meta charset="utf-8">
@@ -118,8 +138,10 @@ a{color:#58a6ff;text-decoration:none}
 .conf{color:#8b949e;font-size:10px;margin-left:3px;vertical-align:super}
 .flag{margin-left:4px}.flag.high{color:#f85149}.flag.medium{color:#c9a227}.flag.low{color:#8b949e}
 .failed td{color:#8b949e}.muted{color:#8b949e}
+h2{font-size:20px;margin:32px 0 4px}
+ul.drift{list-style:none;padding:0;margin:8px 0}ul.drift li{padding:4px 0;border-bottom:1px solid #21262d}
 footer{margin:28px 0;color:#8b949e;font-size:13px}
-@media(prefers-color-scheme:light){body{background:#fff;color:#1f2328}.stat,code{background:#f6f8fa;border-color:#d0d7de}th,td{border-color:#d0d7de}.chip.muted-chip{background:#eaeef2;color:#57606a}}
+@media(prefers-color-scheme:light){body{background:#fff;color:#1f2328}.stat,code{background:#f6f8fa;border-color:#d0d7de}th,td,ul.drift li{border-color:#d0d7de}.chip.muted-chip{background:#eaeef2;color:#57606a}}
 </style></head><body><main>
 <h1>Trovark</h1>
 <p class="tag">Trust scores for MCP servers — evidence-linked grades from static public signals. <code>npx trovark &lt;server&gt;</code></p>
@@ -131,6 +153,7 @@ ${stat(s.total, 'servers scanned')}${stat(s.scored - s.insufficient - (s.notServ
 </tr></thead><tbody>
 ${r.entries.map(row).join('\n')}
 </tbody></table>
+${driftSection(r, drift)}
 <footer>generated ${esc(r.generatedAt)} · rubric v${esc(r.rubricVersion)} ·
 <a href="https://github.com/lets-order-some-fries/trovark">github</a> ·
 <a href="https://www.npmjs.com/package/trovark">npm</a> ·
@@ -157,8 +180,11 @@ function arg(flag: string, fallback: string): string {
 }
 
 if (process.argv[1]?.endsWith('site.ts')) {
-  const results = JSON.parse(readFileSync(arg('--in', 'index/results.json'), 'utf8')) as Results
+  const inPath = arg('--in', 'index/results.json')
+  const results = JSON.parse(readFileSync(inPath, 'utf8')) as Results
+  let drift: DriftLog = { events: [] }
+  try { drift = JSON.parse(readFileSync(join(dirname(inPath), 'drift.json'), 'utf8')) as DriftLog } catch { /* no log yet: baseline state */ }
   const out = arg('--out', 'docs/index.html')
-  writeFileSync(out, renderSite(results))
-  console.error(`wrote ${out} (${results.entries.length} rows)`)
+  writeFileSync(out, renderSite(results, drift))
+  console.error(`wrote ${out} (${results.entries.length} rows, ${drift.events.length} drift events)`)
 }

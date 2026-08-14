@@ -444,6 +444,13 @@ describe('assemble — README quarantine (W6 review remediation item 1): structu
     expect(s.toolCount).toBe(3)
     expect(s.findings.some(f => f.id === 'reliability/readme-sourced-tools')).toBe(true)
   })
+
+  it('D2: README-rung tools are threaded through Signals with toolSource readme-catalog (artifact provenance)', async () => {
+    const s = await assemble({ ref: 'acme/shim', repo: { owner: 'acme', name: 'shim' } }, readmeCatalogHttp(), NOW)
+    expect(s.tools).toHaveLength(3)
+    expect(s.toolSource).toBe('readme-catalog')
+    expect(s.tools![0]).not.toHaveProperty('evidence')
+  })
 })
 
 // W6 corpus-scan finding: a PARTIAL tool surface may not publish 'none'.
@@ -475,6 +482,35 @@ function riskForPartial(
 ): 'none' | 'low' | 'medium' | 'high' | undefined {
   return surfacePartial && risk === 'none' ? undefined : risk
 }
+
+// ---------------------------------------------------------------------------
+// D2 (observatory, docs/superpowers/plans/2026-08-05-observatory-d2.md
+// Task 3): the extracted tool surface is threaded through Signals for
+// SNAPSHOTTING only — an artifact, never a signal. The second test is the
+// load-bearing one: rubric.ts must never mention the new fields.
+// ---------------------------------------------------------------------------
+
+describe('assemble — tools threaded through Signals as artifact-only (D2)', () => {
+  it('threads extracted tools + source into Signals as an artifact (never scored)', async () => {
+    const s = await assemble(
+      { ref: 'foo-mcp', repo: { owner: 'acme', name: 'foo' } },
+      fullFake(), NOW,
+    )
+    expect(s.tools).toBeDefined()
+    expect(s.tools!.length).toBeGreaterThan(0)
+    expect(s.toolSource).toBe('code')
+    expect(s.tools![0]).toHaveProperty('name')
+    expect(s.tools![0]).toHaveProperty('schemaText')
+    // evidence is stripped: hashes must cover tool content, not our file paths
+    expect(s.tools![0]).not.toHaveProperty('evidence')
+  })
+
+  it('rubric provably never reads Signals.tools/toolSource (artifact-only guarantee)', async () => {
+    const { readFileSync } = await import('node:fs')
+    const src = readFileSync('src/scoring/rubric.ts', 'utf8')
+    expect(/\btools\b|\btoolSource\b/.test(src)).toBe(false)
+  })
+})
 
 // Fault hunt 2026-08-08 (C5). A file the tree listed but the blob fetch could
 // not read (403/429/5xx after retries) was previously skipped with an empty
