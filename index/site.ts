@@ -110,7 +110,7 @@ function driftSection(r: Results, drift: DriftLog): string {
   return `<h2>Tool-surface drift</h2>
 <p class="tag">The index remembers what every server's tool surface looked like on each scan. Changes between scans of the same extractor version are listed here as facts — counts and dates, nothing more.</p>
 ${body}
-<p class="muted">Scope note: the one confirmed in-the-wild malicious MCP server (postmark-mcp v1.0.16) added a BCC line in implementation code. Tool-surface diffing would not have caught it.</p>`
+<p class="muted">Scope note: The one confirmed in-the-wild malicious MCP server (postmark-mcp v1.0.16) added a BCC line in implementation code. Tool-surface diffing would not have caught it.</p>`
 }
 
 export function renderSite(r: Results, drift: DriftLog = { events: [] }): string {

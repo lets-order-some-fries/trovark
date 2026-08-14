@@ -289,9 +289,10 @@ describe('renderSite', () => {
     }] }
     const htmlWithEvent = renderSite(results, log)
     expect(htmlWithEvent).toContain('Tool surface changed 2026-09-14: 2 tools added, 1 description edited.')
-    const caveat = 'the one confirmed in-the-wild malicious MCP server (postmark-mcp v1.0.16) added a BCC line in implementation code. Tool-surface diffing would not have caught it.'
+    const caveat = 'The one confirmed in-the-wild malicious MCP server (postmark-mcp v1.0.16) added a BCC line in implementation code. Tool-surface diffing would not have caught it.'
     expect(htmlWithEvent).toContain(caveat)
-    expect(/rug.?pull|malicious|suspicious/i.test(htmlWithEvent.split(caveat).join(''))).toBe(false)
+    // D2 review MINOR: lint the FULL banned list from the plan, not 3 of 10.
+    expect(/rug.?pull|malicious|suspicious|attack|poison|backdoor|compromised|hijack|dangerous/i.test(htmlWithEvent.split(caveat).join(''))).toBe(false)
   })
   it('drift feed lists the most recent 50 events newest first, with escaped refs', () => {
     const many: DriftLog = { events: Array.from({ length: 60 }, (_, i) => ({

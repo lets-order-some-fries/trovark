@@ -337,7 +337,7 @@ function coverageOf(attempted: number, entries: Array<{ ok: boolean }>) {
 describe('recordSurfaces', () => {
   const tools = [{ name: 'x', description: 'X', schemaText: 'def' }]
   it('first run writes snapshots, zero events (baseline); second identical run adds nothing; a change adds one event', () => {
-    const d = mkdtempSync(join(tmpdir(), 'tv-scan-'))
+    const d = join(mkdtempSync(join(tmpdir(), 'tv-scan-')), 'surfaces')  // D2 review MINOR: ../drift.json must land inside the tmpdir, not the shared OS tmp root
     const r1 = recordSurfaces(d, [{ ref: 'a/b', tools, source: 'code' as const }], '2026-08-05T00:00:00.000Z', '1.5.0')
     expect(r1).toEqual({ written: 1, events: 0, suppressed: 0 })
     const r2 = recordSurfaces(d, [{ ref: 'a/b', tools, source: 'code' as const }], '2026-09-01T00:00:00.000Z', '1.5.0')
@@ -346,7 +346,7 @@ describe('recordSurfaces', () => {
     expect(r3.events).toBe(1)
   })
   it('a server absent from this run keeps its old snapshot and produces NO event (missing != removed)', () => {
-    const d = mkdtempSync(join(tmpdir(), 'tv-scan-'))
+    const d = join(mkdtempSync(join(tmpdir(), 'tv-scan-')), 'surfaces')  // D2 review MINOR: ../drift.json must land inside the tmpdir, not the shared OS tmp root
     recordSurfaces(d, [{ ref: 'a/b', tools, source: 'code' as const }], '2026-08-05T00:00:00.000Z', '1.5.0')
     const r = recordSurfaces(d, [], '2026-09-01T00:00:00.000Z', '1.5.0')
     expect(r).toEqual({ written: 0, events: 0, suppressed: 0 })

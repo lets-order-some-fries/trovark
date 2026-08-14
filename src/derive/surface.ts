@@ -38,7 +38,12 @@ export function buildSurfaceSnapshot(
       descriptionSha256: sha256(t.description ?? ''),
       definitionSha256: sha256(t.schemaText),
     }))
-    .sort((a, b) => a.name.localeCompare(b.name) || a.definitionSha256.localeCompare(b.definitionSha256))
+    // D2 review (IMPORTANT): localeCompare consults the process's ICU
+    // locale, so canonical order — and therefore surfaceSha256, which hashes
+    // the sorted array — was only deterministic PER-ENVIRONMENT. Two
+    // machines scanning the same repo could disagree about whether its
+    // surface "changed". Codepoint comparison is locale-free.
+    .sort((a, b) => (a.name < b.name ? -1 : a.name > b.name ? 1 : a.definitionSha256 < b.definitionSha256 ? -1 : a.definitionSha256 > b.definitionSha256 ? 1 : 0))
   return {
     ref, scannedAt,
     extractorVersion: EXTRACTOR_VERSION,
@@ -83,6 +88,16 @@ export function diffSurfaces(prev: ToolSurfaceSnapshot, next: ToolSurfaceSnapsho
     if (ts.length === 1 && old.length === 1) {
       if (ts[0].descriptionSha256 !== old[0].descriptionSha256) descriptionChanged.push(name)
       else if (ts[0].definitionSha256 !== old[0].definitionSha256) definitionChanged.push(name)
+    } else if (ts.length === old.length) {
+      // D2 review (IMPORTANT): a name with >=2 entries on both sides and
+      // equal counts previously produced NO detail at all when only content
+      // changed — the surface hash differed, so an event fired, and the
+      // public feed rendered "Tool surface changed <date>: ." Compare the
+      // multisets of hashes; we cannot attribute WHICH duplicate changed,
+      // but "this name's descriptions/definitions changed" is still a fact.
+      const multiset = (xs: SurfaceTool[], k: 'descriptionSha256' | 'definitionSha256') => xs.map(x => x[k]).sort().join(',')
+      if (multiset(ts, 'descriptionSha256') !== multiset(old, 'descriptionSha256')) descriptionChanged.push(name)
+      else if (multiset(ts, 'definitionSha256') !== multiset(old, 'definitionSha256')) definitionChanged.push(name)
     }
   }
   for (const [name, ts] of p) if (!n.has(name)) removed.push(...ts.map(() => name))

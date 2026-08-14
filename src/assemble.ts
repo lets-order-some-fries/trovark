@@ -236,7 +236,15 @@ export async function assemble(
         // `schema` here covers BOTH extraction sites: provenance comes from
         // schema.readmeSourced, the same flag s.readmeSourced records above,
         // so the snapshot source can never drift from the published one.
-        if (schema.tools.length > 0) {
+        // D2 review (IMPORTANT): gated on !surfacePartial, aligned with the
+        // toolCount/schemaTokenEstimate withhold below. A partial extraction
+        // snapshots whichever SUBSET the sampler happened to fetch, so two
+        // scans of the same unchanged repo could snapshot different subsets
+        // and the drift feed would report fake "tools added/removed" within
+        // one EXTRACTOR_VERSION — manufacturing exactly the false drift the
+        // suppression rules exist to prevent. No snapshot for partial reads;
+        // missing-snapshot-is-not-removal already keeps that honest.
+        if (schema.tools.length > 0 && !schema.surfacePartial) {
           s.tools = schema.tools.map(({ evidence: _evidence, ...t }) => t)  // strip evidence: hashes must cover tool content, not our file paths
           s.toolSource = schema.readmeSourced ? 'readme-catalog' : 'code'
         }

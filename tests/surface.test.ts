@@ -137,3 +137,25 @@ describe('extractor-output guard (EXTRACTOR_VERSION discipline)', () => {
     }
   })
 })
+
+// D2 review (IMPORTANT): a name with >=2 entries on both sides and equal
+// counts previously produced an event whose detail arrays were ALL empty —
+// the public feed rendered "Tool surface changed <date>: ." Multiset hash
+// comparison attributes it as a content change on that name.
+describe('multiset content change is attributed, never rendered empty', () => {
+  it('two same-named tools whose descriptions both changed -> descriptionChanged', () => {
+    const a = buildSurfaceSnapshot('o/r', [t('dup', 'one', 'd1'), t('dup', 'two', 'd2')], '2026-08-15T00:00:00.000Z', '1.6.0', 'code')
+    const b = buildSurfaceSnapshot('o/r', [t('dup', 'uno', 'd1'), t('dup', 'dos', 'd2')], '2026-09-15T00:00:00.000Z', '1.6.0', 'code')
+    const r = diffSurfaces(a, b)
+    expect(r.kind).toBe('event')
+    if (r.kind === 'event') {
+      expect(r.descriptionChanged).toEqual(['dup'])
+      expect(formatDriftEvent(r)).not.toMatch(/: \.$/)
+    }
+  })
+  it('canonical order is locale-independent: codepoint sort, not localeCompare', () => {
+    // 'é' > 'z' by codepoint; several ICU locales sort it before 'z'.
+    const s = buildSurfaceSnapshot('o/r', [t('étool', 'E', 'd1'), t('ztool', 'Z', 'd2')], '2026-08-15T00:00:00.000Z', '1.6.0', 'code')
+    expect(s.tools.map(x => x.name)).toEqual(['ztool', 'étool'])
+  })
+})
