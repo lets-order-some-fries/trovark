@@ -214,14 +214,18 @@ describe('score() — a dimension with no measurement reports null, never a numb
     expect(sec.confidence).toBe('medium')   // 2/3 signals — unchanged by the withhold
     expect(sec.score).toBeNull()
   })
-  it('Rule B: the existing "Low confidence in security" note still appears when coverage is low (1/3)', () => {
+  // Fault hunt IMPORTANT: a withheld dimension now emits an explicit
+  // withhold note (naming that the primary was unmeasurable) instead of the
+  // generic low-confidence wording this test previously pinned — the
+  // withhold is no longer silent, and the reason is stated, not implied.
+  it('Rule B: a withheld security dimension emits an explicit withhold note', () => {
     const s = healthy()
     s.toolSurfaceRisk = undefined; s.cveWorst = undefined  // only no-secrets survives → 1/3
     const card = score('x', s, 'T')
     const sec = card.dimensions.find(d => d.id === 'security')!
     expect(sec.confidence).toBe('low')
     expect(sec.score).toBeNull()
-    expect(card.notes.join(' ')).toMatch(/Low confidence in security: only 1\/3 signals available/)
+    expect(card.notes.join(' ')).toMatch(/security is withheld: its primary signal could not be determined/)
   })
   it('Rule B: a readable tool surface scores security normally — no behaviour change', () => {
     for (const risk of ['none', 'low', 'medium', 'high'] as const) {

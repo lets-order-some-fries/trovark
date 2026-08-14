@@ -30,14 +30,18 @@ function row(e: IndexEntry): string {
   // dimension had no measurement. Render it as a muted em dash with a
   // "not measured" title — never as `0` (the worst possible score, published
   // as a fact) and never as the literal string "null". This also keeps the
-  // client-side sorter honest: its `parseFloat(cell.textContent) || -1` reads
-  // an em dash as NaN -> -1 ("no value"), whereas a 0 cell would rank the
-  // unmeasured dimension as the worst measured one.
+  // client-side sorter honest: it maps a non-numeric cell (the em dash)
+  // to -1, BELOW every measured value including a genuine 0 — `|| -1` would
+  // have collapsed a measured 0 into the same bucket as never-measured.
   const dim = (k: 'health' | 'reliability' | 'security' | 'cost') => {
     const v = d?.[k]
     if (!v) return '<td>—</td>'
     if (v.score === null || v.score === undefined) {
-      return `<td class="muted" title="not measured — no signals could be collected for this dimension">—<span class="conf">${esc(v.confidence[0] ?? '')}</span></td>`
+      // Fault hunt MINOR: the old tooltip claimed "no signals could be
+      // collected", which is FALSE for a primary-withheld dimension (signals
+      // were collected; the primary was unmeasurable) — and it still
+      // advertised a confidence letter for a score we refuse to publish.
+      return '<td class="muted" title="not measured — the score is withheld rather than estimated; see the server\'s notes">—</td>'
     }
     return `<td>${v.score}<span class="conf">${esc(v.confidence[0])}</span></td>`
   }
@@ -138,7 +142,7 @@ document.querySelectorAll('th').forEach(th=>th.addEventListener('click',()=>{
   const dir=th.dataset.d==='a'?-1:1; th.dataset.d=dir===1?'a':'d'
   rows.sort((x,y)=>{
     if(k===0)return dir*x.cells[0].textContent.localeCompare(y.cells[0].textContent)
-    const g=r=>r.classList.contains('failed')?-1:(k<=2?+r.dataset.overall:parseFloat(r.cells[k].textContent)||-1)
+    const g=r=>{if(r.classList.contains('failed'))return -1;if(k<=2)return +r.dataset.overall;const v=parseFloat(r.cells[k].textContent);return Number.isNaN(v)?-1:v}
     return dir*(g(y)-g(x))
   })
   rows.forEach(r=>tb.appendChild(r))

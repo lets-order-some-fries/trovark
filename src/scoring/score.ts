@@ -17,8 +17,15 @@ export function grade(score: number): string {
 import { DIMENSION_WEIGHTS, RUBRIC_VERSION, SIGNALS } from './rubric.js'
 import type { Confidence, DimensionId, DimensionScore, Scorecard, Signals } from '../types.js'
 
-function confidence(available: number, total: number): Confidence {
-  const r = available / total
+// Fault hunt 2026-08-08 (IMPORTANT): this was signal-COUNT-based
+// (available/total), so losing a weight-1 signal cost exactly as much
+// confidence as losing a weight-3 primary — assemble.ts's dynamic-server
+// comment even documented the weight-aware behaviour as if it existed.
+// Confidence now reflects the WEIGHT of what was actually measured: e.g.
+// security missing only no-secrets (1 of 6 weight) stays high (5/6), while
+// security missing its primary (3 of 6) is medium at best.
+function confidence(measuredWeight: number, totalWeight: number): Confidence {
+  const r = measuredWeight / totalWeight
   return r >= 0.75 ? 'high' : r >= 0.4 ? 'medium' : 'low'
 }
 
@@ -92,7 +99,7 @@ export function score(
     return {
       id,
       score: unmeasured ? null : Math.round((vSum / wSum) * 100),
-      confidence: confidence(available, defs.length),
+      confidence: confidence(wSum, defs.reduce((a, d) => a + d.weight, 0)),
       available,
       total: defs.length,
       findings: signals.findings.filter(f => f.dimension === id),
@@ -175,6 +182,11 @@ export function score(
   if (hiddenPayloadNote) notes.push(hiddenPayloadNote)
   for (const d of dimensions) {
     if (d.available === 0) notes.push(`No ${d.id} signals could be collected; ${d.id} is excluded from the overall score.`)
+    // Fault hunt 2026-08-08 (IMPORTANT): a primary-withheld dimension used
+    // to emit NO note at all — the cost/reliability/security withhold was
+    // silent to both humans and JSON consumers, a "not measured" with no
+    // stated reason. Name the fact.
+    else if (d.score === null) notes.push(`${d.id} is withheld: its primary signal could not be determined from the available data, and a score computed from the remaining signals would misrepresent what was read.`)
     else if (d.confidence === 'low') notes.push(`Low confidence in ${d.id}: only ${d.available}/${d.total} signals available.`)
   }
   for (const e of signals.errors) notes.push(`Collector issue: ${e}`)

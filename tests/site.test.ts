@@ -269,7 +269,9 @@ describe('renderSite', () => {
     const out = renderSite(bare)
     expect(out).toMatch(/insufficient data to score/i)
     expect(out).not.toContain('>undefined<')
-    expect(out).not.toContain('NaN')
+    // The sorter SCRIPT legitimately contains the token `Number.isNaN`;
+    // the honesty requirement is that no CELL renders NaN as content.
+    expect(out).not.toMatch(/>NaN</)
   })
   it('rejects non-http(s) repoUrl schemes', () => {
     const evil = {

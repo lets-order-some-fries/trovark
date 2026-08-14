@@ -119,8 +119,12 @@ describe('renderTerminal — a dimension with no measurement (score: null)', () 
     expect(securityLine).not.toContain('░')
     expect(securityLine).not.toContain('█')
   })
-  it('still names the dimension and its confidence', () => {
-    expect(out).toMatch(/security\s+not measured\s+low confidence/)
+  // Fault hunt MINOR: a withheld dimension must NOT advertise a confidence
+  // level — confidence qualifies a measurement, and there is none. This test
+  // previously asserted the opposite ("not measured   low confidence").
+  it('names the dimension but never a confidence level for a withheld score', () => {
+    expect(out).toMatch(/security\s+not measured/)
+    expect(out).not.toMatch(/not measured\s+\w+ confidence/)
   })
   it('measured dimensions on the same card still render their number and bar', () => {
     expect(out).toMatch(/health\s+92\/100\s+[█░]{10}\s+high confidence/)
