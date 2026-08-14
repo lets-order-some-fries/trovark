@@ -19,6 +19,27 @@ It never executes the server's code. Every finding links to its evidence.
 
 A bare package name that exists on both npm and PyPI is rejected as ambiguous — disambiguate with the `npm:<name>` or `pypi:<name>` prefix (e.g. `npx trovark pypi:mcp-server-fetch`).
 
+## CI usage
+
+`--fail-under` turns a scan into a pass/fail gate: exit 0 when the grade meets the
+threshold, exit 1 when it doesn't (or when the ref can't be graded at all — see
+[Reading a scorecard](#reading-a-scorecard) for the ungradeable states, all of which
+fail the gate), exit 2 on a resolution/network error.
+
+```yaml
+# .github/workflows/trovark.yml
+name: trovark
+on: [push]
+jobs:
+  trust-score:
+    runs-on: ubuntu-latest
+    steps:
+      - run: npx trovark ${{ github.repository }} --fail-under B
+```
+
+Set `GITHUB_TOKEN` in the job's `env` for higher rate limits and issue-responsiveness
+signals — the default `GITHUB_TOKEN` GitHub Actions provides is sufficient (read-only).
+
 ## What the grade means
 
 | Dimension | Weight | Question it answers |
