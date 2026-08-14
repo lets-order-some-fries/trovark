@@ -1,0 +1,55 @@
+{
+  "ref": "thehealthai/clarity-mcp",
+  "scannedAt": "2026-08-14T19:41:35.252Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.6.0",
+  "source": "readme-catalog",
+  "tools": [
+    {
+      "name": "check_ingredient",
+      "descriptionSha256": "f476b2b230afc51bc8e762d28f2f7f23f98aa4f610af7c48048b65de03123f7e",
+      "definitionSha256": "32a913c37e4878a56ed5fd0b1b10fae507483b1b68a651a1b5e8c514587fc9db"
+    },
+    {
+      "name": "check_interaction",
+      "descriptionSha256": "8ae087840a38fbb758cf63a84bb494d23975be84d0d0c29b4d85328f8a6b8339",
+      "definitionSha256": "0efb9d5b509fb4ec464586bc359b433f138b58a33bb9c9513983a96990b7b33b"
+    },
+    {
+      "name": "check_recall",
+      "descriptionSha256": "684810ead70a39ffda24ed9c8c2143fe58f1329ce3619cd482a96da3c845cd7b",
+      "definitionSha256": "19fdab2239689763512577b0bbc4677e4c17f39f826bef0fcb161717edde6237"
+    },
+    {
+      "name": "check_stack",
+      "descriptionSha256": "8ee0908bbe2a23c42d349e545f8020f41769beb51727345de3287fa361b7bf9e",
+      "definitionSha256": "973ce0c4e31e6defe9ee93decc3252fab407ea52b8746e0b4d9ea2f1908fcc49"
+    },
+    {
+      "name": "find_alternatives",
+      "descriptionSha256": "00726c3815d8e9b2ae016d3f75b8c56fc7793f10e5e6a543ec1c8315cbece45e",
+      "definitionSha256": "5e26465eeccb5b8f108eedbea3535e3356a003c195be7c30f864c7ac18565582"
+    },
+    {
+      "name": "scan_barcode",
+      "descriptionSha256": "2b8f04729425bd7a5f0ed2a59d0a7ab818e8a1f3e89373fa0fbd90eb5e82dc18",
+      "definitionSha256": "2291a99b77421bae02320fd6aa0e575700ab97a41f7126893ee33d6b997ab145"
+    },
+    {
+      "name": "score_product",
+      "descriptionSha256": "7b90c241bb853d4af70a71825c45a00d62ebb3a543f2a37e893fe4761c98b04c",
+      "definitionSha256": "4a98efce23378248cb112d1642b355614937c04a674bcb2a4cf3053e10ea9c30"
+    },
+    {
+      "name": "strain_lookup",
+      "descriptionSha256": "08596b956a776f48f247c99b30bcaf9c70f4144c78a59dc975bddd53b13ca06d",
+      "definitionSha256": "ef7fc80f9e10671e79bab92afa0d568cea4b5aa677e94065a5143857df623ff6"
+    },
+    {
+      "name": "validate_claim",
+      "descriptionSha256": "03c73eb4c17869bdafe5f332a7851f221824394c96243a4f0fa351e7fa2156e1",
+      "definitionSha256": "00045fb1e1cce921baa7fff39555a4aaae626bc8377ba5976809dec32a6138a0"
+    }
+  ],
+  "surfaceSha256": "3fcd7c8a3cdd1f1e2043abdd7ede798672dd9eb9dced3e086b34253c4dbd181c"
+}

@@ -1,0 +1,50 @@
+{
+  "ref": "LarryWalkerDEV/mcp-immostage",
+  "scannedAt": "2026-08-14T19:41:35.252Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.6.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "beautify_floor_plan",
+      "descriptionSha256": "b8786f6f98abeaf8879b7b3aa30bfd41c7502fe76f14a0aff7054b5eaac28014",
+      "definitionSha256": "d97466ebbf4a5935480081a488f01f5736d1b7e8c8277dbe7ad81de9deed1760"
+    },
+    {
+      "name": "check_staging",
+      "descriptionSha256": "b78e8c815bab0de9c3959350354c2dbeeb1ee12af22708e2723e5b826861709e",
+      "definitionSha256": "3f6d5a75fed1e46cff89d2a09aa9ac76b2a220c0ccd39560fd8d45402dce3583"
+    },
+    {
+      "name": "classify_room",
+      "descriptionSha256": "104ad500921aab350223452cfd01ce48e3af17f4d487965c4ea2ed5b8b06d468",
+      "definitionSha256": "3492eccce09e8be036495d01445ef9dae022e35a2aadb7c404cd0f76dc8d2a1d"
+    },
+    {
+      "name": "generate_marketing",
+      "descriptionSha256": "387034574391247192aa7065eb1ad7b7f51c2d29d8365ba436355ec9acf83bd6",
+      "definitionSha256": "9b2f93bc0d9e33cd76db3c32b0759b96096860300db710419bc3be8f0d20de4f"
+    },
+    {
+      "name": "get_download_link",
+      "descriptionSha256": "c17b2ba67768e2e0d5ceeb340af0b01556f22ce847fcebc9539a2b74629b70b6",
+      "definitionSha256": "48d19405beebe4a0178c8c989c678695e979205a65fe1143f0a8c676731f32f0"
+    },
+    {
+      "name": "optimize_listing",
+      "descriptionSha256": "7d4d3dd49304ca2574b0749905314373ac77f245493498ab0c614ff6f3bb30c7",
+      "definitionSha256": "5f5b5d42e6514d7424ad3eeeb15d4cc7d3f1d08d179b206ead56d66ea2e422d1"
+    },
+    {
+      "name": "stage_room",
+      "descriptionSha256": "c7ecbe514c953a2fc800362637f308dcf04b6be19fda1a38138ebb3d9c14dbb8",
+      "definitionSha256": "581905c4ab4e116be9068ca5b5845f3268e266a85bfc9b7f204c3c3ac0244f27"
+    },
+    {
+      "name": "suggest_style",
+      "descriptionSha256": "9dfcc5a56953acf9b6d2508f85889729e5c085d26185069cd2baa4253ed4804b",
+      "definitionSha256": "b42af662f0709793db2f06c8c641dd29c00a28e1e5145f9ff93a1315a868a0eb"
+    }
+  ],
+  "surfaceSha256": "acb5cf46f09d6f2e77bf2cf442fa42aa4946270986f8b0d6135607cf1a320c79"
+}

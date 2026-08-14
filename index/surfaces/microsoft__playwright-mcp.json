@@ -1,0 +1,355 @@
+{
+  "ref": "microsoft/playwright-mcp",
+  "scannedAt": "2026-08-14T19:41:35.252Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.6.0",
+  "source": "readme-catalog",
+  "tools": [
+    {
+      "name": "browser_annotate",
+      "descriptionSha256": "ca8bfab96dda5d6571d64dcffe52c2bf9fda46a161567f5c1435d9c21c24759a",
+      "definitionSha256": "0b642729c3ca9e6d09e81dbc6b74378217f1727e797f17206e4800b2f440abc3"
+    },
+    {
+      "name": "browser_click",
+      "descriptionSha256": "5bc7302b94469359a1d759df8be7523c927ea63e200d90a2a9360da1612e9d29",
+      "definitionSha256": "0c9e3b5750a78d6c444a8264c5cad6acfa5eb38932acfbc93e3d1273532de963"
+    },
+    {
+      "name": "browser_close",
+      "descriptionSha256": "c483523dc3bb5b05eb23920e124b65ee9dcba6d8e75d2052f785c3010c4cb960",
+      "definitionSha256": "cf1e758786c58d3430f36e33e8f9d0be923987f5c23038468ef2ba75cd8dd717"
+    },
+    {
+      "name": "browser_console_messages",
+      "descriptionSha256": "2ce06ce1312ba7c5fe48cadccb19236fcf7b97a9998ef2454c8f67f3df8ecfb8",
+      "definitionSha256": "937f2e136a4d7d4ede0acba7de1789d6f331d6592fa1ff23a2ede2174bcd0d9a"
+    },
+    {
+      "name": "browser_cookie_clear",
+      "descriptionSha256": "ea7d73cd29a3dc6e92cb199baf66276d8016bef41d602191d514f5c933890297",
+      "definitionSha256": "9c0b5bc8b526a2427587c2c88e7d2c65beff4b0fb715c08bfd258e9ea21e37f7"
+    },
+    {
+      "name": "browser_cookie_delete",
+      "descriptionSha256": "0a7b42d670fd93dfe7fa30285596aff547b89e79d445c6134d20ca04b33bf090",
+      "definitionSha256": "09f5e49b5df5dedc1d332cadd4b5da6578a4d5bf6f1b0eaaff1038a3d1962399"
+    },
+    {
+      "name": "browser_cookie_get",
+      "descriptionSha256": "01dcd948ed4a99a4dd1124b579a6b3e0d8caa3636e52ff4ae9c9249acd02f246",
+      "definitionSha256": "d84bf45b5eaec290e9914dde830ceafe5c0bc07737c0d46e2033c68f99cb9fde"
+    },
+    {
+      "name": "browser_cookie_list",
+      "descriptionSha256": "8e9f8054b0756989a88d8f27b21276471fc23963e38f6e51230a8d2b2458f920",
+      "definitionSha256": "7164d211778f5d6c0f00951ed538c9e0517d52c9f171092f40e0c79daf1b54fa"
+    },
+    {
+      "name": "browser_cookie_set",
+      "descriptionSha256": "a69024dd4251300130b6b701e6d6136c5b1732f387ddc93e3f072bc6bf466646",
+      "definitionSha256": "14b878923fbd97d754ac8108773535d137ad168016bd877e64fc5498dd8b1d47"
+    },
+    {
+      "name": "browser_drag",
+      "descriptionSha256": "684f8531f973ebdaed04f74c1f8840f3c5dedbfacab923ce4d63a6960bce306d",
+      "definitionSha256": "53c9d97b3c0cda6b72b0e526dd66e832b17d52c336a0e1866c69509ada1f2c03"
+    },
+    {
+      "name": "browser_drop",
+      "descriptionSha256": "13b2e619ef9716bb92e4e8415eeb02302ab307b9d7eb8ba8ccddf9603caa4f7f",
+      "definitionSha256": "1e58b0f8de6e5e04a9d7b11bafe9b13b5640c64ab419380195d3a6953ace3523"
+    },
+    {
+      "name": "browser_evaluate",
+      "descriptionSha256": "22e0b74e1d420965fe259f0935a50d24f165977e841fec930760361368c8ef2f",
+      "definitionSha256": "ae480bb0c91a94955c1e329a27430c0c542d2f8b9afc5538ad300f9b14f9435b"
+    },
+    {
+      "name": "browser_file_upload",
+      "descriptionSha256": "d272f8f519d6502ebcbb90472ec6c6b23827101fc85aa46f63224bbe27b9c5e7",
+      "definitionSha256": "1c0bc43f8b861fe2704c8712f08b34e8e716327a3c6d37a33cbbbfc9c1ac491b"
+    },
+    {
+      "name": "browser_fill_form",
+      "descriptionSha256": "fbba903ace94805c1935afa1dbfc2ece6b14c187906b3b75f6cabf06bb4e1d09",
+      "definitionSha256": "5bb977a8b3f107dcde8aaeb01a461330d4c6a9e120515568b0e41e2bee16b9ed"
+    },
+    {
+      "name": "browser_find",
+      "descriptionSha256": "8a60cc971bebd554cbbaabebfa534891dc3abec4e98ac2e702dbbeeb8290db6f",
+      "definitionSha256": "3ac1697be474d430c96cd85d659916eb9eb56c6364c379c63b4451d12380cb5e"
+    },
+    {
+      "name": "browser_generate_locator",
+      "descriptionSha256": "5137a885aa3224f74b35c08a35c824f3b54a37e5c75c0883b4cdea212bcfc0f8",
+      "definitionSha256": "ace7dc92740729b9ad49f86cefc9ecc92a321c9da6b04215973e446e5f1a63d4"
+    },
+    {
+      "name": "browser_get_config",
+      "descriptionSha256": "9a9574a056ff72a3479d57bcafad422a5e887d0b18f23162fdb21651a63f4678",
+      "definitionSha256": "3bbf16d9e188e1773317e88a5f5e98d0a0e3083d957f115a280b66087f09960f"
+    },
+    {
+      "name": "browser_handle_dialog",
+      "descriptionSha256": "34a2837f16e0b3e9aff154f1df1db28a393f6715f106da3c4a1e7e54e2253d83",
+      "definitionSha256": "13034a7528f0542e6991e4eb0207e81d1be4a6ce50d1405f59c3563a85177475"
+    },
+    {
+      "name": "browser_hide_highlight",
+      "descriptionSha256": "4bb9ad6dd8e95f3b0a2ec8b693b53c854f41bfc49e2df269efba5e0fcce517ce",
+      "definitionSha256": "89eab8e29a9a5a1544b438b779f75d64dfac391cd6fd6ff611cef7cfa84a78ef"
+    },
+    {
+      "name": "browser_highlight",
+      "descriptionSha256": "dbef67f3bf151697ac1e9c3e55aed6539c0e38cd8f882cfce6dab89c82b7f69d",
+      "definitionSha256": "8dcf21afe217b1d1de3ed3dd8411826812921b5759592b1cd5ec5756bd9cdc12"
+    },
+    {
+      "name": "browser_hover",
+      "descriptionSha256": "8513e4975a84cba22d8ffce77bca05b555ddb72cb31a6271907b345bb834fe45",
+      "definitionSha256": "bf94920a13aae3614fb7e9db97ed1a6ff4b4960d392029ce01d8366c185a0b40"
+    },
+    {
+      "name": "browser_localstorage_clear",
+      "descriptionSha256": "f41fb09236bb26081d3be07c3808fee256f8ff4ed3e25141174218542a62d135",
+      "definitionSha256": "2843bc485340fe65ade69fdbbbac36ee616a79e395ee46aeb1f0b2e9f954c14d"
+    },
+    {
+      "name": "browser_localstorage_delete",
+      "descriptionSha256": "b194f5941f11f2130f71a242f15abfef91c36392193f84581223b9abe3985b32",
+      "definitionSha256": "fd68b7d33a3644f3fe120701113fa60d26ed6b070f3e1a1d723a73df9df8ac1a"
+    },
+    {
+      "name": "browser_localstorage_get",
+      "descriptionSha256": "81b8624a2e5e379717033f72eaa65463a6860dc110babb42a1f77d5ebade4f7d",
+      "definitionSha256": "cd6b0e020f0d92aa0e5c8a69f3e7c46ac93f67c2772258e2ba98a388f0ca605a"
+    },
+    {
+      "name": "browser_localstorage_list",
+      "descriptionSha256": "e6e8a6983839881875e08255a4ac96990bbfc99b2247014642e2ca9662776604",
+      "definitionSha256": "153abb81b1eb592852e219792dba33e47e444ba7269453386c3e6cedc693ea04"
+    },
+    {
+      "name": "browser_localstorage_set",
+      "descriptionSha256": "efddf24b4d9baa269289533f3b971881fd46590c8e673d8a1873ead57d7a56de",
+      "definitionSha256": "28f6709496440e035268b6fce920353fb558da904849addf9f8e97a4db02fb76"
+    },
+    {
+      "name": "browser_mouse_click_xy",
+      "descriptionSha256": "12ec4f730938d724709c80ae394effa25e2ba3ba37492d8dc19f3ac8f2015bbc",
+      "definitionSha256": "8e5950af647c0e6f1db13d0a6256e78d6767fb31d4fdfcb5213789deb3124484"
+    },
+    {
+      "name": "browser_mouse_down",
+      "descriptionSha256": "15c503e77688d98f1975a4be68aa2a99cad9c79978f6e826c6b40f0140ece446",
+      "definitionSha256": "b7feabe1faa6e574fc772ca6a0b8e497b9351b29b948823399216cea30f14ec3"
+    },
+    {
+      "name": "browser_mouse_drag_xy",
+      "descriptionSha256": "08c340e07713d6bd9b966504f236d97583e53e58ee548b445abde29533d03473",
+      "definitionSha256": "4e2cf278eb8c0b09041f9eab1c7bb102b4403a26bde1b3eed77defab90904eeb"
+    },
+    {
+      "name": "browser_mouse_move_xy",
+      "descriptionSha256": "2a569ccb8339d09dc76db8c7dc29ceca795bba259d68fe85b4532d42ca7634ac",
+      "definitionSha256": "b11e87b768ef5318db62b69da06c2d69ef53eb392c0bcfd585db7bf7e8f5e927"
+    },
+    {
+      "name": "browser_mouse_up",
+      "descriptionSha256": "50d2a4a163116cdba701386a6b5c361397a4a5e008178367ed66f196a04a6335",
+      "definitionSha256": "999065a3fd76437b8d9ebee050e37cafac68ba8c0d0f1d6367d407d3e942e4f3"
+    },
+    {
+      "name": "browser_mouse_wheel",
+      "descriptionSha256": "534afe79d290050da12c640bc303696faeeb376c438f46371d1136dbecfa769f",
+      "definitionSha256": "6247b8567a60cdfc095a65157a290b460e7c80f91b3ec13e57c21900ce5ea264"
+    },
+    {
+      "name": "browser_navigate",
+      "descriptionSha256": "5e517ac29796df4781d6e8f8b3be061cc694f0c8e027f40e42ce0739e887b1d5",
+      "definitionSha256": "7c0d6d04fc42b6cecb8565be687af1b4095135409f3989b578a4f5fe5bac20fb"
+    },
+    {
+      "name": "browser_navigate_back",
+      "descriptionSha256": "c0e28c1d9e4cd2e3b5d6d135c8d4a55456b02ee4b6d95a5d97eb2817323304ed",
+      "definitionSha256": "ab3ab1c5423007f602efd1bced98db92f0761eebf438567a0dfb873afdd6f070"
+    },
+    {
+      "name": "browser_network_request",
+      "descriptionSha256": "93bba7a44508c698cf004b3f3b3952a0d85faa381a13be6f0cac0e6456e1c271",
+      "definitionSha256": "252f4cfc4e98ddf117449cbda0836f22c12a5c6fdaa00213b2cb6a4a06fbb955"
+    },
+    {
+      "name": "browser_network_requests",
+      "descriptionSha256": "73430b57ec02cbe7c9afad83bc4ea3dfc3361938f05d516436039e0e33ca7942",
+      "definitionSha256": "827a2bc432f8366baf4922c6646a976e2c43d80fc2ed48c23103519f01272fac"
+    },
+    {
+      "name": "browser_network_state_set",
+      "descriptionSha256": "d67005a2271f59186fb359b636818200b3b7a04f458f95b1586744e8eb240262",
+      "definitionSha256": "1ccd691146b9757ea78bde027a8963ad9da34edde72b5eb231c89d5fe57ac4ec"
+    },
+    {
+      "name": "browser_pdf_save",
+      "descriptionSha256": "820479de946e42108093a8ac1bd073aecbc1e116b06ea2e4fc5d098bf1338d82",
+      "definitionSha256": "19d2807acde59e09d4ea2b3577977c684ced15eb5950d724dfdf09a30b53eea1"
+    },
+    {
+      "name": "browser_press_key",
+      "descriptionSha256": "aad8c3412d76c93e83c00bbe260068e5e2b988fb41080d148f31d49b5e7d2532",
+      "definitionSha256": "afe200a6aa4bf7fb3bf00fbbfd1d4c80b463adcb8cd37b5b47de31a2eb3b3cf7"
+    },
+    {
+      "name": "browser_resize",
+      "descriptionSha256": "562c4779388a2d66374bf8197abfc94572bd0ae1d09e9990f3c16a99111e7899",
+      "definitionSha256": "242a0b03394177dd240c34a687c17dcc39eaabd8541d0b2f16ee27596ab58a84"
+    },
+    {
+      "name": "browser_resume",
+      "descriptionSha256": "b4bcb308dea3a56701b8b437d03235ce8ac26cb6b3fd9b07e9c3651572afd0e2",
+      "definitionSha256": "733a689ded061f4e8bbd28d860d4ccea721d16c14c99d5face14c16cc9cd4a18"
+    },
+    {
+      "name": "browser_route",
+      "descriptionSha256": "80aa289e471d8131d630545f9f48b171cbb7602e69cbbc9af98530df45f2abdd",
+      "definitionSha256": "278f262660a8f9fb18e5f6c0e3a8d58f224a811ed306bf8015ae9b33730c4b8d"
+    },
+    {
+      "name": "browser_route_list",
+      "descriptionSha256": "f7bfd76e82c345a587b0fe5078d2263553175e2fc88167f9852352c4ff6cb530",
+      "definitionSha256": "5e52fa648ecdad97d46d1b02909a9508840f766e22546df5a8106b545247c529"
+    },
+    {
+      "name": "browser_run_code_unsafe",
+      "descriptionSha256": "542721986d58b3741a1bfae1403f7ee464560339e238e75e46315d4e3d8844d7",
+      "definitionSha256": "5dbc46b3593844669349b9aa795f258c9f0cd1aeb40f2fe5260b128d8a6f000a"
+    },
+    {
+      "name": "browser_select_option",
+      "descriptionSha256": "a085193341d59ac28092de80bbabb95a51012a6a85c011db3e1211fa2b80930a",
+      "definitionSha256": "24c9f1b5fe453f972f39526f7bb84e51871720370031960c6f24f05cc64364a1"
+    },
+    {
+      "name": "browser_sessionstorage_clear",
+      "descriptionSha256": "dec73ceab2645e69a52c7e1cf52ed1fd4a98afbfd73d6deaec25dfd2d8987b55",
+      "definitionSha256": "79c6e9437458afcda089cb6faa53116e574375fc4332bc1309b9c39ec41df709"
+    },
+    {
+      "name": "browser_sessionstorage_delete",
+      "descriptionSha256": "31010d3612a1fd635c75004c55d9481da205cf8b94dd9a9c3641b87f61958395",
+      "definitionSha256": "e03c555fe3598adeef288aa8bba070ac63a560356d7faaddad467f012afb78e9"
+    },
+    {
+      "name": "browser_sessionstorage_get",
+      "descriptionSha256": "9ae7bf55178c74571c3f3dcaaa9fd0938bb8122658afbed8adc2e82066aca8f9",
+      "definitionSha256": "d951e817631ce1af61ab3c24392ba6f5090824623d6d9e3bdd17ba440f9a857a"
+    },
+    {
+      "name": "browser_sessionstorage_list",
+      "descriptionSha256": "ff4fd5e95273e2e2f56a724fef7e5e8ef4350eb090e28655c1ee790c3cdd66ea",
+      "definitionSha256": "5502ebbb361f43b980594ccc51706a3da3a78df87b94777c275972c984b48a7e"
+    },
+    {
+      "name": "browser_sessionstorage_set",
+      "descriptionSha256": "09ff19ffe1d409f55c912cb703facabdde7840c4c53dfc79db7f7b5d1f7c88a9",
+      "definitionSha256": "0a46b701869cab059d19b3aa2e89f79232d50065cfcd842b4e5fd8b6d7957f26"
+    },
+    {
+      "name": "browser_set_storage_state",
+      "descriptionSha256": "254aba68b0789ce5673bf5f9a7b2b247cb3962da49322282e5ed385274bd9296",
+      "definitionSha256": "3da25cffe0c8b655805382ee411e749186a942de38143cb71ac3aa779de12bae"
+    },
+    {
+      "name": "browser_snapshot",
+      "descriptionSha256": "a3f68829ce29df3dbfa0e4e91dbf4564977b4f57a4b15ac977d894429e0ed08a",
+      "definitionSha256": "342f6831372ada3de1cc7cfa79205203e5a1d59cd71f623d90587cd32b1aa568"
+    },
+    {
+      "name": "browser_start_tracing",
+      "descriptionSha256": "20ee7d972f47f70617e18d81a65ed3daf4848626d1225b47f5e593fa35ba6fad",
+      "definitionSha256": "8be893d0ec4d311efec682e6d93324b62b0e7ba0c8761a5d11637a24cd640439"
+    },
+    {
+      "name": "browser_start_video",
+      "descriptionSha256": "41c7177ec1007b88d7f4e56962f6815bbf55c13922e6d097d538e9449cf99619",
+      "definitionSha256": "1b43d4802ceff6d5dae45c58ed90f888226e3f2632c7306956d5c3a74d79cae4"
+    },
+    {
+      "name": "browser_stop_tracing",
+      "descriptionSha256": "c4cb368fdc3c27bdc377ce45982283d3317cb2289a058bbb7a466e7d4ec14030",
+      "definitionSha256": "8a3f129ff300f622966b5eacb27e44eb4d1511a45cd75d1444408f08553e9cfd"
+    },
+    {
+      "name": "browser_stop_video",
+      "descriptionSha256": "08a49cb0cfb4f5b4d39f07bbc2d0bda4d709231727ad64a090dc2e1232cc2cd5",
+      "definitionSha256": "bbabdc870b39aa8c2e160a69d4beb32cb6208030616ddd40384bf1bb52853a00"
+    },
+    {
+      "name": "browser_storage_state",
+      "descriptionSha256": "02e754d0ae3cedfaa332fdc0e660b7603543262089243a15edee46cd4ac24ec6",
+      "definitionSha256": "cea4e4de4f198c11bb67cba41d06e07a9258439eea513e26df01b5aac0f49886"
+    },
+    {
+      "name": "browser_tabs",
+      "descriptionSha256": "e1663538ca64d92f7bb7f0f4a8eadaeab827a7a3380418bf791ce82b65e70c2c",
+      "definitionSha256": "f395aae65398ab5395c42444deb3c6e03376fedc4ee014c94a1e47cba300e808"
+    },
+    {
+      "name": "browser_take_screenshot",
+      "descriptionSha256": "14f147272c20299ea428abd9a08b576144fc06fe44968949e477b0ec490fc661",
+      "definitionSha256": "969a84edc70ce90827a6eaa06d2445346d7cab981e23f349755c808bce1e8c1e"
+    },
+    {
+      "name": "browser_type",
+      "descriptionSha256": "390727daa0fdd31a5d9417f51fd818b1b6d6b934eb9b5b15be57dd9e7e0da2a9",
+      "definitionSha256": "2bf192bf4afcce211b3a7cf3291d9267f5b0df37fd5340b384e8d797a19f7216"
+    },
+    {
+      "name": "browser_unroute",
+      "descriptionSha256": "71134b64aabab725d67e4de7a25b40d642d826fc88a2c011a86fbe6dee121f40",
+      "definitionSha256": "ff904c69d51ba12f2f0b9485d74f83a5c3ad1c2647ccd10c7914822bf7b24c7b"
+    },
+    {
+      "name": "browser_verify_element_visible",
+      "descriptionSha256": "2bad0ec64c4fcdad473ca52818612147564b52972fe30dbad8bef6633787059d",
+      "definitionSha256": "ab6b5526d647e72976bc9d558dc39d73f22b0d1ce6128d1db43cfc0d2f73def8"
+    },
+    {
+      "name": "browser_verify_list_visible",
+      "descriptionSha256": "9dd596b5e7541c432dba83601ce41ee24378ce474a484a44414c1c306d07770d",
+      "definitionSha256": "ed01e5b9466a69ac83bedfbc22db693b38d675ae1bbdb5f89d21e94f9e1ac422"
+    },
+    {
+      "name": "browser_verify_text_visible",
+      "descriptionSha256": "50e9bcb77a45164d0c7d43bc52c1a307c9450f93dd6da12816bae70036db87ff",
+      "definitionSha256": "0e20a9d88844eb9424026fea4d608ce3daab36698ab2ad60edb381d61095dbda"
+    },
+    {
+      "name": "browser_verify_value",
+      "descriptionSha256": "ab1308844ed7b4a2af5de4454157b49515f12486230849ba98dd9e3e67ad59b3",
+      "definitionSha256": "0cf18b21aed6e6773d3ed8e18d967cff445866ffb942cb8f6b2c777e22168348"
+    },
+    {
+      "name": "browser_video_chapter",
+      "descriptionSha256": "8bf8641f04d82f1aeef4b37e6d2d1233835a23dc96fc3e24eaec3ccdf4c3f4b2",
+      "definitionSha256": "b23234102a81a147af6023a9c590231cf2464c58a9ad7e4df512a3b86ee5c5da"
+    },
+    {
+      "name": "browser_video_hide_actions",
+      "descriptionSha256": "01cf9346410117308b4e7913bc932bbe7ee75058d70ae5ca59f59567c8e3dae7",
+      "definitionSha256": "3e0df96341fc4b43b50e4c4af13b5dd328c4b5877864e2639fd1ea3bc1ac88c3"
+    },
+    {
+      "name": "browser_video_show_actions",
+      "descriptionSha256": "59b39bc7221992825dfe7b818003ad1f4d941bc6d8ee944dde22c713467bd895",
+      "definitionSha256": "508c66f0497d3ee32888f5dd42fd68f97bb5ab27e55aa9c85afed9918f0bb2f8"
+    },
+    {
+      "name": "browser_wait_for",
+      "descriptionSha256": "5b754f8f4ac481dae127cb350272c1e5b484b4a3cb819cc426b1bfac9747a372",
+      "definitionSha256": "8d9f691099860be69dd7a45a538db61b7c2511745fa439458a2ae67fa93693fd"
+    }
+  ],
+  "surfaceSha256": "41a77c8b10ddf9957cfca5670db3b029e0bb0fb2ece178867e70f1284ca7018e"
+}

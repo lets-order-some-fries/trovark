@@ -1,0 +1,25 @@
+{
+  "ref": "lyrenth/lyrenth-mcp",
+  "scannedAt": "2026-08-14T19:41:35.252Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.6.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "check_usage",
+      "descriptionSha256": "0711ff1c06ab17df0631a5935fb37a5eeeee930af64b4e41ebe11085cb484087",
+      "definitionSha256": "c091da586588c415a2d1ddcad7aacdf916b854a1584da7b5e5338e16860fd7f9"
+    },
+    {
+      "name": "read_url",
+      "descriptionSha256": "aa25d230081609a807966cfb2f851333c9f25a23fb65d7af76b632a0b85076fa",
+      "definitionSha256": "6446ab9556e60424e2c8b3a712a87fdd5397fb6c713d7e44ddc6297650ea04e5"
+    },
+    {
+      "name": "read_urls",
+      "descriptionSha256": "6d3e863e69ac2c181b734c4dd741a31cd36dc6ac5159feddc70cf4e9d379bf2d",
+      "definitionSha256": "824b98a3dfe37390c0a0d0ce8a2f9c62627024581c9e96d2088e177e444c2a85"
+    }
+  ],
+  "surfaceSha256": "e452a95cb576afa392ff0ac0983560f1135b9de70f78d704c6cd09a4f2e66573"
+}

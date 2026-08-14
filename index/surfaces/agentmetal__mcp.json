@@ -1,0 +1,75 @@
+{
+  "ref": "agentmetal/mcp",
+  "scannedAt": "2026-08-14T19:41:35.252Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.6.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "claim_account",
+      "descriptionSha256": "cdd81cb92f54ba220ed8fad7c4ef4b44cd70be127ed94b593b8fba44375e902c",
+      "definitionSha256": "6fefda715b1230daf7d0bcf0de224c8839ddd33d273a57e7f8643ed4628fac9a"
+    },
+    {
+      "name": "destroy_server",
+      "descriptionSha256": "025c70cd2d45c884144d6d337257355d38c7c809b020012d0cf0e47a2b1800bb",
+      "definitionSha256": "62d01277c8bcf5970ed0ab85b33577e36422d859cc10ed903fe990d1c73d6b07"
+    },
+    {
+      "name": "exec_command",
+      "descriptionSha256": "b73ced2ddedc2a36a826b16006c7f4c10edb4c8cceeac1b315c7be112c68e74c",
+      "definitionSha256": "6fa10349c9c3174e43388ba52365cc9f2eaba51f42c05813159b1185fbbe7f46"
+    },
+    {
+      "name": "extend_server",
+      "descriptionSha256": "03acf984029b335b5f317322b1955459a9f6617e7f1d5f7dad975a57d5542473",
+      "definitionSha256": "f4ea23f4a99f612da5974c048ebaffa1c6c42e833f9df4daaf66d9b72eba3afb"
+    },
+    {
+      "name": "get_catalog",
+      "descriptionSha256": "b612ecbe45744d4a0257605a73c27c12259d48e802465b0c768a8ff99973bf97",
+      "definitionSha256": "c1f9b48673a04b086ae7a2f60f1ea723f76574af9dbc20e72d33c0aac6854238"
+    },
+    {
+      "name": "get_firewall",
+      "descriptionSha256": "101ac5cb49e35464413766e3c11a74eafb82539854e062ef6cead0940d4dfe5b",
+      "definitionSha256": "b7a9a28bc1e2c7a697d85e73f99d5d4a6c0b55a024b170b3662fbe69c8d61453"
+    },
+    {
+      "name": "get_server",
+      "descriptionSha256": "224f6fb09c1ce14583e6c82afcb3c5cfa427cb8cece338f899a503ab0eb6a0b3",
+      "definitionSha256": "7828c00d20ea8060999a447febaa106a84b5e08fac355494634666794142cf44"
+    },
+    {
+      "name": "list_servers",
+      "descriptionSha256": "4bc4ceef534148fb6efd1f883f2bf314ea82196bc8030efa509eb31b0f215042",
+      "definitionSha256": "f4c0b6b2716c72fa13904a1faf1a8f682b620d16a1d8a85babf4188f8a8419b1"
+    },
+    {
+      "name": "manage_firewall",
+      "descriptionSha256": "e5447bb29f11742cdc45d242c61bf298db23b5ff85f3f6532938c836f9c7c595",
+      "definitionSha256": "e6ad79fad11afdb762a1305d0cf191800b74afe12657aef60ab0d1e669de1c66"
+    },
+    {
+      "name": "provision_server",
+      "descriptionSha256": "1a690c0720fe893fe7a3454dd83b644f412223d681c367639b51d663bd812013",
+      "definitionSha256": "c5fbc915f14dd1f6c160bf1ae7caafdf0e71b7ae273e49b98eb2b0b0020e6693"
+    },
+    {
+      "name": "reboot_server",
+      "descriptionSha256": "6dfe4e5a2c3da10f34059ffb04b5a7f2bda62e65d7fcdf05accd548851ee2f0a",
+      "definitionSha256": "57b4457957f783dea56f1fe2adee0d49b9d66182fcbb218a22301eea62d3b592"
+    },
+    {
+      "name": "server_logs",
+      "descriptionSha256": "c685b7b27239c2febca2d539db1255a21b9204857d9ee788464f9d4b0f652a0e",
+      "definitionSha256": "a15efe01bb5bc904e199b971f55e3a9f3101ab7d851e85e5a3337ec97667c841"
+    },
+    {
+      "name": "verify_claim",
+      "descriptionSha256": "be84c188752b73bf7ca2a84f6020f6504f759e1284e3505b40ccccf1d989ac15",
+      "definitionSha256": "ba9349a8b2bd8c9dba6b31cdd7ed18b1e74bf3eeb7dd013d94ef6266d11c508b"
+    }
+  ],
+  "surfaceSha256": "3ddfb3a9dd6c4c7df3d9d654962ebbecba7893c736dd636fafed77fdfc97c95b"
+}

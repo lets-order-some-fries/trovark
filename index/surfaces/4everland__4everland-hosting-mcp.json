@@ -1,0 +1,25 @@
+{
+  "ref": "4everland/4everland-hosting-mcp",
+  "scannedAt": "2026-08-14T19:41:35.252Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.6.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "deploy_site",
+      "descriptionSha256": "d6df88dc775006cbd71e27b281dbdd4fb96393094e86d2d657d5d151e2d603e7",
+      "definitionSha256": "511517c50cb908e7962fe3c375240eb188fe72884014c9c2fa7e11f9feff56f8"
+    },
+    {
+      "name": "search_project",
+      "descriptionSha256": "9a98f4e4237179566c5a22ec163d22f4fc31dca03d690ac5763f45ede77528d9",
+      "definitionSha256": "a864db10e753b43319267faa1081012ae23e1d9361f940f8f027051825f6dfff"
+    },
+    {
+      "name": "view_project_detail",
+      "descriptionSha256": "4828467ae2b8dac85accc7b24e20bd615b42c52b5984404a68876d7681107cc5",
+      "definitionSha256": "bba7504465b693c84c5d60674a59a78a2a6aca72b04544b7100d1bc8a887d8ee"
+    }
+  ],
+  "surfaceSha256": "bdcb8dbea645501e789d4b85eaee87ca7ebface1f3de257fffbac58c6b076ec6"
+}

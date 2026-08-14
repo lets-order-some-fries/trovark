@@ -1,0 +1,65 @@
+{
+  "ref": "anythink-cloud/anythink-cli",
+  "scannedAt": "2026-08-14T19:41:35.252Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.6.0",
+  "source": "readme-catalog",
+  "tools": [
+    {
+      "name": "accounts_create",
+      "descriptionSha256": "9afdf02f4b57e8527d561f98c6b1b841cafbe89037de928fd36607ccc1658714",
+      "definitionSha256": "26938ccef9b91c70e315f6000b4141b9f73f15777e671b315b3cabdeb9b63f99"
+    },
+    {
+      "name": "accounts_list",
+      "descriptionSha256": "b2c1293b8fa302b13ce8e5fc28cd2478b4fb7ba66c6f167f5be85e0e97a7af0d",
+      "definitionSha256": "02edd2e5d9248ca260db436b2f5a6977918aa706fa11e788bc0247422dbfadee"
+    },
+    {
+      "name": "accounts_use",
+      "descriptionSha256": "defd52d9598741a1645a662a246005217b869b4b59a8ae9287225f4ecfd77d35",
+      "definitionSha256": "8e6b0059ce9da7f496550324567129332e1c775256efede65e505aee74a3af92"
+    },
+    {
+      "name": "config_remove",
+      "descriptionSha256": "860b644157a32b4b1522bb92a555787b9b532db5ca7f45267221f6b0f886e1e2",
+      "definitionSha256": "7e029c65ef35a4092a866b98d99032e32acc5b13440eb1211c38e72c6a0afb42"
+    },
+    {
+      "name": "config_show",
+      "descriptionSha256": "13e19acfe609afd68bbd15f6f13a10e2c4befdb49b57c9d9017924bd74130fb3",
+      "definitionSha256": "14e06b4535e6b963e47fb11db2f31a3b3634b15a2fdaf051aabe3d00607d8177"
+    },
+    {
+      "name": "config_use",
+      "descriptionSha256": "6644245f249e9b9ab09af5936a099989f4675326401b4bee6aea10c35ecd75be",
+      "definitionSha256": "d034825e8db8bace606516757139253e1e57f9f6aac5311f3faaa0451d2bc1ba"
+    },
+    {
+      "name": "login_direct",
+      "descriptionSha256": "9cbe33138067ea7e26dc770fecc8f54e91c7d577b63cf400d5d46bd188be9cd0",
+      "definitionSha256": "7cd7f02975599e8bb4a50f4ee7e8f796257f18fcab48623fe872351118e3437f"
+    },
+    {
+      "name": "projects_create",
+      "descriptionSha256": "c52af048cebf3e0aab5a0ecbe1f83e7dee6f3b9eb1bd640768f61d6f50b3a1bb",
+      "definitionSha256": "ee0210f712278aa4d9d4743520bdcb74e13c2123beca0c41cc8477040e3b531d"
+    },
+    {
+      "name": "projects_delete",
+      "descriptionSha256": "3a462fe9dc2f4ea6808a11ef396a8f177fea5619b0f104f865981c62e5510edc",
+      "definitionSha256": "71e157da9f78822a42c9ab713b7d2f0a6fdb492b901a1145a851d8a178ff92be"
+    },
+    {
+      "name": "projects_list",
+      "descriptionSha256": "f92de5a1165ec91c8531fe480183e43a95845641be68fb1f121fcd68ecdcf60f",
+      "definitionSha256": "0450dea3e15866ec32fa9343eca93ecba80057af5832ff09f0dbb963dc9f2dd5"
+    },
+    {
+      "name": "projects_use",
+      "descriptionSha256": "9e53f631be1a27e7e1d9bdbff0adc370db0e3c13a43d9e609c9891ff20e60cd0",
+      "definitionSha256": "18bcdf990ee336c82adc81117335c6b4e78e1c78ce0c1819c837df23c059f1b5"
+    }
+  ],
+  "surfaceSha256": "06fc2367249605fc028630a11cd7c8019f58479f3c47dd33c94d5210673f3df8"
+}

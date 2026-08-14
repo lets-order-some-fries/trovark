@@ -1,0 +1,45 @@
+{
+  "ref": "entire-vc/evc-spark-mcp",
+  "scannedAt": "2026-08-14T19:41:35.252Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.6.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "get_api_key_info",
+      "descriptionSha256": "29b71ffc4a0aca7c2adae7dca3c92fee110df30192a1349c393c42a2e4e7779b",
+      "definitionSha256": "8d3ae15c2af7d554c01b47039195ece9948a6ce1fd377bb1d22c60faf43cf59c"
+    },
+    {
+      "name": "get_asset",
+      "descriptionSha256": "23aee492a1a28142883f71211ec1985eee26528ff040a49380488d93a855c132",
+      "definitionSha256": "348bcb66caa0804275e15761cb787482f209f50c535b2ec2c3be06bae95451f3"
+    },
+    {
+      "name": "get_asset_content",
+      "descriptionSha256": "29f33f2338dfdd9c77723fa4c7477f3d1ff63bb46b1c975c48b7478659880ab7",
+      "definitionSha256": "b698b91da81e85d8a948ac021209a5be59e73abb814d32ae2b342e1cd6ab411d"
+    },
+    {
+      "name": "list_categories",
+      "descriptionSha256": "d11e4d8afed8485f8cd1d0575d82b0516b1a6214d77b25157d7f12393576f95f",
+      "definitionSha256": "f63390760f038df2b971e1a7902d1768dc4e5f895ec2697b4a0dd9a6b019d961"
+    },
+    {
+      "name": "list_popular",
+      "descriptionSha256": "6738c223d76d77869b133003c97436b02bae25920cf2071d1256ef0ddc4da096",
+      "definitionSha256": "ec1c195bc83c9785f109711b9f700642eb211dbe9110ec7a5302d538124cf232"
+    },
+    {
+      "name": "search_assets",
+      "descriptionSha256": "1bb06daa012a3dbc4710216eb7c6cd90d8f01b15070a47531f0634901b487049",
+      "definitionSha256": "004d71bc13d92602fc8c4a9a0f5158856078e84887f86ada47052be0f44b98e6"
+    },
+    {
+      "name": "submit_review",
+      "descriptionSha256": "5ab8680f931f97df7df9b1d3735049d83b136501ed146e3bf7e30e1f3c76aa50",
+      "definitionSha256": "1a08cca1b833762cdf00e46330554b0627f4d2ea1cc5748606c6431ed7d860eb"
+    }
+  ],
+  "surfaceSha256": "cba000c85d7f3c3cc7aa939cba40acaf5f527d71eaa2ad1d7c8de60649210ba2"
+}

@@ -1,0 +1,55 @@
+{
+  "ref": "aparajithn/agent-deploy-dashboard-mcp",
+  "scannedAt": "2026-08-14T19:41:35.252Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.6.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "tool_check_health",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "cb6e128f56c7a1cd16ef5d7c6d792f02f5b2ee51abda2525912b4a0b9dcabd07"
+    },
+    {
+      "name": "tool_get_build_logs",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "ce4752812716d351ba55170b7fc407c844241f1da0da0fbb97f26065412d533c"
+    },
+    {
+      "name": "tool_get_deploy_status",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "f74d812c0c1abf14fce2dc18662eae7cc8b00e098f5ce160cb88155e4c4d459b"
+    },
+    {
+      "name": "tool_get_env_vars",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "77580df13012f0443935bff385551cc7fe1c631d39b6ac77558d9492093160c6"
+    },
+    {
+      "name": "tool_list_all_services",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "283e81ddce6bfe93bee4e9eb0cdd0141436e2d0f3577ee15b9c0d67111fbec87"
+    },
+    {
+      "name": "tool_rollback_deploy",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "2fc8ff64e4448c05b82c0ff867fe164e1b61a79537c4a2afa60ed35d2019b449"
+    },
+    {
+      "name": "tool_set_env_var",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "7b607b5e241788229023ac16d7fa795256366b98066fe0fb297de8cdfacf6828"
+    },
+    {
+      "name": "tool_tail_logs",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "5d183f97ccfb3f9295e31fba2121bb52b21d85ac70eaa1843baccccba88b607b"
+    },
+    {
+      "name": "tool_trigger_redeploy",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "0baf931261034593c9a6de48c60d4efa2a47c37f130320ef5636d377462253dc"
+    }
+  ],
+  "surfaceSha256": "dba7af913e9d0801de18291725854998c5732090bcd78df7a5877d8e8a74d596"
+}

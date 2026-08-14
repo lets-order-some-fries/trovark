@@ -1,0 +1,395 @@
+{
+  "ref": "gupta-kush/spotify-mcp",
+  "scannedAt": "2026-08-14T19:41:35.252Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.6.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "spotify_add_to_playlist",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "e36b98a09a62e5f9f5e4fa552bb9614e0d7a2c6b8675428b4cf6fd2960a7afac"
+    },
+    {
+      "name": "spotify_add_to_queue",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "60f2e72ebcb8bab69cbf330ee484206e6d57e0ed17e68bc9d621bc6edaa82898"
+    },
+    {
+      "name": "spotify_artist_deep_dive",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "2905e70bb5ae7b41a805701d2ef5c2e130f3efc9fdf1b0dea6084c08eeaaeb6c"
+    },
+    {
+      "name": "spotify_check_following_artists",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "fce4d490768e4de413bfacc83a32d8fced6c220c17c39bc795d8b6ab910380ac"
+    },
+    {
+      "name": "spotify_check_following_users",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "a07e9f575b012a6d091fde7e903e9e6a21be94c58f868199fce94ad2f357e063"
+    },
+    {
+      "name": "spotify_check_playlist_followers",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "b48c892dccb339c6c1511a482a83e4a47007c2ff90ffef13b2a7ea03ba422107"
+    },
+    {
+      "name": "spotify_check_saved_albums",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "6630c50e538710f3cd7d2f88bbe682151876338b455fbd296f6760f5cfb166ba"
+    },
+    {
+      "name": "spotify_check_saved_shows",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "60c49150a3632e6f738651ccc456133b96ee5d5e628849e041c47c5b99db2bf3"
+    },
+    {
+      "name": "spotify_check_saved_tracks",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "b5849ae404b603b9f9de06d24fe8f3ff5c9119903088946fa6f0abda6c2ae98c"
+    },
+    {
+      "name": "spotify_create_playlist",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "738b377a3fa2f395414bef056b72ec1d015b9428fe349bc485e141d68d1c8e7e"
+    },
+    {
+      "name": "spotify_discover_by_artist",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "ac4fd2f6c333ae19cbb552c66fb94e67219ecd3cbd106a73e107695862e084a4"
+    },
+    {
+      "name": "spotify_discover_by_mood",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "77c6245244ff2243ac802fa48888437c5dcfe3e78f85ef7c63e9c4773ebd1f44"
+    },
+    {
+      "name": "spotify_discover_deep_cuts",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "bf345c0a804953fdb87b528980c80a952c1109881fdc8b1e55a2d040e8844852"
+    },
+    {
+      "name": "spotify_find_song",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "801db22e391619b8fe150923fc3fca620b599b504615dc690d26bd7b5c4a1de5"
+    },
+    {
+      "name": "spotify_follow_artists",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "5c55ad45edb8e373d2e29c9abc6cdbb22abd7d745de1bd160aa05dcef0d683d6"
+    },
+    {
+      "name": "spotify_follow_playlist",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "24aad9d0edc04922dacdcc83416cd94e51fa324975d71aff7b3beee9f9b5bf95"
+    },
+    {
+      "name": "spotify_follow_users",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "46df3f9909850fed670e2a0c409ea10f257752d9c56e691bf847223b1e54571c"
+    },
+    {
+      "name": "spotify_genre_explorer",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "db023745990484bf693e627f4eb3cb6d2590d257250c56200c40da3ab1ed20e7"
+    },
+    {
+      "name": "spotify_get_album",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "c76a5944eec792df30c986702141395c62179d74c6907fae9f782e688c7d4fba"
+    },
+    {
+      "name": "spotify_get_artist",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "3d666d5a7d546f3bf11d7132c6bf538e0ebc16178957ddb16e6fbf601979a858"
+    },
+    {
+      "name": "spotify_get_artist_albums",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "0d7dd4ce791aaab2692fe6dfc63b4e9d639618eca76199e346f871e99b83a063"
+    },
+    {
+      "name": "spotify_get_devices",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "cafd43be7efeeb7ddaf40e05c2ee543810b448ecc17f028f92fcc876a1e80243"
+    },
+    {
+      "name": "spotify_get_episode",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "0ed01467ef4827204a79e6839850132c487b7b21b164bb355ea77e6a36f3d6c6"
+    },
+    {
+      "name": "spotify_get_followed_artists",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "44b93f03f5dad109e4f00cb3be64ce07f490c45bf7de89d5ba117bd120d9210c"
+    },
+    {
+      "name": "spotify_get_my_playlists",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "38b8383bca452064fe76c5f1ca04c9a8aef2366ad24e1c8a26b5220bef5b53d0"
+    },
+    {
+      "name": "spotify_get_playlist",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "88d3fec19ddadd5bfb37d998d4ee22b8e82f882e3de18e5211958c81b22030a4"
+    },
+    {
+      "name": "spotify_get_playlist_cover",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "6d7620edf0c591a8ce47964bed14435030bb47330a261b49a8164415f435ec69"
+    },
+    {
+      "name": "spotify_get_playlist_tracks",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "fa371cac08584d4f47599a317bedd926d71cb2bcc88d5bba9189509dba9a2cfa"
+    },
+    {
+      "name": "spotify_get_queue",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "d8356658af7c86be902832f6e8f894b48e661be28a1bd9b896f8cc1b68a6c9cc"
+    },
+    {
+      "name": "spotify_get_saved_albums",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "48b9f72116d571521c4da34990d1fc25916ac337e8283959174b4da4c68b5886"
+    },
+    {
+      "name": "spotify_get_saved_episodes",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "bfb08a60e96f0ee85b3b425382955ef274444c754eb77e0c7ccbd73b584e1968"
+    },
+    {
+      "name": "spotify_get_saved_shows",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "c964c1cb13129555ae4f0110acde9c40fec8b42f431a93342af62fcb2ecf046c"
+    },
+    {
+      "name": "spotify_get_saved_tracks",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "b58d44f5e0619ff9ea846b89e6a4807e4dc34178877da4c347deb774e18482f9"
+    },
+    {
+      "name": "spotify_get_show",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "7e414e810452f1387df9019924cea365c5d06ad39f1dd0e9fb4852250cf9ab44"
+    },
+    {
+      "name": "spotify_get_show_episodes",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "ae201341c58708041f8efb892d8f7772c87ee060e78f025fabe6a9018de9628e"
+    },
+    {
+      "name": "spotify_get_track",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "b2c39ceb97a655fa812834da245644df6bbd6c39710334f12701ac0892e5cf31"
+    },
+    {
+      "name": "spotify_get_user",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "30252a384669d71d5897f9e471dfb34413dee5e53d29c2f02c0cee3ebb29cbe2"
+    },
+    {
+      "name": "spotify_library_stats",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "9d174375f2cbb1e7ac628ae4a62e6bf1c8f54a683084de87035a51346ca1dbab"
+    },
+    {
+      "name": "spotify_listening_patterns",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "1bbe39cc4196c99422d73043c973dd1806dcb990cb00c896e55597dd9dd829b6"
+    },
+    {
+      "name": "spotify_listening_report",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "de4af3fa82d95a37687e32746ee543cab17f1f9c08be5303e4379135aa6fe0db"
+    },
+    {
+      "name": "spotify_now_playing",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "46612a2dee39e416a5830d2548588fad412d772038eb6929ab5f7e26f127e59f"
+    },
+    {
+      "name": "spotify_pause",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "4d04fc47197a8863e04d87bbcd6f9e4580272b23874f02dcc001672219561bca"
+    },
+    {
+      "name": "spotify_play",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "67a3d0491e4a0797815d8125f3986ddee9f25c31ce00727672025c9fe3b222d8"
+    },
+    {
+      "name": "spotify_playlist_analysis",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "b4b40dc23e5b537f12f7217e1c4a901ba16d5bbdb7350a5ac58756374f7feabb"
+    },
+    {
+      "name": "spotify_playlist_compare",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "dcc9423f601f12272989102fc420775f46bae7470da0a648956713fb53aba396"
+    },
+    {
+      "name": "spotify_playlist_freshness",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "ede7b9ab4b6ba99d98c6c29a0d85f7615872ce399aae08fbdc6be0093a9a70c8"
+    },
+    {
+      "name": "spotify_query_library",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "b528c6c64e7b7d0ce6684bad7c459d3d117869a297f4af3bf1f76f406bbe95b8"
+    },
+    {
+      "name": "spotify_recently_played",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "80c43f25a1ec5c05aee870832b348d11db8efbe5a0496038e732af7247f9c2f3"
+    },
+    {
+      "name": "spotify_related_artists",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "326feda92fa1c3519842acbb06bf56bb4988f26551fef6ec22c0dc9a3ed4787c"
+    },
+    {
+      "name": "spotify_remove_from_playlist",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "d2182674818af9ca9922bb3a5e4f694db2fe4b16249d9e191c35b9914401ceab"
+    },
+    {
+      "name": "spotify_remove_saved_albums",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "2606544c88a7e08885552e927bda8cb806de0e4e7d5fa6b14f4b1e923871f284"
+    },
+    {
+      "name": "spotify_remove_saved_shows",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "50a0a6c86a567c58f7f8282c20c99e78ae524ee5c2b89d15405bdce440fe270c"
+    },
+    {
+      "name": "spotify_remove_saved_tracks",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "0571f58af2ef055f3cf306e5e2f3126701d0f8313ee0caa6d3e5ae058da7a7a6"
+    },
+    {
+      "name": "spotify_reorder_playlist",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "a2940bdbfcf5110b1a2975b64388a9bf7291968bf587959559470b189954b702"
+    },
+    {
+      "name": "spotify_resume",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "11a1593799667fa389789c3601e1b350c38c3e4004722310d81f72f59177b1dd"
+    },
+    {
+      "name": "spotify_save_albums",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "24777c5c62acad25d2b6f3f28b46826d23adb3a296ba23b7caf97ec19ed5a402"
+    },
+    {
+      "name": "spotify_save_episodes",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "91eb0459ff56dd4d1f42f395f67bb71389b576da39b4e1c0825d8a1cc25e5c51"
+    },
+    {
+      "name": "spotify_save_shows",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "cacf89f2bc1cc6db9657ab54f6b5f9a2ecf24cd35e3767a080999ed54d9be322"
+    },
+    {
+      "name": "spotify_save_tracks",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "7fc00921d27fa0dc9757e3d652caac45a84a9f5784ebafd4d80c597fe2b945a1"
+    },
+    {
+      "name": "spotify_search",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "c0239feecada4112c0789dbe78865b17f219a798d14d4eb8d65c30e524aa02e2"
+    },
+    {
+      "name": "spotify_seek",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "e96fa28c36656e0fbd147bfd111cf39faacb5b5c30a526e68b8a2e400e6c256c"
+    },
+    {
+      "name": "spotify_set_repeat",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "961c9f7a2197b5ccd4d6ee84a16c742aa2678f545f570e690d8f210331e9664b"
+    },
+    {
+      "name": "spotify_set_volume",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "1b64dfbfa6d5527fecdd2d4b6bf710604b2262abd728e34d5acc7e7570393dab"
+    },
+    {
+      "name": "spotify_skip_next",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "a349a96ea0c105cf455ff259ea74a959c35c96a164823cf9cfdd729413b531f8"
+    },
+    {
+      "name": "spotify_skip_previous",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "25e0b78f7e4eb23f55563267a44c34dd525079eed63cb821be8e00d28675be22"
+    },
+    {
+      "name": "spotify_status",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "a2316a5ec56946451865d60eed453c8c438758612813e43a3da13a222de3125d"
+    },
+    {
+      "name": "spotify_sync_library",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "a51fddb4712e3ed765fbb1443b0536190d860f5eea52d3d9ef594338e80b5e97"
+    },
+    {
+      "name": "spotify_taste_evolution",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "323daf80aad7237ea6441a299ee0b76dc6b0a3c487be4dfda55f250955b1bc14"
+    },
+    {
+      "name": "spotify_taste_profile",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "ea27612bb8a1e8d454f2f41516f39d42d20f7bb698c6740438b85aab06f69da4"
+    },
+    {
+      "name": "spotify_toggle_shuffle",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "dfdcd7ab57c945337f69bbc64b4a092ab507770b56bcfba189cdc2fd6cd379c0"
+    },
+    {
+      "name": "spotify_top_artists",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "a96948a54341f8e6537d536ca0ae9d9d798e7ddf6bd56443470b6960d04317bc"
+    },
+    {
+      "name": "spotify_top_tracks",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "58b253eb0a0d23fb7542f59c8344f15415df64dd9ea69d725f591ec0bff0d0d2"
+    },
+    {
+      "name": "spotify_transfer_playback",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "74ebd98b13fc1387f73aefbcb7fa34af464395bda01eb40db1efdd65b6ba38ad"
+    },
+    {
+      "name": "spotify_unfollow_artists",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "07fae28965fd930be901498bb883eb277184f544d1266a721bcdf1a2b20036ce"
+    },
+    {
+      "name": "spotify_unfollow_playlist",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "0eb3110c004a962f46d2e43811523b57830af30d53306bb734a34942ffffd601"
+    },
+    {
+      "name": "spotify_unfollow_users",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "984bb6d01c4c21ebef77cd6fa929e240a94ec3baa84641cadf2377d2e9264c13"
+    },
+    {
+      "name": "spotify_update_playlist",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "de9fdf1a578a7229a3a2f71a1844ac053843ace4c684a5d1464430364a5a1da5"
+    }
+  ],
+  "surfaceSha256": "3a294e5cc52b23155b27b16dd6c7b5f8aab5ed100bfd3d29a0b6de85ce0505e7"
+}

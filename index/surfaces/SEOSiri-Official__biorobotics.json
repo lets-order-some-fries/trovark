@@ -1,0 +1,40 @@
+{
+  "ref": "SEOSiri-Official/biorobotics",
+  "scannedAt": "2026-08-14T19:41:35.252Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.6.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "calculate_dna_melting_temp",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "a3e0e58689b55b6d57a22a1585ae070f22fa28205e869baccb1c72e9080c0a46"
+    },
+    {
+      "name": "calculate_pipetting_speed",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "6aae5244c75dc3f9e7276509b1e2c27e276e903912474b35f2af42a1fdd765c8"
+    },
+    {
+      "name": "fetch_genomic_data",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "290547cb4c6684c452a0363ab76a57488066e4654d20cf1622f89a1c988c3268"
+    },
+    {
+      "name": "map_plate_coordinate",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "13757e11e088c5927bf1d36b054261f91d0169e9f966300a926595e45716b445"
+    },
+    {
+      "name": "resolve_biotech_spatial_intent",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "c86ff1b4fae9a54329304aa1964d6e1c23e10456e2b259895805949ba69ff16d"
+    },
+    {
+      "name": "translate_emg_to_actuation",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "199a55e091d20ff37e2eb5acb389169cb81c10c4ceea7444c1778068493977aa"
+    }
+  ],
+  "surfaceSha256": "efe15647452130068f31f6661173f2f7f2672d0cf600f5442b895dd8480657dc"
+}

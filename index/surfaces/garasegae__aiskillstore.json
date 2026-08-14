@@ -1,0 +1,100 @@
+{
+  "ref": "garasegae/aiskillstore",
+  "scannedAt": "2026-08-14T19:41:35.252Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.6.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "check_draft_status",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "f89134626e99e1f841283fae979188dc6dd206a59bda701fdf41b16ea7aeed0e"
+    },
+    {
+      "name": "check_vetting_status",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "31de9c8e92dd53d9caa4aa9cada30d1176308183461e896497cf94d17f1e5d8d"
+    },
+    {
+      "name": "download_skill",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "513b9a303ce6f2e296ce205641fe238979339b5596610ce7a1e84156d14f4ffe"
+    },
+    {
+      "name": "get_agent_author_stats",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "643ecce03abf0e25cb6ab929c2fd85f36fa7b06f6b9c127c05f13840b563408a"
+    },
+    {
+      "name": "get_agent_identity_stats",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "34848d802f841706ba2fc9781c44aa9f3c617723f2540a3f554495e5d3a1652f"
+    },
+    {
+      "name": "get_install_guide",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "acc24301e0488288130ac5a5ede93bb997f7dd52820a960e3cb5ee4b8304b809"
+    },
+    {
+      "name": "get_most_wanted",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "4dba2f4b808b0e45e610fe57b0334f780a52697f0775eb6e098ec3fa3d4d783a"
+    },
+    {
+      "name": "get_skill",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "8c01cfa84859feb7680cae981cc6eb89a49ecbb4c1e5cff95a087138f0440b74"
+    },
+    {
+      "name": "get_skill_schema",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "7e100da35333ccf4841fc34cd3a091ad82ff00e6f3274cf9970586097c77ffeb"
+    },
+    {
+      "name": "get_vetting_result",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "8d3f35abad6b660d61ce560d749a1a05264fb09105d4688de73b8c0c752e1c38"
+    },
+    {
+      "name": "list_categories",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "c4201a8206bc7ece48108f16d8c70f0dd19cabc052aa96db6dee64463cf4ae30"
+    },
+    {
+      "name": "list_platforms",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "5b4dacc4cbe8670d8b00cbaca8efbdf0318f440d15434c1106094d9b371f0b58"
+    },
+    {
+      "name": "post_review",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "d3aedc07d7e2d7ca13eb32802ebca3835e0f8ce2373a9b96627b6b3daf486c1d"
+    },
+    {
+      "name": "register_developer",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "6d78c9470b7df4c2d7a11f8611d5b3c3a0d4d7e561510078cde40abcde14218e"
+    },
+    {
+      "name": "search_skills",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "db9ccdada8426b3992213a57f0f0d82365d8dc5a658533084bd1f0ac1a18dc21"
+    },
+    {
+      "name": "upload_skill",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "834414262bf3a593656f32df7001942057fe3ff2b4cdc4a08d9c028555b5705c"
+    },
+    {
+      "name": "upload_skill_draft",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "624d376d4e964012cad061ffd9d66a85bb172bce7316a7419a3c05a7fb59e413"
+    },
+    {
+      "name": "validate_compatibility",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "915957b9884ff129d687dad0821a8c256e110cc0ead7f5f70305be461a3196a5"
+    }
+  ],
+  "surfaceSha256": "8b650fb8fedea73d0ec1c5ac18890b387f09130cade72feb02aa16d40f3de1f4"
+}

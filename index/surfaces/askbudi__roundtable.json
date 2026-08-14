@@ -1,0 +1,55 @@
+{
+  "ref": "askbudi/roundtable",
+  "scannedAt": "2026-08-14T19:41:35.252Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.6.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "check_claude_availability",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "689648adba3a5380abb3be94a4f23416c50d8b21f22f1a72df904dfc17293114"
+    },
+    {
+      "name": "check_codex_availability",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "38d3823499ebf57ecc74d885774aee9c98d7cacdc101271d0129e598c984df4b"
+    },
+    {
+      "name": "check_cursor_availability",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "40fda13c0d9dd8682c80e3a619f43c85ee36fe02c42ac249e7994f551e59df61"
+    },
+    {
+      "name": "check_gemini_availability",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "19b06e9da0fd09342ca551b6c31a7816a915f9b75b8372b113d234a0adc167f1"
+    },
+    {
+      "name": "claude_subagent",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "427830375dd66fa548891db0e6acf0feb515b6bfc1db21156fc7c7f6c6b54d89"
+    },
+    {
+      "name": "codex_subagent",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "4af3603ca13b9dbb1a3f5efdb5cfb10a9157a858615feea9e80306f801084b75"
+    },
+    {
+      "name": "cursor_subagent",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "de87a3fd6a0bcfde344b0c68efad675c442e6b88552ec212a1c1747471e925fa"
+    },
+    {
+      "name": "gemini_subagent",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "5e3c25455abf8dfe4b794ec2b79ebf780323be0f892dfe761f770c18dde16977"
+    },
+    {
+      "name": "test_tool",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "238e26a84ed1aa1ca9018705b87f4b4568e8d2d7f8ec3d09547a2ae0c83335c0"
+    }
+  ],
+  "surfaceSha256": "ea5d7184c37a81d9f016c208815dc7a60aa84d6b005f010390a485d0fc7af1c3"
+}

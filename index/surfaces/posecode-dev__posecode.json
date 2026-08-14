@@ -1,0 +1,25 @@
+{
+  "ref": "posecode-dev/posecode",
+  "scannedAt": "2026-08-14T19:41:35.252Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.6.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "posecode_authoring_guide",
+      "descriptionSha256": "1d4d4c3c63d3ea7d5a00f1f9c4960722333300ef639a267d3ff3a42616f0e7dc",
+      "definitionSha256": "9e4fcdd3f9201c90f21f203da22808b57b6d25dfea6cb2b73f15aa4c9cf5da41"
+    },
+    {
+      "name": "render_posecode",
+      "descriptionSha256": "c0a3e02085ad591d88ef77b1e06420055c71f56c7b2f660b7c9c2476a3175785",
+      "definitionSha256": "ac3c33c61946fbd65d26a9159fa8eab60a836aeda0d6247ed4a9fc2e5028e4f2"
+    },
+    {
+      "name": "validate_posecode",
+      "descriptionSha256": "1b22b34669e2f3cd02feac716c36f3abbf6ccf306ef68d70d99a4e88578ecf31",
+      "definitionSha256": "863d228390171a5f09d82fd993a0389765c2772e1c06f64ca597e637edeb8a57"
+    }
+  ],
+  "surfaceSha256": "f30f8f2364fee207e4d5c0a43dc49b7201b7853c7e45a10948758dfe1431a94c"
+}

@@ -1,0 +1,65 @@
+{
+  "ref": "Cifero74/mcp-apple-music",
+  "scannedAt": "2026-08-14T19:41:35.252Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.6.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "add_tracks_to_playlist",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "77f3646bbfed06bb37fe8b64be14d48b05add0d131035b888c6342c98486ae23"
+    },
+    {
+      "name": "create_playlist",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "90d21b8d3f8f0cb37660358c375e124b9ff46df4b37136731ce9e93871bad648"
+    },
+    {
+      "name": "get_library_albums",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "eb47f8a9d63bf8e8f0683fc07bc123f21e2d7d24324bf3e49a724f9b37f775a6"
+    },
+    {
+      "name": "get_library_artists",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "a4e12be44fe75583de0c92cd79c7ffebfacad6fd663e5542bd4de2f95305d052"
+    },
+    {
+      "name": "get_library_playlists",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "25da87abe492a2de9a467c0fe3d53f16e3036177375cde0c78daf5e7f94bcc4c"
+    },
+    {
+      "name": "get_library_songs",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "63f8f510091258b81b0e749d6264bee8ee91fbb838a5a23217d9cc7d85174ae3"
+    },
+    {
+      "name": "get_playlist_tracks",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "807b19c6640fda7bbcac09ae291f1d7f078e56c3a68269c4dcc526c17ee72748"
+    },
+    {
+      "name": "get_recently_played",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "fb1bbf326d571444937e4a53f36763f7d1302039b673da13821373dd70789be9"
+    },
+    {
+      "name": "get_recommendations",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "f34b3d1964567d749b8e17293658c087cf0ef7d3839b74d73c007213326c859c"
+    },
+    {
+      "name": "search_catalog",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "09b381632d5a565092c967a811c1faf6efbc9d8cbbfe2c10385dec07345b15f3"
+    },
+    {
+      "name": "search_library",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "3690d9f301e695d70f39475a5327b226bd85db882039e0b6afb9eda50400132f"
+    }
+  ],
+  "surfaceSha256": "f59e0d793e24702018ac20dc54a606c16d5927b84f6e7526298172ed11bc7328"
+}

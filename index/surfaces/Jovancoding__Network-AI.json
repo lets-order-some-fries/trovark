@@ -1,0 +1,20 @@
+{
+  "ref": "Jovancoding/Network-AI",
+  "scannedAt": "2026-08-14T19:41:35.252Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.6.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "blackboard_search",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "f4bc0b00d9608590728a96195db59c760185b656f0446eb229c4809b03fb51bb"
+    },
+    {
+      "name": "context_pack",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "fac8c67514fa38605129494f2bd8b034d0010c992b97371628769b29ffdfb0ea"
+    }
+  ],
+  "surfaceSha256": "6ba17f58072ec1a82ed8232bb422442115ad89057e2107f290a66269dd9376d8"
+}

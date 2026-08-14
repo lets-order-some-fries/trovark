@@ -1,0 +1,25 @@
+{
+  "ref": "Crindo2/gph-mcp-server",
+  "scannedAt": "2026-08-14T19:41:35.252Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.6.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "get_provider_detail",
+      "descriptionSha256": "6704c7ca023021fe7741737fac037953112bc6037da9133a9f0b833e577e9fb1",
+      "definitionSha256": "b7dfd005d5311a1e4a31a234739beb1868dea01f8648910fd4f0f799d8cb8733"
+    },
+    {
+      "name": "match_practice",
+      "descriptionSha256": "c66705c88455c644c06965f4416ca5407f5e1edba8be0fcd3804d0e7d0957eef",
+      "definitionSha256": "3f9c480ae154e69ed2f01a47a4e08991619d81cc7a51902699308d0979aa5b1f"
+    },
+    {
+      "name": "search_providers",
+      "descriptionSha256": "4192ab3182fc604881e7308d151363b61f53eb1e0abae60e451c5776ee1231be",
+      "definitionSha256": "50809be2692e6ca27d3cabab40969020dc79a3468718af730a98419733abf9ab"
+    }
+  ],
+  "surfaceSha256": "751aa184035c96340c9f604a99e25b6721fa9ec5f4bf5fe77ff8259e972daee3"
+}

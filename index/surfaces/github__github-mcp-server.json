@@ -1,0 +1,30 @@
+{
+  "ref": "github/github-mcp-server",
+  "scannedAt": "2026-08-14T19:41:35.252Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.6.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "get_me",
+      "descriptionSha256": "bc34f566cc782d563dbfb6035ec4b94c7c7d46f34ef84c61cd7b02729ba281ce",
+      "definitionSha256": "84e525aaf4834aac65961fda390fc614a59a81485986a11c3c24acfdba725d2f"
+    },
+    {
+      "name": "get_team_members",
+      "descriptionSha256": "e86ce60eeea8d7fcc9a5e50ae24c13b083aed10d254af864402ec8167502bbc4",
+      "definitionSha256": "a10bdd3fe599268b34f1b226e75484b6dbb1c0f288c3596bc50d9e81469a1730"
+    },
+    {
+      "name": "get_teams",
+      "descriptionSha256": "99380d708092b4760246658a3e9bc5f7991d7bcecc75c3dea03e13fcff6aa27b",
+      "definitionSha256": "dcbca9ee5b559acd3fa5b9261d5ff8e8de8ea6d2db7796afb9080136a466f5be"
+    },
+    {
+      "name": "ui_get",
+      "descriptionSha256": "63ac75424c9d3736970128bbbd4c8aeb836306ace67b6c734e86b2ea2238e98a",
+      "definitionSha256": "d3636856fc41b39762ac615d09e01df2ef32cace4f278f7f65a40d43e21e1d86"
+    }
+  ],
+  "surfaceSha256": "61de4966ac61af244d515161573fbe67e326b563d9e169de88fd6e9c4b6c6bee"
+}

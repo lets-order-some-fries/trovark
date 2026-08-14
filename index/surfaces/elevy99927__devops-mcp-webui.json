@@ -1,0 +1,70 @@
+{
+  "ref": "elevy99927/devops-mcp-webui",
+  "scannedAt": "2026-08-14T19:41:35.252Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.6.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "exec_pod",
+      "descriptionSha256": "9a66cd6b2b479968ddf555ea73302c3846993342c0685e06bbe757bc605d6d0b",
+      "definitionSha256": "fd04033443fa48364ee4fbcb39d08e153598f38e62c57d05bf87884979b7e115"
+    },
+    {
+      "name": "health_check",
+      "descriptionSha256": "14290e1d0681297772dedd7ea7e78b2d2492a46382251c6f8f49a2977978ece1",
+      "definitionSha256": "1114ce46303ed323232a3f2828e66e9bf29b72d9e1a7a9ddb7ea42c0fb2300ae"
+    },
+    {
+      "name": "helm_install",
+      "descriptionSha256": "35b5b28c192ce9504e59cab683bcd4066143ee68ba9de89a29e27c9534544675",
+      "definitionSha256": "38e458e8bca45cb177ba4543beed2c21fd2f6a087827300630b9a3e0b7d15a69"
+    },
+    {
+      "name": "helm_uninstall",
+      "descriptionSha256": "1db96c3a73d3949e0c05e3a5534462be8773e275e63a04b1089cf7997cd25644",
+      "definitionSha256": "811aaad39b6b0d5ab546d1dacddc281b4ea672c653ab904cdff3d361463330b1"
+    },
+    {
+      "name": "helm_upgrade",
+      "descriptionSha256": "0add63f952c51139074c523b7174b7118dee906cfa06530c67cf0a7f2ac627ef",
+      "definitionSha256": "41a03840fe07a8dd30a2cf782b47db2dd1868ccad233159ec8b38cb11c69ae14"
+    },
+    {
+      "name": "kubectl_apply",
+      "descriptionSha256": "686a49be8072c1e5bc000140e41834b45c74f8561088eb9865f7211eb7486f11",
+      "definitionSha256": "4e970732fc38a56307d3735487bbf69281c8b434c9f30e459ab100c61759f990"
+    },
+    {
+      "name": "kubectl_delete",
+      "descriptionSha256": "59acc77ac20e4b504e86576d5021480213faf79f020fab28014f5c9d23bd3806",
+      "definitionSha256": "c7c09cecb09b28ef4199e3e6bb20068c1d57163a8977a4117c1d98c2d1d8f87c"
+    },
+    {
+      "name": "kubectl_describe",
+      "descriptionSha256": "6d0263ac51b974d616ed37e08417deb7741a0a05441ede9d807b313773166860",
+      "definitionSha256": "472dd4da1de9cb5cf6ccb430830b1e5c3517b911f01e3998e50032f9b4f337a5"
+    },
+    {
+      "name": "kubectl_get",
+      "descriptionSha256": "7130febdb3579a3a83d1acc68297141a592f4842fa664918ecfcb5c899369c7a",
+      "definitionSha256": "1ee78e2d813ce04a4a8e4b52095e0cefd8c592662bf3677259b54692fd6dbe55"
+    },
+    {
+      "name": "kubectl_logs",
+      "descriptionSha256": "9c999c30fcb759db7a8d7b6ec5722b8cff5cc6d0aaaaf703a9b854d0486806c6",
+      "definitionSha256": "8f8c5f040a2c22f311866d5026af7fb458a4e90e3a91a444776264b032fbd56a"
+    },
+    {
+      "name": "kubectl_scale",
+      "descriptionSha256": "6495b5d0c15ed25b007f2e12134894117f34278c8be185ddbc0070cd6f357bae",
+      "definitionSha256": "f9b38560eda6517b02e960303d27fc40b06c1c3ae960becf51580465d0b015b0"
+    },
+    {
+      "name": "port_forward",
+      "descriptionSha256": "5890526e7550c44b4c20c23a62e182e50fd50f171850057149b6d6154413f4a3",
+      "definitionSha256": "492e2aeda16a4a8deb763794d2206069699d96e8de6945500a4bd1d4a605e2ce"
+    }
+  ],
+  "surfaceSha256": "836bc7a5f242ee8996bec4af017f17ed8eb526d4d449d21e76a110ef47273d08"
+}

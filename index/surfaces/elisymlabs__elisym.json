@@ -1,0 +1,180 @@
+{
+  "ref": "elisymlabs/elisym",
+  "scannedAt": "2026-08-14T19:41:35.252Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.6.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "add_contact",
+      "descriptionSha256": "ad1516b72ff5f7a4d6e42ae29b96b7d6a736c6ba5734d52bea35ae1eda8de4a1",
+      "definitionSha256": "70f26fa3b87d46919e90fc40c3c59dfa8551792da6575484101b6e26e17bbd17"
+    },
+    {
+      "name": "approve_delegation",
+      "descriptionSha256": "b9a913c2e45ccca669e63da699a07f68055e170db421cad65b53550404dac19e",
+      "definitionSha256": "7bcbc5182113437bed21431b4df628ec4d9692699f0122205047955df69d007f"
+    },
+    {
+      "name": "buy_capability",
+      "descriptionSha256": "d4d4ffe19e33a532c24e3bd5c6b5260be9bc59a47ee037b992f62274a160196f",
+      "definitionSha256": "41689d2c1461037733497968163f4d084243711de4245e2c4066994feda4bb35"
+    },
+    {
+      "name": "create_agent",
+      "descriptionSha256": "0adb4970e8f0e55e4908d88d97074887296b1c889510a5b26defb2d71d0d18b8",
+      "definitionSha256": "6fca39cafef583e783224d062aa11074e5e9b40429f20c0bb84282f1bf65e2e4"
+    },
+    {
+      "name": "create_job",
+      "descriptionSha256": "d082ef47fedf78d3b3d23ed7de50df9b99051cc93ec06b666fe84355cd2d2e63",
+      "definitionSha256": "ca4631df145709d54c62c38d5c2fff767839fcc82f578f17b569a83ba63caa7b"
+    },
+    {
+      "name": "estimate_payment_cost",
+      "descriptionSha256": "420bc30f70bd87b8d0982f2f72700dc2f331dfc147d7a9b5c9dfe26c0b56ae69",
+      "definitionSha256": "7646a19cb2baa37cdcf15c5d3f1a7cf54de5b107ac8da0188a9e4bfe683efdbd"
+    },
+    {
+      "name": "fetch_job_file",
+      "descriptionSha256": "39c867dc1c09de3d02616164159c1143cd952e2ef864d18c6f1f41e93a43c1ec",
+      "definitionSha256": "ad3a357b846a42bc560214c6dbd6a2a7ed01515a023aa913586a6823ea71a5f3"
+    },
+    {
+      "name": "get_agent_policies",
+      "descriptionSha256": "055b57b098fa6f63eaaf13e3d1e124531b75ac0158aeb3822c169fccca75c187",
+      "definitionSha256": "dabe476e28c574d3280b01a42ac31c770fd078ced318a6c67ef600cde5a29f3f"
+    },
+    {
+      "name": "get_balance",
+      "descriptionSha256": "5f37cb250412272253a655bcade9363c706ab8bb9bba0c490c29f6257071747e",
+      "definitionSha256": "8096d85613133f0d427a97975ec7271ad03061e8237bfbeb890ff3b85462d578"
+    },
+    {
+      "name": "get_dashboard",
+      "descriptionSha256": "ea001553b78474a75995478e5004e78f28b96f5f69770d4371572b061d957384",
+      "definitionSha256": "9c477e5f9a5ef3162af990748f09b0aa73a580fd236248664e1e9c28f7ce788a"
+    },
+    {
+      "name": "get_delegation",
+      "descriptionSha256": "b0c4fd87e9fa85ad068795e3225e282684aeb47e6049430d49676eb3d9158759",
+      "definitionSha256": "ccb8fc2695653d0cf9a61daa1434183c4cfcdc711f707ebf5def5b21ef1ca798"
+    },
+    {
+      "name": "get_identity",
+      "descriptionSha256": "06eb031a33c91a19f65d803edcef0d4ed88c2dc346f50ec5de3f5c1f06ec55b2",
+      "definitionSha256": "970a692f3a37fa3dc03a4a907cdd1aff25c328a3f2f8db810263037ebdc9472a"
+    },
+    {
+      "name": "get_job_result",
+      "descriptionSha256": "0030a0eb5a0b69ba7f457524149a5a12a6596cd0e66e5844433df006b92eb613",
+      "definitionSha256": "6de41044f9dc4ede579da03f7da8a8a7ff14c7c80c5d1e1a8f176cdd6ba8fb01"
+    },
+    {
+      "name": "get_messages",
+      "descriptionSha256": "907cf68cb018f253970d8a7277f8556096c3e03bddd13ec8784333dd33ba4abe",
+      "definitionSha256": "b818f870b97825a196938d2ca5706a15cefe767426cac9edd1adfce7168c6a24"
+    },
+    {
+      "name": "list_agents",
+      "descriptionSha256": "a0dc5418ca11cbe5ec5966e8778985cca00d822896f0249366f6cef9b2ccae1f",
+      "definitionSha256": "d2b917214d6d2d3a605d22ff7b369ad7a0ef1399f6a1fb640d04dd49239bca5c"
+    },
+    {
+      "name": "list_capabilities",
+      "descriptionSha256": "893820a4ae54ae2bf8907484ea15036fd84c5c166d1fc70cafbd562697de5403",
+      "definitionSha256": "65e3225ab36d7afc528988147bbeea374a8f0c4dfab7c816756e56d3dd1217f5"
+    },
+    {
+      "name": "list_contacts",
+      "descriptionSha256": "28e0becb9c4d25c12a46377d2f5e0d5ea5a24b2c478a87bfb03d9085dd371fec",
+      "definitionSha256": "5c78f8ee1dfc830abbfef78ca096ac7771daba502144cc123781f4fc983c31cd"
+    },
+    {
+      "name": "list_conversations",
+      "descriptionSha256": "d47aa7536aabdac9a7fdd9d6de0c9824e01449fa7d6960b4febbf44d3246ff3a",
+      "definitionSha256": "68a7df347221c148051026605ce74684086459ab7dbdfab016c0bab62f5c7b11"
+    },
+    {
+      "name": "list_job_sessions",
+      "descriptionSha256": "22bce95a14b696407f3d951c6a2b4e8bccb1f25a941a1543dc9026753b3bc0e2",
+      "definitionSha256": "f562a71a17a438fdbc9e054639ae3bd2b4ac7bc507bb60d62608bb43f13b1fb5"
+    },
+    {
+      "name": "list_my_jobs",
+      "descriptionSha256": "2f603522d514c5a46a6dd5908fbdfc40b5c16f598a85a3ef98974e4e5ee088ea",
+      "definitionSha256": "41a927bfdea2ab6c5bf3c1bba970752b67752daaecb1eaa272ef1665928f6587"
+    },
+    {
+      "name": "remove_contact",
+      "descriptionSha256": "f128f2b328c831e34b62658e358c279280ab044d14b23e5215f73971aaf90dc3",
+      "definitionSha256": "fcc29c2ba1c4a45f860beb12e24946e8254ca9797423626ee5e43e945f1157e7"
+    },
+    {
+      "name": "revoke_delegation",
+      "descriptionSha256": "41a3f218d8be89e86a8ff15292c50ecda15570baad4d91d6f952d453481a6870",
+      "definitionSha256": "dddb9a98eff955a7910acc9590702155336c8e7b41d996e87d0280304d21154e"
+    },
+    {
+      "name": "search_agents",
+      "descriptionSha256": "a7cef512cf8cf72c5083fb0919e0a55f535f72423ed19ffa6506ef7e8b20c272",
+      "definitionSha256": "24ca4542c9cf6ee7b55e2758b62d23910acc5d653d40dc5b6c2b6ac0773667f8"
+    },
+    {
+      "name": "send_message",
+      "descriptionSha256": "33e50e33fbfc6925a943866c9ab9331508e1e8fd572d4c295f1961e62a6c190b",
+      "definitionSha256": "cc0a2d9b1e309fc2801346ad95ddf683251b67c964f08ccc4b077e8bec3766a4"
+    },
+    {
+      "name": "send_payment",
+      "descriptionSha256": "1bf28d3bc4c8708b009a30e87a12504dda0b708a292a7d68fff21e0a922ecaf6",
+      "definitionSha256": "9a05ea6d1b97bf31bc41c9ed6fd0f7b939b407f06678ecd34e199b042ef6373a"
+    },
+    {
+      "name": "stop_agent",
+      "descriptionSha256": "4cc3cc19f1b29fc09ee420933655fb159c5ce59d81e0c5351a97066b3da388f6",
+      "definitionSha256": "76345fdc050f9b9f80ddf4d76db557540f331c920977a3702255cfaf9bde2e24"
+    },
+    {
+      "name": "submit_and_pay_job",
+      "descriptionSha256": "a355d0bf8c63e503fa022696b16d9d78cda60499b677336b6545ecf68d3fe5fa",
+      "definitionSha256": "7258ad3ad49bd9747907bfba0e5513687efc7f57ffb260355523efb641ada246"
+    },
+    {
+      "name": "submit_and_pay_job_from_file",
+      "descriptionSha256": "7ae6a163013aa615e73c47d51b7d39068d6180b47f77d0bdd9e350748464d039",
+      "definitionSha256": "ca202238cd5712831796287f7ec4d181f7bf86a78efb86646c908637e53d41ae"
+    },
+    {
+      "name": "submit_delegated_job",
+      "descriptionSha256": "ca9ab17de1cefb52acd3472d56e6d9232afbfcabb67fd24cf5f6d662cfbd9104",
+      "definitionSha256": "f4877ab86190fb55b232618b84e2a2de4f6c5feaff60301a350eb3c0f1b53958"
+    },
+    {
+      "name": "submit_diff_review",
+      "descriptionSha256": "f3f2fe3976bd3f77c19125e600ba2afdbca9ca6cab97a95c77994114b0ec523d",
+      "definitionSha256": "2c04bd33f22c55e7e8acca927d227a089dd2ddf1268e069e7ac7c55c88f4ba42"
+    },
+    {
+      "name": "submit_feedback",
+      "descriptionSha256": "69b7d8b1e5b9f76e999b5487d55703e993b1f053ebabb89128a7835e86793d56",
+      "definitionSha256": "5597ff853fd7829413633318027edf2ee7b4c61528f8686f1fe4e824c14ad7a2"
+    },
+    {
+      "name": "switch_agent",
+      "descriptionSha256": "3658b765ddfa0b75de9ec38c047264f825b33cc36afd25f1011f0eb74d702a14",
+      "definitionSha256": "047b2be86c1644ecc155e9f85e48d7605491ede82652920a96b144759c9161ff"
+    },
+    {
+      "name": "verify_agent_identities",
+      "descriptionSha256": "79fabd2552d4af0a425783c496d0524cd4963d33ce594a2850705b38dda1e2ca",
+      "definitionSha256": "ad9d96b424d90eb7448bd76b6a3fde67fef0e39ad0db84ebc32f79c9ce51f163"
+    },
+    {
+      "name": "withdraw",
+      "descriptionSha256": "b9ced025b7a8d213599ba3235c3f32dbe53578478cdbf2f71d9fc245c106f5c1",
+      "definitionSha256": "eca67d2e4b944d98a9aa7be6828e7613abd8319bc9447065b70343ac899db1bb"
+    }
+  ],
+  "surfaceSha256": "f6d8ddc50916931d17937e5e244539c3c3ec4176a0b71ef4cb7853bf331d5322"
+}

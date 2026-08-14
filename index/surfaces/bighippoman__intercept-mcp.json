@@ -1,0 +1,35 @@
+{
+  "ref": "bighippoman/intercept-mcp",
+  "scannedAt": "2026-08-14T19:41:35.252Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.6.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "extract",
+      "descriptionSha256": "8addb1e46da9638bf56063f41ab9a5796b054611dc904ac24c14f984e67a6e61",
+      "definitionSha256": "f37f2b19b17db1bb050bfe574edebccba3618c68e29c921cd5f735adcd280c75"
+    },
+    {
+      "name": "fetch",
+      "descriptionSha256": "9fe0c30ff92510520f19c48188ad81cecd2c5a124222b6303b3f926ce84a03bf",
+      "definitionSha256": "e6211073e7e7183da3cc56c0230e57e3d89cd76f3dd430b28dd878323d0e6560"
+    },
+    {
+      "name": "fetch_batch",
+      "descriptionSha256": "908af1c7f79f8072d5270046f47339a3561348bcb1c07cbe8eef3ed54021bb1a",
+      "definitionSha256": "30820fc20144051edfad8ecaa2767b8e1e47a5d2d17cd6a87e4af8e47b1b71b0"
+    },
+    {
+      "name": "research",
+      "descriptionSha256": "d2acdbd4eca4f4e1a5f5b1ea0c6a6dd89f6063f94fa6a4e3c86771d3b0340ad8",
+      "definitionSha256": "ea0a9af079f2f9cb2fdb2f94d015fea799c16d11fc7e61f5b76620c23cfa2bbd"
+    },
+    {
+      "name": "search",
+      "descriptionSha256": "c417be3452c90771f9917e2ea968ffa9bd6ceb30f9432df341d41663a36ab246",
+      "definitionSha256": "5f0765b7495b3238da71baa526767eae8aaa3df329900825457b74ba764407e1"
+    }
+  ],
+  "surfaceSha256": "55b26731f1b8c069608784968b1e57e8f3af8757b83b10f481db5abedbb1b018"
+}

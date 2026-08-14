@@ -1,0 +1,25 @@
+{
+  "ref": "arikusi/nakkas",
+  "scannedAt": "2026-08-14T19:41:35.252Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.6.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "preview",
+      "descriptionSha256": "529272de8b3862c2f031cf91f647d59f58343c9fc021f8d5a04f7f04afadd305",
+      "definitionSha256": "1bdacc1722c46caedff3d8bdbffd65a569d4ee21630ef24f154db42eb220881e"
+    },
+    {
+      "name": "render_svg",
+      "descriptionSha256": "8ed397e73d3c8d78c245087400de059e11e7b584d5ca440773e0cac1c3cc56f9",
+      "definitionSha256": "68fd718120ff5e9eecc74471edfbcac71d0cd41ecd2e61cc04469f6cf043d542"
+    },
+    {
+      "name": "save",
+      "descriptionSha256": "5e014d08099b9a8d0ec4000f70eb4c6a9fb1b8646a90cf025bd6d3d8e38cfbc5",
+      "definitionSha256": "343ccfb033988681b76480ec37a11be4815e6c448c99441cdf663b5587773ea8"
+    }
+  ],
+  "surfaceSha256": "699c20a068749a4122933afe1afeccb86049357ff4edf4ffa70ce8683939a897"
+}

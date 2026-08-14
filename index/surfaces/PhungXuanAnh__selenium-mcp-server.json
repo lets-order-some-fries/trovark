@@ -1,0 +1,105 @@
+{
+  "ref": "PhungXuanAnh/selenium-mcp-server",
+  "scannedAt": "2026-08-14T19:41:35.252Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.6.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "check_page_ready",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "492fd91c1554c30b8fb2130f9d2c5208bb95ec6a7e6e74a3d026dd778b9c3930"
+    },
+    {
+      "name": "click_to_element",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "c3e79cb9ab4fd43ba45ab120c5229d9e5874c074423c4b32742460be22cca76a"
+    },
+    {
+      "name": "get_an_element",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "a555497c385e94d98e8431c9cd5f52d023a1c9fea5dbd74dce12539be44b68c7"
+    },
+    {
+      "name": "get_console_logs",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "e2148a1d280fbb5c442b40b89bc39819998c1e053d297da0fc4a48b95fe126b5"
+    },
+    {
+      "name": "get_direct_children",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "f708986f0c31e182921965a248367f58fb0bddbac6312ac53a5d77f57744ff7b"
+    },
+    {
+      "name": "get_elements",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "584316b504f69f44aef4cf69348f53de472c0df330566b93cfe91fcb0eafd770"
+    },
+    {
+      "name": "get_network_logs",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "3b5872210e0fca4569f25c84e664a44f578214173a66891d8653f37dc8502c2d"
+    },
+    {
+      "name": "get_response",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "71f9071c9a26e9f6938bd51b30d1e35d643da10aa3529e83eb250999459ae644"
+    },
+    {
+      "name": "get_style_an_element",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "a51d9494a97cbe39080f3a945fc059b66b04a5eb6900d4e67b350eed0c415645"
+    },
+    {
+      "name": "local_storage_add",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "9f302641ad166ad42a9d65ccca18a98373f2c41b3d19d60bafe79b0bf0057648"
+    },
+    {
+      "name": "local_storage_read",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "da014af5669dc2653e86a6d365ea553a2c4fdd7c309293228c1c060c0113a7ce"
+    },
+    {
+      "name": "local_storage_read_all",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "de395fc709490d3a4c05fed3c50a3fa3246ead1b6886ccc98d5eab84d3919265"
+    },
+    {
+      "name": "local_storage_remove",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "653dbcf56821964951e59d82cfe56884f38ca105595363ed7db2bcf2a17013a4"
+    },
+    {
+      "name": "local_storage_remove_all",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "b6b4b50309ced0814ee28910cf9277b8d3aeac10394f97cc9c4e1c38c274cff3"
+    },
+    {
+      "name": "navigate",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "a81e93e42a3c817117ef6978b992b80d0026a39e86db7b866fa854080902de75"
+    },
+    {
+      "name": "run_javascript_and_get_console_output",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "245cb96a80e0dfb504dc5287ff32c5571c7602adadfc071356b872c396da84df"
+    },
+    {
+      "name": "run_javascript_in_console",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "64ae3c5c9c7c7ce0184e08565dcc392b34e2ed1f1d06bfa20b17816e05492cfc"
+    },
+    {
+      "name": "set_value_to_input_element",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "6f2f3a643da02c24d419d8c4bdb72d249fb85e25baa15226358ce2789ce68e06"
+    },
+    {
+      "name": "take_screenshot",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "13ccd223c13516f52d53794aa0767a0f8ca3bd8cf815797379d1b22bb0d7c4af"
+    }
+  ],
+  "surfaceSha256": "7aa4dfe87c4f1d4355f5caca256cc52be0dc0ddb75ac6d8db30249a179d6fecf"
+}

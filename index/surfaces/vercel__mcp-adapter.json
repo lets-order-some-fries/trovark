@@ -1,0 +1,15 @@
+{
+  "ref": "vercel/mcp-adapter",
+  "scannedAt": "2026-08-14T19:41:35.252Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.6.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "roll_dice",
+      "descriptionSha256": "241d5a03eba057d5b69e6b05913052c360fe7bf73833a29e9355d49acd6af717",
+      "definitionSha256": "8bee28bb3912bb38d981aed0305118e8614fb6d89bd2912a4f12a35ad5b1cd8b"
+    }
+  ],
+  "surfaceSha256": "093d9ed799c339dcaeb8e0b190e25d5816c2791b0c724e993d2ceec5ff26f776"
+}

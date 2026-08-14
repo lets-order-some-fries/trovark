@@ -1,0 +1,205 @@
+{
+  "ref": "arnstarn/mcp-server-spotinst",
+  "scannedAt": "2026-08-14T19:41:35.252Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.6.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "create_vng",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "392b18a3a8aee93cfde8283c830428a2a17f5f6c3bece096cfa482c56d98aebf"
+    },
+    {
+      "name": "delete_vng",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "35ca643191daf2a68557dbdba450e46a538335e0bc2652fc6cd60735dbfc644f"
+    },
+    {
+      "name": "detach_instances",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "f24fafe034822cf14565dd5441f8e5643154c2fbe90ed7cdc8aafa9b6fdabe86"
+    },
+    {
+      "name": "export_cluster_yaml",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "2f5804443041e3da5a145655b0c663e743da7c216e60e2f397d15b8be6fe6550"
+    },
+    {
+      "name": "export_vng_yaml",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "7a2d2c0e469ef8e3e8ce6b451fe6e8569f957b2f92b1da5be30c4a14d337e9bd"
+    },
+    {
+      "name": "filter_clusters_by_tag",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "118aa1126c0d038bd9bd46343215b8490472ed26d889a2f0608f4d708b529821"
+    },
+    {
+      "name": "filter_vngs_by_tag",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "a1eae97feb1a5cfec31575d2ca6e37e3a1f300f4adc4e3316f8c139e3d91b66e"
+    },
+    {
+      "name": "get_allowed_instance_types",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "5753cf49a649bee353c56bf8b4b4053d71dc9a3269c02ef467894f74e3f2f5ce"
+    },
+    {
+      "name": "get_cluster",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "f3e4b7fc3e821bdd89e93531f8b783e842b6e834db964b71fab7daa5a548550f"
+    },
+    {
+      "name": "get_cluster_azure",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "3ffaf34e4dc1456c3e688f0e8144ed0827aa7d5431bd305428e0bdcc572b5667"
+    },
+    {
+      "name": "get_cluster_costs",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "3ae75ae4a1d02b0c9861d4a1d4918324bd34587540068608871eb046aea45ff3"
+    },
+    {
+      "name": "get_cluster_health",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "211e9503bbaf78bba1b0f33cc00a46319765e1287c0dd5812b622b5163dac1bd"
+    },
+    {
+      "name": "get_cluster_log",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "976bc14559b5fb3e8671d3e5452450d72fcb716499e0d87f3fa1090e83bcb81f"
+    },
+    {
+      "name": "get_cluster_nodes",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "ae397585fa6ee3bcc6e776b9c5f72fdcadd05142d10298f052808488a855628e"
+    },
+    {
+      "name": "get_cluster_scheduling",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "73e6b1867005163dfc2a83d917d8b07eca8aa47f17658317632a25b46d52ef61"
+    },
+    {
+      "name": "get_cost_trending",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "227aa48f23e9a11ba8838e45167c1a89c236f406d9c482ccbf3bf2713fb0b965"
+    },
+    {
+      "name": "get_elastigroup",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "6f6082317c96ee257f5658244f179d14821ddf25e170757b8b68dc815132bf96"
+    },
+    {
+      "name": "get_right_sizing",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "2759e78df5bd55c926e64103ae7b5855ec2286e4304543ea8d007600f37c0121"
+    },
+    {
+      "name": "get_roll",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "493ced35a223a2e096dedd32a97705c5d0ac342e5a472a1e44bf4640f66841ec"
+    },
+    {
+      "name": "get_savings_summary",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "8904d5c1433f229a132cd18bba7b6c454c18ea35d862f743395ed10d000eed2c"
+    },
+    {
+      "name": "get_stateful_node",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "3cd9e57ec26cdb6bb45d70722c89b90c52ea4fc182e157d5d550f87bf07726f9"
+    },
+    {
+      "name": "get_stateful_node_azure",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "44c7b512fad2ebc4e49baa1349f19950a9d226f67a05955f9f7f40545df59f19"
+    },
+    {
+      "name": "get_vng",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "ffec9874a4e9d37629e30a066e06d5ff1d55305a367021988a0b730c73fe83fb"
+    },
+    {
+      "name": "get_vng_azure",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "e8d086d691eed568a7d7b01cd55ee98379352bc2a7a8661e2d9e7c08933f8c59"
+    },
+    {
+      "name": "initiate_roll",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "4ca269499f5f9daf002126c61877ea163f84fc9dbe7b268f123f6cf9fffd7d17"
+    },
+    {
+      "name": "list_accounts",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "747ae1f741abc792b2060d794961ead67409bcfb6dc8df911ad49d05fdeb513b"
+    },
+    {
+      "name": "list_all_clusters",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "cf1d5ad90c7fd2a48f605aa993ed2e68361c0f63db90a4647eac06b55c3d4490"
+    },
+    {
+      "name": "list_clusters",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "810864e4ab3aeeef8a23904cbe4f85b50f62e15d95294b814fbab305f59c5dde"
+    },
+    {
+      "name": "list_clusters_azure",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "a3a8ab6ae090df2257cb418fdbd45c7779e33ab500c38035eed77e4ce169c5cd"
+    },
+    {
+      "name": "list_elastigroups",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "d4884c7b11f4f8a7ba0e846e61decf3179c3d800fee1b7f7abc97472574b6e49"
+    },
+    {
+      "name": "list_rolls",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "6dbe8636e9d929afa8c75eb31893ff5f1bef73d71987a0b10f91ba2a6e60831d"
+    },
+    {
+      "name": "list_stateful_nodes",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "5c9e3b8530586126fba4196458483e5843ef866190dc181289c3b38bebfa2c3f"
+    },
+    {
+      "name": "list_stateful_nodes_azure",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "6237cedc0205203f2d35781fb7080255ee4b68e6c15d9940d72a2fdb7d43686b"
+    },
+    {
+      "name": "list_vngs",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "034ed072f09d0c094df2a853d00352214128a0e7c9af6179d4d3a0241752cdb1"
+    },
+    {
+      "name": "list_vngs_azure",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "080587865b0a201e6616c47b4bd192cd42d54860fd27c94f85d6f99b259cc45b"
+    },
+    {
+      "name": "probe_token_capabilities",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "5fb0ac154602b25228eb8b059042340cfc8e1d57c735b9c511729cc23645da7e"
+    },
+    {
+      "name": "remove_instances",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "c53dbdd5fb8416153badb208ab9039e340c69a5e0da1919bcfeb57ba04ee2fa2"
+    },
+    {
+      "name": "update_vng",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "d086fe93e3be58ae82c897246730b4a08a21228208dd5e41d99649bda22f62dc"
+    },
+    {
+      "name": "update_vng_azure",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "8b98626c0a4dd87d885c07cad28a436004c6b82ac0c001e49574e7a7324c4a47"
+    }
+  ],
+  "surfaceSha256": "be940513795351cf61b3d3069b1d7429248b6b298af2bf6901430995b55bc0e5"
+}

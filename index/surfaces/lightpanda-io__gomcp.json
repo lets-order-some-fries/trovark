@@ -1,0 +1,15 @@
+{
+  "ref": "lightpanda-io/gomcp",
+  "scannedAt": "2026-08-14T19:41:35.252Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.6.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "goto",
+      "descriptionSha256": "fc6ae4b27248710a6e098db85835a7af3f3ae97ed76abd701a83edd1faffe79b",
+      "definitionSha256": "e5408735a0486dbf766c8dab707df24dc51b67bfc4d6019e79ec3fbd5f84da52"
+    }
+  ],
+  "surfaceSha256": "89bf7ece705c3f0ef73c7593a35b0fbb0438e5e7b6a3dd578d96bc02aaa760fb"
+}

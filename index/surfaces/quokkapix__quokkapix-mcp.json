@@ -1,0 +1,65 @@
+{
+  "ref": "quokkapix/quokkapix-mcp",
+  "scannedAt": "2026-08-14T19:41:35.252Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.6.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "explain_payment_flow",
+      "descriptionSha256": "a935f68bd6ce3879e5195a30d5813982411e491ab50a013d26ab2b0b89608cbb",
+      "definitionSha256": "94b679bfe1fc81e852f00c7f0b4e06066f4d7ae0db07bcd1d7ac006460f0dbfe"
+    },
+    {
+      "name": "get_payment_options",
+      "descriptionSha256": "5fc2a59572f8a4e4bc39ee76af34ef06fae1b92b9e5a7e105a0b27fb415a8ea3",
+      "definitionSha256": "4ea7dc0cd5590883f0f6dfb754a7723ae932a2591f219a9e67d4ffb8988ede19"
+    },
+    {
+      "name": "get_recipe",
+      "descriptionSha256": "8c17a07c77591834cceb4724a6a3725a0c00e4ac3599fbfefde635b8b324ecc1",
+      "definitionSha256": "9ded70aa3f3406b3f79251728ffa07447d3b49124440c3271ac2a4ac136abbe5"
+    },
+    {
+      "name": "get_rule_profile",
+      "descriptionSha256": "c263d505fba4bba58918d968bed30e000bdd0cb3dbcd4adcfd71235040e30c4f",
+      "definitionSha256": "beed4a8721e11edb682cffb541c0a40cd7f9069aee1f01a4de3ec51a7aac0f62"
+    },
+    {
+      "name": "list_recipes",
+      "descriptionSha256": "b350e7a83d1018df9fc013291a9fd927c809bd8e25da10cd0ed64602d370f30e",
+      "definitionSha256": "fe962e4a6301a296abdc3db23f3ef8bc984a5cb9a4f7f910ea682ca8957e20eb"
+    },
+    {
+      "name": "list_rule_profiles",
+      "descriptionSha256": "576a1d81ba7d4d3a63eae2864ba7ec26e0917ed580fa83c06c9473d085b0cb2d",
+      "definitionSha256": "1de4e3096e310cadd5971b89bee8706a9cf5c611b5d52d184aca29287acc0237"
+    },
+    {
+      "name": "process_images",
+      "descriptionSha256": "b2bc0a5057eefbd9896b6dd68f7e2726bc3858a8caae42d5e639c9559095d50e",
+      "definitionSha256": "d9f77b8cd3bbfcf8cb78b7acdc36c2f9b0fc3d9e35091976e247557be59dc30e"
+    },
+    {
+      "name": "process_with_settings",
+      "descriptionSha256": "3da769ba460d029dc6827cd06b84ac1c8b0f44276f14bdef6b3cf58842698a22",
+      "definitionSha256": "e1e62d8d4587e811c202f367fdb9b3755664f5b23acd35d87f946438c6c95b1b"
+    },
+    {
+      "name": "validate_recipe",
+      "descriptionSha256": "5acd04ffa1c518b0c242d36e22af8b3a767a73eb4a9df7c1bba92b588811b997",
+      "definitionSha256": "5b9c799ad8c2ec39a231f620ae038f40ca8d0ab53213731881a5d26fb49bbd9d"
+    },
+    {
+      "name": "validate_result_manifest",
+      "descriptionSha256": "83db9388dc25f1ac30e15fdc24395595e9b95e26c9e11729c1eb5b4168d8f71b",
+      "definitionSha256": "8f844290e61a671a58f93d0802ae09ea565bb29e16093f0be6dacb7229973d58"
+    },
+    {
+      "name": "verify_unlock_token",
+      "descriptionSha256": "04bdef689779e8a55dcd0819a5209ece009ca9c5053082a87cfc2273c041b1c6",
+      "definitionSha256": "abcd8e819dc66f6a7c85f7608f6015f4fc7469c6bafcf4d9590d1e7344ed9386"
+    }
+  ],
+  "surfaceSha256": "d63558dff52f1a13a8e4ab07691f47598b070ad8b2a0233ca3b5c970ff24fbb6"
+}

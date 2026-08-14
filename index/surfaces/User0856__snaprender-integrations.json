@@ -1,0 +1,20 @@
+{
+  "ref": "User0856/snaprender-integrations",
+  "scannedAt": "2026-08-14T19:41:35.252Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.6.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "check_screenshot_cache",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "73d62434f351667e2700121109e2de4040dd5a78b8c65476972300bf88a0aa3a"
+    },
+    {
+      "name": "take_screenshot",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "abba87c894118d7a09fc7d1205d015778ec5e14afb6b12caed6fedd9833459ae"
+    }
+  ],
+  "surfaceSha256": "40427945423080dc898024575128dc5cc4d0500685f09bd90f02f9bf2375f85c"
+}

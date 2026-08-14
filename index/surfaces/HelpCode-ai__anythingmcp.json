@@ -1,0 +1,30 @@
+{
+  "ref": "HelpCode-ai/anythingmcp",
+  "scannedAt": "2026-08-14T19:41:35.252Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.6.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "anythingmcp_connect_client",
+      "descriptionSha256": "2b080a727a0a68d7d9b5f0764abd946f92839c7bd6031f5b15d8f5ba5394e9d4",
+      "definitionSha256": "065b0eaee1d3ce663de6548085ec5e956d02ac3097c2f03439826f203ca05b14"
+    },
+    {
+      "name": "anythingmcp_get_started",
+      "descriptionSha256": "3f66591e5411852389e3df5b56f2dbace2e58cd3008411e2e3a7ea735bdf5fbf",
+      "definitionSha256": "b29f0b39a5413265acc0d77b3b4997b7c2225f2433ab8cd9c2dec17d3c9d7bd7"
+    },
+    {
+      "name": "anythingmcp_list_connectors",
+      "descriptionSha256": "c1f38b09c2427c23d508456ca96284ead9b6c6c8575be7b78ce112eeb5de95d9",
+      "definitionSha256": "e67fd10a9c11d84b1a0d4410fca0849163a213fed706dad6d1a65f57c16e04af"
+    },
+    {
+      "name": "anythingmcp_overview",
+      "descriptionSha256": "8e696db82747dee82cbef680f797a2d817cdb99505ed2faca1ca07412a708e4e",
+      "definitionSha256": "6bf4cee47ad5867f3d0b82f793e75253b882a39ff91b8318d7975426976ac207"
+    }
+  ],
+  "surfaceSha256": "5e7d11cee7322451e5d9bf3255e4df8d58fb5ae9c25ea47347ae12fc5d9428c8"
+}

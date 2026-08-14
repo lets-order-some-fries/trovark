@@ -1,0 +1,130 @@
+{
+  "ref": "depwire/depwire",
+  "scannedAt": "2026-08-14T19:41:35.252Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.6.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "affected_files",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "9cebe3af5cd0aaed285fb38805d3cda7a55b36decc985b073d12f93c3e5c83a3"
+    },
+    {
+      "name": "claim_files",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "c277e74d543d3a8b7d7a37ef86a34dd783cd1a14f53cddc438a4b59f9a2aba17"
+    },
+    {
+      "name": "connect_repo",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "d251964b5bc659a4e6d8399bc968bcd3d4e6150e014c3d97f34f165a2ebbfefc"
+    },
+    {
+      "name": "find_dead_code",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "8aa829230744e6b671960cd629032df082d648e1cbaa7660374d9ec3820ecc14"
+    },
+    {
+      "name": "get_active_claims",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "80c861f66852b23040ef5c9cb608480da6c6b11794cb00989d0cf37340aceef7"
+    },
+    {
+      "name": "get_architecture_summary",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "c6e58ce9da33dbcccef579c5168e880e32dca2b052e50fc6f94f5aac31eb4db0"
+    },
+    {
+      "name": "get_decisions",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "f08ad9be5118c5ad96714ebd0ce2292cc1a227fb66ae75515edc558b2b5528ab"
+    },
+    {
+      "name": "get_dependencies",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "7cfa2808d00caaa5cd484a38641a8d7a8079dce040a7fa106fcff41ca8627cc8"
+    },
+    {
+      "name": "get_dependents",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "cc69ee645261de3a3f4a839cab27db4d8a30627fd583e7d4156ae4afb1a4b810"
+    },
+    {
+      "name": "get_file_context",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "1b06f1e8d3b8f384121979a87c6fdbfaadba3b79345699110af74fd28d9b66db"
+    },
+    {
+      "name": "get_health_score",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "66e2c708d67cdcb064285f3cb1dd49d620710a77c938ec8fc992beb2f21e5fb4"
+    },
+    {
+      "name": "get_project_docs",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "e31d30b2ef7ad20b5a98ae8e5de9f9e91cf6c1f333ad3c24cb10b09ca47e4341"
+    },
+    {
+      "name": "get_symbol_info",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "26681475869a690aaaaf27aacdb5ea1c599de789de68c42c45961ca35238bf79"
+    },
+    {
+      "name": "get_temporal_graph",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "dbee7a7ec4b40f3e6880a813072293339d17d2640f21e039958a5d37bd6793b0"
+    },
+    {
+      "name": "impact_analysis",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "7ded44e4ba0325c6a08dccc1b6c815d0b8635ec4b24aabe6f21f5cbce64db85d"
+    },
+    {
+      "name": "list_files",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "8c3b42d3237318b2c183f35ca9ee0eb2301d39427957b72ac471ffa4e539dd3e"
+    },
+    {
+      "name": "record_decision",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "6757bdc5eb49a2e9ed5149c98eb6fa0345c664432be5c8bfe1bc196ddf151a93"
+    },
+    {
+      "name": "release_files",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "b4ece210ac5324a8796f205987a9941ec7d6272a0c1d7a35ef94edbbae0ded1a"
+    },
+    {
+      "name": "search_symbols",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "00e348ce946aa526acb58f69877d1a1e97b4961da50128dabf29832bc8834a87"
+    },
+    {
+      "name": "security_scan",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "d8d3868ff7a26af1a5a06532bcf740fe40485f74fd9086bb85d6dac9d5ff52b1"
+    },
+    {
+      "name": "simulate_change",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "4a4c131f62f0803b62133344d058590adccf38c39e97b9713474bfbf8748e041"
+    },
+    {
+      "name": "update_project_docs",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "75106222da025cabd37879251dfe2fea900cbe1095678a23212e8a8865f14355"
+    },
+    {
+      "name": "verify_change",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "6423a9d85cdd1ac7c45d729ed1297033e5bfc83a1fe00de8e145756d104c8f83"
+    },
+    {
+      "name": "visualize_graph",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "2616b8aaa489179f2e7723360e4148c79cdb3f3aa014be0d1485c372ad2cf9ae"
+    }
+  ],
+  "surfaceSha256": "88f941c89c825023f80255cf8a41d64f34787bf4dc54165e6a06dc558da6f52e"
+}

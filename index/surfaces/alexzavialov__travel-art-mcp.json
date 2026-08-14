@@ -1,0 +1,30 @@
+{
+  "ref": "alexzavialov/travel-art-mcp",
+  "scannedAt": "2026-08-14T19:41:35.252Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.6.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "find_art_events",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "c2d341980905770e22b5811d34ce6a63222d63e60f391595888856cd801869db"
+    },
+    {
+      "name": "find_layover_itinerary",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "64ca11520af1ed694207e4c3ea76598a0fc1427a87b4ae0e5a87780f0291edfc"
+    },
+    {
+      "name": "find_museum_guide",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "761ed114d704b29ece6e34131c853a99890b3ba602a79e36123b9718a044602e"
+    },
+    {
+      "name": "recommend_art_trip",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "29a6a8278014135fa37542f07edb8d114f6ff20840397e26eaa9db7ebf9a9b85"
+    }
+  ],
+  "surfaceSha256": "5abc6709ecef791d12691cd0835f647c4390b3a38574fb03334888864b2ecd5b"
+}

@@ -1,0 +1,115 @@
+{
+  "ref": "mambalabsdev/mcp-gtm-suite",
+  "scannedAt": "2026-08-14T19:41:35.252Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.6.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "aggregate_gtm_signals",
+      "descriptionSha256": "8f1f32b9566d1c71e51d1435acc65e2c62dc367068e2b993afc02e3b62fcc60e",
+      "definitionSha256": "3f80c4ff606785361cff775947d076644faf3d31ceac80577f5529ec9dc3dc39"
+    },
+    {
+      "name": "audit_agent_accessibility",
+      "descriptionSha256": "7db471304f3a4f6998748aa7ef063ca8d45bf7283c5c25f16581dfbfb2b9532a",
+      "definitionSha256": "0e22cf7c72eb070afb6ba076bbe63a35579c4f7de85119d2d951ed1111860185"
+    },
+    {
+      "name": "capture_linkedin_posts_and_commenters",
+      "descriptionSha256": "0b2664622a0a136e141d0fa61328030a5b78932eb6dfdf42e3c97da56f6e8f42",
+      "definitionSha256": "b69f1df47539b49823aff9c4054ff8b282673ba46abb9ab6453336b41cba361d"
+    },
+    {
+      "name": "classify_contact",
+      "descriptionSha256": "aeb77e70b37998cb9ebb738f869f2f239d4accce3e99a7e6e03f68616dbed82a",
+      "definitionSha256": "f3b5f88fd5e71c9d1ec0d944d3281bd99bce1d4787ad2b0fee781727a118924d"
+    },
+    {
+      "name": "detect_ai_tooling",
+      "descriptionSha256": "6b9b701dfc29c91565eab72a84f89a80811153a7960bdc3027882849276aa139",
+      "definitionSha256": "f67917352ee881930c88dd4acc2d215245285c89e4df596cbedf8f2868649208"
+    },
+    {
+      "name": "detect_gtm_tech_stack",
+      "descriptionSha256": "143894c41a81d49cbc20fffcdc051d69f6a2649750c1bde84552a8b2906b06da",
+      "definitionSha256": "6d52b1309939d0179ea218d6e7045b405a2330132365e3c357cecfc920a0dfae"
+    },
+    {
+      "name": "enrich_company_firmographics",
+      "descriptionSha256": "af7d14e14f233c0c87e614776667db7348085f83faca0c59bdc1eb6237de185b",
+      "definitionSha256": "96a2ac8541bc624b4a4fe98fe53599d352d61e4225a08bb86cb268d82cf07d74"
+    },
+    {
+      "name": "fingerprint_outbound_infrastructure",
+      "descriptionSha256": "01f223cf4d3da059d072c844f31e4f5360f17a2aa790c837f2b3d6e57d88cecd",
+      "definitionSha256": "d4267f20f5ce23ac77d124fdc124a3f0fc7cfa80e9405ca5cbd5e336bfb4721c"
+    },
+    {
+      "name": "get_company_changes",
+      "descriptionSha256": "32b4432ebee7c2e0118c2a55127905ed7347e68c485aefc203e9804f6a840113",
+      "definitionSha256": "bd9cc551301953a4504f27524be61766f37173bc39156663cd588c239ea21a69"
+    },
+    {
+      "name": "get_funding_press_signals",
+      "descriptionSha256": "e302d527ba72104904c3fe185dfb3210170e2a8ebd425a27903e4907a0e69642",
+      "definitionSha256": "1c9db611a77c46f6d0b23a7a59fef3803a4f431150bd4daa9f53de1ed365a69b"
+    },
+    {
+      "name": "map_company_event_presence",
+      "descriptionSha256": "f9b4f9b5132021aa9e3d07b23829964ca624a51ca0dd7628976e1670f86a42fe",
+      "definitionSha256": "934f0acc183e0f24df1d64dc5aef609c0d195dd97e8608ef9aae58f1a10a3bfc"
+    },
+    {
+      "name": "map_company_social_presence",
+      "descriptionSha256": "199ba64f5b28a4579d2c521b877c258c6e9ccd707c059e4e5b5582a697408a77",
+      "definitionSha256": "85f60607f7a89921bdb80243435759561f3e3e0d063ea473d5b452214a21626d"
+    },
+    {
+      "name": "monitor_public_awards",
+      "descriptionSha256": "4bcdd842a5dfde1d289143409f221d68f109b3c4e515203bfd0ef13cedcf4e31",
+      "definitionSha256": "c8dec854aae7f60d434dc5319e00238953c7471482c47b011f21db9b2efeeffc"
+    },
+    {
+      "name": "push_leads_to_sequencer",
+      "descriptionSha256": "b181677178943c348160973e33312601078a19be1424c4641bb6a47a913f8ecc",
+      "definitionSha256": "abf33cb8d1c9d1a16c0568144e477fe85d852a0388543d5d804936f301fd7fa0"
+    },
+    {
+      "name": "resolve_company_identity",
+      "descriptionSha256": "4abfd19dc30ed93143c9312b4110ebc6e8e23c86a56506d6eb4eed64a1a6a608",
+      "definitionSha256": "3360488fb5f673424c8a16d68d7454e1acb764b30c1365a5f755d27654e58825"
+    },
+    {
+      "name": "resolve_legal_entity",
+      "descriptionSha256": "1313d42d009a280427a8d4573e1bd16142cb3a580bc7bee0c07e9722654a5cad",
+      "definitionSha256": "5270f845a918629a14507e73ddc503564b5e6e4232253414ba673a23d3ee3d4f"
+    },
+    {
+      "name": "resolve_linkedin_url",
+      "descriptionSha256": "9e26acee9bb34e1f74a7a271ef1ee7704516f195274ba8919f9eec7ea6985a9e",
+      "definitionSha256": "1f201a49fb15d95250cb2b64410823d61a0c508fdf7c2f9361f88f2a0489a620"
+    },
+    {
+      "name": "scan_gtm_hiring_signals",
+      "descriptionSha256": "97cfcb7c9dcbfd603dca3c0ca48acffc44336ccab85546cf01ededa5f24958c2",
+      "definitionSha256": "70792e020063f514e1a25268f56c4be320e001c50b765813d54540f8c3236a72"
+    },
+    {
+      "name": "scan_job_board_keywords",
+      "descriptionSha256": "9f147617fcebbb1cc99470d3e4b7e108daf101a6396e7b4101220303c4a59a82",
+      "definitionSha256": "8fff6c15f87137cef20ef98f8ed207d162d716a660798481cb69bdd564aacfc0"
+    },
+    {
+      "name": "score_icp_fit",
+      "descriptionSha256": "0fe48ddd301d8d708177f45cf0afc31394481e12d2c59433fce3a3b6cdfc1271",
+      "definitionSha256": "493983f146003033a00ee87b21a11c7838ea6fe54d964c6b2fda5be290f756f7"
+    },
+    {
+      "name": "track_publication_cadence",
+      "descriptionSha256": "521b222ef0e38095f20cf973e823c8c7b0a9302057dc4165e6e44f563630625d",
+      "definitionSha256": "097a9f0f1a94f1e51d2fecf36639f9e7232e1787f125e7b6e5347232152d3c26"
+    }
+  ],
+  "surfaceSha256": "ea7bc51063eb7aaa3071269e5a86ad66375c9d570ac6c1e33d2add7db03ab3d4"
+}

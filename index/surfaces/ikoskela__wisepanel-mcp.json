@@ -1,0 +1,15 @@
+{
+  "ref": "ikoskela/wisepanel-mcp",
+  "scannedAt": "2026-08-14T19:41:35.252Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.6.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "wisepanel_start",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "10c22a6d3dda2f363892333ff4aba1a51c7ea2b97f9a04b03fed074628db7e0c"
+    }
+  ],
+  "surfaceSha256": "1fa073401bf7c0959331cf6b945907c072604738db8e76f0a9992d477411b2f8"
+}

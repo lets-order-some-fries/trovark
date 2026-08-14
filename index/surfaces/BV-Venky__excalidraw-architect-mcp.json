@@ -1,0 +1,130 @@
+{
+  "ref": "BV-Venky/excalidraw-architect-mcp",
+  "scannedAt": "2026-08-14T19:41:35.252Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.6.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "create_diagram",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "a35bb5e496d012b6d0d3c34574285b092b43c1719b282b919255901c59ba3617"
+    },
+    {
+      "name": "export_diagram",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "4c58ed44c835e724dfc07f83404010b165600cc94daaf35de0a7ffd7c0bf81ff"
+    },
+    {
+      "name": "get_diagram_info",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "7072451a533001189a972cee1b992dd86790b1349da5b84d1a345c144fc004df"
+    },
+    {
+      "name": "kg_add_service",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "ef6679cdf0bffee7405a3d8be2e468649c1a6e30aea7c48ee7a029059dceaca8"
+    },
+    {
+      "name": "kg_diff",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "857ec8c892a0c7db4b25c56b86199519d991fae5ea244e1ca8510533ec05cfc2"
+    },
+    {
+      "name": "kg_drift",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "cad69775762a85d9fd634784ab717dccdb87e617417916e5c54be314351b2e3c"
+    },
+    {
+      "name": "kg_export",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "f8bd1145e0f4d5968efac03ddf74a0daec552b9165c155193f50fc2bc249e1aa"
+    },
+    {
+      "name": "kg_import",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "2d6da13277e1bb208474200abbb623969c54084e5180ebbf7851be80c05aa6cc"
+    },
+    {
+      "name": "kg_info",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "05aee2444b966281d7f55ed30da554cda575a466f1f9577d84cf2692e7b9fd14"
+    },
+    {
+      "name": "kg_init",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "d575da6e598d4da7e8902ae3fb1633e7d524486ca44efc9e37c6d24f5a923a2d"
+    },
+    {
+      "name": "kg_link",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "f4e8a343aa66444a1b191bae630a886658d213de8b636fd9fe1b597692bad7cd"
+    },
+    {
+      "name": "kg_lint",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "1eb49f5bb12e72c74cc1d73f098b558f871579641d1964d26af5ebfe159b3a12"
+    },
+    {
+      "name": "kg_onboarding_doc",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "38e5760bdebdfb1407ea8f997d6a48410c0befc864b03df7ee8e8e4cdd5ce0a5"
+    },
+    {
+      "name": "kg_path",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "c55d0df63965377c721c7a29e6b04cd93d70b4b23fed1d5ab3718074fbfa55c0"
+    },
+    {
+      "name": "kg_remove_service",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "c751981dff5a946c1c80fa2cd71c97da5c6a40957efd5cc632d91dcf202f9693"
+    },
+    {
+      "name": "kg_render",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "32bb714c214312e8da0cd2c5903ef4e222b5de2c947c85563e09bb2ee488da7b"
+    },
+    {
+      "name": "kg_render_around",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "695cb0fd934e5ea54d4db2380d239bb6d8d950ca777075b12be937aaaea925e2"
+    },
+    {
+      "name": "kg_render_domain",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "b6add045832e9e6885888822b52b2dc63a982fe757f7b174194d5e64559b8cd3"
+    },
+    {
+      "name": "kg_render_view",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "0a5043a0328b1b49cb76a520daacac12d99c4a4f2df2ee53c8ec32f7a0815004"
+    },
+    {
+      "name": "kg_set_domain",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "6c55c0f29031de50f8bdf613eb5e7dffb3e470e0a365fc71df84da5faaf7ca4d"
+    },
+    {
+      "name": "kg_unlink",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "fb2fd07a519f8f3f51e243ceee068ef583242e2ec06c4081eecbd3da89c7f1e3"
+    },
+    {
+      "name": "mermaid_to_excalidraw",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "e944e2d51055d0da7f28515f26d25d0e1e3b8e837c215d12bcef8f5a2004320a"
+    },
+    {
+      "name": "modify_diagram",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "8c0fb517c307a36a1d7a00d617a8a2b5aa2461fb861940cdf1bc6c748c529c01"
+    },
+    {
+      "name": "whats_connected_to",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "cd1cd49abf0bf295abdd996e7b0eb6b455a4b798fe1df7ef48160b47356585a1"
+    }
+  ],
+  "surfaceSha256": "e4a47e7d8014dfdafb6df958caf40289b49fe7170ef5867bd99c6578e00b146e"
+}

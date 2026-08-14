@@ -1,0 +1,20 @@
+{
+  "ref": "waystation-ai/mcp",
+  "scannedAt": "2026-08-14T19:41:35.252Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.6.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "helloWayStation",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "8de75ca018c74ced340bc06fc58cd2ba3e0600cf5269d8dea787848fe8ac6e11"
+    },
+    {
+      "name": "openWayStation",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "40637cdac6c6615c26fd8b1ed3e66e46301ee2338cc5f0d8d3f797b4eae70ff6"
+    }
+  ],
+  "surfaceSha256": "053310fe38dfb0cbe32b83fffdf0b6402f1387b5b7b64ae3f6c4e4ecdd65d75a"
+}

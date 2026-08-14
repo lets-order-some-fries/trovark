@@ -1,0 +1,20 @@
+{
+  "ref": "shunshi-ai/bazi-reader-mcp",
+  "scannedAt": "2026-08-14T19:41:35.252Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.6.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "getBaziChart",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "6bb03e98e717df1281c55f63dc2e5ccc99b4a77eaafeca84bd956160fbbc8f9d"
+    },
+    {
+      "name": "getHuangli",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "44adc74a7fc7b1983b4e9b69e790ee4fb6ce4f8bd4e5a12e18b2a0e24a6215d5"
+    }
+  ],
+  "surfaceSha256": "94b061196d578315f5ccce936c85c9e41f3ec0bf6456b9e54ab60a972b99e043"
+}

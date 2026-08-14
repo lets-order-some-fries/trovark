@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-14T18:45:21.457Z",
+  "generatedAt": "2026-08-14T19:41:35.252Z",
   "rubricVersion": "1.6.0",
   "coverage": {
     "attempted": 400,
@@ -17,8 +17,8 @@
     "dynamic": 1,
     "unresolved": 18,
     "gradeDist": {
-      "A": 39,
-      "B": 119,
+      "A": 40,
+      "B": 118,
       "C": 83,
       "D": 36,
       "F": 1
@@ -27,7 +27,8 @@
     "staleOver180": 56,
     "secretsFindings": 14,
     "deprecated": 0,
-    "shellExecTools": 69
+    "shellExecTools": 68,
+    "driftEvents": 0
   },
   "entries": [
     {
@@ -510,7 +511,7 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 3,
+      "daysSinceLastCommit": 4,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -620,7 +621,7 @@
           "confidence": "low"
         }
       },
-      "daysSinceLastCommit": 2,
+      "daysSinceLastCommit": 3,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -868,6 +869,42 @@
           "confidence": "low"
         }
       },
+      "daysSinceLastCommit": 0,
+      "integrity": {
+        "payloads": 0,
+        "observations": 0
+      }
+    },
+    {
+      "ref": "smart-mcp-proxy/mcpproxy-go",
+      "ok": true,
+      "overall": 88,
+      "grade": "A-",
+      "repoUrl": "https://github.com/smart-mcp-proxy/mcpproxy-go",
+      "dims": {
+        "health": {
+          "score": 98,
+          "confidence": "high"
+        },
+        "reliability": {
+          "score": 100,
+          "confidence": "high"
+        },
+        "security": {
+          "score": 63,
+          "confidence": "medium"
+        },
+        "cost": {
+          "score": null,
+          "confidence": "low"
+        }
+      },
+      "topFindings": [
+        {
+          "id": "security/destructive-tool",
+          "severity": "medium"
+        }
+      ],
       "daysSinceLastCommit": 0,
       "integrity": {
         "payloads": 0,
@@ -2021,46 +2058,6 @@
       }
     },
     {
-      "ref": "smart-mcp-proxy/mcpproxy-go",
-      "ok": true,
-      "overall": 82,
-      "grade": "B+",
-      "repoUrl": "https://github.com/smart-mcp-proxy/mcpproxy-go",
-      "dims": {
-        "health": {
-          "score": 98,
-          "confidence": "high"
-        },
-        "reliability": {
-          "score": 100,
-          "confidence": "high"
-        },
-        "security": {
-          "score": 40,
-          "confidence": "medium"
-        },
-        "cost": {
-          "score": null,
-          "confidence": "low"
-        }
-      },
-      "topFindings": [
-        {
-          "id": "security/shell-exec-tool",
-          "severity": "high"
-        },
-        {
-          "id": "security/destructive-tool",
-          "severity": "medium"
-        }
-      ],
-      "daysSinceLastCommit": 0,
-      "integrity": {
-        "payloads": 0,
-        "observations": 0
-      }
-    },
-    {
       "ref": "AceDataCloud/FluxMCP",
       "ok": true,
       "overall": 81,
@@ -2958,7 +2955,7 @@
           "confidence": "low"
         }
       },
-      "daysSinceLastCommit": 79,
+      "daysSinceLastCommit": 80,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -3118,7 +3115,7 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 0,
+      "daysSinceLastCommit": 1,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -3316,7 +3313,7 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 2,
+      "daysSinceLastCommit": 3,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -4164,7 +4161,7 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 7,
+      "daysSinceLastCommit": 8,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -4794,7 +4791,7 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 125,
+      "daysSinceLastCommit": 126,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -5884,7 +5881,7 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 10,
+      "daysSinceLastCommit": 11,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -9126,7 +9123,7 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 63,
+      "daysSinceLastCommit": 64,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -11324,7 +11321,7 @@
           "confidence": "low"
         }
       },
-      "daysSinceLastCommit": 427,
+      "daysSinceLastCommit": 428,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -12486,7 +12483,7 @@
           "severity": "high"
         }
       ],
-      "daysSinceLastCommit": 62,
+      "daysSinceLastCommit": 63,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -12711,7 +12708,7 @@
       "repoUrl": "https://github.com/mikechao/metmuseum-mcp",
       "dims": {
         "health": {
-          "score": 39,
+          "score": 46,
           "confidence": "high"
         },
         "reliability": {
@@ -14089,7 +14086,7 @@
           "confidence": "low"
         }
       },
-      "daysSinceLastCommit": 12,
+      "daysSinceLastCommit": 13,
       "integrity": {
         "payloads": 0,
         "observations": 0

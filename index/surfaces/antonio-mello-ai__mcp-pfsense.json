@@ -1,0 +1,95 @@
+{
+  "ref": "antonio-mello-ai/mcp-pfsense",
+  "scannedAt": "2026-08-14T19:41:35.252Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.6.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "add_dhcp_static_mapping",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "cff7dda7bad23080e45585777b47890150877bb873116cec4da9a6cd5fdc2000"
+    },
+    {
+      "name": "add_dns_host_override",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "59f4e651b38711cadbfeb94d1fb6db216d53e2362d61026a15244979d4f31618"
+    },
+    {
+      "name": "add_firewall_rule",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "d80d90d90fcd33b5823192f9644097534148ceb2430f214189a9392bf829f413"
+    },
+    {
+      "name": "delete_dhcp_static_mapping",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "60bf1c9d9b12e293a313bbf0873a490ff6c7fc2a7e1057a0a4327d6206c5e532"
+    },
+    {
+      "name": "delete_dns_host_override",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "7aac6c9f34690e9c422de399ceea1c5ef6a7c033e4b5a45d6c102667681a80f1"
+    },
+    {
+      "name": "delete_firewall_rule",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "6b5a7f2733c650aa0958e1a45d62a7ee67e325e2305aab4b36f23c2fb18a9ed2"
+    },
+    {
+      "name": "get_arp_table",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "28166dc1c15b38cf8e18bac1d05690194f7c5136473f68a9fcab5e1d7cbfb8b9"
+    },
+    {
+      "name": "get_gateway_status",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "12a83a1319469e97148388191dce87f11d21a1a6a498da3a451df11694a862e7"
+    },
+    {
+      "name": "get_interfaces",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "3a683d1f4a0829d1640afd238d969d431b23f2fa19e90c78861c1e3cb04ce963"
+    },
+    {
+      "name": "get_system_status",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "c3163f4e99e5c3d986e17e98c933c9f6f871ee6157d5e43649fd8430edb7f227"
+    },
+    {
+      "name": "list_dhcp_leases",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "ce287a7806b78b1aeea51a86a701e8161b3be79abb0f3c13a49060c9e0b9ff66"
+    },
+    {
+      "name": "list_dhcp_static_mappings",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "d42a0d7d4d02effa8a814f3926b11c733a9c26b77f2ed6ab6c4fe537c771bfb0"
+    },
+    {
+      "name": "list_dns_host_overrides",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "d014f37f3d2c24da890b0f4b64c964bb37a7c9c913362aa469cf7a3543ef83cd"
+    },
+    {
+      "name": "list_firewall_aliases",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "2eec11d8bcc2f1922cc2451d451bbd3657d3e166d5e13aa6377e6775e0947337"
+    },
+    {
+      "name": "list_firewall_rules",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "f04a3636cd049904fc93e7c430cdca5982207f2908c912432ec4e30e89a800d7"
+    },
+    {
+      "name": "list_services",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "fb527d32035a6e98aefebbbcbe71b27a0a1fe999f135b73ea672cb03a5451a9b"
+    },
+    {
+      "name": "restart_service",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "6ae499c4f6af26aa848784f8dfdb62a16e7fadc1e7ff9e420adb70a9005049d6"
+    }
+  ],
+  "surfaceSha256": "36e6ad5adba0bf239603a6ffcbbd5de0e99bba9a95bca3ea2103f465063345f8"
+}

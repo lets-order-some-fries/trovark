@@ -1,0 +1,25 @@
+{
+  "ref": "thebrierfox/the-stall",
+  "scannedAt": "2026-08-14T19:41:35.252Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.6.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "call_cap",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "504f9b555cd308bd9368a3b4468178cab200413e0f3958b5cbfb8645111fcd4f"
+    },
+    {
+      "name": "get_cap_info",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "7b8f8d89267fecfa92a4fcadc1a89061eb6c6673977e8205e95f0ff214bbd7b8"
+    },
+    {
+      "name": "list_caps",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "963da115de4556e71eaf2c9e4a28f75b88ef518983f399c4359e460e6b2ab844"
+    }
+  ],
+  "surfaceSha256": "ffdaf80680d4499834988136d5e44aced270d659231830b9a50af70444608c60"
+}

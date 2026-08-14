@@ -1,0 +1,20 @@
+{
+  "ref": "abhiemj/manim-mcp-server",
+  "scannedAt": "2026-08-14T19:41:35.252Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.6.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "cleanup_manim_temp_dir",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "cdb394cb4693501be6d02b676fee53f6b12192b4ebf493aefc71ae8f647d6e6d"
+    },
+    {
+      "name": "execute_manim_code",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "8ca41ea82f13fb65d8ec121029492374980dd6cc1145021581c2067cfd6f8f15"
+    }
+  ],
+  "surfaceSha256": "e9426163720ee38868306b62f8019b4312c6775ce3048e627429a7dade19849e"
+}

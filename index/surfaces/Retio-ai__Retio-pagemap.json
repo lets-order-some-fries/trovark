@@ -1,0 +1,75 @@
+{
+  "ref": "Retio-ai/Retio-pagemap",
+  "scannedAt": "2026-08-14T19:41:35.252Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.6.0",
+  "source": "readme-catalog",
+  "tools": [
+    {
+      "name": "batch_get_page_map",
+      "descriptionSha256": "10605888909b31d4e632c26fb963d84a3b7ef8da9e6ff8e1f9bfe902f7c120a8",
+      "definitionSha256": "8f89bbcd6072794a46ef6f9f6ea3f7dcab8130b22bd4d5453b0dcb6ca14df0e1"
+    },
+    {
+      "name": "close_tab",
+      "descriptionSha256": "681eaeccb601d99780b8342d8dbd137b6e945aec52c69f77dbb3ce2ee6e7c61f",
+      "definitionSha256": "81247763bd5da247e4aecfd382292d34f6ec7349fd9efc35ba50c41726f9f85d"
+    },
+    {
+      "name": "execute_action",
+      "descriptionSha256": "101a802eb8f05ba067fb832e359c4de93fced18fb5140641df008664360d1714",
+      "definitionSha256": "80d70dcc3625d6715511de1b3492934766feda4d80dc708e4a6250337015aa4e"
+    },
+    {
+      "name": "fill_form",
+      "descriptionSha256": "5830001e6f8637102fd5f484508a30a2be28b3b764c831df84b369c8909ab2c5",
+      "definitionSha256": "e2971c9877c290ba880b98e87ddcee2c39961acc14c5e8f180894c9ed0b3322f"
+    },
+    {
+      "name": "get_page_map",
+      "descriptionSha256": "0f7f9496c5075e372d001c076601c1f8b2a9d72080fe9376e8edc52dd3fb895f",
+      "definitionSha256": "5a0e59c5e0f2fa1341fb03ca79fbbec373f4d3731f8a9c20edbb02ddf6c6b3cc"
+    },
+    {
+      "name": "get_page_state",
+      "descriptionSha256": "b4cfe61bc48ebb5230b63b2a1aeecedcc3cf82837a4264484d6596ed147e4ada",
+      "definitionSha256": "0f9592fde19fc07380e0ee051ed4ba462ecbfaa5b08865957ca9c55fd6f9b099"
+    },
+    {
+      "name": "list_tabs",
+      "descriptionSha256": "902a0f06a24be538ae9b070e7ab692009be75de6e60af1ca4e9d60dd9dbb986e",
+      "definitionSha256": "e7c1655b105a1d42a43b03e34a8d0c2967f6ca04460e1700a929cfb140002448"
+    },
+    {
+      "name": "navigate_back",
+      "descriptionSha256": "5330f52893a1f3422c80f76286613621ce3b9f319bf3ccc610c54b288fbb55b7",
+      "definitionSha256": "3f0cd0970d4a596c6b691cda3f9262f516b8fc1883fc2938c925da785cc6a101"
+    },
+    {
+      "name": "open_tab",
+      "descriptionSha256": "6e8e20df577ba31d599c7e30850889f4419a7802e7f9dbd8c525d6c664be376c",
+      "definitionSha256": "3814595ac5554b0e21d62681dc503b510997118d5d92a94ceb6988b66124103b"
+    },
+    {
+      "name": "scroll_page",
+      "descriptionSha256": "0ddc92c0364f3fa0a19ff8db66467bc4adb9695e26996cd7f5e6bf66b72a4453",
+      "definitionSha256": "27cff5cd0135b38434896515442f256a31540e365884a1cb69c5fe2271e3f3fd"
+    },
+    {
+      "name": "switch_tab",
+      "descriptionSha256": "fa5d26fd9fcec439d49c7fd48282d6f27ac40dba439a361592245588c23a4e84",
+      "definitionSha256": "be25e1d31bff6157cf4d5e4929efc6fed9344b83e171c7f74ea6e70fde9a741f"
+    },
+    {
+      "name": "take_screenshot",
+      "descriptionSha256": "0565d74de87cf79f7f82ab3b99c9c0810bcdd97b9670faeebb79e0e48c22f2dc",
+      "definitionSha256": "7c5de46d5a975f39bc86f51cfebaa9e9be25a14768089d7797c7a99f03cdbd31"
+    },
+    {
+      "name": "wait_for",
+      "descriptionSha256": "66f6ab2ccd38d98597c20acf0137643b3db7a042c65931d176dbe0095ab93d2a",
+      "definitionSha256": "8edd10efb81e685a77b9abe0fea673109ae1226ef83e5702c9c246e9582fdfaf"
+    }
+  ],
+  "surfaceSha256": "760cbed451079f0c9b4696ad30e4819e8adb3e30ce4036aea843ab2f41f92ab3"
+}

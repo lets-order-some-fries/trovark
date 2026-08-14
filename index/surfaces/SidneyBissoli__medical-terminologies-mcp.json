@@ -1,0 +1,195 @@
+{
+  "ref": "SidneyBissoli/medical-terminologies-mcp",
+  "scannedAt": "2026-08-14T19:41:35.252Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.6.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "atc_classify",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "cde4b2b6fd596e8211795629061ec449e2b0cbfe7a1b8fe1a842fd7e7fa461cd"
+    },
+    {
+      "name": "atc_lookup",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "e00a6647c7d9fb0cf4482c085802b438cd1fbc4079f721f2dbbb546a25145be6"
+    },
+    {
+      "name": "atc_members",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "aa5eebce640cb96a3437b624aa9fab3d46baa721d85b5c8e1a8f5da8c03dddc9"
+    },
+    {
+      "name": "cid10_chapter",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "43e5c288ed332d873cd9aae95546453a218deae53a45bdf895c9a238e7f631ab"
+    },
+    {
+      "name": "cid10_chapters",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "956a522dd4063372ffd3b707d4bfef899fb3de872de75681ad5aa53a2c084fbc"
+    },
+    {
+      "name": "cid10_lookup",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "578b4c02922b871e0f8e227fb34fa2c60717b99cc90d8626ed1d664e9d7e54eb"
+    },
+    {
+      "name": "cid10_search",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "457ef2a6cc1ddb1e6814fb8869d2b3504cd11177b3bf7d5fe8452dff76e0ac1c"
+    },
+    {
+      "name": "find_equivalent",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "49f63e1534e02e93fc46b49eb8a9a6a3a276e95a8fb68c83102af4228139807b"
+    },
+    {
+      "name": "icd11_chapters",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "1056084f72c2611ef3928d14507c786483de97e00fb58c5688c4cf0da8d69da5"
+    },
+    {
+      "name": "icd11_hierarchy",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "a0942aba6f438873b707fbbb5f8e8707e54bd7bb47e1731bd1ad2f03c613ccbe"
+    },
+    {
+      "name": "icd11_lookup",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "3235a05cfa9f623e729e7cabaac7b09414bf38adeacf05e4f2c9102d285c415e"
+    },
+    {
+      "name": "icd11_postcoordination",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "716570bea84a40005726f31809d324a3ed79febd5ee43fef83d524e2f96289af"
+    },
+    {
+      "name": "icd11_search",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "aee9d391b03f36f8317f4e404114a95cea3e35db715fbd1b8138f5c40fe0791f"
+    },
+    {
+      "name": "loinc_answers",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "e320a756bb83a5eaf3438fe6c3cee9e8c15cb8c1ee39bfb258e5b7611478f87a"
+    },
+    {
+      "name": "loinc_details",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "8a58d21c7e0b615122357d47130a027394be01a7601781217af97df43513de0d"
+    },
+    {
+      "name": "loinc_panels",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "e342f4b124af0b07f6aa39bc88ab01084f4b8a0c7db84170d894c10c2cd68422"
+    },
+    {
+      "name": "loinc_search",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "a823d873bcb8581055d9720debbd46890d8e45acd53343bcfec203e4af6ac07e"
+    },
+    {
+      "name": "map_icd10_to_icd11",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "3fe858a1f3a81c384b4b9b688c5e817d6f874eaaa81e23a0e9c4aa8ce783cb53"
+    },
+    {
+      "name": "map_loinc_to_snomed",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "d4704693ffc85f39c1ebeba651a1002a64bfdb69a092947edd4459fb1f27fc04"
+    },
+    {
+      "name": "map_snomed_to_icd10",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "500f1aa729107bf2a250def192c0daae0d425e8bf59ffa7f0bbb27ddf2a622ea"
+    },
+    {
+      "name": "mesh_descriptor",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "2b9c31802cbe749e9f13d6408fb9d29a1385b67e4268669efc4ab979e9344b06"
+    },
+    {
+      "name": "mesh_qualifiers",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "c6b976ad1ea78404343b579d36aa899a5562b2a5d77c96da1e4964e102be1b6f"
+    },
+    {
+      "name": "mesh_search",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "86ad688b45ba4cc445b51bccf57e22e1bcbd6cbf82afff527f30c41065c16ad9"
+    },
+    {
+      "name": "mesh_tree",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "ad88e10fe0144c80609d2c5d94a64039a5e49570f473ad2d1aafde8b7401dd8e"
+    },
+    {
+      "name": "rxnorm_classes",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "aa60bb9a587462fe91eb89fe0c28f439eb24911940bedc2dddc3a75aebd1a0e5"
+    },
+    {
+      "name": "rxnorm_concept",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "efd919c49390c6cb861ee0a8c17a0387b905a61347e0c1c66a2139b559740f9b"
+    },
+    {
+      "name": "rxnorm_ingredients",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "af9c15ad64cac2b8a776f80c5f6989e5b8cdfd1be48edb83d589f74d6a5b7c07"
+    },
+    {
+      "name": "rxnorm_ndc",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "882960e6d56a4ecce337e3fd04eba4c7defa8acbf64778a9d2cfb74436694eaa"
+    },
+    {
+      "name": "rxnorm_search",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "a101118bdff91b630848c0604bbc31dd6c0d544494e3bdba7a9aaf10a5e9c716"
+    },
+    {
+      "name": "snomed_concept",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "e3c50bfad6f8cc3005259dde53c963f5e0fa0535ae62c180045cfe7964c09407"
+    },
+    {
+      "name": "snomed_descriptions",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "7f0028f5f67a5e47a7977fee15d6cb8ade394208fb0afa7ec1f01d77097c5955"
+    },
+    {
+      "name": "snomed_ecl",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "7f6c679e0d50f328991adc6e3dd7430132f12675fdc335fe970cb1b188dd21ea"
+    },
+    {
+      "name": "snomed_hierarchy",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "d4c80d518c7761e362de1f9b6359c7e3ffc3cd64ab118eb6619b85697105c6fc"
+    },
+    {
+      "name": "snomed_search",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "e4dd47fc2099041fda6eb6f4196304e854178acf19f6e579dd18ffcd48086666"
+    },
+    {
+      "name": "terminology_diff",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "1b1dc9c39ce1ea28a2d9582f446ec369601c71988e822f5b863f0566413522f9"
+    },
+    {
+      "name": "terminology_versions",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "81d6b0657a4464c8657e672641e2a7bdf0ad410b2bac8e71ed2ef9b5788571d4"
+    },
+    {
+      "name": "validate_codes",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "607fe08cb73b92d140023d5a1b634880557b6b6e437770d1371d47b5fbdbe3e1"
+    }
+  ],
+  "surfaceSha256": "b781fda9e4573253f1644786328fc029d99d553fd87fe5e9c367e8be3fd64799"
+}

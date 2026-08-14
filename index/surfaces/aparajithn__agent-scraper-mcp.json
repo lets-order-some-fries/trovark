@@ -1,0 +1,40 @@
+{
+  "ref": "aparajithn/agent-scraper-mcp",
+  "scannedAt": "2026-08-14T19:41:35.252Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.6.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "tool_extract_links",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "2c956d754a8b0d77095099ee12ac5b220b066cac834a5b859634952bee19ed35"
+    },
+    {
+      "name": "tool_extract_meta",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "8bcbe87975062baac5422435a63826f36ec3c042eb6dd2b1210b5449705d9a8c"
+    },
+    {
+      "name": "tool_scrape_structured",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "f53be597d9a4fe9ab51a709af3e00fa830a5fa1430a0be03f43727cf3083d08b"
+    },
+    {
+      "name": "tool_scrape_url",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "da042cd081109afa3ed674ccb522432153ceee238040bd5481f0a0f9114e3f3b"
+    },
+    {
+      "name": "tool_screenshot_url",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "f6a4e3bfa2cb2a9a53267553c2d9e2dd0db06cfb6d86af6d4dc13c8d0202414b"
+    },
+    {
+      "name": "tool_search_google",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "a69a6e35064a4ee6f8aeb106d855261c81efe37a9badf51ce579cbc58c8c5751"
+    }
+  ],
+  "surfaceSha256": "91838e8005a9f0d090ce21be2d46dd6fb744dfb113230323a6897d6c2f27bb6e"
+}

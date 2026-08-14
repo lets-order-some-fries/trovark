@@ -1,0 +1,40 @@
+{
+  "ref": "jasonwilbur/cloud-cost-mcp",
+  "scannedAt": "2026-08-14T19:41:35.252Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.6.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "calculate_workload_cost",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "acef9d2ce876eae864aeadddd2f265cb309c5e692582d60bb714663ab330ba35"
+    },
+    {
+      "name": "compare_compute",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "050aa73fbb101b0bcf90a007e1edeb7e9099f0d5e9774db56661e2ebc76f5836"
+    },
+    {
+      "name": "compare_egress",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "8df3bf90c1958daf5aaeb2b6d904c84e096241711de62edd7e3d5eb542235c2f"
+    },
+    {
+      "name": "compare_kubernetes",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "29a7f30c7c6126ab64ca8e915ac053ab5ddf251582afb596a92c87a237b7dfaa"
+    },
+    {
+      "name": "compare_storage",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "e4815430e027993d8cd026b13eab181ff467d6e4caa33a51ca1e4342961b0163"
+    },
+    {
+      "name": "find_cheapest_compute",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "bc5613cd559bd16965f9693c2e4ef38837c68b344a5ed8428f54e6bf2ed21cd4"
+    }
+  ],
+  "surfaceSha256": "e6d3aa756a089960eb1a5480044500ad337227bd9fa689f1df79af579e21b280"
+}

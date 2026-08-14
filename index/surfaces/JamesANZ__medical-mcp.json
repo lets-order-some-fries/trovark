@@ -1,0 +1,90 @@
+{
+  "ref": "JamesANZ/medical-mcp",
+  "scannedAt": "2026-08-14T19:41:35.252Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.6.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "get-article-details",
+      "descriptionSha256": "62d0c2f7d319242bc280c42fdea7eac35bdc08e85ab71921e9327b0e1e05fe86",
+      "definitionSha256": "c252635b19fa7b70ec1a8488364851669163c300a7dbf306c009d4ac301bd157"
+    },
+    {
+      "name": "get-cache-stats",
+      "descriptionSha256": "4437bec91a47fb7cf0f90763c8ddd9f1cdaa5551fd6cdc11b8ee460ace396054",
+      "definitionSha256": "b2db16e241be0f080a93f5523ec3ad08e51161be4575c5871b7d1bdcf874650b"
+    },
+    {
+      "name": "get-child-health-statistics",
+      "descriptionSha256": "5e59341f66fd7f4b84d2ce4b58f1a408995fcd167fef6fdc7ff8c00039f2f6bc",
+      "definitionSha256": "bd5f567a34df897049b405f2f7b4510a9403e8fc88f78c65f5dbbd0618e39cf2"
+    },
+    {
+      "name": "get-drug-details",
+      "descriptionSha256": "a891de7bd3da2d6c927048f6285f79347a91ad12a80cddd9184f877eedd3f43b",
+      "definitionSha256": "a7175a8d4b618f99c5c04fda97c6e8d3eb1704c2eb70a3d4233133d814cdebd5"
+    },
+    {
+      "name": "get-health-statistics",
+      "descriptionSha256": "ac94f59c1d0214f2131d0d1b18a4c6cadc85f898dd15501bcff1ad68b9b956e0",
+      "definitionSha256": "a9c19967e10a67ba7fcaa2b3e10cd8846c207e015fad10e183d2182d44774e85"
+    },
+    {
+      "name": "search-aap-guidelines",
+      "descriptionSha256": "b9a6781e106b132fb126f8dcd4285e4ba5c0136a06574f1067f0e8a690ff04f8",
+      "definitionSha256": "4f7422126b2eed4339a9e18cc4766105f8ce9f0acc0c9e8f2e1cf973feca956c"
+    },
+    {
+      "name": "search-clinical-guidelines",
+      "descriptionSha256": "c3dd3935cd8d7d3868dd4b114088c4e359e9ff49281d53f785e31c992eb8c372",
+      "definitionSha256": "3889b45d1d1817f96c6113567b6c7e1b61a3b3cc4611c0b9e0fde48fe6b1cbec"
+    },
+    {
+      "name": "search-drug-nomenclature",
+      "descriptionSha256": "51655f50e38410bffca8254edf5963ed9e4fd4c6c0dd18d17259d4fedc26061f",
+      "definitionSha256": "101c0072bb817415e7a60ea33fbdff1c475cc3d4ff4065b2ab91da169e4e47cb"
+    },
+    {
+      "name": "search-drugs",
+      "descriptionSha256": "56408e1ffd211335c86f93afd0da4c8ae5e5a7144648b36d549406c1cda819c4",
+      "definitionSha256": "8758edd66e01980bdbd61eb2e2dccdcd2344c7b316062ffc63799f6d46ba1b9a"
+    },
+    {
+      "name": "search-google-scholar",
+      "descriptionSha256": "f5021278ddd47492c3ab49ad19fe0319e9cb37812b48e524f123cb51452f5d58",
+      "definitionSha256": "cfb69d9697eb390c7c555cfb5a44904831b558fe53b71ed28808f613c81faf1d"
+    },
+    {
+      "name": "search-medical-databases",
+      "descriptionSha256": "29d5f3242cae801e2a30b70581a6214d5ca4c3cb706d80844905f94735b9a783",
+      "definitionSha256": "d363e78a079a59784f9304f31cc7d664dab4e8a80619e4329727d93d7d3e7984"
+    },
+    {
+      "name": "search-medical-journals",
+      "descriptionSha256": "f99bcff79590e9270487049805eaffd95076a1dfbb550acef3121993221f1e0a",
+      "definitionSha256": "f49b9d8e08d84d30921309c984c7b272897212b5f2eb8406a86270ee2c87c095"
+    },
+    {
+      "name": "search-medical-literature",
+      "descriptionSha256": "b03413e2300dbcc142cfa44d12c8474c4caa545e45e612eaad242c7648f7ba7d",
+      "definitionSha256": "8c09c80b7f51f8f92b327876c4abb736977ec127213ebccd95c94fce6d321e4c"
+    },
+    {
+      "name": "search-pediatric-drugs",
+      "descriptionSha256": "c71a1e5d8a99a4e3095778c35e55a8d788c87dd8de77462621e9745951602e8e",
+      "definitionSha256": "40c1f5ead37bd6e1a5922b428d11a3fc120a4bf9a93d12ced64d06ebd71878d3"
+    },
+    {
+      "name": "search-pediatric-guidelines",
+      "descriptionSha256": "c48d718c297bdbbd19403ca4b614d33ba559a0b52c6827ad6a9c0d6efff868da",
+      "definitionSha256": "878cade8823b7a07781674690f6f66e6cda8d286518035c135b0343db1cc477a"
+    },
+    {
+      "name": "search-pediatric-literature",
+      "descriptionSha256": "888cb8f26edcf9756489fb4f225cfa453964c86fb517974be4a527200931d5e7",
+      "definitionSha256": "c80a10c332ec7aeedfd757182d2a883f24fe6f3a861d74be037e8e87f4949ede"
+    }
+  ],
+  "surfaceSha256": "765183b48c6a084e96bb6ca853db7cb6756b95bcb06c2a5b71235334325abb7a"
+}

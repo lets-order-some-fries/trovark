@@ -1,0 +1,30 @@
+{
+  "ref": "ymw0407/auth-fetch-mcp",
+  "scannedAt": "2026-08-14T19:41:35.252Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.6.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "auth_fetch",
+      "descriptionSha256": "7e14ab34ff8862fca1eac9835d95d249c6badca3d4e60d24c259397c50d65240",
+      "definitionSha256": "52e760f223b147b51089dfa9f7ce9821fe972d785460df3ccb406ab2d2563362"
+    },
+    {
+      "name": "close_browser",
+      "descriptionSha256": "248d1b88e5e7368c0a745c3c3269e7e10824cef2f25b89d16c07ebea27f3fb45",
+      "definitionSha256": "48c71bab311dace2e3fe1a079954b9e99c1608a9056ac9ee0a870f0889f23971"
+    },
+    {
+      "name": "download_media",
+      "descriptionSha256": "62525892ccaf563c4c1ee6adae68816ee2db38d1267c4f7325b7d9139a92fb9c",
+      "definitionSha256": "958cc01dde190844d297b87a617fa3295b60d6fed189764b974de15168c97299"
+    },
+    {
+      "name": "list_pages",
+      "descriptionSha256": "e25de6c7be41d617c6997b8dffa953c7afbe4e3f60a2fd98f1acac8f25ed857f",
+      "definitionSha256": "fe6a7b754adb57c5f54f817c4b5ccd494c1606b7077fc4518d8567cfdb34b9fa"
+    }
+  ],
+  "surfaceSha256": "7d5ed3fd2b0c2622980a1e3937c7869bc04dcf46024769b63501a0de12660571"
+}

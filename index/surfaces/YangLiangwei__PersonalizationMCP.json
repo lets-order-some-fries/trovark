@@ -1,0 +1,450 @@
+{
+  "ref": "YangLiangwei/PersonalizationMCP",
+  "scannedAt": "2026-08-14T19:41:35.252Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.6.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "add",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "279eee6a3ce3996f059fefeda1b15b88a15ab1aac2294984c25474fce24340b3"
+    },
+    {
+      "name": "auto_refresh_reddit_token_if_needed",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "7f57fd60e0018572b00da5b2934d65bc047a52b003bfd4bca4795e148aae10a9"
+    },
+    {
+      "name": "auto_refresh_spotify_token_if_needed",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "829b3e03c6bbb3bfbf1cb72bd8390632de06b16f31a5bc1258c4cfbbd4c428c9"
+    },
+    {
+      "name": "auto_refresh_youtube_token_if_needed",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "309488a93564224f7fa00ff184a3b6d220d3bda606d4ae9b74b42d423e993140"
+    },
+    {
+      "name": "compare_games_with_friend",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "e493fe4c04a7431a9f0140e2b40eb86a0dfd628f089273b5ffe5855c6253c7e9"
+    },
+    {
+      "name": "complete_reddit_oauth",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "3a4f55c7acf2e1cec83cd610cd822bbdd693178c09b7a0b3a432e241e3d740c8"
+    },
+    {
+      "name": "complete_spotify_oauth",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "af973810f58ae5d79ace6516b5463454712210aea0981c473e2bd1aa6fa5f642"
+    },
+    {
+      "name": "complete_youtube_oauth",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "c82c9d56e06640c2b5ada2c386a476afd64e0d1fc8ce77fc377cb8d4bcede33c"
+    },
+    {
+      "name": "follow_artists_or_users",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "bec29e985c61e668867a06b06df7ef2d44ca9b7b12cdb7429b2cc6c5a118278b"
+    },
+    {
+      "name": "follow_playlist",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "f085c156f94fc198188c1cce8024fbf76a46dc491608e5b5840709c5def14cc7"
+    },
+    {
+      "name": "get_bilibili_config",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "2df98f9d42314012c9f71b8cc9c049cc93a53113473bcd6bb73e449a002f9ed3"
+    },
+    {
+      "name": "get_bilibili_favorites",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "6e28ec539d76cb7644fe627dde9fe28663d3afd04db59c07566d72d7887b1c3e"
+    },
+    {
+      "name": "get_bilibili_following_list",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "99bbeac61fe0aa66370d81b1c63e3884ccf4c1c6929e20f53a61446efcf6591f"
+    },
+    {
+      "name": "get_bilibili_toview_list",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "c137aa44a734ca9b20c782069bc09f493c844cd595f67f7d54417f29df93be04"
+    },
+    {
+      "name": "get_bilibili_user_info",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "71c85a8d3fdabfd1647ddeb6dc8c8cbf4055e54db33411fe28bf96eccaeee8d1"
+    },
+    {
+      "name": "get_bilibili_user_videos",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "b63650ac0dff756f5ad4722c6b8105cc0c5a3bd0c70782dd2398a719875cc154"
+    },
+    {
+      "name": "get_bilibili_video_info",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "7f4a8455aa06ff39fadbc733250f1d8831a1f98f5ab54f4116c5b8010c171dfc"
+    },
+    {
+      "name": "get_bilibili_watch_history",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "8c79122cce90f396297b64e3e74a2210a2665fa6e50a082df8de97b80fd87c5e"
+    },
+    {
+      "name": "get_channel_info",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "7c1efe30b7c5bf2a2bab0bea421704ee1515e109aca872ecb4c937ca472706bd"
+    },
+    {
+      "name": "get_contributor_subreddits",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "5f88aed46fbef2b0272310e256588b4a0b50a20520815fc7c019dfe21cfa1201"
+    },
+    {
+      "name": "get_current_user_playlists",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "d4dc34e56f6fcbaeb62433b6397b919d381bb8d734442c88a039d96ccd1f8622"
+    },
+    {
+      "name": "get_current_user_profile",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "dcb4fcaeb71f3fd91bea5fd4774dd95a8df565fe1e2e352dd1d18dd0ea06cb59"
+    },
+    {
+      "name": "get_downvoted_content",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "18d94437a0ffcb6fc19100636a4f45275026d708327a8574182320be4841ec3e"
+    },
+    {
+      "name": "get_followed_artists",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "23e95efe0289bc894b38ce5ced7bd625c8dc4e44edb70570ff486b8e1fc5210c"
+    },
+    {
+      "name": "get_friend_game_recommendations",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "6a22c0a34010656dace555a189cfde44d2ea117378b6bb40e57fce8873450ec0"
+    },
+    {
+      "name": "get_friends_current_games",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "4472a9ca2a71a14c6c4ec0007ecc7a676456ce4d2c111d381f219ea0b39963a9"
+    },
+    {
+      "name": "get_hidden_posts",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "e69363f4fec57f1913e23cea8bcb0a8e55ab879bc2ff874ad7021b95f28a616b"
+    },
+    {
+      "name": "get_inbox_messages",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "f52b977956e10f2260df99ad8b3a091490c0dc84dd2d747f0e146608d23745b4"
+    },
+    {
+      "name": "get_moderated_subreddits",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "cfeda5faa0ba821c05d2dbe476ca67df767c1fe615800370aabea447b489ab99"
+    },
+    {
+      "name": "get_my_bilibili_profile",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "24ae6c3ba4395e2402be4721ee84db86c9f36b092e3db9960fb8a2649467b6f2"
+    },
+    {
+      "name": "get_personalization_status",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "fb9de4fab2830f0a575bc154db14354b9ada59aa936374fa1ed449e847d949b6"
+    },
+    {
+      "name": "get_player_achievements",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "8a94d5f17d9560908c4ead231987036f9574a32d3112f4d280dff1ca2316eeeb"
+    },
+    {
+      "name": "get_player_summary",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "ff59b7dba9da180ca608aabe6ba556d5805929f17b9ad419fef126c09cef5d6d"
+    },
+    {
+      "name": "get_playlist_items",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "a73f3178ac550ad85e18ad6b1bbbf5d394b3691265b2a6c06222443dc1094ced"
+    },
+    {
+      "name": "get_reddit_config",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "168441218431b7250d2fde338d6461b6522b0da20a4842544cd040981ebd6add"
+    },
+    {
+      "name": "get_reddit_token_status",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "949a7fb83b9d65860d9d78b5272eee4acebee32d337abc6ba0e9ec581c7bff55"
+    },
+    {
+      "name": "get_saved_content",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "9749e592688d32d552df9c385c7cb530c90b5cb150f27ca2be2b7d8131694e97"
+    },
+    {
+      "name": "get_sent_messages",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "9563d348a3e7737ac27bf0dd7545213d95bd1847f2d1f6e81f3f430c98b48035"
+    },
+    {
+      "name": "get_spotify_config",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "f63a1a97b15f7b7ab6306417c3a54aaaedc0e11aa46435535d361a83d90954bc"
+    },
+    {
+      "name": "get_spotify_token_status",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "3b521a284d03d95dfc1edcc5f9da7f76bd744c68ea5ba01606806e0d57c83fd3"
+    },
+    {
+      "name": "get_steam_config",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "d15c6c8eb5b23d43e2bde8047e99a51d6e6ae8626b1d8450fc6c3bcbac7ab4c9"
+    },
+    {
+      "name": "get_steam_friends",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "22656be586104ef99fd75b0fb536b4493240276fb8afbc77baa4523a290fb878"
+    },
+    {
+      "name": "get_steam_library",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "acd8bb2afa56426f3d3fd1dd926a22dfea25408fa5cc9b257457999f30e12444"
+    },
+    {
+      "name": "get_steam_profile",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "48f64641594ea788d60c959696eae4e54b2474f524f7859de01b00d607319d9d"
+    },
+    {
+      "name": "get_steam_recent_activity",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "3cd691edab7d444eb8d9aeac9eb705bdaf0ed1dc4a06ca2ef0583397c23f8fbb"
+    },
+    {
+      "name": "get_trending_videos",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "d507cac8a5b6ce8c37334ba1aa2bb83ff31e1412ff2334762366e812a6327db4"
+    },
+    {
+      "name": "get_unread_messages",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "001d436285eb5633ca143892e5b70aacbb334509eebe3fb1fac2b8211bec3b81"
+    },
+    {
+      "name": "get_upvoted_content",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "a1be02bb5e01bb6dadcd206d5a39a3ad989327aeccf193e4038bfa7810e79bdf"
+    },
+    {
+      "name": "get_user_comments",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "46075e97dc4da50b717b989e95eec5f6e96e9ed60067ee3c48e261ccc4278be4"
+    },
+    {
+      "name": "get_user_game_stats",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "cd369388c3f97e3235f3ebe65a5b242996d92c6f498d18db6f34d5d31db74a7c"
+    },
+    {
+      "name": "get_user_karma_breakdown",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "679aec9c01e5429847a70e06c6747f6f1539345e3ef48393efdcece81add6360"
+    },
+    {
+      "name": "get_user_overview",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "1672997c661c9319dea7464e5091d5451dce39ee6b3611db6a3aed1b29946dbf"
+    },
+    {
+      "name": "get_user_playlists",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "4933fa4e1711a0282cdff78642babb874076a15d8a2b1c951814d44986863d15"
+    },
+    {
+      "name": "get_user_preferences",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "7699152e9e2f90ebe6ff0c71527fafc7c2079223e92ca3222a4fb1d8b7032d7a"
+    },
+    {
+      "name": "get_user_profile",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "97ac760920dd7f449be15689af662903e8fc5b336889ae83616ffe7e57a25488"
+    },
+    {
+      "name": "get_user_recently_played",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "5203eb201b68b20ee2668181e24230dcaffd08e860366401218a86c6180bf324"
+    },
+    {
+      "name": "get_user_saved_albums",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "f9075500e60256ddb147e40e9ec36e5815941f22c05c88790e7210f54caeb130"
+    },
+    {
+      "name": "get_user_saved_audiobooks",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "d958a0c78a2322f2a4e7fe4c2ff50f95aa136fc782bd48b0937e2c12ec08f260"
+    },
+    {
+      "name": "get_user_saved_episodes",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "400c71c7039c761708a832849a38ee28de83ceeec7b890aac984a1f911c0deb6"
+    },
+    {
+      "name": "get_user_saved_shows",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "c11bc8ea12fb4a677b668cafe5cf8cf26f88d0e1d23cbcc8646606be49d2db37"
+    },
+    {
+      "name": "get_user_saved_tracks",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "edd8ba5a9fcb180f241eaac51f81a6231d535c0215ce986126a9bd4bb5c8e79a"
+    },
+    {
+      "name": "get_user_submitted_posts",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "e1ab6e71c9023f58543217003b67ac2b83744ca753a8797f56d600e673cd1ef0"
+    },
+    {
+      "name": "get_user_subreddits",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "24ea6d9f918b0a4de2951bab8646a2fb7f74791b58437b94263b55a417a24010"
+    },
+    {
+      "name": "get_user_top_items",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "20f2597b367eca32cb2d4bb05853dc0015baafe11dea5037bf9bb3c896e165e5"
+    },
+    {
+      "name": "get_user_trophies",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "7379d6326fc640c587c0f744f19670786a63b86929eb1f8681ffe8ab21a942cd"
+    },
+    {
+      "name": "get_video_details",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "e95bc834a94cd74b3cc69d8bf9b319b0e8bfead20762bacf1a1df5f78ad6c638"
+    },
+    {
+      "name": "get_youtube_config",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "aa25395810815e96126c68a3ebefa96a41a53e0bb0e51646ba157caa56e2ad70"
+    },
+    {
+      "name": "get_youtube_liked_videos",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "3c2bd4038b6d59467eaf53b553192d71c5a83e0d87f1e75465cc8287e0852ace"
+    },
+    {
+      "name": "get_youtube_playlists",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "0a40a672ca1d86f8624557d451686fa309ef1fcb1854cc3780b337c899510279"
+    },
+    {
+      "name": "get_youtube_subscriptions",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "32ea76e03f4533056f9aeee0f35d50b13a0d58c04931a6acdb97a2d0749a81ef"
+    },
+    {
+      "name": "get_youtube_token_status",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "2440c67be4697f866091f3f23bb018971db6b1fba01fd9ccb343889713e5c047"
+    },
+    {
+      "name": "my_steam_recent_activity",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "888f81b76b56cc4b512a8685899a64a8e032397efb46eda4cbec759ec1c31caf"
+    },
+    {
+      "name": "refresh_reddit_token",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "e51a1753a654506f5178511111b95741761d40ee43fa82c536d512fd15bd6546"
+    },
+    {
+      "name": "refresh_spotify_token",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "cceb4d223b84b410fccf4548228dfbd4c620ec586cf0825d9313bfcde31a217e"
+    },
+    {
+      "name": "refresh_youtube_token",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "60bbcaffd7efc3826f41dd1c51ac76abadb43a40c5447cad87a8b670ff36b507"
+    },
+    {
+      "name": "search_bilibili_videos",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "e6161111769ba0cbdef7f0d77ba0afebf7ec4864cddd0206594c27f1c60b0802"
+    },
+    {
+      "name": "search_youtube_videos",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "61140cd86a4e3be4bd59986f1b586ff296e3aa37a35844cd91c3e14440dc7347"
+    },
+    {
+      "name": "setup_reddit_oauth",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "d02296b22337c69c9d74dbb7070dae450e5181cc2e8c4c3ec7bb86b5a56a586c"
+    },
+    {
+      "name": "setup_spotify_oauth",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "fc673098f5685074d4936afdccf91343dd3f3bc9f197f367ddb613c7a22a17ed"
+    },
+    {
+      "name": "setup_youtube_oauth",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "1adc43485b3ad7b59d929787100aaef932678ab9a53c0e2ecd2c6e1fe38fc9ed"
+    },
+    {
+      "name": "test_bilibili_credentials",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "91a70b341bf4114fc3d75421b1322b5044d062c1bdef89dd5a9a1175689e4e91"
+    },
+    {
+      "name": "test_connection",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "74cd7f91c0478e9f28bddb90425ed209cf756dfed45ed7d33c8a07c582874fb7"
+    },
+    {
+      "name": "test_reddit_credentials",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "53f3b55c47fdd5984bc814e21a08a3005b81e0b2846ec30306333e4b03a07ba1"
+    },
+    {
+      "name": "test_spotify_credentials",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "b756202090db0c52fbb827b4743c56db75aa47b366a0a8299780476e919ba967"
+    },
+    {
+      "name": "test_steam_credentials",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "de0437c15f7bee504c9f7e2c2748fe24f709e31a79b3f4d2f58ddd329d7f84de"
+    },
+    {
+      "name": "test_youtube_credentials",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "8dcf40efa0b42b4e93223dfc7b56e0080508d914dc68e26f96246db741420854"
+    },
+    {
+      "name": "unfollow_artists_or_users",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "d75d8e230a08e9d8d2bb1d20ddf71944dff0ae122cde76a68df3a006a21e295f"
+    },
+    {
+      "name": "unfollow_playlist",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "d8f93187dc0542d821ac3bf2ec4c24ff198b5c98560c183880bcaeb1bab7ac32"
+    }
+  ],
+  "surfaceSha256": "ef71779289e569e6095f4b6f195d88f10531923dd8226d8f54ac85c102d391e8"
+}

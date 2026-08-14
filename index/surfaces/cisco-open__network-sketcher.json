@@ -1,0 +1,70 @@
+{
+  "ref": "cisco-open/network-sketcher",
+  "scannedAt": "2026-08-14T19:41:35.252Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.6.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "build_default_outputs",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "245e4aa8eb683ba133926829afe4ea317e14adad1756dd00fb5899d1a2c88271"
+    },
+    {
+      "name": "create_empty_master",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "c4481a55d08ae8c4b3795661bbb4e2db37dade2030df44206500f5e64116f59e"
+    },
+    {
+      "name": "export_device_table_html",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "41524e62510170b50193b632616de48c6ea89439622439d62ba1cd0d8ad64b49"
+    },
+    {
+      "name": "export_diagram",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "cb50a2cdc6492d71235bc6c6ae961feb4e71c2b1ae56da9ffecddabf7b00417c"
+    },
+    {
+      "name": "export_master_xlsx",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "033478db94ae4d5297394bde1f86b79eedfa9bde32085a7e46bf3a62e6d69722"
+    },
+    {
+      "name": "get_ai_context",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "dcf48661b8cd1a07e8dc81e33154e57d5c5c100b4b3b0e6b2f748e4df7b9c05e"
+    },
+    {
+      "name": "get_network_state",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "aa3a264513f91df3c29cf8eb621c7e7cc578fedf5299e634c695f0360b1e69bd"
+    },
+    {
+      "name": "get_workspace_info",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "1888084b097467c41ad8c6d07bee9d95d2abd195445455ef01f40fb2a7e52c3b"
+    },
+    {
+      "name": "import_master",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "769508e464fe67dd372142b0e1516619d18da7e0bbdd9333eb557384f055d33c"
+    },
+    {
+      "name": "run_commands",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "28ad567c39c7d8cd6a6512109f548dc1e969d20176435b47259d6697ebd6aa39"
+    },
+    {
+      "name": "set_workspace",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "184540cbbc710c8b6c366768945d2ad773c709f988d76b99a9683fa1a1e54389"
+    },
+    {
+      "name": "suggest_workspace",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "f285cd8477b90cd5ece58452c5deacaec0319a7e402ce3e05cefaef33c626148"
+    }
+  ],
+  "surfaceSha256": "b18d53c661994d1655257ee7b1e63f648a792c5714a5868e0ce1fa8665f32532"
+}

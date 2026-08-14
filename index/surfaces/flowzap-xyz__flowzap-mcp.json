@@ -1,0 +1,70 @@
+{
+  "ref": "flowzap-xyz/flowzap-mcp",
+  "scannedAt": "2026-08-14T19:41:35.252Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.6.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "flowzap_apply_change",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "cd593752f9a417ad75707bdfed1ae7ef7d983544055460322e00475a7066f826"
+    },
+    {
+      "name": "flowzap_artifact_to_diagram",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "07ea1c5f72f1c5c69ae90508d01f32caf7df289a42f527b1b5ace9ff78934e03"
+    },
+    {
+      "name": "flowzap_compliance_check",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "8e08dea8a49a3f65ca1d6dc1ee76ffd6ce3c55ee2264bd0282e2d8024756aaff"
+    },
+    {
+      "name": "flowzap_create_playground",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "8cf35c9569a2a6f41aaece0ba56dc61eb5333863007aa3b824d4449b9f781cca"
+    },
+    {
+      "name": "flowzap_diff",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "7957cf3a92fc57b588c758faeb154f6b832c0a5b0cca9e82dd70de00092e6d13"
+    },
+    {
+      "name": "flowzap_export_graph",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "343ef2e00dccea0b4fdbf76772a36dd846e7b740ef65cb4f0a33bef2f593b237"
+    },
+    {
+      "name": "flowzap_get_syntax",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "6b345b17e8c2ad47c01b6014188dae1f69000e94c0252ed29b3f2cb7803d9816"
+    },
+    {
+      "name": "flowzap_mindmap_approve",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "ba1e1d082fcadcef32b1ae1cf7b4356e31e4f01bb8105f4a25c5d8b94be4e95d"
+    },
+    {
+      "name": "flowzap_mindmap_create_playground",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "1a91c5cc216f59ba8fe5dc907df589d1e63455886558269053a09e7f6cef06ab"
+    },
+    {
+      "name": "flowzap_mindmap_template",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "5352b7d7459f9df9fd135c430af749fa3a3dfdb8cd8d86a390cb29028e072946"
+    },
+    {
+      "name": "flowzap_mindmap_validate",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "dbd57b75866f1ef95fcaf3d487b4931d92b7a4c866a48c5356a5159c0243c837"
+    },
+    {
+      "name": "flowzap_validate",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "b30be03e5cbbfa6cb109428208d9832c74b7cbff5238e28b569cb2482c754ca2"
+    }
+  ],
+  "surfaceSha256": "acb1c12c153c2da72ff33e4b976c79f310fb56b15c8dd7b697e12e53223ba0d5"
+}

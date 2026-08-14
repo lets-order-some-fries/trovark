@@ -1,0 +1,55 @@
+{
+  "ref": "PantelisGeorgiadis/dicomweb-mcp-server",
+  "scannedAt": "2026-08-14T19:41:35.252Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.6.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "find-encapsulated-pdf-reports",
+      "descriptionSha256": "affc6d453215ab983645489ff8c31a0de2760ec430bd6143796337f372acddb6",
+      "definitionSha256": "fbebb13e07a73a89b91734d9586a09179920bd93d592e6d95634b1ed30245652"
+    },
+    {
+      "name": "find-instances",
+      "descriptionSha256": "918d4538650164c7983bda838288519172c5708fc131f7fed68b68cdc1a8cd81",
+      "definitionSha256": "4df0459a05e3ffae44d64c1ea854a6e3628571dd9b1bb03c66218fb728ab3b43"
+    },
+    {
+      "name": "find-series",
+      "descriptionSha256": "77578fdcce54b82529ff4609d36eeefb7d489803b8d7268fa951aad9db0f39dd",
+      "definitionSha256": "c3cf65e674e68ed9f1240d2f94c9d44a818a99825f20da7da9a31d3f3d0223bc"
+    },
+    {
+      "name": "find-structured-reports",
+      "descriptionSha256": "5f9d5193de6ade342bbc1761051deb7197c53fddaf5f46737c057c621f8dd397",
+      "definitionSha256": "550280a00dc77100556976031cc23712e5ddda4c4ab13ae2ad78c36e31595e62"
+    },
+    {
+      "name": "find-studies",
+      "descriptionSha256": "8f579ebbd4bb2255b6c10412281e1a8c95883c8503e5810be12fcefc2f855103",
+      "definitionSha256": "c80cd51c7bb1a4f8bc6688288b7ff0aa5c138d2668cad0218a2ca357070ba3e8"
+    },
+    {
+      "name": "get-encapsulated-pdf-report-text",
+      "descriptionSha256": "725e5327ecb7c226682622e4abecd2bd44d9d7490bb9f15ab8151ac95859d87c",
+      "definitionSha256": "df8fd42123fce8caaa20e17efa0c641beb5d2932de7fe68b9c2f7171684cde74"
+    },
+    {
+      "name": "get-instance-metadata",
+      "descriptionSha256": "2c18b84fe1d2bc49a34320ef8e8e78d7b0ab27054bd7e83ce3eebb3f19bb581d",
+      "definitionSha256": "e87f8c99b0720f58fc277e5abda224dfc1e4e70e88db364cdab49cc8baa5014d"
+    },
+    {
+      "name": "get-structured-report-text",
+      "descriptionSha256": "a96ac01bc9e4da0ebe5741660e735bdb713e8124bd6dee6660780a865590b44f",
+      "definitionSha256": "b9bf6681e4b6e03640f72e5b9b3d18536ac891c6bf947a78087134f03e403eed"
+    },
+    {
+      "name": "render-instance-frame",
+      "descriptionSha256": "1635bb2b7b5883276f67c17486ec5732d7422d8dfcc2e8b46c05c3b998b5d7a2",
+      "definitionSha256": "0dbb8d56d5bc26f40529a7217be5cc1a4082d168751e636d258bb386cbe5493f"
+    }
+  ],
+  "surfaceSha256": "e35334344ab70ff27ee34d1d88c0289d2044865821602e84d994361b7777d686"
+}

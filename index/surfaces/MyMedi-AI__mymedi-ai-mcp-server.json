@@ -1,0 +1,40 @@
+{
+  "ref": "MyMedi-AI/mymedi-ai-mcp-server",
+  "scannedAt": "2026-08-14T19:41:35.252Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.6.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "code_lookup_basic",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "e6be2ff09813bf7e33f87b96f6ba1461a90776fcc4bdc31f825af5fd32498e1d"
+    },
+    {
+      "name": "denial_code_info",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "00b538580b660d9a3960a7ffe972434329c796e2718df46fa852906f2cca9fc9"
+    },
+    {
+      "name": "modifier_advisor",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "0fee5f6d65295a634937fcbafc85bbb0c8d27abf880f2774bcf54b316ff80168"
+    },
+    {
+      "name": "order_readiness_checklist",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "31f0c1d27f16bec51c429b8fff29d2bb1c8eea72b2da5be9948398a9ce6b994e"
+    },
+    {
+      "name": "pa_required_check",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "b6360cab9a7190aa47e0850730e3d70a1a396a1b8e9a60e2100b058894913794"
+    },
+    {
+      "name": "reimbursement_basic",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "cb00cf5ca0e8d886ec3205c23971f605775b2e204834836bb0c92a1db70f112d"
+    }
+  ],
+  "surfaceSha256": "de8492283e9411c2484f2e18888eb23146deabdd0f459a5743c3a7b983180d15"
+}

@@ -1,0 +1,30 @@
+{
+  "ref": "carlosahumada89/govrider-mcp-server",
+  "scannedAt": "2026-08-14T19:41:35.252Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.6.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "check_credits",
+      "descriptionSha256": "dcbb828a1d5e8a2b43bd1cf4584f6958742409ecd247a22047f24d2bdea9c809",
+      "definitionSha256": "5da75699ad7e80a7957037c122762efd84ad7af95e41df4781c78d423b57460f"
+    },
+    {
+      "name": "get_opportunity",
+      "descriptionSha256": "7703d1158c7ab567262cbe12d57c4aab7f9c7a6ef44cbe426ce6d8a987f1bb89",
+      "definitionSha256": "489e7a78d0e34383b5e42a0b614f168e2e27f35c9fa5deff1fb0990f30116db2"
+    },
+    {
+      "name": "search_enriched",
+      "descriptionSha256": "d83dca23c14b96e1f9f3c1aca8cafedb3c61d10b9f4b7bf8225208bb0c1f7218",
+      "definitionSha256": "2075a2a5d27e8cb9f7e8c10a7eedc112bf68831a98e35f17892fcce5c0b834d4"
+    },
+    {
+      "name": "search_opportunities",
+      "descriptionSha256": "3642845f9270e5890b54182bfd91d32cd4aa87b292eaa341e1770e3eb7082ee3",
+      "definitionSha256": "d65309035a616a0da5317363609011b455cf42694bda6acca8bf1009aaf89d4a"
+    }
+  ],
+  "surfaceSha256": "71ad7d342e24ef033af9c079a1c38ef4af5a8ae8b8cca776466de1e7a3d1a4de"
+}

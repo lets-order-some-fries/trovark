@@ -1,0 +1,45 @@
+{
+  "ref": "oxgeneral/agentnet",
+  "scannedAt": "2026-08-14T19:41:35.252Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.6.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "confirm_referral",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "67226b908cfb1c25083808dd7bd12706af83dbf184b1ba79048cf7b15a78e7d5"
+    },
+    {
+      "name": "find_agents",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "f4fb5703e2618a7c47c69f5145da5a1499b8141bd641327525f807fdc449a43b"
+    },
+    {
+      "name": "my_stats",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "1d0fd91166070c5789af862ae6cd07e8c362cca74f7dd157edf980a6990e28f7"
+    },
+    {
+      "name": "network_stats",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "1d69aad30610afcb8c013995e57616a8120e9555fedf524698efc0a79d6c8090"
+    },
+    {
+      "name": "recommend",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "1683b67d16025201011292802ef83ac8f9596157bf0a27fb1f4ea2f3400d6e8c"
+    },
+    {
+      "name": "register_agent",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "6de357fd5a9b4a01378a3b381580da69bba1b9fd1648c91b89169d1008498c92"
+    },
+    {
+      "name": "report_referral",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "c562a07f91d5442e800dbab2ad5646b64ba582a979f699fbd2398bb05154db7e"
+    }
+  ],
+  "surfaceSha256": "f00a2cfbc16f56e0ab206b6e25d55d378a5c021d665caff343e54ac2d22f6fea"
+}

@@ -1,0 +1,20 @@
+{
+  "ref": "kimtaeyoon83/mcp-server-youtube-transcript",
+  "scannedAt": "2026-08-14T19:41:35.252Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.6.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "analyze_video",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "e29014fac23ef3610531f43cfa4cef44f5daf6fe69ce4026b0c71c7eb8fbf3f2"
+    },
+    {
+      "name": "get_transcript",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "69575b5c43ccc6e8c3b4fef6b5a80ae0bc1b45139f9a33e5e88e799c9e6648e7"
+    }
+  ],
+  "surfaceSha256": "4f2707a6701f2f781a6e167c7315b5a87ab9b36886cc6eced923c3e072abf749"
+}

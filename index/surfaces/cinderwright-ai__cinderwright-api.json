@@ -1,0 +1,85 @@
+{
+  "ref": "cinderwright-ai/cinderwright-api",
+  "scannedAt": "2026-08-14T19:41:35.252Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.6.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "agent_check",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "9b7c0f7d91fc7c61c568928c84bb113e782d88546319d9d3438f39ae38fdd4bc"
+    },
+    {
+      "name": "compare",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "2bb971a49221899e92cad093e37b646e774104cd6a512617c77a08fb93f697e4"
+    },
+    {
+      "name": "discover",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "7607d596285c476225201d6d881725d311b4babe370a736f497bb599714e0c9b"
+    },
+    {
+      "name": "find",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "6f1826c8044afa25a54476bbab5a163d58e54e071b5a5354e90832cc09499a31"
+    },
+    {
+      "name": "market_opportunity",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "690b2cf76a3efc21e2f96905426f1c222f4e22a0827be9aaadef12a5ca673693"
+    },
+    {
+      "name": "market_report",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "7e857d7100d460db67562a658c62051fb8a402f01081622a43c46747f531c1c9"
+    },
+    {
+      "name": "prices",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "55bd1353be0f8a6d1ddf597529adbec01589d92606e1fd272e38ee2120e05b99"
+    },
+    {
+      "name": "protocols",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "be12966a40bcf01fef7851417012ba24c80daf9af9c0a1a99931f665a5958334"
+    },
+    {
+      "name": "proxy_balance",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "0be3dc3768986c8126f35297073f44cccd93f60c797bb89829791edf0b0ad944"
+    },
+    {
+      "name": "proxy_do",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "5cd50cf84ef2bd6c1aaf3325383cb6e2ac002d554d903b9b6a7e19a0a99f7510"
+    },
+    {
+      "name": "proxy_setup",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "ff65547aa5ceb537fd5510ac0b1bd0f584f7eed5e83e6a7484b0f6039d0c4509"
+    },
+    {
+      "name": "quality",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "9f709b344fec80832281cf5908769168e918471a7dcd87156da0d3bf4ffd4e38"
+    },
+    {
+      "name": "stats",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "9b4e497b05b42885aaece6864986b05758a4172ee2ab248272186474701e35f3"
+    },
+    {
+      "name": "submit",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "0b221079c68db0601ee0cb4f1bb83afca4342856ea0ce7c6e84908aed65cfc2d"
+    },
+    {
+      "name": "trends",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "90b5128fa6ccdabaa91510d040f63c3b3b0cad6b0d46f91824e03df95f6b6c1e"
+    }
+  ],
+  "surfaceSha256": "874d76f018600d21c3fa458e86bd4f57e0744bb2b21db117820f044bfb7e9246"
+}

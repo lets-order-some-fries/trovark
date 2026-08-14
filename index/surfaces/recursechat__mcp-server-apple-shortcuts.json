@@ -1,0 +1,20 @@
+{
+  "ref": "recursechat/mcp-server-apple-shortcuts",
+  "scannedAt": "2026-08-14T19:41:35.252Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.6.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "list_shortcuts",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "95aac64a5a38bc79ecffe3c90a5fdc8f2e5c77e0c3dedd2c08e598b6e43b402e"
+    },
+    {
+      "name": "run_shortcut",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "4585e48e19319055ccdf117385a41794a1d7504c546a09fa9b73bf5c53a05b49"
+    }
+  ],
+  "surfaceSha256": "2498163c6fb0862affd0060ad14570f97993b98473ec3084da28c832e76c5848"
+}

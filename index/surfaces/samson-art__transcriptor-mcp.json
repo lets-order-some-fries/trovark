@@ -1,0 +1,30 @@
+{
+  "ref": "samson-art/transcriptor-mcp",
+  "scannedAt": "2026-08-14T19:41:35.252Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.6.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "get_available_subtitles",
+      "descriptionSha256": "2b3bdca089aedcce77a53337c630bc7fa1f512d1c48562ac3e5d917693807cae",
+      "definitionSha256": "96fea852894c48748f761bdcb64523fb0308bac41ac3aa4b5d02646349c97a5f"
+    },
+    {
+      "name": "get_playlist_transcripts",
+      "descriptionSha256": "c64fe85d5045924a4dfce0ec9b3b313c407d6856afee909d730181019c7f39e4",
+      "definitionSha256": "298b1cf4581a53dd3f2889fe4a51d039316c2050430ae4b9f77fc6722b764df9"
+    },
+    {
+      "name": "get_raw_subtitles",
+      "descriptionSha256": "600858fe20957a7fe9d8ebb86bd99c7c72719a0c4ad33cdf0ea4be0126d331b8",
+      "definitionSha256": "e96743e087a6512dd053d0e877aa3b93b7c368b51d09cd389618a80ac250327b"
+    },
+    {
+      "name": "get_video_chapters",
+      "descriptionSha256": "6a1807eadf24e3eeabde2741f0e1e8461823e84394e3f46fce2ba96de0378439",
+      "definitionSha256": "5926bec4eb0497036f311e83fe2d2013381cd635461aed4ce5672bfe545a5cb8"
+    }
+  ],
+  "surfaceSha256": "7014d5c8f923397ef57f4071697fe03c71bbe666af6c9ea411877d36e2968ab0"
+}

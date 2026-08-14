@@ -1,0 +1,30 @@
+{
+  "ref": "sonnyflylock/voxie-ai-directory-mcp",
+  "scannedAt": "2026-08-14T19:41:35.252Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.6.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "chat_with_ai",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "862305d07c87444d61cf69a9b9503848eb0a091cd1b7b767f2bd8b306e775584"
+    },
+    {
+      "name": "find_ai_services_by_country",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "b5e1378504d6c962a158d7efaee9c55a4ffb3965cc0fa94c93bec594b8a8624a"
+    },
+    {
+      "name": "get_ai_service",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "712304a35dd8956efe80070345f130d981a9e9bce752c09e5df981e000f20903"
+    },
+    {
+      "name": "list_ai_services",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "ab567d7ef4801a1c03bb5d5d47bfdde0b6c0028270b9a94b96755b2e0c6e34d3"
+    }
+  ],
+  "surfaceSha256": "7b49838c41c8c467f464332e31b06d285713aa6375a786458ae1d44868ca841e"
+}

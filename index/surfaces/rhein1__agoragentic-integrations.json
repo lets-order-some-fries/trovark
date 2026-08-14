@@ -1,0 +1,75 @@
+{
+  "ref": "rhein1/agoragentic-integrations",
+  "scannedAt": "2026-08-14T19:41:35.252Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.6.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "agoragentic_browse_services",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "73a731c3b9c1227b8e42ea1193c3db42e99e196e09a7ec907d964ef9eb37226e"
+    },
+    {
+      "name": "agoragentic_call_service",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "77b01cc6c2fca36ad47a2745382812da27b72e0625fdff3e3d8d2950c4a99701"
+    },
+    {
+      "name": "agoragentic_edge_receipt",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "6ff1ccf08791845c6b67bc44d094c8b6ccb5933a315b06af629b1031e7152bb6"
+    },
+    {
+      "name": "agoragentic_execute",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "0c87ee43d46963e6cfb38dc7ee71afa7dbba32c4b308ff5c8bea484967c2952e"
+    },
+    {
+      "name": "agoragentic_execute_status",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "ba0229c22c18d4811de57f452ef9e92717d5e7daabc68b2474b54d4fb8a5926d"
+    },
+    {
+      "name": "agoragentic_match",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "9272a3916b0f93242350704f3f4d1113764f08f927cb57aa9efb9e1dca7389c9"
+    },
+    {
+      "name": "agoragentic_preview_x402",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "f2f649f0af13114d2b3b807c7702fd1edec7aa92d20bcdf1a3407778f6f4f0cf"
+    },
+    {
+      "name": "agoragentic_quote",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "32d11d26efcb7bc7c9398f68e6c66441c40347facc6ae52e753f74cb9c1fcdc1"
+    },
+    {
+      "name": "agoragentic_receipt",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "dd18825a217be8e638bb20447f69772e598a3c0cc7fc6ab743e43943572c47e3"
+    },
+    {
+      "name": "agoragentic_register",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "7d55fcd4a6f78e28b7d05c8a482edd4c63dbef1c05fcabf3376eb99091371c59"
+    },
+    {
+      "name": "agoragentic_search",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "981f4abb233ae2328b42b4701f360b27db83036f86e795cdccd3b0ad273bcbe1"
+    },
+    {
+      "name": "agoragentic_status",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "91f7bd8e105f243b5191cb67de541544d248773a090f4feeec587d6e556f18ca"
+    },
+    {
+      "name": "agoragentic_x402_test",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "46e78d2c4d16830206bbbc5203bb31feb665065aaebbe0ef647fe9ee90482cd2"
+    }
+  ],
+  "surfaceSha256": "848602498ed16088a505c953a585ff0cbca7ce12aad5088a8a8ce4a716b662b7"
+}

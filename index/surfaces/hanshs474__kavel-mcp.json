@@ -1,0 +1,30 @@
+{
+  "ref": "hanshs474/kavel-mcp",
+  "scannedAt": "2026-08-14T19:41:35.252Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.6.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "build_kavel_prompt",
+      "descriptionSha256": "086ffcd108e95651767640697b9e880d32d2c826dd7e953d1576beaa0b875133",
+      "definitionSha256": "956e5f46f71130655c6b2c228ff925d9ed58815798e569a5d6b0d2d4073089b8"
+    },
+    {
+      "name": "list_kavel_models",
+      "descriptionSha256": "73542cd7eb6ff512201de8213fee7c0fcb2fdb7038f8581371614defb3489d0c",
+      "definitionSha256": "8dcf1b2ea569114ef17cbee38f0de3153bb7c72bb7c8c8a6341d8e6f23f094ea"
+    },
+    {
+      "name": "list_kavel_tools",
+      "descriptionSha256": "bf37a40a265085db5e91fafd6e6d50468cf2b003765b3ee16b9b803ebae600a4",
+      "definitionSha256": "fb940500485c089848cc7e110274ce2900b11c53e350e8ed146ef3c81a1f1942"
+    },
+    {
+      "name": "open_in_kavel",
+      "descriptionSha256": "42af578c2ebed1d93fba0969ba30ab18e06ec7f2f3becae8839b7f8d4cf15825",
+      "definitionSha256": "8087f13208e9c3082b68df20d79fbfbb6326e5f8f93041939c0e18649f6cb2b8"
+    }
+  ],
+  "surfaceSha256": "d911026e841488328c0304476dcc13c1b0dce17848102b49719b52cfb741b579"
+}

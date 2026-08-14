@@ -1,0 +1,80 @@
+{
+  "ref": "forcedreamai/forcedream-mcp",
+  "scannedAt": "2026-08-14T19:41:35.252Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.6.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "forcedream_check_fraud",
+      "descriptionSha256": "84fdfdca80b207caa852e1e224210ea22627b61187ce747e74842165d0a10747",
+      "definitionSha256": "0f3acd97660d97487bc35ed21cb7f48754d32bb4efbfaea295ed568c02fa653e"
+    },
+    {
+      "name": "forcedream_extract_data",
+      "descriptionSha256": "22167b3e12d68923fe07a828196d2b900b1de2d6f8d7cf0bf32d2edee5e9041a",
+      "definitionSha256": "a853f2aed687c824d2bf859e7ba66bfda0ef08d0052237e118612b62d4d08328"
+    },
+    {
+      "name": "forcedream_generate_code",
+      "descriptionSha256": "1746482b42f0b9f7b923b831939003514a0535f2105cd8e5d403760a53152bdf",
+      "definitionSha256": "169cfbd35de711324adcda7211e11bb376c338238441af2c3338445a392b7dbd"
+    },
+    {
+      "name": "forcedream_generate_embedding",
+      "descriptionSha256": "a770f86732b7edb4477008540ec26742fddd8500c4b921807641ab2f768ba33b",
+      "definitionSha256": "f605c876d656a898c8037536b83eaac00764b535e28d78f4cf627259426f273e"
+    },
+    {
+      "name": "forcedream_generate_sentiment",
+      "descriptionSha256": "4a0ab2a8115e09c80581b6596394ad50cbd34e0507fa057539b8423f6b8ab618",
+      "definitionSha256": "e64e70867ef57b7d38c209a3b0190588f629e674e559ed79fc450259abf3af64"
+    },
+    {
+      "name": "forcedream_invoke_agent",
+      "descriptionSha256": "eaf20f4eed8c132dc6b4b9ec471292b6c1d96cd42c2cf6a804154b9d1d522238",
+      "definitionSha256": "4a7161838f8c4ad312d8582a78e65e57ff40730ec4b73506624d8b0ee8eba988"
+    },
+    {
+      "name": "forcedream_market_quote",
+      "descriptionSha256": "3af5df56daf9a2a8040af25e2afc130556e5f76623c180c4dce4b7a8125ab112",
+      "definitionSha256": "445942b3a9fc600c6f20d381b0113e7f6aa905ba445dd7286e38a0489710879d"
+    },
+    {
+      "name": "forcedream_score_lead",
+      "descriptionSha256": "06ccd9c3ea58c051abd4214854f88646a54ef1d121e86d6dbf0858b4643c4c73",
+      "definitionSha256": "49abe17f7422106c6a8ff7080bf9170131bdb476ccced87174075c0bede9c1c9"
+    },
+    {
+      "name": "forcedream_search_agents",
+      "descriptionSha256": "bc112ab8e4b796c80f4ada5216784a52bc1175980882995c8cccd26c6105c9c9",
+      "definitionSha256": "da7dd9214a21a5508e27cc1cd89cea443ec13568c141d7abd0fa4cc4439d2fab"
+    },
+    {
+      "name": "forcedream_search_costs",
+      "descriptionSha256": "01cb7a4b8002a28f9474d38b43b3936ec68c80cfa85d1aa47d14305c6e2fbf38",
+      "definitionSha256": "72d92ef0278d95e2366974dfae8ac2a71d59a1861bb49fab3a5f1238c5537201"
+    },
+    {
+      "name": "forcedream_search_providers",
+      "descriptionSha256": "d3b0e79a330520939b14e7a4fe5ecbbed5fe3cfae1f401ad993684fdb21064c9",
+      "definitionSha256": "1da6384b12e4a80cea8e48888eba02a55b2273c1ba0596417286edab53508e77"
+    },
+    {
+      "name": "forcedream_search_reliability",
+      "descriptionSha256": "6f549d4d23d9680fd978905f96873fc4590c6c0297b5076212a7f45b121e7376",
+      "definitionSha256": "3326aca8f5a8b15164f948b37da68c5bdf6d98fa3f96908ff517a00faae41a32"
+    },
+    {
+      "name": "forcedream_security_scan",
+      "descriptionSha256": "eb8ca5f08d401eb8133edc6bede8624c6d32df5188154d45b49417107597b171",
+      "definitionSha256": "452b805145be892d32b8f6001d5298360d2abb6fd5134a177da5c4ef60b68ecb"
+    },
+    {
+      "name": "forcedream_verify_proof",
+      "descriptionSha256": "9f260d36b3c326b9c58219b03d84bf2c1e3e416bd45daa1ddc94b936de742464",
+      "definitionSha256": "81658d8f825c6313940a3aa1c16a856abda2d78cb0037bce660af7f363544824"
+    }
+  ],
+  "surfaceSha256": "b4a7f2cca55e9b85b9564fd5404bb5b5b923649954abb3c3282d099b10f3d394"
+}

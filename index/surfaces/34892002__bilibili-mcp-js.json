@@ -1,0 +1,50 @@
+{
+  "ref": "34892002/bilibili-mcp-js",
+  "scannedAt": "2026-08-14T19:41:35.252Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.6.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "bilibili-bangumi-timeline",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "9f618718f47c2a33df120bb42be80d073a69ad064e43cb506d306cfcf5b31da9"
+    },
+    {
+      "name": "bilibili-hot",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "27e204914f6d296332a701abba46c2e20455153e102fefe2ab8bf073f39e6436"
+    },
+    {
+      "name": "bilibili-search-summary",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "ed11cfccfff547ee8caec59820bac1846d1437c74ad3477b61dc9ca2a7f99d88"
+    },
+    {
+      "name": "bilibili-user-complete",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "f968343c4f7ffbb58f9b6086508bce5eb97988b22fc0edf3b07a9fe0d8c2a082"
+    },
+    {
+      "name": "bilibili-user-info",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "de7a4677308d9e9b7b3febfb37f9afefa9d4cd40600600620669b3def085b9c7"
+    },
+    {
+      "name": "bilibili-user-stat",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "4acd641e7ecf2ae5b0af3165773547ff6db0f3c1451bf99c5c4029e164768de7"
+    },
+    {
+      "name": "bilibili-user-videos",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "97fd86473dbe755572fe77e179cb33fb150335d8fc81dd551a36d052fb56924f"
+    },
+    {
+      "name": "bilibili-video-detail",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "768aaafe7c5534663883517dc3db210fd57a4d71d25d32cf3b916e1554a628c7"
+    }
+  ],
+  "surfaceSha256": "7017797ce0b2cf0000a9bcb401a8e3f1c9c0f63b7c55898bfdfb30f8100ac0b7"
+}

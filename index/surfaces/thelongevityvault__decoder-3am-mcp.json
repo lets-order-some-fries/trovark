@@ -1,0 +1,30 @@
+{
+  "ref": "thelongevityvault/decoder-3am-mcp",
+  "scannedAt": "2026-08-14T19:41:35.252Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.6.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "classify_sleep_cause",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "e44443b71990e609ab844c1fc633543731c1eb34d9f4449cd9264a1d8ac19c00"
+    },
+    {
+      "name": "get_cause_info",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "9497ad01be827b6a0d2f654878dc9c5509827dda9bd84dc92e13f88377774542"
+    },
+    {
+      "name": "get_decoder_url",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "4063b89d83ee21c2c4cf67a732e2cd7d6e4ee74447566ca6048720c20c8db337"
+    },
+    {
+      "name": "list_causes",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "0b4884764e9402608eed3fa278d03c439d3b96b2b782fc51db0b3f6a631004a8"
+    }
+  ],
+  "surfaceSha256": "6d4ba6919ac8fbfc2163548e5b586256621b74c0aa55519a5b48dcc23c209541"
+}

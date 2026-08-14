@@ -1,0 +1,25 @@
+{
+  "ref": "AIDataNordic/alexandria-mcp",
+  "scannedAt": "2026-08-14T19:41:35.252Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.6.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "get_book_list",
+      "descriptionSha256": "ee84e7e42bfacda6feec192ca501f84f98d8da7aef077b4e4b9da5b0fa129816",
+      "definitionSha256": "6b1ae72259f4de66302ce0889e999da3256f9e378f4b2c568b9aa8cb764015b0"
+    },
+    {
+      "name": "ping",
+      "descriptionSha256": "f83ee2e297373d681cc90ae36df9582abcffe5aebd7ddeb6a5ab849ee05c7d7e",
+      "definitionSha256": "2146ea10b905dba193d8ba6a8e24e61432405851238ffc7c383a3d87c34089cd"
+    },
+    {
+      "name": "search_texts",
+      "descriptionSha256": "069c0cdce73fcd81f3e5d8e5052d08c80dc997926ca45fd96c31bcdc733bb671",
+      "definitionSha256": "8e02df64996379053a9133f222ad7ab3750cb396fb761ba05cb996ec046d0e5f"
+    }
+  ],
+  "surfaceSha256": "97f2e123dbb725aabea9836fc0d14696136333390338baa080c86f2d8837d461"
+}

@@ -1,0 +1,890 @@
+{
+  "ref": "TwelveTake-Studios/reaper-mcp",
+  "scannedAt": "2026-08-14T19:41:35.252Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.6.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "add_compressor",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "fae0d40a3658095ae3c73d439e58ae4144df3509837cd82def392dfd9b35b8ad"
+    },
+    {
+      "name": "add_envelope_point",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "245044707bff8ffc4ca1b6f0b31a988b14b486de405f7556d389d6cf5a45262a"
+    },
+    {
+      "name": "add_eq",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "2a7925ee884d1ecac5e8159b548b11d06d8f01da27aaa8a88d69181e03d825e8"
+    },
+    {
+      "name": "add_fx_envelope_point",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "e6d21761d74eede2d893406c40252f93444ad5340a4916b49f209f4623fba2e9"
+    },
+    {
+      "name": "add_limiter",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "adc794ae2e1e1eb49be2f09f01001515ce2e831cbe02a92b8b80b00662bfdb5a"
+    },
+    {
+      "name": "add_marker",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "436da2f2f96c5b978bb6876965be9d930bf32d5324b16886f197dd49e2ca0994"
+    },
+    {
+      "name": "add_mastering_chain",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "a4c598fea09bc2f4266f8377699bfc5b09cab637fa0ea725f1696f53ecdf7d43"
+    },
+    {
+      "name": "add_midi_note",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "154b36b40de76901dbe6de1086730415519cd1ac4016eb77bb136a815f2c85f8"
+    },
+    {
+      "name": "add_midi_notes_batch",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "4f99db2c7604d5fa7fea4905a6b10de5fff15ee2253985a182a41f3dee495ee2"
+    },
+    {
+      "name": "add_parallel_compression",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "0ba609ea35f953782830b164445aaf5f58f7823a2c0c14b18ec376ee2eac5f79"
+    },
+    {
+      "name": "add_region",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "0e42840154b1c09efb2042a956f1a22c8c6d90b3a39414c95d4259ddb0ff42b5"
+    },
+    {
+      "name": "arm_track",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "7e58962b0a4c45cc6c17d0a5cce7da8d23a77a7115c24fbd94e19f71ab852f13"
+    },
+    {
+      "name": "arm_track_envelope",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "dece1e6b7ee4424218dad0af89d846712e62a107f6520fdaab9b9bb20d9048c0"
+    },
+    {
+      "name": "clear_all_peak_indicators",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "5d54ff1508b5c27b43181ae34aaa8dfa7bc523e93de4d731ffda1f60d0d2f93b"
+    },
+    {
+      "name": "clear_envelope",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "2f7fe8743e0b68141bd9be58f7f11bd988395b4ab55b8514feb43a36b5b5f812"
+    },
+    {
+      "name": "clear_fx_envelope",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "86450245f1189a2c3c44fcffc945170aa8732777a9e0f75cc4b1ee8f5977f750"
+    },
+    {
+      "name": "clear_midi_item",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "558cc99e173f37263d4bf8c8a897850a163c2714b133817ac02427948e9f9e80"
+    },
+    {
+      "name": "clear_time_selection",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "c7df11247ff71160009760ad0f53dda654eab79701a106665c968007eff2a0b7"
+    },
+    {
+      "name": "configure_reacomp_sidechain",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "f5d131f856b50047014f3129bc40984bada2e77aa87ce0bfba98ed09a66eb899"
+    },
+    {
+      "name": "copy_selected_items",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "74e99cda51f8010df98e0439faadae575182e25d6949b545884cc5d9e333cac8"
+    },
+    {
+      "name": "create_bus",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "de99fbaeeae300834187700f0cd0e96c0131b7514088ac36c3c9986fa3d88bdd"
+    },
+    {
+      "name": "create_midi_item",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "8aa89617f40bc8de4e142a4c4c06ab67255d889676136a60e2941ec4bd3de3da"
+    },
+    {
+      "name": "create_project",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "c03ac8d8d44d56f3812eab7ae2b41d4ac066b61765adaaca80773822aef9dbde"
+    },
+    {
+      "name": "create_send",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "ebd36ae260e01a9e6b370a60055287d0fa1f8e866929d53fc670816c0f0bac2d"
+    },
+    {
+      "name": "crop_to_active_take",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "90f7ac9d21e0d15ba970465ee9f7949232bc677e9d9b52c8cd9e2f2f9e233f1a"
+    },
+    {
+      "name": "cut_selected_items",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "355538532553ecc9bae49af77fdc1936795149f270ed59cd38ac917c2d1be504"
+    },
+    {
+      "name": "delete_envelope_point",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "9aaafccc55cd8d64745ddc9e1cb899b5944b46ef491b3407bb103d80f578d6db"
+    },
+    {
+      "name": "delete_fx_envelope_point",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "b00cc822af70a4a1f3a91191f047de73504fe1cc910bc300fe6d1be843099661"
+    },
+    {
+      "name": "delete_item",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "308412d3a268695e4196a5bde18f3530f3c0919b4a3bef0a175205e087c90ce1"
+    },
+    {
+      "name": "delete_marker",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "ceda725fef8a0419ee430b94855c1718196677e06837a38226bf73a8c706cf99"
+    },
+    {
+      "name": "delete_midi_note",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "64d9ce5020d4f1f7583e147b2cf54dfed0403f172df8464a8258ac0ba717517e"
+    },
+    {
+      "name": "delete_region",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "03a9112ad2aad45609832df8bbeea429ab8bc018299f28ce3fa59abae5b87130"
+    },
+    {
+      "name": "delete_selected_items",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "5136ab75616d7e9b54141630f98a6b3bbf654989d0518036aa5d353f1302d3b8"
+    },
+    {
+      "name": "delete_send",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "235cf65702eac0236cdd7c5d6e1b206e3ea80faffc11ac1d56df5551b7b576e9"
+    },
+    {
+      "name": "delete_take",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "d7572db6698bf113563e7fcec26f860b5760c2ee30175fbe884be75858ae5546"
+    },
+    {
+      "name": "delete_track",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "8f15d3ed0181935f67502b68af2d61900912bd3c8e7a81a5f320d1eefbcdacad"
+    },
+    {
+      "name": "duplicate_item",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "527ec648abf540a423fb23739205e853b1837dce32b621f90b05f19389abed8b"
+    },
+    {
+      "name": "explode_takes",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "8b6eafe06c8b37baad9ef58ad1515187d5b4c7ff387110731910730149e84464"
+    },
+    {
+      "name": "find_eq",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "8a33ac2206d06a48a6557a05d24f0947da0a97661f5d059d40abb0802a9e9fd8"
+    },
+    {
+      "name": "get_active_take",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "29e2062fd411801ac92383315a2aac6da084f468ac9d07b3cd8f264da61d012a"
+    },
+    {
+      "name": "get_all_tracks",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "afb89acbfe5bc553d24adeb7dfcc5bb45c02632005c8f011c257e0e076c95b30"
+    },
+    {
+      "name": "get_cursor_position",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "ce119e6b4ea7b8036979c6475fb081f4ca29f800ff2e07509ad300c7c3c318ae"
+    },
+    {
+      "name": "get_envelope_point_count",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "bef6d75ef915d5c29d1c358bd77df1e36963a7474f77638c7a71893a6e70f2e7"
+    },
+    {
+      "name": "get_envelope_points",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "558279fca3f8c1da68c8d29add588e9c422944764bd1bbab60fdf6f2d019bcf8"
+    },
+    {
+      "name": "get_eq_band_enabled",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "e324ebf665d91b977443f14903cb8f375c3b9818d8ea50148ba950b2682dae6f"
+    },
+    {
+      "name": "get_eq_bands",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "46784ffece65016a41da92e130b20f7e536186ef82267c165baab2f465a066ac"
+    },
+    {
+      "name": "get_fx_envelope",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "2f1534304cbebe326bc188ff298381fd79a06ab744e39ade9664feaeb38bb201"
+    },
+    {
+      "name": "get_fx_envelope_points",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "63bbcdbe1876fab58c878f448efe872cad8e3a64be79015ddfd973f06fa46451"
+    },
+    {
+      "name": "get_fx_preset",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "ec00fcdc484fc450d28e2113b8cc4239667c2ff98e3f6de1f818e9fa5c3d5c9a"
+    },
+    {
+      "name": "get_fx_presets",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "a6649bcdb6e9b00401ea0dca1c84f902d4fbca9d603d7193e14b661679821cae"
+    },
+    {
+      "name": "get_item_info",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "79da781194294103c18212d5c452168011408d9c868faca4e92c117b251a3df7"
+    },
+    {
+      "name": "get_markers",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "99c0741b09a0af6038b6de828b626bb5a4c322140827a1cc27c9eea015af300e"
+    },
+    {
+      "name": "get_master_track",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "7c601276891a2dae1a305ee337fa9b3f6e4f957167fce43ac0cccce6ef150039"
+    },
+    {
+      "name": "get_midi_item",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "56829b245f4ff6c684dcbc58761dcc355741cdd43790747780a6726e20b66e7f"
+    },
+    {
+      "name": "get_midi_notes",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "131464bdefd0fd8d8445665edb368efae32ac8ef519384bda95cdffb370418c2"
+    },
+    {
+      "name": "get_play_position",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "9c11e730b90ae0cb5aa13759010168baad419aa40ed37f56200cb1c74b6d6cf9"
+    },
+    {
+      "name": "get_play_state",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "2c531854d64540aaa70aae4c8dd31cf6db1ba02603f880a128220e4f1ff9f553"
+    },
+    {
+      "name": "get_project_length",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "2792f2a70206e266fb6dcecc3e6549f5a2a4262e3fff7f0e10ebcdd01b6c9af2"
+    },
+    {
+      "name": "get_project_name",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "9752fe3730ec28b6e5075d9677b842e42dbaac8aca76ed24e9b8e974cc89b42a"
+    },
+    {
+      "name": "get_project_path",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "a66fe95923c8d1153d9011244549b0176329ed93bcd5fde38123cb357c032675"
+    },
+    {
+      "name": "get_project_summary",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "18468a9d4ca74f3f7af5ca740621b0fb12a7e65e011a765c5a79d3c3fcdd555f"
+    },
+    {
+      "name": "get_regions",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "f354ebf4a69f65882cf92e3fa513d7c0619b2f049a4d342dac6108f37b90cd34"
+    },
+    {
+      "name": "get_repeat_state",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "e2ac94f7da4ed4ce0852d82027a96d26385edc2a6a842815272fd1455df7d83e"
+    },
+    {
+      "name": "get_selected_items",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "30b69569da6d69070b0d760ef34e9d55a601ff2853c531a8ece43069e3b29213"
+    },
+    {
+      "name": "get_selected_midi_notes",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "df4325d9a28353312ea03b47ce9f593e10d4be9b0a8950f035d87ab28007c52e"
+    },
+    {
+      "name": "get_selected_tracks",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "52645425c1e1a2e549fee499e56ac641dce594a10fdae7e200cb08ff4c5dbda9"
+    },
+    {
+      "name": "get_takes",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "f98ea02ad9eff02b486f85b9bdb33742646868ae22a7eb996c228ca293d58e06"
+    },
+    {
+      "name": "get_tempo",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "989e0c8de01186085be3cc0fb8b18a1924fb4bdacfc64cd5c858d0f7359f31cb"
+    },
+    {
+      "name": "get_time_selection",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "ccc7a95e79c897e9ee7867e4f82007ad1e65d949b6ddc43324bb3de5907a2a89"
+    },
+    {
+      "name": "get_time_signature",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "91f166eb6db0e4c35bfbacd7dad5e0eaa398959d1e26e870b5d0b4e4e9b659c2"
+    },
+    {
+      "name": "get_track",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "c3e6b479e522c25e22eb363e4672a0685205c990f6c3362225cbc4638fe894dd"
+    },
+    {
+      "name": "get_track_count",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "43f61ae4ffcd4a160ca1bce1951e0815c1c089ebfae87b55e7f20d9a87c1d8c5"
+    },
+    {
+      "name": "get_track_envelope",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "c8a9bc43ef23635854b31bfae99adf8726b5654a79a54e903e276c68d3ad72ac"
+    },
+    {
+      "name": "get_track_fx_chunk",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "d28ed84aa774e3be5f2ada475f6acead3a54335f411224704683752e27a4fb3f"
+    },
+    {
+      "name": "get_track_items",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "5d37c1271b5b1b7ddbcd667d57a4225c2671d861e834c71f34f1dc9b3c4b032d"
+    },
+    {
+      "name": "get_track_master_send",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "75ea9d3df20835ba5de906aaae1a3c653f181cfc5e6032bf53017c79b3f467cf"
+    },
+    {
+      "name": "get_track_num_sends",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "05c382e2830b656344a604757d2ca0da7d49c070ac8da29d92666ecd7c1145e7"
+    },
+    {
+      "name": "get_track_peak",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "d49eb0b0b0e24a0fc863d713bf9086af99700e4b062a3e65acdbb11ea03c8bf0"
+    },
+    {
+      "name": "get_track_peak_hold",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "fc84ca57f13bb4ec31491859385c08bfa3805d0d365b60bfc534266c44b8d38d"
+    },
+    {
+      "name": "get_undo_state",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "8eb8f0cac1306f0117b4016706aecd2e6f6b5529c1619b1fb43599cce59e7a18"
+    },
+    {
+      "name": "go_to_marker",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "2f64167a421054bb9df3c52eb3b62404784d372458941dfb8b9d3ccdf2e224d8"
+    },
+    {
+      "name": "go_to_region",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "30dde679dd0320d51834e4bcc1ef69ab2e15dcfcf0119ff373b0035ce13c30e8"
+    },
+    {
+      "name": "humanize_midi_notes",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "d0ea0b982b70a6dac3a983e048b5185bdd36a7f4ee6f862591288645c0890e38"
+    },
+    {
+      "name": "insert_audio_file",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "b40bbca48f2a6ffd0a0b9203aa6c6588be682a73294b477e097e4bf716af61ee"
+    },
+    {
+      "name": "insert_track",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "1fd65e405edd0fb82b578a3a0ec3a6fa6624d8a5291ea8ecd45b11b9de558f2e"
+    },
+    {
+      "name": "legato_midi_notes",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "e303ec2cdba610035c2edea34e5d090f2863e9317cd9566e775f4298bd098851"
+    },
+    {
+      "name": "nudge_midi_notes",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "37bf69be064e3b065f52759510a86a5c629077579a9f0f037084bf79447e037d"
+    },
+    {
+      "name": "open_project",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "3968d8d493e2f179abb3b295365512eee8841f6ac89715920805e7e2ceefaa5f"
+    },
+    {
+      "name": "paste_items",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "19457aa5aa621ec1b7596ac815b846759b5797f3ec4830db3f0d9be563dec5f0"
+    },
+    {
+      "name": "pause",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "a0dddcad5fd2785b7d042808dacd75a7b4319025983c6a2237456583977c7707"
+    },
+    {
+      "name": "play",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "8f92d96930c2e4fd4fadf6656c45db9e760f1caac298cc4479c4e49a9727b4ab"
+    },
+    {
+      "name": "quantize_midi_notes",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "d4bcea850a569237f02f592b2c3c750b60a4dd4bf6c16f2b3b278f03b0b1c921"
+    },
+    {
+      "name": "ramp_midi_note_velocities",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "8d7f114783b25b47a866f2f28a82539e582b948167681766777bb7afe450053d"
+    },
+    {
+      "name": "record",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "4df4f739658c5869af9bd086cd0cf0c629390dd1b23a5d726691c443641ea7c6"
+    },
+    {
+      "name": "redo",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "e6416c089a8f846c35ff8fd3375e3979439188cfd825f52ea6eebeaab2a986a2"
+    },
+    {
+      "name": "remove_overlapping_midi_notes",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "0dbd2910e7ff1b1b79436ed34cee55d5e4a1af4f62d182931c1ace84819e0bb6"
+    },
+    {
+      "name": "render_project",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "b9c60cb13abd7fa0708eb6a6e1681467cd432e4d15e0917c71dc2b5fa01cbf26"
+    },
+    {
+      "name": "render_region",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "6e6fe1f765916369590d1b7560e2a9dbb5f76aa40dac51b0c88ec6e25fe82e75"
+    },
+    {
+      "name": "run_action",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "c2d9c6025093d2fb13ee5c688e4e6b2b08aa2459598af8d3d0fb4838f360dfdc"
+    },
+    {
+      "name": "run_action_by_name",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "2df8cdaf993b10b64c367f7fb2022ac9ea724a0b4c278dc67344c8d23bec713b"
+    },
+    {
+      "name": "save_fx_preset",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "18e989463f33be23f9b3beacf7d358ddd2830c21579633f87243883d3596adc8"
+    },
+    {
+      "name": "save_project",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "f92e7567e5c579c81faf888e777b5588f931f042f1fbe2c198b27f8d1413b95c"
+    },
+    {
+      "name": "scale_midi_note_velocities",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "40c6a52cb3c942bb04ec5afc7eabd1f538df7b0767773c9882aed3118c70a716"
+    },
+    {
+      "name": "select_all_items",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "f4886390a83cfe08a76960f5d4ee44620dceb0c90d0fc21d2896494be366592c"
+    },
+    {
+      "name": "select_all_tracks",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "15189f14806afaecfb9afcdd4a42df74d33d8ed67ced439e5980b8cc9235e21f"
+    },
+    {
+      "name": "select_comp_lane",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "aac841942a79209d36e2d75fc16e3e795047921bfb97092d73961df167254e37"
+    },
+    {
+      "name": "select_track",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "d6a54bf5c77cde850dd9635d94dece3e2b8b987768b6274dddd5782f1819b478"
+    },
+    {
+      "name": "set_active_take",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "29943490291553b26bf3cc54082374eadfe25ef35fc9228c65c3dbc1b5a5adcb"
+    },
+    {
+      "name": "set_cursor_position",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "044e90554b68489d580a3a715670bb53c5735792bc46cfedfb73698bc8a3d315"
+    },
+    {
+      "name": "set_eq_band",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "5c2abb19e961a4657137188431705f4e06bcc24b12913099486e8acdaf324795"
+    },
+    {
+      "name": "set_eq_band_enabled",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "e687ae9f9012394a6630b8bc727030ba289a258db02fc682543d999e4b29f9e0"
+    },
+    {
+      "name": "set_fx_preset",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "fd2a563f74e87aa29179fc234dcd8b4b760fefa91e69ad84fd94c010da18d21b"
+    },
+    {
+      "name": "set_item_fade_in",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "2624267e6c22ffc368a7a1e0f2fd42b340d0a8ea15e5e41dc46023a1b09c6746"
+    },
+    {
+      "name": "set_item_fade_out",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "99c868af70e2184bdbbcc59af86ae59d9fbd21e388fc127f6617ef64b9067d6c"
+    },
+    {
+      "name": "set_item_length",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "2a296919f222041d61e51f50f0bce809c28cb3869e9d63bbd6ed68d7cfd186c0"
+    },
+    {
+      "name": "set_item_mute",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "07c303c6611a5a248ccb22eaac195e92acd04c7d7ab91f7a76fd66e3b850518b"
+    },
+    {
+      "name": "set_item_position",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "fae3666c2e2f0cbb2b5b5acd857720a9eff96334136f0182347fac005c6188f3"
+    },
+    {
+      "name": "set_item_volume",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "ba7d398638e6c86742711af658892b64610e0333528ab7ab330b265807e7c70c"
+    },
+    {
+      "name": "set_midi_note",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "a4a020e2f52c675aff9aeac79b14ed462da707d2cffc38031d508d289c625dae"
+    },
+    {
+      "name": "set_midi_note_velocity",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "5f409ae8f772423ff8f1ee17b949e866710fbe5ba7a054e9988a6f8ef9e95e26"
+    },
+    {
+      "name": "set_send_dest_channels",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "cdf28ca80686816486af7e0b54805fbc67c68d94b038e6cfa4d28381fc9b1327"
+    },
+    {
+      "name": "set_send_source_channels",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "1ef844cd112d6003c8ff21e0fb49c53087cf335fb87432e61665f5a0903bd549"
+    },
+    {
+      "name": "set_send_volume",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "b0980870eeb59d05e857f7e85dccc6306135f77b8e0254201d7fa3cf849952d6"
+    },
+    {
+      "name": "set_tempo",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "4883d71200f45bbdef714c504fcb05ecfdc8a748813b3960d08d7f9de6d4dc9f"
+    },
+    {
+      "name": "set_time_selection",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "64bdad94160d81c5ef618eb471cb769c07818894a97dce711877b15b18ebba1a"
+    },
+    {
+      "name": "set_time_signature",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "2c25b9dc45e6574dfdc7546252d6db937b61243c4f1a61c0e5fd4fdf02944fc5"
+    },
+    {
+      "name": "set_track_as_folder",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "bfe2bdf0cd94c5bb54111d10087a098f72edc87c823970d3ae13f961dbed626b"
+    },
+    {
+      "name": "set_track_automation_mode",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "b702cd656f9ed6e55e4f7c33d5af1c5724cae2616d65da6711e07a653d4d1464"
+    },
+    {
+      "name": "set_track_color",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "e2e212fef04c67a1d7fac33cce3e86e9caa58c8a45cf23e1fa17dce70fc64e0e"
+    },
+    {
+      "name": "set_track_input",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "d0ea998cdeeb42a2ca4de9271c7b81b445ed762e8b2d19ff2409372831960295"
+    },
+    {
+      "name": "set_track_master_send",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "754e38994f98c193048218a34953105431387cc826a89ee2f494864acc1921a7"
+    },
+    {
+      "name": "set_track_monitor",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "a6bb7da195b386f1003fec7f488d13a3e2cdd9815239564bd76ce6d46c8a373f"
+    },
+    {
+      "name": "set_track_mute",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "8fdb2e2761f8ad3dbdf3e4e534dad9f67dcdc9e6abf0fbad7000d45a1bdb4850"
+    },
+    {
+      "name": "set_track_name",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "49f634aef83d98152cb868ac745d04df604e631914f7f8f9878ec03afd4decff"
+    },
+    {
+      "name": "set_track_pan",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "22fc79548ce9ec1e36d3150a56fe4dbf1def4b42985126f148121788bc9dce89"
+    },
+    {
+      "name": "set_track_phase",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "2e4217df1440a82697104a70c5e35aaa737e1d398dbc5aecd7321450a0008653"
+    },
+    {
+      "name": "set_track_solo",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "82408b96b6e9701e77227878fbd377bcadf553c1f5f6c16e859ee66f2534f3d1"
+    },
+    {
+      "name": "set_track_volume",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "1b66e78c62c5a63aa38d40ee99f66bee49b5a9ff90cfd7f3aaedcd40692e950a"
+    },
+    {
+      "name": "set_track_width",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "39517786d74948c813129c9d5afdb5c401374b85b3e7ecf4188c168e07623945"
+    },
+    {
+      "name": "setup_sidechain_compression",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "f05dd093ea9f7fcc11c2c94233de83bfe828a604290b06ddc8db4550c7e8a6bd"
+    },
+    {
+      "name": "setup_sidechain_send",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "0ec9dcd924885aa737be339297428d3d9d7b4514f41ea49ffeb083f80533156a"
+    },
+    {
+      "name": "snap_midi_notes_to_scale",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "44d918cb519fb734b28779ce4b8a9105830d617c126cc5bae39c44e635acec9f"
+    },
+    {
+      "name": "split_item",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "3ffd442c5b64bd0564564a37644c54b104ea2525d1c838077842cc311a5f95fd"
+    },
+    {
+      "name": "stop",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "b4360661fe061c21d53f5417d65782441df141260b64ce42cbe8e332ba8bfc08"
+    },
+    {
+      "name": "stretch_midi_notes",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "fc04a04dd190821fec522217430129447dfbaa1241ed1ed64bfe8b53b2cb425d"
+    },
+    {
+      "name": "strum_midi_notes",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "6d55c88a2b9ce79acc18f3dddb2a1ad12640f6e1f72a6fdc761a4c966ee49d17"
+    },
+    {
+      "name": "take_fx_add_by_name",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "badc5ec8ef8d3491378fa66cf8a551bc0400ad8b67594f71e80499a1a0c2f324"
+    },
+    {
+      "name": "take_fx_delete",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "23525004662b9140d9a518cff33ab90f1a4b3c262b02105445ad96fec617bf70"
+    },
+    {
+      "name": "take_fx_get_count",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "839b1dd9108f852b35902f8fff79a1a620eadd9e003833a19d494c415c464a0e"
+    },
+    {
+      "name": "take_fx_get_enabled",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "acf94ae857ac95fe1c14021031ee5975ddd83e2582e00cff07b0aa8b1e2974a4"
+    },
+    {
+      "name": "take_fx_get_list",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "ea9d56d25cc91d08504ca2be7356958554a793b045ff9bb122c8c7bd9d8b8ec0"
+    },
+    {
+      "name": "take_fx_get_name",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "c5227ad02f4391eb9edd2145fd9c7b42c7c103893e1dd917e6df471f879e730d"
+    },
+    {
+      "name": "take_fx_get_num_params",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "71cf4257d969a9c0ff5108c8fa0c0b1369fb5d6ae7fd4b6308f14dfcf85b70df"
+    },
+    {
+      "name": "take_fx_get_param",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "e8cbec07bc4b915e91908eaa87cf6561de1a4087b9eff09b2ce043dd6d26a612"
+    },
+    {
+      "name": "take_fx_get_param_name",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "99bdcb4eaf902734f2e9874d5dcd0183bee349f50ba7b6f0c6f2239bbe12c7a8"
+    },
+    {
+      "name": "take_fx_set_enabled",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "38319823252a9bd1f5c73a2548e57197739e3a3f08d72b46612fe0e8c29e57ae"
+    },
+    {
+      "name": "take_fx_set_param",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "1e9fc30f1c3c0888379f79db192d0e8fda9243d62f7adc283808a79bba4ed914"
+    },
+    {
+      "name": "toggle_repeat",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "34aa2994899647f86971a0891645ddd0f66f25b64df8f2cd12ee37b89f8542c1"
+    },
+    {
+      "name": "track_fx_add_by_name",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "71a08867da754f46425607251952f16fd3514bdfd76f29e48a3b0a5152070a97"
+    },
+    {
+      "name": "track_fx_delete",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "a1fca6a278417487c8389218ec3ffcbf117bf31b18871f457b67b7852fa3d09f"
+    },
+    {
+      "name": "track_fx_get_count",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "0bad16f1804feb16b15271e6853915595b98c4059575ed06f635b3f86cef7d84"
+    },
+    {
+      "name": "track_fx_get_enabled",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "63ca7d4741142ce032b4489c7c3cc1c9b4043a12f7a847e2e469c5ebdd7f4483"
+    },
+    {
+      "name": "track_fx_get_list",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "99958389202cd88c5ba2ae18ae865f3286e19b814de60e91792d1d6021e473f1"
+    },
+    {
+      "name": "track_fx_get_name",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "a9576e492b141fff79758cdc10cb37b8c5af1a7f5a6b915432745460f5a6d58c"
+    },
+    {
+      "name": "track_fx_get_num_params",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "4179c7ec35d99a058f48020bde3a8c1fe727e84d8f8ae7b1f516dd51a33bd4c8"
+    },
+    {
+      "name": "track_fx_get_param",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "287816f5d4c2cd24b24bc10f1aa0ef5ff84008a94560fc26b038d938b0baa06c"
+    },
+    {
+      "name": "track_fx_get_param_name",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "946e6331a14fc8326be475e5afcb165d6ac813a4a96a36f5a0314929c9fb0fe8"
+    },
+    {
+      "name": "track_fx_move",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "87512710113f6d150d1baec673eff43660f84432cd585c06a1e4f17f9bdabe71"
+    },
+    {
+      "name": "track_fx_set_enabled",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "f08f5a7eda340e349301f83e51c55b2361e2f631c275771b63564977571ad8ba"
+    },
+    {
+      "name": "track_fx_set_param",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "07f071b0a1464d05949edda1858c708fe423acdffa636270199788b146113329"
+    },
+    {
+      "name": "transpose_midi_notes",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "ab54723400c587fb258e0daea70be9188d94b75e91f28544979d26e1c51832fb"
+    },
+    {
+      "name": "undo",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "8d2e6dc5da0002024102d3deb80d6a52ef7bdef585d10d303bd07bdaaf82b2c9"
+    },
+    {
+      "name": "unselect_all_items",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "df73c5de168b268301097133eeab18886691fe18f4267ccbe6432c8068a38f8d"
+    },
+    {
+      "name": "unselect_all_tracks",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "dbe6e5ade74638a6fd9e42feb6576097042e2b733812dfb56ef11fe7884c44f0"
+    },
+    {
+      "name": "zoom_to_project",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "e8fda8a9fb178402d717c742af65a41f7e713dd8b0c4d900cc355ca3165456b7"
+    },
+    {
+      "name": "zoom_to_selection",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "d2c9ba488eb76d9823aa372c7911b8d85a573f5d834c3a4e0d230264863cffab"
+    }
+  ],
+  "surfaceSha256": "0cc9f6e8ac20fcd1810e818199743c381a86571dc8f0c95a3ddf1297426b67c7"
+}

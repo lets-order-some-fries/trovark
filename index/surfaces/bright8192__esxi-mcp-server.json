@@ -1,0 +1,45 @@
+{
+  "ref": "bright8192/esxi-mcp-server",
+  "scannedAt": "2026-08-14T19:41:35.252Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.6.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "authenticate",
+      "descriptionSha256": "d01da8eea5f01ad4ac26983cdb641cb831fc469e54d9ff2a24f840715fd19895",
+      "definitionSha256": "18813cd843d6528111ecd1dfb1aaa279ec606e24ca4cd8829f1f63ef6ed5b720"
+    },
+    {
+      "name": "cloneVM",
+      "descriptionSha256": "6cb4a2aba3f30d792c95400cdd3117636d8cdd2ba45a768052cbc44d1581f7b4",
+      "definitionSha256": "473e7ab5d3554a50b1039f5fc87e4d5ec5d96e355c0847391354909a8760d6ab"
+    },
+    {
+      "name": "createVM",
+      "descriptionSha256": "964489aba53dad652b5a954377b0e1ecdbc9046782beccf8a6d035ff3431f4e4",
+      "definitionSha256": "cb7dc58bd1e55a79ba7f3c0651a0ed6a06b0c41038899b8d129ed59ec827232a"
+    },
+    {
+      "name": "deleteVM",
+      "descriptionSha256": "b467d6a9640a57eb62f22bd31b7eae4f28b0ee95eea2c4483511f3a15cb9862f",
+      "definitionSha256": "05a0de17b4be6da9faae48891b8bc04b349c5dd36799cbfec209c0141a868b4a"
+    },
+    {
+      "name": "listVMs",
+      "descriptionSha256": "2b72a6e68b47539b64aba2741d99e6b96956e183353dd26e941c738289cf3233",
+      "definitionSha256": "db7bcca5b748243d9527e701a191aeb35eb629bddef08680bf304c7c130368e2"
+    },
+    {
+      "name": "powerOff",
+      "descriptionSha256": "15a09eaf18b76f9f2c5755ec3ab7ab21ebb19b100893c4530038d5a9533b1864",
+      "definitionSha256": "cb9adf87fb4c5ef4819ec1c896792fdca5a5805ee3e95c5d88ef14feb818c05e"
+    },
+    {
+      "name": "powerOn",
+      "descriptionSha256": "cc611281e4bde1e385adf18a5d42d33a290a451bf2f61552a2a57853892ee956",
+      "definitionSha256": "82bd6cd794b7c2b9f29073abc10068c4155c09ad6effd46a4f1e923c5a7df2e0"
+    }
+  ],
+  "surfaceSha256": "25d425095bffdbdf6f6fb71afbfc11634cd716264341266382352703452ee5b1"
+}

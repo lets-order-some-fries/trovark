@@ -1,0 +1,30 @@
+{
+  "ref": "karyaboyraz/mockit-mcp",
+  "scannedAt": "2026-08-14T19:41:35.252Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.6.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "generate_screen",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "bad027c2f2b8057e8c0608082a36ef7d5304923f4d9ad321b203698b523bf6a2"
+    },
+    {
+      "name": "get_screen",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "6e44df4e09f50438120f68cbaca6dbb17d205538bd2406d2c99d9516472a55a1"
+    },
+    {
+      "name": "iterate_screen",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "fcb9ffef0bf2eaf1505302a3b97c8a3caabcaf23d60dd5be69f88d847b414339"
+    },
+    {
+      "name": "list_screens",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "6c51e4a0ce1643ff1a0be17a39fc2475b96b36c8a8bd2abec5e674cd1b77f3ea"
+    }
+  ],
+  "surfaceSha256": "a51c257da9621f27c30c9746a9c683db2c9f2efbb4e698ead472eec285c4fef6"
+}

@@ -1,0 +1,75 @@
+{
+  "ref": "the-momentum/fhir-mcp-server",
+  "scannedAt": "2026-08-14T19:41:35.252Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.6.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "add_document_to_pinecone",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "d306507636cf7c7e9f06cf8669cf2727e63148e10c307c729e7f086567d77e14"
+    },
+    {
+      "name": "get_loinc_codes",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "01ba3896dd579f26fdee69c4de19e1f2d5662f83110729434149f73853cef17c"
+    },
+    {
+      "name": "request_allergy_intolerance_resource",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "f10fda497db1c99f9ba7b693a16f6e43938e57aed4c9b3f678bf7c0480459dd1"
+    },
+    {
+      "name": "request_condition_resource",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "deedd137cad6cc22e4ebb7f9d05b3a6e18121e8d195b35b2e1a6762fba6d53db"
+    },
+    {
+      "name": "request_document_reference_resource",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "722fe8cafbc1cc89f1c1a6b411fd84b9948a7291ff79095d10ada1882ae7ccf8"
+    },
+    {
+      "name": "request_encounter_resource",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "058e906d027d80e7a97a27926e09e272e00b5ca2297d513ff3d91ae69543448e"
+    },
+    {
+      "name": "request_family_member_history_resource",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "8fafb08d2665d2ac0b68dd3a61242252455c6a882a4f0d8bf9d73526aee568d3"
+    },
+    {
+      "name": "request_generic_resource",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "f139afd3111e692b0fcd17373de598a3d825b1a5d212423d9c91032ac67b63ba"
+    },
+    {
+      "name": "request_immunization_resource",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "9f52c39a6f4a67be838377d452494888c974e3fa2b4c582b911f78d77c1182f9"
+    },
+    {
+      "name": "request_medication_resource",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "2abbbdc09eb48bb3ebf7ff4d76ece2b140845b305339276f2a26051d1db8e49e"
+    },
+    {
+      "name": "request_observation_resource",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "a5f5f80a733d176e62053a01da90f43eac4c12aa3091b0e8a543d2914516740c"
+    },
+    {
+      "name": "request_patient_resource",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "410051d8dd4090c9ce00b889f89bfd3a84df314f748fd6d27e6fde7ccc738927"
+    },
+    {
+      "name": "search_pinecone",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "eaaedf877bed13489bf5ebecb9523ea6f5f90b69cd9befb18482b466f4cb31a7"
+    }
+  ],
+  "surfaceSha256": "81763db7d9544e954e31a2e2be6021277ac0c3519c87cc08f586598d9b4d60a6"
+}

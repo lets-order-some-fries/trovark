@@ -1,0 +1,60 @@
+{
+  "ref": "sF1nX/x402station-mcp",
+  "scannedAt": "2026-08-14T19:41:35.252Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.6.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "alternatives",
+      "descriptionSha256": "2d569f07a6ae50c1a6297ea0447c80d29060932901ab1dc5dfa8cf1ba74062bc",
+      "definitionSha256": "192b33449820668bc3d584fdb96204f4c6cbd4ea0d730fab3ac94bd76ac83b40"
+    },
+    {
+      "name": "buy_credits",
+      "descriptionSha256": "e1511d0bf3c705a94a45ab676f7ef79d6b14244609eb12a5b1131162674f46e9",
+      "definitionSha256": "2b156368a33c6e26054ed7272b18d4f6207450926873548e9cc0b1046b00c469"
+    },
+    {
+      "name": "catalog_decoys",
+      "descriptionSha256": "99c07a1f5e5914450661be2a47abe74e6c17c6bd19d41458af74d1c0b3fac01b",
+      "definitionSha256": "455901fb248743688d6dc0921c473effcacba645cd4c458179f456c04c2802d5"
+    },
+    {
+      "name": "credits_status",
+      "descriptionSha256": "0e3fa299c3dfde2696da9df0b360c9320f6dfd8a3c1731e0bc2bcf4d9d9ad0ad",
+      "definitionSha256": "86832259fe48c3f3c6e0b07bbb5e6f7839d83f8b41403e5411860127ffd20330"
+    },
+    {
+      "name": "forensics",
+      "descriptionSha256": "30be37b292295aecdb4e6b0c225fd763d4e4ef63d8c229814655aa698144b4d8",
+      "definitionSha256": "c2c0de78280f56a4eec6d80789011c756920dd16ac0d23bfa927c8e695fae0d6"
+    },
+    {
+      "name": "preflight",
+      "descriptionSha256": "492c3df5db8e51fa2204e5d0a9a4d459c1a8e8d52f2b6b5bf1ee045ed00142d4",
+      "definitionSha256": "4b163beefaa2e2ec1fc56a82ae949ab53dac16ceae347223558d864e7c366ffb"
+    },
+    {
+      "name": "watch_status",
+      "descriptionSha256": "84ff934f8c6f40f6b06f74f1e892271a15004d747951b6c140b42fc75ab1ad21",
+      "definitionSha256": "48238c685333e4aaf1deb0e17fbed08179fdf5e286e7f9e6a43e10c588efa7d8"
+    },
+    {
+      "name": "watch_subscribe",
+      "descriptionSha256": "d75f78935003499d8aa977c2ba65668a0857c0f48c6000729a0738d3f9010e1a",
+      "definitionSha256": "590cf83f35ca8d3f63f8f6980d4cafc36f2f3a29f00a4e4355b1f36c66640a09"
+    },
+    {
+      "name": "watch_unsubscribe",
+      "descriptionSha256": "5b3c74fd7e24c5fdb06a73af02256e696d93476a61e001b8d682b7b9bf0b0211",
+      "definitionSha256": "8b34c44ecfa5ee784ec840fc9d7b50549e062c933fdab24c15850f1ec98adb44"
+    },
+    {
+      "name": "whats_new",
+      "descriptionSha256": "1bbc95ee8abda0ea8c5bfe7ce54c815be0b4a8bf6f9b3cdf27ac84115415f2de",
+      "definitionSha256": "c426a0140954514311079af97200da0c75d5023b2987028bc4c0c8771c7133e0"
+    }
+  ],
+  "surfaceSha256": "e50753a1529eb742f35cbe5d63fc62763d667c2152f993b406493b3bc84ef5ba"
+}

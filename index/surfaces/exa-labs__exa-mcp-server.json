@@ -1,0 +1,55 @@
+{
+  "ref": "exa-labs/exa-mcp-server",
+  "scannedAt": "2026-08-14T19:41:35.252Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.6.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "agent_run",
+      "descriptionSha256": "6b14d8567057a82133f9ffb57df87b894de25fe6ed027b1fc8fe0b6660448603",
+      "definitionSha256": "90a6bcda4164fd419c1faadfaa096063f80d0d9c8ae11f7b1673069aeff9d2fb"
+    },
+    {
+      "name": "company_research_exa",
+      "descriptionSha256": "bafb77c750ab233471e24d4bc739468bb95ed4f30929c16c15b6b4e57065b816",
+      "definitionSha256": "bc72fbc579ff4be1f55c8f015ab31fb1007cf4d5027b160c58747ddcf7fbb77e"
+    },
+    {
+      "name": "deep_researcher_check",
+      "descriptionSha256": "a6887cb71a94eb43237ec803e63c3694db3f1e1ff4916093e52fb0e5d6aa350d",
+      "definitionSha256": "7de6535591f67e2e1a89ec03e088d1ffce9436db6e2e2739da2fd7cb068c8c4d"
+    },
+    {
+      "name": "deep_researcher_start",
+      "descriptionSha256": "70962d602eb2f679c622ed625bb84307c8014de7325c5fdf0ef39edb2ea8794e",
+      "definitionSha256": "4a4512a33957b8cf9a897869443469eae775c1e425db71aefbff83d07e381269"
+    },
+    {
+      "name": "deep_search_exa",
+      "descriptionSha256": "5b03fd4ddde51f8b54ec636699aae2b232eae7ad005d5231fb3bc035f997fbe0",
+      "definitionSha256": "6544527d17ee930d4dc8cf6c9bfdb3e4b84fce931dad8f7fbae8c032feab1e95"
+    },
+    {
+      "name": "get_code_context_exa",
+      "descriptionSha256": "2e1d0ccca6e527897a0a852ab523e547ff2bae193097f2687bd0e87045475b24",
+      "definitionSha256": "386ff00cf16a0157d0c1613530def391d109b8a8db70b544970c457e4dd1cc25"
+    },
+    {
+      "name": "linkedin_search_exa",
+      "descriptionSha256": "73d52628994859c50b6e86bae791bc97f83a09e0beac8481fa583f89b781c9c3",
+      "definitionSha256": "686f34d87bc283ef220f2def89af0005c8ff89f03d217a215a6e9d56fd846780"
+    },
+    {
+      "name": "people_search_exa",
+      "descriptionSha256": "71a754fc386eb49136cf29833135de94bb33f66cc8e58812b73d4c2578279d38",
+      "definitionSha256": "c8b2dbd8f08f3ca137d62617ee5e36dde05dac50ea16eecf1bc80fc70313f88a"
+    },
+    {
+      "name": "web_search_advanced_exa",
+      "descriptionSha256": "5d7b1a9e2bd1a4ebab80a433af1eb7888d1d41f0a522302aab08d49ca4f3e8f4",
+      "definitionSha256": "2c514a9384ec82e62537594e040ba47bd00fba844935836c06f050c475a376e9"
+    }
+  ],
+  "surfaceSha256": "198a50722d71931140c8e95416f470b56ddb9d28fe3415a5ca0568a72fdd157a"
+}

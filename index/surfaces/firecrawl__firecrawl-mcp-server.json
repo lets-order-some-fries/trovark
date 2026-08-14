@@ -1,0 +1,145 @@
+{
+  "ref": "firecrawl/firecrawl-mcp-server",
+  "scannedAt": "2026-08-14T19:41:35.252Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.6.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "firecrawl_agent",
+      "descriptionSha256": "ec099a352872938359d047ae237c27439d835a54e16ee3fd557c9563962dfbda",
+      "definitionSha256": "651362ac1de8629aced20bb704ce8ac28d32a1f6c4db3a1fe156bcf7c8e09c62"
+    },
+    {
+      "name": "firecrawl_agent_status",
+      "descriptionSha256": "0382308e5488fbb8879cca4e2630fca9dcaf6e413906aad4f52e05d8390838d6",
+      "definitionSha256": "dde91a0b0ed9e6bffa14caa550c5f54c88eea573a4abf1f1e601384dc9cb76fd"
+    },
+    {
+      "name": "firecrawl_check_crawl_status",
+      "descriptionSha256": "bcb065d57566228584057de87e19dd50f7ad01534d75f3097cf4c3c2a5b64c62",
+      "definitionSha256": "a4961f37cb77029a5e134f4681733841d6476b7a34495b8731d6adb3d1fd4400"
+    },
+    {
+      "name": "firecrawl_crawl",
+      "descriptionSha256": "25649d7791ff0002501bb04e94cd9d6d3d48f47b378b80dd6740fe9e07046bb3",
+      "definitionSha256": "d46938c5ec70759d460294bff78c6f030fa4891e34c020a67be9361099f26490"
+    },
+    {
+      "name": "firecrawl_developer_search",
+      "descriptionSha256": "dbe1ca84ef73a153e85a0dcc82b0caedb336d11ce687c45c250512d6ee32565c",
+      "definitionSha256": "cd2d5298663b6fee88aa943fbd1312b622a5cba2681def4210e4d5e95612bd46"
+    },
+    {
+      "name": "firecrawl_extract",
+      "descriptionSha256": "543286072251e303bbecac45cff6c1165ebc8415874e5fa928512c05b92e07a3",
+      "definitionSha256": "fc86c06df2ebae7e8d106d70f3ff8e2f353742217faee2bd5cc6d0f25fbbddac"
+    },
+    {
+      "name": "firecrawl_feedback",
+      "descriptionSha256": "3c7a932a57a027e90039bfb4ee20e5c708e04a69e3d88e4369fc1645878232c6",
+      "definitionSha256": "20aa923821a9728f215a6bd603452d64bb74d6b8d4b6fb0fb97f3b06ce78e520"
+    },
+    {
+      "name": "firecrawl_interact",
+      "descriptionSha256": "57b902e2a1ed592ec3acc61ceb4bccc3efe0278aff452d0a1c4b70d5ff2cb90b",
+      "definitionSha256": "2f5fd586cefe9929cfd1301576259475c7ad2d393e76e771a19ccef8c66ab7be"
+    },
+    {
+      "name": "firecrawl_interact_stop",
+      "descriptionSha256": "97570b35c9d0d625587349d67d50ca3250b537eb34132bfa9b8ae15b9b255954",
+      "definitionSha256": "725d0afa7dbd05c747483e79f1dc0a8e5cbe271956da1032477a912ccf4be227"
+    },
+    {
+      "name": "firecrawl_map",
+      "descriptionSha256": "6a35a6fb40af34372de09cf2b0c650f9c5993a5d18e6ceaf6166dc848ccea0f4",
+      "definitionSha256": "ad7bb12c6e52d2ea977acc954251e15814dd51d73c7906aef6059a650f076435"
+    },
+    {
+      "name": "firecrawl_monitor_check",
+      "descriptionSha256": "045115fda72b5767133355f5a7915ff0c27f68c5eb604c97cd3d9b93c5266b16",
+      "definitionSha256": "9b0cf0a0bfd3e33f668e11f8a4e0fc671fdcfb8684302a2137e6c499608d2363"
+    },
+    {
+      "name": "firecrawl_monitor_checks",
+      "descriptionSha256": "12eff404d7439cb4eadd5cf4d12e5cf56f6df70981397ad1cd0ba396cfb5d9b7",
+      "definitionSha256": "99c81f0996a9991ef846e949f4eb207af703d36f2cd67441b2f74ff2f3e89ba2"
+    },
+    {
+      "name": "firecrawl_monitor_create",
+      "descriptionSha256": "c30776d3de94ad98c774757ecd2a3fa48da0ad04f6707f73ee98dc6b0f25ec62",
+      "definitionSha256": "7d47494f882d5f9fb003bb91be1888b878b9cb99cf83f0e063af1c94c91dc057"
+    },
+    {
+      "name": "firecrawl_monitor_delete",
+      "descriptionSha256": "4b6629ddb5d9c559004d818bbfbc7b2b1846a3f891df7daf72b923d9ead9c439",
+      "definitionSha256": "b57ec7ae5bbc3b6debedfe716dc38d022da3f42e51bd6c59b36ef24d132aa693"
+    },
+    {
+      "name": "firecrawl_monitor_get",
+      "descriptionSha256": "5048f239c31b18d5ea5cb403e3495cced96bfd7d25fd9d945f00f885eb260edb",
+      "definitionSha256": "09131605af928a8c688987bc3c3739e2577c489b01e4f706e1af8fcaca1655b0"
+    },
+    {
+      "name": "firecrawl_monitor_list",
+      "descriptionSha256": "f82eddfee287bed28ed9ac62cea3d6a7bd92bcec9b5842eb7cbdba27f3eb74db",
+      "definitionSha256": "c60cf2c9009aaa8acf4b51ac3e2cd0ad263f698f45fbcdaa3c13c7139e926d3b"
+    },
+    {
+      "name": "firecrawl_monitor_run",
+      "descriptionSha256": "92acc27fb6f7a4448953fc6ca6d258cbec0225b3addcb390db67428356f782c5",
+      "definitionSha256": "47fa3abf289698606ee0d62df7aa75a47ab50edb87cb1c59fdb878bf0660dc2e"
+    },
+    {
+      "name": "firecrawl_monitor_update",
+      "descriptionSha256": "a4abca1d7a337f027801045cd73dfba88eabbd0f7850b766a12be9b3a4046b8d",
+      "definitionSha256": "1ec8c9aeb4995eb45d467d0304079b4c79b631e003457d0b2b982e6b53516a27"
+    },
+    {
+      "name": "firecrawl_parse",
+      "descriptionSha256": "58a4a0619452aa8d20fa5e3da532b227336b0382850cf82b53d44151f92ec001",
+      "definitionSha256": "7cffc9f2683237a3320aa2417b6f464e0c03964f91a69033e505e21081e135a1"
+    },
+    {
+      "name": "firecrawl_research_inspect_paper",
+      "descriptionSha256": "000022503306a3a1b4038bc15ef595fc32eec425710ead129f8a0b11402e1247",
+      "definitionSha256": "645d9f8f45efeff1dfcad23574a2a185ae61c1b3935eff0cf1c1ab48a218507a"
+    },
+    {
+      "name": "firecrawl_research_read_paper",
+      "descriptionSha256": "75c8304c8dea41e1e157a8e5c55bc5c6fc377ba4a3743904738b4db1c6940c1a",
+      "definitionSha256": "996af0240047e9e0c10b46dc50555d557415b850ab005eb0d4da9aa1cbe4d79b"
+    },
+    {
+      "name": "firecrawl_research_related_papers",
+      "descriptionSha256": "bcf565775b7142b6f8b0d97370e2c8fdf2baa194166a8f3b72027c0a2faeae0a",
+      "definitionSha256": "d27c525b692262c4a8eb412e4fa6f0df5d4749d178f1245a1d5dca09da9b6f29"
+    },
+    {
+      "name": "firecrawl_research_search_github",
+      "descriptionSha256": "e068176cf05c2247c53c7eb8d7ba12b68bded91426d5c3f66b5583c1e04c2bb2",
+      "definitionSha256": "55ac23f4ab5c00e468de901b3987343da2fae2f1a3c64f7f23d7c3326793eb76"
+    },
+    {
+      "name": "firecrawl_research_search_papers",
+      "descriptionSha256": "0b90d0b4bac0a8ecc6f5008667237ec1310c4c4062dc93dd0c5e0af4971ab4fa",
+      "definitionSha256": "12a1a4f9984b8ef8edd9fd188b22418f1f0b8f23b0ee62025e7d8c2a6a22cd6f"
+    },
+    {
+      "name": "firecrawl_scrape",
+      "descriptionSha256": "234eeb0552611cdcb43a736be80fc94db56ccca1febe55acdfc235cf4ca7a206",
+      "definitionSha256": "803e4869cfec0beef13869b36cb07ac50d8422a4d2a3fae4a430123bd6a977d8"
+    },
+    {
+      "name": "firecrawl_search",
+      "descriptionSha256": "fde92d18e110cb0505a83e332770836d09d593663f7985a83aa8b73b2b4e2752",
+      "definitionSha256": "31aa354e4f49b61d6eff3019fba2c0d660150c50af292b199034b66d924068c4"
+    },
+    {
+      "name": "firecrawl_search_feedback",
+      "descriptionSha256": "35945f85a63e094bf9e15396a38d9a8a7572639ed35d686ce14250d971c4fcb1",
+      "definitionSha256": "ab49084fffc37f5aaa89cb0ba2cf8244906c7c794c226fd37c4ab2bc3265ab98"
+    }
+  ],
+  "surfaceSha256": "59c5dec43da20e1660381d247aaf2bca6373f00d5583dc4a540b0d9888f3bc25"
+}

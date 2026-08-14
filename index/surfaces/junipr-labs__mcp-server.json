@@ -1,0 +1,30 @@
+{
+  "ref": "junipr-labs/mcp-server",
+  "scannedAt": "2026-08-14T19:41:35.252Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.6.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "metadata",
+      "descriptionSha256": "0d377407ce0dadfb89760bb3129a2912b1913be98c8775563766e42f59e0b906",
+      "definitionSha256": "78060b9e4548e1b8685b88566e44be1acc0c6f39b4e57d9f48b9b92eee9326fc"
+    },
+    {
+      "name": "pdf",
+      "descriptionSha256": "5968ec6d704ebd5a0abbff7bc2eb962eea4ebbdef39557abb313ef1a0226df5e",
+      "definitionSha256": "42a8663bb5b2b5bfbe3ac342564ac19eb52f215ea72c648221565d471271b55b"
+    },
+    {
+      "name": "run_tool",
+      "descriptionSha256": "79e6b5bcaa23885b6f18b7b6743264429d5f4a9325e1475e3b171105aa6f3935",
+      "definitionSha256": "98def6e5c851e0b6a11afd6511469383da82a6965b391d925eccf911ef133d25"
+    },
+    {
+      "name": "screenshot",
+      "descriptionSha256": "f2d62f615ec1f10e2bc543e944fed9d4a7e53d3f35607cc93b5443e9970b6b12",
+      "definitionSha256": "b47d4c240978bc417c3a52ca8f1f1836bdbb2f8e4bdf30a99b3486679440cec6"
+    }
+  ],
+  "surfaceSha256": "0b59063501ba7d29650444596ed5612b45de4b6e69f046e4976a8179a605585e"
+}

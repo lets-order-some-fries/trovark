@@ -1,0 +1,25 @@
+{
+  "ref": "elastic/mcp-server-elasticsearch",
+  "scannedAt": "2026-08-14T19:41:35.252Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.6.0",
+  "source": "readme-catalog",
+  "tools": [
+    {
+      "name": "get_mappings",
+      "descriptionSha256": "9250939ebd53af6866bcd1c4f474ce862a54c6de58f2eaeef5f5264e9984aee6",
+      "definitionSha256": "5887dbeecd06c3d34747ee3c75aa1bf32e6aab0855bf04ccde8e794e7cfac760"
+    },
+    {
+      "name": "get_shards",
+      "descriptionSha256": "59f5bf494ffeea6a524f2c8a8a5c2b35b86f77b6da5372026f290f2eb4aa1a92",
+      "definitionSha256": "3846d8e679b23d878acdd0b836a61d7d75386c7d8f0e166f8e39a9bad87e9677"
+    },
+    {
+      "name": "list_indices",
+      "descriptionSha256": "b8a9570272491ac3a8a50f6009acfbc97753f022318662f71c07d16e9b93304b",
+      "definitionSha256": "eaa5e27a5247817e3ac5bcdedacb57c4fd05a5c0c11949a9312a297ada7439da"
+    }
+  ],
+  "surfaceSha256": "f9159bdbba1a8b1f083d4287bb6d59cac6a5d1c7db8e7796e5bb22031cfc2f68"
+}

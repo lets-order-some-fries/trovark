@@ -1,0 +1,20 @@
+{
+  "ref": "SureScaleAI/openai-gpt-image-mcp",
+  "scannedAt": "2026-08-14T19:41:35.252Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.6.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "create-image",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "30072091b9c20b434256cb0e1b750273716b4c1b3602729905e2693486f6291c"
+    },
+    {
+      "name": "edit-image",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "a4d72915f47096cdc9bac1f478980ff841f28a7e5e5a5fe9b4f54cdae0d27f45"
+    }
+  ],
+  "surfaceSha256": "68ef3766d46417f40a0867c20ccbd75891e2e2400239e84536025eff2ea528fb"
+}

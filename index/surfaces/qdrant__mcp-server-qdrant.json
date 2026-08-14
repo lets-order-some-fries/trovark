@@ -1,0 +1,20 @@
+{
+  "ref": "qdrant/mcp-server-qdrant",
+  "scannedAt": "2026-08-14T19:41:35.252Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.6.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "qdrant-find",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "8e632359f2b499db3dfc181ef70551dc3a964beade7c1365e0b02406c3eba181"
+    },
+    {
+      "name": "qdrant-store",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "52b270d4f9d7dd191766daca4d2b66f4ff708ca3596f7b4cb3cbbb22f0facbe1"
+    }
+  ],
+  "surfaceSha256": "4dd988e5c8df3ffdcc40b4be92d68b0f892486a63e85b8af2d04cb62f8e65773"
+}

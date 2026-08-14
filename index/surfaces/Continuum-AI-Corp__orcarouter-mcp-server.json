@@ -1,0 +1,30 @@
+{
+  "ref": "Continuum-AI-Corp/orcarouter-mcp-server",
+  "scannedAt": "2026-08-14T19:41:35.252Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.6.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "orcarouter_chat",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "2bf8af9a20da9f45dc3dc6b5f049cc67967fb7ce3770e729c916a27f3d21586f"
+    },
+    {
+      "name": "orcarouter_model_card",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "b6a32975c060bda9233c532a829d03fb0eda2bf194514f8e144b269ed0394afa"
+    },
+    {
+      "name": "orcarouter_models_list",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "f6b2f01684a08aac465efb3aff58ee5b2d9c4bd84335a23e92f6a32047b36c2d"
+    },
+    {
+      "name": "orcarouter_providers_list",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "735b83382be798362212a78d3595fcb177f4de2e930e31979eb38509b67ab90b"
+    }
+  ],
+  "surfaceSha256": "a9bb65654903b181f2f7808aa07edcfefbc8d47a0bd6e0e12954d2a7598c9dd3"
+}

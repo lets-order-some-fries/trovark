@@ -1,0 +1,45 @@
+{
+  "ref": "toadlyBroodle/satring",
+  "scannedAt": "2026-08-14T19:41:35.252Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.6.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "compare_services",
+      "descriptionSha256": "2cc49f1ad9297601de942040e161f7b67f17b23ea40233e7c33c0235eb80b809",
+      "definitionSha256": "648fd197f635ddcd84da687f0b43127f603ce5b73e9fe9ca88b0de6016c39cc4"
+    },
+    {
+      "name": "discover_services",
+      "descriptionSha256": "c2b626219a1117e2c65aa5a358880b40aa93cb46e15ee2acbe61710a65ea8cfd",
+      "definitionSha256": "b2c267105cafcf850f289762dae96e3a2e6b927361809905b31a668ded350629"
+    },
+    {
+      "name": "find_best_service",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "4b135b0201e2e869f16c50a89dd3e1cc0664e4675afe574bf20749dd3444bfdb"
+    },
+    {
+      "name": "get_ratings",
+      "descriptionSha256": "4c64343186c4d624aefa551a8de12f8b771890b2b5b5dd1a5208d36a464c8f4d",
+      "definitionSha256": "a57c426ebebbafcc05096416f6fa4b13bdf44ed92bff5fcb5b27f4ea1a2da121"
+    },
+    {
+      "name": "get_service",
+      "descriptionSha256": "c856061c2ac933b0bd7d0e572da34a99143b26ccaf5ea8a3811f7d7fdc7ecb9e",
+      "definitionSha256": "950b1dcf2cfb4970c6e5fc722b9d43a77ff2d5fc20a5eeb17032060186fd90f5"
+    },
+    {
+      "name": "list_categories",
+      "descriptionSha256": "21eaa8a58cbf0ee3b66f35235ffaf37e6ab6ae9ae591ef8e588c02a6258ba073",
+      "definitionSha256": "b7e3e49a4c1411903dc4a52bae7abc18545e33880a5d9092101b3c679ecdb64c"
+    },
+    {
+      "name": "list_services",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "75705c2bb39162a5237073e18abf4ab396c1726ecbfd04e767170db50d3aca4b"
+    }
+  ],
+  "surfaceSha256": "3a3d328987f4d324c24bd099b0557545e5b62190485f459c78476989b270fca5"
+}

@@ -1,0 +1,30 @@
+{
+  "ref": "forgemeshlabs/imagegen-mcp",
+  "scannedAt": "2026-08-14T19:41:35.252Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.6.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "generate_clean",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "a428795b850abfe9bbea330d10e91c1d02714a158deca1ff24bfc4c1241a8b8f"
+    },
+    {
+      "name": "generate_hd",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "b6a568530410495d7c0020942821bf760459b217262f4259ec494d66e6eef4aa"
+    },
+    {
+      "name": "generate_image",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "b4aebb20a902772a9cc119045a098de1e763c2adc4cdc56c54d5c8e34148cd08"
+    },
+    {
+      "name": "generate_pro",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "6c1bb2f32ea4bf592e16eaf89ee5bb87a89cde5cc56b10a3b369aa306106e9b4"
+    }
+  ],
+  "surfaceSha256": "d9b52bfafaecfdbc7a43a1ded712dc314ee71a675e3622ce2dec1260faf9ae80"
+}

@@ -1,0 +1,90 @@
+{
+  "ref": "supabase-community/supabase-mcp",
+  "scannedAt": "2026-08-14T19:41:35.252Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.6.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "confirm_cost",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "388ddafb00a4758fbf2980b8a87f4890c50b2792988bc00deffc2047977ea41c"
+    },
+    {
+      "name": "create_project",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "635a1532b1ba09ac8c7257f4ba7a131f61ce6b18d1fd8e8057b556f83cfadb0e"
+    },
+    {
+      "name": "delete_branch",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "2e57504db76700fb309efe55f1efb791ff980a79263b54a5e45d59c86a3b866a"
+    },
+    {
+      "name": "get_cost",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "bab9d23a675c9945e993e6baaf340fe73807c8c4a2dfe5a6a01ad64f46fde9b5"
+    },
+    {
+      "name": "get_organization",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "c9e069955befd3d526865d1f0bcc3c8772dfacb6ebc5038e337ddee00c858466"
+    },
+    {
+      "name": "get_project",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "ebdc40dc58ea0a67e55570ac9c8e36f985a9c9960e9eaa4037b0070752801336"
+    },
+    {
+      "name": "list_organizations",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "4e8bbf6debc812781884398ae07bb2f1591c4b5c0783b89544d84fe87d9a10bb"
+    },
+    {
+      "name": "list_projects",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "d8198d868dc03aab9eb1d7815c6c2b5c9022f90ff39763e4f92956f46a52215a"
+    },
+    {
+      "name": "merge_branch",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "9d750efafdd94a3de37bc0adfe3370e33f9a2dd9c98f18143a6a8c3f729c7efb"
+    },
+    {
+      "name": "pause_project",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "aa304db4deaac49d4a3d493079fef52caf457830abcce1b55b8f5dd61ee2f825"
+    },
+    {
+      "name": "postgrestRequest",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "ebf5513c376fe071d7c571bcbc70188986cf7271966e2ab0e4da92a6041747fc"
+    },
+    {
+      "name": "rebase_branch",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "99ca2364cedee6fd267c7ac137067064d1418c95f7fa1531f67986d155a0ff88"
+    },
+    {
+      "name": "reset_branch",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "3c989bea337a32aa169146c478277e128233b0e6e7280ec1af0135d6249acfa1"
+    },
+    {
+      "name": "restore_project",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "87c53f4692de314157f064fe9b91b501c9954c1949267de7c3e712fe22d0efcd"
+    },
+    {
+      "name": "search_docs",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "7963438642cd5c87d95a9f10b38813340c5c7e0728545ce5ce6de10d708f1a98"
+    },
+    {
+      "name": "sqlToRest",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "ea6ce8859977dfaf73cb70996e9f0baeb5a9584224e8e8bf3ada50170f33fc32"
+    }
+  ],
+  "surfaceSha256": "64a9732a26979e83ba5c846635432fc026e3a9c4fd5af2cddfbbc9ef17c3c71f"
+}

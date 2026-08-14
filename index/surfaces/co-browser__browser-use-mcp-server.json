@@ -1,0 +1,20 @@
+{
+  "ref": "co-browser/browser-use-mcp-server",
+  "scannedAt": "2026-08-14T19:41:35.252Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.6.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "browser_get_result",
+      "descriptionSha256": "8447d2664b30d167e4fd8efc8feadc69fa9ad1c2a9ec53cfd422a1055b5453cc",
+      "definitionSha256": "d06eeddb272048feffa08d918cd2f463d901cdce6ed027eae9f2abaef87ebfca"
+    },
+    {
+      "name": "browser_use",
+      "descriptionSha256": "8d5132ca352bcd70790e8ce4427e0ff81e3a24403bc62eec3e530746b1ccb1f9",
+      "definitionSha256": "90c2053df9848881c022f0b107c34ee8714edc510a1fe777092729ce122b848c"
+    }
+  ],
+  "surfaceSha256": "829dd14951c43a8d3a3841c39d7be63f2fcc0d69ace1fa0e184a74695725da9d"
+}

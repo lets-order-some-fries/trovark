@@ -1,0 +1,140 @@
+{
+  "ref": "clanker-records/crompton-network",
+  "scannedAt": "2026-08-14T19:41:35.252Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.6.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "crompton_album_characters",
+      "descriptionSha256": "17528b392c6644992d782c6d078a022dd075d5f26c84d44072b7b29e331de28e",
+      "definitionSha256": "daf78655e3f4027a0f6745b7c9c5970286fb95d166759e94c35050e8854b4f09"
+    },
+    {
+      "name": "crompton_album_groove",
+      "descriptionSha256": "5f46f3e3f0bd9e2e0cfa9ac0baa9e7fca3dd212986e91d2f83a80a66e39c7ac7",
+      "definitionSha256": "3f38bfdbd5c08404040572b2a2763b53990319b7c07a22125d0b3039a719aad1"
+    },
+    {
+      "name": "crompton_album_liner_notes",
+      "descriptionSha256": "475815cc7d87d15fabf513b4639470bb230b922d61909dbda3a252c2a07b74fa",
+      "definitionSha256": "41f084478fc8bbbd55ad6a9ef18cb1cb7c27c7466788e062f66634e24e533e9f"
+    },
+    {
+      "name": "crompton_album_manifest",
+      "descriptionSha256": "e74bf98c7188d5f3bdf13afeb329afbb8a68fe652feda6bf734be60efc993b1c",
+      "definitionSha256": "17accca53604b06e9104674fb8c57cbd3a10a5b92a32632061c2956b4c387913"
+    },
+    {
+      "name": "crompton_album_references",
+      "descriptionSha256": "8a3635a8bc2940e4a194c8246ea247458c26ab13bf6c786de15b433089b9f07a",
+      "definitionSha256": "74a781882ccd3cc4eaac57e2e7192e9b65265fe224fa7199a6b657998a9269c7"
+    },
+    {
+      "name": "crompton_album_snapshot",
+      "descriptionSha256": "dd02cb887616138fe07e2e36f316e6ff12e3612b0cccb4a52f10e451cf8f8617",
+      "definitionSha256": "00014a396e92bed478ddfca4963902203bd625fcafe667f8f75fc01117303761"
+    },
+    {
+      "name": "crompton_album_stereo_image",
+      "descriptionSha256": "c995cf31dd7d5028a19200c9fec198f9489c87d32bdd8f3c74c7eaaaae3012ba",
+      "definitionSha256": "d060613ab85fdd33c8e55586da6420c8645c1b4888581dd7e4a024e213680a24"
+    },
+    {
+      "name": "crompton_album_tonnetz",
+      "descriptionSha256": "913353b8aa7ae485c130cc1eeb154f7b04eb446fe7b80ec81e703f5cc068726b",
+      "definitionSha256": "70954940d55ce0596df1b3570a3289cf04c1ad92f673af3318f036d537155d49"
+    },
+    {
+      "name": "crompton_brief",
+      "descriptionSha256": "5436292bbd45adac3f3483d27119fb25371f45dd3b89223c90cc29c03f13f490",
+      "definitionSha256": "4128aca2c012e7fae338c203502f5b9ee7d552e83e28c1348f2e15f0e01a6f00"
+    },
+    {
+      "name": "crompton_changelog",
+      "descriptionSha256": "6b7575416cfa8067ac852a41d861100623e78ebbb9790f0e688f910e1718ced8",
+      "definitionSha256": "f46bfc859f93ef779c42ac0d677587679f24475ee4c581f102612462b0c4cae1"
+    },
+    {
+      "name": "crompton_cookbook",
+      "descriptionSha256": "5175a50bd99e00bb8c24a8807a1ae72431cb414fde3de31af25d6f10e25312cd",
+      "definitionSha256": "442dbeb55cc941df77a0805f7dc1ea375bbce04f46d21cb1bfc466c271c49202"
+    },
+    {
+      "name": "crompton_digest",
+      "descriptionSha256": "f18c6942d4002f6537f3a613fac6324eaaba4be552bb7077257b78a47191deae",
+      "definitionSha256": "6c5d6769989eab5e5fe7a1aae1b69cec22e25f8bc57402a4c6834d74e13cbe61"
+    },
+    {
+      "name": "crompton_groove",
+      "descriptionSha256": "84a0143129906d28a8badb0c2adaf395e5b3f77498610dbb7d84455368a4f257",
+      "definitionSha256": "2ff840a4c5110d39d7202d236b9fd4e734d207ffb49130a000bf3a5451cf7e14"
+    },
+    {
+      "name": "crompton_hello",
+      "descriptionSha256": "112b026bd8f7c00c89e812f5aaa894ab4f9631a885c9333af4b885421f23a6c0",
+      "definitionSha256": "cc9bcf34dc032c1b87a3ac87eb60d832d214a24837830581abfcc389bff67594"
+    },
+    {
+      "name": "crompton_liner_notes",
+      "descriptionSha256": "9e4dd83fa194c36add9760cad6bcefad62353a6789f4bb2c0897ad5d5c9963cb",
+      "definitionSha256": "a7692757012d8c83114c02b99e9af9e25e63009cc3fc452396c780a36f6e0e41"
+    },
+    {
+      "name": "crompton_listen",
+      "descriptionSha256": "fb8ccd2d4492c820666d58eaf3fc1f2765744a6eb1e82ff44239e57b435f4df1",
+      "definitionSha256": "7d1107c0b35333d9c608d8b3c1e5a6751862be1903db9823256cebbfac6c70da"
+    },
+    {
+      "name": "crompton_lyrics",
+      "descriptionSha256": "8d05218502a161e209d16312b79b0cfa3176d77efb6eeeef3c87dd57e1a60566",
+      "definitionSha256": "a9f2dedf1beddcc7b5e823fc27782f5816890d64394dc8f953ae643bc6d731c0"
+    },
+    {
+      "name": "crompton_moment",
+      "descriptionSha256": "9d65f3de232f04358f7e2bf50d13a74bcd101290ef13ec130b00548a5e5828b4",
+      "definitionSha256": "76ab5e89d83cf390a9ea11acc78f7b0fe73a6547bacf581f5a26c5eccec44e15"
+    },
+    {
+      "name": "crompton_reflect",
+      "descriptionSha256": "ce7062c16a75a4ee9f96c3d970d5281d772e84017d49d6e46aa275ae62525dc3",
+      "definitionSha256": "2ddae43e0f744a6b36f5178e0294a503e99edcdc31cfebebb0d9ec55ff651d74"
+    },
+    {
+      "name": "crompton_reflections",
+      "descriptionSha256": "c554a8445797f38caea7d76202951127f20b61ba2659c76c1b79b667129f8030",
+      "definitionSha256": "6be9764b75c7055880a0e442675e0e1ad4f6e129b700de6485bff1411845e3e4"
+    },
+    {
+      "name": "crompton_spectrogram",
+      "descriptionSha256": "6f38657f5ffd295586f28ea88fb3423eac7ab6b287a7cae46f002357d52fdcbb",
+      "definitionSha256": "e57758d8cfc687dbe980ca41b93accd92ce845e122baead11c6625f1532d8d7d"
+    },
+    {
+      "name": "crompton_stereo_image",
+      "descriptionSha256": "e439c046735ac39368d6a2323d93dc51af830c1b3209cfc7a0ea2e8bf6cd2030",
+      "definitionSha256": "f51b8497ca669190b40a3a91e4f0ba04e5bd6bd7a9d9b5636e676bb98ff0ae3c"
+    },
+    {
+      "name": "crompton_tonnetz",
+      "descriptionSha256": "7254f61eee17f23276f96878a5e0014feb2114bae99585fce02b26482dcf2b28",
+      "definitionSha256": "cd6a28e104f33393e255bc99bd813b2f44d7ca42cb43b561c62550b79b4e5263"
+    },
+    {
+      "name": "crompton_track",
+      "descriptionSha256": "925cabca477769e3502e2a4499e876ed1691092703626faa15d3773ed3e3a9f6",
+      "definitionSha256": "336518f33d1490330487a676369be0d0c9dad9502ec485f18f1960ba7866f3be"
+    },
+    {
+      "name": "crompton_version",
+      "descriptionSha256": "ee1f65d99a9068ea67b51561cfb6cb1577f1625e7c52f069a277e96817577cba",
+      "definitionSha256": "b07ef105d43cf682029b2e53728e1e31b85ed624238ca94e73fe4dd3cb425e26"
+    },
+    {
+      "name": "crompton_waveform",
+      "descriptionSha256": "221b29d7d59920a604a5b62845f2191b5b3e718dac62f97e4ff5a7019983c277",
+      "definitionSha256": "50bf96465c384b682e70e29da62adae8a236ae23126dbc8dfb21ed38ef982d69"
+    }
+  ],
+  "surfaceSha256": "feb4d4d709d204e02ff07196d1c75bbeb34ebbffedcda0e413e61d6e1bdb026c"
+}

@@ -1,0 +1,20 @@
+{
+  "ref": "alexei-led/aws-mcp-server",
+  "scannedAt": "2026-08-14T19:41:35.252Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.6.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "aws_cli_help",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "010c60c2102984951317a6995279befd0edd79545f678776d3dc0b5aa8f611e8"
+    },
+    {
+      "name": "aws_cli_pipeline",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "bca3f0baca0d367d4fdc0eb25a7e6f1eae2cbec7dd55add17827f915309830d8"
+    }
+  ],
+  "surfaceSha256": "7222cc5ada7fcf3f05179a93e7a6b0b6d77e5deec8b1e47c4c854f2404a0f8cc"
+}

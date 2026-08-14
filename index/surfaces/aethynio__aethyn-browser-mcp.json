@@ -1,0 +1,60 @@
+{
+  "ref": "aethynio/aethyn-browser-mcp",
+  "scannedAt": "2026-08-14T19:41:35.252Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.6.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "aethyn_check_exit_ip",
+      "descriptionSha256": "185f46880219afa31a65253a570441b8b914372900034995714f8010697cc35a",
+      "definitionSha256": "336f6de223fe824afc71a8a3b3dd46c9677f9646ad701fc7038f38b951bc4634"
+    },
+    {
+      "name": "aethyn_click",
+      "descriptionSha256": "71e4dd0d995e35d7ccceaa33be92e6312f9b056c9d4b31696f644b8be6b12841",
+      "definitionSha256": "1ea9f843b1eb678c1f4044b5ec0647bc7e6a1f84ea1bdcb8342a9ee2f0933d41"
+    },
+    {
+      "name": "aethyn_close",
+      "descriptionSha256": "4c7fb3550316b64eb8c3ce91866fb32b1280d353d9427fc5826e38df673ca053",
+      "definitionSha256": "8fd0d83e509ca840146ba6eae4e52b52e918c6f03a308af6ad5f1857d66d23fe"
+    },
+    {
+      "name": "aethyn_get_content",
+      "descriptionSha256": "83204e3673450df4716f80ff988cc3173b20dc0995e2c3ded4589495f764f3b0",
+      "definitionSha256": "3bc7fc3cd12262b335084251482eb70378b62fd87b00fd78c77bf0519764b11b"
+    },
+    {
+      "name": "aethyn_launch_browser",
+      "descriptionSha256": "f5f2d8f5bedaf37025a8f84bf8098ffb39100d2b54d436f9952f61e02c8f991d",
+      "definitionSha256": "64279e8503ff6047114b37ecf6031b6073062dcf7029a43b30bf940360dde6fb"
+    },
+    {
+      "name": "aethyn_list_countries",
+      "descriptionSha256": "eef1d026858aa71ee01c8f9225e447928dd326b2565ee219c47b0da113587801",
+      "definitionSha256": "e419d7d65647567a96ca1922477db616f1efb4dd505de75a6d05367d7de2b310"
+    },
+    {
+      "name": "aethyn_navigate",
+      "descriptionSha256": "1f4e4b42614ce553ec130d0ba9f84bf93607027b6055c47c5a7757953418b591",
+      "definitionSha256": "830f948405082614ff1fe9067fdf817be0ba784c77a76d6d2668401990bd2ec6"
+    },
+    {
+      "name": "aethyn_new_identity",
+      "descriptionSha256": "3a50c3587fa712988817d5f467ae25bd77215973cc5f26f0af20e6145d7a80de",
+      "definitionSha256": "ecfd92c2120b85e887f9dd434e860334adc0c9dfd483672e60fb32c73214b686"
+    },
+    {
+      "name": "aethyn_snapshot",
+      "descriptionSha256": "b7764067058f5259d460a1d081eaa5c65c6b2961552051697b4d2a5fe16386ca",
+      "definitionSha256": "b6290706bf28506881e9e6d712e844aa4e1c91bf77fc2d433b22b27ad0d18ab8"
+    },
+    {
+      "name": "aethyn_type",
+      "descriptionSha256": "44eefdf41b1b540fcc80af3b632ce891301b7e07c990ed2407b7d48f9338e356",
+      "definitionSha256": "619b2bedb83b71903ef0fd72d721de8e658fdf8130bf7a7be4a96a2ab52282dc"
+    }
+  ],
+  "surfaceSha256": "7b96e69fb85a6a1fd946b1da7e2e1f3db7d4db8738bba67e714018ec5bce5fae"
+}

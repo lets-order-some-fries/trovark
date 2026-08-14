@@ -1,0 +1,75 @@
+{
+  "ref": "sh6drack/zen-mcp",
+  "scannedAt": "2026-08-14T19:41:35.252Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.6.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "zen_check",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "785861507a99ce7fc31a9805fa2ecd676293c82a83e1bc915ba4b783d71b6d12"
+    },
+    {
+      "name": "zen_click",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "11a717855503afce093f9b6b165f5ef31e81094f55d5bcf59a5b6270f88cae14"
+    },
+    {
+      "name": "zen_evaluate",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "f357bb550511edd4bbc4eb5f12c6d5798c60312a51063ee8d4f33e6e57775999"
+    },
+    {
+      "name": "zen_fill",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "0ef2168dc767ec200a0873d5fbf083f5d645c3ef1a2b969b7e7509dd4988e989"
+    },
+    {
+      "name": "zen_fill_form",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "f3298f33ce2958ad45a446c92986777c354993a72390053adaa44c5080b530c4"
+    },
+    {
+      "name": "zen_get_form_fields",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "ffcf502b3a7ced98a5fbd61644af1e534e0aef6a248dddedb695342483f46075"
+    },
+    {
+      "name": "zen_list_pages",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "4749e5c825c3f0ccfcfdc962e5866e3301eabc6848b4908b612bd7fab6cf32e9"
+    },
+    {
+      "name": "zen_navigate",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "db5c76b771c4e05c02c83e26803250573867053fd292172a31576f75467a714c"
+    },
+    {
+      "name": "zen_new_tab",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "2bf247309379b277f3ddfeb6334b5d59fd676f0dfb2930afec8b4d5dfeb99ef2"
+    },
+    {
+      "name": "zen_screenshot",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "0d12d1178af0e6a5b225e27ceb88a4c0a616e187b1d88a8cc5bbc3b0b6ab6199"
+    },
+    {
+      "name": "zen_select_option",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "b13bfd1b78bdbfe5130ca3924c0e48b7aec2a3b84b0a303672061be557c0b5e5"
+    },
+    {
+      "name": "zen_select_page",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "754c9d6a691eb5d4e322b39c40de3d588a26ad21b455846f8614e29e75248c29"
+    },
+    {
+      "name": "zen_snapshot",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "017cc80b571ef52616559a48079f964e0da9c5e43c2e76725d6977322f453b93"
+    }
+  ],
+  "surfaceSha256": "766e27faacb08dc0a8762e5429cae00bf9ea2ce375300eb8f4aa6f81b6d8a934"
+}

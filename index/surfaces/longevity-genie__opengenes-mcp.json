@@ -1,0 +1,30 @@
+{
+  "ref": "longevity-genie/opengenes-mcp",
+  "scannedAt": "2026-08-14T19:41:35.252Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.6.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "db_query",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "9adb30eb9bae85763e0c31873d21464c6c42ab7dc3e8089aee8a2461a1e8c18b"
+    },
+    {
+      "name": "example_queries",
+      "descriptionSha256": "b4c2b5d418702d58af431485a80011ba5822773074f3122b2e839cc169498d2f",
+      "definitionSha256": "3d4f988d753951d17df114882bc12e2c355a15167691d78b5a377ed79b62bb77"
+    },
+    {
+      "name": "get_example_queries",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "3e6b3c2f6f47e0d29bab2323822c91b1f31eed24289f94469a6ece9654e769ae"
+    },
+    {
+      "name": "get_schema_info",
+      "descriptionSha256": "827cd8ec7f6145ad46f39de3c3e0ed97c46a8084a6e19b0b73b623cfbc97c4b0",
+      "definitionSha256": "f6e463c6cbf4699c752ae1b0f14bab807e0f6196d82a80d5be1270abf2df819f"
+    }
+  ],
+  "surfaceSha256": "c3d8d519b70d5425cb3e74155d5a1e4dc518ef0b3a84b20371ebe2e20b8a70a2"
+}

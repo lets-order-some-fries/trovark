@@ -1,0 +1,105 @@
+{
+  "ref": "davidmosiah/wellness-cgm-mcp",
+  "scannedAt": "2026-08-14T19:41:35.252Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.6.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "cgm_agent_manifest",
+      "descriptionSha256": "9fff732fb89550d3d7a14dd95f619c810ab62bb60dcf94a71cccf837807e90b0",
+      "definitionSha256": "521811cc31070ec990c1d01ec63f61a745a9caef48807a70206deace6c8ef584"
+    },
+    {
+      "name": "cgm_authorize_url",
+      "descriptionSha256": "af13efe0adab4d8d7e022b2ee7a673ed48db0011d5112836f9986070321ea5da",
+      "definitionSha256": "dc47e87d4b84784b684680a54bc0fbc5f8bb490d98e4b8e61281cb4081969b3b"
+    },
+    {
+      "name": "cgm_capabilities",
+      "descriptionSha256": "28ef44209273c9fb9732a5b54cc114c75beb9eb555c1b13868667931c5268b6f",
+      "definitionSha256": "d48b26237b3f3aa27a2d0cebc917e17715a524c4c02deb00fd2ec9dfecf1ab36"
+    },
+    {
+      "name": "cgm_connection_status",
+      "descriptionSha256": "eb35f6dd102b7207d9a189f537939c9f1e8b77fcbca17f5481efc8b49d55ca33",
+      "definitionSha256": "3f6144987a992508448bf71a2ddaddfe310f7d691c5869b035e09eaa638bc554"
+    },
+    {
+      "name": "cgm_daily_summary",
+      "descriptionSha256": "f2fbef304d1b833d1908b1e6f567b8206993479513a21d8837cbcfc51d34d257",
+      "definitionSha256": "27a7f10f3ff9415a24c6ccd3da3423942bdc627dd800a83e601c504f6c08fe65"
+    },
+    {
+      "name": "cgm_data_inventory",
+      "descriptionSha256": "87acc4876ef4334af693bfe65a1f1d0274bc23c43aa37495b53c1727dafccb92",
+      "definitionSha256": "7b6968cff768af0d2bdd7b73ce4e6bb83e56c980473e517a742b3844c20128b3"
+    },
+    {
+      "name": "cgm_demo",
+      "descriptionSha256": "8bc1d1d90f6843ed70fa9be0a16d9b3a83d98d79143370054049041033922394",
+      "definitionSha256": "64875f2d6f6609c052ddb0733b9c2b90cd91911f55d0308ea55b2196c3d64880"
+    },
+    {
+      "name": "cgm_glucose_now",
+      "descriptionSha256": "3be4c7cfa65c5e17d488a3eeb4234c9b0f042281199abf790efa9ca9b329cb9b",
+      "definitionSha256": "a24608bab21fb538a349b101598bb947f3bdfd1033b8998ccfbfdff88d46730d"
+    },
+    {
+      "name": "cgm_glucose_window",
+      "descriptionSha256": "cc62bef17a94e81ace7192cee257a1fdab8f56af07330ac4fd932811ef1e83a3",
+      "definitionSha256": "6e68a51ace1d4c9719e28e39cacd5b472c3c4fce43bd70f4caa0f27443ef66ad"
+    },
+    {
+      "name": "cgm_hypo_events",
+      "descriptionSha256": "165dd144f4e1620e82958543dee8413d8fb651f2b2f90810de89a665241cef6b",
+      "definitionSha256": "f9efc493285b1b183d681d98ec53335589f6599bf2ceb9b43d88c5dc312e2aec"
+    },
+    {
+      "name": "cgm_libre_login",
+      "descriptionSha256": "34d78b90d3eef83e870c67c257fb4bccd24247b46ababe92d270ac64e236f440",
+      "definitionSha256": "7ce1a736d4e71e1974c7ac55bcaf75f55624acc71b40cae57cb55e2dbfabc43f"
+    },
+    {
+      "name": "cgm_libre_status",
+      "descriptionSha256": "a94f2fb8feb643e1720d81efdc10f7b3eaa0b4db455988ad3ddd0fdd0ab9a2e7",
+      "definitionSha256": "71032db8489d8a884ae715b5b4b33210f4bba887cc3857b906e10e945bdd5ccd"
+    },
+    {
+      "name": "cgm_meal_response",
+      "descriptionSha256": "3408c5837295e7d3662916a24573596bd0c1c37bba6bbe4adb748a093284cc89",
+      "definitionSha256": "19a265e559c6951ff2744ca4ade45d4b7d66d211ad76b0f95558b339d5647b4b"
+    },
+    {
+      "name": "cgm_onboarding",
+      "descriptionSha256": "7089fed1476dbf96bb7b25a422aa010c936d329a3829d38f23a54b5512c8bc8e",
+      "definitionSha256": "0f7394977ccea06e180ca170ff8a3f20dcaee766ab7a87f3f85700869cfa596a"
+    },
+    {
+      "name": "cgm_privacy_audit",
+      "descriptionSha256": "7463f75f92d2e0efe61445c0e76df7820251a0a2f72a81ccbdbbd21b5d518d06",
+      "definitionSha256": "f22dfc335904a8da7f9538f2d1798b97bf426ceda1927861f8ea097ecad94c13"
+    },
+    {
+      "name": "cgm_profile_get",
+      "descriptionSha256": "714fcc16ab5bf4ae92bf0c540b0fa06ca7b7d3abef20d849ce9d24b4c2aa2bb9",
+      "definitionSha256": "680144b20c95ab4ecf5dfc734948043a4ac2c0821f2ba4aaa20ef7d436111a29"
+    },
+    {
+      "name": "cgm_profile_update",
+      "descriptionSha256": "cf8b26953407c17cd8d31c5bd85968b91d6d76df01c2074361542522def27b2a",
+      "definitionSha256": "ef799296da6dce2f486d7c55d209a498f7af3a448e82a9c5b9d99dfa38346d51"
+    },
+    {
+      "name": "cgm_quickstart",
+      "descriptionSha256": "bf855c0ed38dbd18c5123d1878878498dbd465801241de6b475ebbd218a33173",
+      "definitionSha256": "4df5bf0520ae45854b701ea42c43686e5e28821c39e06ad4d1bb92f68966dc79"
+    },
+    {
+      "name": "cgm_time_in_range",
+      "descriptionSha256": "fa003d6fd52b322bdb531ec1aefb58d474eef8c42b5b585a899921c73dd1a579",
+      "definitionSha256": "2068865ae6c66def553ddddc07e7983a10e82191ea56c0aea7025e11d56d982e"
+    }
+  ],
+  "surfaceSha256": "d2615dc33add67d6870ba7481d40f5ec5ac39235657c280381e3837cb33e02ce"
+}

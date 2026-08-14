@@ -1,0 +1,50 @@
+{
+  "ref": "particlefuture/1mcpserver",
+  "scannedAt": "2026-08-14T19:41:35.252Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.6.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "configure_mcp_plan",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "f12876753cd5a90c06e1ce67e21b541173a5852f275a5e72e48b3691504a7e85"
+    },
+    {
+      "name": "deep_search_planning",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "2256760b73bc4f437ff43ac7282422f1a36a4694fb689f954f77745d66db82f7"
+    },
+    {
+      "name": "example_mcp_config_file",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "02227a81ea0c3a633282592749ad32dd5bc0b8e58de2837c44a43eb9a75ff264"
+    },
+    {
+      "name": "fetch_readme",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "a6dfee8da6b8e3f20a935849bbb03ba87be8b6ae7fb1ac12607da00324f45cbb"
+    },
+    {
+      "name": "file_system_config_setup",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "d0173cf32abad750e8f164de4b1542b72f30d2c9c8b4bf990a9afd3a1ef3d188"
+    },
+    {
+      "name": "find_mcp_config_path",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "080dd75ccf30989850130dbaab2b27752cb9ff1d7e499a482b338bf6f61a9ee2"
+    },
+    {
+      "name": "find_mcp_config_path_path",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "d89406bb85e2796c6a40e463ce4da930df6a9fd67680cc2b9f38781159f2391a"
+    },
+    {
+      "name": "quick_search",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "1d45dc96b2019cbfb73464ea6fde7085da67fef5ac20ae95f8a474651ec25cad"
+    }
+  ],
+  "surfaceSha256": "febbe36a7c0edcd0ad823fe667f9fa03f9759ed359cda7af9807070de486b9e7"
+}

@@ -1,0 +1,115 @@
+{
+  "ref": "blockrunai/blockrun-mcp",
+  "scannedAt": "2026-08-14T19:41:35.252Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.6.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "Alice",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "06f1f0099bbd852f5f070dd2bf1ccd1a02fac59ad7b7c18261163898b2a1daef"
+    },
+    {
+      "name": "blockrun_chat",
+      "descriptionSha256": "d84a6e1139508b8e334dbbe7666f8367dd65eb22d331457a75a5a7943be82279",
+      "definitionSha256": "2cb9f9dd98e5942814b539ad144ffe9d901a76c43bde8cd9c36f59b1e13f3d0a"
+    },
+    {
+      "name": "blockrun_defi",
+      "descriptionSha256": "0d4f85437ffa1f1e8359619b926815911a591f7010023ab9366addcf3449cfe9",
+      "definitionSha256": "46bcee3f0d1bc563c680581e959f4b503423f340f4bf3a0107aa79c354bb578c"
+    },
+    {
+      "name": "blockrun_dex",
+      "descriptionSha256": "4b7299178da7c3270b52e2e406631408bb3b3c43e24d9c2e1e687905eb86c10a",
+      "definitionSha256": "daf28e205089a128b41177bfb77cc4121c2210a48b81a991245bab0816ab5960"
+    },
+    {
+      "name": "blockrun_exa",
+      "descriptionSha256": "520a92c64989303bcd9647a0d5112c036a11d90724bb41e6dda6e7cbe9effc18",
+      "definitionSha256": "a1c6b6bd48e08614776eb7915ad1692259855394d69b29a030cd44f4a3f9e216"
+    },
+    {
+      "name": "blockrun_image",
+      "descriptionSha256": "6dfcc496c14231788b925aad2ac66368f9c1ee3e4beb3fbb0588b03acc67880e",
+      "definitionSha256": "59b971ca477f9282050b29d78ded35b3dcf654bcccdbbebd622c7394ce6e66fb"
+    },
+    {
+      "name": "blockrun_markets",
+      "descriptionSha256": "601890e5b2aef4ba0eba18387e0c494885fbac32348bc7df2b8aeafa14eb86ee",
+      "definitionSha256": "09deca75b552d1a76f8fde6a3a1804dc0cf6df917d01479122b1d764e93eb5d8"
+    },
+    {
+      "name": "blockrun_modal",
+      "descriptionSha256": "eaf957b682bc2a99397f29fd2650064b78607cf6715b6722ea5c6c6ab9e0c251",
+      "definitionSha256": "dbd46b496a55483a4d940b9bc8ab35ed7c00eda391c5f198743621bac429c679"
+    },
+    {
+      "name": "blockrun_models",
+      "descriptionSha256": "b3408b01eb9c08e601ddefe1423d7095f5fcaf8ca78d474108b81b580d0a6602",
+      "definitionSha256": "3a070eb57188aa0b7191b266e6a01f7c551e8470cd37c5819ec73ca939591a4b"
+    },
+    {
+      "name": "blockrun_music",
+      "descriptionSha256": "b71c830a8f004d759408dbd42ca2d1474006bfcf4847451e9b1d9aa6454e8e95",
+      "definitionSha256": "75792c7bad2c6a11bb5d3ae3a445309c141ac7ac0b7d1a3a81c105d1795b8fd7"
+    },
+    {
+      "name": "blockrun_phone",
+      "descriptionSha256": "3a3e6862be1a4dd0f15449f4ea4dac039accf9c1067345b9ffc3e03214b217c8",
+      "definitionSha256": "b4342ce4edbeb1374c4d6852fd34cbc21d8eaf8b775be07d4a9d82785758b1db"
+    },
+    {
+      "name": "blockrun_polymarket",
+      "descriptionSha256": "7c712d399819b0c663e0d44679257847982db70ea337db4ca2f804fbe1574e0f",
+      "definitionSha256": "795236cf50ffae4cdf1b0f9332bb8ae10a4f5d3a753e4e8567cd65397b6a64ec"
+    },
+    {
+      "name": "blockrun_polymarket_read",
+      "descriptionSha256": "d4d356b503f9f6e213d48f08c3e5ee31c204761dfaa903a06f2ce1ab36e64e0e",
+      "definitionSha256": "8f682788ac34080838b0e10915cc8b6fd36f33e3c3ba247fc387541c72b0fd38"
+    },
+    {
+      "name": "blockrun_price",
+      "descriptionSha256": "3c6dcc85a55ca70d966b43b079a0760d118fefb98af07d2b7c0ff53830830d93",
+      "definitionSha256": "89fc3367479150ce3d144982eae295ca265659d4655e47e855f152ba6e4b430f"
+    },
+    {
+      "name": "blockrun_realface",
+      "descriptionSha256": "e07549ec7f8e6e4692547917a2567c604629c983bfe93848f35e85c1347dadbd",
+      "definitionSha256": "47fc1f6a3ac518521f2f834812277b42dc3fb6556ce10fd178f360c12aaa7693"
+    },
+    {
+      "name": "blockrun_rpc",
+      "descriptionSha256": "102af1261255ceafe4b18ed5f62bc9e404800d976ec550ad997b1c049f1b4f1a",
+      "definitionSha256": "0f99f01d9135eec80e4c60b54cbe63f190d5f16d4acf15a476871692eefc6197"
+    },
+    {
+      "name": "blockrun_search",
+      "descriptionSha256": "b5a64a86951edd8ff2239849ef2ca3750ab1457c661fe0930b49cf03f09cf5b5",
+      "definitionSha256": "4ab3ea0076b89eb72f1a22aa1531dfa7d6ab86c617a3927f67462be1847124df"
+    },
+    {
+      "name": "blockrun_speech",
+      "descriptionSha256": "2079d593cfc8fa2cf14e76ab267299fbae27508623d7a7017a0e8b979ac5b970",
+      "definitionSha256": "6dda35be9aa862ac3f0679531c70e783c37d331679fec7db53aa7f81587d2c67"
+    },
+    {
+      "name": "blockrun_surf",
+      "descriptionSha256": "51da152bf01c689158a13fc33c507b26c435b3f77aa61c637e8636ba0744dbed",
+      "definitionSha256": "c67cd64ec5c2edab1c2d390bf2610d3dc3bb18e34e1386120bce1e9dc0400910"
+    },
+    {
+      "name": "blockrun_video",
+      "descriptionSha256": "6d5349478baf0eea6a5675d75901b80431afd0400001692da7d643d5e9794700",
+      "definitionSha256": "18f93578fb67dddc55410461c9dfafea4885e437c5d2f357c7b6b466f877abdb"
+    },
+    {
+      "name": "blockrun_wallet",
+      "descriptionSha256": "f8a12ee07688d535e30f3781ff1005457c599672b65a0bd9f6507ed8d8189313",
+      "definitionSha256": "0c3a5b6c0639e76e7115d6dc23ab02772fb23870ee368838a3be38b3eb6879ae"
+    }
+  ],
+  "surfaceSha256": "c4d864eb6a64cd5d013b975f467224295a5403df1e9db52ae8f7361a6d0ff3a3"
+}

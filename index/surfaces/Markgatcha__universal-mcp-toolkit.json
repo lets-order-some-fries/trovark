@@ -1,0 +1,295 @@
+{
+  "ref": "Markgatcha/universal-mcp-toolkit",
+  "scannedAt": "2026-08-14T19:41:35.252Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.6.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "comment_on_issue",
+      "descriptionSha256": "6a66af7ec5342be0805dd035293e7b8d6883007056d61f904ac2077f73372dec",
+      "definitionSha256": "0f459f0ff4163e7d1ea289ed02bc0b1198460b877f86586763a85960eb50f049"
+    },
+    {
+      "name": "create-page",
+      "descriptionSha256": "cc09c3f7d2be3a88a6c9c4d163636253b62da79783b534a2adf8083a603f62f5",
+      "definitionSha256": "2b97f2afa2cd3aad6b4d17f0df72ad9063bf5820164ab24892a396cf54611b80"
+    },
+    {
+      "name": "create_issue",
+      "descriptionSha256": "849d0a02376461bbf04fba9efdae6a9cd8f183fc954a6cabdc4f50aae861de74",
+      "definitionSha256": "61c9dee9a147c32b5efe3f7f15d28d53184ecd58a8716d2e013378e7002f26c7"
+    },
+    {
+      "name": "create_or_update_file",
+      "descriptionSha256": "69fc7ac12f117df90fba0ea2ddf9d42f4bae12ec839ef7bea652196455829b52",
+      "definitionSha256": "c52352fbe39a41d990374ca9bdb88195ccfa364914b49edb2732b193813f6639"
+    },
+    {
+      "name": "create_pull_request",
+      "descriptionSha256": "59da1a1a5ce5df69e96f4d4a8e88ae04c43d50eb4053925b0123660589850fc3",
+      "definitionSha256": "68e3e013936f4375cbe1976fd86687cc7e0b2ab9784065434b193e045fba77e4"
+    },
+    {
+      "name": "discord_get_guild_members",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "e9f3ec841b9f2ca9bd1ead7279bd4bbf54bc80c6fdab58541129d2869a229f9a"
+    },
+    {
+      "name": "discord_get_messages",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "f88213592228ae4cf16064e38fd2a7b4082f458ff312a2a3cad93a83f94a19cb"
+    },
+    {
+      "name": "discord_list_channels",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "8ffda7cd1daf4059a95fba4c13e23d8c0de3fb89a5a84cf7207bc30be1dcf9a4"
+    },
+    {
+      "name": "discord_list_guilds",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "ed2bade0dce1b19d683b44d4ff7fb57e72c385e85b971c1cc654e4783781ef80"
+    },
+    {
+      "name": "discord_send_message",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "c02309306848da1bd58a433577205dd733ece61665270ac8d612f1abee8d443e"
+    },
+    {
+      "name": "fetch_channel_history",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "4bf6d9a5245788e7885a0826eb7cd3c300b44d1c19ce80c03d9c413648a218dd"
+    },
+    {
+      "name": "get-invoice",
+      "descriptionSha256": "604055fe4d17ce4f8244671196c2e32a03234def6e9cbb40bc946b6cadc3a183",
+      "definitionSha256": "42c53dedf8e8a7a4ad1afd80e7d7567990bbf107ca2aa4c2ae88ecd9e4888fa9"
+    },
+    {
+      "name": "get-key",
+      "descriptionSha256": "082752cc497498803edd5256fad5962d74acc11f9c12ba6751b27c4753ffa385",
+      "definitionSha256": "7d381a21d772d1dbb8a19011fba75e255027d2abc83c32a70c30f02be21aa1c4"
+    },
+    {
+      "name": "get-page",
+      "descriptionSha256": "d67965315b42070ab553d33445e9ce7424ba761190336a2fb6d5b3207066fd44",
+      "definitionSha256": "660094233c10d1b58b9eab4819126c71a0442485ea5ef961ca78d694781e4a6e"
+    },
+    {
+      "name": "get_deployment",
+      "descriptionSha256": "468837cf78069330ca9c19e54bcdb151582b8a945ddb5d1e734ca6f5c00b45b4",
+      "definitionSha256": "9ab60f4351c05bbaa76dd1a841dee54c8ce05de8f0452909afdbdc0a9641f29f"
+    },
+    {
+      "name": "get_file_contents",
+      "descriptionSha256": "62a08ef895bdbe7ae07242dd491ce96354389117ec53e632d49b83980207ded5",
+      "definitionSha256": "f15e8d2a52bc8f7413e1fd627852763dcf95c5ba843ed9800ec4d3cb0b2c0697"
+    },
+    {
+      "name": "get_issue",
+      "descriptionSha256": "de397c118f50781179085cc67ec5fa243f8058a7def3d28b6f6a31771cdf64a3",
+      "definitionSha256": "c8a9dd6224834d10770e8d172e8a18fb20aa48060097f7aa910480fed31eeda3"
+    },
+    {
+      "name": "get_paper",
+      "descriptionSha256": "60e80087198cb21b7240c4e32a8d672eda91525bb9a40d63d16c2d4873d7f15d",
+      "definitionSha256": "8ba6a31bee82c18c5ca7c8313ed68abbd82fe2460ec5289059b550e6bf6036e7"
+    },
+    {
+      "name": "get_pull_request",
+      "descriptionSha256": "ff7e907cb5d3c6d07426bcfba478f761a0071531053d8ab88eeb591ec374771b",
+      "definitionSha256": "28d9b6cd0c0f3951d7f3d4aee42598e6147420a8c468acd47860d1c0e0323c31"
+    },
+    {
+      "name": "gmail_get_message",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "b4b290d9ecc6727482969464a868cc81bbfdbb3b7483c4e985636f48056589d0"
+    },
+    {
+      "name": "gmail_list_messages",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "89586ffa22208ec72a257933f37a40b8e06bad6b75a4b8b23f263b18f1938c61"
+    },
+    {
+      "name": "gmail_mark_read",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "4c2fc30c9744ff97d13225ec610a204decaa080e6783b2f54b21f03559611c60"
+    },
+    {
+      "name": "gmail_search_messages",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "a87111f6a1da9f9a95681b0ec4e14bd71b6542b81fabd33dd59cbdfc62bd36db"
+    },
+    {
+      "name": "gmail_send_email",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "f5a36d2302857025c9e95778a0b9dc3f6bbf800f93642b74aa1763cee08e27a6"
+    },
+    {
+      "name": "inspect-server-info",
+      "descriptionSha256": "535840108790fcbc82d182355738e321317aef7e7770ffe3bc91975de8a5c45f",
+      "definitionSha256": "96f8ccef1588c32fa341d1d70d653ba5f2120bbfabd1b72b064566d6e05e60c7"
+    },
+    {
+      "name": "inspect_container",
+      "descriptionSha256": "2abc2d0d04100cef93fffea0502948439f76b263d197fa4c205f40575caa04ec",
+      "definitionSha256": "7750bc705b9f4cb6c672ec35f20f647c6b67e2c1d003cd066cfa3fd1547c15f1"
+    },
+    {
+      "name": "list-customers",
+      "descriptionSha256": "af3f8d1a94a96b8a5cb1d22c83d807465e28dd4878847eae88f6989a8b74cfb0",
+      "definitionSha256": "78868d2a4fab03b3baa3acb5f2ee7ca36d57365238df2d09180ed3ca133fb906"
+    },
+    {
+      "name": "list-subscriptions",
+      "descriptionSha256": "07ecd5f7880617f579ec94cf06a6300df68b539e9b2aa610fd33b6aecfd2ba24",
+      "definitionSha256": "58264001506fab1ec1d263f48da5e33e7495bf2266184d494d5e60b0beaf8b87"
+    },
+    {
+      "name": "list_channels",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "f8f630620d3dc5fcf1a5f32731a9e270d0db6c4929947faf2a11b1b35238854e"
+    },
+    {
+      "name": "list_commits",
+      "descriptionSha256": "88bdcaf17a73985f43a9f5c8b2f527e878617d09ca17abdb986218b306dfebfd",
+      "definitionSha256": "edb62ad214e7900838be761e39affd20c3276f9a9e35e659c6569b24a47cfd45"
+    },
+    {
+      "name": "list_containers",
+      "descriptionSha256": "4c3a3a67ad4aefe8cd72b22f076b4adc5da8d088b977e8df465fdf878a0cf201",
+      "definitionSha256": "f9acbb5d6f5163534a0a817ecc7ae8b60b21d9b4052ad87a706d966765cbeb45"
+    },
+    {
+      "name": "list_deployments",
+      "descriptionSha256": "8fe909030202ba65f1aa5750a62c7e9f332fce99064b8286c31db60b34df732b",
+      "definitionSha256": "219546dcf69ab888e184b3695b071ad30f60aecbb4d4eb5f02793a91f4ab49da"
+    },
+    {
+      "name": "list_images",
+      "descriptionSha256": "31597cfae5b72016ffd9ee2cffe61f5427144ca1b687fed8fbd88858ba18c126",
+      "definitionSha256": "db388ebb3557bf5eb89dd133b1b78b9519428b21242c7bcb7718f11832e0daf6"
+    },
+    {
+      "name": "list_issues",
+      "descriptionSha256": "4f172824694fa19975576d42c41b1b5090c49cdca4803f9b204954252f632337",
+      "definitionSha256": "b3d0ca4942626320a8c6772262a7048c3b687056ec7d7915e1b3584bd67a567a"
+    },
+    {
+      "name": "list_projects",
+      "descriptionSha256": "567c7f005cde89a5ec3a0d7dfbc1c2b816b9aba374bbbea9f4b98cf8b6ee6939",
+      "definitionSha256": "7123448a016e741bac3b6c2195f1da274f5d48be6ccbf6216188be14851bfee0"
+    },
+    {
+      "name": "list_recent_papers",
+      "descriptionSha256": "0f0a28d38bb9e6c572a0f74e0c56c0eea8740d6083612c9b18e36ca8b59d965f",
+      "definitionSha256": "12e846743e7dc12447c5d6739c9fe792bef38025377dcaa436b2170f7dbce0a6"
+    },
+    {
+      "name": "list_releases",
+      "descriptionSha256": "34673a18ff0223565c1e2b5b29f8c05a517c9c87299626b468fef5437cca1f78",
+      "definitionSha256": "29947a66148641c31e044cc6a4c44210a6bd0a1b78ce25a3e3e72b462c1c8859"
+    },
+    {
+      "name": "list_workflow_runs",
+      "descriptionSha256": "c60553fc0e07367b5be45a307195002c72125c9698fb8fc0eb9a9d3dc2737720",
+      "definitionSha256": "aa2cf9df440edbd45af9c6abaa0c9bb81e343dcc75c316e01a3226a61e1af07c"
+    },
+    {
+      "name": "merge_pull_request",
+      "descriptionSha256": "bfee0095bf659163a0ccf924ea4fc9f0d1af4c9d3f8c166c7d8fb4b403dbd3ce",
+      "definitionSha256": "fccdb8c92e438fe5c3eff2d29c71162ec53bcdc35153c5cd6ad848e15cfefde5"
+    },
+    {
+      "name": "post_message",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "4280882d8539a22145836d3bb2559aa5ced49750dc020e7db68a7833d63c4b91"
+    },
+    {
+      "name": "search-pages",
+      "descriptionSha256": "6e78a7a371b71d07a7a2a3a6c0103a85319e3fabd7a2ca06ec020a1e216c2379",
+      "definitionSha256": "2ca173c83520d9a5894623850ddaeabdedcfdd56047480aaf188b01eb4ab4325"
+    },
+    {
+      "name": "search_issues",
+      "descriptionSha256": "f8cadef0e790bdd46b7cb18d19c124a39666aebd3cc0dd3ba194ddf036dffb4d",
+      "definitionSha256": "6566b2a642864aa1c47d0fb08f78ed8f19b60838ba19a500c2c57fb67dd9aa2b"
+    },
+    {
+      "name": "search_papers",
+      "descriptionSha256": "6dfe3a96e00a31dda3e945f46914c0145c0ddc8a56c80b27bd42f3459fc6688a",
+      "definitionSha256": "b0c4cba38a569021e916e0b81dc10d892788c512551f23da55036fc41ee2f40c"
+    },
+    {
+      "name": "search_repositories",
+      "descriptionSha256": "98020cd71e74a9773982cc026a1a2244ba3d5d0c6cd963d161b780fe71ac6404",
+      "definitionSha256": "755c0a0a069d736bd2dd5bc24bac74c6f545f71253a5c3fab441f38d48e5caf2"
+    },
+    {
+      "name": "set-key",
+      "descriptionSha256": "e9157c8876b00061880811a49876c6578fd0af1cb54cf0e5823726396975dca0",
+      "definitionSha256": "7889f6775950caea772aca6f447f911700a5e59c98241eb122693daa4e0678f8"
+    },
+    {
+      "name": "transition_issue",
+      "descriptionSha256": "55deff3388fac89da06d68ac77d10edabb30e1c22fefc05bb5e21ad2e1b86602",
+      "definitionSha256": "7e1dfa5a358024f2e7369a6111d021ffd109303687139e26b31486d74f85c501"
+    },
+    {
+      "name": "trello_archive_card",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "3f6912bee6ee46e1c98331c33ec57f4ac44283434d931e1230977a5006c22abc"
+    },
+    {
+      "name": "trello_create_card",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "3687b6e52a94e159a7ce2a7e82f9f58c98fd5e0d49fffbac60a49059c9858a12"
+    },
+    {
+      "name": "trello_list_boards",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "b2df22fd21e9aeb3bdb4f50ec72336ed6456d261acaf50d7c4befc3a3e063097"
+    },
+    {
+      "name": "trello_list_cards",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "f1c8b3c05c4a32176baa09f197ef41a3d8b6840c674f59656e4d056429012d70"
+    },
+    {
+      "name": "trello_list_lists",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "06dd11433a09bbc906ce9c4d7515d980d29feaa660837300e1e336798e5e8dc4"
+    },
+    {
+      "name": "trello_update_card",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "c02567f200bc5251b7c2ed95ae7590614a7f592780a6b6ce12d0d5252504de90"
+    },
+    {
+      "name": "twilio_get_message",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "d9cd56c1ccbba5262f81e08340134e56e4da9fe96e8b1b25992757d9dcfa4965"
+    },
+    {
+      "name": "twilio_list_calls",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "e1cc3b7b23a371c5343ca3df8ca2c9df2fa4ec7a5e2aad2c9dcf2fdefe7956a6"
+    },
+    {
+      "name": "twilio_list_messages",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "aa99807b9dff3089e7ac2ae0b8fc84867b4e9f8edc37d1096fb732ef6a722293"
+    },
+    {
+      "name": "twilio_make_call",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "fdddab2377b7d197a82306b76eb2db0e994b2d7faa9e62de83ab5e45988ddfc9"
+    },
+    {
+      "name": "twilio_send_sms",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "4802f9eff8c0220815d15b187cde62c2e6c4314daa41d73148e70a475e4226d1"
+    }
+  ],
+  "surfaceSha256": "88eba8b2de3746ff89af03f49c21343fe388bcdc8c8b95ace0c6174dfd405fb4"
+}

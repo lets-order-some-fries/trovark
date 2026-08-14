@@ -1,0 +1,30 @@
+{
+  "ref": "bch1212/agentfetch-mcp",
+  "scannedAt": "2026-08-14T19:41:35.252Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.6.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "estimate_tokens",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "e03734ffe2224c40ae753f471215b1b6fc958964322db5c56cc731a753c81f5a"
+    },
+    {
+      "name": "fetch_multiple",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "4a80e5f1bf52623f17e47993993c5a075392ab579acbe797339a35e9f169bf95"
+    },
+    {
+      "name": "fetch_url",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "4e5fc9b254704389cfeca8aea05d3a47ad3a5fd47235940a03008b855d3e24c9"
+    },
+    {
+      "name": "search_and_fetch",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "e6386e134ca2a3e1a13db255bdf15e83d2eb77c3b629f8e68d4584ffb829e4a1"
+    }
+  ],
+  "surfaceSha256": "9949e69656ef3f0e0adb12a66a8e629c850effb22e0aa02dd52e4708302ece00"
+}

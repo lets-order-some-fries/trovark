@@ -1,0 +1,25 @@
+{
+  "ref": "tadas-github/a2asearch-mcp",
+  "scannedAt": "2026-08-14T19:41:35.252Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.6.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "get_agent",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "5733a2894575950ba87c40c25ee21678ca746188be8ba10976ae610920f4a736"
+    },
+    {
+      "name": "list_agents",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "4dd4e2918529b1796602f7c12d20c87a7887a48f40da8a3e43e5f16a0d29a39f"
+    },
+    {
+      "name": "search_agents",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "34d428d0a37ca221f0c007e1254fa07bdf05865d64d6421c3b400754e052bea3"
+    }
+  ],
+  "surfaceSha256": "7eb9c7a2aad74925196309299ea7812464e3ce69d4febfc692c9900229a1655a"
+}

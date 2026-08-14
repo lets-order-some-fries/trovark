@@ -1,0 +1,35 @@
+{
+  "ref": "leonardoca1/aesthetics-wiki-mcp",
+  "scannedAt": "2026-08-14T19:41:35.252Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.6.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "get_aesthetic",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "78f64d6692b76d86492e4c1c812dbb94778d912d30e0e57399162cec8cf5061b"
+    },
+    {
+      "name": "get_aesthetic_images",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "ceea77969d1042ecb446b1447790b391d8ca7c6128bd6533e35485f9c42de354"
+    },
+    {
+      "name": "list_related",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "62e3af996cdc9d24696f77ec07cb01d8684330c771ee910351e88a2870490257"
+    },
+    {
+      "name": "random_aesthetic",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "8914aec62f535e1e11ee605676220cc83d5225943bcd501817c374077e615b2e"
+    },
+    {
+      "name": "search_aesthetic",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "fb3d2b2b80b00f786e1f958fd49c61bdd5bf5aa55c1c4a8fa7e2efd42baad62a"
+    }
+  ],
+  "surfaceSha256": "70d5b1a0d15d630cf47ef5ac4d8d7052af3d0e4def8094f4b2af7c803b122751"
+}

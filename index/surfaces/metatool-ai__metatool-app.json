@@ -1,0 +1,220 @@
+{
+  "ref": "metatool-ai/metatool-app",
+  "scannedAt": "2026-08-14T19:41:35.252Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.6.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "metamcp_bulk_import_mcp_servers",
+      "descriptionSha256": "987b1c8e5f8d109be2ab1a502da643d876357c89c068bde666a304228f1d03b0",
+      "definitionSha256": "1b078f5b9bbbb72e8126ba7f7a68b258fc413bb42c7d81d804b303c425a136ce"
+    },
+    {
+      "name": "metamcp_clear_logs",
+      "descriptionSha256": "e06a4b83abf30dc2915d5d904055014eec8e38516414558b17a4991c6f26bf81",
+      "definitionSha256": "f2dff21ccc18ecd8ccf9d54d076fc3c07b7b3262a954f68532111084adb774ba"
+    },
+    {
+      "name": "metamcp_create_api_key",
+      "descriptionSha256": "d574ff3cf482fbb025ecfbfa3071740f8c95102c80d6ca058498b27b4445584d",
+      "definitionSha256": "addc9703cbcf2551115b5a90e6b845657da738ec7b925035e9e24fd003d6f9ca"
+    },
+    {
+      "name": "metamcp_create_endpoint",
+      "descriptionSha256": "fa1b9af72f3c0763fa108fb64152e4d74d192247e1be7eeb82e2f7492f248f3b",
+      "definitionSha256": "729c7b751ff3b40a23e65619ec0fa6840ed30c9975c0307893b25c37d7ea53ad"
+    },
+    {
+      "name": "metamcp_create_mcp_server",
+      "descriptionSha256": "03cda72a5a72da9b9108ea8201992c9d17c57396b05e6d44c167c01662d9893b",
+      "definitionSha256": "deb34ac56d1310904fb52cff3dbf1c176e36efdff20e49a3bf67e3de76e2193c"
+    },
+    {
+      "name": "metamcp_create_namespace",
+      "descriptionSha256": "8568a96527e7e4376b7fc6a156e7799c49482c173c4f57f6a3223470c642cfa4",
+      "definitionSha256": "55c9fe1bedb2af212dc76fa9cd87cadf3f3606eb53176ad21d772e40a3fe76ae"
+    },
+    {
+      "name": "metamcp_delete_api_key",
+      "descriptionSha256": "cc08ae5963dc6f824d0f91992475bc523c8b555cb8453aa63e913d77d30abe3d",
+      "definitionSha256": "c73bd2ebb9fef7fecd5c330dd199f46111f535418f823a40e88a617bf358fadb"
+    },
+    {
+      "name": "metamcp_delete_endpoint",
+      "descriptionSha256": "c91de90a0f23534eb4f12b0d18b4e6e335f994d3f5a78a6c85b823821dd96ea8",
+      "definitionSha256": "01d962118e6099ee7d8935841b889a1cd47a98af96ca82b8f9062350e6760692"
+    },
+    {
+      "name": "metamcp_delete_mcp_server",
+      "descriptionSha256": "ca4ad17fd2a7154c2621bdeac6897025eead7e0be7e6bc66919d5dfcd6729d6a",
+      "definitionSha256": "7f7f0fb5b04ce3d0c8cda8b798468f54d34c8ef1e25bdbdf85cd18fa42ba4938"
+    },
+    {
+      "name": "metamcp_delete_namespace",
+      "descriptionSha256": "1d76782999f95fe497766865c1d86101a6ec087d81bbc7a5992cb40b3aa11596",
+      "definitionSha256": "a302fe9b12ab7809480aa56a9316dacd438e931e83f8fdfdc7bd4171c7416dd2"
+    },
+    {
+      "name": "metamcp_get_all_configs",
+      "descriptionSha256": "a3849d7d5e63d4eab305eda893c47096f1df2a51e227aa8fa0a758cd841709e2",
+      "definitionSha256": "8e7859540b8f275f061f14918813b296ec77d9a76f527de758561a47158559f6"
+    },
+    {
+      "name": "metamcp_get_endpoint",
+      "descriptionSha256": "36deee66da3e73ca1250c1bd41ff2fa1b1055e084ee9847e1935ceaa4b47ec74",
+      "definitionSha256": "7a75e357d976ef621c99b273202aa985d45536d311e4774ddb4b68eeb0ab89d6"
+    },
+    {
+      "name": "metamcp_get_logs",
+      "descriptionSha256": "08e3b578f1583efa3d1e41f6e530857acf7b728061f6d232cb5af165207c9628",
+      "definitionSha256": "df2518afd80498b3c81459b64b3ebdaf9b9646a6e350e637c595c6d6afcf1db5"
+    },
+    {
+      "name": "metamcp_get_mcp_server",
+      "descriptionSha256": "f0f68470cc3eb89074d87e7a3227640bb6aaca7f62b6f11a6a07c79567b86bd2",
+      "definitionSha256": "01b4e7b3f78d2f00a0316b33e60de056ffc00e3563055af2f7b2d6d81ec6feae"
+    },
+    {
+      "name": "metamcp_get_namespace",
+      "descriptionSha256": "37d98de9ba764b60ea9b85c2e9b7224bf116dc427d16346c6e5e51b5a26e4b28",
+      "definitionSha256": "489418c9296beb7b7718975a7e06a9711a69f2c93eca1fca8f5b52814e374018"
+    },
+    {
+      "name": "metamcp_get_namespace_tools",
+      "descriptionSha256": "27dc84a49fb99cf37dc7698559a9d73719cf27f95fd0cbb4f9f36963e09a4a68",
+      "definitionSha256": "a6d5848810a30db69d355bdc0f71b3b2ea7e49266c9fa79c504eea3b2c7194d9"
+    },
+    {
+      "name": "metamcp_get_oauth_session",
+      "descriptionSha256": "88a5db2313aa3e55b1e1ad238e7d1e1647939121fc179e5072f4f882c9f22ccf",
+      "definitionSha256": "46d282b8aa028e46cab1f44047fbc8b8385a9e7d67eb787d0cec97f94dc1ae08"
+    },
+    {
+      "name": "metamcp_get_tools_by_mcp_server",
+      "descriptionSha256": "31fb9f312c5f3387fce03d91bba29c2c8446e76dea23257c7c0412574ebc264f",
+      "definitionSha256": "88ba6c132e254fa9a9e025e0b6beeeeb2e6e6663efe55aa80dc5d100a2efeb10"
+    },
+    {
+      "name": "metamcp_list_api_keys",
+      "descriptionSha256": "522583018153903c7cae829a5f68496bf90e9ab6f83b9f7906ea2553bc8a8735",
+      "definitionSha256": "cfee6c089f0fe2f4ed473c3e8662cdb35f688439e278470a332242f32a3c4a35"
+    },
+    {
+      "name": "metamcp_list_endpoints",
+      "descriptionSha256": "d505693c397817c6fce6cc100605b5a80c5762697d5c6aac5dce67270976f694",
+      "definitionSha256": "6871874a85bf14529de5a25d8ac929e06f20dbd457dd87ffbd2a4794d31009a8"
+    },
+    {
+      "name": "metamcp_list_mcp_servers",
+      "descriptionSha256": "765f4283e9afdbf289bd4ab595b1a31af6eab660e0c122eae3c08f4e77a1066f",
+      "definitionSha256": "e54599e680936e9827f3941e7a57df760fd84388537da2d4d2237ad7d6c30e59"
+    },
+    {
+      "name": "metamcp_list_namespaces",
+      "descriptionSha256": "8ace59f2f083c580711113cf4c0c7267674147f1534f3d1ec8b265f1b0435384",
+      "definitionSha256": "fe34d194c72cecc25f1a324dc5f848d42c138a612f97948479406b0c212a391b"
+    },
+    {
+      "name": "metamcp_refresh_namespace_tools",
+      "descriptionSha256": "6667978f6e363ab5ff59b78d29acff61220262ae598829c886bf4f753e38eb48",
+      "definitionSha256": "ecbf9e06000925570f4119e26fc6934fbfd80d44bbcd6b536f31e977de203f41"
+    },
+    {
+      "name": "metamcp_save_tools",
+      "descriptionSha256": "518ad7bd98d564951aaad27dee18746885f67b558a94cf250722b0e9a0c7a629",
+      "definitionSha256": "8716e7b193484008e6defaf6e8cbce400a2bf9ba91c335abee436c8768240d68"
+    },
+    {
+      "name": "metamcp_set_basic_auth_disabled",
+      "descriptionSha256": "2da80f121ef64690001c0fd0626f09d7367f02f85f4cdf5ff6f9e3eeaf62e218",
+      "definitionSha256": "041c5f1d7cdf581b2084c90f82ad3aae07dd080c8683d4e9a6bbd81e602904e5"
+    },
+    {
+      "name": "metamcp_set_config",
+      "descriptionSha256": "ef07b394e8d75d0fcf8b593aa144b5f88933588bf0e53569ca800f1cac76bd7f",
+      "definitionSha256": "f5a74ce09ae4e9132b0e361be609ca75e765a1ee33d3e7cb92bd58007156870f"
+    },
+    {
+      "name": "metamcp_set_mcp_max_attempts",
+      "descriptionSha256": "6b67cbdbd3eccf0565c16e094889480dcde75a5387599f45f9010218ae983dd0",
+      "definitionSha256": "15bca1d2b1bb7462438a57e8c0b3836c1e3e46c36ad2d038a4f233cbd0258ef8"
+    },
+    {
+      "name": "metamcp_set_mcp_max_total_timeout",
+      "descriptionSha256": "4c9c27a494aebc6a7c0b02f00bdf3fa43ba54a7562fb01594334f5ddb664d276",
+      "definitionSha256": "79e78478b6c394719348758a8c9511e2c98ff552940932d7fbf33302ff06a363"
+    },
+    {
+      "name": "metamcp_set_mcp_reset_timeout_on_progress",
+      "descriptionSha256": "213b55252097f69fa6de77859374b4c36117eb14dae75b760ab68c254dc6797b",
+      "definitionSha256": "7465d9332cbd73a48bb5244d08ad3592301503c89c84b8371dbe392efec3aed7"
+    },
+    {
+      "name": "metamcp_set_mcp_timeout",
+      "descriptionSha256": "be03f536492421269bd86e9d0295059aa3516a1cb6c6df69abd8a4a126d9b25b",
+      "definitionSha256": "e05f0c1b0242d11ce9f32e18f6351b97689cb5e7cbd05b747c8aebbdaa54d2bc"
+    },
+    {
+      "name": "metamcp_set_session_lifetime",
+      "descriptionSha256": "6b976b286098c54dc2688e3f14c9e23494c9747a69636d9d557272f2f06db743",
+      "definitionSha256": "7c8f9a6c8e5fc5f655a242a87a2c1521cd0711996fb4f62e8549a2ad47bd3ab4"
+    },
+    {
+      "name": "metamcp_set_signup_disabled",
+      "descriptionSha256": "afddf9803e62f4983fa203595f85a2fd125fae10a2b4bd3774c8330bd41d820f",
+      "definitionSha256": "ab4d10a710a98e02042318c9cca3d1780cdf0f7eaf7cf374f60d9efa4a80b1ba"
+    },
+    {
+      "name": "metamcp_set_sso_signup_disabled",
+      "descriptionSha256": "81ed4d97416070c7f844aeb215f7416f992ffb427a50cf93ffd35b814ec7d8b5",
+      "definitionSha256": "da7c031f96e961c54aa0e02f1a3a6c8365e49c6bb253cc7adb5fa0b105ffa368"
+    },
+    {
+      "name": "metamcp_sync_tools",
+      "descriptionSha256": "1f1ff186578e0a60dbc2a2de5699f665826e8467b58c4a6017713f01c708315e",
+      "definitionSha256": "fc8e98f4c9792670949b7643b78bd548c35e038e37cfa90413cfdc31feeaa8ef"
+    },
+    {
+      "name": "metamcp_update_api_key",
+      "descriptionSha256": "cb057fb14c8cef005caabf0f10790d81ea4f0444e2a65830a35f6db39c45c936",
+      "definitionSha256": "a2f9ae3fcf39cdb311197698a1cf4925924f629d6ce864a74103cc4471217abc"
+    },
+    {
+      "name": "metamcp_update_endpoint",
+      "descriptionSha256": "f0917d7936513675ad15b3b5def5e2285f936d1ccda38623f50c48535ac24b36",
+      "definitionSha256": "9f5189a44bb1146f6ca1732adaa78e430935dfb040ea0fe8c534cbcb06dd239d"
+    },
+    {
+      "name": "metamcp_update_mcp_server",
+      "descriptionSha256": "7182694fa54122e22d7a0b354fce2d49f4ffb92401a1838550faa710b6435ff1",
+      "definitionSha256": "f6eb6034e3883a4eb73353c7a1f2377a7358983e88208fd0dffd370174e3d4f6"
+    },
+    {
+      "name": "metamcp_update_namespace",
+      "descriptionSha256": "fb5233ad283b2273a3b7f4055b624e6dd68ed908bb26c4748ec061a37a252dec",
+      "definitionSha256": "7aa18d5636fbd26fac6bb7308885b05dd16be3e6a4394151b543d22169678899"
+    },
+    {
+      "name": "metamcp_update_namespace_server_status",
+      "descriptionSha256": "170a6a7ca32059aff51757d8ac8c146700d812adcd29d38a1019a526702f872c",
+      "definitionSha256": "3964bb66952235bbc1a9cade2a9cb4d37b49d7f9e361de0491b2ba30ef564f23"
+    },
+    {
+      "name": "metamcp_update_namespace_tool_overrides",
+      "descriptionSha256": "54b391e898f5785d1b24e4d930753a9178c222398454df6fa74f206e0780aadb",
+      "definitionSha256": "33ff54aeea53a91ed850d9707c58ed335a06a03f5eddf29a836ba8c5e0e78f1e"
+    },
+    {
+      "name": "metamcp_update_namespace_tool_status",
+      "descriptionSha256": "184adf92c042a09f13e7145933aa2041d105e6e49d1d476992b8af2917acea6c",
+      "definitionSha256": "cb8b4dabffa18364e3241edb81b66b0167304db6cf8d898122a642e35fc71081"
+    },
+    {
+      "name": "metamcp_upsert_oauth_session",
+      "descriptionSha256": "88f7eb306c1cbbf2ffa61d6a817a166a2e2de766a4c33ba3b31a19f2994d94d5",
+      "definitionSha256": "e95160f38cb270a25d678c3b6828f55ef093eb5c9a675bff36024c0ee5c3dcf6"
+    }
+  ],
+  "surfaceSha256": "d7dbc57df90fdb12a4e7b8ce932c7d9264f49511d2579cc0a2b5eb8b58093a47"
+}

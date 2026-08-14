@@ -1,0 +1,25 @@
+{
+  "ref": "drakonkat/wizzy-mcp-tmdb",
+  "scannedAt": "2026-08-14T19:41:35.252Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.6.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "movie_images",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "0908cb29ed8256a148c5beb1b8f3668bf5e9238cd7d5d4297a1f6e581a7f86b7"
+    },
+    {
+      "name": "movie_lists",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "046f0952cf8e3e20a7310f4b77d90b5dc0ccbda5119312d958f22b7f1e18b0c2"
+    },
+    {
+      "name": "person_details",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "1faf6b6a1810e82caca7433368a483161026a5dc689343fe9be33c61b6285098"
+    }
+  ],
+  "surfaceSha256": "a8b435e781ece41bd58f1943fd511e97269d010c7259bc5fea36b8768a8a47fc"
+}

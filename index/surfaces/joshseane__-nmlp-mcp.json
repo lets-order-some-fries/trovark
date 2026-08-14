@@ -1,0 +1,55 @@
+{
+  "ref": "joshseane/-nmlp-mcp",
+  "scannedAt": "2026-08-14T19:41:35.252Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.6.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "nmlp_check_coverage",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "06823cf8708af125185df17613ba0dd09a2e52bdd0df9988c19c74cb019b26f0"
+    },
+    {
+      "name": "nmlp_get_archive",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "b709ec100473d72a20d5861194d1097e1445f3cc42a180c25bcf5dcfe0572337"
+    },
+    {
+      "name": "nmlp_get_business_card",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "29f69bd52544ba8fc638a10a8265e49b8b79de0056c3f3adc3e067f61f06569b"
+    },
+    {
+      "name": "nmlp_get_donation_options",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "3ecbdd2c579946fa2ef50cd558a9b380411f2d60950b81a567917d8006c2a03f"
+    },
+    {
+      "name": "nmlp_get_knowledge",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "0c715098a54d5e05158d616cd829476875236b55de4759d518cd66eeee3d1f76"
+    },
+    {
+      "name": "nmlp_get_pillar_guides",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "2404c9aa9f477277625d634b638c4a5c22a331b54eefdbd303fa635bfd51002d"
+    },
+    {
+      "name": "nmlp_identify_first_edition",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "ebe34d029eddea726189545f97d38097fcc51e63aba08a6897c709dbbd42c322"
+    },
+    {
+      "name": "nmlp_schedule_pickup",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "317e7e02789d5c69a67de3c00b3d52e683eeea7f66bb7b2c2f856cf434fa1075"
+    },
+    {
+      "name": "nmlp_search_qa",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "170fa53d3e4cf896b0af504bf82394df8bcc35fb6af400b838bb495e7fbd7f7a"
+    }
+  ],
+  "surfaceSha256": "573963e2572d78fc247fd1495c049ffbf304717a1f16dfcf0e87a0fc8df0c25a"
+}

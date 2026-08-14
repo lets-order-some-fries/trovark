@@ -1,0 +1,25 @@
+{
+  "ref": "bgaze/snapstack-server",
+  "scannedAt": "2026-08-14T19:41:35.252Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.6.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "clear_screenshots",
+      "descriptionSha256": "6a86773f46ac9000359be23e4c0b34b3f6514c084753b496a047f7b2c7f2c699",
+      "definitionSha256": "41e373a2d62bc8fcfc71a48f43b9d34e0bf1075569b427485cdf9cc2ed45c9bb"
+    },
+    {
+      "name": "count_screenshots",
+      "descriptionSha256": "06efffc82641f3152022aaa58cfd018df5ce779309c456d3b1ac41d0ed3ee122",
+      "definitionSha256": "01f6277271f39bcf523e80dca74301c506bef890bee310d67f29983fe20a93fd"
+    },
+    {
+      "name": "get_screenshots",
+      "descriptionSha256": "a15463f10731a6f56099b3f59d195f1328e162a6cea2271a11f10256a54e1799",
+      "definitionSha256": "908629c35c8ac9249d03aecaca4999150a334a25db0ebe40239208abb2464355"
+    }
+  ],
+  "surfaceSha256": "b51194878d8114ae81988555dd388ca9a6d4e770cb13815dbe00247c8253e226"
+}

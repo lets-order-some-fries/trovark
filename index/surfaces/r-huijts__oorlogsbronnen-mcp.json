@@ -1,0 +1,15 @@
+{
+  "ref": "r-huijts/oorlogsbronnen-mcp",
+  "scannedAt": "2026-08-14T19:41:35.252Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.6.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "search_ww2_nl_archives",
+      "descriptionSha256": "7c4102dfb96e612ef3dc60c6c44574b20984194566c5604da61d86b389f23737",
+      "definitionSha256": "1f9650ad157116c7642866e04eed35b2c813cd5a457b5463492b00e81126f33a"
+    }
+  ],
+  "surfaceSha256": "54cb056f0d468d6f9dc9b4b3d9555672715b7b4795161390f783b91ac4336f0c"
+}

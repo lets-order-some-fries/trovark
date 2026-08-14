@@ -1,0 +1,45 @@
+{
+  "ref": "brutalzinn/simple-mcp-selenium",
+  "scannedAt": "2026-08-14T19:41:35.252Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.6.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "click_element",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "062dd1226a408ee1c19c6a2d9ca7ab8641fb991e1568a888fd578a496eb1b541"
+    },
+    {
+      "name": "get_location",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "efd07b6032956c287f40e17900849892b3c33b0aab74882dcf1d2d5d1dfd1251"
+    },
+    {
+      "name": "list_browsers",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "6561d47476cab4d41506f4bfdf208d7176de2436d716d6f62756d2a46d70a52c"
+    },
+    {
+      "name": "navigate_to",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "3569604fa0cb6b9056d585b3611113dd3a004d77135dec0b60ef388bff4eb337"
+    },
+    {
+      "name": "open_browser",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "80041e9f4358d43be5ac058e55258f07da888fd3a5aade112b8f85a2cbd1972d"
+    },
+    {
+      "name": "set_location",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "9b2021ac5b2c857c1486075ac78876fd36e7688c7313b99232b79d8107f3dc72"
+    },
+    {
+      "name": "type_text",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "17e43a1a745de5c639f8f2c390cce172cd4dd3552035d16a5eb7e030356197ea"
+    }
+  ],
+  "surfaceSha256": "dd35b738c645c133f0d450c421045e35f7956489fd58bb70449d1b88210c4e18"
+}

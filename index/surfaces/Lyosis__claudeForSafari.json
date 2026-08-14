@@ -1,0 +1,60 @@
+{
+  "ref": "Lyosis/claudeForSafari",
+  "scannedAt": "2026-08-14T19:41:35.252Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.6.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "safari_click",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "a4483262d799bfa77a70b2f11ac8f2e6de471c1bb1debdeaddb99e152f090513"
+    },
+    {
+      "name": "safari_find",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "8bcc8ddbf74d02953eec0a6dea8fe6123f7affdb764d78a7c9f8f195140698b7"
+    },
+    {
+      "name": "safari_form_input",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "8c7d46daaa38babf3fd6254a9b2b5067ec8931169a14ebc22c4588a51b6b22eb"
+    },
+    {
+      "name": "safari_get_page_text",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "884cb527d16300346721fec4e62603ce02eb9362edd9719f6bc03f4083254478"
+    },
+    {
+      "name": "safari_javascript",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "e9b33848fbf81fd49f1b3a867f9166d7f47a07d5e57c4f44c1411ac834898772"
+    },
+    {
+      "name": "safari_list_profiles",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "a2e09ec5c6ebc17492d8427f9c9f2f2f0a798399fc8edddd93f263ae8374efee"
+    },
+    {
+      "name": "safari_navigate",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "35b0bcf25503cb121295b1e2c9a3c4d3a315244f6bd0854b2a87957f5842499c"
+    },
+    {
+      "name": "safari_read_page",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "e9e67d61dbc7078255ae0a25587dc7eabc32a8d29893ae0ca61b93a0a7cdbca7"
+    },
+    {
+      "name": "safari_scroll",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "d4bd7ced38f940a9bc5ee3d1c2a8683d85429d5ed6e38d0a0f66350dd3f6bf5f"
+    },
+    {
+      "name": "safari_tabs_list",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "60867965a88f661b46dfe9a7f03fd97814635a877e132e289d1ec1ddd26d32f2"
+    }
+  ],
+  "surfaceSha256": "e48df70f361e5e31533cfa797b7dc4046eb8369f71befad6c98fd5a2006adaf0"
+}

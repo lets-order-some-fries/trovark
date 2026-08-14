@@ -1,0 +1,30 @@
+{
+  "ref": "longevity-genie/synergy-age-mcp",
+  "scannedAt": "2026-08-14T19:41:35.252Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.6.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "db_query",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "9adb30eb9bae85763e0c31873d21464c6c42ab7dc3e8089aee8a2461a1e8c18b"
+    },
+    {
+      "name": "example_queries",
+      "descriptionSha256": "59dd5be094e5d21e596eb1ec32253e985ff921d05502d4958949d42191e4fdc1",
+      "definitionSha256": "0c41c447cb2bad1f91658e49bb27c84929531130da3b752b4f1a83cec1d6a31f"
+    },
+    {
+      "name": "get_example_queries",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "264911404ea222060619319eba1b9629a91373c0e538c592e04194ea70de2a33"
+    },
+    {
+      "name": "get_schema_info",
+      "descriptionSha256": "1d2d7c3ba3e57c835044a96d551dcfd3ad9d60fae596be024bd88cfa5443374b",
+      "definitionSha256": "453b2c36357f9da9e4b2e3b1708548b70b3282db8e8974250fdd42d77a066e05"
+    }
+  ],
+  "surfaceSha256": "ce9ffdfaa672be1e90266523e395d86e9ae5fc40586de82d47e3ee42056bc89a"
+}

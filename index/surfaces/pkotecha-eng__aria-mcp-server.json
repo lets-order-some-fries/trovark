@@ -1,0 +1,25 @@
+{
+  "ref": "pkotecha-eng/aria-mcp-server",
+  "scannedAt": "2026-08-14T19:41:35.252Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.6.0",
+  "source": "readme-catalog",
+  "tools": [
+    {
+      "name": "search_clinical_trials",
+      "descriptionSha256": "7eeb82e7afea07bc4379d9772efbd9337aa42b4c0899d3a3d2c581bf5ccc40a5",
+      "definitionSha256": "1c5bc2b164860a171a967407cce35ef82cbbb23783129cd51c8476228b55a657"
+    },
+    {
+      "name": "search_isrctn",
+      "descriptionSha256": "2d6d0e36c7f0172a414fa854b292acb9f6870c73bbe520857476a0becc724202",
+      "definitionSha256": "d91a36a856c850f5bfab60b727f8aa5c7ade89662471d0a0d232a064c6caf470"
+    },
+    {
+      "name": "search_pubmed",
+      "descriptionSha256": "e67b86704a26a197e62e8497f088aa07b9d928e14ec0f9be1b9b1400de875990",
+      "definitionSha256": "98572c942430de85963155727eddfdcda8d22a096bb59924d0cb6f11befc355f"
+    }
+  ],
+  "surfaceSha256": "c6eefd308e02bc60b29bfba9f8dd3bbc3d20dd603f9109a9167b70cd905c63ac"
+}

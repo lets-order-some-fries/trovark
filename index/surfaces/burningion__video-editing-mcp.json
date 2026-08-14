@@ -1,0 +1,65 @@
+{
+  "ref": "burningion/video-editing-mcp",
+  "scannedAt": "2026-08-14T19:41:35.252Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.6.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "add-video",
+      "descriptionSha256": "15aa8213eb1cc4580819e03554fd6ccc4d18902d1d2daf397b223a983d449f54",
+      "definitionSha256": "66d1695c6bda9ec1635b13fd45be8eb5c35af4a6afd460169e2c346459eaa111"
+    },
+    {
+      "name": "create-video-bar-chart-from-two-axis-data",
+      "descriptionSha256": "e031d809a14be8816555f5e75007adfadd928ea2f711d3a10ecae6c8138077da",
+      "definitionSha256": "dbe2ac3fcf9a06ab05645573258dad943120c927db2c65bbf15385d2e6835d51"
+    },
+    {
+      "name": "create-video-line-chart-from-two-axis-data",
+      "descriptionSha256": "1f531b7213e70a200ab6cfdf15d26103af4bf4d0c86fcbe906da21403612440a",
+      "definitionSha256": "7f3b7192984c7e76b9c5783a3839c282a39249c252778d55ad6c8ab46f2a9891"
+    },
+    {
+      "name": "create-videojungle-project",
+      "descriptionSha256": "7ad1cecd8f3c87a54bf5b5d984f5c5c13ad3e489aa959d11e453bcbd476005c1",
+      "definitionSha256": "6569ca54ba18101d1b5b74955f4ecb3bf831aa8c42b43f31383b5d5cacf1d227"
+    },
+    {
+      "name": "edit-locally",
+      "descriptionSha256": "2af4bfa3db797a42df45d54e31a6398f65cd12b5fda8171202e411ab72511e3c",
+      "definitionSha256": "7d68f051b8c99142c386aca61be62504291a1f3aa5b8121aa928f5f0d504bd35"
+    },
+    {
+      "name": "generate-edit-from-single-video",
+      "descriptionSha256": "1f31f5b8d443baebd4e2a08c7e6bb528281cf67b490062eb2887960367458b15",
+      "definitionSha256": "d541dd178fa2db31c3ebbf3563e8847817acf665d358554025ed4cf128a4463f"
+    },
+    {
+      "name": "generate-edit-from-videos",
+      "descriptionSha256": "cff8f8aea0bc0a0ebcf7e8350a1f89f01750d67eae8c6ed79aff5ab5f75f92b5",
+      "definitionSha256": "626830b4d0368d711c0356a617dd3adde7faba35dbe0537c814b78084d5a59dc"
+    },
+    {
+      "name": "get-project-assets",
+      "descriptionSha256": "1ef12c4c6d0409097f3c94c7fa497282ade4b30607b338d233f2c623dac1d4bb",
+      "definitionSha256": "7358057a8690fd1d9806c6aa55c67a4b6a5fe9a62f68366886fbc1e8455276f1"
+    },
+    {
+      "name": "search-local-videos",
+      "descriptionSha256": "40c7accce04dec5f03ee803d487c73e4303b4e374e04bdaf70cfe0dad1f8f572",
+      "definitionSha256": "025da700e93953214481f914386a1df622d29c57acfc6dce5b295ac83642f65d"
+    },
+    {
+      "name": "search-remote-videos",
+      "descriptionSha256": "d5f6790ac25096ca745df4680dcb03d0c1c9e1121b7293afdcaa6b08b11e7fd3",
+      "definitionSha256": "6c48ed1abeda47dd48b92c730dce542591496235f94a51ae410a9c92dafeb3f9"
+    },
+    {
+      "name": "update-video-edit",
+      "descriptionSha256": "e5c86831296f7dda43c8d0792b2757734a9db9dab3cf7285036a0362de86026e",
+      "definitionSha256": "68b6a2d630d3a34ef6abc3ab04d7d292d0d37ff0dcffc24ba5864fcfd65e1ba8"
+    }
+  ],
+  "surfaceSha256": "0eea34b6d01276c1e96fdcead92d15c272395783e1bee477d222eb882e7e3c40"
+}

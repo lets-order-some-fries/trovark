@@ -1,0 +1,25 @@
+{
+  "ref": "mcpqueen/mcpqueen",
+  "scannedAt": "2026-08-14T19:41:35.252Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.6.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "list_grades",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "de3edaa558f1e494fda4940f5c729b8b6bfd1266bf0373e9ae8903e6170a01f6"
+    },
+    {
+      "name": "search_servers",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "0f2264a1723384451c269ada34ce55380a5a401746c2926f38bb890e392e5bd5"
+    },
+    {
+      "name": "search_tools",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "5a227e1462a6f4ddf1d5c2517dc5b3d6932de12bd1b7fb00e2f8fd9c22aa85c1"
+    }
+  ],
+  "surfaceSha256": "e63489f274b3892e8bca85ff5e7b49f47191203e9975f3fbdb984128c6e58b09"
+}

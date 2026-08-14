@@ -1,0 +1,25 @@
+{
+  "ref": "gregario/astronomy-oracle",
+  "scannedAt": "2026-08-14T19:41:35.252Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.6.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "lookup_object",
+      "descriptionSha256": "44f6d150466b5dfbf5b931f959c541309e69fda6b789ca971630fae5f20473a7",
+      "definitionSha256": "1123e3ed9da4d625acd588e1c44aa6236b8c51aaa22823579d9f29ed9bcc2e86"
+    },
+    {
+      "name": "plan_session",
+      "descriptionSha256": "aa6c6215dcd6051015ed7ee070f170c48baebc6d87c2a97262f0d6b6170f6d14",
+      "definitionSha256": "9aaca7a97afb02d40ba6f2545ee3aefce322fead087572dbb4b42e94a499722d"
+    },
+    {
+      "name": "search_objects",
+      "descriptionSha256": "e593199597c2e60f2d0ffba6aa4f6f45efc35fc0f799b6ecb0534940950a85f4",
+      "definitionSha256": "ffe97b305a1b8798fd54688e3b7bc98635975cd5ae0a34b385ae8f0425e4abc5"
+    }
+  ],
+  "surfaceSha256": "ffb3720315eb757c6c5dd624b8d06d2e75236f5795ad334c1a2f92a27914708b"
+}

@@ -1,0 +1,20 @@
+{
+  "ref": "szp2005/llm-prices-cn",
+  "scannedAt": "2026-08-14T19:41:35.252Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.6.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "estimate_cost",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "08866cbdd008d31052207658539552d2cea844a004a0851f923f56f0830c94d2"
+    },
+    {
+      "name": "list_llm_prices",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "0fcb1c71b701b4a4853c01f02310a06671d1f2b377f089b60769de26352fc190"
+    }
+  ],
+  "surfaceSha256": "122e99d49071f3b58b63aa083561e288cae1ebf632262ff4c44880680a376f0c"
+}

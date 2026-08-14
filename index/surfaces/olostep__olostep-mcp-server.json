@@ -1,0 +1,65 @@
+{
+  "ref": "olostep/olostep-mcp-server",
+  "scannedAt": "2026-08-14T19:41:35.252Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.6.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "answers",
+      "descriptionSha256": "258c504fab66ced0083b6fd5e2554f75b5a20fd74b86169370feb53448709601",
+      "definitionSha256": "187090f8e0e3e842f18401a7a78e7b24e5f3cdd274de1e1b1a818a8c651fcce7"
+    },
+    {
+      "name": "batch_scrape_urls",
+      "descriptionSha256": "e6ab72df4bf46c3de7516219478efde5bbd05f3bfc3d2080b7aa80d106e691f4",
+      "definitionSha256": "7584395e6bd01f08abc66246c0a1258240ac4affa7e8d0d38bd7e74a5dc000ff"
+    },
+    {
+      "name": "create_crawl",
+      "descriptionSha256": "c5354b7ec98babcadb2acd66cd165d058f35f0ce46c52762815f14736ddfbbfe",
+      "definitionSha256": "dfa45aa753f13f66cfb14ba31522ff52ae19c6eb24e542363b8bbdc91b4d2b79"
+    },
+    {
+      "name": "create_map",
+      "descriptionSha256": "fcbed0d7d217957b2d987c27f65a9c676777d36a794021c1c8735d8d0596c6c3",
+      "definitionSha256": "683c2e84b253e6d8048894fb17bffe13b33447f248297e7620665e01aac3192e"
+    },
+    {
+      "name": "get_batch_results",
+      "descriptionSha256": "02c19d679f2e8ab82df5ca1494b326d31e0f0ad2de6bc708a7933279e0030c9a",
+      "definitionSha256": "0638e99d5cf9a1dce02d074d4501642e7d4416ba11802cfa685517f33210d92d"
+    },
+    {
+      "name": "get_crawl_results",
+      "descriptionSha256": "07b797fdbd78dec6062bb7485b93d7c43613f719de48f09d452de3f421d36200",
+      "definitionSha256": "6a511ddf94de35a4a5ee37b2fdfbad25b07dfd99b151c7b35f77a04ab921cd03"
+    },
+    {
+      "name": "get_webpage_content",
+      "descriptionSha256": "34e06d59ea4e6d906c13cab0064c170b539ae035f3d469f666cac42fc1326f7b",
+      "definitionSha256": "3ec5c605602e75f54f15bffc7cfa61366023c92bf76c3ee8fe8f03ce26d17c7e"
+    },
+    {
+      "name": "get_website_urls",
+      "descriptionSha256": "48ba38263a800f8871e1e1107b799c3cdafe6771a4ca0b894fb367a6bf92a1ef",
+      "definitionSha256": "f33a331c21dce28238e0c2bd8063c6d947b3283bedbb9cc97115e101982e8ea4"
+    },
+    {
+      "name": "google_search",
+      "descriptionSha256": "d112ee5ff86b3160243da45d56836a2db640b4d2721d05bf8b6d33fec2ec4397",
+      "definitionSha256": "6c8f1ce9a11c9c2467e68097588df28e5a1d57ff96fad2383cc2ec593ff86404"
+    },
+    {
+      "name": "scrape_website",
+      "descriptionSha256": "9ab9ddd6ed40b9f8f0fe66033308745f4cf94017cfaa55fd6bc12b4a4dd609cf",
+      "definitionSha256": "9b129af2f219ca78a07297fdaffa80f38aac74f1ac814851cf6b7765a7627bc0"
+    },
+    {
+      "name": "search_web",
+      "descriptionSha256": "ee6ebbbeaa8a7f0e1e4a05af74b94ec33e2813a5da4e22098e63a2da5eaf889c",
+      "definitionSha256": "b568bf503eae8ca369e6656632148deb97e8a822ac62d670f42e04570d473f12"
+    }
+  ],
+  "surfaceSha256": "35da6cbbbb25b6061eddee5c0752526799613285f0b85768db43963a5e43f0d1"
+}

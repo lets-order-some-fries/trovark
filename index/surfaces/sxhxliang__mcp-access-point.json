@@ -1,0 +1,110 @@
+{
+  "ref": "sxhxliang/mcp-access-point",
+  "scannedAt": "2026-08-14T19:41:35.252Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.6.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "addPet",
+      "descriptionSha256": "7ba0c64c34f4b95506688deab1bd220730c0b3ec4e62c5b6a77ed54c2973a5ed",
+      "definitionSha256": "e21166db1d6f8c9aef7dc364e3cbab41b632da04a3cf44589ad8690d60820a68"
+    },
+    {
+      "name": "createUser",
+      "descriptionSha256": "f06da128c342eedd7873dda8195840782795ee10408230b1e772b0ade74983b2",
+      "definitionSha256": "e2f56749ef4beba1f342d6b828e3c2e91c55e376f67f2b70143bbd476f7098bd"
+    },
+    {
+      "name": "createUsersWithArrayInput",
+      "descriptionSha256": "1d504c7f006be21702597ae0d70487b6fbd965c5cf469d3cffa41a84e7790aea",
+      "definitionSha256": "06fe08d1604805bd974c3064277562b433d89a6d62b616ccc3eea7ea538d6ec0"
+    },
+    {
+      "name": "createUsersWithListInput",
+      "descriptionSha256": "1d504c7f006be21702597ae0d70487b6fbd965c5cf469d3cffa41a84e7790aea",
+      "definitionSha256": "3e3b21540c0e39b325c4d282ef908ae489d16f21af5763746dee6dfe3b707e6e"
+    },
+    {
+      "name": "deleteOrder",
+      "descriptionSha256": "4447b301be8e325415ec7bf259d37d58078c5578feca55e51c0354cd8eef874e",
+      "definitionSha256": "a2f152465f33fb433b70ad090d63295150e73c6b15248379a24cb8eb6bb33e0a"
+    },
+    {
+      "name": "deletePet",
+      "descriptionSha256": "76007f9d01adf262545674b755e67b6559558fdf7c34ad3bee14d038f73269bd",
+      "definitionSha256": "171e994c431058ce089ad579d22acd8bcfc3f6cea191062fbb6c6c73a23f575a"
+    },
+    {
+      "name": "deleteUser",
+      "descriptionSha256": "58363fd94240d6775511ccf57ce854d5aeec82c030c9dd80764ba1a9e638c343",
+      "definitionSha256": "37748de8a838a58e24dae701d40f7c9ea9e42b852309cc43983f06d15a06a9e0"
+    },
+    {
+      "name": "findPetsByStatus",
+      "descriptionSha256": "122befbf94ec404aa028670d5c6c6a8e0ab8eb92997e2eb0178a24dcd5b66fd4",
+      "definitionSha256": "1ed2bdc526220aa419439c6936e90d2bd42ab936ed7e4c6a5968fc065db04ac7"
+    },
+    {
+      "name": "findPetsByTags",
+      "descriptionSha256": "a96d023150a1e1134783d3adc2e240f35764c5ac726540cec24eda44e62f0cf7",
+      "definitionSha256": "b71ba22f732c1a8456838a096d196502ae9a5849380789e58d31efb223e2be41"
+    },
+    {
+      "name": "getInventory",
+      "descriptionSha256": "9788150ae5f73e2f76758e360627bf38730d9a7d8c6b1f3ab0f47fa4a54583d5",
+      "definitionSha256": "5fc93290889a0342b63f2a64fa488361e8e1ae7179383adb261f4fd2380e517f"
+    },
+    {
+      "name": "getOrderById",
+      "descriptionSha256": "cb60ac956fd56d6a0812eae2a9668cab64c50c993634ae0cb0b4f4ec912f8810",
+      "definitionSha256": "ff3512bce97b4243c09fa686fa2cc060e383c2de289930ac8212d14699177537"
+    },
+    {
+      "name": "getPetById",
+      "descriptionSha256": "4adca77b5ce62c6f4ce85df47f3f9b52daff0f90a4e2f02b7eb39b623ffd0f3b",
+      "definitionSha256": "1c5976cd74ca0b2652e602e3ce3dea64ff360b319ddf9c64c691c7fd2b1c1239"
+    },
+    {
+      "name": "getUserByName",
+      "descriptionSha256": "3f63b282bec8aed8cf8dd987b4a105bddd0bfbdfff0489918b2d76e3f7a18f05",
+      "definitionSha256": "83a425e70e696d3700a2a49de4e52425fedc3c96b9536d428e8336fd6d57cbc1"
+    },
+    {
+      "name": "loginUser",
+      "descriptionSha256": "81235bb2c9b71a7d65477d63db5866864405dccac73db687714f82b25322c71d",
+      "definitionSha256": "5890d5ee823e1c3c18026554132103811cb840744e149e6b2e3ee2c21b10e0cd"
+    },
+    {
+      "name": "logoutUser",
+      "descriptionSha256": "5c9cb97d29909eec9aa5fafe3a793fe8deb3d4d19a96a4837a2162459eec3cf6",
+      "definitionSha256": "d2a3360c637cd5f831950d70d7cb56464f133eb47ebde88d651303df03865ed4"
+    },
+    {
+      "name": "placeOrder",
+      "descriptionSha256": "33dd477dc7bc981924e378e9aa94d939797e85fc1c25d7b651f2a3b7d7b4be7c",
+      "definitionSha256": "cc70bdf869fdb87ee39d08ad7f4652288cb35e726a8edf9df21f5108d26ae6e7"
+    },
+    {
+      "name": "updatePet",
+      "descriptionSha256": "f5f758164111f1a5e1b2a5f470ca154a452fb78a4cab3d52592d4d83569e7023",
+      "definitionSha256": "d9b272fd39aa11fd3863cf6359c6115c7e69bee757b9791c536a0531499919bd"
+    },
+    {
+      "name": "updatePetWithForm",
+      "descriptionSha256": "ce7417563a6bb74f6a58cd6c46518ac0c80cfe7cf21a877b43a103adaebfc3d9",
+      "definitionSha256": "5140fd7e5a8cb4a671c0d32010d0bba0d2afb653121ffcc1647c78532b446f87"
+    },
+    {
+      "name": "updateUser",
+      "descriptionSha256": "f5d24355bb5c2f281be4532339d434e7d803d908c0593d5f360fefd8c2094c1f",
+      "definitionSha256": "f5899865b7d914af753684986181903bc65727e873363f464b6b71c8345160d8"
+    },
+    {
+      "name": "uploadFile",
+      "descriptionSha256": "f3b09afca105fb7b60073df4a52d03639df4696edb1a19b03bc7a49d481e0b35",
+      "definitionSha256": "f696edf04cdcb476dcc929f743deffcab356ab60ced94aefbb69b5d09c61d8e0"
+    }
+  ],
+  "surfaceSha256": "08eb3f232f36e0594615a60008615ee73843b01d62dfe31179c571560a39d718"
+}

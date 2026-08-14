@@ -1,0 +1,15 @@
+{
+  "ref": "Alepha188838884/context-firewall",
+  "scannedAt": "2026-08-14T19:41:35.252Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.6.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "misbehave",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "467e5ad3fd7cdf9405098ea1dddb1938592f351be0611ce48ba743024dfc8027"
+    }
+  ],
+  "surfaceSha256": "21540ada8bd2e339212288c1b368a225f05b0c2f8fe4f39398e64791c3df5e6b"
+}

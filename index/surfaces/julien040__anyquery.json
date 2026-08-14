@@ -1,0 +1,25 @@
+{
+  "ref": "julien040/anyquery",
+  "scannedAt": "2026-08-14T19:41:35.252Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.6.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "describeTable",
+      "descriptionSha256": "80e0b9506523b8c85953d26a74c1a43ec3b20d3e703e635e368eea7e5449da63",
+      "definitionSha256": "54395ca6bef40ea4d0db8e3ecaf3324db6cd66fb963873e5479f127dd393d865"
+    },
+    {
+      "name": "executeQuery",
+      "descriptionSha256": "fb5fab792e0a3e9e274286115457c3b9cd11cb2e1d588a09db9aef1132e3d43f",
+      "definitionSha256": "a82d2d2b1ddf6f12016f02e9e0234ab1eea0232f4731b08db3bfe03e549c220e"
+    },
+    {
+      "name": "listTables",
+      "descriptionSha256": "54ea2f5b36b8c18c59667e161a0868da1bfb3e5721f7ad8b8fcd3392bc1b7f3e",
+      "definitionSha256": "829b49683667aae861f41e9e31097eb372b34a0ecd20e95101b7b709a27879fe"
+    }
+  ],
+  "surfaceSha256": "0ae03de6d8a20aebb69d3049d1875bfbcb0a919eb1270cdbfe38145750510ca3"
+}

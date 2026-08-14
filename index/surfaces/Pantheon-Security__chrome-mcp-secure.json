@@ -1,0 +1,80 @@
+{
+  "ref": "Pantheon-Security/chrome-mcp-secure",
+  "scannedAt": "2026-08-14T19:41:35.252Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.6.0",
+  "source": "readme-catalog",
+  "tools": [
+    {
+      "name": "bypass_cert_and_navigate",
+      "descriptionSha256": "c30e9565ad72bda5ea4f46046568f319f290e583ab9a82542b7121cf511910b8",
+      "definitionSha256": "7089aa8f8821904b8da4e24a79f4a3b9c96fcb651292aa17e5b27ec71ad7460c"
+    },
+    {
+      "name": "click_element",
+      "descriptionSha256": "4050e0805c607438bc2d79b142598ae8bdfe1b4d15d742feca45ef54b9adba84",
+      "definitionSha256": "b65eb857c58ec4976ec5866662ac305b6fd4df17f34d7a91af2c696839f158d1"
+    },
+    {
+      "name": "delete_credential",
+      "descriptionSha256": "36b9094dd4052787a0addf5c8e5a82305af43057b53f47bacf4c52c9b3281778",
+      "definitionSha256": "26dc041d0b55f5c2c4f4c1484dd45ae8f666ad10744131e92fbee2982be3ba9c"
+    },
+    {
+      "name": "get_credential",
+      "descriptionSha256": "2c9ad8d6c0971d28c7e79b050cd45ef3f62986d914a2f502384a48ea9c2b75c8",
+      "definitionSha256": "31937da90c33eede70e5273431da83a3ac912b88fd653b47d2b9cd1acfa27dca"
+    },
+    {
+      "name": "get_page_info",
+      "descriptionSha256": "6a0aee175ba03786960940fce1e58db15ad206ed35d63c2b5d6a49df597e7da5",
+      "definitionSha256": "96e77f2a2ec7fdfd8d7bb9a0d1837bf0f0b0e8ae31d3be3d3d081036e39d0e57"
+    },
+    {
+      "name": "get_page_state",
+      "descriptionSha256": "b35d5b4f2d5a9b32f4c5affdc816508f255abb5d905b02ee6d0c3bcea1f2681d",
+      "definitionSha256": "56f4f0d28e8120b4d8241ec79e0e489d3ec0a9c9b4ad43d7ee59d27d6bc6dc1b"
+    },
+    {
+      "name": "get_tabs",
+      "descriptionSha256": "9f708b068cc3e4766b8ae09cbd41e91a46e465fe97021fab4a635c00f790e499",
+      "definitionSha256": "816d8242a374c1e3aadedbc5ee9321294b7be399ed501840bc29e4399c01fd34"
+    },
+    {
+      "name": "get_text",
+      "descriptionSha256": "9f6290b3ffa01c3a3e870d06056f48e38d91d1cf4b98e74ea8b124579a71ec16",
+      "definitionSha256": "fb124ebd5fabf4a016b2c036ffd58e4cf64b71f5af547dc9cd7d984ab0213129"
+    },
+    {
+      "name": "get_vault_status",
+      "descriptionSha256": "b34ead5e395dfbeffa994bb4442f9054a026a0978f810b272e1c30b5af79a586",
+      "definitionSha256": "f132f0a0c21295ae0258188786b1c0be4667cacb5c0cd3bcdbafab8cde86ac3c"
+    },
+    {
+      "name": "list_credentials",
+      "descriptionSha256": "9504c4c01b748e40c007eae196cfb3ba5a4c7455370a161ac790d6a80911a6bf",
+      "definitionSha256": "7bc6286cf30c56793eb0ea989d3b1d1fc58fec027aed87948fd68150f14b1d2c"
+    },
+    {
+      "name": "secure_login",
+      "descriptionSha256": "38c73a95f7b58683c02fd92bf409d59847cdfe57f1b10b2dfe55fa11abdaa72d",
+      "definitionSha256": "41b5ba40f6d9d2d89005ad42e7bf0b8f28fcbc75d4d8152f4a9d073f5917a2af"
+    },
+    {
+      "name": "store_credential",
+      "descriptionSha256": "606555d4e1a96b88985b59b7cf8a0c97f2e0f67d4bd2ded70a4924529b7c282c",
+      "definitionSha256": "e5e7e3485454942e3e921c1ef2b974b60618a98c2209e5004583043a839fe687"
+    },
+    {
+      "name": "update_credential",
+      "descriptionSha256": "a77886bbaf2a8982d7a5ca7060713465ddfbc6b8fa760996599ecb9cad178f72",
+      "definitionSha256": "b52807b398e889d5eada2509726ac2b8bd30c2f0a696113dda13e0e2ab9340d4"
+    },
+    {
+      "name": "wait_for_element",
+      "descriptionSha256": "03d78488ef4e9411f462e91a5502295fcfb4d309f0053b31379c1e398eb3cc1e",
+      "definitionSha256": "dc187c399a634425491d2d123a5e062463d5221c0be80a0f547ddab9b1c95a49"
+    }
+  ],
+  "surfaceSha256": "49917357c181913492f0ab0092a91109d460c47e6f98a15c3eb89cd38454142b"
+}

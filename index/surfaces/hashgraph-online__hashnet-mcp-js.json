@@ -1,0 +1,125 @@
+{
+  "ref": "hashgraph-online/hashnet-mcp-js",
+  "scannedAt": "2026-08-14T19:41:35.252Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.6.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "hol.capabilities",
+      "descriptionSha256": "c933b980f5ac9ea8661a383d3c0c8c15e84df436694a35ab3aa2e326f4121006",
+      "definitionSha256": "2c9db1dbabec49dbe83b70fcc16e5ccf29dbfff207de5d96d9721242e829fd0b"
+    },
+    {
+      "name": "hol.chat.cancel",
+      "descriptionSha256": "bcbfba9af50c3b5006e22d5a21166be15574e9aca0ceda9e881e939bdb5061d2",
+      "definitionSha256": "2c72291d55386b19b462b6574222afe9576041fccaca095ba91fd94fac1b6786"
+    },
+    {
+      "name": "hol.chat.createSession",
+      "descriptionSha256": "bd76e806bd8d27a1c5891a7b20cd07dcfeaf65aa0d0026bc418b9b9ea3d51b88",
+      "definitionSha256": "ed2a7762c0fafd95a4d1cbe1943a8b69c98b6289db10f060d07dffec069019ff"
+    },
+    {
+      "name": "hol.chat.end",
+      "descriptionSha256": "ff6c1378d5512b8b39d75ddadb8ae96bc38384a90a2376a3305c89033de0a8ff",
+      "definitionSha256": "60ed0a835196d7b6e10e4d458f1ceb37e4fdd170c67fe1798df52c1ef9f436cf"
+    },
+    {
+      "name": "hol.chat.history",
+      "descriptionSha256": "d3b5b85e8ae8f2578ffab2bb5284fe23f74591309b68b0ee13872acf31fcff4b",
+      "definitionSha256": "deb81823970cb793de34eeb4c4454d18430376de9191b03c92b83c3d7d571c45"
+    },
+    {
+      "name": "hol.chat.readiness",
+      "descriptionSha256": "a766f75b4cc651cac9e283a006dc275e55abbd11ae774272dd9e47fccc39d2b3",
+      "definitionSha256": "1b50d4b0da24d3d527409ca836d17861bf6be249d0b62110116df91dc47e8843"
+    },
+    {
+      "name": "hol.chat.resume",
+      "descriptionSha256": "2aebfd12e08e599b61c8c3e24ab2f6c26453226a089859a6841bd33c01723790",
+      "definitionSha256": "de7ffde766d53a595ee686678930cc7a67be872249b7ad662cece3ea9b47ae1a"
+    },
+    {
+      "name": "hol.chat.retry",
+      "descriptionSha256": "df816723eeb678bff333fedfd377cf01283859b135a0fc66a5739a7931514930",
+      "definitionSha256": "b561f7439f388e664b07338e6aad37aae55d889ab8ea3a7eec94a3eba5ada3d8"
+    },
+    {
+      "name": "hol.chat.sendMessage",
+      "descriptionSha256": "8589bf4c3dba7573d8ca1595654b470949f758c1acd49e493815ecb2ca76ecf0",
+      "definitionSha256": "f4e7ecd4d2f5a29964612ca2ff5299ffde47de11f5484fd96f9924fdc5a349a2"
+    },
+    {
+      "name": "hol.getRegistrationQuote",
+      "descriptionSha256": "c98aef8b96d6501b7b62ad6b572b5e523862b7dd65bf5e21affa5b6d4ef05bd7",
+      "definitionSha256": "ccc4b11509c3c2bf515b848aea96912aad8b799c1ac6c50bec92e9df0657b364"
+    },
+    {
+      "name": "hol.guard.billingBalance",
+      "descriptionSha256": "bec7988cb3c178a8182228c335825b1ef8f1c75d2466c7d654c2c61e2ca10fef",
+      "definitionSha256": "ab11715fb045745a538d7704c3130224d14db4618cd3a45b3f3b54d092d86fa2"
+    },
+    {
+      "name": "hol.guard.entitlements",
+      "descriptionSha256": "b04e0a0fb764db3f86084dd6a8362c27e186fd63da0c92535970f10457301b5a",
+      "definitionSha256": "8c668b989131ef6cc60f8900989425bc98b9e002451a5e12947b46b276a30539"
+    },
+    {
+      "name": "hol.guard.resolveTrust",
+      "descriptionSha256": "9930347cb912546914a83b9b0e22942f65107f5cc30a0385c861b8fcf258088a",
+      "definitionSha256": "e1b6ea4e907e8d4cd20ceb946fb525b7becc7c6dd0991bf7d798327477f815fe"
+    },
+    {
+      "name": "hol.guard.revocations",
+      "descriptionSha256": "fd3e51d75252ce15f07853162f59df166653ccf348006f9fde6900e7942c381f",
+      "definitionSha256": "4a31b3b292b97737e1eeeb7072935ac9e10818c549888ebbff73b0dbfe6e1238"
+    },
+    {
+      "name": "hol.guard.session",
+      "descriptionSha256": "d4dc9d2282d0d7233404430d5b2c1a0448f94e178a8799b8d813bbbb932c4970",
+      "definitionSha256": "d3346dea3b30ba64fb189c7f0664a1deab44abca5c5ab34fdaead6745e79e0ab"
+    },
+    {
+      "name": "hol.guard.syncReceipts",
+      "descriptionSha256": "283758bcef03d6930b36def2a069ac3166db0dc9255660d2172e0b79e009d1e3",
+      "definitionSha256": "6ccdacc5cd58adeb033c68be7fd07cda3211e833701b970851d0f5f3103641ee"
+    },
+    {
+      "name": "hol.guard.trustByHash",
+      "descriptionSha256": "9dd78932db9ca01d8c24d555c4cce9c744994da6080fbafbf3f993bc7a855340",
+      "definitionSha256": "e23ef818719e645590e97092f6a00db9655081a740d2a0c5c9d76de03c16729d"
+    },
+    {
+      "name": "hol.registerAgent",
+      "descriptionSha256": "607edb9bb0bf44087613ab671f80c0971428b3badda8380e0653d88cc57e6e35",
+      "definitionSha256": "251fc9caad78d637bde3f3f2e9e97661cbcbcf4ff13eb98a06ebee35cfcc98b7"
+    },
+    {
+      "name": "hol.resolveUaid",
+      "descriptionSha256": "5697beabe5dff5b20693743bc3adc55ba25f08d8b3e071e964c918c3513f5c39",
+      "definitionSha256": "e9904ece26fa133ccee216d4f8d4d7b2899a1d5aeb8a8ed48bd14312937e48eb"
+    },
+    {
+      "name": "hol.search",
+      "descriptionSha256": "8d9627b277b7dadf789118f049bf93983cc99b46459e713f9e468dc2799dc12c",
+      "definitionSha256": "935543f666d284a87ffb30a5efc7224d053a457ef40dcd5c7e093523f303059a"
+    },
+    {
+      "name": "hol.stats",
+      "descriptionSha256": "217d3ce8abc49ee90d9945d470a1e9578f4f00ea0e2557990cd7fac6ac84342f",
+      "definitionSha256": "0c9dfd710466b55deeb1f658b992d924308d051c3bcdd7ff3f7af1b39554ea51"
+    },
+    {
+      "name": "hol.vectorSearch",
+      "descriptionSha256": "0ea52e1dd7782ee22678c8243d37a11440f896237ead3a3073c796f7b34562c1",
+      "definitionSha256": "d35ac3a9cee9b2f8e76499b1dd100fad10adf5621db558ebf06115175baa515f"
+    },
+    {
+      "name": "hol.waitForRegistrationCompletion",
+      "descriptionSha256": "e85b2275f6effffe6d1c423a2df7ba1047e4ccc4093e1b74df8b85fd8f20ba2e",
+      "definitionSha256": "7a31b5c3635aa07cd9ab902dff56c9244c68e87261f3409a74171a7876cb0f85"
+    }
+  ],
+  "surfaceSha256": "7f00126970eca1c5a03cd7b3ce2d5b29f9238c60f1ea802aa9b73e543381c9c7"
+}

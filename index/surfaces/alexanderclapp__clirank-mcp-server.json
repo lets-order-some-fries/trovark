@@ -1,0 +1,55 @@
+{
+  "ref": "alexanderclapp/clirank-mcp-server",
+  "scannedAt": "2026-08-14T19:41:35.252Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.6.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "browse_categories",
+      "descriptionSha256": "af4796f7e8bc5adeb23e0828cc93cbd49032ac9384f6704c216f600efe4a4692",
+      "definitionSha256": "407eeee15ed168c038937addc2321e3dd6dd53b4faad4ddbefdbd08533a4825e"
+    },
+    {
+      "name": "compare_apis",
+      "descriptionSha256": "7f36969e50d2ec6868e6a9e3dfc7b0e0008ea83035a1bdc1f492a76b61ef0235",
+      "definitionSha256": "64b424640d765e31606e5ce5001e065d1ebd141c3a73003a86a24b8f8ff91c9e"
+    },
+    {
+      "name": "discover_apis",
+      "descriptionSha256": "f265443733465ef90fe8627f47d3789936ad4928bc28b6be2978392e29bddd38",
+      "definitionSha256": "9cfe3e11b2643e6042a0167d6664242960be5a8c40f8916ead502ebe8fe7a40b"
+    },
+    {
+      "name": "get_api_details",
+      "descriptionSha256": "d413c0e076f8272124ee1a87390caef8b2461ade37dd1b5beb1469683823f2df",
+      "definitionSha256": "19b65c34817eaac554bbd380bc689a6f819039ff52d437ffc31334f2eefe970c"
+    },
+    {
+      "name": "get_api_docs",
+      "descriptionSha256": "e7dc806ab92734e86ddd4fec559902478f7e0e943605d7ce9a3781cf74b58c37",
+      "definitionSha256": "86ab758175396b6dac39d00e3aceca654d43860ea6e70ef0f04cca0a30bbcafa"
+    },
+    {
+      "name": "get_package_info",
+      "descriptionSha256": "fa171fa8d0de77efb3c997320073a3f8521df2ec79fc0cd1e017250aa00e24d3",
+      "definitionSha256": "d42459b08a34329942bba119b0df2a068043581b9e4be05a970e28ee178215da"
+    },
+    {
+      "name": "get_reviews",
+      "descriptionSha256": "c794a1ae8e803a54eef29d042076916abc1c9a988820818cb392c82191845535",
+      "definitionSha256": "12eebdf103e3a9b36e33c2388a4945c134a7c74abc727a5adda1bda01d875e47"
+    },
+    {
+      "name": "recommend",
+      "descriptionSha256": "583fed64a18b4d7d9115e0d986f1fe17db6c195fe8888d7500f9aaa05f4af53e",
+      "definitionSha256": "961daad4cb9b28928048fd1e1206c38ec48b47126cd1e8477d4e3d041f539881"
+    },
+    {
+      "name": "submit_review",
+      "descriptionSha256": "bab1d725c813eab5148310a81d2e2173bb5fa8623f97a99e4de1cae73446b891",
+      "definitionSha256": "72a853422b9eb3724a1c0c3b3560d80bcfe750bc2cc53eed13f40b3724f6370d"
+    }
+  ],
+  "surfaceSha256": "057f6252659fecf488b94edbc49cfe0b3802ae9856f53456a70741d9ae24b24d"
+}
