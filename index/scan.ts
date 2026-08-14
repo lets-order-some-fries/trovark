@@ -1,11 +1,15 @@
 // Batch-score discovered servers → results.json (compact cards + first-party stats)
-import { readFileSync, writeFileSync } from 'node:fs'
+import { existsSync, readFileSync, writeFileSync } from 'node:fs'
+import { dirname, join } from 'node:path'
 import { createHttp } from '../src/util/http.js'
 import { resolve } from '../src/resolver.js'
 import { assemble } from '../src/assemble.js'
 import { score } from '../src/scoring/score.js'
 import { RUBRIC_VERSION } from '../src/scoring/rubric.js'
-import type { Scorecard } from '../src/types.js'
+import { buildSurfaceSnapshot, diffSurfaces } from '../src/derive/surface.js'
+import type { DriftEvent, SurfaceSource } from '../src/derive/surface.js'
+import { appendDriftEvents, loadSnapshot, saveSnapshot } from './surfaceStore.js'
+import type { Scorecard, ToolInfo } from '../src/types.js'
 
 export interface IndexEntry {
   ref: string
@@ -87,6 +91,10 @@ export interface IndexStats {
   secretsFindings: number
   deprecated: number
   shellExecTools: number
+  // D2 (observatory): drift events recorded by THIS run only — an artifact
+  // count, not a quality statistic. Absent from summarize() (which is pure
+  // over entries); main() sets it from recordSurfaces' return.
+  driftEvents?: number
 }
 
 export function summarize(entries: IndexEntry[]): IndexStats {
@@ -166,6 +174,36 @@ export function toEntry(ref: string, card: Scorecard, daysSinceLastCommit?: numb
   }
 }
 
+// D2 (observatory, docs/superpowers/plans/2026-08-05-observatory-d2.md):
+// pure-ish helper (all I/O confined to dir) so it is testable without a
+// network scan. Called once per run, after the pool completes AND after the
+// coverage/outage gates pass — a refused scan never writes snapshots either.
+// A server absent from `extracted` keeps its old snapshot and produces NO
+// event (missing snapshot != removal); diffs across differing
+// extractorVersion/source are suppressed by diffSurfaces, never rendered.
+export function recordSurfaces(
+  surfacesDir: string,
+  extracted: Array<{ ref: string; tools: ToolInfo[]; source: SurfaceSource }>,
+  scannedAt: string, rubricVersion: string,
+): { written: number; events: number; suppressed: number } {
+  const events: DriftEvent[] = []
+  let suppressed = 0
+  for (const { ref, tools, source } of extracted) {
+    const next = buildSurfaceSnapshot(ref, tools, scannedAt, rubricVersion, source)
+    const prev = loadSnapshot(surfacesDir, ref)
+    if (prev) {
+      const d = diffSurfaces(prev, next)
+      if (d.kind === 'event') events.push(d)
+      else if (d.kind === 'suppressed') suppressed++
+    }
+    saveSnapshot(surfacesDir, next)
+  }
+  if (events.length || !existsSync(join(surfacesDir, '..', 'drift.json'))) {
+    appendDriftEvents(join(surfacesDir, '..', 'drift.json'), events)
+  }
+  return { written: extracted.length, events: events.length, suppressed }
+}
+
 async function pool<T, R>(items: T[], limit: number, fn: (t: T, i: number) => Promise<R>): Promise<R[]> {
   const out: R[] = new Array(items.length)
   let next = 0
@@ -196,10 +234,17 @@ async function main(): Promise<void> {
   if (limit > 0) refs = refs.slice(0, limit)
 
   let done = 0
+  // D2: surface inputs collected during the scan, snapshotted only after the
+  // coverage/outage gates pass. Gated on notServer/unresolved so a library or
+  // a 404'd repo never records a "tool surface".
+  const surfaceInputs: Array<{ ref: string; tools: ToolInfo[]; source: SurfaceSource }> = []
   const entries = await pool(refs, concurrency, async (ref): Promise<IndexEntry> => {
     try {
       const identity = await resolve(ref, http)
       const signals = await assemble(identity, http, now, { hasToken })
+      if (signals.tools && signals.toolSource && !signals.notServer && !signals.unresolved) {
+        surfaceInputs.push({ ref, tools: signals.tools, source: signals.toolSource })
+      }
       const card = score(ref, signals, now.toISOString(), {
         ...(identity.npmPackage ? { npmPackage: identity.npmPackage } : {}),
         ...(identity.pypiPackage ? { pypiPackage: identity.pypiPackage } : {}),
@@ -264,7 +309,13 @@ async function main(): Promise<void> {
     return
   }
 
-  const payload = { generatedAt: now.toISOString(), rubricVersion: RUBRIC_VERSION, coverage, stats: summarize(entries), entries }
+  // D2: snapshots + drift are written ONLY here, after both gates above have
+  // passed — a refused scan (partial run or outage signature) writes neither
+  // the index nor any surface state, so bad runs can't manufacture drift.
+  const surf = recordSurfaces(join(dirname(outFile), 'surfaces'), surfaceInputs, now.toISOString(), RUBRIC_VERSION)
+  console.error(`surfaces: ${surf.written} written, ${surf.events} drift events, ${surf.suppressed} suppressed`)
+
+  const payload = { generatedAt: now.toISOString(), rubricVersion: RUBRIC_VERSION, coverage, stats: { ...summarize(entries), driftEvents: surf.events }, entries }
   writeFileSync(outFile, JSON.stringify(payload, null, 2))
   console.error(`wrote ${outFile}: ${payload.stats.scored}/${payload.stats.total} scored, avg ${payload.stats.avgOverall}`)
 }

@@ -1,5 +1,8 @@
 import { describe, expect, it } from 'vitest'
-import { summarize, toEntry, type IndexEntry } from '../index/scan.js'
+import { mkdtempSync } from 'node:fs'
+import { tmpdir } from 'node:os'
+import { join } from 'node:path'
+import { recordSurfaces, summarize, toEntry, type IndexEntry } from '../index/scan.js'
 import type { Scorecard } from '../src/types.js'
 
 const e = (over: Partial<IndexEntry>): IndexEntry => ({ ref: 'a/b', ok: true, ...over })
@@ -325,6 +328,30 @@ function coverageOf(attempted: number, entries: Array<{ ok: boolean }>) {
   const collectorFailures = entries.filter(e => !e.ok).length
   return { attempted, completed: entries.length, collectorFailures, complete: entries.length === attempted }
 }
+
+// D2 (observatory, docs/superpowers/plans/2026-08-05-observatory-d2.md):
+// recordSurfaces is the scan-side wiring — snapshot every extracted surface,
+// diff against the previous snapshot, append real events to the drift log.
+// First run is the baseline by construction; a server absent from a run is
+// NEVER a removal event (missing snapshot != removed tools).
+describe('recordSurfaces', () => {
+  const tools = [{ name: 'x', description: 'X', schemaText: 'def' }]
+  it('first run writes snapshots, zero events (baseline); second identical run adds nothing; a change adds one event', () => {
+    const d = mkdtempSync(join(tmpdir(), 'tv-scan-'))
+    const r1 = recordSurfaces(d, [{ ref: 'a/b', tools, source: 'code' as const }], '2026-08-05T00:00:00.000Z', '1.5.0')
+    expect(r1).toEqual({ written: 1, events: 0, suppressed: 0 })
+    const r2 = recordSurfaces(d, [{ ref: 'a/b', tools, source: 'code' as const }], '2026-09-01T00:00:00.000Z', '1.5.0')
+    expect(r2.events).toBe(0)
+    const r3 = recordSurfaces(d, [{ ref: 'a/b', tools: [...tools, { name: 'y', schemaText: 'd2' }], source: 'code' as const }], '2026-10-01T00:00:00.000Z', '1.5.0')
+    expect(r3.events).toBe(1)
+  })
+  it('a server absent from this run keeps its old snapshot and produces NO event (missing != removed)', () => {
+    const d = mkdtempSync(join(tmpdir(), 'tv-scan-'))
+    recordSurfaces(d, [{ ref: 'a/b', tools, source: 'code' as const }], '2026-08-05T00:00:00.000Z', '1.5.0')
+    const r = recordSurfaces(d, [], '2026-09-01T00:00:00.000Z', '1.5.0')
+    expect(r).toEqual({ written: 0, events: 0, suppressed: 0 })
+  })
+})
 
 // Secondary-rate-limit postmortem (2026-08-13). GitHub's SECONDARY limit
 // 403s while /rate_limit still shows thousands remaining, and graceful
