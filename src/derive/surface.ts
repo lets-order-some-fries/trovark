@@ -47,3 +47,62 @@ export function buildSurfaceSnapshot(
     surfaceSha256: sha256(JSON.stringify(surfaceTools)),
   }
 }
+
+export interface DriftEvent {
+  kind: 'event'
+  ref: string; prevScannedAt: string; scannedAt: string
+  extractorVersion: string
+  added: string[]; removed: string[]
+  descriptionChanged: string[]; definitionChanged: string[]
+}
+export type DiffResult = DriftEvent
+  | { kind: 'suppressed'; ref: string; reason: 'extractor-version-changed' | 'source-changed' }
+  | { kind: 'unchanged' }
+
+export function diffSurfaces(prev: ToolSurfaceSnapshot, next: ToolSurfaceSnapshot): DiffResult {
+  if (prev.extractorVersion !== next.extractorVersion)
+    return { kind: 'suppressed', ref: next.ref, reason: 'extractor-version-changed' }
+  if (prev.source !== next.source)
+    return { kind: 'suppressed', ref: next.ref, reason: 'source-changed' }
+  if (prev.surfaceSha256 === next.surfaceSha256) return { kind: 'unchanged' }
+
+  const byName = (ts: SurfaceTool[]) => {
+    const m = new Map<string, SurfaceTool[]>()
+    for (const t of ts) m.set(t.name, [...(m.get(t.name) ?? []), t])
+    return m
+  }
+  const p = byName(prev.tools), n = byName(next.tools)
+  const added: string[] = [], removed: string[] = []
+  const descriptionChanged: string[] = [], definitionChanged: string[] = []
+  for (const [name, ts] of n) {
+    const old = p.get(name)
+    if (!old) { added.push(...ts.map(() => name)); continue }
+    // multiset count changes on a shared name count as add/remove
+    if (ts.length > old.length) added.push(...Array(ts.length - old.length).fill(name))
+    if (ts.length < old.length) removed.push(...Array(old.length - ts.length).fill(name))
+    if (ts.length === 1 && old.length === 1) {
+      if (ts[0].descriptionSha256 !== old[0].descriptionSha256) descriptionChanged.push(name)
+      else if (ts[0].definitionSha256 !== old[0].definitionSha256) definitionChanged.push(name)
+    }
+  }
+  for (const [name, ts] of p) if (!n.has(name)) removed.push(...ts.map(() => name))
+  added.sort(); removed.sort(); descriptionChanged.sort(); definitionChanged.sort()
+  return {
+    kind: 'event', ref: next.ref,
+    prevScannedAt: prev.scannedAt, scannedAt: next.scannedAt,
+    extractorVersion: next.extractorVersion,
+    added, removed, descriptionChanged, definitionChanged,
+  }
+}
+
+// Neutral by construction: counts, a date, nothing else. The observatory
+// publishes facts about change, never characterizations of it.
+export function formatDriftEvent(e: DriftEvent): string {
+  const parts: string[] = []
+  const n = (c: number, sing: string, plur: string) => `${c} ${c === 1 ? sing : plur}`
+  if (e.added.length) parts.push(`${n(e.added.length, 'tool', 'tools')} added`)
+  if (e.removed.length) parts.push(`${n(e.removed.length, 'tool', 'tools')} removed`)
+  if (e.descriptionChanged.length) parts.push(`${n(e.descriptionChanged.length, 'description', 'descriptions')} edited`)
+  if (e.definitionChanged.length) parts.push(`${n(e.definitionChanged.length, 'definition', 'definitions')} changed`)
+  return `Tool surface changed ${e.scannedAt.slice(0, 10)}: ${parts.join(', ')}.`
+}

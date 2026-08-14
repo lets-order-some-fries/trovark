@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest'
 import { createHash } from 'node:crypto'
-import { buildSurfaceSnapshot, EXTRACTOR_VERSION } from '../src/derive/surface.js'
+import { buildSurfaceSnapshot, EXTRACTOR_VERSION, diffSurfaces, formatDriftEvent, type DriftEvent } from '../src/derive/surface.js'
 import type { ToolInfo } from '../src/types.js'
 
 const sha = (s: string) => createHash('sha256').update(Buffer.from(s, 'utf8')).digest('hex')
@@ -44,5 +44,68 @@ describe('buildSurfaceSnapshot', () => {
   it('astral/multibyte content hashes by UTF-8 bytes without error', () => {
     const s = buildSurfaceSnapshot('o/r', [t('emoji', '🏴‍☠️ desc', 'def🏴')], '2026-08-05T00:00:00.000Z', '1.5.0', 'code')
     expect(s.tools[0].descriptionSha256).toBe(sha('🏴‍☠️ desc'))
+  })
+})
+
+const snap = (tools: ToolInfo[]) =>
+  buildSurfaceSnapshot('o/r', tools, '2026-08-05T00:00:00.000Z', '1.5.0', 'code')
+
+describe('diffSurfaces', () => {
+  it('unchanged surface → kind unchanged (no event, ever, for a quiet server)', () => {
+    const a = snap([t('x', 'X', 'def')])
+    expect(diffSurfaces(a, { ...a, scannedAt: '2026-09-01T00:00:00.000Z' }).kind).toBe('unchanged')
+  })
+  it('reports added and removed by name', () => {
+    const r = diffSurfaces(snap([t('keep', 'K', 'd1'), t('old', 'O', 'd2')]),
+                           snap([t('keep', 'K', 'd1'), t('new', 'N', 'd3')])) as DriftEvent
+    expect(r.kind).toBe('event')
+    expect(r.added).toEqual(['new'])
+    expect(r.removed).toEqual(['old'])
+  })
+  it('description change reported as descriptionChanged, NOT also definitionChanged', () => {
+    // description text appears inside schemaText too — the more specific
+    // category wins so one edit is not double-reported.
+    const r = diffSurfaces(snap([t('x', 'old words', 'reg(x, "old words")')]),
+                           snap([t('x', 'new words', 'reg(x, "new words")')])) as DriftEvent
+    expect(r.descriptionChanged).toEqual(['x'])
+    expect(r.definitionChanged).toEqual([])
+  })
+  it('definition-only change (same description) → definitionChanged', () => {
+    const r = diffSurfaces(snap([t('x', 'same', 'reg(x, a)')]),
+                           snap([t('x', 'same', 'reg(x, b)')])) as DriftEvent
+    expect(r.definitionChanged).toEqual(['x'])
+    expect(r.descriptionChanged).toEqual([])
+  })
+  it('SUPPRESSED when extractorVersion differs — parser churn must never render as drift', () => {
+    const a = snap([t('x', 'X', 'd')])
+    const b = { ...snap([t('x', 'X', 'd'), t('y', 'Y', 'e')]), extractorVersion: '9.9.9' }
+    expect(diffSurfaces(a, b)).toEqual({ kind: 'suppressed', ref: 'o/r', reason: 'extractor-version-changed' })
+  })
+  it('SUPPRESSED when source differs (code vs readme-catalog)', () => {
+    const a = snap([t('x', 'X', 'd')])
+    const b = { ...a, source: 'readme-catalog' as const, scannedAt: '2026-09-01T00:00:00.000Z' }
+    expect(diffSurfaces(a, b)).toEqual({ kind: 'suppressed', ref: 'o/r', reason: 'source-changed' })
+  })
+})
+
+describe('formatDriftEvent', () => {
+  const ev: DriftEvent = {
+    kind: 'event', ref: 'o/r', prevScannedAt: '2026-08-05T00:00:00.000Z',
+    scannedAt: '2026-09-14T00:00:00.000Z', extractorVersion: '1.0.0',
+    added: ['a', 'b'], removed: [], descriptionChanged: ['c'], definitionChanged: [],
+  }
+  it('renders the spec example shape: counts + date, neutral', () => {
+    expect(formatDriftEvent(ev)).toBe('Tool surface changed 2026-09-14: 2 tools added, 1 description edited.')
+  })
+  it('singular/plural + removed + definition wording', () => {
+    expect(formatDriftEvent({ ...ev, added: ['a'], removed: ['x'], descriptionChanged: [], definitionChanged: ['y'] }))
+      .toBe('Tool surface changed 2026-09-14: 1 tool added, 1 tool removed, 1 definition changed.')
+  })
+  it('NEVER uses verdict language (static template lint)', () => {
+    const BANNED = /rug.?pull|malicious|suspicious|attack|poison|backdoor|compromised|hijack|dangerous/i
+    // formatDriftEvent interpolates only counts, dates and tool NAMES it is
+    // given; lint the rendered output of a benign event as a proxy for the
+    // static template (the integrity-v1 lesson: never lint hostile content).
+    expect(BANNED.test(formatDriftEvent(ev))).toBe(false)
   })
 })
