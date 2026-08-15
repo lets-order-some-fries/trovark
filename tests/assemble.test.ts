@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import { assemble } from '../src/assemble.js'
 import { collectGithub } from '../src/collectors/github.js'
+import { score } from '../src/scoring/score.js'
 import { HttpError } from '../src/util/http.js'
 import type { Http } from '../src/util/http.js'
 
@@ -548,5 +549,96 @@ describe('C5: failed blob fetches are recorded and force a partial surface', () 
     )
     expect(s.errors).toEqual([])
     expect(s.toolCount).toBe(1)
+  })
+})
+
+// Rubric 1.7.0 (2026-08-15): the serialized token footprint stops being a
+// SCORED signal and becomes a published FACT. `tokenFootprint()` and the
+// `schemaTokenEstimate` threading are unchanged — what changes is that
+// nothing in src/scoring/rubric.ts reads the number any more, and assemble.ts
+// instead attaches it as an informational finding so the measurement we CAN
+// make for ~5% of servers is still published rather than thrown away.
+//
+// The asymmetry that forced this: as a scored signal, its ABSENCE flattered.
+// A 5-tool server with a 25k-token schema scored 67; the same server with an
+// unreadable schema scored 100. As a finding, absence is simply silent — and
+// silence is the one rendering that cannot be mistaken for a good number.
+describe('cost/token-footprint is published as an informational finding, not scored', () => {
+  const manifestTool = (name: string, description: string) => ({
+    name, description,
+    inputSchema: { type: 'object', properties: { query: { type: 'string', description: 'the search query' } }, required: ['query'] },
+  })
+
+  function manifestHttp(): Http {
+    const routes: Record<string, unknown> = {
+      'https://api.github.com/repos/acme/manifest/commits?since': [
+        { sha: '1', commit: { author: { date: iso(2) } }, author: { login: 'a' } },
+      ],
+      'https://api.github.com/repos/acme/manifest/git/trees/main?recursive=1': {
+        tree: [
+          { path: 'package.json', type: 'blob', size: 300 },
+          { path: 'mcp.json', type: 'blob', size: 900 },
+        ],
+      },
+      'https://api.github.com/repos/acme/manifest': {
+        stargazers_count: 120, archived: false, pushed_at: iso(2), default_branch: 'main',
+      },
+    }
+    return makeRoutedHttp(routes, (url) => {
+      if (url.endsWith('package.json')) return JSON.stringify({ dependencies: { '@modelcontextprotocol/sdk': '^1.2.0' } })
+      if (url.endsWith('mcp.json')) {
+        return JSON.stringify({ tools: [manifestTool('search_docs', 'Search documentation'), manifestTool('lookup_symbol', 'Look up a symbol')] })
+      }
+      throw new Error(`HTTP 404 for ${url}`)
+    })
+  }
+
+  it('attaches the finding when the footprint is genuinely measured, naming the figure and the source', async () => {
+    const s = await assemble({ ref: 'acme/manifest', repo: { owner: 'acme', name: 'manifest' } }, manifestHttp(), NOW)
+    expect(typeof s.schemaTokenEstimate).toBe('number')
+    const f = s.findings.find(x => x.id === 'cost/token-footprint')!
+    expect(f).toBeDefined()
+    expect(f.dimension).toBe('cost')
+    expect(f.severity).toBe('info')
+    // the measured figure itself, as published
+    expect(f.message).toContain(s.schemaTokenEstimate!.toLocaleString('en-US'))
+    expect(f.message).toMatch(/tools\/list/)
+    expect(f.message).toMatch(/declared JSON schemas/i)
+    // evidence names the file the schemas were read from — principle 2
+    expect(f.evidence).toContain('mcp.json')
+  })
+
+  it('says nothing at all when the footprint could not be measured — absence is silent, never "0 tokens"', async () => {
+    // fullFake's tool surface is source-extracted (zod/TS text), so
+    // tokenFootprint() correctly declines: ~95% of the corpus.
+    const s = await assemble({ ref: 'foo-mcp', repo: { owner: 'acme', name: 'foo' } }, fullFake(), NOW)
+    expect(s.schemaTokenEstimate).toBeUndefined()
+    expect(s.findings.some(f => f.id === 'cost/token-footprint')).toBe(false)
+    expect(s.findings.some(f => /0 tokens/.test(f.message))).toBe(false)
+  })
+
+  it('a partial surface publishes no footprint fact either — the count would be from a sample we know is incomplete', async () => {
+    const http = manifestHttp()
+    const origText = http.text.bind(http)
+    http.text = async (url: string): Promise<string> => {
+      if (url.endsWith('package.json')) throw new HttpError(403, url)
+      return origText(url)
+    }
+    const s = await assemble({ ref: 'acme/manifest', repo: { owner: 'acme', name: 'manifest' } }, http, NOW)
+    expect(s.schemaTokenEstimate).toBeUndefined()
+    expect(s.findings.some(f => f.id === 'cost/token-footprint')).toBe(false)
+  })
+
+  it('the finding is routed to the cost dimension and changes no score — a fact, not a signal', async () => {
+    const s = await assemble({ ref: 'acme/manifest', repo: { owner: 'acme', name: 'manifest' } }, manifestHttp(), NOW)
+    const card = score('acme/manifest', s, NOW.toISOString())
+    const cost = card.dimensions.find(d => d.id === 'cost')!
+    expect(cost.findings.map(f => f.id)).toContain('cost/token-footprint')
+    // 2 tools -> band(2) = 1.0 -> 100, exactly as it would be with no
+    // footprint measured at all.
+    expect(cost.score).toBe(100)
+    const withoutFact = score('acme/manifest', { ...s, findings: s.findings.filter(f => f.id !== 'cost/token-footprint') }, NOW.toISOString())
+    expect(withoutFact.dimensions.find(d => d.id === 'cost')!.score).toBe(cost.score)
+    expect(withoutFact.overall).toBe(card.overall)
   })
 })

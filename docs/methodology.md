@@ -1,4 +1,4 @@
-# Methodology (rubric v1.6.0)
+# Methodology (rubric v1.7.0)
 
 trovark computes a 0–100 Trust Score from four dimensions: Health 35%,
 Reliability 25%, Security 25%, Cost 15%. Grade bands: A ≥ 85, B ≥ 70, C ≥ 55,
@@ -51,16 +51,27 @@ D ≥ 40, F < 40 (+/- at the top/bottom 5 points of each band).
   shown; ~13% true-positive rate in testing, so it carries a low rubric weight
   and findings are labeled "candidate, verify manually" — use a dedicated
   scanner (gitleaks, trufflehog) for authoritative secret detection.
-- **Cost:** tokens of a reconstructed `tools/list` payload (gpt-tokenizer),
-  computed **only when every tool carries a real serialized JSON schema**
-  (manifest/OpenAPI sources — ~5% of the corpus); tool count (deduplicated;
-  test/example paths excluded). For source-extracted tools the raw captured
+- **Cost:** **tool-surface size** — how many distinct tools a client has to
+  load (deduplicated; test/example paths excluded). That is the whole scored
+  dimension, and it is measurable for every server whose tool surface we could
+  extract at all. The serialized **token footprint** of a reconstructed
+  `tools/list` payload (gpt-tokenizer) is still measured wherever it honestly
+  can be — **only when every tool carries a real serialized JSON schema**
+  (manifest/OpenAPI sources, ~5% of the corpus) — and is **reported as a fact**
+  on the scorecard, as the informational `cost/token-footprint` finding. It
+  deliberately **does not score**. For source-extracted tools the raw captured
   text bears no fixed relation to the serialized payload — measured against
   realistic payloads the old estimate was wrong by up to **7.5× in both
-  directions** (not a consistent under-estimate, as this page previously
-  claimed) — so the estimate is **withheld** rather than guessed, and the
-  cost dimension score is withheld with it. Absence lowers confidence; it
-  never renders as a favourable number.
+  directions** — so the estimate is withheld rather than guessed, and where it
+  is withheld nothing is published: silence, never "0 tokens". A signal
+  available for a twentieth of the corpus cannot carry a score, because its
+  absence would **flatter** the other nineteen twentieths: under the old
+  weighting a 5-tool server with a 25k-token schema scored 67, while the same
+  server with an unreadable schema scored 100 — failing to read it was worth
+  +33 points. Scoring every server on the same always-measurable quantity
+  removes that asymmetry by construction rather than by rule. (Rubric 1.7.0.
+  Before it, the footprint carried weight 2 of cost's 3, and the dimension was
+  withheld for 96% of graded servers as a result.)
 
 ## Multi-language tool extraction & the `notServer` outcome (v1.3)
 
@@ -161,11 +172,14 @@ for transparency only, exactly as in v1's findings-only integration.
 - Tool-schema extraction is best-effort static parsing across languages/idioms;
   it does not cover every framework, and a miss triggers the coverage gate
   (grade withheld) rather than a wrong score.
-- The cost token footprint is only computed from genuinely serialized
-  schemas; for the ~95% of servers whose tools are extracted from source,
-  cost rests on tool count alone and its dimension score is withheld. A
-  dimension (or headline grade) resting on unmeasured primaries is withheld
-  rather than renormalized — across ALL dimensions, not just cost.
+- The cost token footprint is only computed from genuinely serialized schemas
+  (~5% of servers); for the ~95% whose tools are extracted from source it is
+  not published at all. It is a reported fact, never a scored signal — cost
+  scores tool count, which is measurable for every server with an extracted
+  surface, so the dimension is withheld only when the tool surface itself
+  could not be read. A dimension (or headline grade) resting on an unmeasured
+  primary is still withheld rather than renormalized, for security
+  (tool-surface risk) and reliability (spec era) alike.
 - CVE resolution covers `package-lock.json`/`uv.lock`/`poetry.lock`; other
   lockfiles (pnpm, yarn, Pipfile) still fall back to declared floors.
 - Monorepos are scored at repository granularity.

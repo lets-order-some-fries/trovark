@@ -58,7 +58,7 @@ describe('cli main', () => {
   it('--json emits parseable scorecard', async () => {
     const r = await run(['acme/foo', '--json'])
     const card = JSON.parse(r.out)
-    expect(card.rubricVersion).toBe('1.6.0')
+    expect(card.rubricVersion).toBe('1.7.0') // 1.7.0: cost scores tool-count alone
     expect(card.dimensions).toHaveLength(4)
     expect(card.ref).toBe('acme/foo')
   })

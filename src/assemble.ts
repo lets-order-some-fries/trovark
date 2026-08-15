@@ -226,6 +226,29 @@ export async function assemble(
         if (!schema.surfacePartial) {
           s.schemaTokenEstimate = schema.schemaTokenEstimate
           if (schema.extracted) s.toolCount = schema.tools.length
+          // Rubric 1.7.0: the serialized token footprint is no longer a
+          // SCORED signal (src/scoring/rubric.ts dropped `token-footprint`
+          // because its absence flattered the ~95% of servers we cannot
+          // measure it for) — but it is still a real, checkable measurement
+          // for the ~5% we can, so it is published as a FACT instead of
+          // discarded. `schemaTokenEstimate` still threads through Signals
+          // untouched; nothing in the rubric reads it.
+          //
+          // Absence is SILENT. No finding when tokenFootprint() declined —
+          // never a "0 tokens" or "not measured" line, which is how an
+          // unmeasured server would start reading like a cheap one. The
+          // surfacePartial gate above applies for the same reason it applies
+          // to the counts: a footprint summed over a sample we know is
+          // incomplete is a wrong number, not a partial one.
+          if (s.schemaTokenEstimate !== undefined) {
+            const sources = [...new Set(schema.tools.map(t => t.evidence))]
+            const shown = sources.slice(0, 3).join(', ')
+            s.findings.push({
+              id: 'cost/token-footprint', dimension: 'cost', severity: 'info',
+              message: `Tool schemas serialize to ~${s.schemaTokenEstimate.toLocaleString('en-US')} tokens in a tools/list response (measured from declared JSON schemas, not estimated).`,
+              evidence: sources.length > 3 ? `${shown}, +${sources.length - 3} more` : shown,
+            })
+          }
         }
         // D2 (observatory, docs/superpowers/plans/2026-08-05-observatory-d2.md
         // Task 3): thread the resolved rung's tool surface through Signals for
