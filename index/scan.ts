@@ -238,7 +238,7 @@ async function main(): Promise<void> {
   // coverage/outage gates pass. Gated on notServer/unresolved so a library or
   // a 404'd repo never records a "tool surface".
   const surfaceInputs: Array<{ ref: string; tools: ToolInfo[]; source: SurfaceSource }> = []
-  const entries = await pool(refs, concurrency, async (ref): Promise<IndexEntry> => {
+  const scanOne = async (ref: string, progress: boolean): Promise<IndexEntry> => {
     try {
       const identity = await resolve(ref, http)
       const signals = await assemble(identity, http, now, { hasToken })
@@ -254,10 +254,43 @@ async function main(): Promise<void> {
     } catch (err) {
       return { ref, ok: false, error: (err as Error).message }
     } finally {
-      done++
-      if (done % 10 === 0 || done === refs.length) console.error(`scanned ${done}/${refs.length}`)
+      if (progress) {
+        done++
+        if (done % 10 === 0 || done === refs.length) console.error(`scanned ${done}/${refs.length}`)
+      }
     }
-  })
+  }
+  const entries = await pool(refs, concurrency, ref => scanOne(ref, true))
+
+  // Second pass over refs whose collectors reported errors. Measured across
+  // consecutive scans: degraded entries swung 18 <-> 43, and EVERY ONE of the
+  // 25 servers that changed published state between two scans had been
+  // degraded in the earlier one. A transient 403 is not a property of the
+  // server, so publishing "insufficient data" on the strength of one bad
+  // moment is honest-but-noisy: the reader cannot tell a server that is hard
+  // to analyse from one GitHub happened to throttle. One more good-faith
+  // attempt before publishing a withhold. If the retry is no better, the
+  // original entry stands and the withhold is published as before — the
+  // retry can only ever REPLACE a degraded read with a cleaner one.
+  const degradedRefs = entries.filter(e => e.collectorErrors).map(e => e.ref)
+  let recovered = 0
+  if (degradedRefs.length > 0 && !process.argv.includes('--no-retry')) {
+    console.error(`retrying ${degradedRefs.length} degraded ref(s)`)
+    const retried = await pool(degradedRefs, concurrency, ref => scanOne(ref, false))
+    const byRef = new Map(retried.map(e => [e.ref, e]))
+    for (let i = 0; i < entries.length; i++) {
+      const before = entries[i]
+      const after = byRef.get(before.ref)
+      // Strictly fewer collector errors than the first attempt, or none at
+      // all. Never swap in an equally-bad or worse read: that would make the
+      // published index depend on which attempt happened to run last.
+      if (after && (after.collectorErrors ?? 0) < (before.collectorErrors ?? Infinity)) {
+        entries[i] = after
+        recovered++
+      }
+    }
+    console.error(`retry recovered ${recovered}/${degradedRefs.length}`)
+  }
 
   entries.sort((a, b) => {
     if (a.ok !== b.ok) return a.ok ? -1 : 1
@@ -312,7 +345,15 @@ async function main(): Promise<void> {
   // D2: snapshots + drift are written ONLY here, after both gates above have
   // passed — a refused scan (partial run or outage signature) writes neither
   // the index nor any surface state, so bad runs can't manufacture drift.
-  const surf = recordSurfaces(join(dirname(outFile), 'surfaces'), surfaceInputs, now.toISOString(), RUBRIC_VERSION)
+  // A retried ref pushes its surface twice (once per attempt). Keep the LAST
+  // — the retry's, which is the read we published — so recordSurfaces diffs
+  // the baseline against the surface that actually backs the entry, exactly
+  // once. Without this the first (degraded) read would be diffed and saved
+  // before the retry overwrote it: harmless today only because the second
+  // diff then compares against the just-saved copy, which is not a property
+  // worth depending on.
+  const dedupedSurfaces = [...new Map(surfaceInputs.map(x => [x.ref, x])).values()]
+  const surf = recordSurfaces(join(dirname(outFile), 'surfaces'), dedupedSurfaces, now.toISOString(), RUBRIC_VERSION)
   console.error(`surfaces: ${surf.written} written, ${surf.events} drift events, ${surf.suppressed} suppressed`)
 
   const payload = { generatedAt: now.toISOString(), rubricVersion: RUBRIC_VERSION, coverage, stats: { ...summarize(entries), driftEvents: surf.events }, entries }
