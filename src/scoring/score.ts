@@ -29,6 +29,30 @@ function confidence(measuredWeight: number, totalWeight: number): Confidence {
   return r >= 0.75 ? 'high' : r >= 0.4 ? 'medium' : 'low'
 }
 
+/**
+ * Cost confidence, from the QUALITY of the count rather than its presence.
+ *
+ * Fault hunt follow-up (2026-08-15): rubric 1.7.0 left cost with a single
+ * weight-1 signal, so the generic weight-ratio above degenerates to
+ * 1/1 -> 'high' whenever the dimension scores and 0/1 -> 'low' when it does
+ * not. The field then restated `score !== null` and carried no information —
+ * and, worse, a tool count parsed out of maintainer PROSE (the README
+ * catalog rung) published at 'high' beside one extracted from real code.
+ *
+ * The serialized token footprint is the right input here even though it is
+ * deliberately not a scored signal: being able to read every tool's declared
+ * schema is evidence that the surface we counted is the COMPLETE one. Using
+ * it for confidence rather than for score is what keeps its absence from
+ * flattering anybody — absence lowers confidence, exactly as it should, and
+ * never moves the number.
+ */
+function costConfidence(signals: Signals, measuredWeight: number): Confidence {
+  if (measuredWeight === 0) return 'low'                    // nothing counted; Rule A also nulls the score
+  if (signals.readmeSourced) return 'low'                   // a maintainer's claim, unverified against code
+  if (signals.schemaTokenEstimate !== undefined) return 'high' // every tool's schema was readable
+  return 'medium'                                           // counted from code, schemas unreadable
+}
+
 export function score(
   ref: string, signals: Signals, generatedAt: string,
   resolved?: Scorecard['resolved'],
@@ -100,7 +124,9 @@ export function score(
     return {
       id,
       score: unmeasured ? null : Math.round((vSum / wSum) * 100),
-      confidence: confidence(wSum, defs.reduce((a, d) => a + d.weight, 0)),
+      confidence: id === 'cost'
+        ? costConfidence(signals, wSum)
+        : confidence(wSum, defs.reduce((a, d) => a + d.weight, 0)),
       available,
       total: defs.length,
       findings: signals.findings.filter(f => f.dimension === id),

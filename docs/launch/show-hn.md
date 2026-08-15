@@ -20,7 +20,7 @@ I kept adding MCP servers to my agents with no real sense of which ones were mai
 
     npx trovark github/github-mcp-server
 
-Four dimensions: **health** (maintained, or one commit from abandonment?), **reliability** (current spec? tests, CI, pinned deps?), **security** (risky tool surface, dependency CVEs via OSV), and **context cost** (how many tokens its tool schema eats). Every finding links to its evidence. The rubric is versioned and public.
+Four dimensions: **health** (maintained, or one commit from abandonment?), **reliability** (current spec? tests, CI, pinned deps?), **security** (risky tool surface, dependency CVEs via OSV), and **tool-surface size** (how many tools a client has to load — with the serialized token footprint reported as a fact where it can honestly be measured). Every finding links to its evidence. The rubric is versioned and public.
 
 Then I ran it across **400 servers** from the community lists and published the index. Current state: 321 graded, 32 correctly identified as libraries rather than servers, 29 honestly withheld, 18 dead links. Grade curve A 59 · B 152 · C 91 · D 17 · F 2 (avg 74). 51 servers are stale past 180 days; 66 expose shell/exec-shaped tools.
 

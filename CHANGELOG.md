@@ -3,6 +3,20 @@
 All notable changes to this project are documented in this file, reconstructed
 from git history. Format loosely follows [Keep a Changelog](https://keepachangelog.com/).
 
+## [0.1.8] - 2026-08-15
+
+Rubric 1.7.0, the tool-surface observatory, and the fixes an adversarial fault
+hunt found in everything above.
+
+- **The observatory (D2):** every scan records a hash-based snapshot of each server's tool surface; the git history of `index/surfaces/` is the dataset. Drift between scans is published as a neutral feed — counts and dates, never a characterization of intent. Baseline: 268 surfaces. First measured drift: 2 of 250 re-snapshotted servers in ~21h.
+- **Rubric 1.7.0 — cost scores tool-surface size.** `token-footprint` is computable for ~5% of servers, and through the 3-of-4 coverage gate it was silently keeping 22% of the corpus from being graded at all. It is now published as a fact (`cost/token-footprint`) and informs confidence, but does not score. Cost confidence reflects the quality of the count: high when every schema was readable, medium when counted from code, low when read from a README.
+- **Stopped publishing "not an MCP server" about real MCP servers** — including Microsoft's `Azure/azure-mcp`. An absence claim now requires a non-empty sample, no self-identification as a server, and a language the detector can read (9 of 20 such verdicts were false).
+- **A headline grade requires 3 of 4 measured dimensions.** 42 servers had been publishing letters computed from half the rubric.
+- **Withheld grades are withheld in the DATA**, not just the display: 29 of 29 insufficient-data servers had been publishing letter grades, several "A".
+- **Dimensions with no measurement report `null`**, never a fabricated 100 or 0; a partial tool surface can no longer publish a clean risk verdict.
+- **Scanner honesty:** a scan now either writes an index or says why it did not — completeness gate, outage gate that counts gracefully-degraded entries, a deadline that actually fires, and failed blob fetches recorded rather than swallowed.
+- `--fail-under` no longer exits 0 on an ungraded card; `--version` no longer reports 0.1.0.
+
 ## [0.1.7] - 2026-08-07
 
 Rubric 1.6.0: a number is measured or it is withheld.

@@ -627,7 +627,34 @@ describe('cost scores tool-surface size alone (rubric 1.7.0)', () => {
     expect(typeof d.score).toBe('number')
     expect(d.score).toBe(70)                  // band(12) -> 0.7
     expect(d.available).toBe(1)
-    expect(d.confidence).toBe('high')         // 1 of 1 signal weight measured
+    expect(d.confidence).toBe('medium')       // counted from code, schemas unreadable (see costConfidence)
+  })
+
+  // Fault hunt follow-up (2026-08-15): with one weight-1 signal the generic
+  // weight-ratio confidence degenerated to high-whenever-scored, restating
+  // `score !== null` and publishing a README-parsed count at the same
+  // confidence as an extracted one. Cost confidence now reflects the QUALITY
+  // of the count. The footprint informs CONFIDENCE without scoring — which is
+  // what keeps its absence from flattering anyone.
+  describe('cost confidence reflects the quality of the count', () => {
+    it('high when every declared schema was readable', () => {
+      expect(cost(withTools({ schemaTokenEstimate: 1_500 })).confidence).toBe('high')
+    })
+    it('medium when counted from code but schemas were unreadable', () => {
+      expect(cost(withTools({ schemaTokenEstimate: undefined })).confidence).toBe('medium')
+    })
+    it("low when the count came from the README — a maintainer's claim", () => {
+      expect(cost(withTools({ schemaTokenEstimate: undefined, readmeSourced: true })).confidence).toBe('low')
+      // ...and a README-sourced count with a readable footprint is STILL low:
+      // provenance outranks schema readability.
+      expect(cost(withTools({ schemaTokenEstimate: 1_500, readmeSourced: true })).confidence).toBe('low')
+    })
+    it('confidence never moves the score', () => {
+      const a = cost(withTools({ schemaTokenEstimate: undefined })).score
+      const b = cost(withTools({ schemaTokenEstimate: 1_500 })).score
+      const c = cost(withTools({ schemaTokenEstimate: 1_500, readmeSourced: true })).score
+      expect(new Set([a, b, c]).size).toBe(1)
+    })
   })
 
   it('the cost score is INDEPENDENT of schemaTokenEstimate — absence can no longer flatter', () => {
