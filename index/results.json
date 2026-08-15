@@ -1,65 +1,35 @@
 {
-  "generatedAt": "2026-08-15T16:26:13.554Z",
+  "generatedAt": "2026-08-15T19:12:07.350Z",
   "rubricVersion": "1.7.0",
   "coverage": {
     "attempted": 400,
     "completed": 400,
     "collectorFailures": 0,
-    "degradedEntries": 43,
+    "degradedEntries": 18,
     "complete": true
   },
   "stats": {
     "total": 400,
     "scored": 400,
     "failed": 0,
-    "insufficient": 80,
+    "insufficient": 55,
     "notServer": 16,
     "dynamic": 1,
-    "unresolved": 17,
+    "unresolved": 18,
     "gradeDist": {
-      "A": 46,
-      "B": 127,
-      "C": 90,
-      "D": 23
+      "A": 47,
+      "B": 138,
+      "C": 100,
+      "D": 25
     },
     "avgOverall": 72,
-    "staleOver180": 50,
+    "staleOver180": 56,
     "secretsFindings": 14,
     "deprecated": 0,
-    "shellExecTools": 61,
-    "driftEvents": 2
+    "shellExecTools": 68,
+    "driftEvents": 0
   },
   "entries": [
-    {
-      "ref": "tsouth89/toolport",
-      "ok": true,
-      "overall": 99,
-      "grade": "A+",
-      "repoUrl": "https://github.com/tsouth89/toolport",
-      "dims": {
-        "health": {
-          "score": 97,
-          "confidence": "high"
-        },
-        "reliability": {
-          "score": null,
-          "confidence": "medium"
-        },
-        "security": {
-          "score": 100,
-          "confidence": "medium"
-        },
-        "cost": {
-          "score": 100,
-          "confidence": "high"
-        }
-      },
-      "daysSinceLastCommit": 0,
-      "integrity": {
-        "payloads": 0,
-        "observations": 0
-      }
-    },
     {
       "ref": "LvcidPsyche/auto-browser",
       "ok": true,
@@ -81,7 +51,37 @@
         },
         "cost": {
           "score": 100,
+          "confidence": "medium"
+        }
+      },
+      "daysSinceLastCommit": 0,
+      "integrity": {
+        "payloads": 0,
+        "observations": 0
+      }
+    },
+    {
+      "ref": "tsouth89/toolport",
+      "ok": true,
+      "overall": 98,
+      "grade": "A+",
+      "repoUrl": "https://github.com/tsouth89/toolport",
+      "dims": {
+        "health": {
+          "score": 96,
           "confidence": "high"
+        },
+        "reliability": {
+          "score": null,
+          "confidence": "medium"
+        },
+        "security": {
+          "score": 100,
+          "confidence": "medium"
+        },
+        "cost": {
+          "score": 100,
+          "confidence": "medium"
         }
       },
       "daysSinceLastCommit": 0,
@@ -111,7 +111,7 @@
         },
         "cost": {
           "score": 100,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "daysSinceLastCommit": 1,
@@ -201,10 +201,10 @@
         },
         "cost": {
           "score": 100,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
-      "daysSinceLastCommit": 3,
+      "daysSinceLastCommit": 4,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -231,7 +231,7 @@
         },
         "cost": {
           "score": 100,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "daysSinceLastCommit": 0,
@@ -261,7 +261,7 @@
         },
         "cost": {
           "score": 100,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "daysSinceLastCommit": 1,
@@ -291,7 +291,7 @@
         },
         "cost": {
           "score": 100,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "daysSinceLastCommit": 1,
@@ -321,7 +321,7 @@
         },
         "cost": {
           "score": 100,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "daysSinceLastCommit": 0,
@@ -381,10 +381,40 @@
         },
         "cost": {
           "score": 100,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "daysSinceLastCommit": 5,
+      "integrity": {
+        "payloads": 0,
+        "observations": 0
+      }
+    },
+    {
+      "ref": "ionos-cloud/ionoscloud-mcp",
+      "ok": true,
+      "overall": 92,
+      "grade": "A",
+      "repoUrl": "https://github.com/ionos-cloud/ionoscloud-mcp",
+      "dims": {
+        "health": {
+          "score": 92,
+          "confidence": "high"
+        },
+        "reliability": {
+          "score": 100,
+          "confidence": "high"
+        },
+        "security": {
+          "score": 85,
+          "confidence": "medium"
+        },
+        "cost": {
+          "score": null,
+          "confidence": "low"
+        }
+      },
+      "daysSinceLastCommit": 1,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -411,7 +441,7 @@
         },
         "cost": {
           "score": 100,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "daysSinceLastCommit": 0,
@@ -441,7 +471,7 @@
         },
         "cost": {
           "score": 100,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "daysSinceLastCommit": 0,
@@ -471,7 +501,7 @@
         },
         "cost": {
           "score": 100,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "daysSinceLastCommit": 32,
@@ -501,10 +531,10 @@
         },
         "cost": {
           "score": 100,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
-      "daysSinceLastCommit": 0,
+      "daysSinceLastCommit": 1,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -531,7 +561,7 @@
         },
         "cost": {
           "score": 100,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "topFindings": [
@@ -540,7 +570,7 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 4,
+      "daysSinceLastCommit": 5,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -567,10 +597,10 @@
         },
         "cost": {
           "score": 100,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
-      "daysSinceLastCommit": 4,
+      "daysSinceLastCommit": 5,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -597,7 +627,7 @@
         },
         "cost": {
           "score": 100,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "daysSinceLastCommit": 0,
@@ -657,7 +687,7 @@
         },
         "cost": {
           "score": 100,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "daysSinceLastCommit": 4,
@@ -687,10 +717,10 @@
         },
         "cost": {
           "score": 100,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
-      "daysSinceLastCommit": 25,
+      "daysSinceLastCommit": 26,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -717,7 +747,7 @@
         },
         "cost": {
           "score": 100,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "daysSinceLastCommit": 0,
@@ -830,7 +860,7 @@
           "confidence": "low"
         }
       },
-      "daysSinceLastCommit": 3,
+      "daysSinceLastCommit": 4,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -901,7 +931,7 @@
         },
         "cost": {
           "score": 100,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "daysSinceLastCommit": 0,
@@ -971,7 +1001,7 @@
         },
         "cost": {
           "score": 100,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "daysSinceLastCommit": 1,
@@ -1045,7 +1075,7 @@
         },
         "cost": {
           "score": 100,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "daysSinceLastCommit": 34,
@@ -1075,7 +1105,7 @@
         },
         "cost": {
           "score": 100,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "daysSinceLastCommit": 19,
@@ -1149,7 +1179,7 @@
         },
         "cost": {
           "score": 100,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "daysSinceLastCommit": 2,
@@ -1223,7 +1253,7 @@
         },
         "cost": {
           "score": 100,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "topFindings": [
@@ -1259,7 +1289,7 @@
         },
         "cost": {
           "score": 100,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "daysSinceLastCommit": 19,
@@ -1289,7 +1319,7 @@
         },
         "cost": {
           "score": 70,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "topFindings": [
@@ -1325,7 +1355,7 @@
         },
         "cost": {
           "score": 100,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "topFindings": [
@@ -1361,7 +1391,7 @@
         },
         "cost": {
           "score": 100,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "daysSinceLastCommit": 12,
@@ -1391,7 +1421,7 @@
         },
         "cost": {
           "score": 100,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "daysSinceLastCommit": 22,
@@ -1457,10 +1487,10 @@
         },
         "cost": {
           "score": 100,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
-      "daysSinceLastCommit": 74,
+      "daysSinceLastCommit": 75,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -1523,7 +1553,7 @@
         },
         "cost": {
           "score": 100,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "daysSinceLastCommit": 16,
@@ -1553,7 +1583,7 @@
         },
         "cost": {
           "score": 100,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "topFindings": [
@@ -1589,10 +1619,10 @@
         },
         "cost": {
           "score": 100,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
-      "daysSinceLastCommit": 17,
+      "daysSinceLastCommit": 18,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -1619,10 +1649,40 @@
         },
         "cost": {
           "score": 100,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "daysSinceLastCommit": 25,
+      "integrity": {
+        "payloads": 0,
+        "observations": 0
+      }
+    },
+    {
+      "ref": "jasonwilbur/cloud-cost-mcp",
+      "ok": true,
+      "overall": 84,
+      "grade": "B+",
+      "repoUrl": "https://github.com/jasonwilbur/cloud-cost-mcp",
+      "dims": {
+        "health": {
+          "score": 55,
+          "confidence": "high"
+        },
+        "reliability": {
+          "score": 100,
+          "confidence": "high"
+        },
+        "security": {
+          "score": 100,
+          "confidence": "medium"
+        },
+        "cost": {
+          "score": 100,
+          "confidence": "medium"
+        }
+      },
+      "daysSinceLastCommit": 72,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -1649,10 +1709,55 @@
         },
         "cost": {
           "score": 70,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "daysSinceLastCommit": 2,
+      "integrity": {
+        "payloads": 0,
+        "observations": 0
+      }
+    },
+    {
+      "ref": "Flux159/mcp-server-kubernetes",
+      "ok": true,
+      "overall": 83,
+      "grade": "B+",
+      "repoUrl": "https://github.com/Flux159/mcp-server-kubernetes",
+      "dims": {
+        "health": {
+          "score": 100,
+          "confidence": "high"
+        },
+        "reliability": {
+          "score": 92,
+          "confidence": "high"
+        },
+        "security": {
+          "score": 40,
+          "confidence": "medium"
+        },
+        "cost": {
+          "score": 100,
+          "confidence": "low"
+        }
+      },
+      "topFindings": [
+        {
+          "id": "security/shell-exec-tool",
+          "severity": "high"
+        },
+        {
+          "id": "security/destructive-tool",
+          "severity": "medium"
+        },
+        {
+          "id": "security/shell-import-no-tools",
+          "severity": "medium"
+        }
+      ],
+      "daysSinceLastCommit": 7,
+      "readmeSourced": true,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -1679,7 +1784,7 @@
         },
         "cost": {
           "score": 100,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "daysSinceLastCommit": 14,
@@ -1709,7 +1814,7 @@
         },
         "cost": {
           "score": 100,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "topFindings": [
@@ -1753,7 +1858,7 @@
         },
         "cost": {
           "score": 100,
-          "confidence": "high"
+          "confidence": "low"
         }
       },
       "topFindings": [
@@ -1770,7 +1875,7 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 26,
+      "daysSinceLastCommit": 27,
       "readmeSourced": true,
       "integrity": {
         "payloads": 0,
@@ -1815,7 +1920,7 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 3,
+      "daysSinceLastCommit": 0,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -1842,7 +1947,7 @@
         },
         "cost": {
           "score": 100,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "topFindings": [
@@ -1878,10 +1983,54 @@
         },
         "cost": {
           "score": 100,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "daysSinceLastCommit": 80,
+      "integrity": {
+        "payloads": 0,
+        "observations": 0
+      }
+    },
+    {
+      "ref": "GeiserX/spinnaker-mcp",
+      "ok": true,
+      "overall": 82,
+      "grade": "B+",
+      "repoUrl": "https://github.com/GeiserX/spinnaker-mcp",
+      "dims": {
+        "health": {
+          "score": 82,
+          "confidence": "high"
+        },
+        "reliability": {
+          "score": 100,
+          "confidence": "high"
+        },
+        "security": {
+          "score": 63,
+          "confidence": "medium"
+        },
+        "cost": {
+          "score": null,
+          "confidence": "low"
+        }
+      },
+      "topFindings": [
+        {
+          "id": "security/destructive-tool",
+          "severity": "medium"
+        },
+        {
+          "id": "security/destructive-tool",
+          "severity": "medium"
+        },
+        {
+          "id": "security/destructive-tool",
+          "severity": "medium"
+        }
+      ],
+      "daysSinceLastCommit": 14,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -1908,7 +2057,7 @@
         },
         "cost": {
           "score": 70,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "topFindings": [
@@ -1944,7 +2093,7 @@
         },
         "cost": {
           "score": 40,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "daysSinceLastCommit": 6,
@@ -1991,7 +2140,7 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 0,
+      "daysSinceLastCommit": 1,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -2018,7 +2167,7 @@
         },
         "cost": {
           "score": 70,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "topFindings": [
@@ -2094,7 +2243,7 @@
         },
         "cost": {
           "score": 100,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "topFindings": [
@@ -2138,7 +2287,7 @@
         },
         "cost": {
           "score": 70,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "topFindings": [
@@ -2182,7 +2331,7 @@
         },
         "cost": {
           "score": 100,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "topFindings": [
@@ -2226,7 +2375,7 @@
         },
         "cost": {
           "score": 70,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "daysSinceLastCommit": 37,
@@ -2256,7 +2405,7 @@
         },
         "cost": {
           "score": 100,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "topFindings": [
@@ -2300,7 +2449,7 @@
         },
         "cost": {
           "score": 100,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "daysSinceLastCommit": 13,
@@ -2366,7 +2515,7 @@
         },
         "cost": {
           "score": 100,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "topFindings": [
@@ -2406,7 +2555,7 @@
         },
         "cost": {
           "score": 70,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "daysSinceLastCommit": 29,
@@ -2480,7 +2629,7 @@
         },
         "cost": {
           "score": 100,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "daysSinceLastCommit": 0,
@@ -2510,7 +2659,7 @@
         },
         "cost": {
           "score": 100,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "topFindings": [
@@ -2546,7 +2695,7 @@
         },
         "cost": {
           "score": 100,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "topFindings": [
@@ -2563,7 +2712,7 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 22,
+      "daysSinceLastCommit": 23,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -2590,10 +2739,10 @@
         },
         "cost": {
           "score": 100,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
-      "daysSinceLastCommit": 7,
+      "daysSinceLastCommit": 8,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -2620,10 +2769,10 @@
         },
         "cost": {
           "score": 100,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
-      "daysSinceLastCommit": 7,
+      "daysSinceLastCommit": 8,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -2650,7 +2799,7 @@
         },
         "cost": {
           "score": 100,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "daysSinceLastCommit": 10,
@@ -2680,7 +2829,7 @@
         },
         "cost": {
           "score": 70,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "topFindings": [
@@ -2724,7 +2873,7 @@
         },
         "cost": {
           "score": 100,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "topFindings": [
@@ -2768,7 +2917,7 @@
         },
         "cost": {
           "score": 100,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "topFindings": [
@@ -2804,7 +2953,7 @@
         },
         "cost": {
           "score": 70,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "topFindings": [
@@ -2848,10 +2997,70 @@
         },
         "cost": {
           "score": 40,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "daysSinceLastCommit": 4,
+      "integrity": {
+        "payloads": 0,
+        "observations": 0
+      }
+    },
+    {
+      "ref": "alexei-led/aws-mcp-server",
+      "ok": true,
+      "overall": 79,
+      "grade": "B",
+      "repoUrl": "https://github.com/alexei-led/aws-mcp-server",
+      "dims": {
+        "health": {
+          "score": 41,
+          "confidence": "high"
+        },
+        "reliability": {
+          "score": 100,
+          "confidence": "high"
+        },
+        "security": {
+          "score": 100,
+          "confidence": "medium"
+        },
+        "cost": {
+          "score": 100,
+          "confidence": "medium"
+        }
+      },
+      "daysSinceLastCommit": 169,
+      "integrity": {
+        "payloads": 0,
+        "observations": 0
+      }
+    },
+    {
+      "ref": "aliyun/alibaba-cloud-ops-mcp-server",
+      "ok": true,
+      "overall": 79,
+      "grade": "B",
+      "repoUrl": "https://github.com/aliyun/alibaba-cloud-ops-mcp-server",
+      "dims": {
+        "health": {
+          "score": 47,
+          "confidence": "high"
+        },
+        "reliability": {
+          "score": 89,
+          "confidence": "high"
+        },
+        "security": {
+          "score": 100,
+          "confidence": "medium"
+        },
+        "cost": {
+          "score": 100,
+          "confidence": "medium"
+        }
+      },
+      "daysSinceLastCommit": 152,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -2878,7 +3087,7 @@
         },
         "cost": {
           "score": 70,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "daysSinceLastCommit": 20,
@@ -2908,7 +3117,7 @@
         },
         "cost": {
           "score": 70,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "topFindings": [
@@ -2921,7 +3130,7 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 1,
+      "daysSinceLastCommit": 2,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -2948,7 +3157,7 @@
         },
         "cost": {
           "score": 40,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "daysSinceLastCommit": 19,
@@ -2978,7 +3187,7 @@
         },
         "cost": {
           "score": 70,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "daysSinceLastCommit": 1,
@@ -3008,10 +3217,54 @@
         },
         "cost": {
           "score": 100,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
-      "daysSinceLastCommit": 7,
+      "daysSinceLastCommit": 8,
+      "integrity": {
+        "payloads": 0,
+        "observations": 0
+      }
+    },
+    {
+      "ref": "jasonwilbur/oci-pricing-mcp",
+      "ok": true,
+      "overall": 79,
+      "grade": "B",
+      "repoUrl": "https://github.com/jasonwilbur/oci-pricing-mcp",
+      "dims": {
+        "health": {
+          "score": 55,
+          "confidence": "high"
+        },
+        "reliability": {
+          "score": 100,
+          "confidence": "high"
+        },
+        "security": {
+          "score": 77,
+          "confidence": "high"
+        },
+        "cost": {
+          "score": 100,
+          "confidence": "medium"
+        }
+      },
+      "topFindings": [
+        {
+          "id": "security/dependency-cve",
+          "severity": "medium"
+        },
+        {
+          "id": "security/dependency-cve",
+          "severity": "medium"
+        },
+        {
+          "id": "security/dependency-cve",
+          "severity": "medium"
+        }
+      ],
+      "daysSinceLastCommit": 72,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -3038,7 +3291,7 @@
         },
         "cost": {
           "score": 40,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "topFindings": [
@@ -3055,7 +3308,7 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 1,
+      "daysSinceLastCommit": 0,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -3082,7 +3335,7 @@
         },
         "cost": {
           "score": 100,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "topFindings": [
@@ -3126,40 +3379,10 @@
         },
         "cost": {
           "score": 100,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "daysSinceLastCommit": 96,
-      "integrity": {
-        "payloads": 0,
-        "observations": 0
-      }
-    },
-    {
-      "ref": "PantelisGeorgiadis/dicomweb-mcp-server",
-      "ok": true,
-      "overall": 79,
-      "grade": "B",
-      "repoUrl": "https://github.com/PantelisGeorgiadis/dicomweb-mcp-server",
-      "dims": {
-        "health": {
-          "score": 52,
-          "confidence": "high"
-        },
-        "reliability": {
-          "score": 100,
-          "confidence": "high"
-        },
-        "security": {
-          "score": 85,
-          "confidence": "medium"
-        },
-        "cost": {
-          "score": 100,
-          "confidence": "high"
-        }
-      },
-      "daysSinceLastCommit": 90,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -3186,7 +3409,7 @@
         },
         "cost": {
           "score": 70,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "topFindings": [
@@ -3226,7 +3449,7 @@
         },
         "cost": {
           "score": 100,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "topFindings": [
@@ -3270,7 +3493,7 @@
         },
         "cost": {
           "score": 100,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "daysSinceLastCommit": 23,
@@ -3300,7 +3523,7 @@
         },
         "cost": {
           "score": 100,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "topFindings": [
@@ -3340,7 +3563,7 @@
         },
         "cost": {
           "score": 70,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "topFindings": [
@@ -3350,6 +3573,72 @@
         }
       ],
       "daysSinceLastCommit": 16,
+      "integrity": {
+        "payloads": 0,
+        "observations": 0
+      }
+    },
+    {
+      "ref": "Albaker-Group/cloudprice-mcp",
+      "ok": true,
+      "overall": 78,
+      "grade": "B",
+      "repoUrl": "https://github.com/Albaker-Group/cloudprice-mcp",
+      "dims": {
+        "health": {
+          "score": 69,
+          "confidence": "high"
+        },
+        "reliability": {
+          "score": 89,
+          "confidence": "high"
+        },
+        "security": {
+          "score": 85,
+          "confidence": "medium"
+        },
+        "cost": {
+          "score": 70,
+          "confidence": "medium"
+        }
+      },
+      "daysSinceLastCommit": 6,
+      "integrity": {
+        "payloads": 0,
+        "observations": 0
+      }
+    },
+    {
+      "ref": "alexpota/cloudscope-mcp",
+      "ok": true,
+      "overall": 78,
+      "grade": "B",
+      "repoUrl": "https://github.com/alexpota/cloudscope-mcp",
+      "dims": {
+        "health": {
+          "score": 73,
+          "confidence": "high"
+        },
+        "reliability": {
+          "score": 100,
+          "confidence": "high"
+        },
+        "security": {
+          "score": 63,
+          "confidence": "medium"
+        },
+        "cost": {
+          "score": null,
+          "confidence": "low"
+        }
+      },
+      "topFindings": [
+        {
+          "id": "security/destructive-tool",
+          "severity": "medium"
+        }
+      ],
+      "daysSinceLastCommit": 3,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -3393,7 +3682,7 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 3,
+      "daysSinceLastCommit": 4,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -3420,7 +3709,7 @@
         },
         "cost": {
           "score": 40,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "topFindings": [
@@ -3437,7 +3726,7 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 53,
+      "daysSinceLastCommit": 54,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -3464,7 +3753,7 @@
         },
         "cost": {
           "score": 70,
-          "confidence": "high"
+          "confidence": "low"
         }
       },
       "topFindings": [
@@ -3505,7 +3794,7 @@
         },
         "cost": {
           "score": 100,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "daysSinceLastCommit": 151,
@@ -3535,7 +3824,7 @@
         },
         "cost": {
           "score": 70,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "topFindings": [
@@ -3579,7 +3868,7 @@
         },
         "cost": {
           "score": 70,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "topFindings": [
@@ -3615,7 +3904,7 @@
         },
         "cost": {
           "score": 100,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "topFindings": [
@@ -3659,7 +3948,7 @@
         },
         "cost": {
           "score": 100,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "topFindings": [
@@ -3703,7 +3992,7 @@
         },
         "cost": {
           "score": 100,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "topFindings": [
@@ -3747,10 +4036,10 @@
         },
         "cost": {
           "score": 100,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
-      "daysSinceLastCommit": 6,
+      "daysSinceLastCommit": 7,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -3830,7 +4119,7 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 38,
+      "daysSinceLastCommit": 39,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -3857,7 +4146,7 @@
         },
         "cost": {
           "score": 100,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "topFindings": [
@@ -3933,7 +4222,7 @@
         },
         "cost": {
           "score": 70,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "topFindings": [
@@ -4013,7 +4302,7 @@
         },
         "cost": {
           "score": 100,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "topFindings": [
@@ -4031,6 +4320,50 @@
         }
       ],
       "daysSinceLastCommit": 138,
+      "integrity": {
+        "payloads": 0,
+        "observations": 0
+      }
+    },
+    {
+      "ref": "AliKarami/MikroMCP",
+      "ok": true,
+      "overall": 76,
+      "grade": "B",
+      "repoUrl": "https://github.com/AliKarami/MikroMCP",
+      "dims": {
+        "health": {
+          "score": 84,
+          "confidence": "high"
+        },
+        "reliability": {
+          "score": 100,
+          "confidence": "high"
+        },
+        "security": {
+          "score": 40,
+          "confidence": "medium"
+        },
+        "cost": {
+          "score": null,
+          "confidence": "low"
+        }
+      },
+      "topFindings": [
+        {
+          "id": "security/shell-exec-tool",
+          "severity": "high"
+        },
+        {
+          "id": "security/shell-exec-tool",
+          "severity": "high"
+        },
+        {
+          "id": "security/destructive-tool",
+          "severity": "medium"
+        }
+      ],
+      "daysSinceLastCommit": 0,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -4057,7 +4390,7 @@
         },
         "cost": {
           "score": 70,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "daysSinceLastCommit": 13,
@@ -4087,7 +4420,7 @@
         },
         "cost": {
           "score": 70,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "topFindings": [
@@ -4096,7 +4429,7 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 59,
+      "daysSinceLastCommit": 60,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -4123,7 +4456,7 @@
         },
         "cost": {
           "score": 100,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "topFindings": [
@@ -4176,7 +4509,7 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 8,
+      "daysSinceLastCommit": 9,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -4203,7 +4536,7 @@
         },
         "cost": {
           "score": 100,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "topFindings": [
@@ -4247,10 +4580,46 @@
         },
         "cost": {
           "score": 100,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "daysSinceLastCommit": 311,
+      "integrity": {
+        "payloads": 0,
+        "observations": 0
+      }
+    },
+    {
+      "ref": "chaandannn/finopsmcp",
+      "ok": true,
+      "overall": 75,
+      "grade": "B",
+      "repoUrl": "https://github.com/chaandannn/finopsmcp",
+      "dims": {
+        "health": {
+          "score": 80,
+          "confidence": "high"
+        },
+        "reliability": {
+          "score": 81,
+          "confidence": "high"
+        },
+        "security": {
+          "score": 63,
+          "confidence": "medium"
+        },
+        "cost": {
+          "score": null,
+          "confidence": "low"
+        }
+      },
+      "topFindings": [
+        {
+          "id": "security/shell-import-no-tools",
+          "severity": "medium"
+        }
+      ],
+      "daysSinceLastCommit": 0,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -4277,7 +4646,7 @@
         },
         "cost": {
           "score": 40,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "topFindings": [
@@ -4295,6 +4664,50 @@
         }
       ],
       "daysSinceLastCommit": 40,
+      "integrity": {
+        "payloads": 0,
+        "observations": 0
+      }
+    },
+    {
+      "ref": "depwire/depwire",
+      "ok": true,
+      "overall": 75,
+      "grade": "B",
+      "repoUrl": "https://github.com/depwire/depwire",
+      "dims": {
+        "health": {
+          "score": 84,
+          "confidence": "high"
+        },
+        "reliability": {
+          "score": 100,
+          "confidence": "high"
+        },
+        "security": {
+          "score": 40,
+          "confidence": "medium"
+        },
+        "cost": {
+          "score": 70,
+          "confidence": "medium"
+        }
+      },
+      "topFindings": [
+        {
+          "id": "security/shell-exec-tool",
+          "severity": "high"
+        },
+        {
+          "id": "security/shell-exec-tool",
+          "severity": "high"
+        },
+        {
+          "id": "security/shell-exec-tool",
+          "severity": "high"
+        }
+      ],
+      "daysSinceLastCommit": 0,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -4331,6 +4744,36 @@
         }
       ],
       "daysSinceLastCommit": 102,
+      "integrity": {
+        "payloads": 0,
+        "observations": 0
+      }
+    },
+    {
+      "ref": "PantelisGeorgiadis/dicomweb-mcp-server",
+      "ok": true,
+      "overall": 75,
+      "grade": "B",
+      "repoUrl": "https://github.com/PantelisGeorgiadis/dicomweb-mcp-server",
+      "dims": {
+        "health": {
+          "score": 40,
+          "confidence": "high"
+        },
+        "reliability": {
+          "score": 100,
+          "confidence": "high"
+        },
+        "security": {
+          "score": 85,
+          "confidence": "medium"
+        },
+        "cost": {
+          "score": 100,
+          "confidence": "medium"
+        }
+      },
+      "daysSinceLastCommit": 91,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -4393,7 +4836,7 @@
         },
         "cost": {
           "score": 100,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "topFindings": [
@@ -4465,54 +4908,10 @@
         },
         "cost": {
           "score": 100,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "daysSinceLastCommit": 313,
-      "integrity": {
-        "payloads": 0,
-        "observations": 0
-      }
-    },
-    {
-      "ref": "depwire/depwire",
-      "ok": true,
-      "overall": 74,
-      "grade": "B-",
-      "repoUrl": "https://github.com/depwire/depwire",
-      "dims": {
-        "health": {
-          "score": 82,
-          "confidence": "high"
-        },
-        "reliability": {
-          "score": 100,
-          "confidence": "high"
-        },
-        "security": {
-          "score": 40,
-          "confidence": "medium"
-        },
-        "cost": {
-          "score": 70,
-          "confidence": "high"
-        }
-      },
-      "topFindings": [
-        {
-          "id": "security/shell-exec-tool",
-          "severity": "high"
-        },
-        {
-          "id": "security/shell-exec-tool",
-          "severity": "high"
-        },
-        {
-          "id": "security/shell-exec-tool",
-          "severity": "high"
-        }
-      ],
-      "daysSinceLastCommit": 0,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -4539,7 +4938,7 @@
         },
         "cost": {
           "score": 100,
-          "confidence": "high"
+          "confidence": "low"
         }
       },
       "topFindings": [
@@ -4580,7 +4979,7 @@
         },
         "cost": {
           "score": 40,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "topFindings": [
@@ -4624,7 +5023,7 @@
         },
         "cost": {
           "score": 70,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "daysSinceLastCommit": 72,
@@ -4654,7 +5053,7 @@
         },
         "cost": {
           "score": 40,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "topFindings": [
@@ -4698,7 +5097,7 @@
         },
         "cost": {
           "score": 70,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "topFindings": [
@@ -4742,7 +5141,7 @@
         },
         "cost": {
           "score": 100,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "daysSinceLastCommit": 67,
@@ -4772,7 +5171,7 @@
         },
         "cost": {
           "score": 100,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "topFindings": [
@@ -4816,7 +5215,7 @@
         },
         "cost": {
           "score": 100,
-          "confidence": "high"
+          "confidence": "low"
         }
       },
       "topFindings": [
@@ -4857,7 +5256,7 @@
         },
         "cost": {
           "score": 70,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "topFindings": [
@@ -4901,7 +5300,7 @@
         },
         "cost": {
           "score": 100,
-          "confidence": "high"
+          "confidence": "low"
         }
       },
       "topFindings": [
@@ -4938,7 +5337,7 @@
         },
         "cost": {
           "score": 70,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "topFindings": [
@@ -4974,7 +5373,7 @@
         },
         "cost": {
           "score": 100,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "topFindings": [
@@ -5031,7 +5430,7 @@
           "severity": "info"
         }
       ],
-      "daysSinceLastCommit": 52,
+      "daysSinceLastCommit": 53,
       "readmeSourced": true,
       "integrity": {
         "payloads": 0,
@@ -5059,7 +5458,7 @@
         },
         "cost": {
           "score": 100,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "topFindings": [
@@ -5068,7 +5467,7 @@
           "severity": "high"
         }
       ],
-      "daysSinceLastCommit": 66,
+      "daysSinceLastCommit": 67,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -5139,7 +5538,7 @@
         },
         "cost": {
           "score": 100,
-          "confidence": "high"
+          "confidence": "low"
         }
       },
       "topFindings": [
@@ -5176,7 +5575,7 @@
         },
         "cost": {
           "score": 70,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "topFindings": [
@@ -5193,7 +5592,7 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 13,
+      "daysSinceLastCommit": 14,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -5220,7 +5619,7 @@
         },
         "cost": {
           "score": 100,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "topFindings": [
@@ -5238,46 +5637,6 @@
         }
       ],
       "daysSinceLastCommit": 74,
-      "integrity": {
-        "payloads": 0,
-        "observations": 0
-      }
-    },
-    {
-      "ref": "Swarmwage/swarmwage",
-      "ok": true,
-      "overall": 73,
-      "grade": "B-",
-      "repoUrl": "https://github.com/Swarmwage/swarmwage",
-      "dims": {
-        "health": {
-          "score": 86,
-          "confidence": "high"
-        },
-        "reliability": {
-          "score": null,
-          "confidence": "medium"
-        },
-        "security": {
-          "score": 40,
-          "confidence": "medium"
-        },
-        "cost": {
-          "score": 100,
-          "confidence": "high"
-        }
-      },
-      "topFindings": [
-        {
-          "id": "security/shell-exec-tool",
-          "severity": "high"
-        },
-        {
-          "id": "security/shell-exec-tool",
-          "severity": "high"
-        }
-      ],
-      "daysSinceLastCommit": 27,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -5304,7 +5663,7 @@
         },
         "cost": {
           "score": 70,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "daysSinceLastCommit": 0,
@@ -5334,7 +5693,7 @@
         },
         "cost": {
           "score": 100,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "topFindings": [
@@ -5378,7 +5737,7 @@
         },
         "cost": {
           "score": 70,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "topFindings": [
@@ -5402,6 +5761,46 @@
       }
     },
     {
+      "ref": "Swarmwage/swarmwage",
+      "ok": true,
+      "overall": 72,
+      "grade": "B-",
+      "repoUrl": "https://github.com/Swarmwage/swarmwage",
+      "dims": {
+        "health": {
+          "score": 82,
+          "confidence": "high"
+        },
+        "reliability": {
+          "score": null,
+          "confidence": "medium"
+        },
+        "security": {
+          "score": 40,
+          "confidence": "medium"
+        },
+        "cost": {
+          "score": 100,
+          "confidence": "medium"
+        }
+      },
+      "topFindings": [
+        {
+          "id": "security/shell-exec-tool",
+          "severity": "high"
+        },
+        {
+          "id": "security/shell-exec-tool",
+          "severity": "high"
+        }
+      ],
+      "daysSinceLastCommit": 27,
+      "integrity": {
+        "payloads": 0,
+        "observations": 0
+      }
+    },
+    {
       "ref": "uxloom-dev/uxloom",
       "ok": true,
       "overall": 72,
@@ -5422,7 +5821,7 @@
         },
         "cost": {
           "score": 70,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "topFindings": [
@@ -5439,7 +5838,7 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 5,
+      "daysSinceLastCommit": 6,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -5466,7 +5865,7 @@
         },
         "cost": {
           "score": 100,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "topFindings": [
@@ -5506,7 +5905,7 @@
         },
         "cost": {
           "score": 20,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "topFindings": [
@@ -5550,7 +5949,7 @@
         },
         "cost": {
           "score": 20,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "topFindings": [
@@ -5594,7 +5993,7 @@
         },
         "cost": {
           "score": 70,
-          "confidence": "high"
+          "confidence": "low"
         }
       },
       "topFindings": [
@@ -5639,7 +6038,7 @@
         },
         "cost": {
           "score": 100,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "topFindings": [
@@ -5683,10 +6082,54 @@
         },
         "cost": {
           "score": 100,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "daysSinceLastCommit": 38,
+      "integrity": {
+        "payloads": 0,
+        "observations": 0
+      }
+    },
+    {
+      "ref": "Infrawise/mcp-server",
+      "ok": true,
+      "overall": 71,
+      "grade": "B-",
+      "repoUrl": "https://github.com/Infrawise/mcp-server",
+      "dims": {
+        "health": {
+          "score": 65,
+          "confidence": "high"
+        },
+        "reliability": {
+          "score": 56,
+          "confidence": "high"
+        },
+        "security": {
+          "score": 77,
+          "confidence": "high"
+        },
+        "cost": {
+          "score": 100,
+          "confidence": "medium"
+        }
+      },
+      "topFindings": [
+        {
+          "id": "security/dependency-cve",
+          "severity": "medium"
+        },
+        {
+          "id": "security/dependency-cve",
+          "severity": "medium"
+        },
+        {
+          "id": "security/dependency-cve",
+          "severity": "medium"
+        }
+      ],
+      "daysSinceLastCommit": 30,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -5757,7 +6200,7 @@
         },
         "cost": {
           "score": 100,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "daysSinceLastCommit": 304,
@@ -5787,7 +6230,7 @@
         },
         "cost": {
           "score": 100,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "daysSinceLastCommit": 354,
@@ -5817,7 +6260,7 @@
         },
         "cost": {
           "score": 100,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "topFindings": [
@@ -5861,7 +6304,7 @@
         },
         "cost": {
           "score": 70,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "topFindings": [
@@ -5905,7 +6348,7 @@
         },
         "cost": {
           "score": 20,
-          "confidence": "high"
+          "confidence": "low"
         }
       },
       "topFindings": [
@@ -5950,10 +6393,10 @@
         },
         "cost": {
           "score": 70,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
-      "daysSinceLastCommit": 16,
+      "daysSinceLastCommit": 17,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -5980,7 +6423,7 @@
         },
         "cost": {
           "score": 40,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "topFindings": [
@@ -6024,7 +6467,7 @@
         },
         "cost": {
           "score": 100,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "daysSinceLastCommit": 227,
@@ -6054,7 +6497,7 @@
         },
         "cost": {
           "score": 40,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "topFindings": [
@@ -6098,7 +6541,7 @@
         },
         "cost": {
           "score": 100,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "topFindings": [
@@ -6111,7 +6554,7 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 36,
+      "daysSinceLastCommit": 37,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -6138,7 +6581,7 @@
         },
         "cost": {
           "score": 70,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "daysSinceLastCommit": 296,
@@ -6168,7 +6611,7 @@
         },
         "cost": {
           "score": 100,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "daysSinceLastCommit": 139,
@@ -6198,7 +6641,7 @@
         },
         "cost": {
           "score": 70,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "topFindings": [
@@ -6242,7 +6685,7 @@
         },
         "cost": {
           "score": 20,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "topFindings": [
@@ -6286,7 +6729,7 @@
         },
         "cost": {
           "score": 100,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "topFindings": [
@@ -6374,7 +6817,7 @@
         },
         "cost": {
           "score": 20,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "topFindings": [
@@ -6427,7 +6870,7 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 11,
+      "daysSinceLastCommit": 12,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -6454,7 +6897,7 @@
         },
         "cost": {
           "score": 100,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "daysSinceLastCommit": 180,
@@ -6484,7 +6927,7 @@
         },
         "cost": {
           "score": 100,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "daysSinceLastCommit": 44,
@@ -6514,7 +6957,7 @@
         },
         "cost": {
           "score": 100,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "topFindings": [
@@ -6558,7 +7001,7 @@
         },
         "cost": {
           "score": 100,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "topFindings": [
@@ -6594,7 +7037,7 @@
         },
         "cost": {
           "score": 40,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "topFindings": [
@@ -6611,7 +7054,7 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 126,
+      "daysSinceLastCommit": 127,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -6682,10 +7125,54 @@
         },
         "cost": {
           "score": 100,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
-      "daysSinceLastCommit": 50,
+      "daysSinceLastCommit": 51,
+      "integrity": {
+        "payloads": 0,
+        "observations": 0
+      }
+    },
+    {
+      "ref": "alexei-led/k8s-mcp-server",
+      "ok": true,
+      "overall": 68,
+      "grade": "C+",
+      "repoUrl": "https://github.com/alexei-led/k8s-mcp-server",
+      "dims": {
+        "health": {
+          "score": 50,
+          "confidence": "high"
+        },
+        "reliability": {
+          "score": 100,
+          "confidence": "high"
+        },
+        "security": {
+          "score": 40,
+          "confidence": "medium"
+        },
+        "cost": {
+          "score": 100,
+          "confidence": "medium"
+        }
+      },
+      "topFindings": [
+        {
+          "id": "security/shell-exec-tool",
+          "severity": "high"
+        },
+        {
+          "id": "security/shell-exec-tool",
+          "severity": "high"
+        },
+        {
+          "id": "security/shell-exec-tool",
+          "severity": "high"
+        }
+      ],
+      "daysSinceLastCommit": 169,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -6712,7 +7199,7 @@
         },
         "cost": {
           "score": 70,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "topFindings": [
@@ -6756,7 +7243,7 @@
         },
         "cost": {
           "score": 70,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "topFindings": [
@@ -6844,7 +7331,7 @@
         },
         "cost": {
           "score": 70,
-          "confidence": "high"
+          "confidence": "low"
         }
       },
       "topFindings": [
@@ -6889,7 +7376,7 @@
         },
         "cost": {
           "score": 100,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "topFindings": [
@@ -6925,7 +7412,7 @@
         },
         "cost": {
           "score": 100,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "topFindings": [
@@ -6965,10 +7452,46 @@
         },
         "cost": {
           "score": 100,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "daysSinceLastCommit": 161,
+      "integrity": {
+        "payloads": 0,
+        "observations": 0
+      }
+    },
+    {
+      "ref": "huangdun/tempmd-mcp",
+      "ok": true,
+      "overall": 67,
+      "grade": "C+",
+      "repoUrl": "https://github.com/huangdun/tempmd-mcp",
+      "dims": {
+        "health": {
+          "score": 71,
+          "confidence": "high"
+        },
+        "reliability": {
+          "score": 44,
+          "confidence": "high"
+        },
+        "security": {
+          "score": 63,
+          "confidence": "medium"
+        },
+        "cost": {
+          "score": 100,
+          "confidence": "medium"
+        }
+      },
+      "topFindings": [
+        {
+          "id": "security/destructive-tool",
+          "severity": "medium"
+        }
+      ],
+      "daysSinceLastCommit": 22,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -6995,7 +7518,7 @@
         },
         "cost": {
           "score": 100,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "topFindings": [
@@ -7035,7 +7558,7 @@
         },
         "cost": {
           "score": 100,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "topFindings": [
@@ -7079,7 +7602,7 @@
         },
         "cost": {
           "score": 70,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "daysSinceLastCommit": 284,
@@ -7109,7 +7632,7 @@
         },
         "cost": {
           "score": 100,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "daysSinceLastCommit": 77,
@@ -7183,7 +7706,7 @@
         },
         "cost": {
           "score": 100,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "topFindings": [
@@ -7247,6 +7770,50 @@
       }
     },
     {
+      "ref": "helbertparanhos/easypanel-mcp-server",
+      "ok": true,
+      "overall": 66,
+      "grade": "C+",
+      "repoUrl": "https://github.com/helbertparanhos/easypanel-mcp-server",
+      "dims": {
+        "health": {
+          "score": 79,
+          "confidence": "high"
+        },
+        "reliability": {
+          "score": 100,
+          "confidence": "high"
+        },
+        "security": {
+          "score": 40,
+          "confidence": "medium"
+        },
+        "cost": {
+          "score": 20,
+          "confidence": "medium"
+        }
+      },
+      "topFindings": [
+        {
+          "id": "security/shell-exec-tool",
+          "severity": "high"
+        },
+        {
+          "id": "security/shell-exec-tool",
+          "severity": "high"
+        },
+        {
+          "id": "security/shell-exec-tool",
+          "severity": "high"
+        }
+      ],
+      "daysSinceLastCommit": 2,
+      "integrity": {
+        "payloads": 0,
+        "observations": 0
+      }
+    },
+    {
       "ref": "khglynn/spotify-bulk-actions-mcp",
       "ok": true,
       "overall": 66,
@@ -7267,7 +7834,7 @@
         },
         "cost": {
           "score": 40,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "topFindings": [
@@ -7311,7 +7878,7 @@
         },
         "cost": {
           "score": 100,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "topFindings": [
@@ -7355,7 +7922,7 @@
         },
         "cost": {
           "score": 100,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "daysSinceLastCommit": 115,
@@ -7385,10 +7952,10 @@
         },
         "cost": {
           "score": 100,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
-      "daysSinceLastCommit": 34,
+      "daysSinceLastCommit": 35,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -7415,7 +7982,7 @@
         },
         "cost": {
           "score": 100,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "daysSinceLastCommit": 70,
@@ -7445,7 +8012,7 @@
         },
         "cost": {
           "score": 40,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "topFindings": [
@@ -7489,7 +8056,7 @@
         },
         "cost": {
           "score": 40,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "topFindings": [
@@ -7506,7 +8073,7 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 61,
+      "daysSinceLastCommit": 62,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -7533,7 +8100,7 @@
         },
         "cost": {
           "score": 100,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "daysSinceLastCommit": 151,
@@ -7563,7 +8130,7 @@
         },
         "cost": {
           "score": 100,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "topFindings": [
@@ -7607,7 +8174,7 @@
         },
         "cost": {
           "score": 20,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "topFindings": [
@@ -7624,7 +8191,7 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 2,
+      "daysSinceLastCommit": 3,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -7651,7 +8218,7 @@
         },
         "cost": {
           "score": 100,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "daysSinceLastCommit": 283,
@@ -7681,7 +8248,7 @@
         },
         "cost": {
           "score": 70,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "topFindings": [
@@ -7725,7 +8292,7 @@
         },
         "cost": {
           "score": 100,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "daysSinceLastCommit": 206,
@@ -7755,7 +8322,7 @@
         },
         "cost": {
           "score": 70,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "topFindings": [
@@ -7795,7 +8362,7 @@
         },
         "cost": {
           "score": 70,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "topFindings": [
@@ -7839,7 +8406,7 @@
         },
         "cost": {
           "score": 70,
-          "confidence": "high"
+          "confidence": "low"
         }
       },
       "topFindings": [
@@ -7884,7 +8451,7 @@
         },
         "cost": {
           "score": 40,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "topFindings": [
@@ -7928,7 +8495,7 @@
         },
         "cost": {
           "score": 40,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "topFindings": [
@@ -7972,7 +8539,7 @@
         },
         "cost": {
           "score": 100,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "topFindings": [
@@ -8016,7 +8583,7 @@
         },
         "cost": {
           "score": 70,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "topFindings": [
@@ -8060,7 +8627,7 @@
         },
         "cost": {
           "score": 100,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "topFindings": [
@@ -8148,7 +8715,7 @@
         },
         "cost": {
           "score": 70,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "topFindings": [
@@ -8192,7 +8759,7 @@
         },
         "cost": {
           "score": 100,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "topFindings": [
@@ -8236,7 +8803,7 @@
         },
         "cost": {
           "score": 70,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "topFindings": [
@@ -8253,7 +8820,7 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 71,
+      "daysSinceLastCommit": 72,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -8280,7 +8847,7 @@
         },
         "cost": {
           "score": 100,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "daysSinceLastCommit": 175,
@@ -8310,7 +8877,7 @@
         },
         "cost": {
           "score": 20,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "topFindings": [
@@ -8354,7 +8921,7 @@
         },
         "cost": {
           "score": 100,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "topFindings": [
@@ -8398,7 +8965,7 @@
         },
         "cost": {
           "score": 40,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "topFindings": [
@@ -8442,7 +9009,7 @@
         },
         "cost": {
           "score": 100,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "topFindings": [
@@ -8486,7 +9053,7 @@
         },
         "cost": {
           "score": 70,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "topFindings": [
@@ -8530,7 +9097,7 @@
         },
         "cost": {
           "score": 40,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "topFindings": [
@@ -8574,7 +9141,7 @@
         },
         "cost": {
           "score": 20,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "topFindings": [
@@ -8591,7 +9158,7 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 8,
+      "daysSinceLastCommit": 9,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -8618,7 +9185,7 @@
         },
         "cost": {
           "score": 70,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "topFindings": [
@@ -8662,7 +9229,7 @@
         },
         "cost": {
           "score": 20,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "topFindings": [
@@ -8706,7 +9273,7 @@
         },
         "cost": {
           "score": 40,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "topFindings": [
@@ -8750,7 +9317,7 @@
         },
         "cost": {
           "score": 40,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "topFindings": [
@@ -8794,7 +9361,7 @@
         },
         "cost": {
           "score": 100,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "daysSinceLastCommit": 155,
@@ -8834,6 +9401,42 @@
       }
     },
     {
+      "ref": "davidlandais/ovh-api-mcp",
+      "ok": true,
+      "overall": 61,
+      "grade": "C",
+      "repoUrl": "https://github.com/davidlandais/ovh-api-mcp",
+      "dims": {
+        "health": {
+          "score": 54,
+          "confidence": "high"
+        },
+        "reliability": {
+          "score": 70,
+          "confidence": "high"
+        },
+        "security": {
+          "score": 63,
+          "confidence": "medium"
+        },
+        "cost": {
+          "score": null,
+          "confidence": "low"
+        }
+      },
+      "topFindings": [
+        {
+          "id": "security/shell-import-no-tools",
+          "severity": "medium"
+        }
+      ],
+      "daysSinceLastCommit": 61,
+      "integrity": {
+        "payloads": 0,
+        "observations": 0
+      }
+    },
+    {
       "ref": "longevity-genie/gget-mcp",
       "ok": true,
       "overall": 61,
@@ -8854,7 +9457,7 @@
         },
         "cost": {
           "score": 20,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "daysSinceLastCommit": 292,
@@ -8884,7 +9487,7 @@
         },
         "cost": {
           "score": 100,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "topFindings": [
@@ -8928,7 +9531,7 @@
         },
         "cost": {
           "score": 100,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "daysSinceLastCommit": 134,
@@ -8958,7 +9561,7 @@
         },
         "cost": {
           "score": 100,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "topFindings": [
@@ -9002,7 +9605,7 @@
         },
         "cost": {
           "score": 70,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "topFindings": [
@@ -9046,7 +9649,7 @@
         },
         "cost": {
           "score": 40,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "topFindings": [
@@ -9090,7 +9693,7 @@
         },
         "cost": {
           "score": 100,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "topFindings": [
@@ -9134,7 +9737,7 @@
         },
         "cost": {
           "score": 70,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "topFindings": [
@@ -9178,7 +9781,7 @@
         },
         "cost": {
           "score": 100,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "topFindings": [
@@ -9187,7 +9790,7 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 115,
+      "daysSinceLastCommit": 116,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -9214,7 +9817,7 @@
         },
         "cost": {
           "score": 100,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "daysSinceLastCommit": 156,
@@ -9244,7 +9847,7 @@
         },
         "cost": {
           "score": 20,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "topFindings": [
@@ -9288,7 +9891,7 @@
         },
         "cost": {
           "score": 100,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "daysSinceLastCommit": 161,
@@ -9318,7 +9921,7 @@
         },
         "cost": {
           "score": 40,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "topFindings": [
@@ -9362,10 +9965,10 @@
         },
         "cost": {
           "score": 100,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
-      "daysSinceLastCommit": 159,
+      "daysSinceLastCommit": 160,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -9392,7 +9995,7 @@
         },
         "cost": {
           "score": 100,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "topFindings": [
@@ -9401,7 +10004,7 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 176,
+      "daysSinceLastCommit": 177,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -9472,7 +10075,7 @@
         },
         "cost": {
           "score": 70,
-          "confidence": "high"
+          "confidence": "low"
         }
       },
       "topFindings": [
@@ -9491,6 +10094,50 @@
       ],
       "daysSinceLastCommit": 180,
       "readmeSourced": true,
+      "integrity": {
+        "payloads": 0,
+        "observations": 0
+      }
+    },
+    {
+      "ref": "cyclops-ui/mcp-cyclops",
+      "ok": true,
+      "overall": 58,
+      "grade": "C-",
+      "repoUrl": "https://github.com/cyclops-ui/mcp-cyclops",
+      "dims": {
+        "health": {
+          "score": 22,
+          "confidence": "high"
+        },
+        "reliability": {
+          "score": 78,
+          "confidence": "high"
+        },
+        "security": {
+          "score": 63,
+          "confidence": "medium"
+        },
+        "cost": {
+          "score": 100,
+          "confidence": "medium"
+        }
+      },
+      "topFindings": [
+        {
+          "id": "security/destructive-tool",
+          "severity": "medium"
+        },
+        {
+          "id": "security/destructive-tool",
+          "severity": "medium"
+        },
+        {
+          "id": "security/destructive-tool",
+          "severity": "medium"
+        }
+      ],
+      "daysSinceLastCommit": 416,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -9517,10 +10164,10 @@
         },
         "cost": {
           "score": 100,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
-      "daysSinceLastCommit": 154,
+      "daysSinceLastCommit": 155,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -9547,7 +10194,7 @@
         },
         "cost": {
           "score": 100,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "topFindings": [
@@ -9565,6 +10212,90 @@
         }
       ],
       "daysSinceLastCommit": 336,
+      "integrity": {
+        "payloads": 0,
+        "observations": 0
+      }
+    },
+    {
+      "ref": "espressif/esp-rainmaker-mcp",
+      "ok": true,
+      "overall": 57,
+      "grade": "C-",
+      "repoUrl": "https://github.com/espressif/esp-rainmaker-mcp",
+      "dims": {
+        "health": {
+          "score": 24,
+          "confidence": "high"
+        },
+        "reliability": {
+          "score": 89,
+          "confidence": "high"
+        },
+        "security": {
+          "score": 63,
+          "confidence": "medium"
+        },
+        "cost": {
+          "score": 70,
+          "confidence": "medium"
+        }
+      },
+      "topFindings": [
+        {
+          "id": "security/destructive-tool",
+          "severity": "medium"
+        },
+        {
+          "id": "security/destructive-tool",
+          "severity": "medium"
+        }
+      ],
+      "daysSinceLastCommit": 396,
+      "integrity": {
+        "payloads": 0,
+        "observations": 0
+      }
+    },
+    {
+      "ref": "hostodo/hostodo-mcp",
+      "ok": true,
+      "overall": 57,
+      "grade": "C-",
+      "repoUrl": "https://github.com/hostodo/hostodo-mcp",
+      "dims": {
+        "health": {
+          "score": 55,
+          "confidence": "high"
+        },
+        "reliability": {
+          "score": 78,
+          "confidence": "high"
+        },
+        "security": {
+          "score": 47,
+          "confidence": "high"
+        },
+        "cost": {
+          "score": 40,
+          "confidence": "high"
+        }
+      },
+      "topFindings": [
+        {
+          "id": "security/shell-exec-tool",
+          "severity": "high"
+        },
+        {
+          "id": "security/shell-exec-tool",
+          "severity": "high"
+        },
+        {
+          "id": "security/shell-exec-tool",
+          "severity": "high"
+        }
+      ],
+      "daysSinceLastCommit": 44,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -9591,7 +10322,7 @@
         },
         "cost": {
           "score": 20,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "topFindings": [
@@ -9635,7 +10366,7 @@
         },
         "cost": {
           "score": 100,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "daysSinceLastCommit": 554,
@@ -9665,7 +10396,7 @@
         },
         "cost": {
           "score": 70,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "topFindings": [
@@ -9709,7 +10440,7 @@
         },
         "cost": {
           "score": 100,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "topFindings": [
@@ -9727,6 +10458,46 @@
         }
       ],
       "daysSinceLastCommit": 479,
+      "integrity": {
+        "payloads": 0,
+        "observations": 0
+      }
+    },
+    {
+      "ref": "bright8192/esxi-mcp-server",
+      "ok": true,
+      "overall": 56,
+      "grade": "C-",
+      "repoUrl": "https://github.com/bright8192/esxi-mcp-server",
+      "dims": {
+        "health": {
+          "score": 33,
+          "confidence": "high"
+        },
+        "reliability": {
+          "score": null,
+          "confidence": "medium"
+        },
+        "security": {
+          "score": 63,
+          "confidence": "medium"
+        },
+        "cost": {
+          "score": 100,
+          "confidence": "medium"
+        }
+      },
+      "topFindings": [
+        {
+          "id": "security/destructive-tool",
+          "severity": "medium"
+        },
+        {
+          "id": "security/destructive-tool",
+          "severity": "medium"
+        }
+      ],
+      "daysSinceLastCommit": 410,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -9753,7 +10524,7 @@
         },
         "cost": {
           "score": 100,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "topFindings": [
@@ -9771,6 +10542,80 @@
         }
       ],
       "daysSinceLastCommit": 268,
+      "integrity": {
+        "payloads": 0,
+        "observations": 0
+      }
+    },
+    {
+      "ref": "friendlygeorge/docker-mcp-server",
+      "ok": true,
+      "overall": 56,
+      "grade": "C-",
+      "repoUrl": "https://github.com/friendlygeorge/docker-mcp-server",
+      "dims": {
+        "health": {
+          "score": 69,
+          "confidence": "high"
+        },
+        "reliability": {
+          "score": 100,
+          "confidence": "high"
+        },
+        "security": {
+          "score": 15,
+          "confidence": "medium"
+        },
+        "cost": {
+          "score": 20,
+          "confidence": "medium"
+        }
+      },
+      "topFindings": [
+        {
+          "id": "security/shell-exec-tool",
+          "severity": "high"
+        },
+        {
+          "id": "security/shell-exec-tool",
+          "severity": "high"
+        },
+        {
+          "id": "security/shell-exec-tool",
+          "severity": "high"
+        }
+      ],
+      "daysSinceLastCommit": 52,
+      "integrity": {
+        "payloads": 0,
+        "observations": 0
+      }
+    },
+    {
+      "ref": "hardik-id/azure-resource-graph-mcp-server",
+      "ok": true,
+      "overall": 56,
+      "grade": "C-",
+      "repoUrl": "https://github.com/hardik-id/azure-resource-graph-mcp-server",
+      "dims": {
+        "health": {
+          "score": 24,
+          "confidence": "high"
+        },
+        "reliability": {
+          "score": 44,
+          "confidence": "high"
+        },
+        "security": {
+          "score": 85,
+          "confidence": "medium"
+        },
+        "cost": {
+          "score": 100,
+          "confidence": "medium"
+        }
+      },
+      "daysSinceLastCommit": 466,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -9797,7 +10642,7 @@
         },
         "cost": {
           "score": 100,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "daysSinceLastCommit": 422,
@@ -9827,7 +10672,7 @@
         },
         "cost": {
           "score": 70,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "topFindings": [
@@ -9871,7 +10716,7 @@
         },
         "cost": {
           "score": 20,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "topFindings": [
@@ -9932,7 +10777,7 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 64,
+      "daysSinceLastCommit": 65,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -9959,7 +10804,7 @@
         },
         "cost": {
           "score": 100,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "topFindings": [
@@ -9999,7 +10844,7 @@
         },
         "cost": {
           "score": 100,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "topFindings": [
@@ -10035,7 +10880,7 @@
         },
         "cost": {
           "score": 40,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "topFindings": [
@@ -10079,7 +10924,7 @@
         },
         "cost": {
           "score": 20,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "topFindings": [
@@ -10097,6 +10942,50 @@
         }
       ],
       "daysSinceLastCommit": 351,
+      "integrity": {
+        "payloads": 0,
+        "observations": 0
+      }
+    },
+    {
+      "ref": "erikhoward/adls-mcp-server",
+      "ok": true,
+      "overall": 53,
+      "grade": "D+",
+      "repoUrl": "https://github.com/erikhoward/adls-mcp-server",
+      "dims": {
+        "health": {
+          "score": 20,
+          "confidence": "high"
+        },
+        "reliability": {
+          "score": 78,
+          "confidence": "high"
+        },
+        "security": {
+          "score": 62,
+          "confidence": "high"
+        },
+        "cost": {
+          "score": 70,
+          "confidence": "medium"
+        }
+      },
+      "topFindings": [
+        {
+          "id": "security/destructive-tool",
+          "severity": "medium"
+        },
+        {
+          "id": "security/destructive-tool",
+          "severity": "medium"
+        },
+        {
+          "id": "security/destructive-tool",
+          "severity": "medium"
+        }
+      ],
+      "daysSinceLastCommit": 441,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -10167,7 +11056,7 @@
         },
         "cost": {
           "score": 100,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "topFindings": [
@@ -10211,7 +11100,7 @@
         },
         "cost": {
           "score": 20,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "daysSinceLastCommit": 144,
@@ -10277,7 +11166,7 @@
         },
         "cost": {
           "score": 70,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "topFindings": [
@@ -10321,7 +11210,7 @@
         },
         "cost": {
           "score": 100,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "topFindings": [
@@ -10365,7 +11254,7 @@
         },
         "cost": {
           "score": 70,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "topFindings": [
@@ -10405,7 +11294,7 @@
         },
         "cost": {
           "score": 40,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "topFindings": [
@@ -10449,7 +11338,7 @@
         },
         "cost": {
           "score": 70,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "topFindings": [
@@ -10489,7 +11378,7 @@
         },
         "cost": {
           "score": 70,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "topFindings": [
@@ -10533,7 +11422,7 @@
         },
         "cost": {
           "score": 100,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "topFindings": [
@@ -10577,7 +11466,7 @@
         },
         "cost": {
           "score": 100,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "topFindings": [
@@ -10586,7 +11475,7 @@
           "severity": "high"
         }
       ],
-      "daysSinceLastCommit": 452,
+      "daysSinceLastCommit": 453,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -10657,7 +11546,7 @@
         },
         "cost": {
           "score": 100,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "topFindings": [
@@ -10666,7 +11555,7 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 207,
+      "daysSinceLastCommit": 208,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -10693,7 +11582,7 @@
         },
         "cost": {
           "score": 70,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "topFindings": [
@@ -10737,7 +11626,7 @@
         },
         "cost": {
           "score": 70,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "daysSinceLastCommit": 275,
@@ -10767,7 +11656,7 @@
         },
         "cost": {
           "score": 100,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "topFindings": [
@@ -10847,7 +11736,7 @@
         },
         "cost": {
           "score": 70,
-          "confidence": "high"
+          "confidence": "low"
         }
       },
       "topFindings": [
@@ -10866,6 +11755,46 @@
       ],
       "daysSinceLastCommit": 203,
       "readmeSourced": true,
+      "integrity": {
+        "payloads": 0,
+        "observations": 0
+      }
+    },
+    {
+      "ref": "elevy99927/devops-mcp-webui",
+      "ok": true,
+      "overall": 43,
+      "grade": "D-",
+      "repoUrl": "https://github.com/elevy99927/devops-mcp-webui",
+      "dims": {
+        "health": {
+          "score": 33,
+          "confidence": "high"
+        },
+        "reliability": {
+          "score": null,
+          "confidence": "medium"
+        },
+        "security": {
+          "score": 40,
+          "confidence": "medium"
+        },
+        "cost": {
+          "score": 70,
+          "confidence": "medium"
+        }
+      },
+      "topFindings": [
+        {
+          "id": "security/shell-exec-tool",
+          "severity": "high"
+        },
+        {
+          "id": "security/destructive-tool",
+          "severity": "medium"
+        }
+      ],
+      "daysSinceLastCommit": 291,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -10892,7 +11821,7 @@
         },
         "cost": {
           "score": 20,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "topFindings": [
@@ -10909,7 +11838,7 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 443,
+      "daysSinceLastCommit": 444,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -10974,31 +11903,6 @@
       }
     },
     {
-      "collectorErrors": 1,
-      "ref": "Albaker-Group/cloudprice-mcp",
-      "ok": true,
-      "insufficientData": true,
-      "repoUrl": "https://github.com/Albaker-Group/cloudprice-mcp",
-      "dims": {
-        "health": {
-          "score": null,
-          "confidence": "low"
-        },
-        "reliability": {
-          "score": null,
-          "confidence": "low"
-        },
-        "security": {
-          "score": null,
-          "confidence": "low"
-        },
-        "cost": {
-          "score": null,
-          "confidence": "low"
-        }
-      }
-    },
-    {
       "ref": "alex-on-ai/WebReaper",
       "ok": true,
       "insufficientData": true,
@@ -11028,132 +11932,6 @@
       }
     },
     {
-      "collectorErrors": 1,
-      "ref": "alexei-led/aws-mcp-server",
-      "ok": true,
-      "insufficientData": true,
-      "repoUrl": "https://github.com/alexei-led/aws-mcp-server",
-      "dims": {
-        "health": {
-          "score": 61,
-          "confidence": "medium"
-        },
-        "reliability": {
-          "score": null,
-          "confidence": "low"
-        },
-        "security": {
-          "score": null,
-          "confidence": "low"
-        },
-        "cost": {
-          "score": null,
-          "confidence": "low"
-        }
-      },
-      "daysSinceLastCommit": 169
-    },
-    {
-      "collectorErrors": 1,
-      "ref": "alexei-led/k8s-mcp-server",
-      "ok": true,
-      "insufficientData": true,
-      "repoUrl": "https://github.com/alexei-led/k8s-mcp-server",
-      "dims": {
-        "health": {
-          "score": null,
-          "confidence": "low"
-        },
-        "reliability": {
-          "score": null,
-          "confidence": "low"
-        },
-        "security": {
-          "score": null,
-          "confidence": "low"
-        },
-        "cost": {
-          "score": null,
-          "confidence": "low"
-        }
-      }
-    },
-    {
-      "collectorErrors": 1,
-      "ref": "alexpota/cloudscope-mcp",
-      "ok": true,
-      "insufficientData": true,
-      "repoUrl": "https://github.com/alexpota/cloudscope-mcp",
-      "dims": {
-        "health": {
-          "score": null,
-          "confidence": "low"
-        },
-        "reliability": {
-          "score": null,
-          "confidence": "low"
-        },
-        "security": {
-          "score": null,
-          "confidence": "low"
-        },
-        "cost": {
-          "score": null,
-          "confidence": "low"
-        }
-      }
-    },
-    {
-      "collectorErrors": 1,
-      "ref": "AliKarami/MikroMCP",
-      "ok": true,
-      "insufficientData": true,
-      "repoUrl": "https://github.com/AliKarami/MikroMCP",
-      "dims": {
-        "health": {
-          "score": null,
-          "confidence": "low"
-        },
-        "reliability": {
-          "score": null,
-          "confidence": "low"
-        },
-        "security": {
-          "score": null,
-          "confidence": "low"
-        },
-        "cost": {
-          "score": null,
-          "confidence": "low"
-        }
-      }
-    },
-    {
-      "collectorErrors": 1,
-      "ref": "aliyun/alibaba-cloud-ops-mcp-server",
-      "ok": true,
-      "insufficientData": true,
-      "repoUrl": "https://github.com/aliyun/alibaba-cloud-ops-mcp-server",
-      "dims": {
-        "health": {
-          "score": null,
-          "confidence": "low"
-        },
-        "reliability": {
-          "score": null,
-          "confidence": "low"
-        },
-        "security": {
-          "score": null,
-          "confidence": "low"
-        },
-        "cost": {
-          "score": null,
-          "confidence": "low"
-        }
-      }
-    },
-    {
       "ref": "arikusi/deepseek-mcp-server",
       "ok": true,
       "insufficientData": true,
@@ -11176,7 +11954,7 @@
           "confidence": "low"
         }
       },
-      "daysSinceLastCommit": 1,
+      "daysSinceLastCommit": 2,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -11301,31 +12079,6 @@
       }
     },
     {
-      "collectorErrors": 1,
-      "ref": "bright8192/esxi-mcp-server",
-      "ok": true,
-      "insufficientData": true,
-      "repoUrl": "https://github.com/bright8192/esxi-mcp-server",
-      "dims": {
-        "health": {
-          "score": null,
-          "confidence": "low"
-        },
-        "reliability": {
-          "score": null,
-          "confidence": "low"
-        },
-        "security": {
-          "score": null,
-          "confidence": "low"
-        },
-        "cost": {
-          "score": null,
-          "confidence": "low"
-        }
-      }
-    },
-    {
       "ref": "bytedance/UI-TARS-desktop",
       "ok": true,
       "insufficientData": true,
@@ -11387,31 +12140,6 @@
       "integrity": {
         "payloads": 0,
         "observations": 0
-      }
-    },
-    {
-      "collectorErrors": 1,
-      "ref": "chaandannn/finopsmcp",
-      "ok": true,
-      "insufficientData": true,
-      "repoUrl": "https://github.com/chaandannn/finopsmcp",
-      "dims": {
-        "health": {
-          "score": null,
-          "confidence": "low"
-        },
-        "reliability": {
-          "score": null,
-          "confidence": "low"
-        },
-        "security": {
-          "score": null,
-          "confidence": "low"
-        },
-        "cost": {
-          "score": null,
-          "confidence": "low"
-        }
       }
     },
     {
@@ -11573,56 +12301,6 @@
       }
     },
     {
-      "collectorErrors": 1,
-      "ref": "cyclops-ui/mcp-cyclops",
-      "ok": true,
-      "insufficientData": true,
-      "repoUrl": "https://github.com/cyclops-ui/mcp-cyclops",
-      "dims": {
-        "health": {
-          "score": null,
-          "confidence": "low"
-        },
-        "reliability": {
-          "score": null,
-          "confidence": "low"
-        },
-        "security": {
-          "score": null,
-          "confidence": "low"
-        },
-        "cost": {
-          "score": null,
-          "confidence": "low"
-        }
-      }
-    },
-    {
-      "collectorErrors": 1,
-      "ref": "davidlandais/ovh-api-mcp",
-      "ok": true,
-      "insufficientData": true,
-      "repoUrl": "https://github.com/davidlandais/ovh-api-mcp",
-      "dims": {
-        "health": {
-          "score": null,
-          "confidence": "low"
-        },
-        "reliability": {
-          "score": null,
-          "confidence": "low"
-        },
-        "security": {
-          "score": null,
-          "confidence": "low"
-        },
-        "cost": {
-          "score": null,
-          "confidence": "low"
-        }
-      }
-    },
-    {
       "ref": "djalal/quran-mcp-server",
       "ok": true,
       "insufficientData": true,
@@ -11645,7 +12323,7 @@
           "confidence": "low"
         }
       },
-      "daysSinceLastCommit": 428,
+      "daysSinceLastCommit": 429,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -11796,31 +12474,6 @@
       }
     },
     {
-      "collectorErrors": 1,
-      "ref": "elevy99927/devops-mcp-webui",
-      "ok": true,
-      "insufficientData": true,
-      "repoUrl": "https://github.com/elevy99927/devops-mcp-webui",
-      "dims": {
-        "health": {
-          "score": null,
-          "confidence": "low"
-        },
-        "reliability": {
-          "score": null,
-          "confidence": "low"
-        },
-        "security": {
-          "score": null,
-          "confidence": "low"
-        },
-        "cost": {
-          "score": null,
-          "confidence": "low"
-        }
-      }
-    },
-    {
       "ref": "erajasekar/ai-diagram-maker-mcp",
       "ok": true,
       "insufficientData": true,
@@ -11847,131 +12500,6 @@
       "integrity": {
         "payloads": 0,
         "observations": 0
-      }
-    },
-    {
-      "collectorErrors": 1,
-      "ref": "erikhoward/adls-mcp-server",
-      "ok": true,
-      "insufficientData": true,
-      "repoUrl": "https://github.com/erikhoward/adls-mcp-server",
-      "dims": {
-        "health": {
-          "score": null,
-          "confidence": "low"
-        },
-        "reliability": {
-          "score": null,
-          "confidence": "low"
-        },
-        "security": {
-          "score": null,
-          "confidence": "low"
-        },
-        "cost": {
-          "score": null,
-          "confidence": "low"
-        }
-      }
-    },
-    {
-      "collectorErrors": 1,
-      "ref": "espressif/esp-rainmaker-mcp",
-      "ok": true,
-      "insufficientData": true,
-      "repoUrl": "https://github.com/espressif/esp-rainmaker-mcp",
-      "dims": {
-        "health": {
-          "score": null,
-          "confidence": "low"
-        },
-        "reliability": {
-          "score": null,
-          "confidence": "low"
-        },
-        "security": {
-          "score": null,
-          "confidence": "low"
-        },
-        "cost": {
-          "score": null,
-          "confidence": "low"
-        }
-      }
-    },
-    {
-      "collectorErrors": 1,
-      "ref": "Flux159/mcp-server-kubernetes",
-      "ok": true,
-      "insufficientData": true,
-      "repoUrl": "https://github.com/Flux159/mcp-server-kubernetes",
-      "dims": {
-        "health": {
-          "score": null,
-          "confidence": "low"
-        },
-        "reliability": {
-          "score": null,
-          "confidence": "low"
-        },
-        "security": {
-          "score": null,
-          "confidence": "low"
-        },
-        "cost": {
-          "score": null,
-          "confidence": "low"
-        }
-      }
-    },
-    {
-      "collectorErrors": 1,
-      "ref": "friendlygeorge/docker-mcp-server",
-      "ok": true,
-      "insufficientData": true,
-      "repoUrl": "https://github.com/friendlygeorge/docker-mcp-server",
-      "dims": {
-        "health": {
-          "score": null,
-          "confidence": "low"
-        },
-        "reliability": {
-          "score": null,
-          "confidence": "low"
-        },
-        "security": {
-          "score": null,
-          "confidence": "low"
-        },
-        "cost": {
-          "score": null,
-          "confidence": "low"
-        }
-      }
-    },
-    {
-      "collectorErrors": 1,
-      "ref": "GeiserX/spinnaker-mcp",
-      "ok": true,
-      "insufficientData": true,
-      "repoUrl": "https://github.com/GeiserX/spinnaker-mcp",
-      "dims": {
-        "health": {
-          "score": null,
-          "confidence": "low"
-        },
-        "reliability": {
-          "score": null,
-          "confidence": "low"
-        },
-        "security": {
-          "score": null,
-          "confidence": "low"
-        },
-        "cost": {
-          "score": null,
-          "confidence": "low"
-        }
       }
     },
     {
@@ -12217,44 +12745,18 @@
       }
     },
     {
-      "collectorErrors": 1,
-      "ref": "hardik-id/azure-resource-graph-mcp-server",
-      "ok": true,
-      "insufficientData": true,
-      "repoUrl": "https://github.com/hardik-id/azure-resource-graph-mcp-server",
-      "dims": {
-        "health": {
-          "score": null,
-          "confidence": "low"
-        },
-        "reliability": {
-          "score": null,
-          "confidence": "low"
-        },
-        "security": {
-          "score": null,
-          "confidence": "low"
-        },
-        "cost": {
-          "score": null,
-          "confidence": "low"
-        }
-      }
-    },
-    {
-      "collectorErrors": 1,
       "ref": "helbertparanhos/cloudflare-mcp-pro",
       "ok": true,
       "insufficientData": true,
       "repoUrl": "https://github.com/helbertparanhos/cloudflare-mcp-pro",
       "dims": {
         "health": {
-          "score": null,
-          "confidence": "low"
+          "score": 55,
+          "confidence": "high"
         },
         "reliability": {
-          "score": null,
-          "confidence": "low"
+          "score": 70,
+          "confidence": "high"
         },
         "security": {
           "score": null,
@@ -12264,31 +12766,11 @@
           "score": null,
           "confidence": "low"
         }
-      }
-    },
-    {
-      "collectorErrors": 1,
-      "ref": "helbertparanhos/easypanel-mcp-server",
-      "ok": true,
-      "insufficientData": true,
-      "repoUrl": "https://github.com/helbertparanhos/easypanel-mcp-server",
-      "dims": {
-        "health": {
-          "score": null,
-          "confidence": "low"
-        },
-        "reliability": {
-          "score": null,
-          "confidence": "low"
-        },
-        "security": {
-          "score": null,
-          "confidence": "low"
-        },
-        "cost": {
-          "score": null,
-          "confidence": "low"
-        }
+      },
+      "daysSinceLastCommit": 54,
+      "integrity": {
+        "payloads": 0,
+        "observations": 0
       }
     },
     {
@@ -12318,160 +12800,10 @@
     },
     {
       "collectorErrors": 1,
-      "ref": "hostodo/hostodo-mcp",
-      "ok": true,
-      "insufficientData": true,
-      "repoUrl": "https://github.com/hostodo/hostodo-mcp",
-      "dims": {
-        "health": {
-          "score": null,
-          "confidence": "low"
-        },
-        "reliability": {
-          "score": null,
-          "confidence": "low"
-        },
-        "security": {
-          "score": null,
-          "confidence": "low"
-        },
-        "cost": {
-          "score": null,
-          "confidence": "low"
-        }
-      }
-    },
-    {
-      "collectorErrors": 1,
-      "ref": "huangdun/tempmd-mcp",
-      "ok": true,
-      "insufficientData": true,
-      "repoUrl": "https://github.com/huangdun/tempmd-mcp",
-      "dims": {
-        "health": {
-          "score": null,
-          "confidence": "low"
-        },
-        "reliability": {
-          "score": null,
-          "confidence": "low"
-        },
-        "security": {
-          "score": null,
-          "confidence": "low"
-        },
-        "cost": {
-          "score": null,
-          "confidence": "low"
-        }
-      }
-    },
-    {
-      "collectorErrors": 1,
-      "ref": "Infrawise/mcp-server",
-      "ok": true,
-      "insufficientData": true,
-      "repoUrl": "https://github.com/Infrawise/mcp-server",
-      "dims": {
-        "health": {
-          "score": null,
-          "confidence": "low"
-        },
-        "reliability": {
-          "score": null,
-          "confidence": "low"
-        },
-        "security": {
-          "score": null,
-          "confidence": "low"
-        },
-        "cost": {
-          "score": null,
-          "confidence": "low"
-        }
-      }
-    },
-    {
-      "collectorErrors": 1,
       "ref": "IO-Aerospace-software-engineering/mcp-server",
       "ok": true,
       "unresolved": true,
       "repoUrl": "https://github.com/IO-Aerospace-software-engineering/mcp-server",
-      "dims": {
-        "health": {
-          "score": null,
-          "confidence": "low"
-        },
-        "reliability": {
-          "score": null,
-          "confidence": "low"
-        },
-        "security": {
-          "score": null,
-          "confidence": "low"
-        },
-        "cost": {
-          "score": null,
-          "confidence": "low"
-        }
-      }
-    },
-    {
-      "collectorErrors": 1,
-      "ref": "ionos-cloud/ionoscloud-mcp",
-      "ok": true,
-      "insufficientData": true,
-      "repoUrl": "https://github.com/ionos-cloud/ionoscloud-mcp",
-      "dims": {
-        "health": {
-          "score": null,
-          "confidence": "low"
-        },
-        "reliability": {
-          "score": null,
-          "confidence": "low"
-        },
-        "security": {
-          "score": null,
-          "confidence": "low"
-        },
-        "cost": {
-          "score": null,
-          "confidence": "low"
-        }
-      }
-    },
-    {
-      "collectorErrors": 1,
-      "ref": "jasonwilbur/cloud-cost-mcp",
-      "ok": true,
-      "insufficientData": true,
-      "repoUrl": "https://github.com/jasonwilbur/cloud-cost-mcp",
-      "dims": {
-        "health": {
-          "score": null,
-          "confidence": "low"
-        },
-        "reliability": {
-          "score": null,
-          "confidence": "low"
-        },
-        "security": {
-          "score": null,
-          "confidence": "low"
-        },
-        "cost": {
-          "score": null,
-          "confidence": "low"
-        }
-      }
-    },
-    {
-      "collectorErrors": 1,
-      "ref": "jasonwilbur/oci-pricing-mcp",
-      "ok": true,
-      "insufficientData": true,
-      "repoUrl": "https://github.com/jasonwilbur/oci-pricing-mcp",
       "dims": {
         "health": {
           "score": null,
@@ -12582,7 +12914,7 @@
       "collectorErrors": 1,
       "ref": "jdubois/azure-cli-mcp",
       "ok": true,
-      "insufficientData": true,
+      "unresolved": true,
       "repoUrl": "https://github.com/jdubois/azure-cli-mcp",
       "dims": {
         "health": {
@@ -12627,7 +12959,7 @@
           "confidence": "low"
         }
       },
-      "daysSinceLastCommit": 11,
+      "daysSinceLastCommit": 12,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -13011,7 +13343,7 @@
         },
         "cost": {
           "score": 40,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "topFindings": [
@@ -13050,7 +13382,7 @@
           "confidence": "low"
         }
       },
-      "daysSinceLastCommit": 7,
+      "daysSinceLastCommit": 8,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -13077,7 +13409,7 @@
         },
         "cost": {
           "score": 100,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "daysSinceLastCommit": 4,
@@ -13140,7 +13472,7 @@
           "confidence": "low"
         }
       },
-      "daysSinceLastCommit": 0,
+      "daysSinceLastCommit": 1,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -13263,7 +13595,7 @@
         },
         "cost": {
           "score": 100,
-          "confidence": "high"
+          "confidence": "medium"
         }
       },
       "daysSinceLastCommit": 0,
@@ -13295,7 +13627,7 @@
           "confidence": "low"
         }
       },
-      "daysSinceLastCommit": 1,
+      "daysSinceLastCommit": 2,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -13324,7 +13656,7 @@
           "confidence": "low"
         }
       },
-      "daysSinceLastCommit": 48,
+      "daysSinceLastCommit": 49,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -13353,7 +13685,7 @@
           "confidence": "low"
         }
       },
-      "daysSinceLastCommit": 1,
+      "daysSinceLastCommit": 2,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -13483,7 +13815,7 @@
           "confidence": "low"
         }
       },
-      "daysSinceLastCommit": 325,
+      "daysSinceLastCommit": 326,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -14008,7 +14340,7 @@
           "confidence": "low"
         }
       },
-      "daysSinceLastCommit": 125,
+      "daysSinceLastCommit": 126,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -14073,7 +14405,7 @@
           "confidence": "low"
         }
       },
-      "daysSinceLastCommit": 2,
+      "daysSinceLastCommit": 3,
       "integrity": {
         "payloads": 0,
         "observations": 0
