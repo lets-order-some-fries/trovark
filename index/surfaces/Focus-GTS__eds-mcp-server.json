@@ -1,8 +1,8 @@
 {
   "ref": "Focus-GTS/eds-mcp-server",
-  "scannedAt": "2026-08-14T19:41:35.252Z",
+  "scannedAt": "2026-08-15T16:26:13.554Z",
   "extractorVersion": "1.0.0",
-  "rubricVersion": "1.6.0",
+  "rubricVersion": "1.7.0",
   "source": "code",
   "tools": [
     {
@@ -14,6 +14,11 @@
       "name": "eds_audit_site",
       "descriptionSha256": "1d3a8b4a73ce90bd275186f31a25a78f38ed6126a590a411d1ccb419e7b8f2e2",
       "definitionSha256": "5e1581bdf7eee044fa58c1aa09973ee8143c81f2631fefb3c19e77f71b38d83d"
+    },
+    {
+      "name": "eds_bulk_fix_metadata",
+      "descriptionSha256": "269aebd3901e02157edcc3ed8cab29ef2740cd6cb5076beb68fd027da61678b3",
+      "definitionSha256": "c6439b3b9a36946d938b0e802279aa3aaec31c9c86786a48fb57ea1fcfd3085e"
     },
     {
       "name": "eds_bulk_preview",
@@ -74,6 +79,16 @@
       "name": "eds_da_rollback",
       "descriptionSha256": "c01cbc4145c83f8ba942e0963365a21b63c378a3ebcbb0de079e2dee9e9fec6f",
       "definitionSha256": "9c2d040b524e345692cd3ef7e2ee994891223164acb8bfd30502bf48ac7bb9c6"
+    },
+    {
+      "name": "eds_fix_metadata",
+      "descriptionSha256": "18528e36eed2709518b6514f00a7b5d05370bc27fd24863629ae85cf51d19bdb",
+      "definitionSha256": "058dbe447216e2aa5f3acfcc3b804250a854d794bf2035d6f9c9def22628b350"
+    },
+    {
+      "name": "eds_fix_redirect",
+      "descriptionSha256": "cf3bd307dc4c434dc482a887cc144fc6ce858ac3a3e62ba3d5c63c193c912310",
+      "definitionSha256": "8623da1c8d48dece1f213953fe7094774ea2cc011ae9f760846368d331cf738e"
     },
     {
       "name": "eds_get_404s",
@@ -171,5 +186,5 @@
       "definitionSha256": "1d7360d1b38e636f5334c7e40752d906ee8bcc4929a17c3caaffed991880ea6a"
     }
   ],
-  "surfaceSha256": "f3505dc5663a445449c23f08d86d8a934de2215a3f5a723912e9cef1e0364199"
+  "surfaceSha256": "138fe498c696356d84ceffb65148e865bb89c3998a63e61e762cd4c62532af05"
 }

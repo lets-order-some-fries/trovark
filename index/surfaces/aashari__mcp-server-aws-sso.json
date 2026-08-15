@@ -1,8 +1,8 @@
 {
   "ref": "aashari/mcp-server-aws-sso",
-  "scannedAt": "2026-08-14T19:41:35.252Z",
+  "scannedAt": "2026-08-15T16:26:13.554Z",
   "extractorVersion": "1.0.0",
-  "rubricVersion": "1.6.0",
+  "rubricVersion": "1.7.0",
   "source": "code",
   "tools": [
     {

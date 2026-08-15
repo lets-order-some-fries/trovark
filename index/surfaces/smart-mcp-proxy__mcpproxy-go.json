@@ -1,14 +1,14 @@
 {
   "ref": "smart-mcp-proxy/mcpproxy-go",
-  "scannedAt": "2026-08-14T19:41:35.252Z",
+  "scannedAt": "2026-08-15T16:26:13.554Z",
   "extractorVersion": "1.0.0",
-  "rubricVersion": "1.6.0",
+  "rubricVersion": "1.7.0",
   "source": "code",
   "tools": [
     {
       "name": "code_execution",
       "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-      "definitionSha256": "3d4bfe20a40a57af8a59754f1dec1757a3a7a35ae5c26a1e1186008ead5657b3"
+      "definitionSha256": "d9e966ca0c6c70845e2ba53fe1cfb3a900e50f91dfbb4d7b8a764bd252cbc8e5"
     },
     {
       "name": "describe_tool",
@@ -61,5 +61,5 @@
       "definitionSha256": "19205346cea7153bfcdbdadf6cbc9f0ec0fbe30d44507fb595de5d47e3ca1019"
     }
   ],
-  "surfaceSha256": "fd207f1e3bd054553f5bcd48cd734ed3134e5f3043d5f7b01e0d27705075c4db"
+  "surfaceSha256": "de868eab07fbb55a925df1d4bf26b04baf8019235cc51b3e7922a515d32972cd"
 }
