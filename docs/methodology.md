@@ -68,8 +68,17 @@ D ≥ 40, F < 40 (+/- at the top/bottom 5 points of each band).
   absence would **flatter** the other nineteen twentieths: under the old
   weighting a 5-tool server with a 25k-token schema scored 67, while the same
   server with an unreadable schema scored 100 — failing to read it was worth
-  +33 points. Scoring every server on the same always-measurable quantity
-  removes that asymmetry by construction rather than by rule. (Rubric 1.7.0.
+  +33 points. Scoring every server on the same always-present quantity removes
+  *that* asymmetry.
+  **What it does not remove, stated plainly:** `toolCount` is a count of the
+  tools Trovark could extract, not of the tools the server has, and the band
+  rewards fewer tools — so a surface we under-read scores *better*. Where the
+  under-read is detectable (the repo's own tree lists more tool-bearing files
+  than the sample reached) the count is withheld and the dimension goes
+  unscored. Where it is not — a file we fetched whose registration idiom we
+  do not parse — the flattering error survives. That residual is why cost
+  carries 15% of the grade and not more, and why the tool count is published
+  next to the grade so you can check it against the server yourself. (Rubric 1.7.0.
   Before it, the footprint carried weight 2 of cost's 3, and the dimension was
   withheld for 96% of graded servers as a result.)
 

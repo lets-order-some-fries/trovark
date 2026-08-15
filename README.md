@@ -7,7 +7,7 @@
     npx trovark github/github-mcp-server
 
 trovark grades any MCP server 0–100 (A–F) from **static, public signals only** —
-maintenance health, spec conformance, security hygiene, and context-token cost.
+maintenance health, spec conformance, security hygiene, and tool-surface size.
 It never executes the server's code. Every finding links to its evidence.
 
 ## Usage
@@ -26,7 +26,7 @@ A bare package name that exists on both npm and PyPI is rejected as ambiguous �
 | Health | 35% | Is this maintained, or one life-change from abandonment? |
 | Reliability | 25% | Does it target the current MCP spec? Is it tested, CI'd, pinned? |
 | Security | 25% | Risky tool surface, committed secrets, known CVEs in deps? |
-| Cost | 15% | How many context tokens does its tool schema eat? |
+| Cost | 15% | How large is its tool surface? (tool count — the serialized token footprint is reported as a fact where measurable, but does not score) |
 
 Missing data lowers *confidence* — it is never silently scored as zero.
 Full methodology: [docs/methodology.md](docs/methodology.md). Rubric is versioned; the scorecard records the version that graded it.

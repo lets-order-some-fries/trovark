@@ -102,10 +102,25 @@ export const SIGNALS: SignalDef[] = [
   // single fault this codebase has fixed most often (see score.ts's Rule
   // A/B/D comments and docs/superpowers/plans/2026-08-01-precision-v1.2.md).
   // score.ts's Rule C papered over it by withholding the dimension whenever
-  // the footprint was missing, which is what produced the 96%. Scoring every
-  // server on the SAME always-measurable signal removes the asymmetry by
-  // construction rather than by rule — there is no longer an "absent" state
-  // for the footprint to flatter from.
+  // the footprint was missing, which is what produced the 96%.
+  //
+  // HONEST LIMIT — from the adversarial review OF this change, recorded
+  // because the commit that introduced it overclaimed. Scoring every server
+  // on the same always-present signal removes the FOOTPRINT's asymmetry: a
+  // signal available to 5% of the corpus no longer flatters the other 95%.
+  // It does NOT remove the asymmetry "by construction", as that commit
+  // claimed. `toolCount` counts the definitions we EXTRACTED, not the ones
+  // the server actually exposes — and this band is monotone DECREASING, so
+  // an under-read surface scores BETTER. Failing to parse a registration
+  // idiom is still rewarded, and with cost down to one signal that leverage
+  // is 3x what it was.
+  // What bounds it: assemble.ts withholds toolCount entirely when
+  // `surfacePartial` (the tree shows more tool-bearing files than the sample
+  // reached) — the DETECTABLE half of under-reading — and Rule A then
+  // withholds the dimension. The undetectable half (a fetched file whose
+  // idiom we do not parse) is a real residual limitation, stated in
+  // docs/methodology.md, and is part of why this dimension carries 15% and
+  // not more.
   //
   // tool-count keeps its existing weight and bands, unchanged.
   { key: 'tool-count', dimension: 'cost', weight: 1,

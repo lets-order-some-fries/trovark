@@ -136,7 +136,7 @@ a{color:#58a6ff;text-decoration:none}
 .chip{color:#fff;border-radius:6px;padding:1px 8px;font-weight:600}
 .chip.muted-chip{background:#30363d;color:#8b949e;font-weight:500}
 .conf{color:#8b949e;font-size:10px;margin-left:3px;vertical-align:super}
-.flag{margin-left:4px}.flag.high{color:#f85149}.flag.medium{color:#c9a227}.flag.low{color:#8b949e}
+.flag{margin-left:4px}.flag.high{color:#f85149}.flag.medium{color:#c9a227}.flag.low{color:#8b949e}.flag.info{color:#6e7681}
 .failed td{color:#8b949e}.muted{color:#8b949e}
 h2{font-size:20px;margin:32px 0 4px}
 ul.drift{list-style:none;padding:0;margin:8px 0}ul.drift li{padding:4px 0;border-bottom:1px solid #21262d}

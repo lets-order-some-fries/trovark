@@ -245,7 +245,7 @@ export async function assemble(
             const shown = sources.slice(0, 3).join(', ')
             s.findings.push({
               id: 'cost/token-footprint', dimension: 'cost', severity: 'info',
-              message: `Tool schemas serialize to ~${s.schemaTokenEstimate.toLocaleString('en-US')} tokens in a tools/list response (measured from declared JSON schemas, not estimated).`,
+              message: `Tool schemas reconstruct to ~${s.schemaTokenEstimate.toLocaleString('en-US')} tokens of a tools/list response for a GPT-family tokenizer, from the declared JSON schemas of the ${s.toolCount ?? 0} extracted definitions. Other tokenizers, and any fields the server adds, will differ.`,
               evidence: sources.length > 3 ? `${shown}, +${sources.length - 3} more` : shown,
             })
           }
