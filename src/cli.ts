@@ -8,6 +8,30 @@ import { renderTerminal } from './report/terminal.js'
 import { renderJson } from './report/json.js'
 
 const GRADE_FLOOR: Record<string, number> = { A: 85, B: 70, C: 55, D: 40 }
+const KNOWN_FLAGS = ['--help', '--version', '--json', '--no-color', '--fail-under'] as const
+
+/** Levenshtein distance, capped at 3 — only used to suggest a near-miss flag. */
+function editDistance(a: string, b: string): number {
+  let prev = Array.from({ length: b.length + 1 }, (_, i) => i)
+  for (let i = 1; i <= a.length; i++) {
+    const row = [i]
+    for (let j = 1; j <= b.length; j++) {
+      row[j] = Math.min(prev[j] + 1, row[j - 1] + 1, prev[j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1))
+    }
+    prev = row
+  }
+  return prev[b.length]
+}
+
+function nearestFlag(unknown: string): string | undefined {
+  let best: string | undefined
+  let bestDistance = 3
+  for (const flag of KNOWN_FLAGS) {
+    const d = editDistance(unknown, flag)
+    if (d < bestDistance) { bestDistance = d; best = flag }
+  }
+  return best
+}
 const USAGE = `Usage: trovark <ref> [--json] [--fail-under <grade|number>] [--no-color]
 
 <ref>: GitHub URL, owner/repo, npm package, or PyPI package name.
@@ -48,8 +72,25 @@ export async function main(argv: string[], deps: CliDeps): Promise<number> {
     deps.err('--fail-under requires a value: A, B, C, D, or a number.')
     return 2
   }
+  // Everything the known-flag readers above did not consume must be a ref.
+  // An unrecognized --flag is rejected rather than ignored: silently dropping
+  // a mistyped --fail-under turns a CI gate into a permanent pass.
+  const escapeIndex = args.indexOf('--')
+  const flagCandidates = escapeIndex === -1 ? args : args.slice(0, escapeIndex)
+  const unknownFlag = flagCandidates.find(a => a.startsWith('--'))
+  if (unknownFlag !== undefined) {
+    const suggestion = nearestFlag(unknownFlag)
+    deps.err(`Unknown option "${unknownFlag}".${suggestion ? ` Did you mean "${suggestion}"?` : ''}\n${USAGE}`)
+    return 2
+  }
+  if (escapeIndex !== -1) args.splice(escapeIndex, 1)
+
   const ref = args[0]
   if (!ref) { deps.err(USAGE); return 2 }
+  if (args.length > 1) {
+    deps.err(`Expected one <ref>, got ${args.length}: ${args.join(', ')}.\n${USAGE}`)
+    return 2
+  }
 
   let threshold: number | undefined
   if (failUnderRaw !== undefined) {
