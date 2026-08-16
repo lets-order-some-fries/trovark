@@ -410,6 +410,15 @@ describe('degraded refs get one retry, and only a cleaner read replaces them', (
     expect(recovered).toBe(1)
     expect(out[0].collectorErrors).toBeUndefined()
   })
+  it('never retries an unresolved repo — a 404 cannot be re-read', () => {
+    const entries = [
+      { ref: 'gone/repo', ok: true, collectorErrors: 1, unresolved: true },
+      { ref: 'flaky/repo', ok: true, collectorErrors: 2 },
+    ]
+    const retryable = entries.filter(e => e.collectorErrors && !e.unresolved).map(e => e.ref)
+    expect(retryable).toEqual(['flaky/repo'])
+  })
+
   it('surface inputs dedupe last-wins, so a retried ref is snapshotted once', () => {
     const inputs = [
       { ref: 'a/b', tools: [{ name: 'x', schemaText: 'first' }], source: 'code' as const },

@@ -272,7 +272,13 @@ async function main(): Promise<void> {
   // attempt before publishing a withhold. If the retry is no better, the
   // original entry stands and the withhold is published as before — the
   // retry can only ever REPLACE a degraded read with a cleaner one.
-  const degradedRefs = entries.filter(e => e.collectorErrors).map(e => e.ref)
+  // Exclude `unresolved`: a repo that 404s reports a collector error on every
+  // attempt, so retrying it is certain failure. Measured on the first run
+  // with the retry active: all 18 degraded refs were unresolved and the pass
+  // recovered 0/18 — the entire budget went to repos that no longer exist.
+  // Excluding them makes the retry count mean "reads that could plausibly
+  // improve", so `recovered 0/N` is a real signal instead of noise.
+  const degradedRefs = entries.filter(e => e.collectorErrors && !e.unresolved).map(e => e.ref)
   let recovered = 0
   if (degradedRefs.length > 0 && !process.argv.includes('--no-retry')) {
     console.error(`retrying ${degradedRefs.length} degraded ref(s)`)

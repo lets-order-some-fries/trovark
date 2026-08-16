@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-15T19:12:07.350Z",
+  "generatedAt": "2026-08-15T19:32:30.425Z",
   "rubricVersion": "1.7.0",
   "coverage": {
     "attempted": 400,
@@ -31,14 +31,14 @@
   },
   "entries": [
     {
-      "ref": "LvcidPsyche/auto-browser",
+      "ref": "tsouth89/toolport",
       "ok": true,
-      "overall": 98,
+      "overall": 99,
       "grade": "A+",
-      "repoUrl": "https://github.com/LvcidPsyche/auto-browser",
+      "repoUrl": "https://github.com/tsouth89/toolport",
       "dims": {
         "health": {
-          "score": 95,
+          "score": 97,
           "confidence": "high"
         },
         "reliability": {
@@ -61,14 +61,14 @@
       }
     },
     {
-      "ref": "tsouth89/toolport",
+      "ref": "LvcidPsyche/auto-browser",
       "ok": true,
       "overall": 98,
       "grade": "A+",
-      "repoUrl": "https://github.com/tsouth89/toolport",
+      "repoUrl": "https://github.com/LvcidPsyche/auto-browser",
       "dims": {
         "health": {
-          "score": 96,
+          "score": 95,
           "confidence": "high"
         },
         "reliability": {
@@ -534,7 +534,7 @@
           "confidence": "medium"
         }
       },
-      "daysSinceLastCommit": 1,
+      "daysSinceLastCommit": 0,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -1019,7 +1019,7 @@
       "dims": {
         "health": {
           "score": 98,
-          "confidence": "high"
+          "confidence": "medium"
         },
         "reliability": {
           "score": 100,
@@ -1364,7 +1364,7 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 5,
+      "daysSinceLastCommit": 0,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -1592,7 +1592,7 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 4,
+      "daysSinceLastCommit": 0,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -1956,7 +1956,7 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 5,
+      "daysSinceLastCommit": 0,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -1986,7 +1986,37 @@
           "confidence": "medium"
         }
       },
-      "daysSinceLastCommit": 80,
+      "daysSinceLastCommit": 81,
+      "integrity": {
+        "payloads": 0,
+        "observations": 0
+      }
+    },
+    {
+      "ref": "daedalusdevelopmentgroup/ddg-agent-payable-services",
+      "ok": true,
+      "overall": 82,
+      "grade": "B+",
+      "repoUrl": "https://github.com/daedalusdevelopmentgroup/ddg-agent-payable-services",
+      "dims": {
+        "health": {
+          "score": 85,
+          "confidence": "medium"
+        },
+        "reliability": {
+          "score": 100,
+          "confidence": "high"
+        },
+        "security": {
+          "score": 85,
+          "confidence": "medium"
+        },
+        "cost": {
+          "score": 40,
+          "confidence": "medium"
+        }
+      },
+      "daysSinceLastCommit": 19,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -2260,7 +2290,7 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 1,
+      "daysSinceLastCommit": 2,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -3137,36 +3167,6 @@
       }
     },
     {
-      "ref": "daedalusdevelopmentgroup/ddg-agent-payable-services",
-      "ok": true,
-      "overall": 79,
-      "grade": "B",
-      "repoUrl": "https://github.com/daedalusdevelopmentgroup/ddg-agent-payable-services",
-      "dims": {
-        "health": {
-          "score": 77,
-          "confidence": "high"
-        },
-        "reliability": {
-          "score": 100,
-          "confidence": "high"
-        },
-        "security": {
-          "score": 85,
-          "confidence": "medium"
-        },
-        "cost": {
-          "score": 40,
-          "confidence": "medium"
-        }
-      },
-      "daysSinceLastCommit": 19,
-      "integrity": {
-        "payloads": 0,
-        "observations": 0
-      }
-    },
-    {
       "ref": "forcedreamai/forcedream-mcp",
       "ok": true,
       "overall": 79,
@@ -3352,7 +3352,7 @@
           "severity": "medium"
         }
       ],
-      "daysSinceLastCommit": 3,
+      "daysSinceLastCommit": 0,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -6477,50 +6477,6 @@
       }
     },
     {
-      "ref": "SidneyBissoli/medical-terminologies-mcp",
-      "ok": true,
-      "overall": 71,
-      "grade": "B-",
-      "repoUrl": "https://github.com/SidneyBissoli/medical-terminologies-mcp",
-      "dims": {
-        "health": {
-          "score": 85,
-          "confidence": "high"
-        },
-        "reliability": {
-          "score": 100,
-          "confidence": "high"
-        },
-        "security": {
-          "score": 40,
-          "confidence": "medium"
-        },
-        "cost": {
-          "score": 40,
-          "confidence": "medium"
-        }
-      },
-      "topFindings": [
-        {
-          "id": "security/shell-exec-tool",
-          "severity": "high"
-        },
-        {
-          "id": "security/shell-exec-tool",
-          "severity": "high"
-        },
-        {
-          "id": "security/shell-exec-tool",
-          "severity": "high"
-        }
-      ],
-      "daysSinceLastCommit": 5,
-      "integrity": {
-        "payloads": 0,
-        "observations": 0
-      }
-    },
-    {
       "ref": "skillselion/skillselion-mcp",
       "ok": true,
       "overall": 71,
@@ -6747,6 +6703,50 @@
         }
       ],
       "daysSinceLastCommit": 31,
+      "integrity": {
+        "payloads": 0,
+        "observations": 0
+      }
+    },
+    {
+      "ref": "SidneyBissoli/medical-terminologies-mcp",
+      "ok": true,
+      "overall": 70,
+      "grade": "B-",
+      "repoUrl": "https://github.com/SidneyBissoli/medical-terminologies-mcp",
+      "dims": {
+        "health": {
+          "score": 83,
+          "confidence": "medium"
+        },
+        "reliability": {
+          "score": 100,
+          "confidence": "high"
+        },
+        "security": {
+          "score": 40,
+          "confidence": "medium"
+        },
+        "cost": {
+          "score": 40,
+          "confidence": "medium"
+        }
+      },
+      "topFindings": [
+        {
+          "id": "security/shell-exec-tool",
+          "severity": "high"
+        },
+        {
+          "id": "security/shell-exec-tool",
+          "severity": "high"
+        },
+        {
+          "id": "security/shell-exec-tool",
+          "severity": "high"
+        }
+      ],
+      "daysSinceLastCommit": 5,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -7010,7 +7010,7 @@
           "severity": "high"
         }
       ],
-      "daysSinceLastCommit": 63,
+      "daysSinceLastCommit": 64,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -7311,6 +7311,46 @@
       }
     },
     {
+      "ref": "julien040/anyquery",
+      "ok": true,
+      "overall": 68,
+      "grade": "C+",
+      "repoUrl": "https://github.com/julien040/anyquery",
+      "dims": {
+        "health": {
+          "score": 86,
+          "confidence": "high"
+        },
+        "reliability": {
+          "score": 78,
+          "confidence": "high"
+        },
+        "security": {
+          "score": 15,
+          "confidence": "medium"
+        },
+        "cost": {
+          "score": 100,
+          "confidence": "medium"
+        }
+      },
+      "topFindings": [
+        {
+          "id": "security/shell-exec-tool",
+          "severity": "high"
+        },
+        {
+          "id": "security/committed-secret",
+          "severity": "medium"
+        }
+      ],
+      "daysSinceLastCommit": 0,
+      "integrity": {
+        "payloads": 0,
+        "observations": 0
+      }
+    },
+    {
       "ref": "Retio-ai/Retio-pagemap",
       "ok": true,
       "overall": 68,
@@ -7492,46 +7532,6 @@
         }
       ],
       "daysSinceLastCommit": 22,
-      "integrity": {
-        "payloads": 0,
-        "observations": 0
-      }
-    },
-    {
-      "ref": "julien040/anyquery",
-      "ok": true,
-      "overall": 67,
-      "grade": "C+",
-      "repoUrl": "https://github.com/julien040/anyquery",
-      "dims": {
-        "health": {
-          "score": 83,
-          "confidence": "high"
-        },
-        "reliability": {
-          "score": 78,
-          "confidence": "high"
-        },
-        "security": {
-          "score": 15,
-          "confidence": "medium"
-        },
-        "cost": {
-          "score": 100,
-          "confidence": "medium"
-        }
-      },
-      "topFindings": [
-        {
-          "id": "security/shell-exec-tool",
-          "severity": "high"
-        },
-        {
-          "id": "security/committed-secret",
-          "severity": "medium"
-        }
-      ],
-      "daysSinceLastCommit": 0,
       "integrity": {
         "payloads": 0,
         "observations": 0
@@ -14311,7 +14311,7 @@
           "confidence": "low"
         }
       },
-      "daysSinceLastCommit": 13,
+      "daysSinceLastCommit": 14,
       "integrity": {
         "payloads": 0,
         "observations": 0
