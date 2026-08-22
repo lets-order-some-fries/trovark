@@ -216,3 +216,39 @@ describe('cli main — unresolved repo (W1): a 404 must never print a graded F c
     expect(code).toBe(2)
   })
 })
+
+// A mistyped flag used to be spliced past and ignored. For --fail-under that
+// silently converts a CI gate into a permanent pass, which is worse than
+// having no gate: the workflow stays green and nobody looks again.
+describe('cli main — unknown flags are rejected, not ignored', () => {
+  it('a typo\'d --fail-under exits 2 and names the flag instead of passing', async () => {
+    const r = await run(['acme/foo', '--fail-undr', '90'])
+    expect(r.code).toBe(2)
+    expect(r.err).toContain('--fail-undr')
+  })
+  it('suggests the nearest known flag', async () => {
+    const r = await run(['acme/foo', '--fail-undr', '90'])
+    expect(r.err).toContain('Did you mean "--fail-under"?')
+  })
+  it('rejects an unknown flag wherever it appears, not only before the ref', async () => {
+    const before = await run(['--failunder', '90', 'acme/foo'])
+    const after = await run(['acme/foo', '--failunder', '90'])
+    expect(before.code).toBe(2)
+    expect(after.code).toBe(2)
+    expect(after.err).toContain('--failunder')
+  })
+  it('rejects a second positional ref rather than silently scoring the first', async () => {
+    const r = await run(['acme/foo', 'acme/bar'])
+    expect(r.code).toBe(2)
+    expect(r.err).toContain('Expected one <ref>')
+  })
+  it('still accepts every known flag together', async () => {
+    const r = await run(['acme/foo', '--json', '--no-color', '--fail-under', 'D'])
+    expect(r.code).toBe(0)
+    expect(() => JSON.parse(r.out)).not.toThrow()
+  })
+  it('a real threshold breach still exits 1, not 2', async () => {
+    const r = await run(['acme/foo', '--fail-under', '99'])
+    expect(r.code).toBe(1)
+  })
+})
