@@ -19,6 +19,20 @@ It never executes the server's code. Every finding links to its evidence.
 
 A bare package name that exists on both npm and PyPI is rejected as ambiguous — disambiguate with the `npm:<name>` or `pypi:<name>` prefix (e.g. `npx trovark pypi:mcp-server-fetch`).
 
+### About `GITHUB_TOKEN`
+
+- **Scopes needed: none.** trovark only calls public read endpoints
+  (`GET /repos/...`, `/commits`, `/releases`, `/issues`, `/issues/{n}/comments`)
+  against `api.github.com`. A classic PAT with zero scopes checked, or a
+  fine-grained PAT with "Public Repositories (read-only)" access, is enough.
+- **Without a token:** everything except median issue time-to-first-response
+  is still collected, at GitHub's unauthenticated rate limit (60 requests/hour).
+- **With a token:** the same signals, plus median issue time-to-first-response
+  (Health dimension), at the authenticated rate limit (5,000 requests/hour).
+- **Security note:** the token is sent as a `Bearer` header on `api.github.com`
+  requests only, and only ever used for `GET` reads — trovark never writes to
+  GitHub.
+
 ## What the grade means
 
 | Dimension | Weight | Question it answers |
