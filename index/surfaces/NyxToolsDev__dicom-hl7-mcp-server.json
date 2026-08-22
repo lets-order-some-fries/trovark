@@ -1,0 +1,95 @@
+{
+  "ref": "NyxToolsDev/dicom-hl7-mcp-server",
+  "scannedAt": "2026-08-15T19:32:30.425Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.7.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "decode_private_tags",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "aee8b4c88604db0ce422414e3f663772906f4d8fab1ce7208120115980450714"
+    },
+    {
+      "name": "explain_dicom_tag",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "12e0d0f1881ebf8ec989d5a29373b522c4eeb8e8e329d15453d20bb7e8914cc5"
+    },
+    {
+      "name": "explain_hl7_segment",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "b2d46f863b8ec020e361caf618e7d274f25d8db6f8d81baf659be339f510fa46"
+    },
+    {
+      "name": "explain_integration_pattern",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "713c59ac2c4772089973948e1c53f5ea8160c7936c7060c2a5024ff7892ed707"
+    },
+    {
+      "name": "generate_mirth_channel",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "3b0cc3e844c338bb28226818893cf1ce8bafb1e2e2e7b4c00d04ff25c32ff9ec"
+    },
+    {
+      "name": "generate_sample_message",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "c5af4971b2a686ddfc952e7c8562eb02baa28dd774945241aeed1f50b8277be3"
+    },
+    {
+      "name": "lookup_dicom_tag",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "a664eb56761cff884c22aefd7363c31adf7d3e5528b87594879c86c5c3413eea"
+    },
+    {
+      "name": "lookup_hl7_table",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "e89ed81d2aec9964f84b07157ab8e4426c9758552e0d478212c2beacea5b64de"
+    },
+    {
+      "name": "map_dicom_to_hl7",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "161f20bce7fa9c25bb970125d3e8b44f7a786af2db5a00ca0f89468bd315daf0"
+    },
+    {
+      "name": "map_hl7_to_fhir",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "2bccdbb054a751f03ae1ff17d954f8bc98772f9c8e62a9ae9e86a6510c61a5d4"
+    },
+    {
+      "name": "pacs_echo",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "7e8d24ea1d1812be054e35f6feb39cd1bd72d0d9dea17c26fdfef1e0cbee238c"
+    },
+    {
+      "name": "pacs_get_metadata",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "fa86a87d62c46853db4c7839e1821e31474e6b1884a0a0e32f256bf3f9915a7d"
+    },
+    {
+      "name": "pacs_query",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "8c3c419510a67e58371d8c1c949c9bd659ef3b77216ac8c98867919e0db9fb4e"
+    },
+    {
+      "name": "pacs_retrieve",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "5f71ff0407a92b7d6095264d32c999f8d8acb0ef9f6c9a4eb873f239450dc6d8"
+    },
+    {
+      "name": "pacs_study_summary",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "70c8f0b4807c11b075eb6411f1b49b84a9974f36ec084d9e362c9ac2202abe01"
+    },
+    {
+      "name": "parse_hl7_message",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "42438d22e9a386842cf91acb2127d518f93ec32f9cb8ff504f0efa52d189be5a"
+    },
+    {
+      "name": "validate_hl7_message",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "dfdfd687467211cb76b31f229949ba143d431a451b30b2b35b5ebcb66e62a869"
+    }
+  ],
+  "surfaceSha256": "8a30de1866235cb2c4ac79a2eec1104327f393c6deca4781d976b30b94f5e4d1"
+}

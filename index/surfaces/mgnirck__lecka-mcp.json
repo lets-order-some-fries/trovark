@@ -1,0 +1,25 @@
+{
+  "ref": "mgnirck/lecka-mcp",
+  "scannedAt": "2026-08-15T19:32:30.425Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.7.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "calculate_fueling_plan",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "f714662ccb4881d506b2a5f05a1d79ef20110b7e77bf43c2af4a35abff739c2a"
+    },
+    {
+      "name": "get_nutrition_data",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "ca5340de38b1a609274ef4e0d7fea8e67f5a808fe04ac930e989a741aa0794b1"
+    },
+    {
+      "name": "get_products",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "5f1c37573c065c0189acacc9b8f82fe172dbc352a3dd8fed72dec84a42905e3b"
+    }
+  ],
+  "surfaceSha256": "6afa3f54ac26848a341373e198e2bc07b1a96f7522b50260c74a630b9d43c303"
+}

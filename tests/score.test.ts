@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { score } from '../src/scoring/score.js'
-import { DIMENSION_WEIGHTS, SIGNALS } from '../src/scoring/rubric.js'
+import { DIMENSION_WEIGHTS, RUBRIC_VERSION, SIGNALS } from '../src/scoring/rubric.js'
 import type { Signals } from '../src/types.js'
 
 const empty = (): Signals => ({ findings: [], errors: [] })
@@ -30,7 +30,10 @@ describe('score()', () => {
     const card = score('x', healthy(), '2026-07-31T00:00:00Z')
     expect(card.overall).toBe(100)
     expect(card.grade).toBe('A+')
-    expect(card.rubricVersion).toBe('1.6.0')
+    // Rubric 1.7.0 (2026-08-15): token-footprint removed as a scored signal;
+    // cost scores tool-surface size (tool-count) alone. See the
+    // "cost scores tool-surface size alone" block at the bottom of this file.
+    expect(card.rubricVersion).toBe('1.7.0')
     for (const d of card.dimensions) expect(d.confidence).toBe('high')
   })
   // W6 review remediation item M2 (.superpowers/sdd/w6-review-findings.md):
@@ -214,14 +217,18 @@ describe('score() — a dimension with no measurement reports null, never a numb
     expect(sec.confidence).toBe('medium')   // 2/3 signals — unchanged by the withhold
     expect(sec.score).toBeNull()
   })
-  it('Rule B: the existing "Low confidence in security" note still appears when coverage is low (1/3)', () => {
+  // Fault hunt IMPORTANT: a withheld dimension now emits an explicit
+  // withhold note (naming that the primary was unmeasurable) instead of the
+  // generic low-confidence wording this test previously pinned — the
+  // withhold is no longer silent, and the reason is stated, not implied.
+  it('Rule B: a withheld security dimension emits an explicit withhold note', () => {
     const s = healthy()
     s.toolSurfaceRisk = undefined; s.cveWorst = undefined  // only no-secrets survives → 1/3
     const card = score('x', s, 'T')
     const sec = card.dimensions.find(d => d.id === 'security')!
     expect(sec.confidence).toBe('low')
     expect(sec.score).toBeNull()
-    expect(card.notes.join(' ')).toMatch(/Low confidence in security: only 1\/3 signals available/)
+    expect(card.notes.join(' ')).toMatch(/security is withheld: its primary signal could not be determined/)
   })
   it('Rule B: a readable tool surface scores security normally — no behaviour change', () => {
     for (const risk of ['none', 'low', 'medium', 'high'] as const) {
@@ -262,14 +269,21 @@ describe('score() — a dimension with no measurement reports null, never a numb
   // never fire on one, and Rule A only ever drops a dimension that was
   // already excluded from `overall`. Pinned numbers so a future regression
   // is caught by value, not just by shape.
+  // CONTRACT CHANGE (rubric 1.7.0): cost was pinned at 47 — the two-signal
+  // composite (2*band(12000)=0.5 + 1*band(30)=0.4)/3 — and the card at 69/C+.
+  // token-footprint is no longer a scored signal, so cost is band(toolCount=30)
+  // = 0.4 -> 40, and the card moves to 0.35*77 + 0.25*78 + 0.25*62 + 0.15*40 =
+  // 67.95 -> 68, still C+. The other three dimensions are untouched by the
+  // rubric change and stay pinned at their old values, which is the point of
+  // keeping this test rather than replacing it.
   it('regression: a fully-graded server is unchanged — all four dimensions numeric, exact pinned values', () => {
     const card = score('x', mixed(), 'T')
     const dim = (id: string) => card.dimensions.find(d => d.id === id)!
     expect(dim('health').score).toBe(77)
     expect(dim('reliability').score).toBe(78)
     expect(dim('security').score).toBe(62)
-    expect(dim('cost').score).toBe(47)
-    expect(card.overall).toBe(69)
+    expect(dim('cost').score).toBe(40)
+    expect(card.overall).toBe(68)
     expect(card.grade).toBe('C+')
     expect(card.insufficientData).toBe(false)
     for (const d of card.dimensions) expect(typeof d.score).toBe('number')
@@ -395,7 +409,12 @@ describe('score() — a withheld grade is withheld in the DATA, not just the dis
     expect(card.grade).toBe('A+')
     for (const d of card.dimensions) expect(d.score).toBe(100)
   })
-  it('regression: a mid-range graded server is unchanged — 69/"C+" with four numeric dimensions', () => {
+  // CONTRACT CHANGE (rubric 1.7.0): same fixture as the pinned-values test
+  // above — 69 was the two-signal cost composite's contribution; with
+  // token-footprint dropped, cost is band(30) = 0.4 -> 40 and the card lands
+  // at 68. The letter is unchanged, which is what this test is really for:
+  // the withheld-grade fix still touches only withheld cards.
+  it('regression: a mid-range graded server is unchanged — 68/"C+" with four numeric dimensions', () => {
     const s: Signals = {
       daysSinceLastCommit: 45, daysSinceLastRelease: 200, commitsLast90Days: 12,
       busFactor: 3, medianIssueResponseDays: 5, stars: 300, weeklyDownloads: 2000,
@@ -405,7 +424,7 @@ describe('score() — a withheld grade is withheld in the DATA, not just the dis
     }
     const card = score('x', s, 'T')
     expect(card.insufficientData).toBe(false)
-    expect(card.overall).toBe(69)
+    expect(card.overall).toBe(68)
     expect(card.grade).toBe('C+')
   })
   it('regression: a graded server with ONE null dimension (Rule A) still keeps its grade — Rule A does not withhold the headline', () => {
@@ -575,34 +594,136 @@ describe('score() — hidden-payload disqualifying override (Phase 2)', () => {
   })
 })
 
-// Fault hunt 2026-08-08, CRITICAL 2. token-footprint is the dominant cost
-// signal (weight 2 of 3) and is withheld for ~95% of the corpus. Letting cost
-// renormalize onto tool-count alone REMOVES A PENALTY: absence rendered as a
-// favourable measurement, which is the exact fault the null-dimension work
-// exists to prevent. The cost fix reintroduced it through the back door.
-describe('cost is withheld when its dominant signal is unmeasurable', () => {
+// CONTRACT CHANGE (rubric 1.7.0, 2026-08-15). This block previously read
+// "cost is withheld when its dominant signal is unmeasurable" and pinned Rule
+// C: token-footprint absent => cost score null, because renormalizing onto
+// tool-count alone REMOVED A PENALTY (absence rendered as a favourable
+// measurement).
+//
+// That fix was correct for the rubric it was written against and is retained
+// here in inverted form, because the rubric itself changed rather than the
+// principle. Measured on the published index (index/results.json, generated
+// 2026-08-14): token-footprint is computable only when EVERY tool carries a
+// real serialized JSON schema — ~5% of the corpus — so cost.score was null for
+// 268 of 278 graded servers (96%) and for all 87 withheld ones. Combined with
+// the >=3-of-4-dimensions gate, a signal we can measure for a twentieth of the
+// corpus was gating 22% of the corpus out of being graded at all.
+//
+// The absence-flatters asymmetry is now removed BY CONSTRUCTION rather than by
+// rule: token-footprint is no longer a scored signal at all, so there is no
+// longer an "absent" state for it to flatter from. Cost scores tool-count,
+// which is measurable for every server with an extracted surface. Rule C is
+// therefore dead — cost's only signal is tool-count, so Rule A (available ===
+// 0) already covers the genuinely-unmeasured case, which the last two tests
+// here pin.
+describe('cost scores tool-surface size alone (rubric 1.7.0)', () => {
   const withTools = (over: Partial<Signals> = {}): Signals => ({
     findings: [], errors: [], toolSurfaceRisk: 'none', toolCount: 12, ...over,
   })
   const cost = (s: Signals) => score('o/r', s, '2026-08-08T00:00:00.000Z').dimensions.find(d => d.id === 'cost')!
 
-  it('withholds the cost score when schemaTokenEstimate is absent (never renormalizes upward)', () => {
+  it('scores cost from tool-count when the footprint is absent — the 96% case that used to be withheld', () => {
     const d = cost(withTools({ schemaTokenEstimate: undefined }))
-    expect(d.score).toBeNull()
-    expect(d.available).toBeGreaterThan(0)   // tool-count WAS measured; confidence reflects it
-  })
-
-  it('scores cost normally when the footprint is genuinely measured', () => {
-    const d = cost(withTools({ schemaTokenEstimate: 1500 }))
     expect(typeof d.score).toBe('number')
-    expect(d.score).toBeGreaterThan(0)
+    expect(d.score).toBe(70)                  // band(12) -> 0.7
+    expect(d.available).toBe(1)
+    expect(d.confidence).toBe('medium')       // counted from code, schemas unreadable (see costConfidence)
   })
 
-  it('absence never scores better than a measured expensive server', () => {
-    const measured = cost(withTools({ schemaTokenEstimate: 30_000 }))
-    const withheld = cost(withTools({ schemaTokenEstimate: undefined }))
-    expect(typeof measured.score).toBe('number')
-    expect(withheld.score).toBeNull()        // not a number that beats it
+  // Fault hunt follow-up (2026-08-15): with one weight-1 signal the generic
+  // weight-ratio confidence degenerated to high-whenever-scored, restating
+  // `score !== null` and publishing a README-parsed count at the same
+  // confidence as an extracted one. Cost confidence now reflects the QUALITY
+  // of the count. The footprint informs CONFIDENCE without scoring — which is
+  // what keeps its absence from flattering anyone.
+  describe('cost confidence reflects the quality of the count', () => {
+    it('high when every declared schema was readable', () => {
+      expect(cost(withTools({ schemaTokenEstimate: 1_500 })).confidence).toBe('high')
+    })
+    it('medium when counted from code but schemas were unreadable', () => {
+      expect(cost(withTools({ schemaTokenEstimate: undefined })).confidence).toBe('medium')
+    })
+    it("low when the count came from the README — a maintainer's claim", () => {
+      expect(cost(withTools({ schemaTokenEstimate: undefined, readmeSourced: true })).confidence).toBe('low')
+      // ...and a README-sourced count with a readable footprint is STILL low:
+      // provenance outranks schema readability.
+      expect(cost(withTools({ schemaTokenEstimate: 1_500, readmeSourced: true })).confidence).toBe('low')
+    })
+    it('confidence never moves the score', () => {
+      const a = cost(withTools({ schemaTokenEstimate: undefined })).score
+      const b = cost(withTools({ schemaTokenEstimate: 1_500 })).score
+      const c = cost(withTools({ schemaTokenEstimate: 1_500, readmeSourced: true })).score
+      expect(new Set([a, b, c]).size).toBe(1)
+    })
+  })
+
+  it('the cost score is INDEPENDENT of schemaTokenEstimate — absence can no longer flatter', () => {
+    const scores = [undefined, 1_500, 25_000, 250_000].map(f => cost(withTools({ schemaTokenEstimate: f })).score)
+    expect(new Set(scores).size).toBe(1)
+    expect(scores[0]).toBe(70)
+  })
+
+  // The measured asymmetry this change removes, stated as an executable fact.
+  // Under 1.6.0 a 5-tool server with a 25k-token serialized schema scored
+  // (2*0.5 + 1*1.0)/3 = 67, while the SAME server with an unreadable schema
+  // scored 100 once Rule C was lifted — i.e. failing to read it was worth +33.
+  // Under 1.7.0 both are 100, because the quantity that differed no longer
+  // scores.
+  it('a big-schema server and an unreadable-schema server with the same tool count score identically', () => {
+    const bigSchema = cost(withTools({ toolCount: 5, schemaTokenEstimate: 25_000 }))
+    const unreadable = cost(withTools({ toolCount: 5, schemaTokenEstimate: undefined }))
+    expect(bigSchema.score).toBe(unreadable.score)
+    expect(bigSchema.score).toBe(100)
+  })
+
+  it('Rule A still covers the no-tools case: cost is withheld, never scored from nothing', () => {
+    const d = cost(withTools({ toolCount: undefined, schemaTokenEstimate: undefined }))
+    expect(d.available).toBe(0)
+    expect(d.score).toBeNull()
+    expect(d.score).not.toBe(0)
+  })
+
+  it('a scored cost dimension emits no withhold note (Rule C is gone, not merely quiet)', () => {
+    const card = score('o/r', withTools({ schemaTokenEstimate: undefined }), 'T')
+    expect(card.notes.join(' ')).not.toMatch(/cost is withheld/)
+  })
+})
+
+// Rubric 1.7.0: the shape of the cost dimension itself, pinned so a future
+// change has to state its intent here rather than drift silently.
+describe('rubric 1.7.0 — cost is a single always-measurable signal', () => {
+  it('RUBRIC_VERSION is 1.7.0', () => {
+    expect(RUBRIC_VERSION).toBe('1.7.0')
+  })
+  it('token-footprint is not a scored signal in any dimension', () => {
+    expect(SIGNALS.map(s => s.key)).not.toContain('token-footprint')
+  })
+  it('cost has exactly one signal: tool-count, at its existing weight', () => {
+    const costSignals = SIGNALS.filter(s => s.dimension === 'cost')
+    expect(costSignals.map(s => s.key)).toEqual(['tool-count'])
+    expect(costSignals[0].weight).toBe(1)
+  })
+  it('tool-count keeps its existing bands', () => {
+    const toolCount = SIGNALS.find(s => s.key === 'tool-count')!
+    const at = (n: number | undefined) => toolCount.evaluate({ findings: [], errors: [], toolCount: n })
+    expect(at(10)).toBe(1)
+    expect(at(25)).toBe(0.7)
+    expect(at(50)).toBe(0.4)
+    expect(at(51)).toBe(0.2)
+    expect(at(undefined)).toBeUndefined()
+  })
+  it('no rubric signal reads schemaTokenEstimate any more — it is a published fact, not a score input', () => {
+    const base: Signals = {
+      findings: [], errors: [],
+      daysSinceLastCommit: 3, daysSinceLastRelease: 20, commitsLast90Days: 40, busFactor: 6,
+      medianIssueResponseDays: 1, stars: 5000, weeklyDownloads: 50000, archived: false,
+      specEra: 'modern', hasCI: true, hasTests: true, hasLockfile: true, schemaExtracted: true,
+      toolSurfaceRisk: 'none', secretsFound: 0, cveWorst: 'none', toolCount: 6,
+    }
+    for (const s of SIGNALS) {
+      expect(s.evaluate({ ...base, schemaTokenEstimate: undefined }))
+        .toBe(s.evaluate({ ...base, schemaTokenEstimate: 400_000 }))
+    }
   })
 })
 
@@ -639,29 +760,68 @@ describe('reliability is withheld when spec-era is unmeasurable', () => {
 // from TWO measured dimensions (Azure/azure-mcp: D+ 50 from health+security
 // with reliability and cost both withheld). Half the rubric is not a grade.
 describe('a headline grade requires at least 3 measured dimensions', () => {
+  // CONTRACT CHANGE (rubric 1.7.0): both fixtures below used to reach a
+  // withheld cost via `toolCount: 5` + no footprint (Rule C). Rule C is gone,
+  // so a server with a counted tool surface now HAS a cost score — reaching a
+  // withheld cost requires an unread tool surface (`toolCount: undefined`,
+  // Rule A). The gate itself is unchanged and is still exactly what these two
+  // tests pin: >=2 null dimensions withholds, exactly 1 does not.
   it('withholds when two dimension scores are null (whatever the mechanism)', () => {
-    // specEra unknown -> reliability withheld; no footprint -> cost withheld
+    // specEra unknown -> reliability withheld; no tool count -> cost withheld
     const card = score('o/r', {
       findings: [], errors: [],
       daysSinceLastCommit: 3, commitsLast90Days: 40, busFactor: 6, stars: 500, archived: false,
       hasCI: true, hasTests: true, hasLockfile: true, schemaExtracted: true,
-      toolSurfaceRisk: 'medium', secretsFound: 0, cveWorst: 'none', toolCount: 5,
+      toolSurfaceRisk: 'medium', secretsFound: 0, cveWorst: 'none', toolCount: undefined,
     }, '2026-08-09T00:00:00.000Z')
     expect(card.dimensions.filter(d => d.score === null).length).toBeGreaterThanOrEqual(2)
     expect(card.insufficientData).toBe(true)
     expect(card.overall).toBeNull()
     expect(card.grade).toBeNull()
   })
-  it('still grades with exactly one withheld dimension (the common cost case)', () => {
+  it('still grades with exactly one withheld dimension (an unreadable tool surface)', () => {
     const card = score('o/r', {
       findings: [], errors: [],
       daysSinceLastCommit: 3, daysSinceLastRelease: 20, commitsLast90Days: 40, busFactor: 6,
       medianIssueResponseDays: 1, stars: 500, archived: false, specEra: 'modern',
       hasCI: true, hasTests: true, hasLockfile: true, schemaExtracted: true,
-      toolSurfaceRisk: 'none', secretsFound: 0, cveWorst: 'none', toolCount: 5,
+      toolSurfaceRisk: 'none', secretsFound: 0, cveWorst: 'none', toolCount: undefined,
     }, '2026-08-09T00:00:00.000Z')
     expect(card.dimensions.filter(d => d.score === null).length).toBe(1) // cost only
     expect(card.insufficientData).toBe(false)
     expect(typeof card.overall).toBe('number')
+  })
+  // The measured consequence of the 1.7.0 rubric change, at the gate: a server
+  // whose tool surface WAS counted but whose schemas were unreadable — 96% of
+  // the graded corpus — used to sit at 3 of 4 dimensions, one loss away from
+  // being withheld entirely. It now sits at 4 of 4.
+  it('a counted tool surface with unreadable schemas now measures all four dimensions', () => {
+    const card = score('o/r', {
+      findings: [], errors: [],
+      daysSinceLastCommit: 3, daysSinceLastRelease: 20, commitsLast90Days: 40, busFactor: 6,
+      medianIssueResponseDays: 1, stars: 500, archived: false, specEra: 'modern',
+      hasCI: true, hasTests: true, hasLockfile: true, schemaExtracted: true,
+      toolSurfaceRisk: 'none', secretsFound: 0, cveWorst: 'none',
+      toolCount: 5, schemaTokenEstimate: undefined,
+    }, '2026-08-09T00:00:00.000Z')
+    expect(card.dimensions.filter(d => d.score === null).length).toBe(0)
+    expect(card.insufficientData).toBe(false)
+  })
+  // ...and the corpus-level consequence: losing ONE other dimension used to
+  // withhold the grade (cost was already gone), which is how "cost + security"
+  // and "cost + reliability" became 87 withheld servers. Losing reliability
+  // alone no longer does.
+  it('losing reliability alone no longer withholds a server with a counted tool surface', () => {
+    const card = score('o/r', {
+      findings: [], errors: [],
+      daysSinceLastCommit: 3, daysSinceLastRelease: 20, commitsLast90Days: 40, busFactor: 6,
+      medianIssueResponseDays: 1, stars: 500, archived: false,
+      specEra: undefined, hasCI: true, hasTests: true, hasLockfile: true, schemaExtracted: true,
+      toolSurfaceRisk: 'none', secretsFound: 0, cveWorst: 'none', toolCount: 5,
+    }, '2026-08-09T00:00:00.000Z')
+    expect(card.dimensions.find(d => d.id === 'reliability')!.score).toBeNull()
+    expect(card.dimensions.filter(d => d.score === null).length).toBe(1)
+    expect(card.insufficientData).toBe(false)
+    expect(typeof card.grade).toBe('string')
   })
 })

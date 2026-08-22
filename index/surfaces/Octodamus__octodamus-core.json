@@ -1,0 +1,60 @@
+{
+  "ref": "Octodamus/octodamus-core",
+  "scannedAt": "2026-08-15T19:32:30.425Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.7.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "ask_oracle",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "518ad632dc42fbe6d03a011aded7ff873feaac9330690e36bb439d6d5fb7b0c9"
+    },
+    {
+      "name": "get_active_calls",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "ff1f28070f2c4d564fceb782fd30108eb9765e7cfe1f804a680804e71d7a9722"
+    },
+    {
+      "name": "get_free_tools",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "03ccb7332ceb3c9f2bc2ef94ddef0f92ba4cd7dfd5ac111659b210be5b95fb9e"
+    },
+    {
+      "name": "get_identity",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "6244b7e62fd0baa27c53e49a2723ff9f126ee09a5ba32f0966d58d870913b937"
+    },
+    {
+      "name": "get_market_brief",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "491cdf349757013d0bad2af52bb7147660f266165250c25f64bf035ac1eb097d"
+    },
+    {
+      "name": "get_market_sentiment",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "ddbd73ebfe36fac1737b640d405bef894ff40c46b6c8b610c96b4854fd67f54a"
+    },
+    {
+      "name": "get_news",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "16b8c57f3dfa1d9c4a8cc2d644ebb4190f667db19eb07e97f60da81bcfed46e5"
+    },
+    {
+      "name": "get_signal",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "be73f38e57e60024d3a8eaf03ef3cf696c7f3618fc970f63afad7ed73fde3354"
+    },
+    {
+      "name": "get_track_record",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "a65d96c71a7d815864c6b2ac49bc05e6a2aa2ec86a0c79901eeadef1b9cccdd5"
+    },
+    {
+      "name": "subscribe_to_octodamus",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "6a4a3e7593a7fca05d22c98a09ab8c5b4bc55d6d5f9d340689e0a04626a0dc29"
+    }
+  ],
+  "surfaceSha256": "61c448c7dae0ba7d766b621dbe982562d85eb4186748d489e2756d054c6a0913"
+}

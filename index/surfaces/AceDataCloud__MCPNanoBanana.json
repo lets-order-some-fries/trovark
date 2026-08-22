@@ -1,0 +1,30 @@
+{
+  "ref": "AceDataCloud/MCPNanoBanana",
+  "scannedAt": "2026-08-15T19:32:30.425Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.7.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "nanobanana_edit_image",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "1cf0d05d9cec6e62499aef191884c4cd785ca25c20cdd57ab5075aad1dc076b6"
+    },
+    {
+      "name": "nanobanana_generate_image",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "df1da6368467e7c37f03722f7c04327f43f841915bb3380123f95530538e4740"
+    },
+    {
+      "name": "nanobanana_get_task",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "0d2e93a238b8b4af1c1bd62f348edd57b20940e844a941f265b36f768e3b86bb"
+    },
+    {
+      "name": "nanobanana_get_tasks_batch",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "0d4ed59035302125241f471b23d00071b4e3246d28eff2ad272c61c76543289d"
+    }
+  ],
+  "surfaceSha256": "f0b37ccc54b5ba71d98de3cabf510edae086775c4075efd8214d54c53e7b8163"
+}

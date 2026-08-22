@@ -1,0 +1,135 @@
+{
+  "ref": "alexar76/aimarket-plugins",
+  "scannedAt": "2026-08-15T19:32:30.425Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.7.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "aggregate_values",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "0b9631efcf7b0bd3fa780f400aae16c39e51b9a5ac6fbfa3d275f0aea8b08358"
+    },
+    {
+      "name": "analyze_cascade_risk",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "6d987f36d5adef80bfa3cc62ffd7326cee164fd636f92a4a28e7b40ef5b708c4"
+    },
+    {
+      "name": "analyze_network_resilience",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "832b798a09998d53e40cfece6e6cbfc9f22164b8fefe8595832f610daffae874"
+    },
+    {
+      "name": "ask_oracle",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "4a26d596f61a2ebd9bf3832d675f5db50670470fa92d8f841f505df91f70ae2b"
+    },
+    {
+      "name": "audit_compute_cost",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "902f89976784056f2ce4deb9bf29beb66154ab8f26fd1a01b0bdb381588b318c"
+    },
+    {
+      "name": "compute_least_time_route",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "11a849e6014cedd4d82b018b9e06788a46dcf1d6c9ec06083152f5a8ec63160d"
+    },
+    {
+      "name": "compute_vdf",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "09418c822a89e80324dd1f51bae29d3f76c62330942eaa773fbf315dce6964d6"
+    },
+    {
+      "name": "generate_claude_desktop_config",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "b74750246cc092ab4285646f1e1e4aa2a845f88b2179107bafe8201ade1a1708"
+    },
+    {
+      "name": "generate_dockerfile",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "b40f29576913bd917fa62be5a478ede7bfc04a116671589d736e5f572da07459"
+    },
+    {
+      "name": "get_agent_trust",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "6c7e741eb22f3791808d52c8632072a5c55b34c646aef4f0e6c0b1323988713e"
+    },
+    {
+      "name": "get_blue_noise",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "e2a9bc7b492f139d1a6f425266b50a5bc5fa9028d2990f51f06f3ca30dd9c818"
+    },
+    {
+      "name": "get_quasirandom_sequence",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "dbcc2b80b3fa8447593b77bbd07cf0a05b5d8b94b4490937cab697205e279900"
+    },
+    {
+      "name": "get_random",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "3b9c0eb852f5f0e5dde6c61454e280209366938d60ccac5f15d91188a3688886"
+    },
+    {
+      "name": "get_randomness_beacon",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "12f75727cc6fb9dbdfc660645c33f0229c0e82e4c2727456d65acda96a6931e3"
+    },
+    {
+      "name": "get_reputation_scores",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "2ca8e5867d247f8975298821ba07438adf9df291833826f86db207a349c22240"
+    },
+    {
+      "name": "list_oracle_capabilities",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "ab1aec7a92a076a8e4fa6b18cfca3d186ede5a021633a6b90178cd5a6edd8ef8"
+    },
+    {
+      "name": "optimize_route",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "616c2871ea07d6bbb249afaabe26142508e1b0d1261fc2a593b26f60f9eefe05"
+    },
+    {
+      "name": "package_capability",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "c96ee5ae9bfe7e710c81039d044846eae0af8e9cf48f6bb5758d4ed33a3ae8a8"
+    },
+    {
+      "name": "verify_cascade_risk",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "54301145b3a2fd14f1952175f2a90388f25614e9a830eb1478ae32b138d93869"
+    },
+    {
+      "name": "verify_compute_cost",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "ca8c12b50174d95885771bca86a058aea5a45ec29fffe8e57af22408a5193974"
+    },
+    {
+      "name": "verify_least_time_route",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "38510135bd666751760782cbdf2f65e00fb35be265f8ce8a02ff4a4e415ee651"
+    },
+    {
+      "name": "verify_network_resilience",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "86c1f597089e5fef837e9864363db2db0363b0cc68ed341826e4e5f967e657b8"
+    },
+    {
+      "name": "verify_random",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "dce1bba1d92114dc9126d73a648cbb4486e2e4b13ff088ff400f7e89cb804bbe"
+    },
+    {
+      "name": "verify_reputation",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "4c9afa2cf7c7ae02d4fa09af922ded280b669d1b5cedc4a761d82078462429ee"
+    },
+    {
+      "name": "verify_vdf",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "7f010fed50ee98e58c199644ecf6b22b46b06eeba0d7d29a6ae37260d5a1323d"
+    }
+  ],
+  "surfaceSha256": "8df3a2bcb5125e0db23b2d390aefe156249336f7a89886dcb8107642d94047d5"
+}

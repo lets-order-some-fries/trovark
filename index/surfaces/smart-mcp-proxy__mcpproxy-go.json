@@ -1,0 +1,65 @@
+{
+  "ref": "smart-mcp-proxy/mcpproxy-go",
+  "scannedAt": "2026-08-15T19:32:30.425Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.7.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "code_execution",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "d9e966ca0c6c70845e2ba53fe1cfb3a900e50f91dfbb4d7b8a764bd252cbc8e5"
+    },
+    {
+      "name": "describe_tool",
+      "descriptionSha256": "630dfe0072c69720caa2753197404a70e82a3b7d32f535568e48c54f2440a357",
+      "definitionSha256": "aa3aab41a01d3f30baffe84b9f1cdf630d40884c8c4fdff10f3cdb4105dd6447"
+    },
+    {
+      "name": "echo",
+      "descriptionSha256": "3746d2e26997e08679150a006bfe276250a181017210b703e3c19b1567581aba",
+      "definitionSha256": "52d43b26b939576156077d89ae31d2f1ce30cf57099ead631c248fd5ea936da8"
+    },
+    {
+      "name": "list_registries",
+      "descriptionSha256": "feadde6e0a8cf61530b5f85cf19a1c556d44857b45f0861b0ed24891e9c5ab05",
+      "definitionSha256": "549e451a4f8e8432d20b470d00eb975f24f7856e894946b4f1082b1c70e28ed6"
+    },
+    {
+      "name": "ping",
+      "descriptionSha256": "aca2fec914fa27e6178af156641c9a350f481c0c51c9495f3de8acde743f7dc9",
+      "definitionSha256": "cf252a139697a2831314cb2548a58c4b927ac172652b25f4a41bebf111c8fc1b"
+    },
+    {
+      "name": "quarantine_security",
+      "descriptionSha256": "b9ad39bc2bd147606589a44245095da9450f1814bf3353bfc7f0bbfff9ce0d1a",
+      "definitionSha256": "7530e2ccc32b533364fa3ba1ba8100aa11a1295ebcc3df0fcae205d250fbd314"
+    },
+    {
+      "name": "read_cache",
+      "descriptionSha256": "ae8c9d4b62885e82d19f0e6f3c6451ba5825a27aad69a30a85891a40d053c500",
+      "definitionSha256": "dd46f3cd7c2d1e1c157887722c735a0a3ee6855627fd90ef9624247cecec029a"
+    },
+    {
+      "name": "retrieve_tools",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "208318129817865c7adf5266f4b06f90308941f474e08162d4a23480cd5dec8c"
+    },
+    {
+      "name": "search_servers",
+      "descriptionSha256": "f30794796f75a265fda9316bf5b95a428b22b03e692a74bb74a5034a0daf63fa",
+      "definitionSha256": "14d198db0729e3a95cc5a6d35892fb49f43c4f872cb83110b2611021f6245b43"
+    },
+    {
+      "name": "set_profile",
+      "descriptionSha256": "73c53511f4a6d240f5549775e8674987cdd00c76a3b9c262ac656cd359c427ce",
+      "definitionSha256": "97f69d023f289ce10f3480fd72da24da8115876b58350ad04be0242bea0c94a6"
+    },
+    {
+      "name": "upstream_servers",
+      "descriptionSha256": "65c13b8a4b0d12186fbf0085d64703c92f73967f5fb776bb842285309186b520",
+      "definitionSha256": "19205346cea7153bfcdbdadf6cbc9f0ec0fbe30d44507fb595de5d47e3ca1019"
+    }
+  ],
+  "surfaceSha256": "de868eab07fbb55a925df1d4bf26b04baf8019235cc51b3e7922a515d32972cd"
+}

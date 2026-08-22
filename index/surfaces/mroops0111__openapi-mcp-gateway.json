@@ -1,0 +1,25 @@
+{
+  "ref": "mroops0111/openapi-mcp-gateway",
+  "scannedAt": "2026-08-15T19:32:30.425Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.7.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "call_operation",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "286ded7d256d03544e1c0fc7e6b2b4ec1b284dc29222d3bf0578efc7806eb130"
+    },
+    {
+      "name": "get_operation",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "56b96a64f007d9772a5663603b7eb6298bb7a91aa9c5963ec1c05fa95edc415c"
+    },
+    {
+      "name": "list_operations",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "d1c70488af781dc38f520a2b9fa3b91f79264d491e878c811c4f18ccf20c76cf"
+    }
+  ],
+  "surfaceSha256": "2c2859b12bbb40f7e2fbaf19d8684f160c1d778581e62fb59f3d7cac63466e46"
+}

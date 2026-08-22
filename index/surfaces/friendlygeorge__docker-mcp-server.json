@@ -1,0 +1,270 @@
+{
+  "ref": "friendlygeorge/docker-mcp-server",
+  "scannedAt": "2026-08-15T19:32:30.425Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.7.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "build_image",
+      "descriptionSha256": "f96c375315b76712587dc2cab799ab0700cd74aa98278916df078d6373130df8",
+      "definitionSha256": "2007fc3478a75ef50f898c17136eee4cff7387651d00678232f0c2fe93d5dee8"
+    },
+    {
+      "name": "check_health",
+      "descriptionSha256": "84ff0acd6034c7c11049f17b838828d8520db085578e8adee374b1e668313e7b",
+      "definitionSha256": "10a84d09d69db35ff2994d442a1edb528778a15064d61a672e583de0791a3084"
+    },
+    {
+      "name": "compose_down",
+      "descriptionSha256": "e6f531bb105c199643167f55e0f80cddc39a73741f6de09c174892d814f5de04",
+      "definitionSha256": "846878217c3edfddaf5e9a76615ec8c1686e2d30e1e94c7d882eb91c2a1d57c4"
+    },
+    {
+      "name": "compose_logs",
+      "descriptionSha256": "09f6cc80cf53c2095928027bac65eb323d695424f6cf7614f3982a7ca5374cee",
+      "definitionSha256": "5805306717abc130076c18a7b8f194caed7fff837708cc5d813d8b6b6043dcac"
+    },
+    {
+      "name": "compose_ps",
+      "descriptionSha256": "1fe9e7538c619fb127a26384dffbd91a42503d75256501b50feb1e3c97f1c23c",
+      "definitionSha256": "27dadbc49c99a72b22c7e6cebebe89b884225eb855915c033c62151c2c464d2e"
+    },
+    {
+      "name": "compose_restart",
+      "descriptionSha256": "14f646aa865a0c8faddd32fc0018112f37894d51451844532c6e4ea43472f2f9",
+      "definitionSha256": "9828122f26c41500506253410ffdc630432a2f7084f7c064116b4e79fcbc8a77"
+    },
+    {
+      "name": "compose_up",
+      "descriptionSha256": "7656029a3a66a597b491abfdfb4202824ef0400eaa6be411b6f06f790daefb5c",
+      "definitionSha256": "d8f484f632111799c57aa1ef0638fc3e3764c1e39108aa62b1dfeb50a6ecea75"
+    },
+    {
+      "name": "container_health_status",
+      "descriptionSha256": "84fe3985b59233e59b0379429cc12eb67d78f9864296edd19809ae7427d26a29",
+      "definitionSha256": "401b7bee97ee6ea34c5a44419b85591c84c4fff4daa9236b205700051c0ac0a9"
+    },
+    {
+      "name": "container_resource_usage",
+      "descriptionSha256": "0c01058014acf4c68daa91712834a889541b2273e475211e83e726e0a11231d1",
+      "definitionSha256": "7b9b4b57c96dfba9e597dd9288ccf5ede34c2d3fb10bb110ece46a78fbbed721"
+    },
+    {
+      "name": "container_stats",
+      "descriptionSha256": "e0ccc7f3903b03e6b18ebbfb76eeda79f7ade4914183a9a6ace1a6e489521a5a",
+      "definitionSha256": "4bfb610cf2295ee22877fa5c5fa2e3e82dca482750b67f9f057c2944bc2bd470"
+    },
+    {
+      "name": "copy_from_container",
+      "descriptionSha256": "1786e2d1d7d7eaa2bba74cf22ca9503040a0259703f0e9ea3d2c7ecc65df9ba0",
+      "definitionSha256": "5966607f1db364dc9f524d17a9fc6147f66b68331ca7d2bf52716d0b68b869c5"
+    },
+    {
+      "name": "copy_to_container",
+      "descriptionSha256": "c4359736f28e362ba6126e8017380191b392479e3efdad8c8bea5ee8f8d36927",
+      "definitionSha256": "41b9de42dcfeb84d584cde8087591a03812538efeadde34bceebd0b50514d566"
+    },
+    {
+      "name": "create_container",
+      "descriptionSha256": "b58fccd2c56f4790cf71ea79f6fbba7dccb2343ab99488e075828a20c8610a5d",
+      "definitionSha256": "7675ef777999331bf758d041ae9a6bcbe2807f7d29279f9d8266b9fa3c3e9a19"
+    },
+    {
+      "name": "create_volume",
+      "descriptionSha256": "498b5a7796cb23d39e716e5b2134dad8d8a832dcd6c7299c7e3bbba78d81018f",
+      "definitionSha256": "3aadd23dc0f16e6934f51a2c9058b69dfb0d99b625f1d32691e1625100262dbc"
+    },
+    {
+      "name": "disk_usage",
+      "descriptionSha256": "0be1ffda137217734b3e029f474b6a337780a037415072ffa81ff7c787f11e25",
+      "definitionSha256": "d0891c1b1fd3307465c16d22710c023cb4fca65f512578b02d571c58a269a794"
+    },
+    {
+      "name": "docker_info",
+      "descriptionSha256": "b2091b6cab5e1a855214a4b20e4256c7b0854d4df2dfa217fe36eb0710ec5eff",
+      "definitionSha256": "5ba88f71e6a924fb93fb4ad0b714ca7145b9729966dc5b02303e94a67783a335"
+    },
+    {
+      "name": "exec_in_container",
+      "descriptionSha256": "1c585d6693af1560af8b7183713569115d2c0e4146529c27476dfa88fa21a20d",
+      "definitionSha256": "c331404595aae1c36565c5657cabe63fb8bba56f636908df79997fb1b3cedae9"
+    },
+    {
+      "name": "fleet_status",
+      "descriptionSha256": "39452203ee66b43af1c0529d1b8574538fca695fdbd43f444e07b6664187cb8e",
+      "definitionSha256": "9df0681e2743a8cdb9d8ccb161b2271ad99b37fa0425b08e63acee557b7cb6b7"
+    },
+    {
+      "name": "inspect_container",
+      "descriptionSha256": "be75bee8292422afb2dad82043f09b41676a9d02e3bdc2b835f3914b3e456fa7",
+      "definitionSha256": "15c3b4a5650284ec9912dda61c59fda764a6eb2c12b2157bddc52551f8f99446"
+    },
+    {
+      "name": "inspect_context",
+      "descriptionSha256": "9bd1a7303a7390e938b9249d9a6c08788c265a5fd5c82d882093d15d346263f1",
+      "definitionSha256": "61b807569ac4728edc0610ab3d51cfff79df4803aa90816450ef2042f8cef6f8"
+    },
+    {
+      "name": "inspect_volume",
+      "descriptionSha256": "3e04db8f8b429ffca0924f99c6709dfbf7e873746cbcc03b0f5b984013006ab5",
+      "definitionSha256": "89e06ec6498bcb18cf56a996d0135086f6e9df57c429c3f62f7c78753ca844e3"
+    },
+    {
+      "name": "list_containers",
+      "descriptionSha256": "6997ba627f8a41bd62948d80b557fd1eb82c6b71ecde9c62733f1797c7269db8",
+      "definitionSha256": "93cd50a914341f43df75945e255fe5d8444f95a7f66ab675286e01d88e458408"
+    },
+    {
+      "name": "list_contexts",
+      "descriptionSha256": "07c1a3834f93915abab916920de9f345289954cf75dcfb4adf7857b4750685b6",
+      "definitionSha256": "2f8c5903ab38f36118d1523f9df7eee3d70532d67c29c94f270afd9b583938df"
+    },
+    {
+      "name": "list_images",
+      "descriptionSha256": "ac2c1f9bcd67708a990f4709a2c980c32fe29a323d1e5351b412ec872b89231c",
+      "definitionSha256": "d4f61af53d669779a21896a5dfe12215a8df009691b0e2f7e8d70a9c9f2d8982"
+    },
+    {
+      "name": "list_networks",
+      "descriptionSha256": "8078441e636254c0b59f79a22045088cdfe44049cc5885b39afc98d0b959a0d2",
+      "definitionSha256": "5434cb607d0b53727557cd467462e71644675e600a8ba6a4c334f5ae83018230"
+    },
+    {
+      "name": "list_volumes",
+      "descriptionSha256": "b1c048b6b8e30b7dfda1f565b388006ef513426779d1a82bc6039b8496088f0a",
+      "definitionSha256": "fc8c4fce367d14e66a347e5b3a0fe614989877bd8f5a437b774afe76d4dd9429"
+    },
+    {
+      "name": "monitor_dashboard",
+      "descriptionSha256": "0613835d570cca5f79355f2c54b58e503ba12bd3038c722a81ea160c2ebfb21f",
+      "definitionSha256": "d96d2732a6b0be9ab0eb5760b2b88323feff10c84c8a3cba86b9432e227f1318"
+    },
+    {
+      "name": "prune_containers",
+      "descriptionSha256": "a57da4e58eb7dc6471df1c0165e7d798829c39a3ccb12c090285929e815cd54f",
+      "definitionSha256": "b85326fab16f021dbf7494fbf69df6bc2a94fdbdedf0dcfadf7a6ebbcdc1e51f"
+    },
+    {
+      "name": "prune_images",
+      "descriptionSha256": "22b1c039b04658bed44b86efc39f1e0c1137130f71d13499f27183cc8b3dfacd",
+      "definitionSha256": "8bbeaf29c6db53604c64c8a7a578d80aa4715c4795ea7d2c7949eac81797076f"
+    },
+    {
+      "name": "prune_volumes",
+      "descriptionSha256": "dcc4a13daeaaf58c49a905d946d52c16f60610bd64a56ba54da00e29ab7484a1",
+      "definitionSha256": "f7ed63f945814f7af75603e0f76247bdf675986df46bb995e150f924960df7ac"
+    },
+    {
+      "name": "pull_image",
+      "descriptionSha256": "e42b51eb8a9f86eb4aa0d5f8f2d7568aa3c9eb422cbf5b3f053c1005bca99eb0",
+      "definitionSha256": "1e5031463e2511337edabdeec190d2054198839144d3d52f3a8919d0a669c86d"
+    },
+    {
+      "name": "recreate_container",
+      "descriptionSha256": "bec250e042d46f783757241c615a983661ac6ad0a061c0d51dbb7684678efbcc",
+      "definitionSha256": "cd0ee03a0973f578fd7fb5a86ff97cd9db176d1f4d816b3600169702d4ee1979"
+    },
+    {
+      "name": "registry_login",
+      "descriptionSha256": "524f4598f5e5def36fabbbf10ba117c6c49221171205199313e8886134d7a9f9",
+      "definitionSha256": "dbf7269a91e831c55675eda4dd7fe93926577178450182d8f7238bdb9a393196"
+    },
+    {
+      "name": "registry_push",
+      "descriptionSha256": "433522e6fc07da4f55fb9f9a137307fe96c585c4acd5b50f6e02ebe96a65140e",
+      "definitionSha256": "9d0c838ec4f6b9a292f0f910d50f8a9020bbc291f9e874798211ff6a05839ebb"
+    },
+    {
+      "name": "registry_search",
+      "descriptionSha256": "0ac1462f0370365313aeb332691d8050ad2b227a2df908f398e80dc3b5a9c0b7",
+      "definitionSha256": "866d38316e1e87f711ff090806da857411c06f51e4d408856c79fde93c8a02db"
+    },
+    {
+      "name": "remove_container",
+      "descriptionSha256": "c33bd29f35d90fce7dc740af2c55774f4eb64673c43b1427db08ec4806d7f73f",
+      "definitionSha256": "64802fb183e5f296dd8c6a64dba423e1819c91c6377904686ac0eece852c5459"
+    },
+    {
+      "name": "remove_image",
+      "descriptionSha256": "73c6074bceb024253d56433c48f941f20c9b06e24bc0b8d89178a7e85ec4a8ff",
+      "definitionSha256": "055480a693bea251d63169b0d5b97f9583cd27d250ad704416293f07d33232dd"
+    },
+    {
+      "name": "remove_volume",
+      "descriptionSha256": "20f66697f010f24f39ae030286ad21e7793f7164512c8afb8883124ae6f199b2",
+      "definitionSha256": "bf42633a53cf0eda9d5f9f31f1af2248437498a049a2a7930f8d0a6d942ba3f9"
+    },
+    {
+      "name": "resource_alert_check",
+      "descriptionSha256": "b4b433f4005284722f77712ddd3a12af1b32eed0da29740e03eb594519497d23",
+      "definitionSha256": "0f35d4f6bc60ac61637d98d365713bed1f15c9107ff1055ee669d633d20f8baf"
+    },
+    {
+      "name": "restart_container",
+      "descriptionSha256": "7b624a59246b4cdff7bbf2ed7748deb584e1750f68d1d2feb70e4181dc843aa0",
+      "definitionSha256": "7abd0a545989cc451a5e6a6d78756978b42f84fdf05d45e2b1cef407aeeb04d2"
+    },
+    {
+      "name": "run_container",
+      "descriptionSha256": "950311529fba12c91c02318a89fc1bb3d7f2821c449bee9565024539f75ce0fa",
+      "definitionSha256": "a17a0887684e532764583a7a0e2dde1d681a0bdbe4d01cf142add9f7bd844e0a"
+    },
+    {
+      "name": "scan_image",
+      "descriptionSha256": "62180ceb219c8f6effd469d13086fbad44e73f969879939100fbe4a7742044d7",
+      "definitionSha256": "60521d174df30a18113be62229b6e7a1fa6e6ea9aef73ee09befb601824d78e9"
+    },
+    {
+      "name": "search_logs",
+      "descriptionSha256": "c3db8d81ed6c3d4945c8f3f9ed6a51b4992a9d8d309781133512417b21309c8b",
+      "definitionSha256": "24b9ada7f538a8f89acdbd054ce207f2fa922c39d8acac13f0ba08d4f954abbe"
+    },
+    {
+      "name": "set_restart_policy",
+      "descriptionSha256": "565da8cd9d598e6399e2a10bef7fa9ca637e57e79852e15ff52a5afb6838f526",
+      "definitionSha256": "3586162f74504a5f71ca461d2c75cd39c7de6b42766aad1caff2db8aaf133d76"
+    },
+    {
+      "name": "start_container",
+      "descriptionSha256": "267b795301ecb34306e7f9abf3bf42249993ce0b2998bb2e697e3399e45f0eed",
+      "definitionSha256": "4c3be6024cfdaf8e77b18d4ec2e789a76d3a45d77ea1985ccbf417b71c54d026"
+    },
+    {
+      "name": "stop_container",
+      "descriptionSha256": "1fbe4be3712c75c8ca8454306f60a7409c206eac64c655f68b8f5ed495b1c543",
+      "definitionSha256": "534ba2c4af29ffeb22f959bffd9903f65f56ff524e3fb08735e34ea10935e106"
+    },
+    {
+      "name": "stream_logs",
+      "descriptionSha256": "f3b9c026e8ef5a7d3b9384117141de58dbf3482de74a56c5cac2835cc94cc1ec",
+      "definitionSha256": "b6f0d87ad50c4e1ebaad58796e771de20e6612b0e23d9ef1269d65e8e8a7d37c"
+    },
+    {
+      "name": "update_container",
+      "descriptionSha256": "21fc78156f32b23e9c0f77cde71d9ad5f85b0c35edf505fcb84d855ac3ee136b",
+      "definitionSha256": "b451d798d079ea7731a94bc2cddf6aa386e507163b3a2d7f19658f734d444fc5"
+    },
+    {
+      "name": "use_context",
+      "descriptionSha256": "5c00405062abfb92743fa06e8f0bcb7f4d666f346b2dc80f8e1117ac731e598a",
+      "definitionSha256": "31a6df7ede963847fc6072ab0c117b2f06d464bcd9e117b33ce4bd20ffb8ac26"
+    },
+    {
+      "name": "vulnerability_report",
+      "descriptionSha256": "148a8c5d63e72dd2f9fb3e4ea18487327e3dbb2f621cb986b30c2a5f6c5b4e2d",
+      "definitionSha256": "d87dd8701ea13719ea78a2bec218fe2cf5414cd1c4370147b72318eb0bdab08e"
+    },
+    {
+      "name": "watch_events",
+      "descriptionSha256": "07e9f644d9ab5b5a46d78fd66f26f0c41fe0f2a12047a8ba1cc15a5566c252b9",
+      "definitionSha256": "c5d45c7a03b17ebeeb9551571a0af0190789cb58bd1b568bde32df82faced07f"
+    },
+    {
+      "name": "watch_health",
+      "descriptionSha256": "fad2b296e12fdaeabde3c2527aa8408120400149e7724e440d384c3246801a79",
+      "definitionSha256": "af0cd383fdf6d999ef95d094bc2fc55f7be6a8aaa5ea364ca191c0eec725da79"
+    }
+  ],
+  "surfaceSha256": "6cec83350210e6abc210b3336cee21f86cc17bad19597b1e444d015ed3c6ceb6"
+}

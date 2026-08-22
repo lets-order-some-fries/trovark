@@ -1,0 +1,25 @@
+{
+  "ref": "aidevelopers2/remoteopenclaw-mcp",
+  "scannedAt": "2026-08-15T19:32:30.425Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.7.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "search_mcp_servers",
+      "descriptionSha256": "a7726acf0f5061e5a0d9c7ea9e124a4818f7f342c637320119cdf0f610c1d218",
+      "definitionSha256": "85ca7ef219a2988d397e91e17723b413165ec2be4a73428ef98da4676cba73ca"
+    },
+    {
+      "name": "search_plugins",
+      "descriptionSha256": "a7726acf0f5061e5a0d9c7ea9e124a4818f7f342c637320119cdf0f610c1d218",
+      "definitionSha256": "c16c8fd1686133d1957f64dcece24bf7e5629b3c6a27369d3ae9fb0b8f7c4470"
+    },
+    {
+      "name": "search_skills",
+      "descriptionSha256": "a7726acf0f5061e5a0d9c7ea9e124a4818f7f342c637320119cdf0f610c1d218",
+      "definitionSha256": "9bc1e165c0d0cd35958d060e8a0bfaeb9f2c8975e4fdee77588fe05fc84c0b54"
+    }
+  ],
+  "surfaceSha256": "fd11cf4fba113f9e2ac18e35565c40cc5f5206b448c7086506db0786fe9de469"
+}

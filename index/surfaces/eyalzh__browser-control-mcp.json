@@ -1,0 +1,50 @@
+{
+  "ref": "eyalzh/browser-control-mcp",
+  "scannedAt": "2026-08-15T19:32:30.425Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.7.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "close-browser-tabs",
+      "descriptionSha256": "2aa25db615ca3b7d324ade68b14ddc6eab9a9b1d46dee1bc584f95b31b802bd0",
+      "definitionSha256": "16d7f8a16f9609315a00b68d455b61ffcc227aa7111475ffb888cb74746a2d20"
+    },
+    {
+      "name": "find-highlight-in-browser-tab",
+      "descriptionSha256": "2980787d64d9e14d2815687971969444207a69269673ccc711fe44274f1991be",
+      "definitionSha256": "690cb9f06dbf495d676bc6ca43b248e903c3dea28bc3e397620b5c4fad971ec5"
+    },
+    {
+      "name": "get-list-of-open-tabs",
+      "descriptionSha256": "52999adf5500d3ce253a67ace7f038b27585af207025be9e0f1da93f80fb533b",
+      "definitionSha256": "5a8ead6fd359211d9cef30e261cf521024baeca4372f98f3a124eb08765548aa"
+    },
+    {
+      "name": "get-recent-browser-history",
+      "descriptionSha256": "aa295010e6aa9765a9071ac01e625f1e9061fc577b922fbf1d50a7740b3b92d4",
+      "definitionSha256": "14efa885d7c753bec0441cefa4945f755698a27bf8e5d6651dc1f24dc6ddf6fb"
+    },
+    {
+      "name": "get-tab-web-content",
+      "descriptionSha256": "d2938f037ebe235b11b9101971c37bff344c57acc29e125ddcf1a44ba83e62f7",
+      "definitionSha256": "bdcc28449dee526cbbc5e1c4e31cad988a71f57ca542fb04fde711091bd0133c"
+    },
+    {
+      "name": "group-browser-tabs",
+      "descriptionSha256": "09b7275ca72b71e186ef9daf929582234b5bab03dbb8bc76d9b1b3ba1adb25aa",
+      "definitionSha256": "282511befbc5021ff230fa736179e05189853cfdb549dbfdf4aa122d3b4d5ed3"
+    },
+    {
+      "name": "open-browser-tab",
+      "descriptionSha256": "f8a0992154b10b8fd0a1acf885b8bf8bd1ee15be2c68f8fa221341b655f54dd9",
+      "definitionSha256": "af2f63eb52f51c2b3b266aa3c8d8e234f757a92d614da28970287d2aa8021264"
+    },
+    {
+      "name": "reorder-browser-tabs",
+      "descriptionSha256": "2948bc9dd03350d7f710992fcfa52f4b4826123b2f0e1b804a73b61a526a36cd",
+      "definitionSha256": "99e507c86ce5acd530363eb10df5e8088a36fd067120cecba4ffccaab982a797"
+    }
+  ],
+  "surfaceSha256": "71c804cbea265f675dfff4c50dca786167d436b02a8b7d4e37d4469dfb18bdaa"
+}

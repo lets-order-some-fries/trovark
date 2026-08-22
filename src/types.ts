@@ -121,6 +121,13 @@ export interface Signals {
   // A real scan, even a clean one, always sets integrityScanned too.
   integrityHits?: IntegrityHit[]
   integrityScanned?: { files: number; chars: number; tools: number }
+  // D2 (observatory, docs/superpowers/plans/2026-08-05-observatory-d2.md):
+  // the extracted tool surface, threaded through for SNAPSHOTTING only —
+  // an artifact, never a signal. No SIGNALS[].evaluate may read these
+  // (asserted by tests/assemble.test.ts). Both undefined unless extraction
+  // produced >=1 tool; absence != an empty surface.
+  tools?: ToolInfo[]
+  toolSource?: 'code' | 'readme-catalog'
 }
 
 export interface DimensionScore {

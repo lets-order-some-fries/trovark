@@ -1,0 +1,30 @@
+{
+  "ref": "espadaw/Agent47",
+  "scannedAt": "2026-08-15T19:32:30.425Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.7.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "comparePrice",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "6f58c5391f81c3cd740484f06fa30bed5cc8aad2a6decc54d233101695110e64"
+    },
+    {
+      "name": "findJobs",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "4a1b1ce8aaa3a56f31edc14adb2cfc07a747e5b26de1bcf79d2f56c5e9294ad1"
+    },
+    {
+      "name": "getPlatformStats",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "5cb14329068311400d0fc58583b4ca8466ced4bae89faeee29095ef68a5ef034"
+    },
+    {
+      "name": "subscribeToAlerts",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "c52dfad0170160b2ae3ffe2779256a15d6a57488c4c4f266d4beeb11e9cb4dc6"
+    }
+  ],
+  "surfaceSha256": "c6351de725c140dae5eb081338c3c91468a7e8ad3c791c6957a93581157b671d"
+}

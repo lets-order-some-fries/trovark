@@ -1,0 +1,30 @@
+{
+  "ref": "humanforai/humanforai-mcp",
+  "scannedAt": "2026-08-15T19:32:30.425Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.7.0",
+  "source": "readme-catalog",
+  "tools": [
+    {
+      "name": "check_task_status",
+      "descriptionSha256": "60613882d22253264fe2e3e1e217b76ebe843e04f0c6b3fe7f60c97f25c2aea6",
+      "definitionSha256": "bf7b453b5e2d93a57edb6b77953284ae43f773683b3c5795e15827e1b9602e5b"
+    },
+    {
+      "name": "get_human_services",
+      "descriptionSha256": "b14af651fc9bdd3f1e5685e07345f127cca436a42ed3ac78d9e1d4d13bf00a41",
+      "definitionSha256": "58a3403b53d8b3246fb57f949d51c56d97a3d820309f6750e52da358c817bf34"
+    },
+    {
+      "name": "message_human_operator",
+      "descriptionSha256": "e385ac39c83a05189a9ac63953c3d5dfab7ef6389841504d321d5a8015cf4e8e",
+      "definitionSha256": "1912c5ef502b8086e32eacb415d629c90200bce6c2de285155188e78d3b4da64"
+    },
+    {
+      "name": "submit_human_task",
+      "descriptionSha256": "f34eb92d8f25d7af2e6a754d4fbff262f3edebfa4e1581ea4c4edbf6f0a41ad7",
+      "definitionSha256": "c2a443fe2bc2128043a52d8c6db55db3e9edf69e0fe757be90c65dbaf363821f"
+    }
+  ],
+  "surfaceSha256": "96847696fe9185a2ba80f3cd84728882bdc9a6e07058f67093efd7f3a2007c92"
+}

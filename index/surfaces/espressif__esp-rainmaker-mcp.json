@@ -1,0 +1,75 @@
+{
+  "ref": "espressif/esp-rainmaker-mcp",
+  "scannedAt": "2026-08-15T19:32:30.425Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.7.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "add_device_to_room",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "7de1521b4379462927af984ab79b7aa1fcb99b0afd312e73d48bb1b1a0b36c83"
+    },
+    {
+      "name": "check_login_status",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "58a28806905289a688d6f04050183ec42f2652df3c83eccd19b293410d4ec90c"
+    },
+    {
+      "name": "create_group",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "f94173fa98f7684c67b71cb6ff1b592b6eb021e373e839804a81ba093558463d"
+    },
+    {
+      "name": "get_group_details",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "46ff13c10bb92ca2374f67ba0046f58b67494de698464c95c8a3f4c39ef96b66"
+    },
+    {
+      "name": "get_node_details",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "75739395d31603c6b48fa2a89c1f5dbacc1b983866fd347da83d5834bfbe2623"
+    },
+    {
+      "name": "get_node_status",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "b956c9f03163c16d831dd4db7d1e7f5ca60f6ac91cf5e21bc32f02c54557e6b9"
+    },
+    {
+      "name": "get_nodes",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "c5b47e6e32c25b45d1587b29e5ae6252758fbe4bc36a0e331847abaf52024ca9"
+    },
+    {
+      "name": "get_params",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "ed53f282d7271e74063675705ec8fba95899a64110957f3e2949a3a252972084"
+    },
+    {
+      "name": "get_schedules",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "3e851fc7c60bda53b9eb11942c595dbe0ddca50cc5180ddc03c568311990a528"
+    },
+    {
+      "name": "login_instructions",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "ec1e90e905d66cdd5ce9c754e3f2826b9f7dadd7726fef6350890dbbec02369b"
+    },
+    {
+      "name": "set_params",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "f592f630c31d0ee504b2474bc85fb5a1c7332cd1c2f89d85bee3e1014c8e0894"
+    },
+    {
+      "name": "set_schedule",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "3b9fabf108918892d6dc042131dbd6db803cbe59a6a409b7bda58e8e8480af12"
+    },
+    {
+      "name": "update_group",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "18beebe25749c50416d33083ba4442adc0337bf07e94ff3788861620d748dd5d"
+    }
+  ],
+  "surfaceSha256": "b36e71005f83913f8eac28ff7a49ceb87fb6b773cfa344c103cc1a990075730d"
+}

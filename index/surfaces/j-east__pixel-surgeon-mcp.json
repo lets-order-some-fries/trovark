@@ -1,0 +1,65 @@
+{
+  "ref": "j-east/pixel-surgeon-mcp",
+  "scannedAt": "2026-08-15T19:32:30.425Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.7.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "edit_image",
+      "descriptionSha256": "4ba472ffd8ba8b5ab06d86000380f48218843e76821895c34815fe683a7045ed",
+      "definitionSha256": "5da4dd3e7bfcf5fd06865a8b3f2ad49a9ef23586f058b364cc420f45dd662b49"
+    },
+    {
+      "name": "fix_image",
+      "descriptionSha256": "988e817bf3254576af8681364e96bbd3f788efd5124e1d0e0e9ea51a4163cf05",
+      "definitionSha256": "88d89b2a85e10df1dda2766afb82a53a9398699e243d96873b9daac400dd3075"
+    },
+    {
+      "name": "fix_region",
+      "descriptionSha256": "9b00a1407b539b3c467791b3fb6c152a8e6b974bd3f1d74a23ca40f7034d2425",
+      "definitionSha256": "9148d96c15face14755c82ecbfd931001dd0aa0c518b5c0a228edb23abb65e38"
+    },
+    {
+      "name": "generate_image",
+      "descriptionSha256": "1f34612bc2a36990ab2dd5d0e3db00af315104e8ea39f02c13bfed54d22046c3",
+      "definitionSha256": "2b0c0e4268e163933cb7c8bb2b1a45d5b1ad8405b33af339d2df2cb973647e15"
+    },
+    {
+      "name": "generate_images",
+      "descriptionSha256": "fa88c4e1a27a6c15a04c8b542fbe6d81e7790c04f73bff175ca66bc4b5cb788a",
+      "definitionSha256": "0a0cab4c8051bc14225396426d0cce5bd5cbe6edf645d8e5992c078cc9eb21d8"
+    },
+    {
+      "name": "generate_video",
+      "descriptionSha256": "90ff94999ebce55593ce52f3f7aa7c540ada41556402e262945c1802dda43ea2",
+      "definitionSha256": "f2c478b9ce1d8f7674aa467b495fe6c4870b29310cdd03f076d2a099e4bffbc1"
+    },
+    {
+      "name": "interactive_fix",
+      "descriptionSha256": "54783365b4672e62105a044898765a44f33d1e064180fc4135d4ccedb00fa544",
+      "definitionSha256": "307f5b58a5641d5456c446a2fa23c00aa90c5471caf96b67eca08caf592f372f"
+    },
+    {
+      "name": "list_images",
+      "descriptionSha256": "9350a3d167b164bc8541bcd1f98ae45bc96bd94fcaa22348387a60646c665f6e",
+      "definitionSha256": "73f71f698048b8ca4115f7e965f5cbb0be30050010f3c7826ca8148529519929"
+    },
+    {
+      "name": "remove_background",
+      "descriptionSha256": "d184f3ad6c9951dd0d649b3e95236c8183789eebd0e622b8153dfafa71e9bd62",
+      "definitionSha256": "118fb2f7141e45f01d7e5dfaac2a398d47c6b3aac0a28848558e53f35552a281"
+    },
+    {
+      "name": "save_image",
+      "descriptionSha256": "ac78c3c2329bd7680861184bbdb2f9446cfec68c8bcdac0be6286e4a925e7b18",
+      "definitionSha256": "dcbf9efc598284162e047a0a35619fdcce280594e75b50abec33fa680e2b843c"
+    },
+    {
+      "name": "trace_to_svg",
+      "descriptionSha256": "6e0def4172af4547114234982ca7ad1941509c923a03fd34ea7672928a0c38d5",
+      "definitionSha256": "17314b158f8eee5532145ab52180bec5ce9749f0110c157dba210546325bb594"
+    }
+  ],
+  "surfaceSha256": "cd28bd0611037fe8e79b6eef6dabe9658b7c0e5c65724c72f638ce24642f3eb2"
+}

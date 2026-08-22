@@ -1,0 +1,70 @@
+{
+  "ref": "hlydecker/ucsc-genome-mcp",
+  "scannedAt": "2026-08-15T19:32:30.425Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.7.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "find_genome",
+      "descriptionSha256": "43aa0af05b2dbb4ff404c2637401d7e581b345db500a1d339d12285204da3c20",
+      "definitionSha256": "d3c29965177b70631fe220574e0ba52411616931fd2b5898fab69b87c7d53afb"
+    },
+    {
+      "name": "get_sequence",
+      "descriptionSha256": "1d4a5c13bb8f2964756eba531c9028e22f4e0fea7538bb1cd5dffe76584bec0f",
+      "definitionSha256": "683bcd497302f10ae9b80507bf02f47d5e2ed4d7088df462a1f4598f20d02ea7"
+    },
+    {
+      "name": "get_track_data",
+      "descriptionSha256": "422ab6efb60431b4aa0207ca58f4cef53981d2ab625ee251305d6aab4d3787f0",
+      "definitionSha256": "28753581d8c97522ab0c4d76706ae6e58980dd246fcd4cef32a2e71997def3ca"
+    },
+    {
+      "name": "list_chromosomes",
+      "descriptionSha256": "eeeecd1f3da31bf755e8672e7d172bb8862d1a26bcb6c2dab569868cd385f22c",
+      "definitionSha256": "962b52acc4ec7f91c4751dc09be0551a4cdb8560d05364420243863eab8e2423"
+    },
+    {
+      "name": "list_files",
+      "descriptionSha256": "b635e716a3acf99ab16b42d957ef8b6b360b345b900b82b69ed08e18abe6115f",
+      "definitionSha256": "428c5ed0bee0a10d3438088047229ce8049e1ce72f7cdd43617d559d28195b15"
+    },
+    {
+      "name": "list_genark_genomes",
+      "descriptionSha256": "c57d32002221d744b37b80fa7bba0b46061925ed1832263758fefeb00b6721c6",
+      "definitionSha256": "48b6e0e28db7fe42b445439e362db0df1636e699ed8ad42950b9b0c70e35a7bd"
+    },
+    {
+      "name": "list_hub_genomes",
+      "descriptionSha256": "45256a090ab3bff40136fc42555329d36dd31e229d7530dad444f70d672e7d49",
+      "definitionSha256": "39319cdede5da9b8cd53feaaf53f21fb9517e20c465c32d83506dd0228082358"
+    },
+    {
+      "name": "list_public_hubs",
+      "descriptionSha256": "2afce3d3f6a0741fe5701ea55dfc715f40b0f02a515923f6610d87e4b4cc24df",
+      "definitionSha256": "ca9d6a93e00a390a8dd930b881b3746a18610316c586382169bb8889bc2eeb28"
+    },
+    {
+      "name": "list_schema",
+      "descriptionSha256": "d033a4ec809762b654c1d66f36e008b9ed4e2aa5299e425420c3dad770826597",
+      "definitionSha256": "1dc9022e2ef9817f2239c10b0b3190d95bebc11ef6c2e1abc6dde6161decea40"
+    },
+    {
+      "name": "list_tracks",
+      "descriptionSha256": "92df23329faa81d028c0431abd58d32c62524c83c9875ff81453fedd5be25344",
+      "definitionSha256": "015439ce700959a5deac5aba3447efb98041e50fea8c6eac8bdf89e9ed3e5142"
+    },
+    {
+      "name": "list_ucsc_genomes",
+      "descriptionSha256": "c5476a7257afc13396391fd12c65ad03b08835041e6340654cde89aa46487473",
+      "definitionSha256": "f536104a290ba5b7198c2a1f11dac0157014b25a7874dee1a3fae85da1653b59"
+    },
+    {
+      "name": "search_genome",
+      "descriptionSha256": "12cd09020e665efa2dacfd09b88c1bdd5f98e48f63674ee8f4f4514a10723f1c",
+      "definitionSha256": "28b5301d41a97d50334f07f78257e284358121c73c8eaa47031af98bfdb2d294"
+    }
+  ],
+  "surfaceSha256": "2ed8ffbc7dfb7b68864dcdea66347f40534a0006d7b52ddb8cc35c799a796325"
+}

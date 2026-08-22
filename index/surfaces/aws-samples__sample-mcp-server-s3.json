@@ -1,0 +1,25 @@
+{
+  "ref": "aws-samples/sample-mcp-server-s3",
+  "scannedAt": "2026-08-15T19:32:30.425Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.7.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "GetObject",
+      "descriptionSha256": "70315aaf75e1e44f0cb3f965c71a02d3ed053f56f7136a357d297403c8ac45e0",
+      "definitionSha256": "d420b9b1964ccea55f36d6ba2ed5ce957ce603212a79ba89c790617eb6893e3a"
+    },
+    {
+      "name": "ListBuckets",
+      "descriptionSha256": "167def02df6e35d0bf6d102a5b641b6c3396b89d33e33b4867e55cdf1f40857e",
+      "definitionSha256": "3ffe027ea55ce5f61bba090e3a92481f387280f04998ec327f964ffd7c9c675e"
+    },
+    {
+      "name": "ListObjectsV2",
+      "descriptionSha256": "00147c0f28d966a2153d702fc4edea47ded1ba51bcde7bbab609dc904175d374",
+      "definitionSha256": "630461be2c0050fc69a0e74b2f2614a9a099e0de336d871d77f5bf38331b1f73"
+    }
+  ],
+  "surfaceSha256": "c2c742d59b3c1cbe719a143a902ab0622b15d2d7c6977e13786607f3c13e5747"
+}

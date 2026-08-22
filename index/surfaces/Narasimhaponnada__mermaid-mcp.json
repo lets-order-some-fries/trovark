@@ -1,0 +1,45 @@
+{
+  "ref": "Narasimhaponnada/mermaid-mcp",
+  "scannedAt": "2026-08-15T19:32:30.425Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.7.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "convertDiagram",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "d530a29ea389c207d278a3bb6f996f4003ee6438fa35deede6a1f82f704def70"
+    },
+    {
+      "name": "generateDiagram",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "c4d64d9147464d631c904766befe7da176dbd3c48598bd441da517f5f7acf686"
+    },
+    {
+      "name": "getDiagramInfo",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "df2d379cfc129a689d59e3c4de4eebb66d948c61ff1066b70ac929736c9e0eac"
+    },
+    {
+      "name": "getTemplate",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "0463d5a6947a879534e2dc7637552458f92e62847d86fbde10a666cc15035b1a"
+    },
+    {
+      "name": "listSupportedTypes",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "06abac34dcfe5be811199d144650302dc7040209a6d3370c3bb4b43c5d074185"
+    },
+    {
+      "name": "listTemplates",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "c54a08ea391205b016575dd35769166f71677125786ddffeea29319109a61d66"
+    },
+    {
+      "name": "validateDiagram",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "07df76140811cab3af725ee9181eb61befd24d0c9b4ce7dcafe0e6ba9851122f"
+    }
+  ],
+  "surfaceSha256": "e7e0cf71bea7bcc525ce1e24351e61fb37e0275724a02ed6c3adbdc3f7c630f2"
+}

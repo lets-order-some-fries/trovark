@@ -1,0 +1,55 @@
+{
+  "ref": "jau123/MeiGen-AI-Design-MCP",
+  "scannedAt": "2026-08-15T19:32:30.425Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.7.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "check_generation",
+      "descriptionSha256": "fbf1d99dfaef343756ed93007b574ed21b2683e8e8c75a2e56a76316d611183f",
+      "definitionSha256": "16126403fa4468b064985fd7ee88dc57650408d81bb7783f6c1a8179fd1bb121"
+    },
+    {
+      "name": "comfyui_workflow",
+      "descriptionSha256": "3034a6254787bc473846af5361fb10e70ee5334a2a9d1ea81f433cb393d1f5f8",
+      "definitionSha256": "a587b9b69db2ee79c24b8a2c0646a40d2c3fadebb85973546d18f3a8522385ba"
+    },
+    {
+      "name": "enhance_prompt",
+      "descriptionSha256": "32c07762ad94eedbb3c32dbf3745f79c35f44e3612b840550d0bb5376d64d29b",
+      "definitionSha256": "d30f5271f19db391a35b270dc07cc478f251f3337a2edfe495d7512305966373"
+    },
+    {
+      "name": "generate_image",
+      "descriptionSha256": "4198e11b6668bb677fc261ee044269c92bb2ae0fa40ea2f770e1c44c1a8e7598",
+      "definitionSha256": "0dbd48d6b5fd23336dc3cbe2e334420f86d7dddbf7a35393b7c5eb6e5060b105"
+    },
+    {
+      "name": "generate_video",
+      "descriptionSha256": "16a6998d599d50512eed6af29a961d833533baadbc87469f9a4e4bc5e6e58634",
+      "definitionSha256": "846e482514b0e91075d9565380a7051fbd8775d7119af21e3c6000216416040b"
+    },
+    {
+      "name": "get_inspiration",
+      "descriptionSha256": "ae912c3c348840fa7d1d252fabac6aa7094df8f0d891370639fe53a3165cb178",
+      "definitionSha256": "65710d3a45de262e336a7b9e3a0ef4128e26c028dc57aafc436eaf21f1267564"
+    },
+    {
+      "name": "list_models",
+      "descriptionSha256": "5abb65b363abe0853b1d330ce863d3237bcd893578092d1ee164619ba88a8ca3",
+      "definitionSha256": "99ff99b380c11d0c24a72f131c34c6567a62d832129480f3b37d54693ef974c2"
+    },
+    {
+      "name": "manage_preferences",
+      "descriptionSha256": "d1ae192f84e9277cf92af3c24f69376d7871f7f1b5ffc8a590e19f36554826bc",
+      "definitionSha256": "84cc603b4d2a13de378847261bcba88d4c2a847d5f03a6337b5f8e8f9cdd3c3f"
+    },
+    {
+      "name": "search_gallery",
+      "descriptionSha256": "a516f245f1d822744a541796cd662796f48e93528db7c35b8a33318633fb05fe",
+      "definitionSha256": "1ea64ed4122396ed4f0d01bef060ff6af5cf6245f367f15881a48b889e3147fa"
+    }
+  ],
+  "surfaceSha256": "38ed75a2a4e29be52e23d23642e2e682a10c2eb6351c6b9a4844f7b5999b952e"
+}

@@ -1,0 +1,60 @@
+{
+  "ref": "Rajskij/oura-mcp",
+  "scannedAt": "2026-08-15T19:32:30.425Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.7.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "oura_get_activity",
+      "descriptionSha256": "cac77ef86e5e8138799f3a82c866171a0a2c378b56153d4e581c52b197d8e516",
+      "definitionSha256": "30341fac522cb039f2c7212991c4ebee1a7016d76e91bdd3ccaf2890639d00d9"
+    },
+    {
+      "name": "oura_get_heartrate",
+      "descriptionSha256": "3ae513b5d895b189026da94884f3e00fbcf98c95df7dc21488bfbe1aa7eef7f6",
+      "definitionSha256": "e8b7a13adeee2ed4c9b6283ffd2d11c665067222d71ac65e065e8b50aaede975"
+    },
+    {
+      "name": "oura_get_profile",
+      "descriptionSha256": "b4f3d97fc44a1e02ff19d1f9c11d22489d2a1c9ddb14de92ba5d9f5988f2b693",
+      "definitionSha256": "22056863876d575800567b82629ccf65ff719a0d061d742baa18556eb256792a"
+    },
+    {
+      "name": "oura_get_readiness",
+      "descriptionSha256": "84ac8acc6aa3955159be37dbf22ba40016f647324ae60ab6f37ded548f7488cc",
+      "definitionSha256": "ec8d8a202b6f52460f11e34675036acdaec1f4060b4cf3e0eb2d4df966cbde97"
+    },
+    {
+      "name": "oura_get_sleep",
+      "descriptionSha256": "28f2014ec5c25b06ad20fe7275e07443d9eeb62e39b1b0acea5699a0f6575945",
+      "definitionSha256": "2710a31758dce0575c7856512c7504c054affd18d66065814a15d68b32ee0e34"
+    },
+    {
+      "name": "oura_get_sleep_detail",
+      "descriptionSha256": "ffabc3c7b2c57a092d29d9c42a17ad9cafff6bb00af97e0b8ebb8d2bb4040317",
+      "definitionSha256": "8114bab5b9a19aa7feb90a2f5751409f2563d2dd75097ef0c6a8bfd07d13e252"
+    },
+    {
+      "name": "oura_get_stress",
+      "descriptionSha256": "6ffcb7f74dcd665ddb0ddcd8c8a3e6824ca4937e6fc14c027babad6b1393e988",
+      "definitionSha256": "cad5a49250a48a50bb0b99a14e63a7686780abf7b597d7a56d2cb87e1394cf4a"
+    },
+    {
+      "name": "oura_get_tags",
+      "descriptionSha256": "036cbb6d6efdbbbdc449575dc80e77d30820ecdcd096c9b1f48de2eb57c88f1e",
+      "definitionSha256": "5d5c8de357cd4f94bbd9f24605014702dbefbca18f9b8c3787de16e29b161d8f"
+    },
+    {
+      "name": "oura_get_vitals",
+      "descriptionSha256": "63776ac571d859c52a723c570b348dde7c08eaf0ccc9f63021b4fccd3d2832ee",
+      "definitionSha256": "dfd634c2fd6410f29128e5dfaba2a3b2800b1876dfe1d37fc13d6a38ff3f4359"
+    },
+    {
+      "name": "oura_get_workouts",
+      "descriptionSha256": "2f0db96f9c7d7cac21e0b14b8c18fbfebb44db933e10874f85b691572f9ec599",
+      "definitionSha256": "229bd584adf1c3f4a514e7269e969da01116a81eabd1b733a14a8ab0b242c74f"
+    }
+  ],
+  "surfaceSha256": "0da8097e5f27076483404d49378f4360f36fe96a159708cf7ec20935300e194b"
+}

@@ -1,0 +1,100 @@
+{
+  "ref": "the-momentum/apple-health-mcp-server",
+  "scannedAt": "2026-08-15T19:32:30.425Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.7.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "get_health_summary_ch",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "3bc6aa522e21a3e03edd6a955330b0eea4883efacbbd986c3b8cc6139690eac9"
+    },
+    {
+      "name": "get_health_summary_duckdb",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "f5b74841704f8443b74efd974538d3cc4ee7d1e74d2d23441c72af4477105032"
+    },
+    {
+      "name": "get_health_summary_es",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "3ec8674f1705bdc243f5003fc41358ee4135fb99e26a85be413347acfefef223"
+    },
+    {
+      "name": "get_statistics_by_type_ch",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "e1050acef15404b1313a736b4de87b3743d0fcdd86b098433cf4a20bbf59fa54"
+    },
+    {
+      "name": "get_statistics_by_type_duckdb",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "13ca1dc3e77d7bd691caad60eca6e2de3397ed2e26f63ad6a997b41082ad9cff"
+    },
+    {
+      "name": "get_statistics_by_type_es",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "90ace807f1a9684f3452ab77bc36cc317ae650fdf9a8e21cdd157de711a483c9"
+    },
+    {
+      "name": "get_trend_data_ch",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "143e067293b34521bffb8e21cb04929796946fc0a79c98ca6b6d4f2a6ea3b892"
+    },
+    {
+      "name": "get_trend_data_duckdb",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "fbc6e8fda5fefb6c37a69a91e99929d8ecdc1a4bc79ef824abf3821b0199cabb"
+    },
+    {
+      "name": "get_trend_data_es",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "ebbca3865ec9993518f3d3563b9b6004e0c76820fedc4fd6700bbca9bd997619"
+    },
+    {
+      "name": "get_xml_by_type",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "c455437288bfc947c995d0f33e875dc0bef01fb456f4c25ed3a31cb3f9959f95"
+    },
+    {
+      "name": "get_xml_structure",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "49a390ca478839366d756baa8a398be337e307e4dcae14829d21336054b52673"
+    },
+    {
+      "name": "search_health_records_ch",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "43d944889cdb0cd63f5d5918a318c7046d8f081122b5e0542982ff9c4bcf77f9"
+    },
+    {
+      "name": "search_health_records_duckdb",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "45c0967da3bd1fc766c8d029f6e5c663e931c6a49902baa3b26473f1b108dae3"
+    },
+    {
+      "name": "search_health_records_es",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "a5419787024227e85c4e42c1f0a98ebf6fad9fff87e1c97e88e6035e8b3fe2fe"
+    },
+    {
+      "name": "search_values_ch",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "b3baede5b4251da7cad05b467467354da38d7bd70be7c337850ae48cb04d84f7"
+    },
+    {
+      "name": "search_values_duckdb",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "7a9644dc5b45c4ff75c1cb52a9943c38a993da863a65188279a5773ee2fd5656"
+    },
+    {
+      "name": "search_values_es",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "f17f40d1fd257407c784a7000051813a05bf018aedb7f6b8aca9fc26ec066e24"
+    },
+    {
+      "name": "search_xml_content",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "5a371e194b8d300e6d31ffbf7596da48a84ae65e37f3b0cfc4b6399562b088f5"
+    }
+  ],
+  "surfaceSha256": "a26ffd8efb9895f8fc572933a712e91fed8965a670446cdb0a4fcbee4fa87c97"
+}

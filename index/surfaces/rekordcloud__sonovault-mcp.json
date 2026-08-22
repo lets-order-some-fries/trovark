@@ -1,0 +1,85 @@
+{
+  "ref": "rekordcloud/sonovault-mcp",
+  "scannedAt": "2026-08-15T19:32:30.425Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.7.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "browse_tracks",
+      "descriptionSha256": "d9626ef99616a6c6c5bc95813e65a40bb6ae5c3bcfa27cace80d847fff807160",
+      "definitionSha256": "a2a77690484e10908f43d67d14b4a528f58cd3921124585c58405ea5b0676f7a"
+    },
+    {
+      "name": "get_artist_releases",
+      "descriptionSha256": "eb2392f0e5f543ffd34cb4feed4efda8319e6fe430d903fe20afffff6db7222f",
+      "definitionSha256": "00866dcb1968ab17bf1e99ed84fbd8bdf0b87ce0a763a802b68a5741dee89dfb"
+    },
+    {
+      "name": "get_label_releases",
+      "descriptionSha256": "8d71395f709715f123108722e2df7aa3951c93ff02d820ca808dd5d8cb2dbd38",
+      "definitionSha256": "6a3daf93b381f784872cad9b3abfd9c7fb7faa64624f5cf25853e2472b00bb9c"
+    },
+    {
+      "name": "get_platform_links",
+      "descriptionSha256": "96426640b3503b711cf557123cb6242ef31ec6d0b3841dec8dde954f32e2c588",
+      "definitionSha256": "058518cc8e73479873e73155045b8ea3f39a0b0eb455a426bbeebcba3b192e8b"
+    },
+    {
+      "name": "get_recordings_of_work",
+      "descriptionSha256": "b5281f221c18997b34bbf3bdd86e2b87618f3c60a14eb76e7c162ee4d829a7f6",
+      "definitionSha256": "19b51c1c25958927dbfaf4e4bae437cc6cc6ad13ea396f80fda8c7d5deceafd2"
+    },
+    {
+      "name": "get_release",
+      "descriptionSha256": "cb68dd2b14a62bc1a5b2be886d91a521ef3f9f0746c99c73e14706a4e0240f2e",
+      "definitionSha256": "c5e158839aba892788287c184824eaaf232942d30c586ea557578c60486f9de0"
+    },
+    {
+      "name": "get_track",
+      "descriptionSha256": "5048adb2c6222ac5910a32d77b949ddb4c0ee58896fe0d5f3d51764f8eb39317",
+      "definitionSha256": "01d50a66a68acf2d16989f9f7b0b8f4b5e72544d7c113e22bc789404452a1e1c"
+    },
+    {
+      "name": "get_work_codes",
+      "descriptionSha256": "45c8860fded203fc4f91eb52eed8120b87228d076ccfcbe2100f94f320123050",
+      "definitionSha256": "f7072244db17e3d97093ae86658a9587b72a560b4d5c6d13847c2a8b8ac888b4"
+    },
+    {
+      "name": "list_genres",
+      "descriptionSha256": "62731aad5572b85fa2aa58d2b81abb91c81788f0d848c99677147747ddeb5e4c",
+      "definitionSha256": "59dd624f8c05b8c23a6d28b683c56c0d5ba73870d484de60171b50d662b3d520"
+    },
+    {
+      "name": "lookup_isrc",
+      "descriptionSha256": "be01787afbd1a78e40d9ee83bd545f6211bb8052655cb13b558d989da07e4ab5",
+      "definitionSha256": "b743063ef1ddb973d2ca9bb244adcc46b1c124a9c8ac8ccf622734b975c77385"
+    },
+    {
+      "name": "resolve_tracks",
+      "descriptionSha256": "fd05217f57c2129c89f387174d8725c70b71267dcd46918a44971ffb8c4e74eb",
+      "definitionSha256": "9832c600e08cced965aad3de2afda198743818760ce26c24d0233c17a122b7b1"
+    },
+    {
+      "name": "search_artists",
+      "descriptionSha256": "7b33bd70681d23456e0f89d6b97d19524504290f5e60d42fcef526d19445a4dc",
+      "definitionSha256": "051a678ff1224bfc78cc183d249ba801110e06be7673c07b3336bff0afb74c72"
+    },
+    {
+      "name": "search_labels",
+      "descriptionSha256": "779c8e17134b54bbd4bb7dff3e634ee41c6f8f63bbd7cf5cb4aaeebf6172f7d6",
+      "definitionSha256": "5d27cabc42cdb3bee69e951f49705f807520c127925e84d74b61fdc33b37019d"
+    },
+    {
+      "name": "search_releases",
+      "descriptionSha256": "2780c106f0cd433b23ce88fbff2c001f8c1d5d6caf5596a5aaed9823fd25d6dc",
+      "definitionSha256": "051deebdf1102b7654adc6d556412be181b367ef55e611a02666994c8086fd9b"
+    },
+    {
+      "name": "search_tracks",
+      "descriptionSha256": "d77eb5901d8e932b71cade6420d56225673b5e73a6dbc64159cccc5fe58fdda1",
+      "definitionSha256": "c22e8ef3eff98d2c6b6291d20cc3e5afea6217502c92ee3dd250fbd8deb5b358"
+    }
+  ],
+  "surfaceSha256": "b89bf54b32ae351ae6e8bc5f346c87ae3970b4098f53069b8b8e57d1c29ceb27"
+}

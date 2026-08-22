@@ -1,0 +1,80 @@
+{
+  "ref": "yenchieh/diagramzu-mcp",
+  "scannedAt": "2026-08-15T19:32:30.425Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.7.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "add_comment",
+      "descriptionSha256": "1e5eebab1c890cae410ac26b4e5184939ddbd6fa4610cc4bd46a4446623af723",
+      "definitionSha256": "6b7baf9664c0a11a5fe75751d27fd0247d05415a4910d0763b3589b36b225887"
+    },
+    {
+      "name": "analyze_diagram",
+      "descriptionSha256": "60289c6f6c36a64277b8f98c4de5a64503a98e3995bf497030e3cf78332df26d",
+      "definitionSha256": "fcb11c26e904bf29d3e3958544422caf6d16ceda3078d12dbd66176c37489c71"
+    },
+    {
+      "name": "create_deck",
+      "descriptionSha256": "0aa8fbb876cf1a05d9834255e4cc8d8ccf13e48c9cca50af16389f07a2f142cf",
+      "definitionSha256": "384ba73a032db3104e8b5e6600e105e40482cd2813e398e0ff6375a986bebc98"
+    },
+    {
+      "name": "create_diagram",
+      "descriptionSha256": "a16ad6d8963c1e69d573e5d34d11f5794b663a1a608513589917a16329d48803",
+      "definitionSha256": "18da811ee04f699b9f662fcb420bd9c2a932b8beeda1a448adec898b2dc05530"
+    },
+    {
+      "name": "get_deck",
+      "descriptionSha256": "681cd7cc937107ea9744d2dc55f906a7ea465d441bc02429359254bb518d8557",
+      "definitionSha256": "1cf94e0a7f94101f913e7935fafcbd7ceea4b6c6c4c787483c0452b5aa1bb2f8"
+    },
+    {
+      "name": "get_diagram",
+      "descriptionSha256": "e91c8afd02e48d81cef8327a0231d1e07f7dcd0dde9a9e97730efbb07d67ee1f",
+      "definitionSha256": "ba8746e64eb11ad63613e6c44cdbda0803f7b71c6bea74d977b38a3a45253d0e"
+    },
+    {
+      "name": "get_version",
+      "descriptionSha256": "b9064c6fe565d9e833e124b057b9ead52f2938a4f5b90840e358b101c9430598",
+      "definitionSha256": "be39c50cf4cc5ac4a3eb58681e2d97b3a0e9d45b5bf8cc82cb06b31bc1e58b40"
+    },
+    {
+      "name": "list_comments",
+      "descriptionSha256": "7dc30e6163d84965f13a607399b4ea618dd2c84dc9a1ad5ce1b2f00d5d733e1e",
+      "definitionSha256": "4e6e0958cd7b228b0bb55b9a14afdca06e6deaba8008582249d3ecc06de44f42"
+    },
+    {
+      "name": "list_decks",
+      "descriptionSha256": "eea6e09aa849a1f152929ee684184cd3a449d4588c905b66661e443edbe53712",
+      "definitionSha256": "0bf9e4b1a2c2e645eb2c434cf6c8ad72e815bdac15a2df8ea3bc34604ba3fe5d"
+    },
+    {
+      "name": "list_diagrams",
+      "descriptionSha256": "0fff8942614b97152686287f578307c34b7e5e981859a10e7906bbae296dcb9c",
+      "definitionSha256": "6532de2f6594f1ec2be443f0ac9df81041b3379e3a21cf0fb467ad994edfc5d5"
+    },
+    {
+      "name": "list_folders",
+      "descriptionSha256": "9aa92d8fd2473d1c9ec2d17350d05bc7717612d0374d3224a0563392fbc37123",
+      "definitionSha256": "2dbc9f83ab40b2bdd058ebb8472abd547b2d00421d26baf865e793b6eb807500"
+    },
+    {
+      "name": "list_versions",
+      "descriptionSha256": "9252c73c0022f7d33efb25a9e666a327c2448a717ad056d5af297fccf791b2d8",
+      "definitionSha256": "81ade16bfde8748e26a0bc69a4705721c32c3e404c4bc3635a7c114bfdb61743"
+    },
+    {
+      "name": "update_deck",
+      "descriptionSha256": "8768e13648aafb8c6127a95863d4e7c7a088bdbd1a53ee062e86782e35014680",
+      "definitionSha256": "454471f09a8ecddb88e726e2727b477125fc6f03beaba2187d496a91dcce2508"
+    },
+    {
+      "name": "update_diagram",
+      "descriptionSha256": "fb7efa8984cf5262b5fa4628f517b3c357dcedd263468b408ad766334ae5914c",
+      "definitionSha256": "e1efd06e5bc423f11a5a03d570b87ddaf44ac50dee7f6adfbe0ff78245362370"
+    }
+  ],
+  "surfaceSha256": "faead8334d3fb96324b804a109cd7bedaa311a314ca81168a0dc4cc04c1d731b"
+}

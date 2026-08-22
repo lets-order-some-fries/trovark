@@ -1,0 +1,50 @@
+{
+  "ref": "salwks/mcp-techTrend",
+  "scannedAt": "2026-08-15T19:32:30.425Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.7.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "fn",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "cd295fba4d0324b6de9116bbf9a903bc25df551b8528f621a39ab5c43bfcaf5e"
+    },
+    {
+      "name": "trends_briefing",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "116148727248c968ba8f7c664994010f388e21eaf00ab0866be4a4d229b71d05"
+    },
+    {
+      "name": "trends_digest",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "cce48f0ba3ac0e167179404619cceb5a2e4da0c955e3a3f28d119a28eb63d3ce"
+    },
+    {
+      "name": "trends_get_config",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "34a8a85b8ef952000bc737b8eaa84feab779b8244c620794a86a610b55aaf0d6"
+    },
+    {
+      "name": "trends_set_arxiv_categories",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "ada043f760ce35818888f35ad28c66ff6a4a8f502116346d13f70c73d3b38aec"
+    },
+    {
+      "name": "trends_set_enabled_sources",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "2accd62e21785b5892df1c8419f0464be4a830523390759beba53229bbcd4ab0"
+    },
+    {
+      "name": "trends_set_pubmed_query",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "36cde0b63415d1af8c6cd2d322ac3c725468be7e640bd8ebdb66475a759c21e9"
+    },
+    {
+      "name": "trends_set_token",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "3d55f665ca380a86def57bae3f33106f01fbefd116cb3443a5c8739faab3d1f3"
+    }
+  ],
+  "surfaceSha256": "9baa9b6ed8ff46a447615fca5dc1abf03bb0937b657747d274a3ee1856df5f79"
+}

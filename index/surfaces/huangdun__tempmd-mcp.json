@@ -1,0 +1,45 @@
+{
+  "ref": "huangdun/tempmd-mcp",
+  "scannedAt": "2026-08-15T19:32:30.425Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.7.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "get_temp_status",
+      "descriptionSha256": "46fb31a88e6309520fc1451342147fec1e048c6acc8376d74599ef91646aeb9b",
+      "definitionSha256": "2cf467ad317bf8f6b758c033a04fcd4d8f76e5ed53d7819b46ec6ee919752914"
+    },
+    {
+      "name": "list_temps",
+      "descriptionSha256": "27b7d8dd69c8be14ea9a174024a24abaf24bfc29247bcaf3a2cf048a2d20a178",
+      "definitionSha256": "69fa41eed9986b8e2ca31e639285f403c09741f770d9e1585ca3c2538c585463"
+    },
+    {
+      "name": "publish_temp",
+      "descriptionSha256": "5d5464d8f822aee108945fbd47f4fdadfd6fb97ba19cc874cfb32f27a7a87f00",
+      "definitionSha256": "fc11abb720ea43064857240a0166aa36e608667250ab4d5db1942b2fca5a796f"
+    },
+    {
+      "name": "restore_temp",
+      "descriptionSha256": "f9212bbaebe8f00389bf75017653cbfa3d1dad38c7f5e19f21360f1a54be7673",
+      "definitionSha256": "a24671b96bac0463435ec7893a2aaacf2076e7fe187cc32a2d737c2e15c63c15"
+    },
+    {
+      "name": "set_comments",
+      "descriptionSha256": "4252f8c825964e4715cf49556017c74fe4f7b48876a61682cf599e260c377d9b",
+      "definitionSha256": "4c287101bb78a094cf10cc6822e70b5a4bebb1b038e17a9f956592df8dd50ecf"
+    },
+    {
+      "name": "snapshot_temp",
+      "descriptionSha256": "efc3d4b4599e02d6991552d552cf48e4419d25dcc75db19542d27cfb54fbb115",
+      "definitionSha256": "e23fab445e17547760287db76bd7be113caeda0ad4d829be6d3e3a2689b9651d"
+    },
+    {
+      "name": "update_temp",
+      "descriptionSha256": "4bb66e7353445ccb834abc8865c45aeb5d20f6f7a94de280b8eaf4253298366e",
+      "definitionSha256": "51bfff3662d30961f345fe950b6a204b9c2fce33f0107b2f0afa65c7077dc903"
+    }
+  ],
+  "surfaceSha256": "0cc8f5cf1ebc1494c2b39692e6f47d4b3c095c123e33b886d9720dadf81da3fc"
+}

@@ -1,0 +1,35 @@
+{
+  "ref": "doggychip/agentforge",
+  "scannedAt": "2026-08-15T19:32:30.425Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.7.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "check_agent_health",
+      "descriptionSha256": "1b9674cb0bb1c4a264cf1a5f742d2505bf6b8fd8a8dad94b71be086e4087457f",
+      "definitionSha256": "2d4da341067179b2b9ad736f14e66f7fb3a9d4a8679e3c831e559d68e19d5f40"
+    },
+    {
+      "name": "get_agent",
+      "descriptionSha256": "85089b5a0b5fa20fbc7599667600bb143f4f9be5195f8fab459b214214dfa964",
+      "definitionSha256": "3345b9ca55b6585fde6eaa98e09563142bb607a2313d89225aa86481cdd25ad7"
+    },
+    {
+      "name": "get_platform_stats",
+      "descriptionSha256": "6942ac5645023a7079ef464f90feb42e06d90b084d01945f59b5120cb8b67aaf",
+      "definitionSha256": "9aae38a94696d0cb788d709314a9bc1244165bab9a5769806254e35e38bb5ae1"
+    },
+    {
+      "name": "invoke_agent",
+      "descriptionSha256": "0d5cc9c1abe2606036d20d2fef8c065eff028577a672ae0479a92913dd261155",
+      "definitionSha256": "a5557d3e0a1a6fef7bf99878e57962b42b2a0e2ba03bc0fa6b6627a4c7c18b25"
+    },
+    {
+      "name": "list_agents",
+      "descriptionSha256": "408ebe3aa7975e789e72b61b15be465316276581e8d382289d7f73cc099cbf11",
+      "definitionSha256": "64ce29e8f677624495986ecedb3d557dfc06f6758afb1f88c9df3ee46975c08b"
+    }
+  ],
+  "surfaceSha256": "36fd9065771adfc4b52de5a6b403f19e54b5dbbb7b241881823ed7ea6ba460bc"
+}

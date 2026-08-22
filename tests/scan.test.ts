@@ -1,5 +1,8 @@
 import { describe, expect, it } from 'vitest'
-import { summarize, toEntry, type IndexEntry } from '../index/scan.js'
+import { mkdtempSync } from 'node:fs'
+import { tmpdir } from 'node:os'
+import { join } from 'node:path'
+import { recordSurfaces, summarize, toEntry, type IndexEntry } from '../index/scan.js'
 import type { Scorecard } from '../src/types.js'
 
 const e = (over: Partial<IndexEntry>): IndexEntry => ({ ref: 'a/b', ok: true, ...over })
@@ -326,6 +329,30 @@ function coverageOf(attempted: number, entries: Array<{ ok: boolean }>) {
   return { attempted, completed: entries.length, collectorFailures, complete: entries.length === attempted }
 }
 
+// D2 (observatory, docs/superpowers/plans/2026-08-05-observatory-d2.md):
+// recordSurfaces is the scan-side wiring — snapshot every extracted surface,
+// diff against the previous snapshot, append real events to the drift log.
+// First run is the baseline by construction; a server absent from a run is
+// NEVER a removal event (missing snapshot != removed tools).
+describe('recordSurfaces', () => {
+  const tools = [{ name: 'x', description: 'X', schemaText: 'def' }]
+  it('first run writes snapshots, zero events (baseline); second identical run adds nothing; a change adds one event', () => {
+    const d = join(mkdtempSync(join(tmpdir(), 'tv-scan-')), 'surfaces')  // D2 review MINOR: ../drift.json must land inside the tmpdir, not the shared OS tmp root
+    const r1 = recordSurfaces(d, [{ ref: 'a/b', tools, source: 'code' as const }], '2026-08-05T00:00:00.000Z', '1.5.0')
+    expect(r1).toEqual({ written: 1, events: 0, suppressed: 0 })
+    const r2 = recordSurfaces(d, [{ ref: 'a/b', tools, source: 'code' as const }], '2026-09-01T00:00:00.000Z', '1.5.0')
+    expect(r2.events).toBe(0)
+    const r3 = recordSurfaces(d, [{ ref: 'a/b', tools: [...tools, { name: 'y', schemaText: 'd2' }], source: 'code' as const }], '2026-10-01T00:00:00.000Z', '1.5.0')
+    expect(r3.events).toBe(1)
+  })
+  it('a server absent from this run keeps its old snapshot and produces NO event (missing != removed)', () => {
+    const d = join(mkdtempSync(join(tmpdir(), 'tv-scan-')), 'surfaces')  // D2 review MINOR: ../drift.json must land inside the tmpdir, not the shared OS tmp root
+    recordSurfaces(d, [{ ref: 'a/b', tools, source: 'code' as const }], '2026-08-05T00:00:00.000Z', '1.5.0')
+    const r = recordSurfaces(d, [], '2026-09-01T00:00:00.000Z', '1.5.0')
+    expect(r).toEqual({ written: 0, events: 0, suppressed: 0 })
+  })
+})
+
 // Secondary-rate-limit postmortem (2026-08-13). GitHub's SECONDARY limit
 // 403s while /rate_limit still shows thousands remaining, and graceful
 // degradation converts those 403s into ok:true entries with empty signals —
@@ -342,5 +369,63 @@ describe('outage gate counts gracefully-degraded entries', () => {
     expect(failed).toBe(0)               // the old gate saw a perfect scan
     expect(degradedCount).toBe(1)        // the new gate sees the outage
     expect((failed + degradedCount) / entries.length).toBeGreaterThan(0.25)
+  })
+})
+
+// 2026-08-15: consecutive scans swung 18 <-> 43 degraded entries, and every
+// one of the 25 servers that changed published state between two scans had
+// been degraded in the earlier one. A transient 403 is not a property of the
+// server, so one more good-faith attempt runs before a withhold is published.
+describe('degraded refs get one retry, and only a cleaner read replaces them', () => {
+  const entry = (ref: string, errs?: number) => ({ ref, ok: true, ...(errs ? { collectorErrors: errs } : {}) })
+
+  // Mirrors the replacement rule in index/scan.ts's retry pass.
+  const merge = (before: Array<ReturnType<typeof entry>>, after: Array<ReturnType<typeof entry>>) => {
+    const byRef = new Map(after.map(e => [e.ref, e]))
+    let recovered = 0
+    const out = before.map(b => {
+      const a = byRef.get(b.ref)
+      if (a && (a.collectorErrors ?? 0) < (b.collectorErrors ?? Infinity)) { recovered++; return a }
+      return b
+    })
+    return { out, recovered }
+  }
+
+  it('replaces a degraded entry with a clean re-read', () => {
+    const { out, recovered } = merge([entry('a/b', 3)], [entry('a/b')])
+    expect(recovered).toBe(1)
+    expect(out[0].collectorErrors).toBeUndefined()
+  })
+  it('keeps the original when the retry is no better — never a coin flip on which attempt ran last', () => {
+    const { out, recovered } = merge([entry('a/b', 2)], [entry('a/b', 2)])
+    expect(recovered).toBe(0)
+    expect(out[0].collectorErrors).toBe(2)
+  })
+  it('keeps the original when the retry is worse', () => {
+    const { out } = merge([entry('a/b', 1)], [entry('a/b', 5)])
+    expect(out[0].collectorErrors).toBe(1)
+  })
+  it('never touches entries that were healthy the first time', () => {
+    const { out, recovered } = merge([entry('a/b'), entry('c/d', 2)], [entry('c/d')])
+    expect(recovered).toBe(1)
+    expect(out[0].collectorErrors).toBeUndefined()
+  })
+  it('never retries an unresolved repo — a 404 cannot be re-read', () => {
+    const entries = [
+      { ref: 'gone/repo', ok: true, collectorErrors: 1, unresolved: true },
+      { ref: 'flaky/repo', ok: true, collectorErrors: 2 },
+    ]
+    const retryable = entries.filter(e => e.collectorErrors && !e.unresolved).map(e => e.ref)
+    expect(retryable).toEqual(['flaky/repo'])
+  })
+
+  it('surface inputs dedupe last-wins, so a retried ref is snapshotted once', () => {
+    const inputs = [
+      { ref: 'a/b', tools: [{ name: 'x', schemaText: 'first' }], source: 'code' as const },
+      { ref: 'a/b', tools: [{ name: 'x', schemaText: 'retry' }], source: 'code' as const },
+    ]
+    const deduped = [...new Map(inputs.map(x => [x.ref, x])).values()]
+    expect(deduped).toHaveLength(1)
+    expect(deduped[0].tools[0].schemaText).toBe('retry')
   })
 })

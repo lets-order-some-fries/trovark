@@ -1,0 +1,100 @@
+{
+  "ref": "BluesPrince/thiri-mcp",
+  "scannedAt": "2026-08-15T19:32:30.425Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.7.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "analyze_chord",
+      "descriptionSha256": "3b643f02abc3e44f5a7000c4035b2c55e96254fd08f013edbda5b9b5c85771f7",
+      "definitionSha256": "91295621d743849c5a3a40b5258faf52e66d2f5d4b3025dd06183639ff5f7ea3"
+    },
+    {
+      "name": "compose_progression",
+      "descriptionSha256": "bd881119bcf4840b44d1daeff8402037db9248a5e7590a6a08b8ff9afedcdbe7",
+      "definitionSha256": "9d95d3effe422e735c9295de70074cdb1a7f7f15e1ec087558f9617d33c03fb7"
+    },
+    {
+      "name": "conduct_band",
+      "descriptionSha256": "fc30cffaec62da0cf6572621792dbd77c1c1cb5e432ed9710289d1bc1ce984c2",
+      "definitionSha256": "738ea7de2f1e26c2770a56cff390ed2ee6a288a4bf7600e8b6e4fbcc8299121d"
+    },
+    {
+      "name": "create_composition",
+      "descriptionSha256": "0bf5e871cfcebd0463d9616836427241681f09fc3277f45d8c19978ee534cb56",
+      "definitionSha256": "d31cbcb324b980794adb633196ca4be05971f6468535462525292102e2f4720c"
+    },
+    {
+      "name": "export_midi",
+      "descriptionSha256": "d50b290dac9ce472412ce14b8e2e4db4a3b40f950101ab6037d1af3ff3bcb5d4",
+      "definitionSha256": "018fbd9f05673507a1c8981e34b8072b35659e92afebcd06c35dac327bc81495"
+    },
+    {
+      "name": "generate_voicing",
+      "descriptionSha256": "04a94d3341ba08f2cbbb75ad6ee114457063f5f7a61a7e9c0a24e79f2ded4536",
+      "definitionSha256": "8e6d82105a60d2bc26ccb6faefc2b10ea016b834d0e077ab89e6a4d3b87736fc"
+    },
+    {
+      "name": "inspect_composition",
+      "descriptionSha256": "83a273e46052b2e68b7834815eaf20827533ce3bc0e0888796d5e8cfe459d9a5",
+      "definitionSha256": "4b6649acb87f82a68b1380c41d6738f2c1edbcaacdef24bc59cbb121ee9820b5"
+    },
+    {
+      "name": "list_compositions",
+      "descriptionSha256": "8670c471fcfd26b3f5264150585bd752a8a682cd33aa2a4cc38ee9a01404dc42",
+      "definitionSha256": "10003731c4dfc489d3777c8d6bbf930094a5dff4cdc0eb0a04b4e3d825f76be3"
+    },
+    {
+      "name": "play_audio",
+      "descriptionSha256": "f6a6ee8e7880bae42efbcf48caa6119eb62fb04f09f3615bca482d3c9927dfa9",
+      "definitionSha256": "8dc4d95f181d80d69a29656b5fcfca9eaa3404d584da847251a2b0b91846b89c"
+    },
+    {
+      "name": "play_composition",
+      "descriptionSha256": "7ceca6755f026534112a4eb820e4e5fe3b23631fa60d30c2dd92af7d04d9810a",
+      "definitionSha256": "a6b46ac0453100614db230aac0c63f5264e45d80dca7440f4cbb12d4cbfb710b"
+    },
+    {
+      "name": "reharmonize",
+      "descriptionSha256": "96bd5992126d59e4db77047060a1b7a996fadcbb080a3c876ef0d94d171dbace",
+      "definitionSha256": "eec4871b55ccba73c4e56ea9b8828fa712e3db372bcf7da5eb55ed35438a7621"
+    },
+    {
+      "name": "reharmonize_section",
+      "descriptionSha256": "2065249fda267a58f76306e0a10645ba0bb2277449bc45265d098a59d0a55d89",
+      "definitionSha256": "705be93d7158198ff16491c895103f70f51263ef174180cc43e5d6d274139413"
+    },
+    {
+      "name": "render_audio",
+      "descriptionSha256": "3ff42d0e1bd54370ede8b6028ae0599dba7f5bdf4bf10a80754c3c40764722f5",
+      "definitionSha256": "f6b4fa24ab2c47b552abfd243591d97eebbf3c0d1d3ee71c31f816660800df55"
+    },
+    {
+      "name": "render_composition",
+      "descriptionSha256": "bc84aa1387a511609510c374dde1e0a4a87bc36144bd0e1139c0b535147dfc2e",
+      "definitionSha256": "23fd9fc35db8d67cfa03422f87efff517b26f74a8576e647de072fdaee8f6c64"
+    },
+    {
+      "name": "resolve_chord",
+      "descriptionSha256": "78eca0248884bca36f61f4a0f84e234436fb167ae902c4339b4f22ae31162a89",
+      "definitionSha256": "ff7e959161255e22c8acb5ef4e301b5f5b73c0e408499bac9dfa6a5371ecfe1e"
+    },
+    {
+      "name": "revoice_progression",
+      "descriptionSha256": "814a73c83b446245b4a9b1d70a49e89e0584441a2d2318a4488c869717a4e0cd",
+      "definitionSha256": "5fdbc35cbd1d775890e774f8b92039e14196ba91e9ace2c8d91fe281b2a52e9f"
+    },
+    {
+      "name": "search_corpus",
+      "descriptionSha256": "ab2abb37282ddd903741e57e113e3bd6ca8f4d92f7d8212832dd8d95a2511f9b",
+      "definitionSha256": "8ad5bda56112fe0551146985b4b73df17dbc6a7decffeed301cb660296c7098f"
+    },
+    {
+      "name": "set_chord",
+      "descriptionSha256": "3f18e46962b6fdc584a3cc0986f4f6e56e4b522058943bf5a698be46cb321660",
+      "definitionSha256": "d191ec361f4a26084cf44988e1b8ef336c2037192aa86f5864e0b184e0603311"
+    }
+  ],
+  "surfaceSha256": "9d004ce3e817ef1de40286ae34313936c082e7b18acc88c83424c1315ef9d584"
+}

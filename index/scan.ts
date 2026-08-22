@@ -1,11 +1,15 @@
 // Batch-score discovered servers → results.json (compact cards + first-party stats)
-import { readFileSync, writeFileSync } from 'node:fs'
+import { existsSync, readFileSync, writeFileSync } from 'node:fs'
+import { dirname, join } from 'node:path'
 import { createHttp } from '../src/util/http.js'
 import { resolve } from '../src/resolver.js'
 import { assemble } from '../src/assemble.js'
 import { score } from '../src/scoring/score.js'
 import { RUBRIC_VERSION } from '../src/scoring/rubric.js'
-import type { Scorecard } from '../src/types.js'
+import { buildSurfaceSnapshot, diffSurfaces } from '../src/derive/surface.js'
+import type { DriftEvent, SurfaceSource } from '../src/derive/surface.js'
+import { appendDriftEvents, loadSnapshot, saveSnapshot } from './surfaceStore.js'
+import type { Scorecard, ToolInfo } from '../src/types.js'
 
 export interface IndexEntry {
   ref: string
@@ -87,6 +91,10 @@ export interface IndexStats {
   secretsFindings: number
   deprecated: number
   shellExecTools: number
+  // D2 (observatory): drift events recorded by THIS run only — an artifact
+  // count, not a quality statistic. Absent from summarize() (which is pure
+  // over entries); main() sets it from recordSurfaces' return.
+  driftEvents?: number
 }
 
 export function summarize(entries: IndexEntry[]): IndexStats {
@@ -166,6 +174,36 @@ export function toEntry(ref: string, card: Scorecard, daysSinceLastCommit?: numb
   }
 }
 
+// D2 (observatory, docs/superpowers/plans/2026-08-05-observatory-d2.md):
+// pure-ish helper (all I/O confined to dir) so it is testable without a
+// network scan. Called once per run, after the pool completes AND after the
+// coverage/outage gates pass — a refused scan never writes snapshots either.
+// A server absent from `extracted` keeps its old snapshot and produces NO
+// event (missing snapshot != removal); diffs across differing
+// extractorVersion/source are suppressed by diffSurfaces, never rendered.
+export function recordSurfaces(
+  surfacesDir: string,
+  extracted: Array<{ ref: string; tools: ToolInfo[]; source: SurfaceSource }>,
+  scannedAt: string, rubricVersion: string,
+): { written: number; events: number; suppressed: number } {
+  const events: DriftEvent[] = []
+  let suppressed = 0
+  for (const { ref, tools, source } of extracted) {
+    const next = buildSurfaceSnapshot(ref, tools, scannedAt, rubricVersion, source)
+    const prev = loadSnapshot(surfacesDir, ref)
+    if (prev) {
+      const d = diffSurfaces(prev, next)
+      if (d.kind === 'event') events.push(d)
+      else if (d.kind === 'suppressed') suppressed++
+    }
+    saveSnapshot(surfacesDir, next)
+  }
+  if (events.length || !existsSync(join(surfacesDir, '..', 'drift.json'))) {
+    appendDriftEvents(join(surfacesDir, '..', 'drift.json'), events)
+  }
+  return { written: extracted.length, events: events.length, suppressed }
+}
+
 async function pool<T, R>(items: T[], limit: number, fn: (t: T, i: number) => Promise<R>): Promise<R[]> {
   const out: R[] = new Array(items.length)
   let next = 0
@@ -196,10 +234,17 @@ async function main(): Promise<void> {
   if (limit > 0) refs = refs.slice(0, limit)
 
   let done = 0
-  const entries = await pool(refs, concurrency, async (ref): Promise<IndexEntry> => {
+  // D2: surface inputs collected during the scan, snapshotted only after the
+  // coverage/outage gates pass. Gated on notServer/unresolved so a library or
+  // a 404'd repo never records a "tool surface".
+  const surfaceInputs: Array<{ ref: string; tools: ToolInfo[]; source: SurfaceSource }> = []
+  const scanOne = async (ref: string, progress: boolean): Promise<IndexEntry> => {
     try {
       const identity = await resolve(ref, http)
       const signals = await assemble(identity, http, now, { hasToken })
+      if (signals.tools && signals.toolSource && !signals.notServer && !signals.unresolved) {
+        surfaceInputs.push({ ref, tools: signals.tools, source: signals.toolSource })
+      }
       const card = score(ref, signals, now.toISOString(), {
         ...(identity.npmPackage ? { npmPackage: identity.npmPackage } : {}),
         ...(identity.pypiPackage ? { pypiPackage: identity.pypiPackage } : {}),
@@ -209,10 +254,49 @@ async function main(): Promise<void> {
     } catch (err) {
       return { ref, ok: false, error: (err as Error).message }
     } finally {
-      done++
-      if (done % 10 === 0 || done === refs.length) console.error(`scanned ${done}/${refs.length}`)
+      if (progress) {
+        done++
+        if (done % 10 === 0 || done === refs.length) console.error(`scanned ${done}/${refs.length}`)
+      }
     }
-  })
+  }
+  const entries = await pool(refs, concurrency, ref => scanOne(ref, true))
+
+  // Second pass over refs whose collectors reported errors. Measured across
+  // consecutive scans: degraded entries swung 18 <-> 43, and EVERY ONE of the
+  // 25 servers that changed published state between two scans had been
+  // degraded in the earlier one. A transient 403 is not a property of the
+  // server, so publishing "insufficient data" on the strength of one bad
+  // moment is honest-but-noisy: the reader cannot tell a server that is hard
+  // to analyse from one GitHub happened to throttle. One more good-faith
+  // attempt before publishing a withhold. If the retry is no better, the
+  // original entry stands and the withhold is published as before — the
+  // retry can only ever REPLACE a degraded read with a cleaner one.
+  // Exclude `unresolved`: a repo that 404s reports a collector error on every
+  // attempt, so retrying it is certain failure. Measured on the first run
+  // with the retry active: all 18 degraded refs were unresolved and the pass
+  // recovered 0/18 — the entire budget went to repos that no longer exist.
+  // Excluding them makes the retry count mean "reads that could plausibly
+  // improve", so `recovered 0/N` is a real signal instead of noise.
+  const degradedRefs = entries.filter(e => e.collectorErrors && !e.unresolved).map(e => e.ref)
+  let recovered = 0
+  if (degradedRefs.length > 0 && !process.argv.includes('--no-retry')) {
+    console.error(`retrying ${degradedRefs.length} degraded ref(s)`)
+    const retried = await pool(degradedRefs, concurrency, ref => scanOne(ref, false))
+    const byRef = new Map(retried.map(e => [e.ref, e]))
+    for (let i = 0; i < entries.length; i++) {
+      const before = entries[i]
+      const after = byRef.get(before.ref)
+      // Strictly fewer collector errors than the first attempt, or none at
+      // all. Never swap in an equally-bad or worse read: that would make the
+      // published index depend on which attempt happened to run last.
+      if (after && (after.collectorErrors ?? 0) < (before.collectorErrors ?? Infinity)) {
+        entries[i] = after
+        recovered++
+      }
+    }
+    console.error(`retry recovered ${recovered}/${degradedRefs.length}`)
+  }
 
   entries.sort((a, b) => {
     if (a.ok !== b.ok) return a.ok ? -1 : 1
@@ -264,7 +348,21 @@ async function main(): Promise<void> {
     return
   }
 
-  const payload = { generatedAt: now.toISOString(), rubricVersion: RUBRIC_VERSION, coverage, stats: summarize(entries), entries }
+  // D2: snapshots + drift are written ONLY here, after both gates above have
+  // passed — a refused scan (partial run or outage signature) writes neither
+  // the index nor any surface state, so bad runs can't manufacture drift.
+  // A retried ref pushes its surface twice (once per attempt). Keep the LAST
+  // — the retry's, which is the read we published — so recordSurfaces diffs
+  // the baseline against the surface that actually backs the entry, exactly
+  // once. Without this the first (degraded) read would be diffed and saved
+  // before the retry overwrote it: harmless today only because the second
+  // diff then compares against the just-saved copy, which is not a property
+  // worth depending on.
+  const dedupedSurfaces = [...new Map(surfaceInputs.map(x => [x.ref, x])).values()]
+  const surf = recordSurfaces(join(dirname(outFile), 'surfaces'), dedupedSurfaces, now.toISOString(), RUBRIC_VERSION)
+  console.error(`surfaces: ${surf.written} written, ${surf.events} drift events, ${surf.suppressed} suppressed`)
+
+  const payload = { generatedAt: now.toISOString(), rubricVersion: RUBRIC_VERSION, coverage, stats: { ...summarize(entries), driftEvents: surf.events }, entries }
   writeFileSync(outFile, JSON.stringify(payload, null, 2))
   console.error(`wrote ${outFile}: ${payload.stats.scored}/${payload.stats.total} scored, avg ${payload.stats.avgOverall}`)
 }

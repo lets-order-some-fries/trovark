@@ -1,0 +1,25 @@
+{
+  "ref": "cantian-ai/bazi-mcp",
+  "scannedAt": "2026-08-15T19:32:30.425Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.7.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "getBaziDetail",
+      "descriptionSha256": "76e83099d70767c6c35d071b55d7d1c8cd4f448a4d6a648ca2d8dcd2db0843ed",
+      "definitionSha256": "4004b840606f74ae03699bb3ef5626cc3555d9747d2c3abc44847621a7aafbc8"
+    },
+    {
+      "name": "getChineseCalendar",
+      "descriptionSha256": "ed34c82c8a9c6a52c77673f37012adb0c06a2905615e82d2d97e3f9ea49ad5b8",
+      "definitionSha256": "66ea08b30c652169f66c7b22b1ffc5bca275e6598b88aa0dd8801375e8ec10ee"
+    },
+    {
+      "name": "getSolarTimes",
+      "descriptionSha256": "943ce292d27d40009c266b5fbc5a1f69444e52805176ca844462996f7df1d5ee",
+      "definitionSha256": "1a9576efe8172f7e01021e8af3cc0a584282e2920a9888d08707cafb78a5ce0a"
+    }
+  ],
+  "surfaceSha256": "5761b97baf353a976b4c40796068ff9bb630ab46dbe8b7f94c6d0b1df7498f2d"
+}

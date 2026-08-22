@@ -1,0 +1,90 @@
+{
+  "ref": "erikhoward/adls-mcp-server",
+  "scannedAt": "2026-08-15T19:32:30.425Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.7.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "create_directory",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "e068318aaeb5cacd3f21c940d0f216c605c89c4672861831fcdcfe8f73b425c0"
+    },
+    {
+      "name": "create_filesystem",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "920416512416a07f82457834a8e7270436253f86e800a0adcc539d29cdd94178"
+    },
+    {
+      "name": "delete_directory",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "1a1be70dc35fc2c4eceae2b739682fcd62e3894ef20879b09ab0e26a8f72b3df"
+    },
+    {
+      "name": "delete_filesystem",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "eb80ec0a32155fac5ec307281569966422fe39d05c8e52ffe1ab1cb79f6830ad"
+    },
+    {
+      "name": "directory_exists",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "ebdb68ec85f6e03724a37568e10e0e85ed191be7713dd1298d247dba1813df2d"
+    },
+    {
+      "name": "directory_get_paths",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "777359fca4e824de62be4de045f08a38e82d3f2e58dbaa2df1d2ac0b9b04c32a"
+    },
+    {
+      "name": "download_file",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "d59d8e957e9cb18c8670402388cbb1978e32b3acbf456fa0ab1b27f80b83e68e"
+    },
+    {
+      "name": "file_exists",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "bbbbdb2c2ef1fad4bd11851e48444ed9bba27ef35c80a1ac7ffa54e4e76fa403"
+    },
+    {
+      "name": "get_file_metadata",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "2ae64dfb3898c44ac8d566b00b5bb166bc910c3e5a7274b85ac64d0cbc10b12c"
+    },
+    {
+      "name": "get_file_properties",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "81119d787a02878533714cc3154f3275bce6d7884eab034a115cfc89bf4f8480"
+    },
+    {
+      "name": "list_filesystems",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "ebe89c4c888fa63f17c87f08ca67b2e2fb7c61718ccc329144151c34ba05543e"
+    },
+    {
+      "name": "rename_directory",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "2a43f7f5ec4dca5935ac80ef6ef8e7b21ed4f01804996102498206d6d9bea75f"
+    },
+    {
+      "name": "rename_file",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "94727b8e256cb3b7a410cf0c38adaafc77170c144b71401512d20de484c03ace"
+    },
+    {
+      "name": "set_file_metadata",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "d40c33615e52c89f7f11bc24cbaa68fb23890e641d06c69436654969bd90bb0a"
+    },
+    {
+      "name": "set_file_metadata_json",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "51b8efc9d33a50e7e06c3d8813d04ba8f5ecfef3b8dc4d6bd2dd29e891a8bfa4"
+    },
+    {
+      "name": "upload_file",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "cfc7af345a87e39214d2c6645ac0dc8960569fe543e226d2b3ea8ffce2a2bd88"
+    }
+  ],
+  "surfaceSha256": "cb5417df3289bb3812977da0c95776bb8c7e8a5c005f16e38685b5bd07afa603"
+}

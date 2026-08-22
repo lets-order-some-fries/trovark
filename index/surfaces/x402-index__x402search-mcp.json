@@ -1,0 +1,15 @@
+{
+  "ref": "x402-index/x402search-mcp",
+  "scannedAt": "2026-08-15T19:32:30.425Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.7.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "search_x402_apis",
+      "descriptionSha256": "571207916dd351905d4cd5a2526f238b42491b7f0a9e089b9155830a8b044727",
+      "definitionSha256": "31272b577562a6bd7585e352bedba004ecdbdc4e2a3fb52da413e84c7de4bfc1"
+    }
+  ],
+  "surfaceSha256": "7444d170ee95a073aff679f017636988074ca3d8869e025bab3bfb74a99dac00"
+}

@@ -1,0 +1,70 @@
+{
+  "ref": "ConstantineB6/comfy-pilot",
+  "scannedAt": "2026-08-15T19:32:30.425Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.7.0",
+  "source": "readme-catalog",
+  "tools": [
+    {
+      "name": "download_model",
+      "descriptionSha256": "321d44c982490aae9d502b573dc252d7b38d67f66c87ce561637c8a1f32f88e6",
+      "definitionSha256": "f71ee530a0b221ad1147e4d6743700a225ac1e349a72608e3e64d655395cfa3c"
+    },
+    {
+      "name": "edit_graph",
+      "descriptionSha256": "f552c9267f2de4ad23f50e314bc30329a78483994d8699859e9dae3ba5727b63",
+      "definitionSha256": "66539df30891d402627913b17f191fd6ffaf56c0c7e59607d1c555efea650d36"
+    },
+    {
+      "name": "get_node_info",
+      "descriptionSha256": "07b7601e220b35b5ca31eced2e39591d2e607311d31a5cf469a186a4a155f6d5",
+      "definitionSha256": "1682ab9d47ffbcc2d9e5727dfe2b0296e7477417543a56a23bfc3d7cd3b54e5d"
+    },
+    {
+      "name": "get_node_types",
+      "descriptionSha256": "c445ad60b4d65534cfb332e54386bce2f4c4d5aa5e85c36f5c624ca97c1d8658",
+      "definitionSha256": "4ba8062287f0153b6d4f6675c69b1efed07c5ded94e320d1de98b365f1a9b926"
+    },
+    {
+      "name": "get_status",
+      "descriptionSha256": "de81b10fbbac2cf2f8ebab03461d910a77c9c9c1fb952603229d4fe2508e1da0",
+      "definitionSha256": "09719927407c91fd7a10c17a8af7ad852cf9611c073ccdfc101a7e8ee7659323"
+    },
+    {
+      "name": "get_workflow",
+      "descriptionSha256": "cb85fe4c45a10f68085856a563c1f96c0fa20041136e1b8ec752cdea7a1b490a",
+      "definitionSha256": "2f67eb848bd52964f6d6a176b4f0f9b4aafd5c2e1472ba8b04feb69c5a3552e8"
+    },
+    {
+      "name": "install_custom_node",
+      "descriptionSha256": "f9eaadba22326c18d4acc7c43a9a4b52470ea929ed3e0aa9553b945559ee261e",
+      "definitionSha256": "c365f649a4e0f1edddec02e56f2967f2979452e50cc21006ebed83e8f09c994c"
+    },
+    {
+      "name": "search_custom_nodes",
+      "descriptionSha256": "90f8464815e71f169efc895e13d3ea205207a783e08fa6e212e9041780db002e",
+      "definitionSha256": "d22aea1efd3dd2a94eed5c943c721a05ca18563310a347e390913d29710fa5cd"
+    },
+    {
+      "name": "summarize_workflow",
+      "descriptionSha256": "68fd222096b60f38d8f1cf2238332e7b4ab30ec32f4f1c4076a3bc453ec30dd5",
+      "definitionSha256": "4db11c7bf19553070d1258bc97686cd4421ca546816ff093d48446c8ce09efe5"
+    },
+    {
+      "name": "uninstall_custom_node",
+      "descriptionSha256": "1b0fa0f5fb7aec9542d0939c1baff6163dae54c2779f3f464dae4a9e70ca34a3",
+      "definitionSha256": "972c36c1f201ce6f478176731f0e92be9c644833a1f24f080f90543d76de5ce0"
+    },
+    {
+      "name": "update_custom_node",
+      "descriptionSha256": "c67e200e7e1d31122778fb74d68fffde42cdae61595a272793af90222a1aeb59",
+      "definitionSha256": "96bbffd27f020b19f72512a50084d2895dff4b4c885604e8909a336812b36dc4"
+    },
+    {
+      "name": "view_image",
+      "descriptionSha256": "360afb80c601b9920202c5db27dca9193b3af73f6a30c324909f68339263ccf3",
+      "definitionSha256": "20cb45f7f1e7ac01382bcedc3b7ef00450f7da878fc8b63fa92db8b76799db66"
+    }
+  ],
+  "surfaceSha256": "3f63907273c5e4038f9d2644c9edaf42ed6017a497061e9e750eaa8abf907eab"
+}

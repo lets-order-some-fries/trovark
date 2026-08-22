@@ -1,0 +1,20 @@
+{
+  "ref": "Operative-Sh/web-eval-agent",
+  "scannedAt": "2026-08-15T19:32:30.425Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.7.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "setup_browser_state",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "04ee19573d12a4055f157105b163ab7673f8e1f23dced677b4d02667f24b0d49"
+    },
+    {
+      "name": "web_eval_agent",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "3542db499adec33bde73fc22d4011c835265d8ab246669f48ba524750ede3e67"
+    }
+  ],
+  "surfaceSha256": "3c89656cf3d2f9f1957e6ef8a93e044b2e65cc643f425b386c9327cc1122a44a"
+}

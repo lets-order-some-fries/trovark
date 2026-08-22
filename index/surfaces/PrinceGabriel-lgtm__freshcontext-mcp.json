@@ -1,0 +1,120 @@
+{
+  "ref": "PrinceGabriel-lgtm/freshcontext-mcp",
+  "scannedAt": "2026-08-15T19:32:30.425Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.7.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "evaluate_context",
+      "descriptionSha256": "b4314d0eee14cc135214fdf73d3cfb151ceedfe4c430e786a5abb673a98eb86f",
+      "definitionSha256": "26f2a95fd8df5f561f9ee45eecf22f4a9e5113a42db18c70ed4f1996d9d79166"
+    },
+    {
+      "name": "extract_arxiv",
+      "descriptionSha256": "66cb0c52a4d00276feaa17dde20a8b0b0275e4b797e99edd15c3263be2015853",
+      "definitionSha256": "fa3e4ee67c6ba0c699a6ab061e9dbe465678d6c8ccda2ccacb9e37fc78799b6f"
+    },
+    {
+      "name": "extract_changelog",
+      "descriptionSha256": "ada1010d6c23ee4730e7b3d1cb059e651a72a43c642d6738a5fa66414833a84f",
+      "definitionSha256": "56d863627705a2078326e600485962cacafee51555e4131ef4e298d138a41145"
+    },
+    {
+      "name": "extract_company_landscape",
+      "descriptionSha256": "1b540a36481be731f4a358af30ebfe7f116f6e4e160ce35835406cd7161bbf90",
+      "definitionSha256": "15e7e0641fcbd7faf184889decdaad6cd81527ab1c7c04f6918a9ba6d5af626d"
+    },
+    {
+      "name": "extract_finance",
+      "descriptionSha256": "fe23988449c45d723650e7a39faa84531b8b8484e01bbd8553702a103413bc58",
+      "definitionSha256": "6b3f5c1a4c6e231f0b8f1a85b15317297293a7ba557dd54534022a545bfaf27e"
+    },
+    {
+      "name": "extract_finance_landscape",
+      "descriptionSha256": "b6e71087f8b3a13dde6543d41d8558f1781b3da403fa2fbb62b4c9be001f2cf9",
+      "definitionSha256": "826f4c6f9578d84d39f8ff1325ff913812ee5be08ee2b9a037fbc2833836600c"
+    },
+    {
+      "name": "extract_gdelt",
+      "descriptionSha256": "914d552511cacac59566173a2e68382cf93280623ce16bc08bd9cc388a4f72a3",
+      "definitionSha256": "5174ba4fa45899544ea3941f759ffb76350fb6e9935f11fe86a47724485b5133"
+    },
+    {
+      "name": "extract_gebiz",
+      "descriptionSha256": "b0f45d50ca4a9bd591638e83d59120bca4771df26207d8e349b866d3c82659e7",
+      "definitionSha256": "73351c58598296711d93d0f23755514a3fb0a79790858c2e13ae241a34a43f51"
+    },
+    {
+      "name": "extract_github",
+      "descriptionSha256": "3a78f626fe3afca18de227cc754c7ba58ad190f9c19ed3ed96497b6549e53fca",
+      "definitionSha256": "9108e649ca7c9da19c9107be0518c8fbd2b96efd84d13f18f28b2463672d778b"
+    },
+    {
+      "name": "extract_gov_landscape",
+      "descriptionSha256": "cfa00e390ac4db05b0bde4ea39f2a0afb1b8b7d69cb742d6f9c42a50f3218bab",
+      "definitionSha256": "8b2d7aa5fc832aab5960ff48ccf550a7e7ce6f5ab51cc5b8d874647dccad9451"
+    },
+    {
+      "name": "extract_govcontracts",
+      "descriptionSha256": "cb4450f5309fbcba2c44b0582d3c45329f3e273b4726ba03d6da0b09f9f4485e",
+      "definitionSha256": "6bfb270bfdaa9c0c2c85268c69f4d9e57727c45b96ec7424dbb7eafb6a9b1b59"
+    },
+    {
+      "name": "extract_hackernews",
+      "descriptionSha256": "c511d821d93286209ed759ee4a71a7a5ca0882fd139a6075e095b58b0260bbe5",
+      "definitionSha256": "bfb9a0f81ce724435e1eb7201099f09e77797d27eebaf931a0cda8e0e71b2195"
+    },
+    {
+      "name": "extract_idea_landscape",
+      "descriptionSha256": "c5bf7064e4bf57f277a0de2f01bbe9025b253f64154e22506f5568d23633dcc4",
+      "definitionSha256": "9b02d7b42880f682696167b2527a6f36b2b1d20383c62827d90fc1ddbda78d8f"
+    },
+    {
+      "name": "extract_landscape",
+      "descriptionSha256": "1f53d55c5f34e0121c21020319d8ce5548cab2f120786aff79962c7b6b7208b3",
+      "definitionSha256": "138e780518ce7270185486926aaaa92b894433b2acf80ef3ab563fddbc80da88"
+    },
+    {
+      "name": "extract_producthunt",
+      "descriptionSha256": "9426606e317238e2fd1fd94b13aea0ff2b4ce1f50d130bc90c7e461824baf0f7",
+      "definitionSha256": "5c9f35213effd43ac784719173a6ed73d305c15c7f9c546ac6ef26d2b325c1a5"
+    },
+    {
+      "name": "extract_reddit",
+      "descriptionSha256": "5142e09b40c2928a0745d1ce23c1fc1f309cefbc125ce319a037d9c7e7b5164a",
+      "definitionSha256": "e4e56e2b45b966c87000b156ec4871d0dcd15cbd7bcb62eb1f0d90b315f84324"
+    },
+    {
+      "name": "extract_scholar",
+      "descriptionSha256": "95d4ac28996eecfabe758f93aaa7b857ab3ac8e7a0174e7829b1ccaf4c872004",
+      "definitionSha256": "a2a73f5048b373d190fd2027f40b3000b0539d5340c45e949d25b4549a0f108c"
+    },
+    {
+      "name": "extract_sec_filings",
+      "descriptionSha256": "96f6a1a97210d22b597de093fafb53b4a84eedb4e5e7b6f235af334369b0a19a",
+      "definitionSha256": "03c0c98f4c6d57f584584887cd3fd312114de70962cbb491698e0d35116c201c"
+    },
+    {
+      "name": "extract_yc",
+      "descriptionSha256": "8bd9acb90b6bed79ae6cc9479299e5319510848a5edd845496921097be685411",
+      "definitionSha256": "54ddfdf101edb9b0c385602ec85ff977012310f99778fc19f3750b670751aaeb"
+    },
+    {
+      "name": "package_trends",
+      "descriptionSha256": "ece2ed79bdb63b39c69bcb4ccecb42a543bc20c617414127937890c2b2ab87de",
+      "definitionSha256": "0db9ae5b32e0ac0773a3cc98cabf58fd313d8b963174aeeb23d06d2c47d253a5"
+    },
+    {
+      "name": "search_jobs",
+      "descriptionSha256": "85ce45074b5e4dca3356662b7143116dc5af09104094f016a437b638a88f4a5e",
+      "definitionSha256": "cd4cb8767e8db6ebfee76d19abb738a4ff8c165c3135c983c2f3b0edce517477"
+    },
+    {
+      "name": "search_repos",
+      "descriptionSha256": "e30640b972a59a16d9b20a1aa07ec3b6aa9d5109c6ac1ab28dc83e0a77c54862",
+      "definitionSha256": "24554a1955a1cde931fd9ee48926bd476437093161f4074591ef98d299092cbc"
+    }
+  ],
+  "surfaceSha256": "4aadec8a4e46fd12f424acd30ff1dc8d3ee48df169744881321643b91d9ec701"
+}

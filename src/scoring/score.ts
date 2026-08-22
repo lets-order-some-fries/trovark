@@ -17,9 +17,40 @@ export function grade(score: number): string {
 import { DIMENSION_WEIGHTS, RUBRIC_VERSION, SIGNALS } from './rubric.js'
 import type { Confidence, DimensionId, DimensionScore, Scorecard, Signals } from '../types.js'
 
-function confidence(available: number, total: number): Confidence {
-  const r = available / total
+// Fault hunt 2026-08-08 (IMPORTANT): this was signal-COUNT-based
+// (available/total), so losing a weight-1 signal cost exactly as much
+// confidence as losing a weight-3 primary — assemble.ts's dynamic-server
+// comment even documented the weight-aware behaviour as if it existed.
+// Confidence now reflects the WEIGHT of what was actually measured: e.g.
+// security missing only no-secrets (1 of 6 weight) stays high (5/6), while
+// security missing its primary (3 of 6) is medium at best.
+function confidence(measuredWeight: number, totalWeight: number): Confidence {
+  const r = measuredWeight / totalWeight
   return r >= 0.75 ? 'high' : r >= 0.4 ? 'medium' : 'low'
+}
+
+/**
+ * Cost confidence, from the QUALITY of the count rather than its presence.
+ *
+ * Fault hunt follow-up (2026-08-15): rubric 1.7.0 left cost with a single
+ * weight-1 signal, so the generic weight-ratio above degenerates to
+ * 1/1 -> 'high' whenever the dimension scores and 0/1 -> 'low' when it does
+ * not. The field then restated `score !== null` and carried no information —
+ * and, worse, a tool count parsed out of maintainer PROSE (the README
+ * catalog rung) published at 'high' beside one extracted from real code.
+ *
+ * The serialized token footprint is the right input here even though it is
+ * deliberately not a scored signal: being able to read every tool's declared
+ * schema is evidence that the surface we counted is the COMPLETE one. Using
+ * it for confidence rather than for score is what keeps its absence from
+ * flattering anybody — absence lowers confidence, exactly as it should, and
+ * never moves the number.
+ */
+function costConfidence(signals: Signals, measuredWeight: number): Confidence {
+  if (measuredWeight === 0) return 'low'                    // nothing counted; Rule A also nulls the score
+  if (signals.readmeSourced) return 'low'                   // a maintainer's claim, unverified against code
+  if (signals.schemaTokenEstimate !== undefined) return 'high' // every tool's schema was readable
+  return 'medium'                                           // counted from code, schemas unreadable
 }
 
 export function score(
@@ -66,18 +97,20 @@ export function score(
     // The gate below already withholds the GRADE on this condition —
     // but notServer/dynamic/unresolved bypass that gate entirely, so the
     // withhold has to live on the dimension itself to cover every path.
-    // Rule C (fault hunt 2026-08-08): the same reasoning applies to cost.
-    // `token-footprint` is the DOMINANT cost signal (weight 2 of 3) and is
-    // withheld whenever the tools did not come from a serialized schema —
-    // ~95% of the corpus. Renormalizing onto tool-count alone does not just
-    // lose precision, it REMOVES A PENALTY: a server whose schemas would
-    // have hit the 25k-token band at 0.5 rises from (2*0.5 + 0.7)/3 = 57 to
-    // 0.7 = 70 purely because we could not read it. Absence must never
-    // render as a FAVOURABLE measurement — precisely the fault this block
-    // exists to prevent, which the cost fix reintroduced through the back
-    // door. tool-count still counts toward `available`, so confidence
-    // reflects that something was measured; only the composite is withheld.
-    const costPrimaryAbsent = signals.schemaTokenEstimate === undefined
+    // Rule C (fault hunt 2026-08-08) is REMOVED as of rubric 1.7.0. It
+    // withheld cost whenever `schemaTokenEstimate` was absent, because
+    // renormalizing a 2-signal cost onto tool-count alone REMOVED A PENALTY
+    // (absence rendered as a favourable measurement). The rule was right; the
+    // rubric it was defending was not. `token-footprint` is computable for
+    // ~5% of the corpus, so Rule C withheld cost for 268 of 278 graded
+    // servers (96%) and for all 87 withheld ones — and, through the >=3-of-4
+    // gate below, was the shared reason every one of those 87 servers went
+    // ungraded. src/scoring/rubric.ts now drops token-footprint entirely, so
+    // cost's ONLY signal is tool-count: there is no composite left to
+    // renormalize and no absent dominant signal to flatter from. Rule A
+    // (`available === 0`) already covers the case Rule C would now be asked
+    // about — a server whose tool surface could not be counted — so keeping
+    // Rule C would be dead code that reads like a live invariant.
     // Rule D (fault hunt 2026-08-08, C4): reliability's primary is spec-era
     // (weight 3 of 9), and it is binary — a server on a LEGACY SDK loses the
     // full 3, while one whose SDK we could not determine loses nothing after
@@ -87,12 +120,13 @@ export function score(
     const reliabilityPrimaryAbsent = signals.specEra === undefined
     const unmeasured = available === 0
       || (id === 'security' && securityPrimaryAbsent)
-      || (id === 'cost' && costPrimaryAbsent)
       || (id === 'reliability' && reliabilityPrimaryAbsent)
     return {
       id,
       score: unmeasured ? null : Math.round((vSum / wSum) * 100),
-      confidence: confidence(available, defs.length),
+      confidence: id === 'cost'
+        ? costConfidence(signals, wSum)
+        : confidence(wSum, defs.reduce((a, d) => a + d.weight, 0)),
       available,
       total: defs.length,
       findings: signals.findings.filter(f => f.dimension === id),
@@ -143,7 +177,7 @@ export function score(
   // W6: `securityPrimaryAbsent` is computed once, above the dimension loop —
   // the SAME value Rule B uses to withhold the security dimension score.
   // Fault hunt follow-up (2026-08-09): this gate predates the null-score
-  // semantics and counted only `available === 0` — but Rules B/C/D withhold
+  // semantics and counted only `available === 0` — but Rules B/D withhold
   // a dimension's SCORE while its `available` stays positive, and `overall`
   // silently renormalized onto whatever dimensions remained. Measured on the
   // post-fix corpus: 42 graded servers (13%) published letter grades from
@@ -175,6 +209,13 @@ export function score(
   if (hiddenPayloadNote) notes.push(hiddenPayloadNote)
   for (const d of dimensions) {
     if (d.available === 0) notes.push(`No ${d.id} signals could be collected; ${d.id} is excluded from the overall score.`)
+    // Fault hunt 2026-08-08 (IMPORTANT): a primary-withheld dimension used
+    // to emit NO note at all — the reliability/security withhold was
+    // silent to both humans and JSON consumers, a "not measured" with no
+    // stated reason. Name the fact. (Cost was the third case until rubric
+    // 1.7.0 retired Rule C; it now reaches this branch only via Rule A,
+    // which emits the "No cost signals" note above instead.)
+    else if (d.score === null) notes.push(`${d.id} is withheld: its primary signal could not be determined from the available data, and a score computed from the remaining signals would misrepresent what was read.`)
     else if (d.confidence === 'low') notes.push(`Low confidence in ${d.id}: only ${d.available}/${d.total} signals available.`)
   }
   for (const e of signals.errors) notes.push(`Collector issue: ${e}`)

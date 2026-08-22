@@ -1,0 +1,70 @@
+{
+  "ref": "albertnahas/icogenie-mcp",
+  "scannedAt": "2026-08-15T19:32:30.425Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.7.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "check_credits",
+      "descriptionSha256": "4ecad283c82466bd16b7101480b3395434406323e72f2abbebe91f4bc2742c2c",
+      "definitionSha256": "7495fa34bb449f40adcf8396465e8f3a684e6e579674ab23a316358507496788"
+    },
+    {
+      "name": "claim_daily_credits",
+      "descriptionSha256": "00e4cc5d40c874e675e82518055fb5987b667c68fd0a7ff10543e8c6b457d953",
+      "definitionSha256": "61d9159e647d364cbbcb28b238228b47cc32f9426127b50f94db81586395a27a"
+    },
+    {
+      "name": "confirm_regeneration",
+      "descriptionSha256": "12d79811520341430117c3cc9d7b13d61ccbd9f0753399edaec21c013e11dea4",
+      "definitionSha256": "1af85d62fe28bb255b9aea9c6cdc83cbb7b1f7f865a85d9758ea5ac555676783"
+    },
+    {
+      "name": "download_from_library",
+      "descriptionSha256": "d47dd1a6255b15699473da03ebbba1e85d9926af4a94431b0d7e2e3c9f7f1179",
+      "definitionSha256": "d04c70afdac47063342824b16379f0a236ee9b620ba69fcf326e047b230e296b"
+    },
+    {
+      "name": "download_icon",
+      "descriptionSha256": "7d9d8ed20e256652ad20e6b5ac0c25a92c9c7f0360caaf9c42493817048923ed",
+      "definitionSha256": "c8c48df12e710c3d36f761bd15b30b28288fe4bbe9bede632a52b1cc66194948"
+    },
+    {
+      "name": "generate_bundle",
+      "descriptionSha256": "c1a78707d8368042636d0af24192450e01edf9d4465c78326efa3e3893d0e108",
+      "definitionSha256": "641b5bc5457170adafaf4772817300c40ff18c62276d60bbe4b8360541fcd705"
+    },
+    {
+      "name": "generate_icon",
+      "descriptionSha256": "cc614815b021f120d701f08bcf1a827743ef4ffb84967ac6bcd72e3bcb8cef7c",
+      "definitionSha256": "9eb494c4091b92a27341bf485054f417feecbb96397e5684cece190e36b3bbc3"
+    },
+    {
+      "name": "list_library",
+      "descriptionSha256": "c782d610fded8d3575d7a48367ef6c2cc6b55748fdfdaca2ed76b4377cbf030f",
+      "definitionSha256": "a218a7bad490f616fb5579911900c4400fd08c8c5b844f572be4cd0a57a7bbba"
+    },
+    {
+      "name": "list_styles",
+      "descriptionSha256": "4a17f90131f3ad848435c7ab778094b58014e9aa8a32c8a722e4c399289f3ea1",
+      "definitionSha256": "1209cb9377dd56b203ef5910abd64bde3c9bc66843e0e3791c06e209387a3bb4"
+    },
+    {
+      "name": "normalize_bundle",
+      "descriptionSha256": "17c8ec15e9d92b15f829549e61669e951e0ceb9e76e6417244d0a013bd667ca8",
+      "definitionSha256": "77c9f48869e35bad3330aa553709dc0a4d6e635567fc3c1faa6ed4f62cb95873"
+    },
+    {
+      "name": "regenerate_icon",
+      "descriptionSha256": "b30cf2311fe2cbed3721fd4c1de63bea8bb977b2408b418fad25a67d639922bb",
+      "definitionSha256": "30225ee93e18cde62287096a65819ba077577bdb94e13cfd988537aa4b1ee235"
+    },
+    {
+      "name": "save_to_library",
+      "descriptionSha256": "c2078a0944fe42a92e807c554d428bff36bd74254f20c285e1daf98943ffa29d",
+      "definitionSha256": "b43e315d628e2cbd921b78f87f8321aed4e3fe3487428b6a55bb0a0b31e3f5de"
+    }
+  ],
+  "surfaceSha256": "14c835dda7f06e49226b5b4b79a64f6923123c23fa33fc9721bb8091883027aa"
+}

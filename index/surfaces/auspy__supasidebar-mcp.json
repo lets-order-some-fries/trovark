@@ -1,0 +1,190 @@
+{
+  "ref": "auspy/supasidebar-mcp",
+  "scannedAt": "2026-08-15T19:32:30.425Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.7.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "add_atc_rule",
+      "descriptionSha256": "c44df457b3cac99f6798c8c0f59c285bf489226099a173ff784df35223f8397e",
+      "definitionSha256": "c19de49b03ba8c90bbf825ddd455c1ee05a8312b038ae19a574dfac13aa8c84f"
+    },
+    {
+      "name": "add_link",
+      "descriptionSha256": "25ad7a67a97bf9d93b125fa72093763ede0861dd234a22b3d46d3be235d27f92",
+      "definitionSha256": "920d63dd03f3228f5c48f77e265457e3d41f75b55911a6dae328499a3ee35118"
+    },
+    {
+      "name": "add_search_shortcut",
+      "descriptionSha256": "f9d62dd733d853368124e720b3c2d3a7fc5b67860adc3e1b4354e5c8cea078c6",
+      "definitionSha256": "6b9bad867d9d5c0811f51df2fc107cea06f64e3ef0f829e0608fe21e481c98ab"
+    },
+    {
+      "name": "clear_shortcut",
+      "descriptionSha256": "5062ca1903556234f0e9b6a33d35b360326dae42a12555e91bc1cfe04c633477",
+      "definitionSha256": "bf7e415df0026bf4447e286315650d9aa3b073a603aeac35c32862b34f3ca0d6"
+    },
+    {
+      "name": "create_folder",
+      "descriptionSha256": "09da7e1d41a4fda669119216d3d9a5648d6631fdd6b6cb103a5803e4d936d931",
+      "definitionSha256": "7ca6164c2c4bf2ce56488145bce19c93e22883d523ca087ee70698253dcfcfd7"
+    },
+    {
+      "name": "create_space",
+      "descriptionSha256": "178da636a536201a2ab6e6df92533fbd2b58b2a5aae9b71e91d4d2fe4864bb9a",
+      "definitionSha256": "72c1876e1553b804968e6e61969c0407cd09501f414a39c92513344570c2f878"
+    },
+    {
+      "name": "delete_atc_rule",
+      "descriptionSha256": "24b3974becb48d43781ef5aa5bd6eefe18871433f2a0a939f79f9afe7652f564",
+      "definitionSha256": "ee8053f91cc7cfaac9dd40d050b19fb39354fc4d3a80e26783a5a64ba9fbe153"
+    },
+    {
+      "name": "enable_feature",
+      "descriptionSha256": "6d337aeb56cb2097a3c34349c51bbc9cbe7f799fd87596af7d0b16de34d8292d",
+      "definitionSha256": "2d5a9dae0e8789f23e76b713bfaffee8ba19faff1cc9155506a114efed70eb66"
+    },
+    {
+      "name": "get_live_tabs",
+      "descriptionSha256": "03220eb744c7e041285cf97ad4c683c04cc119ff7e0e6cb656172eb23debe4e8",
+      "definitionSha256": "ae7d2575dc0a4011608924977c9852911463a39b53766466ed355c0485a352d7"
+    },
+    {
+      "name": "get_settings",
+      "descriptionSha256": "d9514dd31a0af4bf308645ed255b3e18e8f63d3409dea0e61635646bbfe5f2b1",
+      "definitionSha256": "6bb50ea8b738a3261b85e673020d89976637a70d029b0a3e45e902c978923310"
+    },
+    {
+      "name": "get_shortcuts",
+      "descriptionSha256": "3e9d67a39752fb5b2f02bd18a9bae58a27cd30e4becc93b5cd7efc35e60d462f",
+      "definitionSha256": "8fca69dff1c6db327f490cb11ca1352d955a5d57af552fda213e7e6495cbee4c"
+    },
+    {
+      "name": "get_visibility",
+      "descriptionSha256": "d3a4854977963a9308cbbd2e9b4193c91c100a818377c4ef3588d11bf430cb28",
+      "definitionSha256": "2346cf8ade8d6d0deb33e29a2227f1fdc939ea09cd922df1049396f6ce5c9e46"
+    },
+    {
+      "name": "guide",
+      "descriptionSha256": "a8b4fdc4c4ec6f02b9c3ab9011b49706971cd2f3a835f988d9af0e636142ae44",
+      "definitionSha256": "31a0b6fb8cf22acba5d6a9bdc028b7dd5d8b504e688f0ccebf5b054745028509"
+    },
+    {
+      "name": "launch_sidebar",
+      "descriptionSha256": "7ecaefdc7c9bdaffdbd1d7ac75399528fa4a4339814063a789491d3aa8da31ef",
+      "definitionSha256": "c7d02fc1158f10c2dc64bf874dc55888b3b974bb85bcb3f57cd5673cf850c713"
+    },
+    {
+      "name": "list_atc_rules",
+      "descriptionSha256": "d8a8cc0ff362599f03cde7e32e6a762a792c9fa30c565f28a5eabb8031e9947e",
+      "definitionSha256": "159ae16eef8c596f5080ed6369cd4ce587d74d6881b2e71950a10685da887ddb"
+    },
+    {
+      "name": "list_browser_profiles",
+      "descriptionSha256": "be9d40295e2c50534b784983fc04cda3957291898cfd70bb7598216492b3bfef",
+      "definitionSha256": "f41b5c712b6d930056b404b96ae237fa9901f478caa213ee70256a5c142baac8"
+    },
+    {
+      "name": "list_folders",
+      "descriptionSha256": "ef2fa14a689aead853c9011c3eb933bba6c1f379e9b872ae475a6aee6e999464",
+      "definitionSha256": "86713dbaa671cb6affaf1449ea47a1eba4619b2109f2eca16b83850ebc0b18ae"
+    },
+    {
+      "name": "list_installed_browsers",
+      "descriptionSha256": "78279e023ecdff396a3474338d53a57700ca2ee9eaefcea44d7521ac5a4f2ab9",
+      "definitionSha256": "c011797903f871dcd525391b2e0bf7737d9ebc61b7270572a61eb285b83016b0"
+    },
+    {
+      "name": "list_links",
+      "descriptionSha256": "182cb6ba78da2b4556cbed2662852e13f0f29c5a18d56b89d96e0875da6e8d1e",
+      "definitionSha256": "b23116ef8488f7c8942a0fbb54838edb5d373993cf9ba6a0e0ebc843144b0938"
+    },
+    {
+      "name": "list_recent",
+      "descriptionSha256": "f29d3823f36e64c1b5a31046e8068874ad169eba4c8ff66681c6cff5d11f25c2",
+      "definitionSha256": "6fd71ad75ee451863d12bbc760ad8749f911b0980bc49cbc579cc9ee01feea8b"
+    },
+    {
+      "name": "list_search_shortcuts",
+      "descriptionSha256": "d2c0dc677eb9ee554aec83d1cfa37cbe846c9a4a4954ea7a4bb993b6cfe87b17",
+      "definitionSha256": "bd026d7c498e82f2ff8edb0acc4bb77bc0c0cfea28372d86ae1e8efe905ae866"
+    },
+    {
+      "name": "list_spaces",
+      "descriptionSha256": "55c327f2d4ddabbd495bb484957e626fc70619b7a68b43d020915162ca9e4925",
+      "definitionSha256": "c9eccdedc404442eca5a4adcc17b0fd7e808b9cb3ae8e7e2b0f44b04b01ef2c5"
+    },
+    {
+      "name": "list_tags",
+      "descriptionSha256": "79dd759961a5affacd897c4f93bf0081402d99f6e9e19c207767832e7b43dcec",
+      "definitionSha256": "4dddff5f870ef962f0b33706da0b6688ecb932721af00b1b6a1a9a318663350b"
+    },
+    {
+      "name": "move_link",
+      "descriptionSha256": "007dc49edb42519ccd38690f41e85af04303f82af2a1e8944ba131ad28329de7",
+      "definitionSha256": "c0918d4b0a025f9cc723e6f3216d26a472bc586f7c79c9fd01425ed18ccb95a3"
+    },
+    {
+      "name": "open_link",
+      "descriptionSha256": "4b581254250f2b9f1ca1d5d2115b13a41f564f35d24e6b644e38982da307b86f",
+      "definitionSha256": "e0baa0457f280cb847f4e343ce2358629c834afbe91ff3141f7b9d2b57d5642a"
+    },
+    {
+      "name": "open_preferences",
+      "descriptionSha256": "a085ea4c1afe162b5569f8b17a5d9afdabb6ab72c33aa4b94c4e164e128d3269",
+      "definitionSha256": "6c631a469d8864283cd4bf194a327c9f4ed4269f9753510d1d9f559235bdb074"
+    },
+    {
+      "name": "remove_search_shortcut",
+      "descriptionSha256": "7b2478109f11622c1c42d1156f6c7fc4987440e918ba4ee7954eaf1e09ac5ec7",
+      "definitionSha256": "b0cf16dd330da327b196bd2215e433108b27bd416248619470c195e01910a774"
+    },
+    {
+      "name": "reorder_atc_rules",
+      "descriptionSha256": "934981a0a255216c6356ebce21003bbd0d5ca6b08c533508b28c169ef90fc57e",
+      "definitionSha256": "e6fc84032d067fdc2fe969b6696c18d64109e268e09f4631287559d84795bb23"
+    },
+    {
+      "name": "search",
+      "descriptionSha256": "a9105c9b4298b4c1b8e00e97a2c1d16b3b2079ddeaaf0bfd1fa9d3d5a5ece12b",
+      "definitionSha256": "b5ad993e2ad91bd21c927a9df5311b30a522f6eab5b647b55fc305f35e9acf4a"
+    },
+    {
+      "name": "switch_space",
+      "descriptionSha256": "b659a1e7c296eb190ebb2d6a66293bc7dd53a44f67f19eca8e5c6da297e29a8e",
+      "definitionSha256": "636340bf58556897205874e4fd9473a53b5e499c283f445011507828e6a0af21"
+    },
+    {
+      "name": "toggle_command_panel",
+      "descriptionSha256": "ea50a476e0c0b97482690b9e4bae4ee101fe3ca6431494b10dcd4757a814885a",
+      "definitionSha256": "f83f04d42c205766e07e1e9646de52187e4b45d0628413a694ae18909ab1bced"
+    },
+    {
+      "name": "toggle_sidebar",
+      "descriptionSha256": "2789c335071ff7e800be60054db37bfaaabc478f5334f82f4dc37010bc9b932d",
+      "definitionSha256": "1e116d0e52fd9a56f000adf776a884d44674bf683d52659479e3cf0a77b181e3"
+    },
+    {
+      "name": "update_atc_rule",
+      "descriptionSha256": "39f24cf42d504cb7a967f045c5a2d175306568411dd3ee2676ecfb1f95e9c4da",
+      "definitionSha256": "28d6469c6958d99e4da2b3bb348bb2c2b7b39079845d73e655f60bc2d68c24a0"
+    },
+    {
+      "name": "update_setting",
+      "descriptionSha256": "ead955ca62f32c23095130f05c3da80c6a7a6b154176e6ce52c8147123f01de5",
+      "definitionSha256": "b226c0811d593ed317d4c97ca16fa2d7912287c46c092ff60dd706e66e4ec292"
+    },
+    {
+      "name": "update_shortcut",
+      "descriptionSha256": "3f75fc53dc1e7f2fde11bc3381bb3ed5baef93743c6522104672a5162b89f5c6",
+      "definitionSha256": "638fb6bb2a73d238a47218387bf07862aa6ce70dfe1d40b6c27a2574c9844c3e"
+    },
+    {
+      "name": "web_search",
+      "descriptionSha256": "366f0d7a0adbf5398913d73fc059ee433945fdb773c7e18c03c0a333dc7a6e8c",
+      "definitionSha256": "1ad36c87a0e4367b65959c63e450ae2ed937cb12b2194ead0816d52ea3c5a610"
+    }
+  ],
+  "surfaceSha256": "c61978ae69dce593917612f014284ee3771f1769e4bd09d90c42ee8d68588f37"
+}

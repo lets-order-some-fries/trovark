@@ -1,0 +1,115 @@
+{
+  "ref": "fulcradynamics/fulcra-context-mcp",
+  "scannedAt": "2026-08-15T19:32:30.425Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.7.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "annotations_catalog",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "8c7ad73629ede6833bcf72d00513c58d2a95aac76eb1bb329095a92c64e534a2"
+    },
+    {
+      "name": "archive_data_type",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "0cc985a1e8c9faa271496548a1663e7f13a557e73dc43b40b5f7bd55dcb9de90"
+    },
+    {
+      "name": "create_data_type",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "7c9678cf13f1391e1210dd46bc417199b9cbcdcfb971d1aeac70423dda1f994c"
+    },
+    {
+      "name": "delete_file",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "d96cc71c7981e8315573d9569da2f2df4d871f640556e72c43a1f661aad56e3a"
+    },
+    {
+      "name": "get_calendar_events",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "f19fc25cf928dbce1bfccb8f281969ceefa4172bba599d087bacc44c0d4ec4b1"
+    },
+    {
+      "name": "get_calendars",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "d97244cc6abb0daf6fd8ca2b2ff4ca4adcbcb5001da78b0947fb8d0598baf074"
+    },
+    {
+      "name": "get_data_catalog",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "ceec12c840cb2fac20710a2529b7d4b3d89a75052ac83c9ca1c3525bca5ffb6d"
+    },
+    {
+      "name": "get_data_updates",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "4234e56e2efa8248ba4c34ac31246ae82f6dc1dc98e1cdb6ff5ddd4a8c24f5b5"
+    },
+    {
+      "name": "get_location_at_time",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "a6fffa1a2e336b4028f8c9b5e1b94c2ecb1b421c82cdecfa8b38bafc99a6bbb8"
+    },
+    {
+      "name": "get_location_time_series",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "17a2933d79f82060d3d785d09377608032cdcda0628180654bfe7ce849520bb4"
+    },
+    {
+      "name": "get_records",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "dbb863c9054eb270ae1b81ea0d808970d5ecdb96dc1f0551235c3b2649f5aca1"
+    },
+    {
+      "name": "get_sleep",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "7c7a22a279dd7c13d8225bb9c193cb04d553f90159b3b854d3ab6f620778ff75"
+    },
+    {
+      "name": "get_time_series",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "8192e022d19d5be2c3cf844044cb47cadbcb0cc13ed212354fd9236303f21367"
+    },
+    {
+      "name": "get_user_info",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "00fc0d82118db4739badf345db410def1cd488fed3627c1dcbd6ceb0c091d243"
+    },
+    {
+      "name": "get_workouts",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "4c44b4f529ccdb68d8412509e4582844a3869eb9af4a6765219436a1f4e032d4"
+    },
+    {
+      "name": "list_files",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "f67725bd89bc9d7580c05c991b0945085c5b0c9e4943266a7643cde8a8a1c55b"
+    },
+    {
+      "name": "read_file",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "cdb7e714b9b5e87c3c58764f5752767d9cca955242b68c2c82164049ae261a92"
+    },
+    {
+      "name": "record_data",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "2fa3b932164fe65a6f77ac025f0b9cd1bba05c3c1c81e568809f9dc46e599211"
+    },
+    {
+      "name": "restore_data_type",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "dbdb1fcbd9976547d55394903857bed3b8c854c1fab467e117cacb6215c506ff"
+    },
+    {
+      "name": "restore_file",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "e40dacaef6e47769e3696ff10ccc79ada787797ebdc4616bf44ed6bc5ded9114"
+    },
+    {
+      "name": "write_file",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "c7c54455bef8928a9fa632286bfa2f8cc0eb0a24996b5f38ee52906fa7c5ff70"
+    }
+  ],
+  "surfaceSha256": "b1a39309b32bd22a1999ffe4c654408465be77db8dbff4ff73c5a9602855e0bf"
+}

@@ -1,0 +1,30 @@
+{
+  "ref": "Infrawise/mcp-server",
+  "scannedAt": "2026-08-15T19:32:30.425Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.7.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "get_general_recommendations",
+      "descriptionSha256": "7c15992fa9edb5eb839c72aa1a81100210dcb5dc89df2d0b2b4fc13f5ee761e6",
+      "definitionSha256": "456ea7aaf190f2a9f0db60801c3f47d9e16bd597f14a7313b7626f4e5cee63f3"
+    },
+    {
+      "name": "get_idle_resources",
+      "descriptionSha256": "eb234aca3a6710b7422c28d7c4e1b7c47a2f67cec20f823c675604391e4d7c8d",
+      "definitionSha256": "467c175c51d7c41621a821bb6b01e9520e5709269608bb5c8391848c64b935e7"
+    },
+    {
+      "name": "get_savings_summary",
+      "descriptionSha256": "6c100ac5a5e3a42019af49eb75a1928579028ff8fa995b5c61341d2d43e9e633",
+      "definitionSha256": "ab48d0ef013769d2fc15dad3f1874661a9b989d897af0d24dc3ea8a58eb530e9"
+    },
+    {
+      "name": "get_sku_optimizations",
+      "descriptionSha256": "6b7061e8197d6d916b03df2548ef8ea77a08b11c59db19395c9a26ce7de849ba",
+      "definitionSha256": "bccb9109cca981e4edd0bfa37445666b3fd83187c04ceddd5c808d25ac8a96e5"
+    }
+  ],
+  "surfaceSha256": "61e23e565a2906dcac18737339116639938f6919cb27dd5a31be38839e841e18"
+}

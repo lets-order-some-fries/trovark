@@ -1,0 +1,32 @@
+{
+  "events": [
+    {
+      "kind": "event",
+      "ref": "smart-mcp-proxy/mcpproxy-go",
+      "prevScannedAt": "2026-08-14T19:41:35.252Z",
+      "scannedAt": "2026-08-15T16:26:13.554Z",
+      "extractorVersion": "1.0.0",
+      "added": [],
+      "removed": [],
+      "descriptionChanged": [],
+      "definitionChanged": [
+        "code_execution"
+      ]
+    },
+    {
+      "kind": "event",
+      "ref": "Focus-GTS/eds-mcp-server",
+      "prevScannedAt": "2026-08-14T19:41:35.252Z",
+      "scannedAt": "2026-08-15T16:26:13.554Z",
+      "extractorVersion": "1.0.0",
+      "added": [
+        "eds_bulk_fix_metadata",
+        "eds_fix_metadata",
+        "eds_fix_redirect"
+      ],
+      "removed": [],
+      "descriptionChanged": [],
+      "definitionChanged": []
+    }
+  ]
+}

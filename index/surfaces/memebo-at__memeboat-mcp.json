@@ -1,0 +1,25 @@
+{
+  "ref": "memebo-at/memeboat-mcp",
+  "scannedAt": "2026-08-15T19:32:30.425Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.7.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "create_meme",
+      "descriptionSha256": "761953dedfd6f47f5ebf8e1a121c59667b3a8164cb84f8e5fd0e2f0cd074497f",
+      "definitionSha256": "15d4fe35c3565ba05b30a23a747844e98f77e49920cc38f76e4bd3c0f76bde37"
+    },
+    {
+      "name": "get_meme_template",
+      "descriptionSha256": "fb48e7ad74a581b7882e943e2b1d691a82dcee3cac9f3351b0374ccdb31eec3f",
+      "definitionSha256": "f11d0e60df7c8114a551008330f94c7ef5422dafd3a4717b1f64bc1212f0a329"
+    },
+    {
+      "name": "search_meme_templates",
+      "descriptionSha256": "2b8e07033d6db34c208f4eda2bf4f0d6565de585eb1c58ee7b5160c823828377",
+      "definitionSha256": "78cf2ac811b342d0d697976dbd827835b07a3260f0b7a7329936bf153c46c4a1"
+    }
+  ],
+  "surfaceSha256": "85c717c32b688fd4704bbe645a60911773c4e30a6a552ccaae49df68ff4a8282"
+}

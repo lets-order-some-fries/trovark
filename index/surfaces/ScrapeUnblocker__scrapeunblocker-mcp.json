@@ -1,0 +1,25 @@
+{
+  "ref": "ScrapeUnblocker/scrapeunblocker-mcp",
+  "scannedAt": "2026-08-15T19:32:30.425Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.7.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "fetch_html",
+      "descriptionSha256": "9f4d8c8ecb0c0fa874de6d2599e0bb21c330d6202e4efd5efbc309b2ea143fe6",
+      "definitionSha256": "378b9d66e793bb9094fb9fa4cd4e79121ea2f150342fb8ae91cf2f1da81d3ecc"
+    },
+    {
+      "name": "fetch_parsed",
+      "descriptionSha256": "6e8a8dc828aed4091c284dd803c212bc917ff21eb79eb229b3a15596a66cc211",
+      "definitionSha256": "46cd2ee40c59f80e7305890a6990e574667759b8cb186e8e99689c6fb4142e3e"
+    },
+    {
+      "name": "google_search",
+      "descriptionSha256": "ff59c0d4f98f050102bace17f795f9d90d3b74cd0dbe47ec53e8da70cf337049",
+      "definitionSha256": "478f39d3a93bf0de1d7782de78bcae17255f2a723424027e9e7e1a3295cd1d19"
+    }
+  ],
+  "surfaceSha256": "b35f62df31b2ff0acc7e8ac046075cd1c5f8bd81aee53ce94b651e5ef01fd7d3"
+}

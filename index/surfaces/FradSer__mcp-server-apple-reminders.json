@@ -1,0 +1,15 @@
+{
+  "ref": "FradSer/mcp-server-apple-reminders",
+  "scannedAt": "2026-08-15T19:32:30.425Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.7.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "reminders_tasks",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "27b15a77fe6fd917d154e5e6838b42d1dda24bd55090f6abcc2f7b8f117c7047"
+    }
+  ],
+  "surfaceSha256": "e88e3563ff1d6a77d2e79eb5342ea8b05e781f8798e91606f364735b09c1cb57"
+}

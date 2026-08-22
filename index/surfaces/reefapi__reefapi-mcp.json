@@ -1,0 +1,35 @@
+{
+  "ref": "reefapi/reefapi-mcp",
+  "scannedAt": "2026-08-15T19:32:30.425Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.7.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "call_engine",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "0ac8c2a61f73727abd0154cd31bf071b1846744a9871f4ad78c0c56a3ce20519"
+    },
+    {
+      "name": "get_action_schema",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "6784adaada5de9f0a19045a5aca7eff304f719dfe818185660708c09c102664d"
+    },
+    {
+      "name": "get_catalog",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "5ba98bdde47f73e308988cafe548cf82809a267d6597b336874aa77d2dec29b4"
+    },
+    {
+      "name": "get_engine_schema",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "7b06442f4485c3eb7227f2082e932e0e5ba03b7f2c81b8bc1ff5d93df9430c95"
+    },
+    {
+      "name": "search_engines",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "1512d3eeafde52fc6091c57e436c1d960725c9182a6f76eb15f2307e83eba6a9"
+    }
+  ],
+  "surfaceSha256": "5ca83791fafe5e237d2e878f4ca4729ea7f48691add6d9b26db386bdc7255990"
+}

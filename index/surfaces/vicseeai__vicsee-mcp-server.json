@@ -1,0 +1,45 @@
+{
+  "ref": "vicseeai/vicsee-mcp-server",
+  "scannedAt": "2026-08-15T19:32:30.425Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.7.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "vicsee_generate",
+      "descriptionSha256": "409f5d869db025ca7b346e63404b76514828b1eca826d22c98f5550381ed810e",
+      "definitionSha256": "5185a298aab64aa841f23be09cac606fc14cc85b81f6675b4464368e3f648ad6"
+    },
+    {
+      "name": "vicsee_get_credits",
+      "descriptionSha256": "26c1441619e786fc73953c7d8ed752c4cde6bcad6736cb29b53b758f18adeb07",
+      "definitionSha256": "0efa9ec75b65851aa549df84133778d9e838ba6640e6546557dbde6e671bad2c"
+    },
+    {
+      "name": "vicsee_get_task",
+      "descriptionSha256": "0bcd5082eee2458f7a1e8e8637cf72cef59e3b45d29808a874b0197fbc7499be",
+      "definitionSha256": "f9b6e7a01515733ad2d6acd547d35c99710bf7e3ee3131c7cf408c49455992c4"
+    },
+    {
+      "name": "vicsee_list_models",
+      "descriptionSha256": "d90c5153a4894edb499299c1ad6af212530102e324765a1b13063751fc31159a",
+      "definitionSha256": "96ec0332083e7b478c52317ff23baafb6848a180a81bab9d6a09be5ff9831eb9"
+    },
+    {
+      "name": "vicsee_upload",
+      "descriptionSha256": "5e5dc9195753d94ffb69f43003df89b21ac3bc7fb5126f9f263415256ebae97e",
+      "definitionSha256": "5882a5050f1c0cd4ade22b6b39bd57eea2f22317874568fd9ba5b4dbb3d2448b"
+    },
+    {
+      "name": "vicsee_upscale_image",
+      "descriptionSha256": "4bff3f25831249ff05e66373b93994e49fb87d7e98f1dd8fd5c4f6fc707d324a",
+      "definitionSha256": "282c16aa68c2ee93949b1c7f82eaf2b896893c8b9c7835e1f649a0c0873ee45d"
+    },
+    {
+      "name": "vicsee_upscale_video",
+      "descriptionSha256": "04ea2b9717efbc13da46ba03f41e74eca0370de2a8226048ddfe5df2282ea5f3",
+      "definitionSha256": "92d5812dcf4de0d56575ce86b57d753348096f25a502bac093ce478e5ed9f460"
+    }
+  ],
+  "surfaceSha256": "233585e36ca49cb6e0d646e7bf6bba201be2b8dfea1280220f503d296dfb1c95"
+}

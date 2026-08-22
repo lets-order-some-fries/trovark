@@ -1,0 +1,285 @@
+{
+  "ref": "gavxm/ani-mcp",
+  "scannedAt": "2026-08-15T19:32:30.425Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.7.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "anilist_activity",
+      "descriptionSha256": "92a1f6aa8eac1a34c31bee40aa350562e8a234b877820a0728e5b46736acf87b",
+      "definitionSha256": "b6d1461a227e5cf2c394627df9985b804e9c76a5698336b82cb1e275cd9fe445"
+    },
+    {
+      "name": "anilist_add_to_list",
+      "descriptionSha256": "866afcb6a137eb5a751b63506b3db13e7e34bf9da8478af2684ea60e1d7419db",
+      "definitionSha256": "9cb21d19ec37af0d4608c675e4d9efc092f669e4d71d46605955a28f8cd0941c"
+    },
+    {
+      "name": "anilist_airing",
+      "descriptionSha256": "ab23efca2d4e91e21eeac9161cbcc1c2ae72f277ecbe31f0ef1273eaf6a22b0a",
+      "definitionSha256": "0aa7dee7edc46044d2c61bf5aeee9b70623e76ffcf5ac3fb5ca4e98c9b7564f2"
+    },
+    {
+      "name": "anilist_batch_update",
+      "descriptionSha256": "f061801a41ce951f4159fcc4f309791ebf42086884311a1d24dc79d271c1d0e5",
+      "definitionSha256": "1b98dfaab3402d5f3c1a8003b7dec7b04129034c2e8055c958b6e9256d92e1c5"
+    },
+    {
+      "name": "anilist_calibration",
+      "descriptionSha256": "d5b04ca22cce1a665a3ee4085912d4a2f751d5c64b009c143eb4cf746b3f9a49",
+      "definitionSha256": "89493daa3dde3603ea1a72e3e1f646c23aeaacdcb024b6de17a9990ddf7edd91"
+    },
+    {
+      "name": "anilist_characters",
+      "descriptionSha256": "6ab26c44346622777333c48bc4a128b3d3505a422552a91ab4f3727b00d9b25c",
+      "definitionSha256": "62ee8c3754ea95dcf0e8402235867346e6e689d6c876db5783055021177103e2"
+    },
+    {
+      "name": "anilist_compare",
+      "descriptionSha256": "2453f8f74e8f2dfc2a5b18870d046f5a899b0a2405dad1b235ef56708f7d1f2c",
+      "definitionSha256": "86585b2d4391faa52da6b40d849ff4962a616537b5775b27d179cdb1dd5f9ce4"
+    },
+    {
+      "name": "anilist_compat_card",
+      "descriptionSha256": "35c9024ad05577b15c4700d94344b8119b221dd55296fb9839928345f3230773",
+      "definitionSha256": "413c174fa5db97af54db495fa9d429f9ccf78593d8f1a271821452301a24b94e"
+    },
+    {
+      "name": "anilist_completionist",
+      "descriptionSha256": "9f02e961fd0d2e6ae25dfef86177e43f860f0437ca66fe900e9a73e6d96c705c",
+      "definitionSha256": "3e585b16feb543ede4ac5d67574f6ce7a58860e632b3b53d36aa47c7abec0767"
+    },
+    {
+      "name": "anilist_delete_from_list",
+      "descriptionSha256": "a936136a86359704750c70cf15b66088a1895658f616e4fed9e9a78ab84c9620",
+      "definitionSha256": "d6e3ec86502b0bf46d1925126fe73f81393f708f4fac22c27e4860926ae70795"
+    },
+    {
+      "name": "anilist_details",
+      "descriptionSha256": "955b0ca935e0eeed60f7e675e270ececf17a7c78e53a0c2e1e242444ad1a1f10",
+      "definitionSha256": "4b6bdf14b09df78190bc2597622395fb7eacfb2453020f7baf734e396232d223"
+    },
+    {
+      "name": "anilist_drops",
+      "descriptionSha256": "6c5c4713f954b110ea417046fdd00897de004a6970bb7a7b049139754a24a692",
+      "definitionSha256": "3ca9b3950d8491cab3a0a665912e7ae998e23167a0d41a368b7109724c50830c"
+    },
+    {
+      "name": "anilist_evolution",
+      "descriptionSha256": "3ae512a5d9f551218e60d2eacdcfc5fab0e4074769a41529b714664654c1974e",
+      "definitionSha256": "de61de979f198b956c5ddb2acba2d3d6fe6e2b144cd5b99d6250695ca34fd9f0"
+    },
+    {
+      "name": "anilist_explain",
+      "descriptionSha256": "9917f0679dbc88a1b608aac9811ad2503c8c26cbb25403ffb551fd5a6d098828",
+      "definitionSha256": "1cdfaafae954112a1b27a36bf2365dd734e3baf8bff19513bd0961074b5cb5e9"
+    },
+    {
+      "name": "anilist_export",
+      "descriptionSha256": "43d8a4dfe9ed031a7f4b40fcb2abc25ebc43a6f382763d1ae4ba635704dfa3a2",
+      "definitionSha256": "ba0bcfd3fc7ead434c22f2dd22d11b905b64778a992ad82a0cc3fdba0812bc9b"
+    },
+    {
+      "name": "anilist_favourite",
+      "descriptionSha256": "d1ee19c1f36e75134db6d4e49e23853c06b90d5b5c4177dcc51db8059acc957e",
+      "definitionSha256": "c02427eb19c3276fbed5891249b9038af98ae840f6d1576b1849915b34d53259"
+    },
+    {
+      "name": "anilist_feed",
+      "descriptionSha256": "220d3882ae7a7260abe8532307c95045bd126de6cf08f7673a737db25735b15a",
+      "definitionSha256": "e6e357dcff1a408b786f566baa7a6b8c8a51a822fbd9f859cb4c37995dad94b9"
+    },
+    {
+      "name": "anilist_follow_suggestions",
+      "descriptionSha256": "b50c198380c002804940ce282126a52d85255b5db699e4e594d1e231d32512b8",
+      "definitionSha256": "2c044a4254646f67a1baa022ee8ab43d146eab1ec779ab9bd5a55309734ee0b1"
+    },
+    {
+      "name": "anilist_genre_list",
+      "descriptionSha256": "2430eb574380047a92a5a684dd965ea81fa56e129e318283a52b0926203d97a5",
+      "definitionSha256": "741fd935cdb1aef9e735d572fe86f0e1006e47b4a84e39dbbfd732d30faa4416"
+    },
+    {
+      "name": "anilist_genres",
+      "descriptionSha256": "1dd2238bc557bdc095c7a0bd8bd8e18e92e21f97e88d8f08995851d55b0031cc",
+      "definitionSha256": "54e8d63a037c92ec6ceb280c303f14215f87928bca19352827842ff8d55a1fde"
+    },
+    {
+      "name": "anilist_group_pick",
+      "descriptionSha256": "f25dc60fe2128a3f5d19e48c978a388ab3f0fa507c51638b5c6843cb6affb32b",
+      "definitionSha256": "b416f31002f99fa7e929dd8312b507300f6c142351ec0cdd91c5614ab493ec05"
+    },
+    {
+      "name": "anilist_kitsu_import",
+      "descriptionSha256": "f730d33e09303337cf4323b593569486faad172162ba909669ccc06a84ddc2db",
+      "definitionSha256": "db7826b573e649d179b036dd76dac548bbc9b858ea06040ad41f75a748c2f5f0"
+    },
+    {
+      "name": "anilist_list",
+      "descriptionSha256": "7503ffcbf8a5df7e80275bcf53ac73f3c70347aba47bd1f7be9a53f76b5c3e24",
+      "definitionSha256": "6ca5fe0558dd77b6bc01b1f5b69a580177b5b2946fbffbdb30134547eb575e3e"
+    },
+    {
+      "name": "anilist_lookup",
+      "descriptionSha256": "43895dfa62a2048574ee5a0c50f70d1ecbfa145ba1f73f4b701f876042d3f21e",
+      "definitionSha256": "b62cdc61a4cc61b4d639d872fcb6f2cd3c060982b5f28a6f9ea0879bfb73cccc"
+    },
+    {
+      "name": "anilist_mal_import",
+      "descriptionSha256": "61741716f3660da2ed7aaa3df7080f935ec4ca71df7dfa97cb11289458aff5b4",
+      "definitionSha256": "0f048cee00a039503bb263edd126046a053e5914b058b51af3576211d5776164"
+    },
+    {
+      "name": "anilist_pace",
+      "descriptionSha256": "6631d837bbf039ce6a3eca66e919e757deb9e58493341f79f415916dce2f5cbe",
+      "definitionSha256": "294d02ee0099b3cf4ec830e8aa06755f7266894f49e1199c819e3b2d9b8795f0"
+    },
+    {
+      "name": "anilist_pick",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "7b2652969c275d3388e16d74f3a8ae6061b2c3110f5f580626bcc3b4a81b2d5f"
+    },
+    {
+      "name": "anilist_profile",
+      "descriptionSha256": "5c1f12cde2377451a618737322d967d953ae44f5529eda06eacd8f328f904f40",
+      "definitionSha256": "de146121ffac3d3cbb8f09bd582670599a1e7c4bc18112fa8c7bda2328d41255"
+    },
+    {
+      "name": "anilist_rate",
+      "descriptionSha256": "98ce28ec09556aa5168b1df9866a7774ddf4f9a21013a9090094df665434839f",
+      "definitionSha256": "8525025d58640bc493c8515302ad12aeabc34aabc7f543fa3077f823e60c5883"
+    },
+    {
+      "name": "anilist_react",
+      "descriptionSha256": "f1f919e64918f7214c763ace12a0679265f32863ae4f9f1165d78235c92b2a85",
+      "definitionSha256": "38827cf0b6dad82ed85f93dfc18c5beb9045b3d9f1b42e85ff688d82bb7e0be1"
+    },
+    {
+      "name": "anilist_recommendations",
+      "descriptionSha256": "ba6026a6b5b8c1fdb339dcf9cdaa498ffd8119ad62fa10af839efa77f68aae06",
+      "definitionSha256": "3bb390ab028e281690aaf5658b7eb324e076565af04ec9bbd6de5adcf350e76d"
+    },
+    {
+      "name": "anilist_reviews",
+      "descriptionSha256": "02dda337e801acd5defe7c49245323f150187b1061787f8f0e77a5e1c629020d",
+      "definitionSha256": "6f5a9ccf566fb5e9a8c8f3c74415c18e42c7a3c5dea9a310b14f47a4041288fd"
+    },
+    {
+      "name": "anilist_schedule",
+      "descriptionSha256": "a36b28d0071528a4929afa51bc6f74ac5d5f07963419b68c993dd3071583e531",
+      "definitionSha256": "14f280aab5394937498b43fb99b0c049b92dc5e86fe02b0de3898852c7e1610f"
+    },
+    {
+      "name": "anilist_search",
+      "descriptionSha256": "7ceec7910f1ac9cd581ce5677175fa3ac01bb2a95a11ca5abee11d02ece1ecb9",
+      "definitionSha256": "05a3d986109d12afcc1f84deb0a69342d27f4f4dd68093a397e424f75e0c1b3d"
+    },
+    {
+      "name": "anilist_seasonal",
+      "descriptionSha256": "a47d8d551a563d6d5b4492e1048d9894b8a67be889c18a94ee8e922873d3a35b",
+      "definitionSha256": "ea4b1d06af82cb466797b6965bb69d30fbd7b1cc2b483703294a10327d0c1c13"
+    },
+    {
+      "name": "anilist_seasonal_recap_card",
+      "descriptionSha256": "d57932585b3f32166e104273558131516908267f25e0f9e04bde3bbc065eca99",
+      "definitionSha256": "fab435ca3a49dbe08d38ea9932c995e34960224c79a80d4f7c383a3570b8891f"
+    },
+    {
+      "name": "anilist_seasonal_stats",
+      "descriptionSha256": "739e9a54c48890298f11a44c88540f61d3eca54305753e557440fd8ee53938ff",
+      "definitionSha256": "038af1fa281bc246ae86223f529b15e90ab9ac692cf43f71d65ae149a203c7e8"
+    },
+    {
+      "name": "anilist_sequels",
+      "descriptionSha256": "541304e6f76a930ab3fa97950414c6c1ea784fb48ab9f5c99812102b6356d448",
+      "definitionSha256": "0d5cddfc78e44ec138dfdbd24a8b12b39cfd6bd2ca285cfe48f6ab675a069f71"
+    },
+    {
+      "name": "anilist_session",
+      "descriptionSha256": "1c64146c77babc4bde57a665c2794c4e9beec5548148a20dc39f3e3b7725e4a9",
+      "definitionSha256": "7db6782bc2f02df23ae7b62fc355920a91227e9d0580f380668c1865ec1e59c6"
+    },
+    {
+      "name": "anilist_shared_planning",
+      "descriptionSha256": "7ed7347ea279dc8dbe6447e48ec9b14fce836706e6f702057a6c19315a06a57b",
+      "definitionSha256": "f3634c77d5c8485220d1211e99aead61dce60e99780830baba1131291096e715"
+    },
+    {
+      "name": "anilist_similar",
+      "descriptionSha256": "3ffe9b09de5a1eded0fc8dd9d1b9c6c3f4be8c6fd3616a229f5b5e1a4c462759",
+      "definitionSha256": "a3a757ff07daeeb6ca4152d09b65cd2c9082141a825e22651c5cbd11c78abb93"
+    },
+    {
+      "name": "anilist_staff",
+      "descriptionSha256": "f5365ec9292440de94fbc617ce2d59c6238e9743cdb0a59f58eaae83802076b2",
+      "definitionSha256": "8700d171ac70b524825a43a0533801720b9139b3750f833d91ac4a23fc1a72a2"
+    },
+    {
+      "name": "anilist_staff_search",
+      "descriptionSha256": "b9e2976185a3f82a5a4ed1d6fe8b62b83f88da1d0a2fb3d524f638bd785d6404",
+      "definitionSha256": "8e0babf0255904caa6993d76fa22d3690671de13d0f4b2ea1ea57db6e62d553c"
+    },
+    {
+      "name": "anilist_stats",
+      "descriptionSha256": "7503ffcbf8a5df7e80275bcf53ac73f3c70347aba47bd1f7be9a53f76b5c3e24",
+      "definitionSha256": "d4e0fb4edb54aa71e670954b76dd0bc18e10ddaf433c832a24f3347472b1e772"
+    },
+    {
+      "name": "anilist_studio_search",
+      "descriptionSha256": "fc0ceec20ac7ce8097a5f014b37f324a3cd3e435c09d1968ea778d0395955086",
+      "definitionSha256": "a326f94cdc13f03d587e4502d8f4dec4059a61d4a06dacd22f3756201da354e8"
+    },
+    {
+      "name": "anilist_taste",
+      "descriptionSha256": "ce778344c315789f75f22e66c18790d45949dd1b926e856237bf0bec43178263",
+      "definitionSha256": "c2505c9126c01df0e0998c9f72346ef2bf56904447646321763f816dfa2ab510"
+    },
+    {
+      "name": "anilist_taste_card",
+      "descriptionSha256": "1b2c923f69bc64bbb61caa74f02ed1d770a9c1e9d2efdcb5d6251f43c882220f",
+      "definitionSha256": "51f2afeb3c92fe59b70c30890a155456f7ead83ef0644fa6761b5dbdce01e14f"
+    },
+    {
+      "name": "anilist_trending",
+      "descriptionSha256": "242c3171714c970714d85fe59ef9ed7e737a609324abec9b0185323d1d4747ef",
+      "definitionSha256": "5fa2d3390d7e4e40706d1b538f0828d2c277071c31d77a11dac6588bc6e3d224"
+    },
+    {
+      "name": "anilist_undo",
+      "descriptionSha256": "0f7e372ac521c78843117b4f7a28475bb6b9d8f6a69af44c0b70f409988f26e7",
+      "definitionSha256": "3a664b4d810b12ef85eccf1b12f9be723150e3dae673b010e8112eced269b96a"
+    },
+    {
+      "name": "anilist_unscored",
+      "descriptionSha256": "b60a22a67226160b12b2cac6544974b457a34f523bd31c89b2618d36b18794f2",
+      "definitionSha256": "862c7c374fd4e53540e30a8716f34759ac963c132eaf2977561a7e79c77f7551"
+    },
+    {
+      "name": "anilist_update_progress",
+      "descriptionSha256": "71e676d019c9654d710313e2c550d60bd7ff1f2c28f25cbc52de986bbfdc873b",
+      "definitionSha256": "aa06a9d86d53540dd6ae3576ae7c331137e87f0b4b4ae14dce382d995bf5d0af"
+    },
+    {
+      "name": "anilist_watch_order",
+      "descriptionSha256": "b94a32710e83cd98e2898e47036c66e3f6eeaeb4a065d1cce6ae6e835dcca45b",
+      "definitionSha256": "021ed5a3b7f8b32681c2d5aafc75be0879febd0cb0789bf5ae5e9e46e05e6c71"
+    },
+    {
+      "name": "anilist_whoami",
+      "descriptionSha256": "f1fa6c94af93f3f570fcc34058d753e8ca348121996b0929056c02be6a1e20dd",
+      "definitionSha256": "d2175a3557d657955f026e8455a84cf0de9647ba52d2570f5ab8231e44fb9438"
+    },
+    {
+      "name": "anilist_wrapped",
+      "descriptionSha256": "3719c21ab28a676f26420787f7266503b87e4e5e6d14e39495a798d0c72414ec",
+      "definitionSha256": "171c79bc50a210f4c9798a841b3c54a1ae375a3bc4675060ce1822196a4cd608"
+    },
+    {
+      "name": "anilist_wrapped_card",
+      "descriptionSha256": "1ead9c833f100781a3fd7cf6542e9fc4156fd9e902bc1f40472bcb53aee793b8",
+      "definitionSha256": "e13dfeb59f17f9cdc0694603d44da8fd419b4d4a1dbe62f19e389e1a3a2906c3"
+    }
+  ],
+  "surfaceSha256": "1b448db35d459822e644fb21e1862d5516997fb410d00988db84dd9dd0db2b83"
+}

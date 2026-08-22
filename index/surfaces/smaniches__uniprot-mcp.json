@@ -1,0 +1,215 @@
+{
+  "ref": "smaniches/uniprot-mcp",
+  "scannedAt": "2026-08-15T19:32:30.425Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.7.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "uniprot_batch_entries",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "0cbd19ca35ef29000e8715f7ff78624ddeb4834ae27edaffb971b1526faebcb4"
+    },
+    {
+      "name": "uniprot_compute_properties",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "f246c1766fbd567c5582e166667b0bf431968d2a153302b33e931fe22af2a627"
+    },
+    {
+      "name": "uniprot_features_at_position",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "34109649e23a1468b6f290ebfae983b95803637557c6e8e55b02cdea45524d8f"
+    },
+    {
+      "name": "uniprot_get_active_sites",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "c009e8bf3af53e6e5f627c765711f707d77a7d46befe6e0664e602620ebaf510"
+    },
+    {
+      "name": "uniprot_get_alphafold_confidence",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "f6a6a8ee7839602437311cfc09893cdd0a9b8c574e418d7832cb7a6ceac44cdc"
+    },
+    {
+      "name": "uniprot_get_citation",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "72810fda6337bc72550b1230a88f9e57c35458c69089ed880a44ca2bc5e0b862"
+    },
+    {
+      "name": "uniprot_get_cross_refs",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "cbb196854cc8847469db7b181cb39c490661a6cfba8ae18a7fbd9d3e21081689"
+    },
+    {
+      "name": "uniprot_get_disease_associations",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "b3a3ff230bdee775ca51700ae08d049cea3b29f96e8cf64f0a369502f2c240fa"
+    },
+    {
+      "name": "uniprot_get_entry",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "b69f105f3ee13df6ed13f397d3a7d0c9006456bb47011a1997d3fca13fe76887"
+    },
+    {
+      "name": "uniprot_get_evidence_summary",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "53357177d907152ff42e61cfe4690ff8f0ddc392d6c8e981ea4f4ce39dfa95a6"
+    },
+    {
+      "name": "uniprot_get_features",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "1cbe5e93c8201a6c355ec0ea39ddca75c9e51285c3a5b587667c063d5785fc7f"
+    },
+    {
+      "name": "uniprot_get_go_terms",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "6db9092277f3cc715e61fcf3a1a2aa0c3467ae6efe2de1b5d51351736714d23e"
+    },
+    {
+      "name": "uniprot_get_keyword",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "b8e289e3763f2d1cf177dbfeea9396ce192839307269bca868f4c806822601b6"
+    },
+    {
+      "name": "uniprot_get_processing_features",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "937fad20d302d9fb2a954301f66e70d00a658b7e6c143824488fb6f9050ae89b"
+    },
+    {
+      "name": "uniprot_get_proteome",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "0cf362e6d77d04d995182878e1b972028d32a649a7f7820b28028aee64a2792e"
+    },
+    {
+      "name": "uniprot_get_ptms",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "67fdf295b025b443b63685d91aafd5b5209f100be1240835462cf75e52a4ba16"
+    },
+    {
+      "name": "uniprot_get_publications",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "5663e5c0375060ef8db3669aab5f2d285e984986e9fb06f0ae6bd53de688c5d1"
+    },
+    {
+      "name": "uniprot_get_sequence",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "15a27fab6ffb302a916214a8c6e600616f6cc900c601155f111691ec029fbe23"
+    },
+    {
+      "name": "uniprot_get_subcellular_location",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "a4aa4779f2fc3ff4cfb9e0ede0fa707194f9ce99da5bb956e7a34765c5b4c5fc"
+    },
+    {
+      "name": "uniprot_get_uniparc",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "fa17c31c144f8e73d5b18896216a358e0818b2663269c38bfb731f7d7b61e758"
+    },
+    {
+      "name": "uniprot_get_uniref",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "171b594bef7b1ec26f3ebab4200a463c9292e3c905c3dff56f3cb7857ea59aa3"
+    },
+    {
+      "name": "uniprot_get_variants",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "f13f8eb87a3a474eb0f7e045c3f54c90bdb20024d24d5a39596eb5449de23dff"
+    },
+    {
+      "name": "uniprot_id_mapping",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "79c536f3c650fb05b7a132b4f7d0e9291394db476a9485ccb9591b5e197d797a"
+    },
+    {
+      "name": "uniprot_lookup_variant",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "5c2e4c4d84e665be6054a96404339c1337c0629213780defd7a3ca397e8c0806"
+    },
+    {
+      "name": "uniprot_provenance_verify",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "5fe115d751720c545a33dd064ff7d1c33ce4a2946b2137e81c7aa6e9305a384f"
+    },
+    {
+      "name": "uniprot_replay_from_cache",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "326a67478785605d0bd60c30cd4086c5f54f374da81a726447e437f4e83329f4"
+    },
+    {
+      "name": "uniprot_resolve_alphafold",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "ea6285f62c8251594060ee07e62d048b12c82a28a8449dc0f8807538173ae655"
+    },
+    {
+      "name": "uniprot_resolve_chembl",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "75da9cc35f2595189f184337d05402ae624c3d750350be686e4edbf00727fe1c"
+    },
+    {
+      "name": "uniprot_resolve_clinvar",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "53814d8c5491313d8189f190ceadb1b01861f3c47c81346008af2db74d1368b4"
+    },
+    {
+      "name": "uniprot_resolve_interpro",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "b3e13862216a812c129b4852957ef66ffc02404e6c67224f3dbbd2bbcc14849e"
+    },
+    {
+      "name": "uniprot_resolve_orthology",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "a23a35537024ffb5e7ab876fb9eb4c85fc8c5804e71adacf2184b74d032503ba"
+    },
+    {
+      "name": "uniprot_resolve_pdb",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "0c3fd1b557eeb5291b0732c227ef486f900e19f7f21358ae84676224fe54c684"
+    },
+    {
+      "name": "uniprot_search",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "1483bdf4f27313f6e0da1dcc870783290b1074c818210debad8eb3c97af32435"
+    },
+    {
+      "name": "uniprot_search_citations",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "8fb3f81119993b5d5814db9a957740232c512ef4165be0ed58e6919a9037da7f"
+    },
+    {
+      "name": "uniprot_search_keywords",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "c9c2304c7da82cc89125f51935eb600f654b830c2a8fecd2a9cf640c1d183aed"
+    },
+    {
+      "name": "uniprot_search_proteomes",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "32b101b0e693d217146f3ed74f302e88ef9bcaddbc58ed6b4e5316ff8c35ce89"
+    },
+    {
+      "name": "uniprot_search_subcellular_locations",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "60b4e1f53d577ecd376759747f89b33d34f515ed94bc21c3e99055e3255b5377"
+    },
+    {
+      "name": "uniprot_search_uniparc",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "2aeb90db3a61e721ff6f4644500876635df55108fa7c36c7887f5cce3ae91ae0"
+    },
+    {
+      "name": "uniprot_search_uniref",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "a9ae10e5deb83ecbc84665200888ddc7bae5c5588b476576c1ccdab1bebeb58c"
+    },
+    {
+      "name": "uniprot_target_dossier",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "d2f5bfa6ec0aad331523ddc1abb0b38fff5142efcbbb976d3fbc87d374950a85"
+    },
+    {
+      "name": "uniprot_taxonomy_search",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "2a403764fb17484275bad846643eb863d4e9bdbff6dc1066aeacf6494f394f9a"
+    }
+  ],
+  "surfaceSha256": "eced6d89ba4ec76bfa94784886ace5f6cbcfb90a3d057d9c6e869f74d3f43ce2"
+}

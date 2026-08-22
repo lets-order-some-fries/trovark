@@ -1,0 +1,185 @@
+{
+  "ref": "Ceki-me/mcp-server",
+  "scannedAt": "2026-08-15T19:32:30.425Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.7.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "book-event",
+      "descriptionSha256": "703a2102362e584c3ba0f8de10377fa81499c248b1bf856b6dc2f4f131dfc306",
+      "definitionSha256": "c9e0ee92875671379a998e5c889d948b108b35d08bad9c8627eb35f709156018"
+    },
+    {
+      "name": "browser-click",
+      "descriptionSha256": "862b4c51af9b411d202be0f7715ed602f2ec07bc56389519d6aaf5b180506a77",
+      "definitionSha256": "671f8cc933764c07d04a0b2643f26dd10522221f1770bf1f3152de62712cd506"
+    },
+    {
+      "name": "browser-navigate",
+      "descriptionSha256": "43404fd912b0515e5fe4a7036e126333d418f6fc11095cd1e4ade390208b15ca",
+      "definitionSha256": "6a6b98e3196e5c46cabd76d706e85dd29234e9fa9cd43c66b8cee8a0e747b5e6"
+    },
+    {
+      "name": "browser-screenshot",
+      "descriptionSha256": "bdfbf01c1e4fda9a7b74ed8d6d6f62c9c2ae39e44634020d94190049ca963a0d",
+      "definitionSha256": "b492f5a7a10dab1283097358d5f0fd644812aa75727271cba871106d89a59715"
+    },
+    {
+      "name": "browser-scroll",
+      "descriptionSha256": "62764c4b18e9888b5b37f832ec7617e01f6c43aa09d81ce4d20dbec8d88ef97c",
+      "definitionSha256": "a78a4b462e25abf79582df6e6b3fe4d19dfebdcd0f1bd04f9ebc9620a71895e0"
+    },
+    {
+      "name": "browser-stop",
+      "descriptionSha256": "b12786b1cd02b7d45c7570b686792b4a74d6ea9d6228092b88a45eef70032e8b",
+      "definitionSha256": "e1c0c8275360f9b388bc9dd4bce1c036c3e107369ea359aac0cc2fd0b4505539"
+    },
+    {
+      "name": "browser-type",
+      "descriptionSha256": "8267ee2a23bfffc7ed54ebece2b853d1a467c2cca84c0ad1e50102b5c3c66b0a",
+      "definitionSha256": "0c362b1523a36e084dd49c4130de4b8f9141a8b017edfda3eef5da5777ee64f5"
+    },
+    {
+      "name": "create-schedule",
+      "descriptionSha256": "215714e409450cbdfc1f54b3e12f90f478442929cb8d91a898063693f737d603",
+      "definitionSha256": "2ea609cd7c322ab86846251d0573f96a4a2a7cd45c3fe3cb17cb25a2e82788a6"
+    },
+    {
+      "name": "create-topup-invoice",
+      "descriptionSha256": "1343516649ee604ba7fa91fe19fdd87cfe9b4b6d1df0bba32d7a8477672fab35",
+      "definitionSha256": "4aec1eea77f21632d6250fa9eef4ec8f63b653c52d29b75422b0ad0832de0c8e"
+    },
+    {
+      "name": "delete-schedule",
+      "descriptionSha256": "58aeeafd473e37f13f13bdb6aed0a8c3125da784ebf936420a9645d5923ac37c",
+      "definitionSha256": "5fc2ee0a8d1991637515d436471f33a2219260172154b015b6bbc77d5f111b2d"
+    },
+    {
+      "name": "get-crypto-list",
+      "descriptionSha256": "412f7cd216a71d83f1a6ca1ad302b0a42dac1fdcb56e5e33dc1f4738348c37a9",
+      "definitionSha256": "d6ee1389fdc437045cc53c2b828737fbce8843460a369979d94e09c715b5b8b1"
+    },
+    {
+      "name": "get-my-bookings",
+      "descriptionSha256": "45b0c790925e99571bd0cb49463e6a26c3d97bf2cd84bf08552d8be2efb42fd9",
+      "definitionSha256": "e3dfcbbdfac088749c74595a7f63924db8ed41783537f3d7cfe8ef7f4112a231"
+    },
+    {
+      "name": "get-my-jobs",
+      "descriptionSha256": "8ab136078e3fc6128563bbaacb10918773324278178556912d09d117f46699fc",
+      "definitionSha256": "6fcfa701e42c896feccf8213add20509a04f1b46d5c54501623b4b4a9ea1833d"
+    },
+    {
+      "name": "get-owner-connect-link",
+      "descriptionSha256": "391fa90a0c8b6ca1e7d4c2e8c5d802fb193bd91365538ae1f60d78c8253c3486",
+      "definitionSha256": "c3d3ba9a52f5f0844270b0f194a4fedd34c3aa9bd0c8a8a3f16b13b02f46ec2a"
+    },
+    {
+      "name": "get-pricing",
+      "descriptionSha256": "e27989d6b8b3eadfb87174117f7611ddf52d02fd5cc5bb5b5e3690b7b24473b5",
+      "definitionSha256": "bb222e4d92d54e7fdfb384c33fc718ba524ad08654fb508e0974988c4f00edb3"
+    },
+    {
+      "name": "get-profile",
+      "descriptionSha256": "7f51e719b78fa2484c105ed6e3409ad14e9256af02942f30e1ffa793665343cd",
+      "definitionSha256": "992695d36228b1e83130ddc2604f0ef65073822b78ad2a8795c821b3af7ef947"
+    },
+    {
+      "name": "get-schedule",
+      "descriptionSha256": "0c434e498b277da1e57391466b3639795834dfdd5d2744f8d4946225b4aab367",
+      "definitionSha256": "77cbb6fb6025e10f04eaf7fefc03050a8d4d464bb1fa4414f548bc99831c6675"
+    },
+    {
+      "name": "get-schedules",
+      "descriptionSha256": "cb4ec32f78b7fb818e9e362136152dd904aba4c1153002150b3ffffc6c234f09",
+      "definitionSha256": "460932477e5a8b0b0ac89182431c6f5cec0554284555ed15c343d410f749588e"
+    },
+    {
+      "name": "get-user",
+      "descriptionSha256": "fca30c7c66f558fb1e8bc3218763c030efff45a7e6a894bb996d92561d7e893d",
+      "definitionSha256": "328b0846bd75fada19b2f840bd94ca23bde390b3505bb329a371f37fc6e31d37"
+    },
+    {
+      "name": "get-wallet",
+      "descriptionSha256": "50d21197109ec28064094cf722d6efe0623aa4b54a82543c05745ed90442bfc4",
+      "definitionSha256": "683adf1131c94059cd20c5ec82914d0ff74cae9c888de5aa44bb1732adf9aa4b"
+    },
+    {
+      "name": "get-wallet-transactions",
+      "descriptionSha256": "145a0e334adb6181eed8502c3c761f24e6c1060b87c209f01ca471ad31140098",
+      "definitionSha256": "262f42a59e058ffa8056b306fbd21bb43cdb54389bbd21bf5f26317fc0d24183"
+    },
+    {
+      "name": "get-wallet-usage",
+      "descriptionSha256": "49da5798d39baec4a3f317841ce55090f2a8618a4a2344b5b283562f54beffe5",
+      "definitionSha256": "f3beecfee1d0a5c410cbfed507447b811e857ec6e9c94ba4024135356ae14ec3"
+    },
+    {
+      "name": "list-my-browsers",
+      "descriptionSha256": "358a6236f00e07f29d0674087296e175197716a9439c8df9048236b14c07bb29",
+      "definitionSha256": "7ba91676b27b5251a9a199118b7489ad7e7a5ce646559c02aac673256cd5ad1a"
+    },
+    {
+      "name": "post-job",
+      "descriptionSha256": "ff4a55a82d544777236c80b63899e8d3f0485126f88d1bccea79a4ae14a89d80",
+      "definitionSha256": "243182ca6032be67779a97870407c1df4cd7718a70dd9787fc987f07468876ef"
+    },
+    {
+      "name": "regenerate-key",
+      "descriptionSha256": "d96d020109780c94abc6187185f22242d3e4c5e96b51a82b30bb6ede2072e023",
+      "definitionSha256": "e5ef5447d06888e753f928c1314006b6f20fde79723cb6a6d3b8b869d43fe6f7"
+    },
+    {
+      "name": "register-agent",
+      "descriptionSha256": "dcf2ed3dc6458ed314364a957c2e7de2546c1ac9039cfe5a087c09bdc04c2170",
+      "definitionSha256": "0721d1750f6f38fb7aacaf4e7c040aa254de08e7728d223b47407e9c9ba343d9"
+    },
+    {
+      "name": "rent-browser",
+      "descriptionSha256": "c83b16b3d4237058533e1ae38e641a660436ccabb505d96af3aa6cb25f6a2322",
+      "definitionSha256": "57b3870da5c766fd80ec7fc46d1d69b517028a29fec0f18be32b07a479d750d3"
+    },
+    {
+      "name": "request-withdrawal",
+      "descriptionSha256": "3b881b1733b4e3d91f8cc6d0ccce5e6b35b8590e78c2fd1aef9ac285f77b4463",
+      "definitionSha256": "abe107d2cd7cedf61f598c074499e4983035822f64aef3bf8a4c4da4d771db32"
+    },
+    {
+      "name": "resend-verification",
+      "descriptionSha256": "c959483f1b367387e49cdb8433485e21d5d5b62137e1dba531579dcf37e3423c",
+      "definitionSha256": "b7a264c9fbf0b63cf4a4b6a5bf790f1c822680747637cc091d9c617771bdfa1b"
+    },
+    {
+      "name": "search-browsers",
+      "descriptionSha256": "f84b1f1eb6cc6d7c26c243dedb5a07f082a30c26f25a8e88886cd89469e09856",
+      "definitionSha256": "b321ad6304411e8019b31e3a09a451e65969c3c67e7f29b1420ba1dbe8c49cad"
+    },
+    {
+      "name": "search-specialists",
+      "descriptionSha256": "f3bc7f7a8ddddbca17e4a7c6a9160ffaea7b8d76846fcc394152501c6bd18d38",
+      "definitionSha256": "b427b63fe40c096c09972c2ca9ee8affbf2ae02133b7ef1f6067c227a79f6708"
+    },
+    {
+      "name": "select-currency",
+      "descriptionSha256": "7f6cf2023eb77c881edd57c5ef056bdfb7c3120da54c6a1606910a57b3aab970",
+      "definitionSha256": "cc75bd31a0c32773aa0b9a08cddfd12aec6f0ad8534833ca06ae771fa306d743"
+    },
+    {
+      "name": "update-profile",
+      "descriptionSha256": "822842c843f70311c8d654981ab6ba1fa99b6fcb518c20601d050ba4698e1228",
+      "definitionSha256": "883cd2f2561ff4586b5cfa7c26bb69c9c149978bd9e812fd0232daeeb2703428"
+    },
+    {
+      "name": "update-schedule",
+      "descriptionSha256": "092fd0c9c101558e8cbb00212c63928e4e5c0f18d98af4e4079cea8a84f9a97a",
+      "definitionSha256": "ea584abee4c8860f6b6e1683a2eea1c87a63d2ee97e85937a3edc67abd062ad7"
+    },
+    {
+      "name": "verify-email",
+      "descriptionSha256": "ddbb657e4df138f9f8fd2ba9c2610add6075c795e06541fcaba5ce57e0e2f362",
+      "definitionSha256": "b92dc44e665433914572d091939fc5189ef787098c56df80f8d94de84eecb03b"
+    }
+  ],
+  "surfaceSha256": "7441fc75a99372076b3810a46004e60b57adaacccea8741152ad73d0ba9c72e2"
+}

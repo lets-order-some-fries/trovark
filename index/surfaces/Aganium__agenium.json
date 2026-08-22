@@ -1,0 +1,25 @@
+{
+  "ref": "Aganium/agenium",
+  "scannedAt": "2026-08-15T19:32:30.425Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.7.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "calculate",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "e8b3b0cc3e709bc9885bfa724af0888eb24c287cbd14574e1f00d6964facb70a"
+    },
+    {
+      "name": "greet",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "f581f2f0e7597ae62c39a3984721f74f2cbaf3708f752a4b4cb57b06b56ba341"
+    },
+    {
+      "name": "status",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "2f761b8d02c2ede4b339dd707d71d2a92a5a4cf6c3da4d270699039f7aebd46a"
+    }
+  ],
+  "surfaceSha256": "b99bab3dd3d48a03b6766453c13751c9226d3ea3584e0d0e722095b3a8fb350d"
+}

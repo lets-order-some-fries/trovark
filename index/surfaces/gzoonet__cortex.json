@@ -1,0 +1,70 @@
+{
+  "ref": "gzoonet/cortex",
+  "scannedAt": "2026-08-15T19:32:30.425Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.7.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "add_project",
+      "descriptionSha256": "8afd401b082de1e6430cb9e7329f7ba7d93aacb1e496594d5f72719cced0daf7",
+      "definitionSha256": "40257bdb99926ecba5dd13554a6023fba101d93ec4c6eb5d96f347a89dcbd28e"
+    },
+    {
+      "name": "cortex_ask",
+      "descriptionSha256": "1b64a2ce6b99f4ae8d8ce041d81fcf651f1ef6cb0ce3747bf3f0bdba0eb36584",
+      "definitionSha256": "887aaef6cf72143f753bb9c307877291b000ab021794b93c2f679cc7b332925d"
+    },
+    {
+      "name": "find_entity",
+      "descriptionSha256": "0cdc17511265a1c4c860c6a60e582a1dcb08e5661e821560cda829c201d1a699",
+      "definitionSha256": "df87b6b23ddb3c55bdbe97b9de0eeb4edeff2608b322617bf88a6ef03cb5c0c7"
+    },
+    {
+      "name": "get_contradictions",
+      "descriptionSha256": "b326795be91b5eb3a915edc7c429d60d6c98050e42e2d70c149cba71b922583d",
+      "definitionSha256": "b6b1df64633a5d45bfb306f7d79d0ea2f8f62f233d6f2a32df4d8a2a1e687300"
+    },
+    {
+      "name": "get_status",
+      "descriptionSha256": "2a8c74d53d54475c0e6600a899cd26b72c0657d25cd399ccc6bdec6b9a40a249",
+      "definitionSha256": "dcdb7d2b694f5fa46764cd0c425f0d7e7e1ec826d396162db660a89395ee6380"
+    },
+    {
+      "name": "ingest_file",
+      "descriptionSha256": "5ac3a57657b3e65d709e2aeed1f33b2455cbf245116353adaef04d66d1b21053",
+      "definitionSha256": "d69d35e11ad4b1bc5931b2a1ebbf439bb1a20dc6414bdcd3c883a279ae62b901"
+    },
+    {
+      "name": "list_projects",
+      "descriptionSha256": "c4abaa0da6b4d661a1a43103d30177322b7c5090ad43e471b44c24c36fc69b9d",
+      "definitionSha256": "0f1686d2479e53d31697fc9b80790dceaf36e87a70f17f44f41c15e13cdbd92f"
+    },
+    {
+      "name": "query_cortex",
+      "descriptionSha256": "c3ee512685fe39a396c3efce6e84ee25d98fe63145a59e086caf4b032e5fb226",
+      "definitionSha256": "1c9183951e6ebe500b19273a03b4185e5520040b7e75a4fbedbbf797845302b8"
+    },
+    {
+      "name": "remove_project",
+      "descriptionSha256": "254d5b92ddf7419abe43589318496e9ff8177534d66ed1ce057ad9dbe1d943a7",
+      "definitionSha256": "3c6760448ab820541a50113fef5b455b57478638050a4915afc09a168d2931e2"
+    },
+    {
+      "name": "resolve_contradiction",
+      "descriptionSha256": "7993443dc73f9c6d196bea00193a69751cb546f70e0712eb3b41255a0d61e077",
+      "definitionSha256": "6037750c1ffa4b8ce62e9286cb8af2ca8e23a9880ab80cb86d54fbc85137f7b4"
+    },
+    {
+      "name": "search_entities",
+      "descriptionSha256": "9d5eaf02f4430a55a65d423c18a3f60afb3be3edad4ebd97e0b522ad8a166f3d",
+      "definitionSha256": "c59a0b80a054d223077c06201dd8d739b29fc43ab5132dbcf49a6a8d9b2764c0"
+    },
+    {
+      "name": "session_brief",
+      "descriptionSha256": "53460a68d86c4da43b597a3619ddbd67dd57142cf4c725ad0ebf8468cf6601a2",
+      "definitionSha256": "5fc3b0f6c337f8880ff7761045ae1d60528eaee2215831fc63a06c3a83c68895"
+    }
+  ],
+  "surfaceSha256": "e13ab3100876f66f31555d7e8bc140184fc099d1fa70205a01bb412c41c9c71a"
+}

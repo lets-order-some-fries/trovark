@@ -1,0 +1,180 @@
+{
+  "ref": "attalla1/photopea-mcp-server",
+  "scannedAt": "2026-08-15T19:32:30.425Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.7.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "photopea_add_fill_layer",
+      "descriptionSha256": "cc28d1e8cfa2585d3c708cfc3e87b4cdf752c79157da710e024ebcc8b32a30ec",
+      "definitionSha256": "d2046d6d025b1a0e9ba5ccabf4ddd32fddb3f872fea15c48a00ca11b57378b4f"
+    },
+    {
+      "name": "photopea_add_gradient",
+      "descriptionSha256": "5ab2ca5fa96168473e21fce24f888d6859513f1ba38a7b3d15ace542a185670e",
+      "definitionSha256": "9ac4ba279e4bd9549c1c55a2a0f01120deb3c6748243895bc572be94360f9edc"
+    },
+    {
+      "name": "photopea_add_layer",
+      "descriptionSha256": "5c0f986cbd3c67c88b2b4ce784092d2420bcc60413a650ff5fa8b1b91b75cc7c",
+      "definitionSha256": "adfd734b04182940b1ee4fc783902e9dce044c1830a5715859ca6536d7ff7e72"
+    },
+    {
+      "name": "photopea_add_shape",
+      "descriptionSha256": "7cf891e135c4760e3f31ae226ad1932f1b85d7535fcd771df5a1937befc9a0de",
+      "definitionSha256": "dbef9263c6f81a47267f85c283b8c2e639feb285d760bcb856d24ec3b934acbe"
+    },
+    {
+      "name": "photopea_add_text",
+      "descriptionSha256": "38ff025d25cd386598dd18c6e222ab6011542d47f4192d67b8cb3f86f99e8613",
+      "definitionSha256": "992e3a4ffbb811babc4c752df5422ec4dd16a0a8294c6489de2697b2a27abbfa"
+    },
+    {
+      "name": "photopea_apply_adjustment",
+      "descriptionSha256": "2a2aa9a1a5720f21d21008830fae85c04d346bfc0fbd0aa8fe32dff010c2d5ed",
+      "definitionSha256": "61925b19210ea19114215c67e79fe5050d3bba6bf1c921c8e601014aad51f850"
+    },
+    {
+      "name": "photopea_apply_filter",
+      "descriptionSha256": "bbcb10f0c6b9544aa23a3ee59eb06b159b3c5d56b9b2b58a2f9b424f4de9b184",
+      "definitionSha256": "98d5ece4518ffb70ec5a8a36d6f257099049fbf47ae6dbb9a3bba604103dc952"
+    },
+    {
+      "name": "photopea_clear_selection",
+      "descriptionSha256": "99bb02f81f5acbf37b7c2f1c93cdb185a59cabdca956988e253fdf2c876db46d",
+      "definitionSha256": "4c618a858574a20c3a388bc2b1e924a23c3a89ec35555ef740e55b4815e21b68"
+    },
+    {
+      "name": "photopea_close_document",
+      "descriptionSha256": "0a4a3f2d6717a3fcd626d3754cb2f58cac895133b27544ffe8f72d215ea22421",
+      "definitionSha256": "6e91b4f8c487f36ca5f7cd37dd3230535f1483e31edc191688f145fe3e11441b"
+    },
+    {
+      "name": "photopea_create_document",
+      "descriptionSha256": "48d606023a7d5d7933d132cdf427479c702ee026a5332d0141756e17b3f952dc",
+      "definitionSha256": "feefc2a1b53e8a960aa1f272135a3e80705eab5f46edb4e7e65d0aea2113283a"
+    },
+    {
+      "name": "photopea_delete_layer",
+      "descriptionSha256": "4a1e0ec02a150794728ff2f8ed77dc3431186231cd0403d05ff276628bc48647",
+      "definitionSha256": "431a152b32f97e8f27c36734725af11b4a24adaf5c84358db5d2db2b37e480c1"
+    },
+    {
+      "name": "photopea_duplicate_layer",
+      "descriptionSha256": "e0753c06962d7fdd9cec23ffd3b557c4d290eebdccd5e8c39e398fd63b081f7b",
+      "definitionSha256": "9f61dd4b5c6fdac954dc4ac158fac7d0ddae1bad71e1dcc9ec1eb20165fc3f43"
+    },
+    {
+      "name": "photopea_edit_text",
+      "descriptionSha256": "294e68e21dcdb5807cf88b8ce59a0767c00fe0f5d087f4713c9d2c80ee37491d",
+      "definitionSha256": "80a0e778cb883e81e2c131bc6f4e5716c072f02ae8063a7f22ff124c3ae6b83c"
+    },
+    {
+      "name": "photopea_export_image",
+      "descriptionSha256": "babc9d9c2a35c1a0b9fc56befd406478572fbd5318785d3b8cbd0017b7c30a72",
+      "definitionSha256": "94103ab30bc15129c40e9c395758cdbf0086eced4a5a86192fafb07a7573f607"
+    },
+    {
+      "name": "photopea_fill_selection",
+      "descriptionSha256": "1c5abb377e6fb89e4d413f5b1a2ef998da21c6a62214134bd4777d80fe4123f4",
+      "definitionSha256": "b9418eb3eba95bace342a7799434f94515f7f38b311ab809769ecfa4af13b2e9"
+    },
+    {
+      "name": "photopea_get_document_info",
+      "descriptionSha256": "9766055e6955391f8883e92006aa77ccf0c20f0436df9af9e1f1cec9e22b4d49",
+      "definitionSha256": "89e37bf9f4022ebdebaa1c5922c89133b5691f495c0aef6f33105302959d81b9"
+    },
+    {
+      "name": "photopea_get_layers",
+      "descriptionSha256": "9c213e70141022286ba6e827bb6bd66ca8ea300180cda165d9120a5079c22289",
+      "definitionSha256": "3d0775d0d5536fa7888f7ba3dc8192a151092dc7bb91c7b4bd258d309a81f478"
+    },
+    {
+      "name": "photopea_group_layers",
+      "descriptionSha256": "1dddbf540c5bea0206c9b823aa94adff5f27c4fa26353694ee64043b120de87b",
+      "definitionSha256": "38514dbc54e5364cb58e6123e0488123b3aece3f2c7f76acde0ce8c5f622550d"
+    },
+    {
+      "name": "photopea_list_fonts",
+      "descriptionSha256": "bf73ca8154daa04ce9f03253156dd74345ae06913ddec07ba2173a75224cd764",
+      "definitionSha256": "4a3f93a0a1c8dfa431799dd682838b2267c541a79888e5a6ff4fbc5a1a06ce01"
+    },
+    {
+      "name": "photopea_load_font",
+      "descriptionSha256": "c5d7d47afdd4d9b5e7645e5b503ff74091bb386295a57f1e02a35f14b71490c7",
+      "definitionSha256": "c1912f7425310c08a1688b1aec3f9bc2e09c4db1c5220ab99c8b9529ff11ae0b"
+    },
+    {
+      "name": "photopea_make_selection",
+      "descriptionSha256": "c72d11045bb631fa4c0eca205b1bc747e57a9ab7adca216085241036847ae04d",
+      "definitionSha256": "a280e74016f53a50008c7e44384436dbdd59c03e00d066072b4ffe01c75dae3d"
+    },
+    {
+      "name": "photopea_modify_selection",
+      "descriptionSha256": "d5d53132bf392c37d475a58df19dcc8c86bc31f5feeb5e59a0ca5ae633f3305d",
+      "definitionSha256": "832c174d4c2f276d8c80857b00942f32996aaf3b5dfcaa89b5c890b82f6fab42"
+    },
+    {
+      "name": "photopea_move_layer",
+      "descriptionSha256": "04492266a9f7650ad589f383eda5b0409c550cbc07c3669ddca28e9c90f8851e",
+      "definitionSha256": "6f938d055ffebedef4cfc6713d1b775c0aaa22d4a2d34644b98c40b8b7339e0a"
+    },
+    {
+      "name": "photopea_open_file",
+      "descriptionSha256": "1a50d8cfbe5703ec2b4c599e0c098585844221986a47f0e3dd0d44a9e5db1b59",
+      "definitionSha256": "5c7aada65453aa13ac3f3e8cfa2984304862e1aa5246dff4e9e4f791764d24b9"
+    },
+    {
+      "name": "photopea_place_image",
+      "descriptionSha256": "462176859925a37818ac905af3c5a002c2a823acb07f9f28d074cc8d0b2ec53b",
+      "definitionSha256": "28632aaf8940abf7b8c3b41f9f8c670bbf031700795bd1cfd74192a43461a7f1"
+    },
+    {
+      "name": "photopea_redo",
+      "descriptionSha256": "9aa1a91d5e4dcf6eebc91c270f73540e09427d6db1739dc7616e84bdae3390d7",
+      "definitionSha256": "43a49460fcd0acba452cdc9e8cfa001ebbac7f8738a74fa82f124e65ff43cdcd"
+    },
+    {
+      "name": "photopea_reorder_layer",
+      "descriptionSha256": "c770fddf65ca75e1c67fe9fca0e62fa82b9825a4915a53c72ead5457241627eb",
+      "definitionSha256": "9386de09ff31f3aacdcd2470f1239f18b31a307d67705600d388a0156f706513"
+    },
+    {
+      "name": "photopea_resize_document",
+      "descriptionSha256": "4a0c8b395eba43e037383d3ea698bad6cff330bca793361ddd63a36711157779",
+      "definitionSha256": "ed8289d7b7fee7f42913cebadee794221dcdd5ca73a7b632fdb86f29bb8869b5"
+    },
+    {
+      "name": "photopea_run_script",
+      "descriptionSha256": "18e4a35af17d22a083fb4d38f11d4dfed45b5642d8c4e3b667126da75c390812",
+      "definitionSha256": "f026c237035fae9ef1c044406431277494bdd81561e39560e65694dc65dc48b9"
+    },
+    {
+      "name": "photopea_select_layer",
+      "descriptionSha256": "f5cc542ac3b9b353e6b7b4345baf9b5921e1f7f5ec53b0f04712a344ccdfb098",
+      "definitionSha256": "f6da7b27a9c7d44d09a4216bdbb3ab8796735969a1c9424d12d7fbe8f9363a99"
+    },
+    {
+      "name": "photopea_set_layer_properties",
+      "descriptionSha256": "12be93c741a12a03859ef3ca52c52932aa269681a58ae7fe6eeea5c289782400",
+      "definitionSha256": "6c97a2df08bf7d56e8e4b3da90960cb120e8f512a6bdd788ea30e3a4f919bc04"
+    },
+    {
+      "name": "photopea_transform_layer",
+      "descriptionSha256": "b2ff1a60563324057b08027b4441dced4d248709a9e1119c387526c35ced1918",
+      "definitionSha256": "a3a7a5917bb147e4686c37933154f690a151cbffc87156d135a3d2ed74d7b4f9"
+    },
+    {
+      "name": "photopea_undo",
+      "descriptionSha256": "cad7e0799bb143ceba17d57febaeb52782e281f91915724772ec66f14a9724a6",
+      "definitionSha256": "8de8b083dec7ef95108ab1c101b28ad00bba33acd3c9cbd4a6ec20f596a84047"
+    },
+    {
+      "name": "photopea_ungroup_layers",
+      "descriptionSha256": "95c6222ec744616b5afe69d96fede8ee028ae252349676ae3d9bb20c0d47eaba",
+      "definitionSha256": "3e97d26d18b5d2c44bc8bcacc3c236ae42c7c254d2697fdc768ffaa90b3de71f"
+    }
+  ],
+  "surfaceSha256": "13f841e19ba037e8121ed6850729c76b18490a251cbc408d293d747955dec28f"
+}

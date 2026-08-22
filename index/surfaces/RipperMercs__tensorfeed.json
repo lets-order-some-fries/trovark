@@ -1,0 +1,35 @@
+{
+  "ref": "RipperMercs/tensorfeed",
+  "scannedAt": "2026-08-15T19:32:30.425Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.7.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "get_cve_record",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "8388c852bbc20b9279e20ed3f2328b006ef13b66214599dff8f661740a999c33"
+    },
+    {
+      "name": "get_kev_catalog",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "bf4181d86894474a096a67e1272a1895f8ab1e314f2d1955cfb14f45f0488ce6"
+    },
+    {
+      "name": "get_models",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "9275a194586a3b62861cd72946ee314ee706aa045e71d53a11676b75a869f006"
+    },
+    {
+      "name": "get_news_articles",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "b9b4e6e6444313a9bfb028df79950bcc03962417d0cf680ad837b54385950edb"
+    },
+    {
+      "name": "get_status_summary",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "9237212f4acd480688b3f6db6c7570dede25dbf569f645b2c8e95d62942a6840"
+    }
+  ],
+  "surfaceSha256": "f8594053aadc8d34f7a72d8e463f8f2584ec22fd7599ec6c78fc80b94d34c6bb"
+}

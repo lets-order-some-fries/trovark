@@ -1,0 +1,70 @@
+{
+  "ref": "robhunter/agentdeals",
+  "scannedAt": "2026-08-15T19:32:30.425Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.7.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "check_balance",
+      "descriptionSha256": "6840219e0d54b9c497f7b9928c08cdf6ab82f584548de9af50581ff4ea34ed8d",
+      "definitionSha256": "dfd1cd5ecb47775a871e37f95d07e3374c939f57da74a9d69b59dd594de26e4d"
+    },
+    {
+      "name": "compare_vendors",
+      "descriptionSha256": "6312f739abb038fd215896a3650cfc29407bc47ea671bea8a84514f6d0b5f251",
+      "definitionSha256": "c94415f3807cd45a187c319baf14c33158bec31575c72af071f3370f189f4860"
+    },
+    {
+      "name": "get_referral_code",
+      "descriptionSha256": "8c1b39172dce912b928e11de975fcf3e20138f86704346d9bcee7e64233c198e",
+      "definitionSha256": "45a4076af6007693b19fd6ef8c578c817c2053f3b1092ac23a46f033b6fb23ed"
+    },
+    {
+      "name": "leaderboard",
+      "descriptionSha256": "1d34939730fc4311391068d44d2b6689b2d784fc391c4a2b2c1bccc0024910ab",
+      "definitionSha256": "c34eec945b934f4ede722046e96e2b84fe274bc4d6f963e57d5559b4cf5cf489"
+    },
+    {
+      "name": "manage_friends",
+      "descriptionSha256": "1f07a9c92b18db67edcac2b3fa3fa09bfa7cc1be5c20ec3a9c24708ecbac1d2e",
+      "definitionSha256": "db082ff30019dcb4ff598e7c36a2016505c245696c2159e1dd4e1be0c601b28c"
+    },
+    {
+      "name": "my_referral_codes",
+      "descriptionSha256": "09326f9d8934d1ed4e76633dc3498cf76cfa6286f2176e8920499b64bd72f9f9",
+      "definitionSha256": "6112eea5e492664e3d303be67e3822bbd614a5e19803732a3dee0fbe12460470"
+    },
+    {
+      "name": "plan_stack",
+      "descriptionSha256": "cb3e54bf281c97ad4195d76b91b15056a25f753a7e0c8e90b64ddb041d0ccd74",
+      "definitionSha256": "7b6d469a8a362e5ecd9c9659fbb1a7be9cdd48fc522d428a06b651446d8ada2f"
+    },
+    {
+      "name": "register_agent",
+      "descriptionSha256": "4c92524914bf360327e95a1552075745645194f085106e02e49daac98dc13d93",
+      "definitionSha256": "ee8e377d475e89c8bc0f0016fa61dd399e51dade78be45264417bb1b825b88ab"
+    },
+    {
+      "name": "request_payout",
+      "descriptionSha256": "7f92acb57d3da61bc01e135b718a6c69b90b957bb284a9d79c1bbe9f8e7fc6f1",
+      "definitionSha256": "f6dfc1bb161280736f756dd6eb7331b236fd7fc642b6240706571c0cd7cc9d60"
+    },
+    {
+      "name": "search_deals",
+      "descriptionSha256": "06d27822e9cbc8d53807c50395d4eb58e8eaa2c433fdf2459405c60fcc2db739",
+      "definitionSha256": "1b40f0053212822a0fd22fe246cbcae1268e39a8bce0fb0b904ea80f51219b43"
+    },
+    {
+      "name": "submit_referral_code",
+      "descriptionSha256": "c441987630dc47129580f7da8413b76227939341119f3aef1d15a77e593f7587",
+      "definitionSha256": "94928e86ba68d39a1970131057d9a798954c5d11f5a672104f5756346abd3127"
+    },
+    {
+      "name": "track_changes",
+      "descriptionSha256": "593f37daee0166187fe2146bff6df96d6c7ce0e1ff31d6aced0693061360302b",
+      "definitionSha256": "981c46f7fb36ae02781699fc38ca2d828d1f45d807cc9472c7eeaceb3295fa77"
+    }
+  ],
+  "surfaceSha256": "bc1ec87ad5e78b1cbc8d173a9f6e68ec2c8ffe3b62342a32840966ef8532ab8f"
+}

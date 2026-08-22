@@ -1,0 +1,190 @@
+{
+  "ref": "Focus-GTS/eds-mcp-server",
+  "scannedAt": "2026-08-15T19:32:30.425Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.7.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "eds_audit_page",
+      "descriptionSha256": "298c553f6e3caf642feb0dc55ba968a425a454931a72d5deb634a72f8cf03db3",
+      "definitionSha256": "7ce289ec883d3e644037116cd1ccc3de09091157b5bebe33ea99517e81d35ba4"
+    },
+    {
+      "name": "eds_audit_site",
+      "descriptionSha256": "1d3a8b4a73ce90bd275186f31a25a78f38ed6126a590a411d1ccb419e7b8f2e2",
+      "definitionSha256": "5e1581bdf7eee044fa58c1aa09973ee8143c81f2631fefb3c19e77f71b38d83d"
+    },
+    {
+      "name": "eds_bulk_fix_metadata",
+      "descriptionSha256": "269aebd3901e02157edcc3ed8cab29ef2740cd6cb5076beb68fd027da61678b3",
+      "definitionSha256": "c6439b3b9a36946d938b0e802279aa3aaec31c9c86786a48fb57ea1fcfd3085e"
+    },
+    {
+      "name": "eds_bulk_preview",
+      "descriptionSha256": "503845850313b1f6e3020dc99716c70a57f700ef0a61bee1bd1bdf6975fc9a6d",
+      "definitionSha256": "eb8bedbc5571235adb2876ef5bb0ae58984d3f10b034fc94a2fea8ca4629ed4f"
+    },
+    {
+      "name": "eds_bulk_publish",
+      "descriptionSha256": "06dc4d1e5b9fe56bee67df6bafa8555dcc062c71a7d94dcc36092d85a45fa277",
+      "definitionSha256": "60ff19af7b7e070f82be36529d1f52c241300b65525806afff5a54b68f14bf36"
+    },
+    {
+      "name": "eds_da_copy_source",
+      "descriptionSha256": "06f3b2b58d3c98d24639e866cb01fb539931030d63651407326945d40ffeff58",
+      "definitionSha256": "94773ae49c9571165c5f974bfdcdbfafc72a32275b1ba6ecb450ba508c3a90ac"
+    },
+    {
+      "name": "eds_da_delete_source",
+      "descriptionSha256": "7e7835e22fa7c8df5cf6593320d8f25dbb8f88722ba5179c34d64b80b29d70f5",
+      "definitionSha256": "7560aa35de8b7680967cad09da307f2a9dcf3d3f50454673649307de424e4864"
+    },
+    {
+      "name": "eds_da_export",
+      "descriptionSha256": "89cd3a518479574af08949e3c306fa398cca949887f9ad63ded6aff1c16504c7",
+      "definitionSha256": "18929dee69e6fa431665323ef52bfef4f459f8f502bab86c724f16880973394f"
+    },
+    {
+      "name": "eds_da_get_source",
+      "descriptionSha256": "bb5478152b44f6b3b105553bff87072bef9c8c4aac505018912169db7a95ca3d",
+      "definitionSha256": "a93d148b529f6f4423f526142b5cc2c746a5b5499e26e25a3f7e136d65deebde"
+    },
+    {
+      "name": "eds_da_get_versions",
+      "descriptionSha256": "1e22d5a58bee8164b8f0e9395f32e56d9b8c0ca3a53e2087c5710e7e5cc09e42",
+      "definitionSha256": "a0a24a1971874356911c57c1c4665c8a7246e9f6e187772aa60ed99ae6573b4c"
+    },
+    {
+      "name": "eds_da_list_sources",
+      "descriptionSha256": "4face7b99ee571d5331c268a261fa5ebc2bcc75c54025c70b427b6a57ee9fd8c",
+      "definitionSha256": "331cfaa8499e7b882a0573f7c6585fd89a3df0de792372ce99f8799eb3eb4901"
+    },
+    {
+      "name": "eds_da_move_source",
+      "descriptionSha256": "38cf5ddcc2254fdf866e89318ee04f9f005506110e60d3133c970e0022b0c85e",
+      "definitionSha256": "6297a5d1d1fa7b20ab85853433c15c326ef518bc849ae75284dd2a4725bdefd1"
+    },
+    {
+      "name": "eds_da_push",
+      "descriptionSha256": "dc8eb0c50fe6176190251e114b73f678f4645d88687918a32a51d5a6b502fd2a",
+      "definitionSha256": "a3c8b8223520f38021515aa591e1c06dfada1c7a207b738c9e686647ebb1fc22"
+    },
+    {
+      "name": "eds_da_put_source",
+      "descriptionSha256": "42bf5f37287fa6c91ac6994dc4ee556ce119382cdb1f4b760a43c6d2ea889aaf",
+      "definitionSha256": "6039fb72c50b773845aa393c76ee0e71fc7dab569700867b2170668355b82190"
+    },
+    {
+      "name": "eds_da_rollback",
+      "descriptionSha256": "c01cbc4145c83f8ba942e0963365a21b63c378a3ebcbb0de079e2dee9e9fec6f",
+      "definitionSha256": "9c2d040b524e345692cd3ef7e2ee994891223164acb8bfd30502bf48ac7bb9c6"
+    },
+    {
+      "name": "eds_fix_metadata",
+      "descriptionSha256": "18528e36eed2709518b6514f00a7b5d05370bc27fd24863629ae85cf51d19bdb",
+      "definitionSha256": "058dbe447216e2aa5f3acfcc3b804250a854d794bf2035d6f9c9def22628b350"
+    },
+    {
+      "name": "eds_fix_redirect",
+      "descriptionSha256": "cf3bd307dc4c434dc482a887cc144fc6ce858ac3a3e62ba3d5c63c193c912310",
+      "definitionSha256": "8623da1c8d48dece1f213953fe7094774ea2cc011ae9f760846368d331cf738e"
+    },
+    {
+      "name": "eds_get_404s",
+      "descriptionSha256": "a30eb055732b5f9106dad9bd76d03c02463d14f7aeed557e577b64021bf85c5a",
+      "definitionSha256": "52d5cbdf00c91ccc3b2b7855d9a32c33d17c758462eb99867d01ded0cdd19fe8"
+    },
+    {
+      "name": "eds_get_api_keys",
+      "descriptionSha256": "58e7ee47245ee25ec2cd41eb68a71402818dabdc26306647f9d2f8bbcc5ec10d",
+      "definitionSha256": "35a619b2ef689a5ccb2e7bd80d1740016874e6da6982852c974d6a7a981b6ec9"
+    },
+    {
+      "name": "eds_get_config",
+      "descriptionSha256": "61a4aadd11f828057f3b1a7b5763d1db8bb4fdcada79c62a97b93b9bf5654092",
+      "definitionSha256": "20b6f1cac6244938712fabc02cf7e645ef88713c5b632e88a4471c78ce57cb5b"
+    },
+    {
+      "name": "eds_get_cwv",
+      "descriptionSha256": "e40a3755e5550379c405491996a0987853ea6e39b790d7ef2de28cc5125b7700",
+      "definitionSha256": "829fd6e57676f573d16b4c3eae5533062f167fbfce8c7f63ff6bd398e01a917a"
+    },
+    {
+      "name": "eds_get_experiments",
+      "descriptionSha256": "fbac0fb8b7052cad4a519b328d3ee4da14efbc99d70fb097eef0db4511ae996c",
+      "definitionSha256": "158a099d09ffe95e4f6a5de57be13229750a6b4e83f30f1853bc6ecaecc1a752"
+    },
+    {
+      "name": "eds_get_job_status",
+      "descriptionSha256": "179bbdc9079cfd2e8211c0de0413a9caf26f8eb3a0be7de44a80fb781f0bfe03",
+      "definitionSha256": "28f486b456ca36ab4da71df2bab00def82726b3ded523c743dac3abb09f96548"
+    },
+    {
+      "name": "eds_get_logs",
+      "descriptionSha256": "6bbbfa45b0e7cb7c5ec8a5ce176a75e3dd7137ee47a639909dbfeb0376abeaee",
+      "definitionSha256": "f74f25806b00b96b3440488e21652870e0a9f442c5899596e33c32174a4549b7"
+    },
+    {
+      "name": "eds_get_metadata",
+      "descriptionSha256": "7d88bfbdac51e910c11bafe1b608f1ebb873f7231e7acaae5fded0954f915516",
+      "definitionSha256": "335cf0a5c7ff27ba89acb4baf29c1a76a2b920080c96c077baef9c25a09ce081"
+    },
+    {
+      "name": "eds_get_page",
+      "descriptionSha256": "09b1b92b87cd8562abfdca46c2e162ce3cd839d7c6e9e0e46b4186de49b74a65",
+      "definitionSha256": "2f1757620f53bfdaf9610a055bded636c24772694a1c4d4fceee2474c35314f1"
+    },
+    {
+      "name": "eds_get_redirects",
+      "descriptionSha256": "6a696f46bec8f950555c2574eb9883c57b2d112f5d32873c15f3acaa29bf5974",
+      "definitionSha256": "01b2aebf69887c1684d4fb277690a86ef18cae573af8da4a09f41a483d6fb2b8"
+    },
+    {
+      "name": "eds_get_sitemap",
+      "descriptionSha256": "1051d77ddbd46b49fe4b87fd3cccf87674ad124e6441e8645b7d284ecba9eca9",
+      "definitionSha256": "6bcdf7d183030bcd941828d45dc58889574c55f2f64c3df2d4941c0029bedc2b"
+    },
+    {
+      "name": "eds_get_status",
+      "descriptionSha256": "83ac47278b19a3a6eb06f50c4b3ee491d3b740034ef08e7009db5d357aa3015a",
+      "definitionSha256": "b1bf2df19625e56fa32f0840d0d9cdb349f0b6f637241ac7d62be59bc8528052"
+    },
+    {
+      "name": "eds_list_pages",
+      "descriptionSha256": "bc36ecb0ddc5a51139ede881a52f76302f0e30dbf512571209a9d3e7897585a4",
+      "definitionSha256": "a1a20a5ed8033f875932cbc04637fec76dcebb6cc4c001150be3201c6cb7d6df"
+    },
+    {
+      "name": "eds_preview_and_publish",
+      "descriptionSha256": "2e592bc864f3df3cb7562b29937f72894a825a741434a2affcaeda09946ea3ed",
+      "definitionSha256": "4a46a5dbcef867f6d540ebb10fa575aabcd3117328a1a74250f03650ac96192a"
+    },
+    {
+      "name": "eds_preview_page",
+      "descriptionSha256": "16d61514694bde456493b7df984c328f7b9e0c475961a73a1d877a47053eac33",
+      "definitionSha256": "aa88387f9d4b5d61f4e8667c8cf3383af05cd04dc9855da7505a578b9ac8a0c0"
+    },
+    {
+      "name": "eds_publish_page",
+      "descriptionSha256": "832baad1d6f3e8785bcdac62f928ddfadedfee1e66f5250ce2c93537c497f1fa",
+      "definitionSha256": "844c67d5e553e9b57da35eb2a84d9fa120cc6b8a5d0f4b5db769da917672e1ea"
+    },
+    {
+      "name": "eds_purge_cache",
+      "descriptionSha256": "dc611efd6b4667d7bf764df3936a7a83d2f5e6016d78498ed24f5b88f8644aa4",
+      "definitionSha256": "b6fc76620db7f47d132c72dcbaa0b96f7e3437a8edfa134912e4666c9d540f94"
+    },
+    {
+      "name": "eds_search_pages",
+      "descriptionSha256": "1b58587a468f0aaa0500e7cca7913a4577589256d7b317a0e64bc99d7840e9a5",
+      "definitionSha256": "acc935ece5667d78bb6a3dbf328bf15c7c47eda83a2ad1dd2710f0d75b3545f2"
+    },
+    {
+      "name": "eds_unpublish_page",
+      "descriptionSha256": "e73439a5e30ff19789a105edd3824be55306336da8ce464e8ea0dd6785e7013d",
+      "definitionSha256": "1d7360d1b38e636f5334c7e40752d906ee8bcc4929a17c3caaffed991880ea6a"
+    }
+  ],
+  "surfaceSha256": "138fe498c696356d84ceffb65148e865bb89c3998a63e61e762cd4c62532af05"
+}

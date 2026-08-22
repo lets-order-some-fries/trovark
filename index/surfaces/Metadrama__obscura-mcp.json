@@ -1,0 +1,30 @@
+{
+  "ref": "Metadrama/obscura-mcp",
+  "scannedAt": "2026-08-15T19:32:30.425Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.7.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "browse_interact",
+      "descriptionSha256": "0f3f31f2ae2159b15fdfc7bf2f68414e833e85820a15ac33216d7667e23cedd4",
+      "definitionSha256": "afc21a5d0e1a225f5e4e8054fb9715383c7191f2beb2bd3419c5b7f3a78fea3b"
+    },
+    {
+      "name": "browse_page",
+      "descriptionSha256": "43483841d7d13519e578382a3db1873df88c60b8103c61c3c2bb7b01d4e8cb5f",
+      "definitionSha256": "6ca4199d014bdbab96f8254470dc120068695064f6868de77c1a4e959b2ed166"
+    },
+    {
+      "name": "browse_scrape",
+      "descriptionSha256": "efcc446db52361aa9c55421c446e83f0d31086b31e9a15014115a0b25bb065ca",
+      "definitionSha256": "b6003a9ed01d5d6753da52431a97e5aa125807c1810bd00d084e5c9c599ac3e4"
+    },
+    {
+      "name": "browse_session",
+      "descriptionSha256": "f54c4c8d3f136804cb1f8f5e45d6a19019c0f34f1ddd1612214214ac79d1e7e1",
+      "definitionSha256": "1b4258b7ad199633c91ebc16ca5cee24cd10cc0cce23926944747fbb4ca85c75"
+    }
+  ],
+  "surfaceSha256": "4fd1a03b642707f6e1c94cd67c00337ff65d2f8720f8427ddb26cf856d4fb6cb"
+}

@@ -1,0 +1,105 @@
+{
+  "ref": "longevity-genie/biothings-mcp",
+  "scannedAt": "2026-08-15T19:32:30.425Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.7.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "download_entrez_data",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "3a8afd5562d159c458a3ee0aba027ab11eaf739b51d2e384d8b902af512033e8"
+    },
+    {
+      "name": "download_entrez_data_local",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "c09608255540f89c2244de5cee3e656ec03ee50e49dad643d5a3b7eb151930bb"
+    },
+    {
+      "name": "get_chem",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "560a2c180b8e596a959c912370bfe59dc23ecb35d59ae4e4bb7ae17ad50728da"
+    },
+    {
+      "name": "get_chems",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "5c9a35162cb6d159dc3653a5dd7a65c7b66d1f9b6bc1e72e32e642cb44335c33"
+    },
+    {
+      "name": "get_gene",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "2cae7ba77ef462a9b57b5140192e53fda8b7c018271af2a273f435599d84a8f4"
+    },
+    {
+      "name": "get_gene_metadata",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "4230d54d2341a454b9d903fcc6b120f5761c9a47799dc1ad022dab80dd1ac129"
+    },
+    {
+      "name": "get_genes",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "b6e6290cdfea146078600c26c1a0d4a1165cd61ba5fe1fa6c59f81cfd62b3e15"
+    },
+    {
+      "name": "get_taxon",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "ec10c5fa71bec0cc3f3680395975748dc22ad01b51a0bdb4c6af17e0b2f3f11e"
+    },
+    {
+      "name": "get_taxons",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "e69617ba493a0015f7878ffc510de0dd4b7d3c90538422e3724acdd22cd09dd4"
+    },
+    {
+      "name": "get_variant",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "2815d57552531da00196ee4f4b8b296a8266f66ce412d0b2ef8dd900eb0a61d6"
+    },
+    {
+      "name": "get_variants",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "cc28a2eb1357c472abcef12867b760bdcc91a5761ec335e002eb3685026c0bc6"
+    },
+    {
+      "name": "query_chems",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "8b67887b52910e010a9facd5bb80734128accd60b9ad7ae344fd3fc9457a67ec"
+    },
+    {
+      "name": "query_genes",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "7e1398a6892ded6e9ec8b462cc9adfa863b6fada25537da61d7c3042312068de"
+    },
+    {
+      "name": "query_many_chems",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "32e2ab8f3ce5a8c478f461913cf1254fa83bf6c37efe9994d410bb97da56f52f"
+    },
+    {
+      "name": "query_many_genes",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "c679ea92f8d22a94cd3ff5a1d10fbdec466c10c0bbfc60be1488720e4890c0c1"
+    },
+    {
+      "name": "query_many_taxons",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "ab1d96adfbd2822ccbec68a55ef75eb2e6ea29208124db5b5e016f1da56207f3"
+    },
+    {
+      "name": "query_many_variants",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "2f53e1eb8ab8306d1820dd677c451854a118724aea885d7a9f716c0017952f9f"
+    },
+    {
+      "name": "query_taxons",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "ae9dfe1eecfbeaa458eaad585493fe3f3715e7d5fac14f7d476b26bcfa001dc8"
+    },
+    {
+      "name": "query_variants",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "51f267fd78832d2b6de269b14dcfeaf82ce6f2c142dc6fa08ad9da0e8bc7a731"
+    }
+  ],
+  "surfaceSha256": "5e366b73b22143bae5c3ccac2556a4d0779807f215e4253258ad7e15425038e9"
+}

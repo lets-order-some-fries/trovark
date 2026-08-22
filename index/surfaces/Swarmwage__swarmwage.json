@@ -1,0 +1,20 @@
+{
+  "ref": "Swarmwage/swarmwage",
+  "scannedAt": "2026-08-15T19:32:30.425Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.7.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "hire_agent",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "53168e2dc1572b96fb8fb46f54fcb42aef2765316a36fcdbd3771642c5a10c8e"
+    },
+    {
+      "name": "search_agents",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "b6a714ccdff198fb58ff0d2dd1cde67a997fe571dd461dde6c4f6cd86492d716"
+    }
+  ],
+  "surfaceSha256": "39d5138c35bbd1f22d315d6a947c2c747416a97d9761f7dae60a94d313a2f250"
+}

@@ -1,0 +1,50 @@
+{
+  "ref": "doctorm333/promptpilot-mcp-server",
+  "scannedAt": "2026-08-15T19:32:30.425Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.7.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "build_prompt",
+      "descriptionSha256": "1817f3ec9d529282a3f3e3a084cb00a380d038c36969bbe4c1734bf755a8ffa2",
+      "definitionSha256": "c3a4288548042ca6eb8e39594f7e07e28affc26d79524234a84c3d9ab238ff78"
+    },
+    {
+      "name": "check_balance",
+      "descriptionSha256": "a49bb3becf0457dae6c2716a7a43245eb662659647e8d28f1440e23af0ba2990",
+      "definitionSha256": "4a6dd3c9d2de7ab45e38db308c586b848885e45a07382a5ac737b02578de677a"
+    },
+    {
+      "name": "generate_audio",
+      "descriptionSha256": "24416d4618531e1aeede7cc9e3c893f5f753ba50b3566d23474e1f64bb591040",
+      "definitionSha256": "37562bce361012a6c04586935aa64018ef9bd9555e4b1f292407093a6538cfeb"
+    },
+    {
+      "name": "generate_batch",
+      "descriptionSha256": "e68d28c7d350f7238c15b5c75b206c6a451b68e4c75e3e1ae59fb97ef0af5a4e",
+      "definitionSha256": "d921c57a2833fb40e4d55b4718faf574b4bd1f07c8cf7f90a40f1867beda49f0"
+    },
+    {
+      "name": "generate_image",
+      "descriptionSha256": "09a4ed8b26a76599263a328abbadb8c0620856c0d42c4e81f06ee7dfa5bf8b62",
+      "definitionSha256": "6676fe98fc1ed2c212d487a12d63ca2d127162aaa4549459c5fd5d71a1a47089"
+    },
+    {
+      "name": "generate_video",
+      "descriptionSha256": "0710fc9b610a21543ab2140a080f42b7bd172b74a38704f0206e0a99fa0cdcb4",
+      "definitionSha256": "661e4e228c96b21466c587342a28d533816ca4b0d69189c4ca4c27d65d927230"
+    },
+    {
+      "name": "list_models",
+      "descriptionSha256": "044c59593f6e6267ce55b83b1a16d02d1795ded9e42067506cd7a5e5fb31c0da",
+      "definitionSha256": "7b71ab03746ef1dcc5ccfce362a9b1cbb54aaa3094ebd1b6ebaad749ac6613aa"
+    },
+    {
+      "name": "list_styles",
+      "descriptionSha256": "66da19880abec94bbc530a2c598e9b95d54f15ef6dd4619429cc1caabcb39e3e",
+      "definitionSha256": "50506aa3808deed52c4a449f299ab5886e1996131e3f3f81fb28b9d72a198b79"
+    }
+  ],
+  "surfaceSha256": "b724c06c746e8791c2d35ac091ccb52b51872fd80a70d8d573e61c67994f6b78"
+}

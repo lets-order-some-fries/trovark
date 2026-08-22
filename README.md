@@ -7,7 +7,7 @@
     npx trovark github/github-mcp-server
 
 trovark grades any MCP server 0–100 (A–F) from **static, public signals only** —
-maintenance health, spec conformance, security hygiene, and context-token cost.
+maintenance health, spec conformance, security hygiene, and tool-surface size.
 It never executes the server's code. Every finding links to its evidence.
 
 ## Usage
@@ -18,6 +18,20 @@ It never executes the server's code. Every finding links to its evidence.
     GITHUB_TOKEN=... npx trovark <ref>   # higher rate limits + responsiveness signals
 
 A bare package name that exists on both npm and PyPI is rejected as ambiguous — disambiguate with the `npm:<name>` or `pypi:<name>` prefix (e.g. `npx trovark pypi:mcp-server-fetch`).
+
+### About `GITHUB_TOKEN`
+
+- **Scopes needed: none.** trovark only calls public read endpoints
+  (`GET /repos/...`, `/commits`, `/releases`, `/issues`, `/issues/{n}/comments`)
+  against `api.github.com`. A classic PAT with zero scopes checked, or a
+  fine-grained PAT with "Public Repositories (read-only)" access, is enough.
+- **Without a token:** everything except median issue time-to-first-response
+  is still collected, at GitHub's unauthenticated rate limit (60 requests/hour).
+- **With a token:** the same signals, plus median issue time-to-first-response
+  (Health dimension), at the authenticated rate limit (5,000 requests/hour).
+- **Security note:** the token is sent as a `Bearer` header on `api.github.com`
+  requests only, and only ever used for `GET` reads — trovark never writes to
+  GitHub.
 
 ## CI usage
 
@@ -39,6 +53,7 @@ jobs:
 
 Set `GITHUB_TOKEN` in the job's `env` for higher rate limits and issue-responsiveness
 signals — the default `GITHUB_TOKEN` GitHub Actions provides is sufficient (read-only).
+See [About `GITHUB_TOKEN`](#about-github_token) for exactly which scopes it needs (none).
 
 ## What the grade means
 
@@ -47,10 +62,19 @@ signals — the default `GITHUB_TOKEN` GitHub Actions provides is sufficient (re
 | Health | 35% | Is this maintained, or one life-change from abandonment? |
 | Reliability | 25% | Does it target the current MCP spec? Is it tested, CI'd, pinned? |
 | Security | 25% | Risky tool surface, committed secrets, known CVEs in deps? |
-| Cost | 15% | How many context tokens does its tool schema eat? |
+| Cost | 15% | How large is its tool surface? (tool count — the serialized token footprint is reported as a fact where measurable, but does not score) |
 
 Missing data lowers *confidence* — it is never silently scored as zero.
 Full methodology: [docs/methodology.md](docs/methodology.md). Rubric is versioned; the scorecard records the version that graded it.
+
+### The observatory
+
+The index also snapshots every scanned server's extracted tool surface on each
+scan and publishes changes as a neutral drift feed — the only public index that
+remembers what every server's tool surface looked like last month. Snapshots
+store hashes, not content; drift events carry zero findings and zero score
+impact. Details and honest scope limits:
+[Tool-surface observatory](docs/methodology.md#tool-surface-observatory-d2).
 
 ## Reading a scorecard
 

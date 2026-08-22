@@ -1,0 +1,15 @@
+{
+  "ref": "AgentHotspot/agenthotspot-mcp",
+  "scannedAt": "2026-08-15T19:32:30.425Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.7.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "search_connectors",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "d28e649d6866988d6a193aa569be3541214e87476c7088e9503ba43f853c09fd"
+    }
+  ],
+  "surfaceSha256": "5c033acf51d89d3b97da824df6dcc277068d4b6960ab48b70d696cdd154c2bf9"
+}

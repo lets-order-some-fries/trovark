@@ -1,0 +1,55 @@
+{
+  "ref": "forgemeshlabs/coinopai-mcp",
+  "scannedAt": "2026-08-15T19:32:30.425Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.7.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "audit_trade_decision",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "d4314307e09d8156071426507dcf32975141bad7a8c142d839923b54bb27e7fe"
+    },
+    {
+      "name": "check_trade_preflight",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "8eddd8f6e5045e34848912d8125a0473566038a3a149b1f31dfb14f04ab3251f"
+    },
+    {
+      "name": "get_agent_automation",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "b51bde655df9b75569af677b508adcd07a26c82bcdeb15a0b920d1bd01cce117"
+    },
+    {
+      "name": "get_crypto_decision",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "7e42d86273514339d237a5843556f876d82a629496156268d4d04fcb6c2f38f3"
+    },
+    {
+      "name": "get_crypto_risk",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "f25b4cc24e48c4d3c6dc9735ea5bdcff1fd56d88a9a1f6e2233d59ccf3ce0eda"
+    },
+    {
+      "name": "get_crypto_signal_history",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "ea262e309c473e9097ff261612a0eef54de4e6c40e09e961e4d2fe9dd67e13b7"
+    },
+    {
+      "name": "get_crypto_signals",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "e02d6303a73a7cdfeba0155dc9b633df9c761641cbcf109cb0172ae86af6b5e8"
+    },
+    {
+      "name": "list_automation_categories",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "b33c8bde62a3dab82b22fdcd8029dd5f1db20201ad29665c4c086874976c13db"
+    },
+    {
+      "name": "search_agent_automations",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "33b24d4344e8cc7786f77e736ff388bb95d270e97588fb547b53dcba9e1711c6"
+    }
+  ],
+  "surfaceSha256": "84958fd57a3b637220a8f7e006ac37affcb2ac88cc53f09fabf655eac629033c"
+}

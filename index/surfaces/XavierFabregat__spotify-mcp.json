@@ -1,0 +1,65 @@
+{
+  "ref": "XavierFabregat/spotify-mcp",
+  "scannedAt": "2026-08-15T19:32:30.425Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.7.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "authenticate",
+      "descriptionSha256": "72f8449cb4b2fecee668d12a040562245fff2a2c025e31d79385f8be9b05c93a",
+      "definitionSha256": "19457d220236afdfebdd29895c5a35d78ec67e3043105d4833d433a8c3b86170"
+    },
+    {
+      "name": "devices",
+      "descriptionSha256": "1abb17d472b16dc93651c9b2f74f051bfb46a87d01f34c7f7ae65cb5dfd0f8af",
+      "definitionSha256": "38bdb2782617614050aa790b14d666778214081e840ce3b02ae83af5b7d0f0ea"
+    },
+    {
+      "name": "get_playlist_items",
+      "descriptionSha256": "ff3ef81a29a0af0261df6ec050b3fd5de41ae83c9c7c4ba2952c53b521c0e8a5",
+      "definitionSha256": "6188245310ce77e264696c5c76e087762f5a8c9fe3b66db13e8ed4bb043afc3d"
+    },
+    {
+      "name": "get_playlists",
+      "descriptionSha256": "d45e87961b9bb80faff08152c46f57b8e8c58b18629053a125f5a9bddc8f65ef",
+      "definitionSha256": "090748b46ac174d2e78faa9f9602c70b06342f63762625179a894cf572375b19"
+    },
+    {
+      "name": "library",
+      "descriptionSha256": "e2e91b077811e494295f6b8f1c21cf5a23e3f6546e1a38cf1ea3c05f4e5b4264",
+      "definitionSha256": "7e22f69daacf7b09db2149f2afaf421af8be3a793fd37383c9e1310d7bff228f"
+    },
+    {
+      "name": "modify_playlist",
+      "descriptionSha256": "e58af80aafc85fbb5afcdc761b31cac96eb4eef2b39b15a1ecf684a41d9bdd13",
+      "definitionSha256": "2f4e01cd375564ee395e65364e5a394c6cc137ac1c8bc14aad4f1d2fe5299b02"
+    },
+    {
+      "name": "now_playing",
+      "descriptionSha256": "cac230806a8f0f6da8be6eb6d790b6626e3f87cf476e460208697491e3e939c2",
+      "definitionSha256": "76b8e79d63b99a3ab055bd0531a86e18f43dd82f80cdf1b907b443592080ae40"
+    },
+    {
+      "name": "play",
+      "descriptionSha256": "f3605ba6185a6a4d008750a213fa13f399d85f0f5cc7d32e17ae23cb19cf4723",
+      "definitionSha256": "fa365424b161a2311771087c79ac648cc960407523ed3b5c9fedd2fb21af60bf"
+    },
+    {
+      "name": "playback",
+      "descriptionSha256": "25702dc8e0c52129d75547f8c618fc5926ca790d32d323bf00c8bbc8fd0af530",
+      "definitionSha256": "36d1247f0cd71bfe586f93dc417740a87363c294b792c74b8d24e9826c5b4e08"
+    },
+    {
+      "name": "queue",
+      "descriptionSha256": "846192dfcf65977651e0ac2b029f1e8b6f025707de8bc937597a6ee17a212fb7",
+      "definitionSha256": "5255c9e221690d6667453bb9f0657f7ed2bf0d5407ab68c169b44420a29f4c45"
+    },
+    {
+      "name": "search",
+      "descriptionSha256": "d869ec6b011739a8abfe807012c67c94e6854776f0c66dd9ab4804ca02c33173",
+      "definitionSha256": "12b9ebdf3f125eb26664fc008e1f21d3ae1741d60d530f899d009822fd836040"
+    }
+  ],
+  "surfaceSha256": "793c731b785f12f708aa3bbd92e8b0654f3e6c9d95c71c57846b598fb4a38cd7"
+}

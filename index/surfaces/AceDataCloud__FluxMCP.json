@@ -1,0 +1,40 @@
+{
+  "ref": "AceDataCloud/FluxMCP",
+  "scannedAt": "2026-08-15T19:32:30.425Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.7.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "flux_edit_image",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "fc166880c3320b13765e08bf81468184f70d34c3c3890757232f1590ed783dd0"
+    },
+    {
+      "name": "flux_generate_image",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "a853ffbec0019987e973ab108c008a687ceea6579f325800f9510ee9671c65c0"
+    },
+    {
+      "name": "flux_get_task",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "06abf9277af19d07f047e84cdd5811a758a5119b2c4e2547a6d4f7b176117104"
+    },
+    {
+      "name": "flux_get_tasks_batch",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "126e701a52c8c8ab3cdfbb963b28817d25246ac65e6607d349630456b517289d"
+    },
+    {
+      "name": "flux_list_actions",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "469ec245c6dd00869fbe1cdee6c6a700944c53de27346fcf743e215213d494cd"
+    },
+    {
+      "name": "flux_list_models",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "b22387d5306d15fadb37030e43c4206d0e2ce2303a68bf3f4a7cce717df3c817"
+    }
+  ],
+  "surfaceSha256": "0401f5207fa72def278c3cccd35d465131a1ef9185c6f373229ac3c43d611f7e"
+}

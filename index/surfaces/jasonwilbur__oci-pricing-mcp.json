@@ -1,0 +1,40 @@
+{
+  "ref": "jasonwilbur/oci-pricing-mcp",
+  "scannedAt": "2026-08-15T19:32:30.425Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.7.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "calculate_monthly_cost",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "a3851d3f16064d894f1be7cc0237f32c8d3b1b4abee663ef8972ccf15dd6346a"
+    },
+    {
+      "name": "compare_regions",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "efcaddae8308f6327725a3693ab936ebfcacd1908c2fbb7c4b24409fed4b2cb5"
+    },
+    {
+      "name": "get_pricing",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "7036a761893b29eceab7b592a85993e2777429be0d29ed2134227e5ce4912b5a"
+    },
+    {
+      "name": "list_regions",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "746aa0940e764c99e8f6b02889b42f5240defd40c5a8caa40a3bb5715a6b846e"
+    },
+    {
+      "name": "list_services",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "14df292aa43c54be6174d692e5b994af66edd6610825b5b4377d6e7c981e3139"
+    },
+    {
+      "name": "quick_estimate",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "a7ff22b757bc751d31b5994872496cc126c325e8fa1b9ddf0f973350782853a3"
+    }
+  ],
+  "surfaceSha256": "ba34a1df5dcd8505c8edaf7124976cfd7990b94f0dd7dbdd2825db59f994c174"
+}

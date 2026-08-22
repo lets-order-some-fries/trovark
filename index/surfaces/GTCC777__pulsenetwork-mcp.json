@@ -1,0 +1,15 @@
+{
+  "ref": "GTCC777/pulsenetwork-mcp",
+  "scannedAt": "2026-08-15T19:32:30.425Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.7.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "discover",
+      "descriptionSha256": "08b8646713346574d0ae0c4eef49480c9e14a9af00cb35b4c001fc1efc74c43d",
+      "definitionSha256": "c22e73452cb06923b1335ca6a973aeb7c83b455e9f40337dcc984c5aa01b5fa4"
+    }
+  ],
+  "surfaceSha256": "33d129831ebaf1a6410cf39e2595ee91293b147c55c2ed44b6dd27d5710c479c"
+}

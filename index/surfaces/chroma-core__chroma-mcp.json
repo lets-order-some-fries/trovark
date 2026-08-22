@@ -1,0 +1,75 @@
+{
+  "ref": "chroma-core/chroma-mcp",
+  "scannedAt": "2026-08-15T19:32:30.425Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.7.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "chroma_add_documents",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "e4910fd6680fc9d9d3b0e156d66b06099f71a5e23c7c1470329fc6483eb8d19d"
+    },
+    {
+      "name": "chroma_create_collection",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "e807d8a13860725025432bb44ee982732bd77471301e3fa41e43a50876b0c57b"
+    },
+    {
+      "name": "chroma_delete_collection",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "519c021d990c9389bf012806ebaed4e5d0fe553fbe24cb0ee71ccde835e2c9e5"
+    },
+    {
+      "name": "chroma_delete_documents",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "d82bde18c47cf9ac7e25407731fc2bcc1958983ce899dedd31a77e1a2590ef8e"
+    },
+    {
+      "name": "chroma_fork_collection",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "878baa9a5584672d950354d085f7385b1b9677683a833187b5936538be7fca8f"
+    },
+    {
+      "name": "chroma_get_collection_count",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "8763cb627e5754de6fb59af33d92c92e83b4cc48c149a0cb223d31263e43e415"
+    },
+    {
+      "name": "chroma_get_collection_info",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "56309a1dc7b107fa26d36f305001b888484e887f18dfffa73ca230d6ee5a15fa"
+    },
+    {
+      "name": "chroma_get_documents",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "f02f9a5282cdd3577200da81dd500fe593f6fd5bf7fa6be795571501fb68fb02"
+    },
+    {
+      "name": "chroma_list_collections",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "f3403b90701fc0e90761183eccc9664bc36382ab32adc0e00547d9852be2fed8"
+    },
+    {
+      "name": "chroma_modify_collection",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "5b1d3306f8ecfdb4b66661d4c50147c3037fb2e5d6e8e2009db03a341c4f5ee4"
+    },
+    {
+      "name": "chroma_peek_collection",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "1f1ba8d607787c6f9aa0f348c73d81f3c51a15ff261b1b129f1d4975d0278d73"
+    },
+    {
+      "name": "chroma_query_documents",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "3f00c82bee6491fda5071b5f5fae421d484723740233eeadcb640434e73c09b7"
+    },
+    {
+      "name": "chroma_update_documents",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "0b96d0575c483fd9aac4800886358be4979107ae2547bb30ca15b74429c06b44"
+    }
+  ],
+  "surfaceSha256": "81702d15659a59c668d46b82bf130683b3db2e07d865ca2f5e7ad62f27b23bb2"
+}

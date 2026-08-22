@@ -1,0 +1,50 @@
+{
+  "ref": "blackwhite084/playwright-plus-python-mcp",
+  "scannedAt": "2026-08-15T19:32:30.425Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.7.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "playwright_click",
+      "descriptionSha256": "0435f4a9ccf3a5e4c8e2ab564a9b9e510a61ce0f584354f197f84120bc678347",
+      "definitionSha256": "c58c6bddf6364cdc4415de4dc7bd9a69cecd470da6ed8aff3130b1cc1a6d5671"
+    },
+    {
+      "name": "playwright_click_text",
+      "descriptionSha256": "c5c7efceee85feeeb0f5d839bf4d287e64767f91499d2193c089b60e9237b607",
+      "definitionSha256": "131f452fb7aa25b1fb2f50493bfcee40578712bb57d8a4c5d15a9e65fa960199"
+    },
+    {
+      "name": "playwright_evaluate",
+      "descriptionSha256": "0d3a0f5f637a3ca339c8c9bef048bb7db6e97e99b3e930af4f90036cf0ae0eac",
+      "definitionSha256": "886ceec65e98a91f0cb83cf6360d9ed030e6a703ca703feebf9e6a9804ab680e"
+    },
+    {
+      "name": "playwright_fill",
+      "descriptionSha256": "9092ab55b68d8d48b44cd4637d7c45d295489784406d1d0b2811c64eb390c12e",
+      "definitionSha256": "b39840ce99caa4de19602b466b6f4e574f8926a8add71cbdce4a620c401d84f5"
+    },
+    {
+      "name": "playwright_get_html_content",
+      "descriptionSha256": "c2872463bdbf21ceea934efff438ed1c53793800d3344466e1efa790d6d124e2",
+      "definitionSha256": "4a6f59d8826f98aebaa5a97e3164b3ce7a3dc40d538994db5550c85b2be5a6b4"
+    },
+    {
+      "name": "playwright_get_text_content",
+      "descriptionSha256": "93bfa5fe6be50f096c8146093c80e62186ef1b3eb30b88e03fbc79a1381591bd",
+      "definitionSha256": "9cf589fa1f65bc3a3ee45f893363265007bd476a729529f45ddb483da0ae38de"
+    },
+    {
+      "name": "playwright_navigate",
+      "descriptionSha256": "a34cf603ce2097ec6bf3eed213b40b198384f8da8901ea099368e31081617fc7",
+      "definitionSha256": "b9757c58d73adb26d7a76dfcf0953404c135292a076f6257f570406eeb491d54"
+    },
+    {
+      "name": "playwright_screenshot",
+      "descriptionSha256": "5e3558916850d55baa3a9b5dfaec0755a8c16f6bcd03be7a78aadbc65745da85",
+      "definitionSha256": "56d60d993aa7fa99bf7b83f9a48506db60ba8270f2ef7e419dc04d3bcca489c9"
+    }
+  ],
+  "surfaceSha256": "995a876ce83da2eff3ed65cff20207b60e094cee92f9480d96198c0f0bee9f7e"
+}

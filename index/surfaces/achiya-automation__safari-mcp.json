@@ -1,0 +1,495 @@
+{
+  "ref": "achiya-automation/safari-mcp",
+  "scannedAt": "2026-08-15T19:32:30.425Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.7.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "safari_accessibility_snapshot",
+      "descriptionSha256": "c678ddcdfb3c45cf6398e3157250dae3522dac784fe7f2135c09f759b98bbdba",
+      "definitionSha256": "9859d27d50abdfe9d528c46765306e4a14f73435af52ea768253efd294f4f2ce"
+    },
+    {
+      "name": "safari_analyze_page",
+      "descriptionSha256": "251767e5171e24d3f023251054a1fcb3d992d9d6479f654f932c2d209ee180db",
+      "definitionSha256": "25a2c1a6765f454e09a6f05be6c7f480984a1ed2e68086687e836bbb523ed233"
+    },
+    {
+      "name": "safari_check_pwa",
+      "descriptionSha256": "8440db1caeb84aa06939e2a247a1fb0e9a5aaa04e0d74b092756312809034721",
+      "definitionSha256": "2f5b7ed387eab4bef8b95c4855146d6d9443939ccca65c8a85a3aba1a151fbdf"
+    },
+    {
+      "name": "safari_clear_console",
+      "descriptionSha256": "1001d4612af3bca4e35871743731efaa6e58b7db6b122865894154d8d7dd7ee3",
+      "definitionSha256": "dc3d62e3cec58d83fe8a09ccbbdb12ace1663845978494184d0a0aa54ce27c30"
+    },
+    {
+      "name": "safari_clear_field",
+      "descriptionSha256": "3cbd0aaf271f3a19231432bd0c5fc659b278ede022b793e6b30437cfe6a5b4da",
+      "definitionSha256": "599addc677e12f121afad1c434e2c9a9a1f105d72b9acac013e1a5fd3c1e80c5"
+    },
+    {
+      "name": "safari_clear_mocks",
+      "descriptionSha256": "9e2829fda5e65fcd49e9f0604c11427b9fc9453297aceeab7ded501ee737ffbf",
+      "definitionSha256": "0ffb316a097e9e7e7acf86352504efd3293febea5bc600df0f0c38c9e1378f6b"
+    },
+    {
+      "name": "safari_clear_network",
+      "descriptionSha256": "37cca310c3667bd3fb45f2d577bd59e37befae3ca979083751a89cc252b451ea",
+      "definitionSha256": "1c9647667c15d616478724880d3b5515272601c7fd31ff8047e2b3955af8bd65"
+    },
+    {
+      "name": "safari_click",
+      "descriptionSha256": "fddf164a21d367d4b690293c7b358f01b97b2e84cdc759f7d968ad1b4ce0b7c3",
+      "definitionSha256": "7421f36b6e905b1889bd396d426076dd64e7dca53e8bbb5e4877b5b8fee8c988"
+    },
+    {
+      "name": "safari_click_and_read",
+      "descriptionSha256": "cc676484d37a6287029e1cb3b009d3679344c1e3e00af9163fc6907e39a5f4a0",
+      "definitionSha256": "7030c0c20d259e0c0f3ea3d180d49ebc8f5cc488318db4f15fabe79b7be0481f"
+    },
+    {
+      "name": "safari_click_and_wait",
+      "descriptionSha256": "f6c8ad1e0d0f70d3aba045379c9d90cf485875f2a0a99aa8d1ce76dc0380b35e",
+      "definitionSha256": "5db41a36dd4977edeef5842be8f4275433ee5b1f7a2ec4fcecd3451450d27347"
+    },
+    {
+      "name": "safari_clipboard_read",
+      "descriptionSha256": "110cccc5ce3a66ffdff65cd461ff54fe86cd9c41e4730bbbe895fc48e1716ad3",
+      "definitionSha256": "49864ba51eb6be9114eec17cbb75ce22c18ca9807f9d71e15182132f0cfa3b7b"
+    },
+    {
+      "name": "safari_clipboard_write",
+      "descriptionSha256": "87c596b936847bce55af96bf51f0c99077a57b5e9fbb843d327c2facd72fef87",
+      "definitionSha256": "b4f56121e0feecdde69f535f63b2acbca4a3e2a8030329ae56ecc1c6789c936f"
+    },
+    {
+      "name": "safari_close_tab",
+      "descriptionSha256": "0294d996a45e56a9b04fa3474a23f18c37fd349a18fb1d00ae76030b8b98dd4f",
+      "definitionSha256": "c4508a476197fd51238031a3a5bc1b49d253ca77219b609f7148b8636124d5a6"
+    },
+    {
+      "name": "safari_console_filter",
+      "descriptionSha256": "d9850a7ad06a6f9fffef7f27450e9e043cc049254cefd9392e3c32f5eef447aa",
+      "definitionSha256": "c9c0e216e2609da87e2c4e083cecc00278fd61cd6f97756f5ee9000670aaeadf"
+    },
+    {
+      "name": "safari_css_coverage",
+      "descriptionSha256": "99f2c32aed811d0f218a6b25c5a4657df96f555fbefba543fa9b9c93d1c3dec9",
+      "definitionSha256": "949597427f3ec006cfa8a357673dd81cd173123fbca069b64dd0d9879bb0a977"
+    },
+    {
+      "name": "safari_delete_cookies",
+      "descriptionSha256": "0cd1592065e7105e4e057134627ec408e3bb568ae6c45659311cc32270d35400",
+      "definitionSha256": "9f89ba42399d2eca1fa7361ab3ed48ab3755b9bff54614514146108efe5e64da"
+    },
+    {
+      "name": "safari_delete_local_storage",
+      "descriptionSha256": "685a7887f3194b38cb505427c91ed5f0bf618c90bfd98d70804be5c2fadb291d",
+      "definitionSha256": "4bc88241390c5cda78808b6f2fca921a7d437dc65cf56abefb9069ac147d0a36"
+    },
+    {
+      "name": "safari_delete_session_storage",
+      "descriptionSha256": "372d4825eb5d7b509eb9e8cc33d9c82ebe0dcab4f1f23fd8ed3be626d0d6f983",
+      "definitionSha256": "9b77494c9cce2cc0152f2994c082414d29dcc5f205d840fca2ff09ddcd21d0d0"
+    },
+    {
+      "name": "safari_detect_forms",
+      "descriptionSha256": "99436abaacebb90b95adb8c0cc062c173ba4f3f9f9aca1245ede0c1e6c59acff",
+      "definitionSha256": "0301ba2ee61f41d1df748002d901cacbb7a5ad1e4b18c440fcb005ab20b475ab"
+    },
+    {
+      "name": "safari_doctor",
+      "descriptionSha256": "a602bbda761d044b364b4a56351e216e3884f0c39c1f14b0a093efd89ccf7cec",
+      "definitionSha256": "76f739004a3d8a1d12904a024db5a55769d35e9c0ffa23a5f23d2739aaac7ca7"
+    },
+    {
+      "name": "safari_double_click",
+      "descriptionSha256": "c6a2167dcf81e468bac6080058af1f22d0fef3e7388776fbabdc02fb10a140ac",
+      "definitionSha256": "6a173b5ded4dd535b3719c4d3c9e93e9f9c6c6055c24244eec59d1b5d478266f"
+    },
+    {
+      "name": "safari_drag",
+      "descriptionSha256": "66e7e1355c5305aae1312062d95aee4b31ecf01223d54d6318ce2f37605c4b88",
+      "definitionSha256": "8ae3a1ac4a6600b73e8ce0a2cdbdb6ce582d732ce9c9927578914e08b50f5847"
+    },
+    {
+      "name": "safari_emulate",
+      "descriptionSha256": "3ce5231693b40c95979f191ea5e6ee32efeb0f7a0ca2b1b4b46b7f5bcee1ce57",
+      "definitionSha256": "c805e3d80cce8076b4f9c94e6117c7a1f6a5b457b196c4ab4275824917507875"
+    },
+    {
+      "name": "safari_eval_file",
+      "descriptionSha256": "c488e4f19e253b5e84f628d9f02b797702ea11f2c0d3ec375b0e167d0cc92289",
+      "definitionSha256": "c9c9e0ca5913664570a42a0519c9c183f87407c3526d458d5c4d4b3d680492b9"
+    },
+    {
+      "name": "safari_evaluate",
+      "descriptionSha256": "bbe492239296b92601e49e1740ad9a41fd5decc077a17c3d5629644c456be373",
+      "definitionSha256": "502261c8c381018110bba77e92c72041ee617c38ebfe907c380a52c4f88f1549"
+    },
+    {
+      "name": "safari_export_storage",
+      "descriptionSha256": "b43cbd2f6fe84bda21d5bf67e125bb319ab7de6a56599705183d20cfc402b568",
+      "definitionSha256": "8d721b52ad045984851ada25949737c5abb5f46a4ca8bc92d6c85c6ec91ec79d"
+    },
+    {
+      "name": "safari_extract_images",
+      "descriptionSha256": "cc7352d252c20f1dbd15b8aa63cf86ea8ff72554c1395adc0d9cf6de15ad5ab8",
+      "definitionSha256": "27829427ee8b4dafd63ba545cc0093cfd0833ecad3fb1d01d07c17378fb6ebe2"
+    },
+    {
+      "name": "safari_extract_links",
+      "descriptionSha256": "30a724e0405cf24ca1eeacacd9a7c43c77203750c4c256fff0472768031508c2",
+      "definitionSha256": "417f02415b51ce56f099720baa3273bc9c20ed03cc537cbdae4a86bf24b40ad6"
+    },
+    {
+      "name": "safari_extract_meta",
+      "descriptionSha256": "a9aca0b58c1ccfb04f33f9ca94995d05322eec022a99262e2f0b563fcbf408af",
+      "definitionSha256": "10c9a3857dc646c24934d78956b9ba86e252c3616c62d06ebdfaa48a08f0ef37"
+    },
+    {
+      "name": "safari_extract_tables",
+      "descriptionSha256": "1d45fd314dd2e10e0f9002bf4fd14ee81d6648968bfa5bfe74e910cb62a4d8bc",
+      "definitionSha256": "52c095c7f6cd47838fa2e7381e378befd5d2a7565a8dada894b0122661fd78d7"
+    },
+    {
+      "name": "safari_fill",
+      "descriptionSha256": "0f1f555fa0900d6c75cfac6f6443a6b2cb804e70619f1205cd8b25ba387a2458",
+      "definitionSha256": "a175199f49c67088b4251abef38c2255c596449d5592596637bdfe90d5cd3e02"
+    },
+    {
+      "name": "safari_fill_and_submit",
+      "descriptionSha256": "5ea2a61cee1e1be4b8ff7c61d725f594a06b72108df5c1c32b4bbf695c906340",
+      "definitionSha256": "b4c78894ebf4c7be227234339561142a47dec34b14b7a4e367ebbe2a67c3b9e1"
+    },
+    {
+      "name": "safari_fill_form",
+      "descriptionSha256": "27d055f9f62c51047c08b2cbecd11c70cf33b5263c833434adfb9797cdc0da1a",
+      "definitionSha256": "85156de0a332bb205e6957abe16fd99b8a197138b822733399634694b42c386b"
+    },
+    {
+      "name": "safari_get_computed_style",
+      "descriptionSha256": "f63978b3043262f4a74565b71f41fd9afc19123a0f51889e0382a0d2413601f6",
+      "definitionSha256": "7ed76e68b316414fca7003cc104cf30df815b21c87df08538a2a88cc15138e26"
+    },
+    {
+      "name": "safari_get_console",
+      "descriptionSha256": "eb62a3afa5e5d5aa888328e0f94de4ed24a5589867f28bedffa10a31d9098d5d",
+      "definitionSha256": "a1ad4bbef11dfc3e2a010e71c31b0538e4d3d673e05f8afb4976a19fd696d228"
+    },
+    {
+      "name": "safari_get_cookies",
+      "descriptionSha256": "e7d8c57fbf1420ed6f2eef72254c68047cf6b0fde4c4110e6cf219532088e903",
+      "definitionSha256": "16d490890514741cea4a83afebcd570cdb7a895777653a9a6af8d310e8dde519"
+    },
+    {
+      "name": "safari_get_element",
+      "descriptionSha256": "6b6f6a54e14513dbb6129e89cc9fc92c259e02c067f2494565eab800ecaba3ed",
+      "definitionSha256": "80b81c0702625b3e86174e24218272f3437571c966f3541379037b3a5c60319a"
+    },
+    {
+      "name": "safari_get_indexed_db",
+      "descriptionSha256": "64f02e04f846566332042f767d24bc622ef8834f53f9bdea486ca53fac286be2",
+      "definitionSha256": "3fea70dd2451d26cae2990b230d13aa883e707a72c8fa9279c1c00cb6557e296"
+    },
+    {
+      "name": "safari_get_source",
+      "descriptionSha256": "6cf529126ece1f651ba8002e927c14793958ef21460ba7abdc1d27d190a24cb3",
+      "definitionSha256": "4da242e7511b8033ce4ec7331e0657c73e3f517951af651a73887df47582ba16"
+    },
+    {
+      "name": "safari_go_back",
+      "descriptionSha256": "01cf7c7127d7ebd1100f405446568fdd5bfd91353f944c467a12d0f7b870d820",
+      "definitionSha256": "e7ed2c6c405253915cd28acf933d12a061ee49b216d7ac92932455ca8d27897d"
+    },
+    {
+      "name": "safari_go_forward",
+      "descriptionSha256": "10a0d04697ad344e73d87fcf73d7f1b50610482d1055e5ccf979c20876927dd9",
+      "definitionSha256": "564ed4a2c1db2450d6f0523e8a23f542ca3106e0cff7725dec85af9641a44600"
+    },
+    {
+      "name": "safari_handle_dialog",
+      "descriptionSha256": "66dfaaf9e116c777e67cc8eb22bdd9f6a80145576a80ef3a44a426f72de402a9",
+      "definitionSha256": "1a5073add32e7c67fa395744d13967b6c735e14ab28f8c23cad627755d27ec30"
+    },
+    {
+      "name": "safari_hover",
+      "descriptionSha256": "c3d3d87f9d5a3e7250c35cb4eb7b67b4eb4499e4beefa48b3db61e2842716451",
+      "definitionSha256": "1137c4c2bb677bfef21aff806d99a8cfd4cc2b71d4f7ea7437bdca59c70eeb01"
+    },
+    {
+      "name": "safari_import_storage",
+      "descriptionSha256": "3b0504035b68b8b298ad9513b7c71f37627bb33c06e0e7cd40ba6e44ee9223ef",
+      "definitionSha256": "8afbb9a67a0a500e66b9a6db7f71f2bf832e4d029ced6c26d8e515aadfb107e0"
+    },
+    {
+      "name": "safari_inspect_viewport",
+      "descriptionSha256": "2b495321f9ea2774223bb028597b7d1bf39eb43823cbb7cec00e6f11591cebb8",
+      "definitionSha256": "f0ca5fc90bc57be8868f989b6d2a6a94a53a34685a1063c25181bf6ac54fad5e"
+    },
+    {
+      "name": "safari_list_indexed_dbs",
+      "descriptionSha256": "8cf12faea6824c74aeb76e9c9446676153cd29d20ae3afeac5010e4bdec7926e",
+      "definitionSha256": "236654f5289d048853bd696c663cc38685d4887bef9b3efb21908db909c7d821"
+    },
+    {
+      "name": "safari_list_tabs",
+      "descriptionSha256": "1895a82cc10028dc4beb64ca81bbcfcb8554c11eb7ac8530eb4d90f1e8787593",
+      "definitionSha256": "d22d02f643986c1120f4b95c5abee838fe432d965d7a9731773e9fed60063687"
+    },
+    {
+      "name": "safari_local_storage",
+      "descriptionSha256": "eb7848db9d9719502fca3ece41f1af886f66ff2ab3a3ae22f55c5ffdc8a0d004",
+      "definitionSha256": "e3fed2a355488d08fe5f9f6f1c36e949312c0e590dcdd5db0e99086736c1c971"
+    },
+    {
+      "name": "safari_mock_route",
+      "descriptionSha256": "d6356107c73477a3a1eb9d786000f284434ee82bb551c1c1a917c61c8a1f32ee",
+      "definitionSha256": "ca7743504c9d24d97269a14b37934310e279c4b39f0511de746358d2870576cd"
+    },
+    {
+      "name": "safari_native_click",
+      "descriptionSha256": "69bfa1d2ae4d47b8d41ec6d982247fc91a6094f8dc8781ba0f17dd8bf36ec81d",
+      "definitionSha256": "3ede5d0e673302780990d94e708c37423aa77c8af1f28450775c3be298ad569e"
+    },
+    {
+      "name": "safari_native_hover",
+      "descriptionSha256": "447b759f7dd84ed44a96602c99447c756432096b83718ffb2ecf980ebc7c21fb",
+      "definitionSha256": "62cb3a6ac07a6d8bba165780af81052b4864fc58e37d962c7cbebe120239c25d"
+    },
+    {
+      "name": "safari_native_keyboard",
+      "descriptionSha256": "2aa2023cb6171216edf5a738e6a805568756c2dd8ec475636c08eeac88b525d2",
+      "definitionSha256": "0364ec006e96c3210c05545f270a43e56869a9f3701e009d1cdfb643ed6c764f"
+    },
+    {
+      "name": "safari_native_type",
+      "descriptionSha256": "72427884aa50f535c938c9bd1d821d380d872425039ab0c65036e14a5c33ec58",
+      "definitionSha256": "2db57a051122f46f13f1ae0f4d11788f21ec30f6ce3065d5777a499fd429662d"
+    },
+    {
+      "name": "safari_navigate",
+      "descriptionSha256": "1fa434438d6fdd166841a32c19ce7961401e23fd02eeaf0546db98dfc092993e",
+      "definitionSha256": "07253ea31a7f4bd4dc74cc822c92c861f2daa1787429625259cb2d975fd94565"
+    },
+    {
+      "name": "safari_navigate_and_read",
+      "descriptionSha256": "5e9ad430bef74ed5fb7918ecb0209925c0a5b955d32ebedbebebf0388b2c7ca4",
+      "definitionSha256": "8be692c92f01bbc104ffac7c3b4f0fd581da955d73d5b37327ef8d95a0eb0229"
+    },
+    {
+      "name": "safari_network",
+      "descriptionSha256": "9ab2ac98dc5221a891df70c1904b3ecdf58e31830d21187bc475a1c4f87f9e3b",
+      "definitionSha256": "98960c9388eba271fa6fe8a73434d6549f6dbc36b50183d0816fe5c73bd615ee"
+    },
+    {
+      "name": "safari_network_details",
+      "descriptionSha256": "dd3795f0a5f085fb9f9b1335e67ca76d84c32c9c5c7f889c22282ebf553b10d8",
+      "definitionSha256": "6031d7941dc20207c135170ba793b8ebeaa12803bd69a8b369863f9f80b9a6e8"
+    },
+    {
+      "name": "safari_new_tab",
+      "descriptionSha256": "11c2c87c18dc999cb954ceaee5a3c4171b31dc5533830def1bd59304be6043b1",
+      "definitionSha256": "b7902c27c23e2c706ef3876bb77ed4dbaf1f8f841f8c04d331f405ba3430d4f0"
+    },
+    {
+      "name": "safari_override_geolocation",
+      "descriptionSha256": "120cd224aef7dc22e7b01e00588ab01eabf553be8b648327ea1b14c5216ad71b",
+      "definitionSha256": "1369eeec01f49b5abe6fdffa08413a1a5934b3c4a7eaad02702887489b631bec"
+    },
+    {
+      "name": "safari_paste_image",
+      "descriptionSha256": "7f30b480402da84b6829926b2fa99e16054a55257059f5e1bca2c73cc06d3d94",
+      "definitionSha256": "ba28ac6b6178157dc78f9863df1fc7b24d19457d8447fc1a283ea15a8ff7b8ca"
+    },
+    {
+      "name": "safari_performance_metrics",
+      "descriptionSha256": "084eb58532fda1f57da13b53639cfaf87544bdbbb3d78cb3c3438f15d528901c",
+      "definitionSha256": "42726c61183795cd6c814a0fd46de9a5fa85664f5a22b5dd74c0ad087cf0df5b"
+    },
+    {
+      "name": "safari_press_key",
+      "descriptionSha256": "b7ce4df84d6e904b3829a79768ece79d9a3e2deabe1e6ece5f746f19d4f7a213",
+      "definitionSha256": "65399c82e0745eb3e2bcaea6ecc7bb2eb5ff2bc681ce049b1f78d31d429796bc"
+    },
+    {
+      "name": "safari_query_all",
+      "descriptionSha256": "d5ce8d028f0bc6a6115b6370307352b452b7120c9029694e774835d6610e20ba",
+      "definitionSha256": "d01f716a1475ede01ccabe9a0ec868447a028eaf451938b0e76f2f33038e6781"
+    },
+    {
+      "name": "safari_react_select_list_options",
+      "descriptionSha256": "e2328d01cfc8ac1068cbcfb280959ad72546ec0d8210de3bde4a45adc5898ec4",
+      "definitionSha256": "d87f4d9c93600650455587ae615da21282984c0e0b0c82c52e6965ba1c4032c3"
+    },
+    {
+      "name": "safari_react_select_set",
+      "descriptionSha256": "6fafd561680e005d85dc0513306a6a9ec8beea805e9fcd2752d70faecb2329bd",
+      "definitionSha256": "a7943bc413afc45e34e1cc93b4500061c8c26a9d6d0cb11227ee38072ee3c5f5"
+    },
+    {
+      "name": "safari_read_page",
+      "descriptionSha256": "c0cc930e43a4e80e4f25eba586868e0dc08fdfdb37a27ab7f3e063fa0fcb15ab",
+      "definitionSha256": "2211916b1ac5324f2805c245ee75a4581cb6acfb452f3296141c9846c5608af4"
+    },
+    {
+      "name": "safari_reload",
+      "descriptionSha256": "982ebb6a7ea5f077473d4bf4b12860b8e50d3dbfd58fc5b957f38a6d8ad36cb6",
+      "definitionSha256": "c54bb605fdce08296ed5202157878d96809b8f52b94cd1dabc59fc562ab53976"
+    },
+    {
+      "name": "safari_reload_extension",
+      "descriptionSha256": "06432a94b8647af2ab3fad0ef4679efd4d4a76f86aa5a93f6d421b2a5b981953",
+      "definitionSha256": "da9c3bf55a8cee23d49be2bd8a6010b3740d3e91d6fcf3aa5e27dfd9acded77d"
+    },
+    {
+      "name": "safari_replace_editor",
+      "descriptionSha256": "d09eebb4c19fff4935ecc99307ebd443af935e77ae7c20c4fabb09e8ef092005",
+      "definitionSha256": "f2759def437d68c3f0166507ce4a41f162247631586d8b5942246207f67802bd"
+    },
+    {
+      "name": "safari_reset_emulation",
+      "descriptionSha256": "2ea370e02ff2f00681f8f251318e3bfcdc72f135de6622f5e126d138fd0d2900",
+      "definitionSha256": "f754a03710c1ecc4690ae267f987e12081ae47b3c19729d1fa536b12823a8d61"
+    },
+    {
+      "name": "safari_resize",
+      "descriptionSha256": "daea935ec8a02035135bbedadea776b21e243b11fdc97c49a3dec37f4e96c527",
+      "definitionSha256": "3a90c4f439ef7745cb796b2a4431f06cc50bd4d240fb8f834059d36758dd6526"
+    },
+    {
+      "name": "safari_right_click",
+      "descriptionSha256": "c7ba9d3782d4aaa437881c51cb970824d950f8791887f3901a92e4ed5f8b4029",
+      "definitionSha256": "747f60b41675a12276af2fc7cbad3c6e6c0622ae525590af144b086c97b95f00"
+    },
+    {
+      "name": "safari_run_script",
+      "descriptionSha256": "0721486630018acfd18f668b15d4c876d3e468a7ac3de5070ac4e5da36657911",
+      "definitionSha256": "90ff2788b4da2d244feec46bf79897e956c75cbce64658a8653a7adfb55f9714"
+    },
+    {
+      "name": "safari_safe_area_insets",
+      "descriptionSha256": "4a8cd8a79f8db239a9b283abdfd4fcfd9e0b70c6bc51dce9454545cdfdf9a709",
+      "definitionSha256": "3b08ac4708497cf42a5a695ea90c4365033e393adafed5f86b71dcf8d3151f14"
+    },
+    {
+      "name": "safari_save_pdf",
+      "descriptionSha256": "812c906b2564f7c84bce4d253ef119ba8ad634c0feb0a97e826d2dd578aec64c",
+      "definitionSha256": "c1d53b03b9496b921b370c6c1f0503c2b445d31a7e95a4fecf1aae4c166e22c6"
+    },
+    {
+      "name": "safari_screenshot",
+      "descriptionSha256": "bdddc5da3fa2034a88a0b077c6fa90c9d1de655f0a744f6e9ab1ce6ec65f05fe",
+      "definitionSha256": "f0a3d8d4271875542ea5a8726ece29f3945baf9f43bf10beb712e9b2926a7418"
+    },
+    {
+      "name": "safari_screenshot_element",
+      "descriptionSha256": "2823ddf57c7726bf7776f7f2375fefd3293f78d04cae34c291d310d2e42816cc",
+      "definitionSha256": "88eca13c05fceaf924240e27c663cf55e9d59edfe84ea4c2a95be3008d97bf83"
+    },
+    {
+      "name": "safari_scroll",
+      "descriptionSha256": "4d260f7bc8f444d597730eef5b51040e0910594e11b497c931d3a426ce2e711c",
+      "definitionSha256": "879c721a3b3d029149171be3f936e528442fbd2a0375e9c203793139324b2e61"
+    },
+    {
+      "name": "safari_scroll_to",
+      "descriptionSha256": "57abba1b898eae8592ec0c27afdbeeabf444c4cb2e7e2d8ed98161869633390c",
+      "definitionSha256": "9f6a3c3097d1bb5ef0682b156c9a77b739a2662eb4e3e63b817a3270e8ddf7a3"
+    },
+    {
+      "name": "safari_scroll_to_element",
+      "descriptionSha256": "5ab9cf2e78e2c587cb506d7800731a0b9195fa182ac5d14457e613935f8e5635",
+      "definitionSha256": "8dbc46dacd26df079fe506bea4273ae4da9bb5b9f99fea69efb190d35d434c80"
+    },
+    {
+      "name": "safari_select_option",
+      "descriptionSha256": "7d30d8f7ea560bf1a2b12279c70888e521557d230120db6b56c9cb3a38969382",
+      "definitionSha256": "c3124f35b8a4165937b1b302737771471293f0892ea57e6c7a904e983cc2d7f6"
+    },
+    {
+      "name": "safari_session_storage",
+      "descriptionSha256": "9a4ad5a00590f2a2913e67ae001eb3c4b7100e9c2b04ee228bef2b8720017ba3",
+      "definitionSha256": "d2be19c75e075e2f13394dd81c1c235e63ecedcbcf91d994a709f29c0b3fbad5"
+    },
+    {
+      "name": "safari_set_cookie",
+      "descriptionSha256": "58044a2e9c48665a05e3b687356fa40a1f80b7e8a34131e7bfaad0c039acfee5",
+      "definitionSha256": "298d3cf449e144233dddad67b4d4b284bf22c37862072e51ea0dc9567145969b"
+    },
+    {
+      "name": "safari_set_local_storage",
+      "descriptionSha256": "23cfd07fb0c37ea196a05da050db790dfb0f583c00fac0489b06cc068ab32060",
+      "definitionSha256": "0f8867ec98d089ae8607740292c26855d409cb8d3d35b12ff2a4323a2a5aa773"
+    },
+    {
+      "name": "safari_set_session_storage",
+      "descriptionSha256": "39be68c44ca67e82a90fea29eb3c767e87cec121a0c98b7898d8c05a07e711b7",
+      "definitionSha256": "4ca2ef45b9b81b95e8e16dc9dfbbbe9a0c42e95cc79ecf661f961f90cd75c6b0"
+    },
+    {
+      "name": "safari_snapshot",
+      "descriptionSha256": "d4f00643ff8524958ef8740f466043c905f92142c489069a927d9d07383112ae",
+      "definitionSha256": "1bab52d02c9724744fcef8b7b5002cf199ceeeb1876da733d0a0b896c0732b46"
+    },
+    {
+      "name": "safari_start_console",
+      "descriptionSha256": "b8d44b6ee3dc6aa709b194c6f5b8c9e460fd6f4d07a26a475e5a2a05edc8f231",
+      "definitionSha256": "7706d2b892dd9cc1e8fc84df8aece684bf660ad64a3b946b7dace0062ea81d79"
+    },
+    {
+      "name": "safari_start_network_capture",
+      "descriptionSha256": "789f41df553dca513d1c986a20b0590f01b01eb67153e7174ed0ba9280efbf69",
+      "definitionSha256": "5f8a0a5c4288c9c3226371e10dc294f36e97de02622aab6adf1ce46ed3abb98d"
+    },
+    {
+      "name": "safari_switch_tab",
+      "descriptionSha256": "345de94154596ce8626b515461acee664cd7931836cb5483e8cddca702241ad7",
+      "definitionSha256": "282a52da4078823b07de274599914bcb35c28ed45acb4bfb18823cf20a97fff3"
+    },
+    {
+      "name": "safari_throttle_network",
+      "descriptionSha256": "c8d8fe1ad4272c219bf02ec1e869d74900e49fe2323063a1eaca625d42447940",
+      "definitionSha256": "7c0441862fd8590d545966bce3a4b7de78ad0f1c18cf949111268e1c7c400f08"
+    },
+    {
+      "name": "safari_type_text",
+      "descriptionSha256": "58ab8ff5d160f580514d9dbcdb4d308c539e171d0b2c20f2c29c47aafa833da1",
+      "definitionSha256": "20edd483bf7076c20241d6392e36fa5368cd3786d3efcbd5fa445606f57bd0c9"
+    },
+    {
+      "name": "safari_upload_file",
+      "descriptionSha256": "c39384557e2ba80e0737eef5f32123193e546983c1c4f6e1751e3ac425f08854",
+      "definitionSha256": "ff5327743d65217eb2922e0622ee1efc4635226a2169fee744fe6607c8ebe449"
+    },
+    {
+      "name": "safari_verify_state",
+      "descriptionSha256": "fec883ea132eda46e08601d414f42df36edeb49db13fec0b5381a5de8e4f8cd1",
+      "definitionSha256": "63cde1c89562fb8a80e3095f0c7d0f5df0466f36fe195f4980a4b61a10055de6"
+    },
+    {
+      "name": "safari_wait",
+      "descriptionSha256": "a588789c7d89b7217b141606cdb4483abf79c7b735fa25329ac4e69607e5573a",
+      "definitionSha256": "8bfa17c16e1692efd5ee61f27d862778cfac71f35e5a02ac1505b9f024d6b83b"
+    },
+    {
+      "name": "safari_wait_for",
+      "descriptionSha256": "f87d74269e0acca3c027867949f8461d8504e51dfc6827657718e50d4aff1d73",
+      "definitionSha256": "61bb44c6f17ec89d8cf89ed85f186e8e21f6396aa91054d73971d281f1f66048"
+    },
+    {
+      "name": "safari_wait_for_new_tab",
+      "descriptionSha256": "699ecf0f08af6823ff1ca9a492265dffd15740bd0b834678312ef4841eed9ab3",
+      "definitionSha256": "22e81cfbfdb9866256ea5a60abd1e05682da14db9a54370b8d8c0ce803f0cb07"
+    },
+    {
+      "name": "safari_webkit_compat",
+      "descriptionSha256": "bce59dde406251eb513d6dadc5752741921f7e7682fab6ff0e82b6c11db869d6",
+      "definitionSha256": "3593159d710dc953c4a2ca62ad12269e9028399f33b69f785a89e3c17d02ded8"
+    }
+  ],
+  "surfaceSha256": "b5cabe30fed86e6d40b13709bef80602c78ab71d195c72f48924b0c01cecbcac"
+}

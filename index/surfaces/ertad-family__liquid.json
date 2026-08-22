@@ -1,0 +1,50 @@
+{
+  "ref": "ertad-family/liquid",
+  "scannedAt": "2026-08-15T19:32:30.425Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.7.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "liquid_connect",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "d5be6f61c2fc68d05560eba6865bf632ba1135a482deaa63e43341cc055aa351"
+    },
+    {
+      "name": "liquid_discover",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "61635c11538ccfc3fb8956fea024c7088b408c693294c8dfcc2a47dc6ef2beb9"
+    },
+    {
+      "name": "liquid_estimate",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "9c2f8b393a89c6fdc6ecd8a5e785f7482e4a49af3df95898c4d9d74a08162251"
+    },
+    {
+      "name": "liquid_execute",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "85100029308ed6020d479b5bdf9292d4b44f5d1e4c95c63423068b77231bdf82"
+    },
+    {
+      "name": "liquid_fetch",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "27275ad041bfb5bcd27921e1081a5c67f12812ad3cdeee5a62d314e273289d33"
+    },
+    {
+      "name": "liquid_list_adapters",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "c52a7fcb471d37bfc6c73f61862829a81d99e5f7eff7fec46ab5f6ede6140850"
+    },
+    {
+      "name": "liquid_query",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "a18b75f38849ea965d35496f9c4a480925a26dca87634a49b4fd84d3b3ff99a5"
+    },
+    {
+      "name": "liquid_sense",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "4ded5c04ef0ae2a6c6be29151bd96acb5fb17a3bc65b90e496b27107c83953c6"
+    }
+  ],
+  "surfaceSha256": "360ac94aa0a268efe18143c5793c762a191f33c196fc61fb441ada7897587c12"
+}

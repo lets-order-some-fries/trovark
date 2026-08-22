@@ -1,0 +1,40 @@
+{
+  "ref": "r-huijts/rijksmuseum-mcp",
+  "scannedAt": "2026-08-15T19:32:30.425Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.7.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "get_artwork_details",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "0ce39405ac1df3cf7784b65c9f28d21094d8a72c99c9ba73c0841c73d4e030d3"
+    },
+    {
+      "name": "get_artwork_image",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "73f1cb2e300701f160b41d1cb44786ca0437960e9712b5d11b0f59698bc6c9ea"
+    },
+    {
+      "name": "get_user_set_details",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "343bef44b3159de1ac2023ee4cc821a8aa776e87fce89577d637e7db29531365"
+    },
+    {
+      "name": "get_user_sets",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "f6dac081d906718f1b12e87b77420be83b72fca82166cc0bc032ac07f7ff0982"
+    },
+    {
+      "name": "open_image_in_browser",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "a5b9b0ae668deffeeb7d2d21f01b5c80252ed1086014450632f66ce1d10afe2f"
+    },
+    {
+      "name": "search_artwork",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "75739dd58884f591c764b55ce335e229ba690735621fa0ad75d1f9ddc9142d5a"
+    }
+  ],
+  "surfaceSha256": "953f6f47220908bedf331c849cda877d86db7bcedb393f88a02a1466c69c613a"
+}

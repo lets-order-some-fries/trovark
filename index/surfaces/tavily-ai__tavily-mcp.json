@@ -1,0 +1,35 @@
+{
+  "ref": "tavily-ai/tavily-mcp",
+  "scannedAt": "2026-08-15T19:32:30.425Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.7.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "tavily_crawl",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "40e8bc7335ef0f8af96fcb61bd7eed1ae5a021ce39e5c6a09f6a55223562e43c"
+    },
+    {
+      "name": "tavily_extract",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "ef5fd7fd0afd576eb9ebd15e26f61c4973317f3b1f32457e6fa61e67cbe885df"
+    },
+    {
+      "name": "tavily_map",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "a600a4becbdc7d9da03a3694d11baa52ceb3f5a7f8557bef1e2bc25419cc749c"
+    },
+    {
+      "name": "tavily_research",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "542e99fff2dff6a2a2a311e1d999a9cbe914642f55daf35581c279903a6023ad"
+    },
+    {
+      "name": "tavily_search",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "571b89f0f44b9b389f78a7d30c147377c5f2b677494656e6f1b8871d70db2807"
+    }
+  ],
+  "surfaceSha256": "f78fdcf0511cd8676f58ffab6b77232d9007f54692c8bdb6e20e3188afec521d"
+}

@@ -1,0 +1,30 @@
+{
+  "ref": "realwigu/mcp-doctor",
+  "scannedAt": "2026-08-15T19:32:30.425Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.7.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "bench",
+      "descriptionSha256": "606b26527e561719a8b8a9c30f7c430f9ffebf6d451400f60c7b63b970d21597",
+      "definitionSha256": "e2c97399c979964fe7b96f2297980bc166a78307fa5dd984529563764dfb0852"
+    },
+    {
+      "name": "doctor",
+      "descriptionSha256": "15bffe7158507005aa44c4db9caa2e04f2d79bf42d9f9192a908e524d049ebc3",
+      "definitionSha256": "c80e72a24c01168fe83965d5b4013f898fbd1010c0b8e07a68c5ea3c91956be4"
+    },
+    {
+      "name": "scan",
+      "descriptionSha256": "53da4434b8da21ce19ab44a9a67d6101484a5651c294aea39a2bbe111481d356",
+      "definitionSha256": "aa29456aebfd85e3c9eb6c6ed5d0839200c9dd83741f362300a6b6e741c2a219"
+    },
+    {
+      "name": "security",
+      "descriptionSha256": "9978076ca7a90dfe03bd2bcc34c20c410f546d6b92b2e048cebd836dedec414c",
+      "definitionSha256": "97c52f40b6ae56a7e36e64ec502330209c7d5b90f9fe9a5d64fb7d43be0cd159"
+    }
+  ],
+  "surfaceSha256": "e5a0a1ae2ebed25cd152dadb443b6b595e0537f564a0b4a94b1f727a82911fab"
+}

@@ -1,0 +1,45 @@
+{
+  "ref": "8enSmith/mcp-open-library",
+  "scannedAt": "2026-08-15T19:32:30.425Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.7.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "get_author_info",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "043ba66a3af1361db6998d5d2edb8e9d4c46ac6abc39f4f2ef310989a606d810"
+    },
+    {
+      "name": "get_author_photo",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "1d45d3003d912f7b7277f3115ac15dce1d761e70d328f5ed980676f5f71e4e9c"
+    },
+    {
+      "name": "get_authors_by_name",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "dd31614003078365a866ec3aa4521ac5dc739636547256d134d47eb4151a370c"
+    },
+    {
+      "name": "get_book_by_id",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "72cdeed936253fe1abd8478a2c7ebf98dd980a5092e5f80b6e8368a0e4f4f591"
+    },
+    {
+      "name": "get_book_by_title",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "d4a6570fe9a1e8ade4b179d7fed8e324c173e36f46cad68aa54976d36e6be3d5"
+    },
+    {
+      "name": "get_book_cover",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "8bfb0ff6a7f222e060bf69230ff8de69979049af8064ade9543f12b5765b5117"
+    },
+    {
+      "name": "search_books",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "d1df078b2b2c7210b34a42cf7ddcc29dc10adaa957b75317e00e418ce7616ab9"
+    }
+  ],
+  "surfaceSha256": "668db5927a5e2f7b950b2e143bd85f3e9dd6a13b13b1b7960fff4ec51a9758aa"
+}

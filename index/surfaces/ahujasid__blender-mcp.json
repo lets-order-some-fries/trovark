@@ -1,0 +1,120 @@
+{
+  "ref": "ahujasid/blender-mcp",
+  "scannedAt": "2026-08-15T19:32:30.425Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.7.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "download_polyhaven_asset",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "559594736290109ae8eac6f09be5064cbc6f3b6312320d4184e5e09b589de3ff"
+    },
+    {
+      "name": "download_sketchfab_model",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "534dd441fbcca24d1c66398d85da9925242e864b8856b557b4f7afa3497a74d4"
+    },
+    {
+      "name": "execute_blender_code",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "a6b6cfe616e85b670cd15b794e907880ebd3760bc9d3e6668a3005e7b950f16a"
+    },
+    {
+      "name": "generate_hunyuan3d_model",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "166f745fb27ee908c8c2af5d42a2242359dabff415ec45aaefc4c6188a503e14"
+    },
+    {
+      "name": "generate_hyper3d_model_via_images",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "023177b89c60f98240b5b33dc56b162a2ffba6bef6cd29cfdaed589703f0fe07"
+    },
+    {
+      "name": "generate_hyper3d_model_via_text",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "bdef704639d028469474b974d2b40e7ac294f2d35340818392cad2ab5e4816b2"
+    },
+    {
+      "name": "get_hunyuan3d_status",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "b2fe085356f4c7eb892745a6164ec4ced1d33f92752738677a77c639d53b8707"
+    },
+    {
+      "name": "get_hyper3d_status",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "8a90cc912c6c68fa38e01dbee4f7fc7920a0032b664bba56b833ec0fb69ac9ef"
+    },
+    {
+      "name": "get_object_info",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "9550dcbb60ab4b9abbba8c06a49154bdfc20ee6bf5423f02241420d9dbbdc032"
+    },
+    {
+      "name": "get_polyhaven_categories",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "d078a77165c714905eff74194f7851e70840e4fe84a62c893729961e958574f8"
+    },
+    {
+      "name": "get_polyhaven_status",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "6294c7dc7ba9e4c7800ccf6d0ac7ad097c263fca73ba43331e5e6c9541674590"
+    },
+    {
+      "name": "get_scene_info",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "9d635c31f8e1a9309817693a9abc0c0d3f60b7750250385711edb3663084c52e"
+    },
+    {
+      "name": "get_sketchfab_model_preview",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "261a4318da10f9708977f817933b8236163bb95ed39402619c6a539ce814e406"
+    },
+    {
+      "name": "get_sketchfab_status",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "748cd4ed50c299d67277ffe4fb5daf92fb31e982c340d75176e7b0b36ed6413b"
+    },
+    {
+      "name": "get_viewport_screenshot",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "8462d796a5805998bc8c63c39297f5314417c443f83ed9146d201cbd64d6c0df"
+    },
+    {
+      "name": "import_generated_asset",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "efb0e1e43b9830467dcfdd5b69d211ccea5554d11fdf7b383be92d9413543fe1"
+    },
+    {
+      "name": "import_generated_asset_hunyuan",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "cea9a8a9ee8975fadee4b0e2f3a3ceb11b5ab541f8d1e705d1956089f36352cf"
+    },
+    {
+      "name": "poll_hunyuan_job_status",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "9d6a628a0d5d00fe1cdea63efaaa1104df40ae780ec88692e113676a40536231"
+    },
+    {
+      "name": "poll_rodin_job_status",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "3ec620927098ab0c675812b25ccdb2921f5a758c4e440064f86f1d8c8b992cbd"
+    },
+    {
+      "name": "search_polyhaven_assets",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "a4480679ee06ca18c8be1ccf8bdddde2440c4eaf5f285762164be381180950d5"
+    },
+    {
+      "name": "search_sketchfab_models",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "98c08759932b9834cd9ddfa9e777515bab9587223131c59efef757f6a0445d3b"
+    },
+    {
+      "name": "set_texture",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "b6ca628599edc067a4c2d39dc34c6776ff9514d76284af4ba05bdbcb1c4f5875"
+    }
+  ],
+  "surfaceSha256": "64f70a08126122f2ed67019699bbb7a1af352a0f09f51f64372ad2c6c7adf987"
+}

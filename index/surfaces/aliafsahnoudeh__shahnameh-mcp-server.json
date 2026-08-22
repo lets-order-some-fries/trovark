@@ -1,0 +1,40 @@
+{
+  "ref": "aliafsahnoudeh/shahnameh-mcp-server",
+  "scannedAt": "2026-08-15T19:32:30.425Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.7.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "get_chapter_by_id",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "41a3fc4c95aa47736f54ec30c194a875d20bbe85b3356b634b5375510b84083c"
+    },
+    {
+      "name": "get_chapters",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "be2aba98baebefff39749ee571835fbaa19d31a19542feb8fcdd70b698204da2"
+    },
+    {
+      "name": "get_verse_by_id",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "1655df078caf467dd3c91e8cf062f485c2f1e9e56b494cb8971dac239bcb3ceb"
+    },
+    {
+      "name": "list_chapter_verses",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "2214fff24ef7f9f9261c1a80d63213992d2619614800881007618e222bb6ef83"
+    },
+    {
+      "name": "list_verses_by_substrings",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "8e1c6b2e4188a322422fa7be3e5e5a836ef4fbc96fcce4bf5ed1efb7ac4665ea"
+    },
+    {
+      "name": "search_explanations",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "e306837bce5550c90b51e2555a5fedf15e3a6defdee5138193076b0cd1affe2f"
+    }
+  ],
+  "surfaceSha256": "24ef960f564afcf3c63d612e700102582bc1b215e36aef34d4e5c7ea2838850a"
+}

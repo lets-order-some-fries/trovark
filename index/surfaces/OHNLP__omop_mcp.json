@@ -1,0 +1,20 @@
+{
+  "ref": "OHNLP/omop_mcp",
+  "scannedAt": "2026-08-15T19:32:30.425Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.7.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "batch_map_concepts_from_csv",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "a188a292c300867afbc930adf899e47c661ce9592d5d177d7ec13220783da701"
+    },
+    {
+      "name": "find_omop_concept",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "916e456dab09bb5d3c1af2bef8792b34802922a0ce051df6aedca27defc937d6"
+    }
+  ],
+  "surfaceSha256": "e3ed7695a5bd78fa9be4a2693e0cca942e9b705d49beb6ef2f98462fb4c4afb9"
+}

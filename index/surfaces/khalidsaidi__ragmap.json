@@ -1,0 +1,40 @@
+{
+  "ref": "khalidsaidi/ragmap",
+  "scannedAt": "2026-08-15T19:32:30.425Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.7.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "rag_explain_score",
+      "descriptionSha256": "0bd321f60372a74fef620aa4f152bb8e318c2ffd4f7228bd160341e076086396",
+      "definitionSha256": "1c511d0fe098bffd22a56568f0e0043c5f34f4889945fb7ccc93036ccd4ac88f"
+    },
+    {
+      "name": "rag_find_servers",
+      "descriptionSha256": "e2b8e1186cd51838d89a4927160aae752345eb53de9ef5b760807a3b4653ecd0",
+      "definitionSha256": "c6f0df656fbb8ddb6393d87b3944b51614b7387c7994cb5925ec578d1a833b45"
+    },
+    {
+      "name": "rag_get_install_config",
+      "descriptionSha256": "5e6b32563000145f7c4612b02824befe264a77bebbdc20e9d1d7a029bcee794b",
+      "definitionSha256": "f7c7dea2381e46ea11b054eca20cb77d6af84304d1c7d89c835b39dad0d895d7"
+    },
+    {
+      "name": "rag_get_server",
+      "descriptionSha256": "ab667e810e325a505b7013d026fa7f3f8af74016557892c95d1975175f9c3779",
+      "definitionSha256": "a899ce2b636b55681e24b1df0ce46d162188bcaa15fbeb4ba0cb8b9885669e9a"
+    },
+    {
+      "name": "rag_list_categories",
+      "descriptionSha256": "d0e91c388d914a05462a6a769be2dafe0d6548ef3478ca154cb6c012b4006114",
+      "definitionSha256": "742c54002bbf280e58049128acbc0b6daa5944ab39609a740756cd563fc35308"
+    },
+    {
+      "name": "rag_top_servers",
+      "descriptionSha256": "44ea9a150a92592052d2cac523f70c9ab135352a3ff8b82c251b562ccae17fce",
+      "definitionSha256": "fb2c44fc7c1324c09464bf272d19a5a83b01253361fa8a80a373ec7e8afd34a6"
+    }
+  ],
+  "surfaceSha256": "fe6bdc6399fb1f7c697726703d9f0c85dd361f0739d64e759dbc661c3f02486c"
+}

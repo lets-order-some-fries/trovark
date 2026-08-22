@@ -1,0 +1,35 @@
+{
+  "ref": "Flux159/mcp-server-kubernetes",
+  "scannedAt": "2026-08-15T19:32:30.425Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.7.0",
+  "source": "readme-catalog",
+  "tools": [
+    {
+      "name": "cleanup_pods",
+      "descriptionSha256": "c8b667c351a6f8d6e6a4c126da773dfc33314a00201932413c3f6151dd42dd4a",
+      "definitionSha256": "ed2a0d9267d1b5d195ebd1176564bddec911c196f0da538b4ff6ab4c50764616"
+    },
+    {
+      "name": "kubectl_delete",
+      "descriptionSha256": "068d6e01e53eb842dad0d90b08fbc8f705cc833e6b02adfc7fd032772db80b2f",
+      "definitionSha256": "7cdeb63a25ecccb4641e79b4044691a1f758f69eb80f577b71e13af3a21c77a2"
+    },
+    {
+      "name": "kubectl_generic",
+      "descriptionSha256": "9ff6db45f8277c1d623c6a5caa3730f6cabd67ca3386ffaf3591d840097bc12d",
+      "definitionSha256": "1c0005e09fa58e559a4fb17da7a33fe31cf393da75fa39a5ee0f8316e227567a"
+    },
+    {
+      "name": "node_management",
+      "descriptionSha256": "fb995bb1e15cef4ad6ad5cf65b58ddc8dbbbbb0a362f9d874557191d58dea278",
+      "definitionSha256": "bce7e3e110cbc89bf9bf96ffd9a24dae466bfcf2f4456fedc67a1c4590df1afe"
+    },
+    {
+      "name": "uninstall_helm_chart",
+      "descriptionSha256": "2cf40330d8b319fc8629d6151ddf87400247eafbc9c8e0c635848e8430b3f12f",
+      "definitionSha256": "4b7a77bd65b6e805169270c2fc63218cbcad902f41309b137421fb6689a3df05"
+    }
+  ],
+  "surfaceSha256": "c9be5c55f7701677dd08569ac5bdff29c1e7ba993482ddef3c2c75fec33c1728"
+}

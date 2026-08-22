@@ -1,0 +1,35 @@
+{
+  "ref": "aashari/mcp-server-aws-sso",
+  "scannedAt": "2026-08-15T19:32:30.425Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.7.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "aws_sso_ec2_exec_command",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "f816e8b3aa7db8b5e023b5d704b8b8362fb0aa173457805c3c02825b76d17cda"
+    },
+    {
+      "name": "aws_sso_exec_command",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "b354c4c6ddbbf168b8ed4b37a7839026e788b018025307a26acacef598989c4c"
+    },
+    {
+      "name": "aws_sso_login",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "43aa9c141f02e634389924a7b64315c0ba540d45d66054fb9ab9231beb9863a5"
+    },
+    {
+      "name": "aws_sso_ls_accounts",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "4f0ab1cefe14a471b73163cd574f6cebb5b25dff8d0cbc62dfd93f31a90fc119"
+    },
+    {
+      "name": "aws_sso_status",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "972fda1ff978c510549801a15f48e78ac85f86409bc22e6ba7c1a09de51604d1"
+    }
+  ],
+  "surfaceSha256": "4fecca8812b2aab426ae827350733c6bd01f4327bb5afab926893d27f951839b"
+}

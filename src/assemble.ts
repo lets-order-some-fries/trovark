@@ -226,6 +226,50 @@ export async function assemble(
         if (!schema.surfacePartial) {
           s.schemaTokenEstimate = schema.schemaTokenEstimate
           if (schema.extracted) s.toolCount = schema.tools.length
+          // Rubric 1.7.0: the serialized token footprint is no longer a
+          // SCORED signal (src/scoring/rubric.ts dropped `token-footprint`
+          // because its absence flattered the ~95% of servers we cannot
+          // measure it for) — but it is still a real, checkable measurement
+          // for the ~5% we can, so it is published as a FACT instead of
+          // discarded. `schemaTokenEstimate` still threads through Signals
+          // untouched; nothing in the rubric reads it.
+          //
+          // Absence is SILENT. No finding when tokenFootprint() declined —
+          // never a "0 tokens" or "not measured" line, which is how an
+          // unmeasured server would start reading like a cheap one. The
+          // surfacePartial gate above applies for the same reason it applies
+          // to the counts: a footprint summed over a sample we know is
+          // incomplete is a wrong number, not a partial one.
+          if (s.schemaTokenEstimate !== undefined) {
+            const sources = [...new Set(schema.tools.map(t => t.evidence))]
+            const shown = sources.slice(0, 3).join(', ')
+            s.findings.push({
+              id: 'cost/token-footprint', dimension: 'cost', severity: 'info',
+              message: `Tool schemas reconstruct to ~${s.schemaTokenEstimate.toLocaleString('en-US')} tokens of a tools/list response for a GPT-family tokenizer, from the declared JSON schemas of the ${s.toolCount ?? 0} extracted definitions. Other tokenizers, and any fields the server adds, will differ.`,
+              evidence: sources.length > 3 ? `${shown}, +${sources.length - 3} more` : shown,
+            })
+          }
+        }
+        // D2 (observatory, docs/superpowers/plans/2026-08-05-observatory-d2.md
+        // Task 3): thread the resolved rung's tool surface through Signals for
+        // SNAPSHOTTING only — an artifact, never a signal (rubric.ts provably
+        // never reads these fields; tests/assemble.test.ts asserts it). Set
+        // together iff extraction produced >=1 tool; both stay undefined
+        // otherwise — absence != an empty surface. The single resolved
+        // `schema` here covers BOTH extraction sites: provenance comes from
+        // schema.readmeSourced, the same flag s.readmeSourced records above,
+        // so the snapshot source can never drift from the published one.
+        // D2 review (IMPORTANT): gated on !surfacePartial, aligned with the
+        // toolCount/schemaTokenEstimate withhold below. A partial extraction
+        // snapshots whichever SUBSET the sampler happened to fetch, so two
+        // scans of the same unchanged repo could snapshot different subsets
+        // and the drift feed would report fake "tools added/removed" within
+        // one EXTRACTOR_VERSION — manufacturing exactly the false drift the
+        // suppression rules exist to prevent. No snapshot for partial reads;
+        // missing-snapshot-is-not-removal already keeps that honest.
+        if (schema.tools.length > 0 && !schema.surfacePartial) {
+          s.tools = schema.tools.map(({ evidence: _evidence, ...t }) => t)  // strip evidence: hashes must cover tool content, not our file paths
+          s.toolSource = schema.readmeSourced ? 'readme-catalog' : 'code'
         }
         s.findings.push(...schema.findings)
         const secrets = scanSecrets(snap.files)

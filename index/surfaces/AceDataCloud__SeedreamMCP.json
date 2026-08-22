@@ -1,0 +1,40 @@
+{
+  "ref": "AceDataCloud/SeedreamMCP",
+  "scannedAt": "2026-08-15T19:32:30.425Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.7.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "seedream_edit_image",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "810fb88ce57e0761f45944a40ff425804ada60c132771acf64a4d116c7cfcc06"
+    },
+    {
+      "name": "seedream_generate_image",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "bbb74977e11fe52799ba60e89b8708129557b597d05b4233d3501a43508941ff"
+    },
+    {
+      "name": "seedream_get_task",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "5fed1335ecd277d0199f8b951042909cf67743f89cc68c9f6c84296c23c4fa10"
+    },
+    {
+      "name": "seedream_get_tasks_batch",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "b65a375c98719b7ae36d683a3e1fbb70abe5a601cd7bf7207ac06b29eeff435f"
+    },
+    {
+      "name": "seedream_list_models",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "1b0de834f19063d9b313ea26a8e79ad46eec392c547de5442a130bd342238cb7"
+    },
+    {
+      "name": "seedream_list_sizes",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "f5e8743293cbc6463ea63b500cff2839128967ab4810a7c00783a1ffc19afb8a"
+    }
+  ],
+  "surfaceSha256": "cb8845b4f92d6962028997c9f99509b4a90a4ba0f9e7b43fb8044f17463a4cfe"
+}

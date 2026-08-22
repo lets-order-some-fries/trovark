@@ -1,0 +1,70 @@
+{
+  "ref": "thehealthai/fda-risk-radar-mcp",
+  "scannedAt": "2026-08-15T19:32:30.425Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.7.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "cohort_postmarket_stats",
+      "descriptionSha256": "4a9d66aa9fbfbfe931d6e7b0e526844cfc39084ad7e20f877a7a3548f0b712ad",
+      "definitionSha256": "2ac237cc7e65de78858b0f8427832e727263bb7864c552144b3b5a3952e653d6"
+    },
+    {
+      "name": "device_evidence_lookup",
+      "descriptionSha256": "7541205b069fdf485172882bffa4e7aa215fb6c1ef98c3dc3e555190bbc77412",
+      "definitionSha256": "75e1c9ac5aa833c0be8f47e5d05e7aa0d14c48d6c87a330a6fdac6aeb248bffc"
+    },
+    {
+      "name": "device_postmarket_lookup",
+      "descriptionSha256": "26d453fe4c49dbca06e0134d7bb0dfe665b782f757d4e2a588e8e435504debec",
+      "definitionSha256": "2eced187c48d18516e542cf975b41c0b03d5b5929853a1f650b381bd628040ea"
+    },
+    {
+      "name": "device_risk_lookup",
+      "descriptionSha256": "743d5cacdcb6b1b30b4a2b06d76a3294a547d40b67bc2d3a43b138f81e2693e1",
+      "definitionSha256": "7727c60562f57a91e411061484833c56e11d1a9773548403f2bd551460adabc2"
+    },
+    {
+      "name": "evidence_cohort_stats",
+      "descriptionSha256": "7b042f26284049202e91d0699581cbfb38bc50b689a0be79880d54bc5cac6b6f",
+      "definitionSha256": "4bbf98e9a176b0274892a748c674355f1669dd38a345ec8d3b32a985116bf26f"
+    },
+    {
+      "name": "evidence_search",
+      "descriptionSha256": "77e65ce471f5dfa7c6436e498561fc79ecdb8158e1d174f1b51be511a29a5cfd",
+      "definitionSha256": "a9ccc545769068eff24bd307db3e9eecd9b9b613c071a6c60fcf7904f65d7875"
+    },
+    {
+      "name": "postmarket_search",
+      "descriptionSha256": "d3e36aad7d28411bd58532def7c5a29232229e7c85f58c5c4402d7b2d212e426",
+      "definitionSha256": "eb8911e88d52fb7d39c7e2b7559b2d5c9d8aa7f9faaac70082117749ba5a0c30"
+    },
+    {
+      "name": "predicate_chain",
+      "descriptionSha256": "a3c6857a80f15741c3c3e805e4b757c5bf001fd359df74a74c03dffad548ca16",
+      "definitionSha256": "f90fbe85605a2255c36a894409dd484af8bc697194bb8a18c7bff2b73e441c16"
+    },
+    {
+      "name": "reimbursement_lookup",
+      "descriptionSha256": "11f38d4bff67288b1abeb5acd465af6babe381609eb3f8dfb0f7bad202ed5cb4",
+      "definitionSha256": "e16e2ae2650f0434e48b3176a5dc86623c0d80ecbab59ae02a0735eddf8f219e"
+    },
+    {
+      "name": "reimbursement_search",
+      "descriptionSha256": "3e00f7e732a3e9ec6b44f6160fcb702e1fbfe14f051fe21f433d6b5afdb796e7",
+      "definitionSha256": "b851e6aff2a1236a7c998047b28daa6757341f29b510af37625cdf0d20ea019c"
+    },
+    {
+      "name": "reimbursement_stats",
+      "descriptionSha256": "c2cf2fa4f88cef8c8ac19db56f2c988c7d2d7a504e0949f3bf3106aeaccc5d31",
+      "definitionSha256": "952dc58a8d89ccdf2661dd10ac589919f78f5ee42514ca5cbcbbdb7772ccfb32"
+    },
+    {
+      "name": "vehicle_risk_lookup",
+      "descriptionSha256": "d0aa9de440329aff66ea53ba7bcfc890f848697d64930c319d669c3fae22f23f",
+      "definitionSha256": "bbf57c26e7cd0e29e4de6a241fa1ac110d53ec2073d6990ea7a85860bb5d348a"
+    }
+  ],
+  "surfaceSha256": "90f0a9b65e98775b1b0f32bdf87261789b3035b56677254062d6efde383282a1"
+}

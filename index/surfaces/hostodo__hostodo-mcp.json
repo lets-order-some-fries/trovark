@@ -1,0 +1,245 @@
+{
+  "ref": "hostodo/hostodo-mcp",
+  "scannedAt": "2026-08-15T19:32:30.425Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.7.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "hostodo_add_payment_method",
+      "descriptionSha256": "8b1a8e03ca40d292cf3db308803549816c2504844a097821b4636200fd0294be",
+      "definitionSha256": "fce4a8c728803bf905936a43f164051315b9ac9e71b8454436ee629f442feae6"
+    },
+    {
+      "name": "hostodo_add_ssh_key",
+      "descriptionSha256": "85d65cb7a8d3f2714d2514cba9ceac972ce378d0a3cadcaa9451606cebfc289b",
+      "definitionSha256": "15327c5cc9c6a448a28835b36e19279577a4db50ce2f529cbe2a96db3aa12056"
+    },
+    {
+      "name": "hostodo_apply_credit",
+      "descriptionSha256": "aa5f92b9d1bc03f5d21672f60c45b671da7308c4f828eb1d7daf772a2bba1aec",
+      "definitionSha256": "b0a4bc62e56456f7f701c51aafe09f1d95eb77bfb0c6166a5f5f1231aa2136fd"
+    },
+    {
+      "name": "hostodo_cancel_vm_command",
+      "descriptionSha256": "b8be8cf1bc31899d1f2a268c72055a83f63cad7513fdd9692ac7a45627a7714b",
+      "definitionSha256": "69f25042b83aa13b8925e5c27fbbf772df619150ec9571a9615d746f92b52fb0"
+    },
+    {
+      "name": "hostodo_check_vm_health",
+      "descriptionSha256": "65abff0a388d8f5cd056e1d45fb7a8c7b56efd2fd7659e109ba9fa85c6951c7f",
+      "definitionSha256": "4c194dfd9a9cf5acd3886bffe819d0578460c9f8f7bdd0f77893fcab107870c7"
+    },
+    {
+      "name": "hostodo_close_ticket",
+      "descriptionSha256": "5ff2f31958f223f53dc8bac4877d610e6b86222064127e4999b5f281aa1acbab",
+      "definitionSha256": "ef1df4e3afbd40ab0697dac49f8f671857d270f65bf2291e102e966f05c7998a"
+    },
+    {
+      "name": "hostodo_create_artifact_upload",
+      "descriptionSha256": "838056e5f19f48c8f6a18b30a91fd2005017937690f2ed8f8e1ccdbe6b6dd421",
+      "definitionSha256": "dbdc52281f43bc53cedd579d080e3897f06792100dba8e9ec24b0d11999afa8d"
+    },
+    {
+      "name": "hostodo_create_dns_record",
+      "descriptionSha256": "1432c07f68f593509a683375e203163485f381e899abbca84b6ae507782a6d1c",
+      "definitionSha256": "6de3b08da85e2bfb636a010d27bef3c9ef63ec5937559b9460ed9cda48671c3f"
+    },
+    {
+      "name": "hostodo_create_snapshot",
+      "descriptionSha256": "76399b9b886d262b98d121559e18c238c039efca10ac0e23f25afd27ea96448a",
+      "definitionSha256": "8b31bdee90005770fa65099fde5171f4411ab7893e63bddc998921930df383b2"
+    },
+    {
+      "name": "hostodo_create_ticket",
+      "descriptionSha256": "1bc8426c7901a9066a85cfdd48573ef6c8dd8ad253347d7398ef3b6da75017f7",
+      "definitionSha256": "e10ecbef318b11fe4e3e78e4930f79733ae3daa695cb57656b1ecd600c1430bb"
+    },
+    {
+      "name": "hostodo_delete_dns_record",
+      "descriptionSha256": "d0b1c9e18744e0a5f4ecb61883f3ccd52ea283756172d9753b584a87d6e44b3b",
+      "definitionSha256": "82721bc5e14d90aba4b63026359e914cb7b7a25d3c35d2fbd75136875c509ca0"
+    },
+    {
+      "name": "hostodo_exec_vm_command",
+      "descriptionSha256": "1bdb32302665e9d84bf4c16f90d64dd3e0879e875e7fa62a6f16a242fa20ff39",
+      "definitionSha256": "edb6475284fc3bf217914298bf4e1e20304947a0ccbde3bc9fd75871d7573ae2"
+    },
+    {
+      "name": "hostodo_get_account_balance",
+      "descriptionSha256": "da059781acff3e6d3996e47fa7c109e8192b697ccf63c47f147ef539182b76fe",
+      "definitionSha256": "4aba53dac7933435673e27a7d18b40c7cba7a86a87062c26722aece20a712030"
+    },
+    {
+      "name": "hostodo_get_bandwidth_usage",
+      "descriptionSha256": "90a9a04e2fa541b1eb5aedfb448446be8b865f871670abb1b8fcae4a90a4be7b",
+      "definitionSha256": "d1d0423d121935904178522be87721effa649d90c8bb3d9df855e80450c9397d"
+    },
+    {
+      "name": "hostodo_get_deployment",
+      "descriptionSha256": "8fdf3f5c36be370bebf402b7332d1e40fe0ffc5174697590e437cde0841c6776",
+      "definitionSha256": "9d135c759e86037d6fca3731562238179a2bb65db7d2e4cf46d0ec62bb03ac9e"
+    },
+    {
+      "name": "hostodo_get_incidents",
+      "descriptionSha256": "5ac38f625a88de4147c80fc139b41b5237022517d9fc01c32e7a9a8cc14a0507",
+      "definitionSha256": "cdaccc682041a4a284fe735e23953507b016632498ca0e33160159831df3e2d8"
+    },
+    {
+      "name": "hostodo_get_invoice",
+      "descriptionSha256": "90cd2ffd1b1fd0650f03a17730be36ccf4290f1f6e31f246e76ebd19721a85d8",
+      "definitionSha256": "3544c2672f6949eeb1f895c46c9710d3649aa6df71099a233981829da6f6285f"
+    },
+    {
+      "name": "hostodo_get_service_logs",
+      "descriptionSha256": "9adc0a861d169db47397a52d9d40c01b75b44c569b0304b8d6ddb4902530e238",
+      "definitionSha256": "40494d24827eb41edf1430d62576b48bde461544663faa9748b150c954269a5e"
+    },
+    {
+      "name": "hostodo_get_ticket",
+      "descriptionSha256": "2e6cdfce5d52bdb95498344f94ad7b489323d3a88c272fadea9896c1419a488c",
+      "definitionSha256": "fbe1bd08c408132855b22901ac30f8ef4919729800b2cfe848fa070b2eb2dba7"
+    },
+    {
+      "name": "hostodo_get_vm",
+      "descriptionSha256": "c601a8010ca4b81b4d44f2cc617fd5915bcdbf2f58a8b104471c25da207f865e",
+      "definitionSha256": "aeeffef7977ef9c44e8e2580cec9bf66433b0c69b49a829935beb8073d358868"
+    },
+    {
+      "name": "hostodo_get_vm_command_output",
+      "descriptionSha256": "f233f44a4ebc17fa699c291aefcf4c925dd12cf3526df9dd3bbf79a4c2c00124",
+      "definitionSha256": "1eb3fb65e0633508fed6c71308269a600ff677ef36c69d1c6b0c0bfb2c4b2c3a"
+    },
+    {
+      "name": "hostodo_get_vm_metrics",
+      "descriptionSha256": "82c54c9b43f900e712f9cefafc39c15dc1b4d50cbafcf9c9ef5e944ddde367d7",
+      "definitionSha256": "1d8415c1de22ad24d2b4ab9138f30fe0f5629e99e72c1f4620af301ed988625a"
+    },
+    {
+      "name": "hostodo_install_artifact",
+      "descriptionSha256": "1f75972b6644134b875e16539510342a9cafe76ecbb1ebe5764cffedcf8d21b0",
+      "definitionSha256": "264bca363c03ff8a31fd58e9de0ede97f3c8e7c03d5a9b5426e145aaa42587cd"
+    },
+    {
+      "name": "hostodo_list_dns_zones",
+      "descriptionSha256": "87ba906832deecb2a4797912c9da9f6ceac72476a1e9a2fa279cb75808479e2d",
+      "definitionSha256": "d191a688cc9564a3c6bbbfcec4edd019d77cf8c79284c0680345de85902fd743"
+    },
+    {
+      "name": "hostodo_list_invoices",
+      "descriptionSha256": "2dd2a60868850571b386deddcf6c0d8cf187a39670d520ffdc4a1e10def027a3",
+      "definitionSha256": "eadfe1ebc4d7843f5f53103437bc761a0e1b6bb9ac96b00c5d560697f8727fd9"
+    },
+    {
+      "name": "hostodo_list_payment_methods",
+      "descriptionSha256": "800386120fca7cad95af8a081d040a515cbc42d292c5c9738768601408bbc6f2",
+      "definitionSha256": "2b9c0af2755528c5d6191de1dfd5d5c65d512218f8193918ee8040f17eff8af0"
+    },
+    {
+      "name": "hostodo_list_rdns",
+      "descriptionSha256": "44ecc2766a6d436e2d89c2d4acca1913fc7a18190addbac0aa64009876855e0d",
+      "definitionSha256": "d511b15cd2488f9c984db129fcc248952f899cf12b635f6a8286b7ab6ce69f13"
+    },
+    {
+      "name": "hostodo_list_snapshots",
+      "descriptionSha256": "dcce697508f989eecf4cfe55b5036422e2f9447b14e6c3d1aae740981d578042",
+      "definitionSha256": "420659b268121aff6cfe251729d7031378b358fc7df0fbd6ef5a35f88849b488"
+    },
+    {
+      "name": "hostodo_list_ssh_keys",
+      "descriptionSha256": "8d9ed211fbf0ed4f8a76b8d5b83a366d4e3ba0d75ebafe7c8f37700a909f3916",
+      "definitionSha256": "7b263f8ee81ab0b24273a70cc49404db54dd232e41465aa877560253e85f201b"
+    },
+    {
+      "name": "hostodo_list_templates",
+      "descriptionSha256": "a356bcfc9ee001413527d0efe970e62628ad2ff3e154427dea9f54b0a716eae5",
+      "definitionSha256": "aa84eb19f3aa7276af05071ab36560aa5f9d78880dc39fe4274af90ef6331400"
+    },
+    {
+      "name": "hostodo_list_tickets",
+      "descriptionSha256": "f4248b67a5be8618baab7098e7c1ab4b88e74b59c84f883f51ea9f9127ba9a17",
+      "definitionSha256": "87bf42092dde36afc4318df73c49bed079b1e78b3c53c3be679a068e08e8fb8b"
+    },
+    {
+      "name": "hostodo_list_vms",
+      "descriptionSha256": "d10338f3b3d9dae75276e250a1719c717ce086574d6653b369b13f31aedc6dff",
+      "definitionSha256": "269eede89292bcc263c078e0bdae905cb3b7eaca62ca354e7d6055efdabec97c"
+    },
+    {
+      "name": "hostodo_pay_invoice",
+      "descriptionSha256": "4d7357dfbd6d37e78958c13e382bccf1c5f17757359253df57145b19402c69ad",
+      "definitionSha256": "5cbb587785b9dbc092b7402a910416023809595da1215ec5ec9a92d1aa46a768"
+    },
+    {
+      "name": "hostodo_power_vm",
+      "descriptionSha256": "24363c72bdca1747ad88f745bb2644b57563ab82048c7b18bcbb60a7b43098de",
+      "definitionSha256": "223cb01e5f4180dd37b1690cafb1ecca8face8c02ca755ce80ec037ceb641790"
+    },
+    {
+      "name": "hostodo_read_vm_command_logs",
+      "descriptionSha256": "be6cda2b89fc4d7a75f74f39b8fe6b445c1369ef030358904e99ef9d1eaae3c3",
+      "definitionSha256": "2d71999987c162bc46e9aaf00168dde9443e187ac68b27b702edde215c9ff437"
+    },
+    {
+      "name": "hostodo_reinstall_vm",
+      "descriptionSha256": "e430ba907393b40ddb9fc3dd62984f988c881e999e9ee3e6540ce4716d188a87",
+      "definitionSha256": "4d1abc01c4744bcfe224ba25ddf83a5e3a75a291787210140c62b2cefd9db959"
+    },
+    {
+      "name": "hostodo_remove_ssh_key",
+      "descriptionSha256": "b0a7a8f3d7596202d48a86152a937b8f9a100d941f8536bad0fc35a02a7b5db4",
+      "definitionSha256": "9b91554947ae99307a8e68433743225389f50d4a80af4bc1d50d24efbffb1ea6"
+    },
+    {
+      "name": "hostodo_rename_vm",
+      "descriptionSha256": "77ae1d2e05e4a36e9839eb4883abc776825bbc65c52c6ea59954a5f59a1e8b89",
+      "definitionSha256": "05b5d343bf19e8662a2d353632ef08b6dccb597c279bbe025a222356c40db6ca"
+    },
+    {
+      "name": "hostodo_reply_ticket",
+      "descriptionSha256": "9a630fc301c458fea396cbb9d10c5b07cb5789f6d33266c4c857800527f8be89",
+      "definitionSha256": "c30cbc428d584609a2a3e1fea6795e28e1b31df75f3f5d9d9470febcc305be4a"
+    },
+    {
+      "name": "hostodo_restart_service",
+      "descriptionSha256": "67a73c5cb3f70a4caccaf0f9ddca283641f86770da153c8394a23d5a520aa280",
+      "definitionSha256": "604077ab7c59832600381c924ca870e855030b2ec32a78a5781f936ff0cb2aaa"
+    },
+    {
+      "name": "hostodo_restore_snapshot",
+      "descriptionSha256": "dde7e41020c00acb78cfe6eb58fd99545917cf1ece0c6d8090f3bb11e2bc9576",
+      "definitionSha256": "d57b4d8fc5f7f488c424564ffd52c504477f4044489c513b9c3a37fd2e853a6f"
+    },
+    {
+      "name": "hostodo_rollback_deployment",
+      "descriptionSha256": "3986ebb35eaab28ced3b5d612521be3a0c8518cee97a7db33bb51be9c0dc8f71",
+      "definitionSha256": "10d2362f4b6c8837c4b76ed2f8a7ccc757bc52f0694605f23000e7d58883ca74"
+    },
+    {
+      "name": "hostodo_set_rdns",
+      "descriptionSha256": "037306603b33aa3d941136dd689da02202a799c30d81dad6366173ebde724400",
+      "definitionSha256": "6514ede3cd556a85c66b9d9edd51050df766586d1ff660ff45c8be87456e41b9"
+    },
+    {
+      "name": "hostodo_set_vm_exec_enabled",
+      "descriptionSha256": "9f8f8d5efaca63fdff92b0b4798939cf0a7f6c05b7a54b8e41c63468e0307d21",
+      "definitionSha256": "66fa5d062dab814561fad03c70c1e96d930d14bfba0b1b925d3b92e32f32a31c"
+    },
+    {
+      "name": "hostodo_start_vm_command",
+      "descriptionSha256": "ee54d213ec8cca6bca64c481c23174daa86cf58a5ea5fbd9010dcda5b3550221",
+      "definitionSha256": "f21d431c825669f1e273424c0ec9d2dce531ea4c10d225fe1ad9db17656a846c"
+    },
+    {
+      "name": "hostodo_update_dns_record",
+      "descriptionSha256": "703ca06640f4a71345738fe05323ee86376ad522fb5dc00c2ef122f662fe8f84",
+      "definitionSha256": "7a9c3ff087349a50572ecfb4f205067270415289d52cd5c28ef90c59956badf1"
+    },
+    {
+      "name": "hostodo_upload_ticket_attachment",
+      "descriptionSha256": "c81df358cd95b890910b7cef0693dd84202b51ca74d1bd55183fc5c2cd3a1393",
+      "definitionSha256": "64106979677b0a16f5911ed5ba3a58f7722d47e5ac746d4593d33781c0c2c7b0"
+    }
+  ],
+  "surfaceSha256": "1a09fdd3df75335d75bf4ac5e4d683df84d051d171006f0ace17cd8c2ca07587"
+}

@@ -1,0 +1,50 @@
+{
+  "ref": "omni-mcp/isaac-sim-mcp",
+  "scannedAt": "2026-08-15T19:32:30.425Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.7.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "create_physics_scene",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "6482936fe1b107f0416f6a9dfdc9d6f024e98bd5317b5385ed9fc1764dff951f"
+    },
+    {
+      "name": "create_robot",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "9b6b1326f14b98a77b40261d159a6b0c48bbe465deae178e8033da1d34b954e0"
+    },
+    {
+      "name": "execute_script",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "aea491db52166091d858fe3ad76f74e80472ed275ba73422da758b2f54029f80"
+    },
+    {
+      "name": "generate_3d_from_text_or_image",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "aa9ce8d3965f804d0a5d5572a192fe90b66a9edb22d712c2c1ff361b3e5d7d44"
+    },
+    {
+      "name": "get_scene_info",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "dd62fbbe285f629c0aefd02a03feffb8d54bfbbf0daa7a397e1ac5d4b371a52b"
+    },
+    {
+      "name": "omni_kit_command",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "a676dbe54a4f1cefb637788198cb7173265cb1dc0064a9af7631821eea13db64"
+    },
+    {
+      "name": "search_3d_usd_by_text",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "9c6a6b16197f56ac6400058f9eec39503e5fe92e134ae0cdd394f30512b267ac"
+    },
+    {
+      "name": "transform",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "6221a2aedd0dc16edd93ae23391d2326fbbf7cbd4d8d1979ff56da48176520f2"
+    }
+  ],
+  "surfaceSha256": "cd537b7e1b22af5b83869f104594f9cb7de65b24c246d1c54d9ebfd0b822c874"
+}

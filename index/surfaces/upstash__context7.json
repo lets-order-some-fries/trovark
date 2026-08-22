@@ -1,0 +1,20 @@
+{
+  "ref": "upstash/context7",
+  "scannedAt": "2026-08-15T19:32:30.425Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.7.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "query-docs",
+      "descriptionSha256": "afff5ee2ed35a3b75a5deb4e696d9ffbc7750d0dc19d068af6f8537f54326c52",
+      "definitionSha256": "e363f2b7c07e614bbda2021d96bbbac1654b33a1372dd3c4bec82d4fbca5da2e"
+    },
+    {
+      "name": "resolve-library-id",
+      "descriptionSha256": "bb1554ef53f0e68a9498f9bbbd0aa0bcc866fb1b1ae5ee2cf8a2a1d17e8d54b7",
+      "definitionSha256": "62644975e2775978485ca37b53f032fefe1df4ff89199ee62433ae92d7e3eaa1"
+    }
+  ],
+  "surfaceSha256": "2244cf1e0c6bea466b7643b8dd13fa86d26b1bc2123ac0e6082e75c92e914b67"
+}

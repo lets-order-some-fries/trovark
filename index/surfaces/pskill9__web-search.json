@@ -1,0 +1,15 @@
+{
+  "ref": "pskill9/web-search",
+  "scannedAt": "2026-08-15T19:32:30.425Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.7.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "search",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "a4a8216cdc672427fafe0ba6b4739a43f55b93a51cc06745f72c517fad58509e"
+    }
+  ],
+  "surfaceSha256": "0cf952dce80a65aeaccb62abd958b81aebeb127491c17e623a8bc40ec19d5a70"
+}

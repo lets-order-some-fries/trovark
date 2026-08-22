@@ -1,0 +1,15 @@
+{
+  "ref": "tasopen/mcp-alphabanana",
+  "scannedAt": "2026-08-15T19:32:30.425Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.7.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "generate_image",
+      "descriptionSha256": "ae2868f2d5b190599f8afdfec20ed8da21419cc4c65f1cd70f67cf55020c9f96",
+      "definitionSha256": "626ff7111ba56d5ba98c644370cf3dfbc32de3d7f0b4c4e5369641708ba95f57"
+    }
+  ],
+  "surfaceSha256": "2fa3008463688827cd3330a63d3ef1f46c089818310c4995c2c3b52a5d4d7225"
+}

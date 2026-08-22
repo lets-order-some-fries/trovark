@@ -1,0 +1,15 @@
+{
+  "ref": "LvcidPsyche/auto-browser",
+  "scannedAt": "2026-08-15T19:32:30.425Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.7.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "auto_browser",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "9e4b1c720225f1156a5543e5fa428c18b16d1699533702d79cb8dba6580a1476"
+    }
+  ],
+  "surfaceSha256": "0abc1de423b6ae2a3c05fadd13a18305494282bd734e1eed5280dace1e361b2a"
+}

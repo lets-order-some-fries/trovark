@@ -1,0 +1,40 @@
+{
+  "ref": "isaac-levine/forage",
+  "scannedAt": "2026-08-15T19:32:30.425Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.7.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "forage_evaluate",
+      "descriptionSha256": "d35f5b1f667c9a9610f7d0b3804d73ea743ae4b524c6ff84220fe59a73b15d30",
+      "definitionSha256": "1830844eb71c4666d155ce16bc2ce9da695fcaae73e67652c3709f5e0cbfdbde"
+    },
+    {
+      "name": "forage_install",
+      "descriptionSha256": "fe5855ad96ffcb75fddd570512a12689de0493e3259a8afb7c3e91932c569b87",
+      "definitionSha256": "364f058c96ce2f970deeab7ed20c0ce30c1beb5fefb2b9c0cf37ba3cd54fc976"
+    },
+    {
+      "name": "forage_learn",
+      "descriptionSha256": "a0c04e78613ab3e70b37a5351697881fbf7ca4c0e9980ce11a929aa63b08890b",
+      "definitionSha256": "92a73be73b077b1eb630226c89b07dca9c8450a5f386d3ff1337e46e20a74523"
+    },
+    {
+      "name": "forage_search",
+      "descriptionSha256": "bfd9cef25e3ca5057ec2d8f6fcd9800a3850311b6dd1490a2896fa87b13821ab",
+      "definitionSha256": "ec86a6bf69d9e93bc74944b6c23d4bf3de05c18d27544121892574749ee664d2"
+    },
+    {
+      "name": "forage_status",
+      "descriptionSha256": "889bdb0a3285885413c11fda4051e5018d108380512990b504505f267024579d",
+      "definitionSha256": "b26bf025c3ad40f0985676a367420404244df0e84ad802835de58d5c77f4c1f5"
+    },
+    {
+      "name": "forage_uninstall",
+      "descriptionSha256": "efc31d3e620539cd2a592c106b6f2199d9c8864b90e76163822f57c74ef5da6e",
+      "definitionSha256": "435a662cbfea668b905c53f652ea50ad2b5716834a25ab9ed422a6d3f4586755"
+    }
+  ],
+  "surfaceSha256": "d827a214f6631ae5d4d01a25fbbe0b3c6afb2197290e61b236493636682e088c"
+}

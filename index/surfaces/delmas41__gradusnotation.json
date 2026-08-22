@@ -1,0 +1,15 @@
+{
+  "ref": "delmas41/gradusnotation",
+  "scannedAt": "2026-08-15T19:32:30.425Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.7.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "notation_render",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "97640b84c704a9079cc0d5bbbba196b382f87376e91e4c86c34494dbd76be37d"
+    }
+  ],
+  "surfaceSha256": "ff7474f8f0682b7be36ee3f5708f16fda042f072fa1d60db5a13e961d8daddd4"
+}

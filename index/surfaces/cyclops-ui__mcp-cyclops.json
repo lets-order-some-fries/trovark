@@ -1,0 +1,45 @@
+{
+  "ref": "cyclops-ui/mcp-cyclops",
+  "scannedAt": "2026-08-15T19:32:30.425Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.7.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "create_module",
+      "descriptionSha256": "bed96d956a5b3c833e9b467f06d95a44663648535d618a1ad282549f2ce9f807",
+      "definitionSha256": "d596de4a9dd1c6cd3efd4cf777469baea40764d406531d3e5f321467b23825ee"
+    },
+    {
+      "name": "create_module_manifest",
+      "descriptionSha256": "5b05a2b21c4f6b49f7b159eb7440e9e1c202a43b3fe7acd7ac9c184c9cb8d49b",
+      "definitionSha256": "cfa1fcaee59ba9179afe83962bc2b913a342fe17b35cb246b7a9491c9eb1236b"
+    },
+    {
+      "name": "get_module",
+      "descriptionSha256": "3b5a66451c2237f795f066a21210fb6ec61cae0fc43e35763bb98cc696696b6e",
+      "definitionSha256": "874425d655bd5da9a033e4b68195f410edb0712f6d032d3106085149c14fe3b8"
+    },
+    {
+      "name": "get_template_store",
+      "descriptionSha256": "d3a98c16111d4e3ea8c0c639e6e25acaaa8858cedcc4e0adeb24c57319df459e",
+      "definitionSha256": "d2a9fa8580f56ebfd0f8608001c023de55a517d0fda124a734e2526b7282b9a6"
+    },
+    {
+      "name": "list_module_resources",
+      "descriptionSha256": "69c5705ef161f2925dc9e451fb255c25eb74d2ed92cb5ba8fd9f198587045c26",
+      "definitionSha256": "85a8d6e72b5842d528acb5c28d97051f15f7bd78da42fe6af2073fb63734c3bd"
+    },
+    {
+      "name": "list_modules",
+      "descriptionSha256": "d250be9e80447302aad86a653217caa22e9749d34636ac96c633fb218f573a97",
+      "definitionSha256": "85cbf26b2d3d9768f87f741e42ecfc2e65506689cd015cc9dfcd552233c9b306"
+    },
+    {
+      "name": "update_module",
+      "descriptionSha256": "c466c405036251900ce3697a930ff04e07892865e6a7fd50276584584f795970",
+      "definitionSha256": "55fcae251f8d95b36075fc761937fe824e46a6690d4f5d4ad586f08bff6e0e00"
+    }
+  ],
+  "surfaceSha256": "9594f0db8ebd5ad58cb5efc7872ab3bf7be5aec21456d1db3ce19f266c26de7c"
+}

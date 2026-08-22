@@ -1,0 +1,25 @@
+{
+  "ref": "agentbodegastore/agentbodega",
+  "scannedAt": "2026-08-15T19:32:30.425Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.7.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "agentbodega_get_endpoint",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "1a32962086d89b3bfe87f54112ddab39abe19706b604979797aeb5b76ec4425a"
+    },
+    {
+      "name": "agentbodega_plan_task",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "8cbe671e7ad951982a295b8c41a613a6da6ccae18931f4e1c8452e8bce95bf42"
+    },
+    {
+      "name": "agentbodega_search_catalog",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "a80ffd022f1e21f5b635616b3c5dbfc43957b2d4f930859099c14c5b631a679a"
+    }
+  ],
+  "surfaceSha256": "b81320245cf2ff18289a4cd932a78eef572f7d107516bfe6538ed09dcbe3b84f"
+}

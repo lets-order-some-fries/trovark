@@ -1,0 +1,230 @@
+{
+  "ref": "yuna0x0/anilist-mcp",
+  "scannedAt": "2026-08-15T19:32:30.425Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.7.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "add_list_entry",
+      "descriptionSha256": "ccaf6e7c3c8bdd78fab7e66f7abb22320ef7ea4b279739280a6cf163b3eec453",
+      "definitionSha256": "f494db8cf442adb3b0b271d98452724d868d13ef5022a43cc12e25ad35d3337c"
+    },
+    {
+      "name": "delete_activity",
+      "descriptionSha256": "fb919489719ca4da43f4c8430c0308430ab2dc7e826694415b5d3a608b9e523a",
+      "definitionSha256": "d2da6ac5a6586ea11a798cd6bb07ce8ffe7f8a7d10ab781b240c1e56985ac9c7"
+    },
+    {
+      "name": "delete_thread",
+      "descriptionSha256": "e626f45893a2683465040d7aab912e95a1826a21c2cb6b4b1f746b0da2e2c8f1",
+      "definitionSha256": "da6aee0ecb9ad65e900e9fdcccdc2570d3ab1a42c473e8cd91f84e27756c8594"
+    },
+    {
+      "name": "favourite_anime",
+      "descriptionSha256": "0eca9d1110b65304603a25203ed90f72e09e404ec0a49ecbffe67fb5ab6d261a",
+      "definitionSha256": "b5f4dfd00ced3da6809b634a3a61d562256270510e38c7ee14a22edcd691c98e"
+    },
+    {
+      "name": "favourite_character",
+      "descriptionSha256": "145dd227c1087426e5b0c560a38a696dc0abf4040ef699cf35c9f25d6c81515c",
+      "definitionSha256": "48305b0d1df851cd872f9f02fdbe4e01e5ae19bbdebc6d427dbd3e351f8760ff"
+    },
+    {
+      "name": "favourite_manga",
+      "descriptionSha256": "1fa1d64e2a87d7e0e3665bb82efc7bc9a7c81a5d7084a633e9e4f717b5ecb855",
+      "definitionSha256": "ad863588b13a1e3c316033d28d1b0728281dfbef9c7b553040111de63dd4d247"
+    },
+    {
+      "name": "favourite_staff",
+      "descriptionSha256": "20d3909a6e003cbe21ae5df88f12022ccd1023e97965a727a5656ea3b2cd152f",
+      "definitionSha256": "a8465e853016a7abaf4affc9442da0b827a537823e4123aa281313a85cc473b4"
+    },
+    {
+      "name": "favourite_studio",
+      "descriptionSha256": "99e7d201e6706025e2f6a337a1f8f1c0fac3ebb4aa6821cd724e0336947feffa",
+      "definitionSha256": "c5aaed45258c59ee1702a7e4c83dbeb203afba4d19e66ad4960f5258ba3263dd"
+    },
+    {
+      "name": "follow_user",
+      "descriptionSha256": "909d0d0ff52cae9ba82c5aee6a3147d5eb40c288ba50ed6217ed1a41f687cae8",
+      "definitionSha256": "04535580900f91ff56179787de475c83eac0774833184ccfe5afdde507904620"
+    },
+    {
+      "name": "get_activity",
+      "descriptionSha256": "eac43d52c06f518dd5012cf5c9b57cc80419b6a367df510413531e9065b84e0a",
+      "definitionSha256": "1d785a2b3f10dd44d6890780ddcfc562e080fee60705c4899c71cd3e9dff8404"
+    },
+    {
+      "name": "get_anime",
+      "descriptionSha256": "d9b9eca5a5cd7577b95ffd99edcfabb555d751d5fe3a4289d1275d8f15292bd3",
+      "definitionSha256": "9286433d702e3a404021b5b0bdd069ebecfd9c9cd6bda0af4fe85c21f66e6957"
+    },
+    {
+      "name": "get_authorized_user",
+      "descriptionSha256": "60fce3f7a98fbd45363251bca9e6f2d00b8e911c37a5fa99b20dee654012cfaf",
+      "definitionSha256": "6a42fd44390404701e135becead5e982b64d029aaa3deaadee97aa44f12baa5e"
+    },
+    {
+      "name": "get_character",
+      "descriptionSha256": "25c66963c5ccc75b949c507944d7e1ba8b5113a57b4ae11b538b5c7b2910c5d9",
+      "definitionSha256": "00270f5b23f2f7e6119ac2e60dd27de89d6c105311aaa83a94fd63e4e60e128b"
+    },
+    {
+      "name": "get_full_user_info",
+      "descriptionSha256": "7503ffcbf8a5df7e80275bcf53ac73f3c70347aba47bd1f7be9a53f76b5c3e24",
+      "definitionSha256": "87adf89e3c2eedff0297668add07ca5b334e3513f32b07c0b527c7bbaa891e2e"
+    },
+    {
+      "name": "get_genres",
+      "descriptionSha256": "3119d941576771602937edba90e01bcf1570033840e1d18db43551400ac709b1",
+      "definitionSha256": "5c2f827900dffbf63d827c8667115d7f790fe1391b20b9eec2dde11a6a0c1aac"
+    },
+    {
+      "name": "get_manga",
+      "descriptionSha256": "7e0130ec9f4430c5036a99795ea2590bdba79ee5a80abc77dfb6c19acbdd5aac",
+      "definitionSha256": "3ebb2d0a04659ff2431e7a28bbbbc05316a530aaf49d491e5e86774766d52547"
+    },
+    {
+      "name": "get_media_tags",
+      "descriptionSha256": "39e9b1d5a8d8d23ce84b0ec13ff1b196999b6abff7ebf1be30603cce8ba774c3",
+      "definitionSha256": "ab04b6b2077db8fe0237b0b3288bec7d2e361dc0ee5a7bc57038cd029bc8eb19"
+    },
+    {
+      "name": "get_recommendation",
+      "descriptionSha256": "04bf2c96e92b110f870dde57c5c2950dfa48ad4df02cf3a09fc143bf21d02b23",
+      "definitionSha256": "f11b8482740650627342cb969607b2e500ca4689204c30efcdd947bcbb3c9d75"
+    },
+    {
+      "name": "get_recommendations_for_media",
+      "descriptionSha256": "0f669753486b55c2745c715349c23de8ec798979031ea1299dcfb89570a58909",
+      "definitionSha256": "31327c0aa40aae225a45f018f6a33d32c2b628e96b139f71f63056ea05ea7482"
+    },
+    {
+      "name": "get_site_statistics",
+      "descriptionSha256": "66e307e81457b3393b280768bf76012b3a2d27319240d182473e8a0f823f9c63",
+      "definitionSha256": "2c5e2ebda0717ca7baec96d702c0905d423f5a3c985766fb9b1c39c4ae801ff8"
+    },
+    {
+      "name": "get_staff",
+      "descriptionSha256": "63a72128dbfd0832c5ec0816560100d2c4aa9ed88dda8d1097089cf37efb80ed",
+      "definitionSha256": "1ab923593662c6eab47280ff27ce9f690379dac71dc7bd00c4ae1200ff75d4a6"
+    },
+    {
+      "name": "get_studio",
+      "descriptionSha256": "3ab74d230b41b7d3dde787e4bb3cb0fd1f96d2bd8940fb4297626c35e23f37dd",
+      "definitionSha256": "6d7e535a3d18067e35ed9bac569dfe4277a8fbe53c8770aa4e8ba91ce9d763c1"
+    },
+    {
+      "name": "get_thread",
+      "descriptionSha256": "b271d46247da1831713b4d7e83a22dbd04af0199597cc26554ec4db24c9b7257",
+      "definitionSha256": "653b687028bea3deb863fb0b9b426a8967224da525658d51640df037d1e58eed"
+    },
+    {
+      "name": "get_thread_comments",
+      "descriptionSha256": "174ede3feb05cb25bb7fcc8db1f49dae33a6d9797b8e52fd4e5bd59e9ee02b52",
+      "definitionSha256": "fe5c1bfbd21177307c96de2b7cad558dd97356d05bfc4406feb9e88b266a1fe6"
+    },
+    {
+      "name": "get_todays_birthday_characters",
+      "descriptionSha256": "715a5328579cd0ed37ab5a1f1c5ab838f4fd1e8d15318afa07982430f5f14238",
+      "definitionSha256": "d1a41453163fc17fb351f38e1cc2e898aa814333dc0eee30f31b2bd703a89bb7"
+    },
+    {
+      "name": "get_todays_birthday_staff",
+      "descriptionSha256": "5dfd65b8889b8884a94cbd898490cf92cf7eed7a24bf30a65666f4681f644092",
+      "definitionSha256": "10505dbb7c53ccd16f0f39aaf00f2033d2ad06faff3528167a4284ec288d0434"
+    },
+    {
+      "name": "get_user_activity",
+      "descriptionSha256": "7f63e9582979d0187dbd940a090b22fc43c280805c8c80f6166e72b4c16d8ba7",
+      "definitionSha256": "1931025977ce7c03ef5ff8c473bd1ec1a632aa7dfa331b8682cc4315990ac1d5"
+    },
+    {
+      "name": "get_user_anime_list",
+      "descriptionSha256": "7503ffcbf8a5df7e80275bcf53ac73f3c70347aba47bd1f7be9a53f76b5c3e24",
+      "definitionSha256": "b7a21234e2a0853028b966042c50ebd270db7d97ef0cfe249ae2097f0dd08b02"
+    },
+    {
+      "name": "get_user_manga_list",
+      "descriptionSha256": "7503ffcbf8a5df7e80275bcf53ac73f3c70347aba47bd1f7be9a53f76b5c3e24",
+      "definitionSha256": "9ad642432e994ca3213cf3d47c0db999bff8fcc6bb47af763fcdd68be6f97631"
+    },
+    {
+      "name": "get_user_profile",
+      "descriptionSha256": "7503ffcbf8a5df7e80275bcf53ac73f3c70347aba47bd1f7be9a53f76b5c3e24",
+      "definitionSha256": "2a6bbd717ef2e263245cc3e172643b0e0b9fa569e9e756d1cbdb5a131666dc33"
+    },
+    {
+      "name": "get_user_recent_activity",
+      "descriptionSha256": "220d3882ae7a7260abe8532307c95045bd126de6cf08f7673a737db25735b15a",
+      "definitionSha256": "8f9555c3a57b4393185853fc8ac9a37db700509f8581dc47d0945979b0d65be8"
+    },
+    {
+      "name": "get_user_stats",
+      "descriptionSha256": "7503ffcbf8a5df7e80275bcf53ac73f3c70347aba47bd1f7be9a53f76b5c3e24",
+      "definitionSha256": "7d06a4a3da6d8b0253e3fede0fe406a83437f326bb5c10d67aefd43f5f5a03e9"
+    },
+    {
+      "name": "post_message_activity",
+      "descriptionSha256": "55aeb3f9a919df996cddfb4aba05f6f12d13d8aea5b5e56d8362737a63858c21",
+      "definitionSha256": "fcf26d8082dde17937765f27302cb98f905e840a59ac92bec1817f45436c6696"
+    },
+    {
+      "name": "post_text_activity",
+      "descriptionSha256": "138def6f1acb82fcc6b9fcb981e62b7b3948d56456392f945da2d88b106bc152",
+      "definitionSha256": "822776fa642907fd86be943fb7fa92fae290ceff58e7c9d8ed6a854d1ee46a03"
+    },
+    {
+      "name": "remove_list_entry",
+      "descriptionSha256": "e80ec51fcfc32d54e0cdbe3e4818025a8a2457aa3c7d3c00af9c2d988ca8c836",
+      "definitionSha256": "0d7017d941beff959502a60edcb039b1abef47d283e3a2b8bef1f8b6a7518fff"
+    },
+    {
+      "name": "search_activity",
+      "descriptionSha256": "da28e761d186b39f0f8825e0b5350ce267f29e9bdf61f1b81e067479826b2f3a",
+      "definitionSha256": "03606591097e858f75886bcc74357df348976d813f3ef858db257e2986a4d9df"
+    },
+    {
+      "name": "search_anime",
+      "descriptionSha256": "30d33276950da75d2c59893ca0512136de3ac4824c4112a94fe84fdf27054ff2",
+      "definitionSha256": "30ef69b26ba17ca3390b707a16506e7d575e59ad87c348cee7009f76ca6a412a"
+    },
+    {
+      "name": "search_character",
+      "descriptionSha256": "895648a9ecb585e3a8669cdc06f2e1c70a392aca5bebcdf801a43e89b2819824",
+      "definitionSha256": "9a25e4201c9993618b7e76d0ff45b8c89afbef3ddca6e7dbe6c95b6568b0142d"
+    },
+    {
+      "name": "search_manga",
+      "descriptionSha256": "625bc19214c8d8e964ce6c16359cceeddb9273778812c3d9471bfceb43bd50fb",
+      "definitionSha256": "324964cff8f14f524ffb086397a9b58cd0300f5acce10e453cabc79f52d9551c"
+    },
+    {
+      "name": "search_staff",
+      "descriptionSha256": "c17135fe9313def830661391a5d2fdce743ac45e68e7092281319307460dc278",
+      "definitionSha256": "edde26e6e1d929d902db2b7eec87f6bda7a68f0198618221ce2ae96a7ba45e86"
+    },
+    {
+      "name": "search_studio",
+      "descriptionSha256": "269bd7055237ca621a27ae2bc551a8bac7b834d17a2fbfefff360bda541f8a81",
+      "definitionSha256": "66cfe1b99bda19215dc628ede06fe606bc73ba221772ea3b2a1ff74bd560fe6f"
+    },
+    {
+      "name": "search_user",
+      "descriptionSha256": "3b86c3374c917c5e831b4d0548b1e7309e19f8d05e76b150f9f8943bbf04aba0",
+      "definitionSha256": "3b0ce6db3476247a87e3db96a2f8c12e76e19964eba6867b81fbd01489cf81dc"
+    },
+    {
+      "name": "update_list_entry",
+      "descriptionSha256": "6053ab6c81d63429d5c4e6df9ed08f91fe9ed46891493477d54d3f55565eee3b",
+      "definitionSha256": "0e62300c653308a5eea06c2b10e037617d1fc0b432973515ae7acda2da0a67a9"
+    },
+    {
+      "name": "update_user",
+      "descriptionSha256": "5fd4dc93e55d9906968cc239b15efca05372ff78127c504527a36a0571cf1403",
+      "definitionSha256": "34216670f9219c61acf10a509c8bd2eb538acb95b03f1b8b7ef0d59fdb04be1f"
+    }
+  ],
+  "surfaceSha256": "ad5081289c75ec3f1d26b5fb8212bcdb28ea710fe69bd75e644f191f4f544040"
+}

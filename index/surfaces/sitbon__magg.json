@@ -1,0 +1,80 @@
+{
+  "ref": "sitbon/magg",
+  "scannedAt": "2026-08-15T19:32:30.425Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.7.0",
+  "source": "readme-catalog",
+  "tools": [
+    {
+      "name": "magg_add_server",
+      "descriptionSha256": "dfb291496ecddf61adcc82bca04e6efea4123cb6ff714b354dc2cf747fed9b8d",
+      "definitionSha256": "6a566b50afca491d84560e287b30a0c00369739576098bf80ce366ec0957366d"
+    },
+    {
+      "name": "magg_analyze_servers",
+      "descriptionSha256": "9c1dbbfa3d38f4c2922300cd653874ae49bbbdc98b87f1b392be447e3509b922",
+      "definitionSha256": "6d2b2154536dde6443ea2da595af6876aec4ef7e400ccf55494d342698918a79"
+    },
+    {
+      "name": "magg_check",
+      "descriptionSha256": "ae5abb7ae53dfa1923f19833abf779026c9506e3b40696767223984a51a4b87c",
+      "definitionSha256": "85abac3a17a02fcd4b9e25978498e2818b132ca438248a6cb215ad71464847df"
+    },
+    {
+      "name": "magg_kit_info",
+      "descriptionSha256": "43fafc0b2c6b58b36d738a6dbf70fd38d89c4b0d0b0a322e181551765a3eeaef",
+      "definitionSha256": "7b30cf188ea0d65f0122adcf3b377f4073e62a36e1d1194c9a836b8bce54ab9c"
+    },
+    {
+      "name": "magg_list_kits",
+      "descriptionSha256": "e0dafd9350c8906f3b684fce44213fb5186bd1a6c29ce0e41b4b8d70f2ca2ed7",
+      "definitionSha256": "9b73a16e0b2fb00dcf1d683b6b44ac4a6d1a0e5307f8f6c4d9c15134310107f5"
+    },
+    {
+      "name": "magg_list_servers",
+      "descriptionSha256": "58da25c72b29efbd9bba3b847e9291d11ae97e4aaa0803e877f2b5ddd231e793",
+      "definitionSha256": "d25e434feecde598b11ce9d46746376cec7daf2f8af2442f9b35b80236382395"
+    },
+    {
+      "name": "magg_list_tools",
+      "descriptionSha256": "547917943cdb42279930b68dd6393cd0f3f5fbde461eec037407321461102152",
+      "definitionSha256": "b6f95826cfc8945a08827ce2f548086883a657bbf55dea61d717e63057a6ff5f"
+    },
+    {
+      "name": "magg_load_kit",
+      "descriptionSha256": "16bc277a8347e2a5c1dacec7637751ca2b12e19970b3c657c2bbfc1d2fb35649",
+      "definitionSha256": "0c790cb71af2710fbba304b3feceb4d203af391b90d3b513dc2218e38302e40f"
+    },
+    {
+      "name": "magg_reload_config",
+      "descriptionSha256": "c1d6827957cf81f9abf51589e31c2ccf819881066d0d07d4a81e4048e54a53a0",
+      "definitionSha256": "af70207c4f5bac530874c514aa879c400fd6ad63d111c69327b8de35920fbc26"
+    },
+    {
+      "name": "magg_remove_server",
+      "descriptionSha256": "f3a42658b4c8d3fdddec83c27180f282bd9518a14711304f60036ae8c6e4fe01",
+      "definitionSha256": "7686e24e9b835ef0ff3a89d93365f9eb12449a7b5f9e0dcc09c7144c64b03e20"
+    },
+    {
+      "name": "magg_search_servers",
+      "descriptionSha256": "6507391e48a64a2176222399a8a0f675a96cd57a0c9908de7c97875d9f5749fb",
+      "definitionSha256": "5493dfc0497f33069979b8912d432276ca0756f759b9a1fac07a8f43b4796568"
+    },
+    {
+      "name": "magg_smart_configure",
+      "descriptionSha256": "458da3047d90b10c811ae709383de25ae16b7ce19637fcb5a775f71f3638e211",
+      "definitionSha256": "d58b5dbb2131ca3616238ed579ef3cecebcf87e81d095dc95361addd2d84bef2"
+    },
+    {
+      "name": "magg_status",
+      "descriptionSha256": "0caf9b7ae9116f83d86c7f99eb887da668c5efbd6edfec730947bbffbe8ec1a1",
+      "definitionSha256": "8229e3ae9a23416b829029c7ca8f05a414adc9f0e80f3a3f07f53396b1711401"
+    },
+    {
+      "name": "magg_unload_kit",
+      "descriptionSha256": "de8bb8664d22d5a83b6f5e981a0e59e8be98828ae51fdf456b84fac9b7bf80d6",
+      "definitionSha256": "487dbaaa15a38b2e490d7ff6b7b66d3c60520631e9f9342cdeb43c5fad95bcee"
+    }
+  ],
+  "surfaceSha256": "0b1c919651d587027d08f1d4eb0af0509405133c73712b207685b6b9bc15b1bd"
+}

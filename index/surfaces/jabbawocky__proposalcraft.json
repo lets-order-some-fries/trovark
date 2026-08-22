@@ -1,0 +1,55 @@
+{
+  "ref": "jabbawocky/proposalcraft",
+  "scannedAt": "2026-08-15T19:32:30.425Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.7.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "analyze_brief",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "237904fcdc7e0d2b413cdbeb99800dee4ffbd1ee0d2fe31f59af099bbb86863b"
+    },
+    {
+      "name": "delete_proposal",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "c764b74e8f4ecee94dec2ed9b8f0623fd98ad8f787829834a2f20387016183c0"
+    },
+    {
+      "name": "draft_proposal",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "f1c134c4673445a1127388db1c65813520b5749f2578843585b9c4e172c7cd0c"
+    },
+    {
+      "name": "get_proposal",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "a0f53a290391a86007fb47e480b9efcd1063bef0d0e673691895730036c91ef8"
+    },
+    {
+      "name": "list_proposals",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "4cbff9cf09792dd8c71572f839b3bd02578e4328967e5c6f2d0bfb86e5d77efc"
+    },
+    {
+      "name": "load_examples",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "e5638752b808d698d6a4ac1a339fbd43a3d6602d757dc1cd8b6899f6d54a483b"
+    },
+    {
+      "name": "proposal_to_email",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "fdbc404fddd8f069a61c16eab5a3f0a9786d105cc0c24e4b74daff03f3446b2f"
+    },
+    {
+      "name": "save_proposal",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "10dcfcaba018d26f3f7480f323f2e926d3a61341fc0a770c72e1c4ef8d2d4961"
+    },
+    {
+      "name": "usage_status",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "8b247f63d2463ac65a77ef5bf81487d58b747e309ff62eced658e17656ff319b"
+    }
+  ],
+  "surfaceSha256": "16eb70926d52fdf0defad45520f9a1a9aa926b8379719b9e17e175a63ce953c8"
+}

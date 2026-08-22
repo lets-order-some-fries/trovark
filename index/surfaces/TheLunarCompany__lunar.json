@@ -1,0 +1,15 @@
+{
+  "ref": "TheLunarCompany/lunar",
+  "scannedAt": "2026-08-15T19:32:30.425Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.7.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "reload-tools",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "fad1b1df3b7cf183e88e057ee05edcc3a3dfa8dc672f3e8f0d2973c96849af55"
+    }
+  ],
+  "surfaceSha256": "c70251085dccb173595800352f35a252da444d40dc5f35cda4b60b47181d2885"
+}

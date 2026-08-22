@@ -1,0 +1,225 @@
+{
+  "ref": "daedalusdevelopmentgroup/ddg-agent-payable-services",
+  "scannedAt": "2026-08-15T19:32:30.425Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.7.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "ddg_agent_distribution_targets",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "56638f7f577785999bc22145de5851b2088c5b0d4edb347ea773d801f5e869c3"
+    },
+    {
+      "name": "ddg_agent_readiness_scorecard",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "2562711a98d4cb42962a2ed190070f0c839c7468f8c7a7a04e1dc183cac8a010"
+    },
+    {
+      "name": "ddg_agent_status",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "4bf5ceb452f2b61ffacd9ba315611b7f1dd79e1737649182badf2c7e24293580"
+    },
+    {
+      "name": "ddg_browser_proof",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "2d1ae70633048f4d99921ea67ed6499133a513c79df823b90e0b8df9a5452c09"
+    },
+    {
+      "name": "ddg_call",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "42931e77b3f65d05bb15d606e99bbc4ea245d944303eca351a21685cc37dc4bb"
+    },
+    {
+      "name": "ddg_checkout_conformance",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "ac66b9005f28c378cb205c36b6b791891b516d16b767f40fa0de7236ef430561"
+    },
+    {
+      "name": "ddg_data_query",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "df6583f22dfdf99190ada08be87f51dcd3974535a71e0fdd394a9b9ca9d3d091"
+    },
+    {
+      "name": "ddg_direct_crypto_addresses",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "f64b491a9c04fb19ee32f97332daa17f3dcf0ca861465283ea14bc90ac8446e1"
+    },
+    {
+      "name": "ddg_ethereum_rpc_query",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "df004c217af3c4c0144eb9550dda54f134c6b27bb0e3b54e8435c61264c764d5"
+    },
+    {
+      "name": "ddg_fetch_public_resource",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "c1637dfc52720a1ae28a98117d03c89975806374db61d665b0f578ab3ce63dad"
+    },
+    {
+      "name": "ddg_json_repair",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "05cde2c32a4b426752d23cea3e864aae483b5114ead1731c7a7de7d1a07e323d"
+    },
+    {
+      "name": "ddg_lead_pack",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "04aabf65cb21c53a9cd60b315252e8175fcb645ab6f5cf89bf0ea633ab5bce48"
+    },
+    {
+      "name": "ddg_list_local_runtime_options",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "2cd7b6607435e715c84744ce49a8341fa91bce7de1d6b8e07732d16504859f55"
+    },
+    {
+      "name": "ddg_list_models",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "51a32dec60cc71610570ab4e6a4091c0efffd71d32cfa965b1eecd159f977d5f"
+    },
+    {
+      "name": "ddg_list_services",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "3d50012d217362acb80dc0883ca33fdc19b9596702b79a1aeefa260a362528dd"
+    },
+    {
+      "name": "ddg_mcp_security_audit",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "e422a19317940ac3c69295d6c4c4fc73c18970fa128dd362709d7f7bdbf0693e"
+    },
+    {
+      "name": "ddg_mcp_security_profile",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "3f92b20e4c5054acff724f6439492b1b606504f09bded71004d2024cf67c0d0a"
+    },
+    {
+      "name": "ddg_micro_swarm_preview",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "4f8f861a0166cf5b80303eb99a584dcedafa294a367b3fc3ad649f56ca42ef7a"
+    },
+    {
+      "name": "ddg_order_artifact",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "4beb8b2fa4f0913096d1305ce3fbd81530088ffaa527bf808268ab2c0b99391f"
+    },
+    {
+      "name": "ddg_order_status",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "93e26e0467884e209edb118c9bb65fe878c4fdd19bfbd53ab3b3cae15da366b7"
+    },
+    {
+      "name": "ddg_prompt_injection_scan",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "b548c7d3ac6f63b65964098a323e4e2443e4ef84cf4516012755a45f60812535"
+    },
+    {
+      "name": "ddg_public_resource_index",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "dfa7d897d5d82a9e5e12933f7a926f56947526984b2958119eb216db374806cd"
+    },
+    {
+      "name": "ddg_quote_payment",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "4f688bf710ff5fe69571726b71b4e4a512042c8c08bca44422e1554d436d89ea"
+    },
+    {
+      "name": "ddg_rate_limit_analyzer",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "d51f127339ed79a722bfac12a477d1aeb0a476ed79747a2c1d0deb80018c633a"
+    },
+    {
+      "name": "ddg_receipt_verify_design",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "09a630c192a7d7f696ba29a4cec420b65e5d763a73fa8ea7fd0c5acb0cdbb7ca"
+    },
+    {
+      "name": "ddg_request_ollama_model",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "afc4fbb43962c7ec94507e8561aeb5b4cadee2522b5eec5415623291f33b7b67"
+    },
+    {
+      "name": "ddg_run_paid_model",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "379c34003ea9e9c0a610975a404504cee6e18202605cccdda5e539be6672f462"
+    },
+    {
+      "name": "ddg_search_services",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "0f93cdb1c420104aff27c2db963d89cbfe9e6b1e7b4b72f8478536f4482d7a02"
+    },
+    {
+      "name": "ddg_security_service_catalog",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "5be084d28048e46e7c93f23445c48771b021621897a07f8de23d7542d15cb43d"
+    },
+    {
+      "name": "ddg_site_audit",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "21fa2223a6a6fd4884ecce409de2316ebcaf7a3a22f7f3f266ea45a68ef418c5"
+    },
+    {
+      "name": "ddg_skill_safety_scan",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "e3137a5755b14c70504095e1109eb726a0a0e60d65fd9f0a2187939f322d13e0"
+    },
+    {
+      "name": "ddg_submit_order",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "d07464f581bd63dbb40d4647e6621f61194afbfddd1e01252426347e10318ddc"
+    },
+    {
+      "name": "ddg_tx_smoke_test",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "1b643d6231dffe1100553e6ac00c61af0fe4445db16c9799637823f20d3d8a00"
+    },
+    {
+      "name": "ddg_x402_bazaar_readiness",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "4dcdf5d56577d9be972d3eb0a19e7706b3678ad75555b1c7be0420c6117bd909"
+    },
+    {
+      "name": "ddg_x402_supported_chains",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "144c870a41b9e9bc28a6ec9e6afa195ea3ac8f8448e1ed0baf97f26eb70897c2"
+    },
+    {
+      "name": "ddg_x402scan_status",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "5896e1c70c6d200b8324312ed94dbbc3f0e4ca46e99e4123d43a472aa72d1e95"
+    },
+    {
+      "name": "ddgbrowser_proof",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "792c5c1051d3afc952c08b640ec0838bc56766638d2a09e4b0b85aeaf79a3001"
+    },
+    {
+      "name": "ddgjson_repair",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "f5dd9d308a9b293f94a56c0a5ab8c1422ce248d9e7f136289259ab3326c37cc9"
+    },
+    {
+      "name": "ddglead_pack",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "6154193ba21af896c6e3ad726177518d330236133a48fc812892add8cff42c79"
+    },
+    {
+      "name": "ddgmcpsecurity_audit",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "990562bbfb4573e286980d031a4309f38a1d8360faafbd1bed4360ca4a1ad365"
+    },
+    {
+      "name": "ddgprompt_injection_scan",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "e58ae27bb2553524dfced9b1580dbe241052b45b34a1805d11547e6766e1fb26"
+    },
+    {
+      "name": "ddgsite_audit",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "fe80018380611945732af71485aded04e2f667591b08c2894152ade693604353"
+    },
+    {
+      "name": "ddgskill_safety_scan",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "eed050750392f4e354d6220b5140c3ab92c2ee2b01b22f7c83f7b020eb1461ff"
+    }
+  ],
+  "surfaceSha256": "a7e619c82d4a7eac6281f69b706b19df17eaab1d8587fad095c28cf123d7b3a9"
+}

@@ -1,0 +1,30 @@
+{
+  "ref": "ariekogan/ateam-mcp",
+  "scannedAt": "2026-08-15T19:32:30.425Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.7.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "ateam_auth",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "f1f0225bc1240f985bd39d1ac243fd7070d21e4c16fdacb978c3c9dde7dd240c"
+    },
+    {
+      "name": "ateam_bootstrap",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "735a896663adfd6e1ca5e3414be28915b89fca10ac1778c5398c1742697d8c7d"
+    },
+    {
+      "name": "ateam_get_spec",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "879648d0161775b0643b1926a4f700bfa430a4ce946fe6083fada0374802919f"
+    },
+    {
+      "name": "echo",
+      "descriptionSha256": "9e86742e96f5d52ebe7488ee220a8b87bc4c91da4daf1d4444670e07e3f02e6c",
+      "definitionSha256": "fcbee24f780953296032c57d8583cb4dad8be4b88e66134d849477c65390e4d3"
+    }
+  ],
+  "surfaceSha256": "8ee78ea4bd9a9b88429330c71cef5f44e4ba5d150516a7833ca6c1bba3739a23"
+}

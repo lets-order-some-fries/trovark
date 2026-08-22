@@ -1,0 +1,260 @@
+{
+  "ref": "musharna/plant-genomics-mcp",
+  "scannedAt": "2026-08-15T19:32:30.425Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.7.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "alphafold_structure",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "522b5cd23c59b9f14ea7fe579ec2c340bf05190623c8f6d9827a4be2dff42782"
+    },
+    {
+      "name": "analyze_locus_synth",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "259748c62aba0c11e9b3c53742e3b5794b34b5ed42626277dfd4af97200f09ee"
+    },
+    {
+      "name": "arabidopsis_natural_variation",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "7fa3db32f4b9da03a8adba09398ca1d38fb19deed4efce92e12847d917b535cc"
+    },
+    {
+      "name": "aragwas_associations",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "cef703cc0e5060996e5d09ef3104333fb67136be219b2998fdf8cded34a300dc"
+    },
+    {
+      "name": "atted_coexpression",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "3e6677f51d9675f288035471af6a7ecb9937f55de79f0a8a6511fa9beb355173"
+    },
+    {
+      "name": "bar_aiv_interactions",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "274671004e3198c077bcbb07d53d1386c305e70abfc5551d48ea7fb50fcd6a67"
+    },
+    {
+      "name": "bar_efp_expression",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "f6a9f2b04b859a71c68cbd9756cc93476ccc753f2edff67277eda47aeb757a01"
+    },
+    {
+      "name": "bar_gene_summary",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "ef7ded3bce4de003cc1b1d14fe2c9cfe9d8679ee01a83b674fc3353273f03a16"
+    },
+    {
+      "name": "batch_atted_coexpression",
+      "descriptionSha256": "1ca3d2954022c30b42cad6dfd930d09720bac5e43127f0a104eca92c1c693f81",
+      "definitionSha256": "d66fa5f309de5c2dd1b21a1f5684bbf9b019cd9724e5b7a5d84d43d43b7c9383"
+    },
+    {
+      "name": "batch_bar_aiv_interactions",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "d7242aa36f04404cf7e387e824130d3d85b00c4b38a7e5403ab8f1972efa5e0b"
+    },
+    {
+      "name": "batch_bar_gene_summary",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "66784d0ece6a8d4a31609afccb4f55411da3fb68be7cd8976289cacc66f447ff"
+    },
+    {
+      "name": "batch_ensembl_plants_lookup_locus",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "e3f23c31b6f04bbd5becceb521502ade298823cb17356792afccc28a5cf77a75"
+    },
+    {
+      "name": "batch_get_gene_xrefs",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "7bdce45c7195a1d719a6bb045c69cf55c7d932ebb74f22d6cba67e76c4350757"
+    },
+    {
+      "name": "batch_gramene_homologs",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "b7097a68005d529de9a92f5c5e53495dbe4abf862637557703051a99def57d23"
+    },
+    {
+      "name": "batch_kegg_pathways",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "4f81c8e35735f5b2eba5903c4e3a7981b31ffa79715fa45fd9d10c30d815e33b"
+    },
+    {
+      "name": "batch_locus_go_annotations",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "6a711d9ff6b8beabc55258b20ad1ca3e2f4d723e79bf38491999f079085293a1"
+    },
+    {
+      "name": "batch_locus_literature",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "f6b7e9f4d21abc162e9fe1aa5e9740dcbe8ac522e75eea09da549c09b10090f8"
+    },
+    {
+      "name": "batch_phytozome_lookup_locus",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "cf74a4a71039b47f6033eb7a49b40584979ff27261ff5c70d5159628f75c5ec8"
+    },
+    {
+      "name": "batch_resolve_locus_to_uniprot",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "e5db8d09ea8c2c317bbdad8e00e22ddaf7544984322845cb844ef48f11e3fd9a"
+    },
+    {
+      "name": "batch_string_interactions",
+      "descriptionSha256": "eeac14973931ccec28d31c28ffd7c12b1d49ab98c1f850bd4c8729e91cdf970d",
+      "definitionSha256": "cdfa6803b87462e049e0d4643d62b0b881e2b03d3bedfe3faa131705f48da519"
+    },
+    {
+      "name": "biological_context_synth",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "01b3131bc905a6a47e54231d3e5fdbafbf70447723e8117ddfa608dd1dbdc4d4"
+    },
+    {
+      "name": "blast_sequence",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "cf105fdc7a0a89480033f5d82ac979c080ac701aab944dcc9e0ef54f5cf48c28"
+    },
+    {
+      "name": "consensus_homologs",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "ed14c4b6077b7d275cae6d6b4a2bd7930f75abacf047c1ed3c361256685c0b74"
+    },
+    {
+      "name": "ensembl_plants_lookup_locus",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "0f584bdbb36f5de411239a49814b566a5801e6bcab7033a53ff148b131619a67"
+    },
+    {
+      "name": "ensembl_region_query",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "9d39fb716bd69fded587e6c34694beded78c4ddfd530b46981ac8793fa4a5508"
+    },
+    {
+      "name": "experimental_interactions",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "d0b9a91a18dfb59cdf48bcfaf00b45ac97a3e0729243ce233311b5745247238c"
+    },
+    {
+      "name": "experimental_structures",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "b35af5a8410175a76a3d99fc0b369c0da4a9772884124070738016b9e5b312c8"
+    },
+    {
+      "name": "find_homologs_synth",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "5175a0c0adef2195f5dc36dcd4c15fff55bd495528441551520fb09bb2f95273"
+    },
+    {
+      "name": "gene_report",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "777dbb45f6e62fa3532ea1ba31fe8418b92c7e711a87ebd7e057afb31a9f850e"
+    },
+    {
+      "name": "get_gene_xrefs",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "e3956fd8bf84e232c75139deb411fb2563300494a0aa37149839e5eabee9e1d6"
+    },
+    {
+      "name": "get_sequence",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "227fc1b5c9f6d808c7540d7848a43c5abe9ecbeac6bb0a8ea00330a73b238eb7"
+    },
+    {
+      "name": "go_enrichment",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "ba98acc7aeeb83b33649864f9cc843d955d5e88acc74680ba57da94de51d4884"
+    },
+    {
+      "name": "gramene_homologs",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "a473e97d68df1203119f31cdd68b0436d24dbf81684d2870283a410811026e9d"
+    },
+    {
+      "name": "interpro_domains",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "6f9d4511260104f9b51cfb876be4d9e3cd1ff7f2dfbe9eb3ffe34e994af59051"
+    },
+    {
+      "name": "jaspar_motif",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "acbb0268c287555630882ddf57d2023649413a3f70d5b3b3a5b5363c357e16cb"
+    },
+    {
+      "name": "kegg_pathways",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "cd8a7679b745614511ce1953fe18d5d69decc6fb7cc24e7debfa879aae35fe03"
+    },
+    {
+      "name": "locus_gene_rifs",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "fccde018d8d90c7a1781e4873808ed0b145636bf81242fcc5cf4320d0ff0b6b0"
+    },
+    {
+      "name": "locus_go_annotations",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "c7d483331e3ff00a346c6c3e373fe3cb38efafd73facd3ed58b18373c1982d0b"
+    },
+    {
+      "name": "locus_literature",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "ddc1a90de3e3f28a1e9c2a129dd5ba7af698012299ca1768e489673c0578ae24"
+    },
+    {
+      "name": "locus_plant_ontology",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "3e180b2f1db7df636a4a36361543397b0f9a4190ff2ad65acc39597db53c397e"
+    },
+    {
+      "name": "locus_variants",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "d8d6c2f78c87769521865c5f56b08fba661d5db8be6e9a958d79cb298b54c9d9"
+    },
+    {
+      "name": "orthodb_orthologs",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "d7de86c295de5351719c78024a38f54696d9a8af4cecae0dcf94a3f49db9df61"
+    },
+    {
+      "name": "panther_family",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "91e52002d76f007416579c791fb6349c53508a98fb584cd411d9fa399646fd12"
+    },
+    {
+      "name": "phytozome_lookup_locus",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "9751e932cdbfdb3c55392235c971f9f04c934264e70757a219631c855642dcb7"
+    },
+    {
+      "name": "plantcyc_locus_info",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "bb52edd200d2d407891fb2e5f20350b1c0fbe546c263d74f9b65e143984291c7"
+    },
+    {
+      "name": "resolve_locus_to_uniprot",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "f8617f5e361a8854124968738c92667f086b9e7524860eb281a19265d5cb564e"
+    },
+    {
+      "name": "string_interactions",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "b284d8bf21fd429d7aac13d536822f638369876b7f8e9bb55f0f1a4c6ccb91f5"
+    },
+    {
+      "name": "tair_locus_info",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "8daef736aca566ea1c6b8257e8e0ea47603dbf9dfc63f6d7986a34141d59f93d"
+    },
+    {
+      "name": "tf_binding_motifs",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "6f356b96475effe78140c8e164b532992a7f59268aca33b1885c4826a79ea0da"
+    },
+    {
+      "name": "vep_annotate",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "56a5061efa1e5786641277349f3306ff5a0c4c54474f1a195676f64630a4f277"
+    }
+  ],
+  "surfaceSha256": "7844f02832ffc3a4e9da71a712ffadcc0b8a967e97685ec7a591a8ab7a594450"
+}

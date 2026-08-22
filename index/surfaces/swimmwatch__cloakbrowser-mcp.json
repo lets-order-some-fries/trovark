@@ -1,0 +1,20 @@
+{
+  "ref": "swimmwatch/cloakbrowser-mcp",
+  "scannedAt": "2026-08-15T19:32:30.425Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.7.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "cloakbrowser_binary_info",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "3d69f13cd50838a802f385f99fec19dc7605fe3ae8b725988cf8208949dc462a"
+    },
+    {
+      "name": "cloakbrowser_bridge_info",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "3eb08718ecb67181034390e06e84c42d54601efc4cfe7bd81bafd2f7edebab8f"
+    }
+  ],
+  "surfaceSha256": "780cbb6a0bb02874876a8c1881582c89c183f224927304bb435892d617ae5c93"
+}

@@ -1,0 +1,190 @@
+{
+  "ref": "cswkim/discogs-mcp-server",
+  "scannedAt": "2026-08-15T19:32:30.425Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.7.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "add_to_wantlist",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "7eb1a787785d43a7f37ad72c1cb300dbc8e39ee4296d0ce8998e7137ff05c756"
+    },
+    {
+      "name": "create_marketplace_listing",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "a2d214da302f1919407960cc5fbaa9cfe7dd8da136a427cf7d184869c6781e9c"
+    },
+    {
+      "name": "delete_marketplace_listing",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "45b4a7c94cf3ccf11eff66f980e3d6b17f29a72038d8aaf1d1cc962485fef57c"
+    },
+    {
+      "name": "delete_release_rating",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "2296a7d8158584c8d05bbdb97b93a56a9cba7cb1a659821c9b3a090cb474fb14"
+    },
+    {
+      "name": "download_inventory_export",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "d21298f2d32f128ddd71db685e75975508dc9774f5570337a67033246efbd0f6"
+    },
+    {
+      "name": "edit_item_in_wantlist",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "317a511184222ca882d5cb52eedd2c1ca498dd7baf213ac69a4883a2b693da30"
+    },
+    {
+      "name": "edit_marketplace_order",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "32f879733e31a05ea63a18bb7b268e6a84bef510ff836cd18f40ca9ab5fd8bd8"
+    },
+    {
+      "name": "edit_release_rating",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "84e19b1b7aa983fbc760d791c422a267a889a8c9ce0b44a64debd22f03761aed"
+    },
+    {
+      "name": "edit_user_profile",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "d86b9f87a34b37e572dd10dc1f36455c3be5ca1cc9c17addd8e3ca1b077c3a90"
+    },
+    {
+      "name": "fetch_image",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "2d6113b417eea86a41beef84de051c3054dc3cd27eb54dd5ec0e43c2a808a278"
+    },
+    {
+      "name": "get_artist",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "fc9d1a7c107c723a0cfa6b61f8f5b146023e02074839ae2b436663abc64d7382"
+    },
+    {
+      "name": "get_artist_releases",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "c5a0eacde222b45a53d4c8e66ba9c925517f63a3d5242f95a0da1bd7b287e729"
+    },
+    {
+      "name": "get_inventory_export",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "1a0008104fa7b8e0a40d6aa6102f681ee176d252e53160c1209f0f513ca2fab0"
+    },
+    {
+      "name": "get_inventory_exports",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "de635ab5e2848424567dff22b7226dce97f8a27f60d24aed89baf0cc9de881ae"
+    },
+    {
+      "name": "get_label",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "29097b50acc2913b30862f40024e0e15b6856ebb18cd53f218ed88b890a60c9b"
+    },
+    {
+      "name": "get_label_releases",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "07e4dd2c2aa4c8782eba4b116e4615300636ab929aac52b4d9c47404ad580d7b"
+    },
+    {
+      "name": "get_list",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "1da583087e5fa07b479490a036949760219af02ecd415253a795d8d1522e7eda"
+    },
+    {
+      "name": "get_marketplace_listing",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "4d6832484bdfed69d90ca37634e18f231eb4585ebc6f8e4219c9dd8411e1e7cf"
+    },
+    {
+      "name": "get_marketplace_order",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "cd94d335b9574ba617e9fc55a8cd4dde49b2e5a10ca35ddc5afdaf0841fb33a4"
+    },
+    {
+      "name": "get_marketplace_orders",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "ef9be176f744eb3870e940a619197f518eecb2fe140d8c73aa055ba9decf3b98"
+    },
+    {
+      "name": "get_marketplace_release_stats",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "d8f531d6e72e4e14866196693d9b7b00e73565916b997507426b4af87bf278f7"
+    },
+    {
+      "name": "get_master_release",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "1629887ab5a5775f36dc88b662aa5d96628818da6b0a6eb04507a93edbd040ec"
+    },
+    {
+      "name": "get_release",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "ba8a3c2d4ac3bd44ba1d93441f1c9c8e4e40ec06dd425d24d9d241016f49b060"
+    },
+    {
+      "name": "get_release_community_rating",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "fcb7fabec12ee0dbf84b75fc9a7e6deb7d83130bd2aedf13578e141e837191e6"
+    },
+    {
+      "name": "get_release_rating_by_user",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "7433cc2f48f6b9c818250dee10467f704ad7bdf3d525d07ac5ff0b6cd230d0a4"
+    },
+    {
+      "name": "get_user_collection_folders",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "9177e739d8ca40c17e8649c05441c6e5420cf832eaa6b5dbec1b3e4648c7a9e8"
+    },
+    {
+      "name": "get_user_collection_value",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "72b4c35f4c910b8d81652ccc4a38428cd893b6a6e831dafcb490c30916b6d80d"
+    },
+    {
+      "name": "get_user_contributions",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "f8cdad0d5cb564c11b8288da8e6ce65d64f39d6115cf73c4abfb10515d699d48"
+    },
+    {
+      "name": "get_user_identity",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "693007f8368c5ef10c7c5d8f1f01d8023ab4ebc558fcc64c76c1f2e795add6f2"
+    },
+    {
+      "name": "get_user_inventory",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "ed338e18ee32f22acf9d47e364c7aadd0ae53952afe894ffb10ff39353a33151"
+    },
+    {
+      "name": "get_user_lists",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "db42b594bf698d4b24fcf5a36c4ffbdfb86bd3964c4a1427a40cbbdec115bbd5"
+    },
+    {
+      "name": "get_user_profile",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "53535597b3285ccf41e71231259c56a8b9e11645207bfb89244a821b24efd485"
+    },
+    {
+      "name": "get_user_submissions",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "9623f3d59a33f2cb0c50cf3554ec3e1ad710a4805590f90d2ba64dd32e473a1d"
+    },
+    {
+      "name": "get_user_wantlist",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "913f12ca7cbd8e9118f7bf7e70b4c4484d43f92dc0643e74e60d177674bd6b55"
+    },
+    {
+      "name": "inventory_export",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "a675b6bdcceaa9d8f5aa66881d7a22732277eec7471229883a2153210183ed3f"
+    },
+    {
+      "name": "search",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "b3636c4c48df565a8cd5c96263d0dc929bdb12e40d005abceab48022640e504c"
+    }
+  ],
+  "surfaceSha256": "0f8ca907ae29c6f256c2e474d860a7ca8a45fe65e1804dc6832722db4f6841a4"
+}

@@ -1,4 +1,4 @@
-# Methodology (rubric v1.6.0)
+# Methodology (rubric v1.7.0)
 
 trovark computes a 0–100 Trust Score from four dimensions: Health 35%,
 Reliability 25%, Security 25%, Cost 15%. Grade bands: A ≥ 85, B ≥ 70, C ≥ 55,
@@ -51,16 +51,36 @@ D ≥ 40, F < 40 (+/- at the top/bottom 5 points of each band).
   shown; ~13% true-positive rate in testing, so it carries a low rubric weight
   and findings are labeled "candidate, verify manually" — use a dedicated
   scanner (gitleaks, trufflehog) for authoritative secret detection.
-- **Cost:** tokens of a reconstructed `tools/list` payload (gpt-tokenizer),
-  computed **only when every tool carries a real serialized JSON schema**
-  (manifest/OpenAPI sources — ~5% of the corpus); tool count (deduplicated;
-  test/example paths excluded). For source-extracted tools the raw captured
+- **Cost:** **tool-surface size** — how many distinct tools a client has to
+  load (deduplicated; test/example paths excluded). That is the whole scored
+  dimension, and it is measurable for every server whose tool surface we could
+  extract at all. The serialized **token footprint** of a reconstructed
+  `tools/list` payload (gpt-tokenizer) is still measured wherever it honestly
+  can be — **only when every tool carries a real serialized JSON schema**
+  (manifest/OpenAPI sources, ~5% of the corpus) — and is **reported as a fact**
+  on the scorecard, as the informational `cost/token-footprint` finding. It
+  deliberately **does not score**. For source-extracted tools the raw captured
   text bears no fixed relation to the serialized payload — measured against
   realistic payloads the old estimate was wrong by up to **7.5× in both
-  directions** (not a consistent under-estimate, as this page previously
-  claimed) — so the estimate is **withheld** rather than guessed, and the
-  cost dimension score is withheld with it. Absence lowers confidence; it
-  never renders as a favourable number.
+  directions** — so the estimate is withheld rather than guessed, and where it
+  is withheld nothing is published: silence, never "0 tokens". A signal
+  available for a twentieth of the corpus cannot carry a score, because its
+  absence would **flatter** the other nineteen twentieths: under the old
+  weighting a 5-tool server with a 25k-token schema scored 67, while the same
+  server with an unreadable schema scored 100 — failing to read it was worth
+  +33 points. Scoring every server on the same always-present quantity removes
+  *that* asymmetry.
+  **What it does not remove, stated plainly:** `toolCount` is a count of the
+  tools Trovark could extract, not of the tools the server has, and the band
+  rewards fewer tools — so a surface we under-read scores *better*. Where the
+  under-read is detectable (the repo's own tree lists more tool-bearing files
+  than the sample reached) the count is withheld and the dimension goes
+  unscored. Where it is not — a file we fetched whose registration idiom we
+  do not parse — the flattering error survives. That residual is why cost
+  carries 15% of the grade and not more, and why the tool count is published
+  next to the grade so you can check it against the server yourself. (Rubric 1.7.0.
+  Before it, the footprint carried weight 2 of cost's 3, and the dimension was
+  withheld for 96% of graded servers as a result.)
 
 ## Multi-language tool extraction & the `notServer` outcome (v1.3)
 
@@ -161,14 +181,61 @@ for transparency only, exactly as in v1's findings-only integration.
 - Tool-schema extraction is best-effort static parsing across languages/idioms;
   it does not cover every framework, and a miss triggers the coverage gate
   (grade withheld) rather than a wrong score.
-- The cost token footprint is only computed from genuinely serialized
-  schemas; for the ~95% of servers whose tools are extracted from source,
-  cost rests on tool count alone and its dimension score is withheld. A
-  dimension (or headline grade) resting on unmeasured primaries is withheld
-  rather than renormalized — across ALL dimensions, not just cost.
+- The cost token footprint is only computed from genuinely serialized schemas
+  (~5% of servers); for the ~95% whose tools are extracted from source it is
+  not published at all. It is a reported fact, never a scored signal — cost
+  scores tool count, which is measurable for every server with an extracted
+  surface, so the dimension is withheld only when the tool surface itself
+  could not be read. A dimension (or headline grade) resting on an unmeasured
+  primary is still withheld rather than renormalized, for security
+  (tool-surface risk) and reliability (spec era) alike.
 - CVE resolution covers `package-lock.json`/`uv.lock`/`poetry.lock`; other
   lockfiles (pnpm, yarn, Pipfile) still fall back to declared floors.
 - Monorepos are scored at repository granularity.
 - The committed-secret heuristic is a candidate signal, not a real secret scan.
 - Bare package names found on both npm and PyPI are rejected as ambiguous rather
   than guessed — use the `npm:`/`pypi:` prefix.
+
+## Tool-surface observatory (D2)
+
+On every index scan, Trovark records a per-server **snapshot** of the tool
+surface it extracted, under `index/surfaces/` (one JSON file per server), and
+publishes changes between consecutive snapshots as a **drift feed**
+(`index/drift.json`, rendered on the index page). The git history of the
+committed snapshot files is the longitudinal dataset.
+
+**What a snapshot contains — hashes, not content.** Each snapshot lists the
+extracted tool names plus a `descriptionSha256` and `definitionSha256` per
+tool (sha256 over the UTF-8 bytes of the description and of the extracted
+definition slice), and a `surfaceSha256` over the canonical, name-sorted tool
+list. No description text, no schema text, and no repository file paths are
+stored — a snapshot can tell you *that* a description changed, never *what it
+says now*.
+
+**The `EXTRACTOR_VERSION` suppression rule.** Every snapshot records the
+`EXTRACTOR_VERSION` (`src/derive/surface.ts`) it was taken under, and diffs
+across differing extractor versions — or differing sources
+(code-extracted vs. README-catalog) — are **suppressed, not rendered**. The
+reason is this repository's own history: the v1.2→v1.4 extraction expansion
+moved the index from 211 to 270 graded servers by parsing more idioms. Every
+one of those newly parsed surfaces would have rendered as fake "drift" had the
+differ compared across parser versions — parser churn is a fact about
+Trovark, not about the server. Any change to what extraction emits requires an
+`EXTRACTOR_VERSION` bump (enforced by the recorded-fixture guard in
+`tests/surface.test.ts`), and the first scan under a new version silently
+re-baselines every server.
+
+**A missing snapshot is not a removal.** A server that becomes unreadable in
+a later scan — classified `notServer`, `dynamic`, `unresolved`, or
+`insufficientData` — produces no new snapshot and **no drift event**. Its
+last snapshot simply stands. "We could not read the surface this time" is
+never published as "the tools were removed."
+
+**Scope, honestly.** The one confirmed in-the-wild malicious MCP server
+(postmark-mcp v1.0.16) added a BCC line in implementation code. Tool-surface
+diffing would not have caught it. The observatory is a transparency artifact,
+not a detector: drift events carry **zero findings and zero score impact**,
+and no signal in the scoring rubric reads the snapshot data.
+
+The drift feed publishes facts about change — counts, names, dates. It never
+characterizes intent.

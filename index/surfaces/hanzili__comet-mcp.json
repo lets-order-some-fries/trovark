@@ -1,0 +1,40 @@
+{
+  "ref": "hanzili/comet-mcp",
+  "scannedAt": "2026-08-15T19:32:30.425Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.7.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "comet_ask",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "8162967d2a158d9177c9434ed01d570e8874d18ac8c38224147e62ff100c8fb5"
+    },
+    {
+      "name": "comet_connect",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "c313c7a328165e8b6a9f97fcf551c024f8a2500c19dd766beb6e45560f22d241"
+    },
+    {
+      "name": "comet_mode",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "fa15e27a538f3403517e20ed16c44d0290eabfb94f9838ceb05ca15aa818ab71"
+    },
+    {
+      "name": "comet_poll",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "34569cbad56ff3dda9501147df9d025f123b88640a41cae30eae2d01c03a3c3c"
+    },
+    {
+      "name": "comet_screenshot",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "1c2d2d6c3829565188847776fd7a1999ce7a642a4448f0c823f8f3cb6f25f254"
+    },
+    {
+      "name": "comet_stop",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "578182d3df97af9aa8ba0c624e1079983109e65c0695ffc3e2629ef5226bcbec"
+    }
+  ],
+  "surfaceSha256": "fe04d335e8afa5ba931745d61fd41a9a0eb51c14526ccec57a4727356dbaf663"
+}

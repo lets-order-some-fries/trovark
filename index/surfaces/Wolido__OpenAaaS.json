@@ -1,0 +1,15 @@
+{
+  "ref": "Wolido/OpenAaaS",
+  "scannedAt": "2026-08-15T19:32:30.425Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.7.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "OpenAaaS",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "7eb07041f127d2ed0719892f58fc8a171888d17711d4574abec0f8482ce1c2af"
+    }
+  ],
+  "surfaceSha256": "a86a2a48dca2f380f331319129582f040785c44458d95ff1ab73bf6404205fb1"
+}

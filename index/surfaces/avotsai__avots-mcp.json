@@ -1,0 +1,90 @@
+{
+  "ref": "avotsai/avots-mcp",
+  "scannedAt": "2026-08-15T19:32:30.425Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.7.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "chat",
+      "descriptionSha256": "b649dff99dfff83cbe1e7abb02af787ff50024cbdec1da01f7c12c4f70c1af2f",
+      "definitionSha256": "538e4b34cd3e919c14b72cab195e18c63d8c4a9f6427bdb5f18c1665b3f3bf4d"
+    },
+    {
+      "name": "check_balance",
+      "descriptionSha256": "a97593b1c92d44a96ca63b77d80de16cb00f040265a4eb403eda1cc3e5e01ea7",
+      "definitionSha256": "1d8579eac77267de56ec59a4a745ec0c895124bfe5f0c00b3f6f6182929ad06e"
+    },
+    {
+      "name": "check_job",
+      "descriptionSha256": "273ece7d0c22a768003e360bb0bda548f3b9cbb480879559cf44077e4de5cd35",
+      "definitionSha256": "6a5164b68917cb0d7c7b7fb77820570195b3b4c7d0cf9ae92cc8516f8c6e7514"
+    },
+    {
+      "name": "create_avatar",
+      "descriptionSha256": "6765104781ec8a81a892a7740ab0bb01bcae88edd98ea24466d7d8732bb99aa4",
+      "definitionSha256": "71e093f49a3f417f3fc5780ed2df1daafb0647f1994067b964ee688bc3653a69"
+    },
+    {
+      "name": "create_calendar_event",
+      "descriptionSha256": "e578f3c98a163c570725785e62eec5c351b9cd019160852b8a46432f61b93b4c",
+      "definitionSha256": "05acbbd7384ce06db80327bcdf4f7693bb4842d9df2f42aa03f9259a7bfa37cd"
+    },
+    {
+      "name": "create_montage",
+      "descriptionSha256": "f412cb45e847531b54066c49e56994cc772fffc2791a283ccddda4fed78ef636",
+      "definitionSha256": "be64630429286b965de9ac395068c2f023c85695f09541ef48e61768859fff4d"
+    },
+    {
+      "name": "create_travel_poster",
+      "descriptionSha256": "617aaa8b488b6b948c9a5befc93b5e29bf467b81efb30d9e6abd43b2f505820c",
+      "definitionSha256": "ce85b9957a1ab3d902e592a9771357f34f09caaa25f8a72e3641733efda0adef"
+    },
+    {
+      "name": "face_swap_video",
+      "descriptionSha256": "47910751ff251a2e9c5651a2ab78c30b3b45da2925140193b2de83e82e3fbac0",
+      "definitionSha256": "3be570af7d038ff8e8280bc6e9fe70f3b6af6fe0a9cf5dfe5ae902a7602e57f9"
+    },
+    {
+      "name": "generate_audio",
+      "descriptionSha256": "bf20967ae4e0563dc004b3f90bb99720f7a7930b696aae296432dacd881f780c",
+      "definitionSha256": "006ba99dec196dbaa00bbf5bfb64e07105c7a1f7cf23c365e5ea6c889e82ec68"
+    },
+    {
+      "name": "generate_image",
+      "descriptionSha256": "0deff58f5686141052c18dd11388792c7b5e180b4c54dec6d38de52938848108",
+      "definitionSha256": "ad356de02b15f261c7277736aa6ffd485a881885fc23bcd6650174135bf16e30"
+    },
+    {
+      "name": "generate_talking_avatar",
+      "descriptionSha256": "ab0e7bdf8229d80db04ea135b1defeeab12294e76e2443b740792fefe099355e",
+      "definitionSha256": "087f0573a84ab4253124c7eaa538e98c94d020bf74ff10b9532965c2cccf59e7"
+    },
+    {
+      "name": "generate_video",
+      "descriptionSha256": "801cc92c913c68d607bd962e93824d03ad39b19dab6b2439884cafe0ff79030c",
+      "definitionSha256": "add0027cedd72c980d095d763dc56fa70dd21b3babbb021e8af38aa02932a070"
+    },
+    {
+      "name": "generate_vlog",
+      "descriptionSha256": "7e8dd949bd6a4855424c8c94a5db839d9a312daadc52623a7b3d27d010e91af9",
+      "definitionSha256": "fea1534054bfa332570484fcd3f17569e1c2965b4a2c977a8462896991ea261f"
+    },
+    {
+      "name": "lipsync_video",
+      "descriptionSha256": "aa739a1cc59f275cf116bd35ce1f1fff1cedb3ca184bbfd6e1d7330cc10731cf",
+      "definitionSha256": "9179ab04edf7653f37b95b5acff38bd7bc1ca96a4df1a0c8e066a09b7c3e4c34"
+    },
+    {
+      "name": "list_avatars",
+      "descriptionSha256": "22614c2ae02f6b8fa230ab69bdb1adff3ba4913e27537f98b4cd498c8505bd46",
+      "definitionSha256": "c4e22fb515c25aa1737d51831d7a1ca77eb034f337cbf9d5dc9964dda86b1e36"
+    },
+    {
+      "name": "list_models",
+      "descriptionSha256": "b815126d6798438ab637909403d8406d2176a336a16786a3e3ab277de4cb544b",
+      "definitionSha256": "7773cbd2f0105e2337cfc775423283cffcea530e3e47c6e7fa7eea315cf183ae"
+    }
+  ],
+  "surfaceSha256": "c4564ba494112a794c3ceb9a1a46492be13a519059c9194015e35552c3ee70e6"
+}

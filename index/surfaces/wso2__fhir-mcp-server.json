@@ -1,0 +1,35 @@
+{
+  "ref": "wso2/fhir-mcp-server",
+  "scannedAt": "2026-08-15T19:32:30.425Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.7.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "create",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "ca504460cda7ed3cb38a22507105b2c61aad59a71b86d8d620fc2eaec854eb2b"
+    },
+    {
+      "name": "delete",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "d51cee56a6897c82cbe1e7c6cdfda037d0923233316c6dd89fce8e356ecd9824"
+    },
+    {
+      "name": "get_capabilities",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "420e709380c5ef3278d9038e06f8bf146d7f18aa3bf5d61b378135e29953914f"
+    },
+    {
+      "name": "get_user",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "68b3767425294179cb7cd006ccf36360bd9ae47cb1b236e4d85c6c91a1b6e3ac"
+    },
+    {
+      "name": "search",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "f49052b3e8d1bca066256ceb1c135025921e0404a93f90cd8306138d2be18d31"
+    }
+  ],
+  "surfaceSha256": "4ece0a1786bfba695cbb9af3fed624e25ab40db03bfd0edb815e1c7e790666c1"
+}

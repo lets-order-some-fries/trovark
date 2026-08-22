@@ -1,0 +1,30 @@
+{
+  "ref": "skillselion/skillselion-mcp",
+  "scannedAt": "2026-08-15T19:32:30.425Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.7.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "load_skill",
+      "descriptionSha256": "b42aeb5948006641a9e87092d7d2f0eba5db3127c93a8c0169cba2cbcd980de1",
+      "definitionSha256": "41d4121b2876e3f4162b8bf924b089784423c85ec8362d5131c245245bd039e2"
+    },
+    {
+      "name": "search_skillselion",
+      "descriptionSha256": "7e64671fc6d7c9ff1e6cc8f03278f2b95282f9dffd174d328604c466b5b4bb8a",
+      "definitionSha256": "2e8b41aee6d505b7952a6774ba2b00a0c5aa113eb40040332be3d39f7cd4c639"
+    },
+    {
+      "name": "synthesize_skills",
+      "descriptionSha256": "c86ea0ca9b9e831fd969822198c8b556acbcff5031e9777b8fb527d992f351f8",
+      "definitionSha256": "abc46f15ec29cd07221a04960a8035904e7a16d470fcffeced89c790f818bc54"
+    },
+    {
+      "name": "top_skillselion",
+      "descriptionSha256": "954bbb604e54edf3f7b29c5949fd8f398099adfd208790e4d875a1407eac5cf2",
+      "definitionSha256": "9d0b8086f4c547e260abb4477cb278ff3462c91e053c67d25fc0e3bc501a57eb"
+    }
+  ],
+  "surfaceSha256": "7643bbde1b4e4143851be3958b45de4560fffb4f662af8311ba8097a4a4b6b02"
+}

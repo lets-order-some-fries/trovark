@@ -1,0 +1,15 @@
+{
+  "ref": "hardik-id/azure-resource-graph-mcp-server",
+  "scannedAt": "2026-08-15T19:32:30.425Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.7.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "query-resources",
+      "descriptionSha256": "5cc1f0dc64a37779d89471463f5f97023d211feef070f6fbcc6a9fadc11eec5f",
+      "definitionSha256": "11db35eb1d5b2a20be050dbf8c41c402c4f5de48c698a0ae8a195c41835fee27"
+    }
+  ],
+  "surfaceSha256": "a838af13d83c602de55c90c83222251a2aa3d9549cb73243f16a9fcd09fc7d4d"
+}

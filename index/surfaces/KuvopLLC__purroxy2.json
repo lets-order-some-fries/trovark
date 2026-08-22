@@ -1,0 +1,40 @@
+{
+  "ref": "KuvopLLC/purroxy2",
+  "scannedAt": "2026-08-15T19:32:30.425Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.7.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "purroxy_extract_data",
+      "descriptionSha256": "481e140f87474ea08d1064aceeb8ab8c69937eb0bf6c9a986e1bcd12153d9468",
+      "definitionSha256": "def01842ca0dd76620eddaaa8bcb39dca627af36ee3a2e0ed936afb1091fe8cb"
+    },
+    {
+      "name": "purroxy_get_status",
+      "descriptionSha256": "4a3c406c289f5bd129397e823c1c4525c4bb7a40073fb5bf4b92aec3ddaba4c4",
+      "definitionSha256": "d39f402f3ba2db2e3a6ae8685adbede0b18c93946eac5751703fdcc2429ca867"
+    },
+    {
+      "name": "purroxy_list_capabilities",
+      "descriptionSha256": "91b995cac46c8e4df0eb0f319c85b60616e092f688040148feacb9546bf96f5d",
+      "definitionSha256": "44d803e75f47ef8eb0c2c11aefa3f126b0f8cc6e88f13179c39c6de2750db019"
+    },
+    {
+      "name": "purroxy_login",
+      "descriptionSha256": "0d41fdd39cd24dd776c9877f3ad83f71c152e93512e4f1b8b94aa7ace3bbb6b6",
+      "definitionSha256": "666d4b882f42b71e34f83b0ef5ce8e69c465071c288727ca027acd70f5e069b7"
+    },
+    {
+      "name": "purroxy_record",
+      "descriptionSha256": "d49338173c55263616c4e0324adc8f71f480f3c2f4d6a8ab54c8e481bf4e802f",
+      "definitionSha256": "f9cc16ffd57f4cf6b239a2b26190b8b2eac850771653657ddc95863281523369"
+    },
+    {
+      "name": "purroxy_run_capability",
+      "descriptionSha256": "335f9e412069c500301239ec2d3f86ed30cd68ac3fab80604597f2e1f016ef7a",
+      "definitionSha256": "d62f0f1fc2c39f6841c93169b193648468c43b31550d263bd48ee6068d2f2c07"
+    }
+  ],
+  "surfaceSha256": "4e131e2176e4fb0988ced0c1ca012c0f4b34db7cad791569ea7251cf6c06e937"
+}

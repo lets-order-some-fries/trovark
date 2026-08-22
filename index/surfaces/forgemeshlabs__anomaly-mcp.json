@@ -1,0 +1,45 @@
+{
+  "ref": "forgemeshlabs/anomaly-mcp",
+  "scannedAt": "2026-08-15T19:32:30.425Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.7.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "address_scan",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "f130f438bb02c60dee2e9fc02fc2a5d87f62376da780500d5a8e7740a7518875"
+    },
+    {
+      "name": "anomaly_scan",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "19b14769a8a0e9a049e2c91d026e7247d1f258f0ee03de1e086776b73c34e7a0"
+    },
+    {
+      "name": "health_check",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "96475e619bd3307f1cda93227d00ebf6398b4e37ab8b9cf563118ec46c5d2500"
+    },
+    {
+      "name": "model_status",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "1892e0aadf79c37bde4c132a40e41017e8173e2c9e6e8ab4813e54103dd235bb"
+    },
+    {
+      "name": "nft_scan",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "66e037aa84128015926406199a19f771633ecfb9e67cee51f73cf0e8a746b366"
+    },
+    {
+      "name": "token_scan",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "b3f78182e93b064f65fcc33b33eeaa18f482032ed9ab8806ecc4c29b01bce62b"
+    },
+    {
+      "name": "whale_alerts",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "751bdae55391716128f838221b738a3bd792b3729f51da77eb71f5a057924f5c"
+    }
+  ],
+  "surfaceSha256": "ad3b2eec0d12c1768d59962d12a00276161fb7fe61f565113b456b91915d49ba"
+}

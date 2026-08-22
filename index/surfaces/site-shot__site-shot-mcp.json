@@ -1,0 +1,20 @@
+{
+  "ref": "site-shot/site-shot-mcp",
+  "scannedAt": "2026-08-15T19:32:30.425Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.7.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "capture_full_page",
+      "descriptionSha256": "cab3f983b2e50e69f820f32a649b6c524cec95400e263816e64abaf4125ac243",
+      "definitionSha256": "71850a9c9f4fc57bfa8f374286eb93869236473a863e6def7acf384850928cb3"
+    },
+    {
+      "name": "capture_screenshot",
+      "descriptionSha256": "a982bdde3caf8e89132086061b27741de46f8a5100a95b3e64a6f26a78f4a59e",
+      "definitionSha256": "4518356a474eda8fd02ebe3aef8d3978181f927f5706fc37d75b082bd349a797"
+    }
+  ],
+  "surfaceSha256": "949421536821ffcfe53e9c290fb635c46ebb7a16f6652b65c045119587afc218"
+}

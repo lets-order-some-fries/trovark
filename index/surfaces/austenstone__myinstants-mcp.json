@@ -1,0 +1,35 @@
+{
+  "ref": "austenstone/myinstants-mcp",
+  "scannedAt": "2026-08-15T19:32:30.425Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.7.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "browse_category",
+      "descriptionSha256": "1e95b5a3dd9654b057ff40ce087ad04105224de6f32bc9327c3d796b36b92d54",
+      "definitionSha256": "44ca92f6cb326cd2cfa6ee408a2dc721fbf416cf4a3dd3b906bf4b2f1557a5eb"
+    },
+    {
+      "name": "get_sound_details",
+      "descriptionSha256": "75b6de07987cbf14d54afb6bb681d9bf604118eb953f4a202069a53487abab43",
+      "definitionSha256": "1b8e637a08067b068e25d3ff4d2b5f6f7556955e39145878a142a945c8a599bc"
+    },
+    {
+      "name": "list_devices",
+      "descriptionSha256": "7efd9aad542c46769671682c7b2f4f0afc463ec13145c745b3f4dfda63702778",
+      "definitionSha256": "487bfa495a887294f8d0ede60a345ae5ee2d037a8f52e4b861bd3c89dbfe5020"
+    },
+    {
+      "name": "play_sound",
+      "descriptionSha256": "cf53ea858a33cbf47ecb1268d7688f9c8b5db4f8f035d78c1b43878cf0ae45ae",
+      "definitionSha256": "259f4d34d9c290b0faf6de8ff9c7419302e4d39724ee12a7189ea1da87d5e3b6"
+    },
+    {
+      "name": "search_sounds",
+      "descriptionSha256": "c3a6e57d183693c6027cf5a889d2d8ed2594a5c35962fc9d7dfa2e4a84fbcbdd",
+      "definitionSha256": "d8a74bd499642626fcd19f86d11b43cd86c95bc89f57a4bc060234c79d032c60"
+    }
+  ],
+  "surfaceSha256": "82916634e934b8152dd002cf48e3500da5d0eee3186c4b79a8fc4057e376624e"
+}

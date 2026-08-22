@@ -1,0 +1,110 @@
+{
+  "ref": "ammawla/encode-toolkit",
+  "scannedAt": "2026-08-15T19:32:30.425Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.7.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "encode_batch_download",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "0146855c0129e281ddf1f08fbd9477333a351266f91ff433640408c48614a0b2"
+    },
+    {
+      "name": "encode_compare_experiments",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "3cf3e1092826316e991b0ddbb73e6b905b57b8a2140ea9bd4c1c015766bdfad1"
+    },
+    {
+      "name": "encode_download_files",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "8c14e5a54440167e2771c749a3eee324f9d0f3c5f29b3755e71928b941de5eea"
+    },
+    {
+      "name": "encode_export_data",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "c2d11178ee9d85347cecd4a3691eadfab20471f0a089fcfc3e9b4a900901a815"
+    },
+    {
+      "name": "encode_get_citations",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "eca850e887538324b6436bd594703681fd9779dda3f4a0d99c6d6582c26a2a16"
+    },
+    {
+      "name": "encode_get_experiment",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "9b022cf3b1fb047b0b3a69929bd2059e3008d09aec35a60ceb28e5cc4356253d"
+    },
+    {
+      "name": "encode_get_facets",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "304b16b1c12e7f57d236a39dc5d2832788cf06eafc5dab51970614d4fe9da312"
+    },
+    {
+      "name": "encode_get_file_info",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "5bd836b4cf0579fb071d1f2ae4f5609e233f1b0efa4554b261d7da6121739fd9"
+    },
+    {
+      "name": "encode_get_metadata",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "41bc63480b0ef8e13c8e6dd88fcec686a0b8c159f61f119e2f089ad616645f53"
+    },
+    {
+      "name": "encode_get_provenance",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "8a553bcf88eea87805267c0f986df1340d52f1e1f3a1d60304e4deaffddbb4f6"
+    },
+    {
+      "name": "encode_get_references",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "d4f82ad8af64f29296aa4088919c33075d61f10c7b69faa18dd91f5eddaaab4d"
+    },
+    {
+      "name": "encode_link_reference",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "1c446bd49e00138a121c56c2ad2452804b72f3d46d053cbfdcbdf942e560b1c5"
+    },
+    {
+      "name": "encode_list_files",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "6ddcc74770ff07e5a4657b243b4f074deb9f16cefea9c542007fc7eb37cd8fd7"
+    },
+    {
+      "name": "encode_list_tracked",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "bdb4bb6b40b135a1c7a26ce2bf4b68124db19bc5023d13b7cd86355f3e40fa4f"
+    },
+    {
+      "name": "encode_log_derived_file",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "c6eca858086d86a57af3d2f0b6fd613014d001acea85819307f98cb4c026c543"
+    },
+    {
+      "name": "encode_manage_credentials",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "53275db91c09ab181b9a316639abf45121132eb8d8d74bdd6bcb1d09dde9e5fb"
+    },
+    {
+      "name": "encode_search_experiments",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "8af6be38e12b4b8bd7c0afa89270d1b369fb1c29bb12b6f81d34a7ffbf09d018"
+    },
+    {
+      "name": "encode_search_files",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "e78c27f18e1ffdee5446495ec4808000531e786aff64437e212be349a77b34ee"
+    },
+    {
+      "name": "encode_summarize_collection",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "f6c538f0e40a437a4e8ceb219a25bf1f85c7fd8b8415f2ede4496baf8e20ff65"
+    },
+    {
+      "name": "encode_track_experiment",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "bba9cd6049e51859253d29645a1d126c7cd53330a34fac6742b0eda599aca5cd"
+    }
+  ],
+  "surfaceSha256": "8916f0ddd8e2fa691b3d11383e4b433ae2fe841be792c861d6c32a112fb0fa75"
+}

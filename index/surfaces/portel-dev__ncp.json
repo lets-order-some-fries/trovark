@@ -1,0 +1,25 @@
+{
+  "ref": "portel-dev/ncp",
+  "scannedAt": "2026-08-15T19:32:30.425Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.7.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "code",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "e9cd4621b286dc2ef7835345f7c991cc5c1a49dc0d20d89054c8ff9a71ea9d1c"
+    },
+    {
+      "name": "find",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "8b2ad6c68e0b19e6a5e8ba9ce10263ea2c106d7a2692d308b72b703cb6af04d6"
+    },
+    {
+      "name": "run",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "e16989c482fc1be548d9ace828d10fd757d4652087b78a14b62a5b18a17e9281"
+    }
+  ],
+  "surfaceSha256": "e3c0205df85fb06561f3c8e346abf1dc7b918f467483e43e761eb0f63d1008c7"
+}

@@ -1,0 +1,15 @@
+{
+  "ref": "aliyun/alibaba-cloud-ops-mcp-server",
+  "scannedAt": "2026-08-15T19:32:30.425Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.7.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "dynamic_lambda",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "87d156a83e88047833aa3f1e005b6617f13abca7bfff8a3c740377f530d147c0"
+    }
+  ],
+  "surfaceSha256": "d77e0a9b2787e3130c4b8fbe5c60ccf8ca4e062f352aae2454d944dd4c56e175"
+}

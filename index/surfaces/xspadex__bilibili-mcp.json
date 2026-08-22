@@ -1,0 +1,15 @@
+{
+  "ref": "xspadex/bilibili-mcp",
+  "scannedAt": "2026-08-15T19:32:30.425Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.7.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "get_popular",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "168f9943ca74f6b438087934808c6e59a67bd2cfefe0d9025ce7d508009c6589"
+    }
+  ],
+  "surfaceSha256": "7a71efeed101d3fc1a8253a57a59778e874a3410da1b7b28d7aba80c72ed6fbd"
+}

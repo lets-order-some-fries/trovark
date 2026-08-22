@@ -1,0 +1,175 @@
+{
+  "ref": "khglynn/spotify-bulk-actions-mcp",
+  "scannedAt": "2026-08-15T19:32:30.425Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.7.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "add_reviewed_tracks",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "80eefe4b2002757bd6d37a7203901886cc2458d608eafd08c9c5ba13cf09cace"
+    },
+    {
+      "name": "add_tracks_to_playlist",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "9e54aa96655a260482096aa0c465db2471da9372125d1d9bf00ec1c6dcbaa424"
+    },
+    {
+      "name": "batch_search_tracks",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "93c5dc2beb3d6a50301b80f86f830ddd12b63f50af6033483ecfee25438294f6"
+    },
+    {
+      "name": "check_auth_status",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "4ff689f7c47c606a2105f91b00e1984c2f99230fc80caa95244c30b19f99792d"
+    },
+    {
+      "name": "compare_playlists",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "15a7bdc7700840cf5521047feec02faf8790919072c5cd699c8a6013e898f2c2"
+    },
+    {
+      "name": "create_playlist",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "485508afbd579a3a450a29c6ec9a38d1a4219172e550172920e82f7954970fc7"
+    },
+    {
+      "name": "create_playlist_from_search_results",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "123b3c358dea2b023d9461e279204ec21606169f7fc1e0446e89cd185c8b7266"
+    },
+    {
+      "name": "export_library_summary",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "9b97b4b310c819e922f35c2f4678ec662e1c08f9283fb2c13a6048b7646fdc84"
+    },
+    {
+      "name": "export_playlist_to_csv",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "dc16bfc14e68cf8f23da7e7c54b632c6b51557e5bd797969714fc7a56ffd42a5"
+    },
+    {
+      "name": "export_review_csv",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "4370a652bac9b95228c93c697e922b6369389a1ab65189b8f19372801737078b"
+    },
+    {
+      "name": "find_duplicate_tracks",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "47113279a29d3c6bc8c91935637092b31b3afa6e62334e44eb4ee2dfe052ce9a"
+    },
+    {
+      "name": "follow_artists",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "ae86be0a88445d599fe83448fcbf7d3b04471e6ebc1b49ec9b75d274c8540fd6"
+    },
+    {
+      "name": "get_albums_by_song_count",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "8cf60eac898e405865c3b92c1df8d85a1241fd5bd98dc09df93684699be79884"
+    },
+    {
+      "name": "get_followed_artists",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "5ed2a753aace032577fe7b3af0f1f9b44bc72ae25ae736981ddd1e6277ff88b1"
+    },
+    {
+      "name": "get_library_artists",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "bbd218596d2b5fbba5e3ff39941cf599874bfa9c4ac24c80efc970773dff4e35"
+    },
+    {
+      "name": "get_playlist_info",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "bca663c13b0af34dde422de0f0e5a029443c9516fb7b07575cdea0acdbc3233a"
+    },
+    {
+      "name": "get_playlist_tracks",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "b8b085012de21de19a4e03ffaaed539ac8f9495b53783a747105a3b364101a13"
+    },
+    {
+      "name": "get_recently_played",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "bbd5a1e5058e7dfcc73c322797b583177e93294aa43406b99b4378c04dc14709"
+    },
+    {
+      "name": "get_saved_tracks",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "96f02121d3cb175cf5a1f6271a628ebd420797a942e4a74c6ba7805ab946e8be"
+    },
+    {
+      "name": "get_top_artists",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "822cba01051f807847533ae22faa783c5d86a807b5e353852304c64a9159ff86"
+    },
+    {
+      "name": "get_top_tracks",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "936369a0c2e26d7764fe092fecdc91c4dc46e925f274fc9895c3ea712e0fc5bc"
+    },
+    {
+      "name": "get_track_preview_url",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "19167bae836d48f80b8bfd174cf8e4f4aa3cbd177e753f90ead52f60be6474f3"
+    },
+    {
+      "name": "import_and_create_playlist",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "a16477c1baa9815f19990dc2b07c2003068f5f0e6c84f2093af62b1594776d5b"
+    },
+    {
+      "name": "parse_song_list_csv",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "70ef378dfd7a9990081435d2fdda9af6988935b0d97d5ff083a47e7a1c72006c"
+    },
+    {
+      "name": "remove_duplicate_tracks",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "729433bdbbe5ceed367e30947fb0a8440cb5794b0d65b759888a98899cd0bc8e"
+    },
+    {
+      "name": "remove_tracks_from_playlist",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "8649954cc089609977db03d2c9387ed4eb6900715a12a329911e7ef2a8ee0c88"
+    },
+    {
+      "name": "reorder_playlist_tracks",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "7fca21b7e2c198be052202b53b7507dd186c9544a846042868a14996ed127aa4"
+    },
+    {
+      "name": "save_tracks",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "075b5b11f36028b2bbc0e223115d5f0d3d5e7c29aef20e2e13eb42c510344dda"
+    },
+    {
+      "name": "search_track",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "37dd2be69678d605b5426e4569a928a0afb146670749da2a6af14c49fd4170e4"
+    },
+    {
+      "name": "search_track_fuzzy",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "5630805b65d284bcc57f31a805ca6e9f72b1357d709c1abff7b117597231a8ef"
+    },
+    {
+      "name": "unfollow_artists",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "6d862a126c70842d2406f374c3c80aed876ab7a220668fb5649c46ed2a603aea"
+    },
+    {
+      "name": "unsave_tracks",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "ee12434ad233f495651205592e797725b4c51ef81df5c937cac7035ac0f3e928"
+    },
+    {
+      "name": "update_playlist",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "6c257443ec1077873afd522d497941698b9ad26ee054568c352dc47744cc3ec8"
+    }
+  ],
+  "surfaceSha256": "35fc5b43058c8e036a47ef620d93f6435e1a1af435c937921805547b345d0ebe"
+}

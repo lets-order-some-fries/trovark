@@ -1,0 +1,25 @@
+{
+  "ref": "K-Dense-AI/claude-skills-mcp",
+  "scannedAt": "2026-08-15T19:32:30.425Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.7.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "find_helpful_skills",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "abe5f9c2e7031ce1d3302ab14104053ef40372196a9ca612b689702aa1f33fd0"
+    },
+    {
+      "name": "list_skills",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "9b4e5e67435e588d03b0fe7076b4face50eafd657f251efb913a811df96073a3"
+    },
+    {
+      "name": "read_skill_document",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "9dfd27cd23633e4f181920babe78f9a2137882240411cf7aec910b54ca47f3a1"
+    }
+  ],
+  "surfaceSha256": "f65ebef839c87dc1c0aeff1fd24d295d3c2423b9730c07dd21f00cd903bd41fd"
+}

@@ -1,0 +1,40 @@
+{
+  "ref": "browserbase/mcp-server-browserbase",
+  "scannedAt": "2026-08-15T19:32:30.425Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.7.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "act",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "07c6d344b1495640f3712b0f070e4a1feb4725077f7c2ae91d684b602fdc5afe"
+    },
+    {
+      "name": "end",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "a8332530043a1fd201cf490dae343453d1c99dbaf49329b83a733a20270e679b"
+    },
+    {
+      "name": "extract",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "607ab1f5f00c368143152673ca66c3364e16ad8e408f9c960676a4592fcd2428"
+    },
+    {
+      "name": "navigate",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "f3db8b6fbd4ab7f2ff3e76aa82d97ea535540e4efc29973e7e85654d3fa1d139"
+    },
+    {
+      "name": "observe",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "20692823f96a9769c17d17e29823d1285cec1f7da09b428d38a1e209d4423bc6"
+    },
+    {
+      "name": "start",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "0242ae9361c28f274df51fb53c9688e2e70f1f0e7e92df860dd225458c3885fa"
+    }
+  ],
+  "surfaceSha256": "c5831e4712c9d44a1e8d322a43b848c88842af8e7b1dc45b3fce745a9ea1cb55"
+}

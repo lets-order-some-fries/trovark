@@ -1,0 +1,35 @@
+{
+  "ref": "ArturLys/ao3-mcp",
+  "scannedAt": "2026-08-15T19:32:30.425Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.7.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "find_tags",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "105b647b97fab6436a57a176cc7fe2eefeb8e78957a1ce687b6f8b8c807f20a8"
+    },
+    {
+      "name": "get_work",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "c422e4eea548721fa1bbcdd63b3c8f2c5c97ccabe46495652169824f6bca0820"
+    },
+    {
+      "name": "get_work_text",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "c683971a4e4205628e853498378dfb99d7cbf894b5ffc6080b8d476a0e4a2d45"
+    },
+    {
+      "name": "read_works",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "de6d1520c75a4941f9ae0cda603cc134691b36d5a3a66701967a87553d0e691e"
+    },
+    {
+      "name": "search_works",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "bcd3e9a4cb69b78425652d221e6901b14ce6e41e82c8ef84490d20d3039a48a4"
+    }
+  ],
+  "surfaceSha256": "27752b6cdbdb5c77ab3fdf8c73a128ebb8e30fb993dfff9241992128825ebbea"
+}

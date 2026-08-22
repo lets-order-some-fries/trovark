@@ -1,0 +1,35 @@
+{
+  "ref": "gpu-bridge/mcp-server",
+  "scannedAt": "2026-08-15T19:32:30.425Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.7.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "gpu_balance",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "01f60ea6bfaf635b16aed49d5cdc3ef92a348daf21cbe1c89b87009adfd4b65b"
+    },
+    {
+      "name": "gpu_catalog",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "6a5a06b648f2e50a7398685260a97fd6e1889c7c51dbeec4c55b84b11d98661c"
+    },
+    {
+      "name": "gpu_estimate",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "5b328a62f8f1ea78b14a8f361e1c4e36f3a062574c0ee2249e8266fb37b8a830"
+    },
+    {
+      "name": "gpu_run",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "a3814983b01789841c4f1361e26e49f5b92f47d76b85db7cd021235d38a380a0"
+    },
+    {
+      "name": "gpu_status",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "9a12a0c04e4a03af08af3ed1d7499847bd74179c1c8ef44edf20bd3eb203d073"
+    }
+  ],
+  "surfaceSha256": "f1ceb6e0d8d053bc924d2fddf29a4034948e62cf9e0cb9ff4f0e7c655d0c5cb7"
+}

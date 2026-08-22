@@ -1,0 +1,25 @@
+{
+  "ref": "cfpramod/open-museum-mcp",
+  "scannedAt": "2026-08-15T19:32:30.425Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.7.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "cite",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "79d0afbd5a5352dbb24126c8513211f687b7286697c7a30e9d28de34304dbdc9"
+    },
+    {
+      "name": "get_artwork",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "0eecc1e6bfe5ed93048c5aed0fcd567b72eea85d112eea99006a7c20b532c33d"
+    },
+    {
+      "name": "search_artworks",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "4ac4f86e69199220bcb94c30df58e5767f7230e866a28745a7541ddb9c03cfc0"
+    }
+  ],
+  "surfaceSha256": "c33fec27da7d2c8aaff612e2413ceb1088d677d4dc03a5e9419fa0cb4873378b"
+}

@@ -69,7 +69,11 @@ export function renderTerminal(card: Scorecard, opts: { color?: boolean } = {}):
     const body = d.score === null
       ? paint(33, `${d.id.padEnd(13)} ${'not measured'.padEnd(20)}`, c)
       : paint(colorFor(d.score), `${d.id.padEnd(13)} ${String(d.score).padStart(3)}/100  ${bar(d.score)}`, c)
-    lines.push('  ' + body + `  ${d.confidence} confidence`)
+    // Fault hunt MINOR: a withheld dimension used to print
+    // "not measured   medium confidence" — advertising confidence in a score
+    // we refuse to publish. Confidence qualifies a measurement; no
+    // measurement, no qualifier.
+    lines.push('  ' + body + (d.score === null ? '' : `  ${d.confidence} confidence`))
   }
   const findings = card.dimensions.flatMap(d => d.findings)
   if (findings.length > 0) {

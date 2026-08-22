@@ -1,0 +1,35 @@
+{
+  "ref": "pubspro/pubmed-search",
+  "scannedAt": "2026-08-15T19:32:30.425Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.7.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "find_reviews",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "5ed709b36f3e83f4457071cb5b8b6fa3e331d1de094fbf35b326cc03e3051e33"
+    },
+    {
+      "name": "get_abstract",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "0b0d77f5ea763bbc441c88480e429ffe4747e6664e816418dba453ae56eca566"
+    },
+    {
+      "name": "get_citations",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "15a73ffe75186e355e9414851e908e4e20becf7d7ddf94f81556328c78dbd48a"
+    },
+    {
+      "name": "search_pubmed",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "c4e066e37f1b7cc144154a5cd2bc7cf1b748dd71d4db1002a412d169baef4ee0"
+    },
+    {
+      "name": "summarize_findings",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "8185c097a2f736547d475cf4b8e4e83b081ed445177527465c6411d256acf5df"
+    }
+  ],
+  "surfaceSha256": "7d015dadaf5ec70de5b21bfcf724b2b1f1fe611795e67b8594fc07a4038297ec"
+}

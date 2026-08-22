@@ -1,0 +1,30 @@
+{
+  "ref": "corralimited/snapdiff-mcp",
+  "scannedAt": "2026-08-15T19:32:30.425Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.7.0",
+  "source": "readme-catalog",
+  "tools": [
+    {
+      "name": "snapdiff_capture_screenshot",
+      "descriptionSha256": "3f560ed76100d88937492bd804f8e7a31e70dd0769b7120a00c0afdf691c3cb8",
+      "definitionSha256": "f843128b203ef11dc570eaa4ad8a9f9b56893533b2cf6ed98c6abcf036af12ea"
+    },
+    {
+      "name": "snapdiff_compare_pages",
+      "descriptionSha256": "7a77d7a8158cd3ce88f4e689d2db95e53cb6cb7cdb05eac0b3309073952e076b",
+      "definitionSha256": "6326f7801f97339adbae06c0db06d81f6be4d35835a14cac361bc2e5117cb651"
+    },
+    {
+      "name": "snapdiff_html_to_image",
+      "descriptionSha256": "c37397dc017f76fc0103052c26ed96036236df80e5ec0e317db1ab1d588b5019",
+      "definitionSha256": "909b61c9fac7bbaf315d831af5465ebd3cd53aa9575dd7812387a994325a0c21"
+    },
+    {
+      "name": "snapdiff_verify_ui_change",
+      "descriptionSha256": "c9c36663d6d6e2b36249e82cc1f90b68a427c931fa670939ea306084e5e6790f",
+      "definitionSha256": "420f2da3dc8f09583472e5ab395dd8046bf1b44e63bfd572eb8dc0de998713b1"
+    }
+  ],
+  "surfaceSha256": "cc7b764969e7e17c0725aa39d27cc6e9609bebb3f3559c0c4b66a648c8a419de"
+}

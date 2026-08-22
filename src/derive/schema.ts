@@ -1621,8 +1621,10 @@ export function extractSchema(
  * and since the rubric maps fewer tokens to a BETTER score, publishing a lower
  * bound would systematically flatter servers — the same "absence rendered as a
  * favourable measurement" fault as scoring a partial tool surface `none`.
- * `undefined` drops the signal, the rubric lowers cost's confidence, and the
- * dimension rests on tool-count, which we can always honestly count.
+ * As of rubric 1.7.0 this figure does NOT score: it is published as the
+ * informational `cost/token-footprint` finding (see src/assemble.ts) and the
+ * cost dimension scores tool-surface size instead. `undefined` therefore
+ * publishes nothing at all — silence, never "0 tokens".
  */
 export function tokenFootprint(tools: Array<ToolInfo & { evidence?: string }>): number | undefined {
   const payload: Array<Record<string, unknown>> = []

@@ -1,0 +1,20 @@
+{
+  "ref": "asmith26/jupytercad-mcp",
+  "scannedAt": "2026-08-15T19:32:30.425Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.7.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "_wrapper",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "d3cd4c88fa4c47a7a603c8c4945273af45c7e57cb9af2ee7ac0c7b743bc3cca1"
+    },
+    {
+      "name": "get_current_cad_design",
+      "descriptionSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "definitionSha256": "9cb1af5eb590b9ef39bd0699b19259c51dce10e216610519d6d05ec441ddcb15"
+    }
+  ],
+  "surfaceSha256": "59ae98794fd66e174f3fa78f6b8ee7e7dee9823bc7a024b0654bef25eff8fe13"
+}

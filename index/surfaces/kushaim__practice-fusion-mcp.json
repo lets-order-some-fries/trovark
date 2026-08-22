@@ -1,0 +1,100 @@
+{
+  "ref": "kushaim/practice-fusion-mcp",
+  "scannedAt": "2026-08-15T19:32:30.425Z",
+  "extractorVersion": "1.0.0",
+  "rubricVersion": "1.7.0",
+  "source": "code",
+  "tools": [
+    {
+      "name": "practicefusion_get_allergies",
+      "descriptionSha256": "16e0903e95e24e2dc35d367fc83eda94f58fa70febef2353df947ed20ce5556f",
+      "definitionSha256": "51b2c1f34e1311a9d3347500a6b214999f72018a0150a9ec44665022950927bb"
+    },
+    {
+      "name": "practicefusion_get_appointments",
+      "descriptionSha256": "4d3e356480a1850b53501e7a8dfeb8b84a14b7f235b0effc70050e675cd603e5",
+      "definitionSha256": "74f2a222da26053d94ad8faa95710650e3cf1b3613a6c47f03ddf926389eefbc"
+    },
+    {
+      "name": "practicefusion_get_care_plans",
+      "descriptionSha256": "16e0903e95e24e2dc35d367fc83eda94f58fa70febef2353df947ed20ce5556f",
+      "definitionSha256": "342fb969237ed4b3feba6bc5852931a4413317b90776ef24937e74a6c737ac08"
+    },
+    {
+      "name": "practicefusion_get_conditions",
+      "descriptionSha256": "16e0903e95e24e2dc35d367fc83eda94f58fa70febef2353df947ed20ce5556f",
+      "definitionSha256": "1ca4ef6975518a10d37b3050c21dd970ac935ef29f152f6dabdb18ae42f51ec6"
+    },
+    {
+      "name": "practicefusion_get_coverage",
+      "descriptionSha256": "16e0903e95e24e2dc35d367fc83eda94f58fa70febef2353df947ed20ce5556f",
+      "definitionSha256": "086dca37d8529149add2f7bc286b9e02e15897d2fed5008350b2c3ba42d848ab"
+    },
+    {
+      "name": "practicefusion_get_diagnostic_reports",
+      "descriptionSha256": "16e0903e95e24e2dc35d367fc83eda94f58fa70febef2353df947ed20ce5556f",
+      "definitionSha256": "2445963642e64bc5ec82fc573bd6ceabd1682c906202ab60b943c19885c52794"
+    },
+    {
+      "name": "practicefusion_get_documents",
+      "descriptionSha256": "16e0903e95e24e2dc35d367fc83eda94f58fa70febef2353df947ed20ce5556f",
+      "definitionSha256": "c2c5c661e999416a10b1946cec87f6b81c5f00cc483d906d61f5efd687a57c2c"
+    },
+    {
+      "name": "practicefusion_get_encounters",
+      "descriptionSha256": "16e0903e95e24e2dc35d367fc83eda94f58fa70febef2353df947ed20ce5556f",
+      "definitionSha256": "e5fd6a9fc5f521f5ee9796364392277fd992cc41be1687fe18b79171c56f4863"
+    },
+    {
+      "name": "practicefusion_get_everything",
+      "descriptionSha256": "e329347498f285ee26c466d4fb73fe0f6a6af28b60e2a595cfb2bfeeb517fb16",
+      "definitionSha256": "72df3ab09262cd07b251a4e837ed5ef1f6283d5b967d919baa8cad92ac161953"
+    },
+    {
+      "name": "practicefusion_get_goals",
+      "descriptionSha256": "16e0903e95e24e2dc35d367fc83eda94f58fa70febef2353df947ed20ce5556f",
+      "definitionSha256": "a12f3b6eb6fca824bdd55ec617a2538e87536f4c130ebb4ceb513e29c1c911ae"
+    },
+    {
+      "name": "practicefusion_get_immunizations",
+      "descriptionSha256": "16e0903e95e24e2dc35d367fc83eda94f58fa70febef2353df947ed20ce5556f",
+      "definitionSha256": "dedc8db2bfbe58114ba5674ab8f2cf8c242485cf8e4e0c7316b6f6db7117a834"
+    },
+    {
+      "name": "practicefusion_get_lab_results",
+      "descriptionSha256": "16e0903e95e24e2dc35d367fc83eda94f58fa70febef2353df947ed20ce5556f",
+      "definitionSha256": "a2924a37e6756d8e7588c520613cb1374aa4f20083bf9c1366792179fb032966"
+    },
+    {
+      "name": "practicefusion_get_medications",
+      "descriptionSha256": "16e0903e95e24e2dc35d367fc83eda94f58fa70febef2353df947ed20ce5556f",
+      "definitionSha256": "e17b15961141c03db844674fefe0c5a2b2435f57b31128d3bca730c37da1d463"
+    },
+    {
+      "name": "practicefusion_get_patient",
+      "descriptionSha256": "270863970bd5332e7160f6f2e1449c68edea214f11769bdfb9ce1acf521287fb",
+      "definitionSha256": "b8f7de40cc997325b3916ab25d9962e01df8d8dc7c2892144c906aff18bd251e"
+    },
+    {
+      "name": "practicefusion_get_procedures",
+      "descriptionSha256": "16e0903e95e24e2dc35d367fc83eda94f58fa70febef2353df947ed20ce5556f",
+      "definitionSha256": "529e0eff4e1255c35334616774c2702231166041810e7620fefdbc8237843839"
+    },
+    {
+      "name": "practicefusion_get_vitals",
+      "descriptionSha256": "16e0903e95e24e2dc35d367fc83eda94f58fa70febef2353df947ed20ce5556f",
+      "definitionSha256": "73626470bfab137e66d9fbaea04e22ace54c74e9eda40bd29787203174c4ec86"
+    },
+    {
+      "name": "practicefusion_search_patients",
+      "descriptionSha256": "57d58b85c3c59fe3a9b6deaeb837dd7ddec2882cb83e7b6d5adde0ccfa5b0cfd",
+      "definitionSha256": "9c32d0c0c58da6adb41770ad0bbb9264b4840de9752e3e7d1085fe2240c03f96"
+    },
+    {
+      "name": "practicefusion_search_practitioners",
+      "descriptionSha256": "c1100aca47eaad6d791b3d15f4fba493e63e466b7732b37c3cfffa94fcb39ef7",
+      "definitionSha256": "8c747e10429efe2562d7ba6ac03a317feb4c4c1af4d58b966131772b58e0c938"
+    }
+  ],
+  "surfaceSha256": "323f918d3b98270f2ab30e9aa2d8a9f242886a4bc0202be51693298574b6c9b4"
+}
