@@ -82,7 +82,7 @@ impact. Details and honest scope limits:
 
     trovark  ·  acme/weather-mcp
       resolved: github.com/acme/weather-mcp
-    Trust Score: 74/100 (B-)   rubric v1.5.0
+    Trust Score: 74/100 (B-)   rubric v1.7.0
 
       health         75/100  ████████░░  high confidence
       reliability    44/100  ████░░░░░░  high confidence
@@ -92,7 +92,7 @@ impact. Details and honest scope limits:
     Metadata Integrity: 0 findings across 2 files / 239 characters / 1 tool descriptions.
 
 - **`Trust Score: 74/100 (B-)`** — the overall 0–100 score and letter grade, the weighted sum
-  of the four dimensions above. `rubric v1.5.0` is the rubric version that produced this
+  of the four dimensions above. `rubric v1.7.0` is the rubric version that produced this
   scorecard; scorecards from different rubric versions aren't directly comparable.
 - **Dimension rows** (`health 75/100 ... high confidence`) — each dimension's own 0–100 score
   plus a confidence level (`high` ≥75%, `medium` ≥40%, `low` <40% of that dimension's signals
@@ -127,6 +127,24 @@ to grade":
 `--json` carries the same information as structured fields (`overall`, `grade`,
 `dimensions[].confidence`, `insufficientData`, `notServer`, `unresolved`) instead of prose — see
 [`src/types.ts`](src/types.ts) for the full `Scorecard` shape.
+
+Abridged, from a real run of `npx trovark github/github-mcp-server --json`:
+
+    {
+      "ref": "github/github-mcp-server",
+      "rubricVersion": "1.7.0",
+      "checksVersion": "1.0.0",
+      "overall": 96,
+      "grade": "A+",
+      "dimensions": [
+        { "id": "health",   "score": 100, "confidence": "high",   "available": 7, "total": 7, "findings": [] },
+        { "id": "security", "score": 85,  "confidence": "medium", "available": 2, "total": 3, "findings": [] }
+      ]
+    }
+
+`available` and `total` are why each dimension reports its own confidence: a security score
+computed from two of three signals is a weaker claim than a health score computed from all
+seven, and the JSON says so rather than leaving the consumer to infer it.
 
 ## What trovark is not
 
