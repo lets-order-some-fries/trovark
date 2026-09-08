@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 import { readFileSync } from 'node:fs'
-import { createHttp, type Http } from './util/http.js'
+import { createHttp, RateLimitError, type Http } from './util/http.js'
 import { ResolveError, resolve } from './resolver.js'
 import { assemble } from './assemble.js'
 import { score } from './scoring/score.js'
@@ -56,7 +56,10 @@ export async function main(argv: string[], deps: CliDeps): Promise<number> {
     return v
   }
 
-  if (has('--help')) { deps.err(USAGE); return 2 }
+  // Asking for help is not an error: usage goes to stdout and exits 0, so
+  // `trovark --help | less` shows something and a `set -e` script survives it.
+  // The no-args path below stays on stderr/2 — that IS a usage error.
+  if (has('--help')) { deps.log(USAGE); return 0 }
   if (has('--version')) {
     // Fault hunt 2026-08-08 (MINOR): this was a hardcoded '0.1.0' literal,
     // shipped unchanged in the 0.1.7 package. Read the source of truth.
@@ -137,6 +140,16 @@ export async function main(argv: string[], deps: CliDeps): Promise<number> {
     if (threshold !== undefined && card.overall !== null && card.overall < threshold) return 1
     return 0
   } catch (err) {
+    if (err instanceof RateLimitError) {
+      const when = err.resetEpoch === undefined
+        ? ''
+        : ` It resets at ${new Date(err.resetEpoch * 1000).toISOString().slice(11, 16)} UTC.`
+      deps.err(`trovark: the GitHub API rate limit for this machine is exhausted.${when}`)
+      deps.err('This is your request budget, not a property of the ref — a scan costs about 30 requests, '
+        + 'against 60/hour unauthenticated.')
+      deps.err('Set a token for 5,000/hour:  export GITHUB_TOKEN=$(gh auth token)')
+      return 2
+    }
     if (err instanceof ResolveError) { deps.err(err.message); return 2 }
     deps.err(`trovark failed: ${(err as Error).message}`)
     return 2

@@ -1,4 +1,4 @@
-import type { Http } from './util/http.js'
+import { RateLimitError, type Http } from './util/http.js'
 import type { ServerIdentity } from './resolver.js'
 import type { Signals } from './types.js'
 import { collectGithub, RepoNotFoundError, type RepoFile } from './collectors/github.js'
@@ -314,6 +314,11 @@ export async function assemble(
       // gone — a distinct terminal state, not a generic collector hiccup.
       // Everything else (network errors, 403, 5xx) keeps today's behavior:
       // recorded in errors[], surfaced later as insufficientData.
+      // The caller's own exhausted API budget says nothing about this
+      // repository, so it must not be folded into the scorecard as a
+      // collector hiccup and published as INSUFFICIENT DATA. Let it out to
+      // the CLI, which can tell the user what actually happened.
+      if (err instanceof RateLimitError) throw err
       if (err instanceof RepoNotFoundError) s.unresolved = true
       s.errors.push(`github: ${(err as Error).message}`)
     }

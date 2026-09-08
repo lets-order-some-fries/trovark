@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { main } from '../src/cli.js'
-import { HttpError } from '../src/util/http.js'
+import { HttpError, RateLimitError } from '../src/util/http.js'
 import type { Http } from '../src/util/http.js'
 
 // Minimal fake: a healthy-enough GitHub-only server.
@@ -79,6 +79,14 @@ describe('cli main', () => {
     const r = await run([])
     expect(r.code).toBe(2)
     expect(r.err).toContain('Usage')
+  })
+  it('--help → usage on stdout, exit 0', async () => {
+    // Asking for help is not an error. Writing it to stderr with exit 2 makes
+    // `trovark --help | less` show an empty page and fails any `set -e` script.
+    const r = await run(['--help'])
+    expect(r.code).toBe(0)
+    expect(r.out).toContain('Usage')
+    expect(r.err).toBe('')
   })
   it('report header shows the resolved identity', async () => {
     const r = await run(['acme/foo'])
@@ -250,5 +258,27 @@ describe('cli main — unknown flags are rejected, not ignored', () => {
   it('a real threshold breach still exits 1, not 2', async () => {
     const r = await run(['acme/foo', '--fail-under', '99'])
     expect(r.code).toBe(1)
+  })
+
+  it('an exhausted rate limit blames the budget, not the scanned repo', async () => {
+    // Before: stdout showed "Trust Score: INSUFFICIENT DATA" with four
+    // "not measured" dimensions, and stderr said "insufficient data to score
+    // this ref" — about a repo that grades A+ when a token is present.
+    const reset = Math.floor(Date.UTC(2026, 6, 31, 1, 30, 0) / 1000)
+    const limited = {
+      ...fake,
+      async json<T>(url: string): Promise<T> {
+        if (url.startsWith('https://api.github.com/')) {
+          throw new RateLimitError(403, url, reset)
+        }
+        return fake.json<T>(url)
+      },
+    }
+    const logs: string[] = [], errs: string[] = []
+    const code = await main(['acme/foo'], { http: limited, now: NOW, log: s => logs.push(s), err: s => errs.push(s) })
+    expect(code).toBe(2)
+    expect(errs.join('\n')).toMatch(/rate limit/i)
+    expect(errs.join('\n')).toMatch(/GITHUB_TOKEN/)
+    expect(logs.join('\n')).not.toMatch(/INSUFFICIENT DATA/)
   })
 })

@@ -30,6 +30,30 @@ export class HttpError extends Error {
   }
 }
 
+/**
+ * The caller's own API budget is exhausted (403/429 carrying
+ * `x-ratelimit-remaining: 0`).
+ *
+ * This is a fact about the machine running trovark, not about the repository
+ * being scanned, so it must never be folded into a scorecard as though the
+ * server were unanalysable. Without the distinction the second token-less scan
+ * in an hour reports INSUFFICIENT DATA about a repo that grades A+ with a token
+ * present, and says nothing about GITHUB_TOKEN.
+ *
+ * Deliberately narrow: GitHub's SECONDARY rate limit does not send
+ * `remaining: 0`, and the index scanner is right to treat those as transient
+ * and retry them. Only primary-budget exhaustion is typed here.
+ */
+export class RateLimitError extends HttpError {
+  /** Unix seconds at which the budget refills, from `x-ratelimit-reset`. */
+  readonly resetEpoch: number | undefined
+  constructor(status: number, url: string, resetEpoch: number | undefined) {
+    super(status, url)
+    this.name = 'RateLimitError'
+    this.resetEpoch = resetEpoch
+  }
+}
+
 interface RequestInitExtra {
   method?: string
   body?: string
@@ -92,6 +116,15 @@ export function createHttp(opts: HttpOptions = {}): Http {
       }
       if (res) {
         if (res.ok) return res
+        // An exhausted budget cannot be waited out in 250ms, so it is thrown
+        // immediately rather than retried, whatever the status carrying it.
+        if ((res.status === 403 || res.status === 429) &&
+            res.headers.get('x-ratelimit-remaining') === '0') {
+          const rawReset = res.headers.get('x-ratelimit-reset')
+          const reset = rawReset === null ? undefined : Number(rawReset)
+          throw new RateLimitError(res.status, url,
+            reset !== undefined && Number.isFinite(reset) ? reset : undefined)
+        }
         const httpErr = new HttpError(res.status, url)
         if (res.status === 429 || res.status >= 500) lastErr = httpErr // retryable
         else throw httpErr // other non-2xx: fail immediately

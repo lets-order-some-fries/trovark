@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest'
-import { createHttp, HttpError } from '../src/util/http.js'
+import { createHttp, HttpError, RateLimitError } from '../src/util/http.js'
 
 const ok = (body: unknown) => new Response(JSON.stringify(body), { status: 200 })
 
@@ -77,5 +77,34 @@ describe('createHttp', () => {
     expect(data).toEqual({ a: 1 })
     expect(headers.get('x-test')).toBe('yes')
     expect(fetchImpl).toHaveBeenCalledTimes(2) // proves it went through the retry path, not a duplicate impl
+  })
+
+  // A 403 with x-ratelimit-remaining: 0 is a fact about the CALLER's budget,
+  // not about the repository being scanned. Typed separately so the CLI can
+  // say "your rate limit is exhausted" instead of blaming the scanned ref.
+  it('types an exhausted primary rate limit and does not retry it', async () => {
+    const reset = String(Math.floor(Date.UTC(2026, 6, 31, 1, 0, 0) / 1000))
+    const fetchImpl = vi.fn(async () => new Response('{"message":"API rate limit exceeded"}', {
+      status: 403,
+      headers: { 'x-ratelimit-remaining': '0', 'x-ratelimit-reset': reset },
+    }))
+    const http = createHttp({ fetchImpl: fetchImpl as unknown as typeof fetch, retries: 2 })
+    await expect(http.json('https://api.github.com/repos/a/b')).rejects.toBeInstanceOf(RateLimitError)
+    expect(fetchImpl).toHaveBeenCalledTimes(1)
+    const err = await http.json('https://api.github.com/repos/a/b').catch(e => e as RateLimitError)
+    expect(err.resetEpoch).toBe(Number(reset))
+    expect(err.status).toBe(403)
+  })
+
+  it('leaves a secondary-limit 403 as an ordinary HttpError', async () => {
+    // GitHub's secondary limit carries no remaining: 0. The scanner treats
+    // those as transient and retries them; they must not become RateLimitError.
+    const fetchImpl = vi.fn(async () => new Response('{"message":"secondary rate limit"}', {
+      status: 403, headers: { 'retry-after': '60' },
+    }))
+    const http = createHttp({ fetchImpl: fetchImpl as unknown as typeof fetch, retries: 1 })
+    const err = await http.json('https://api.github.com/repos/a/b').catch(e => e as Error)
+    expect(err).toBeInstanceOf(HttpError)
+    expect(err).not.toBeInstanceOf(RateLimitError)
   })
 })
