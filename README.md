@@ -36,9 +36,21 @@ A bare package name that exists on both npm and PyPI is rejected as ambiguous �
 ## CI usage
 
 `--fail-under` turns a scan into a pass/fail gate: exit 0 when the grade meets the
-threshold, exit 1 when it doesn't (or when the ref can't be graded at all — see
-[Reading a scorecard](#reading-a-scorecard) for the ungradeable states, all of which
-fail the gate), exit 2 on a resolution/network error.
+threshold, exit 1 when it doesn't, exit 2 on a resolution or network error.
+
+The [ungradeable states](#reading-a-scorecard) do not all fail the gate the same way,
+so a workflow that branches on the exit code needs the distinction:
+
+| State | with `--fail-under` | without |
+|---|---|---|
+| `INSUFFICIENT DATA` | 2 | 2 |
+| `REPO UNAVAILABLE` | 2 | 2 |
+| `LIBRARY` | 1 | 0 |
+| `DYNAMIC TOOL SURFACE` | 1 | 0 |
+
+The first two are errors either way: nothing was measured. The last two are correct,
+successful answers — there is genuinely no grade to give — so they only fail once a
+threshold demands one.
 
 ```yaml
 # .github/workflows/trovark.yml
@@ -123,6 +135,10 @@ to grade":
   tools of its own to grade. No score is computed, and `--fail-under` is a no-op against it.
 - **`REPO UNAVAILABLE`** — the reference doesn't resolve to an existing, accessible GitHub repo
   (renamed, deleted, or never existed). No score, no findings.
+- **`DYNAMIC TOOL SURFACE`** — the ref is a gateway, proxy or registry that assembles its
+  tools at runtime from servers it federates, so there is no static surface to read. Grading
+  what such a repo declares about itself would measure the wrong thing. No score is computed,
+  and `--json` carries `notServerReason: "dynamic"`.
 
 `--json` carries the same information as structured fields (`overall`, `grade`,
 `dimensions[].confidence`, `insufficientData`, `notServer`, `unresolved`) instead of prose — see
