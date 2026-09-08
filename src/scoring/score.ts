@@ -218,6 +218,18 @@ export function score(
     else if (d.score === null) notes.push(`${d.id} is withheld: its primary signal could not be determined from the available data, and a score computed from the remaining signals would misrepresent what was read.`)
     else if (d.confidence === 'low') notes.push(`Low confidence in ${d.id}: only ${d.available}/${d.total} signals available.`)
   }
+  // Say so on the card when the score is not about the package that was asked
+  // for. Without this the reader has no way to know: two different packages in
+  // one monorepo return identical findings and the same grade, with evidence
+  // citing files that belong to a sibling package.
+  if (signals.repoHostsOtherPackages) {
+    const pkg = resolved?.npmPackage ?? resolved?.pypiPackage
+    const repo = resolved?.repo ? `${resolved.repo.owner}/${resolved.repo.name}` : 'the repository'
+    if (pkg !== undefined) {
+      notes.push(`Scored at repository granularity: ${repo} hosts packages besides ${pkg}, `
+        + 'so the tool count and every finding below cover the whole repository, not this package alone.')
+    }
+  }
   for (const e of signals.errors) notes.push(`Collector issue: ${e}`)
   // W6 (coverage-v1.5, Task W6 Part B): 'dynamic' reuses the notServer
   // plumbing (overall/grade null, same as every other notServer reason —

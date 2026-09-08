@@ -825,3 +825,37 @@ describe('a headline grade requires at least 3 measured dimensions', () => {
     expect(typeof card.grade).toBe('string')
   })
 })
+
+describe('a package ref scored at repository granularity says so', () => {
+  // Two different published packages in one monorepo returned byte-identical
+  // findings and the same 89/A-, with evidence on the server-filesystem card
+  // citing src/memory/index.ts — a sibling package the user never asked about.
+  // The limitation was real and documented, but only in methodology.md, never
+  // on the card the reader is looking at.
+  const resolved = {
+    npmPackage: '@modelcontextprotocol/server-filesystem',
+    repo: { owner: 'modelcontextprotocol', name: 'servers' },
+  }
+
+  it('names the repository, the package, and what the findings actually cover', () => {
+    const s = { ...healthy(), repoHostsOtherPackages: true }
+    const note = score('npm:x', s, '2026-09-08T00:00:00Z', resolved)
+      .notes.find(n => n.startsWith('Scored at repository granularity'))
+    expect(note).toBeDefined()
+    expect(note).toContain('modelcontextprotocol/servers')
+    expect(note).toContain('@modelcontextprotocol/server-filesystem')
+  })
+
+  it('is silent when the repository hosts only this package', () => {
+    const card = score('npm:x', healthy(), '2026-09-08T00:00:00Z', resolved)
+    expect(card.notes.some(n => n.startsWith('Scored at repository granularity'))).toBe(false)
+  })
+
+  it('does not move the grade', () => {
+    const plain = score('npm:x', healthy(), '2026-09-08T00:00:00Z', resolved)
+    const flagged = score('npm:x', { ...healthy(), repoHostsOtherPackages: true },
+      '2026-09-08T00:00:00Z', resolved)
+    expect(flagged.overall).toBe(plain.overall)
+    expect(flagged.grade).toBe(plain.grade)
+  })
+})

@@ -140,6 +140,12 @@ to grade":
   what such a repo declares about itself would measure the wrong thing. No score is computed,
   and `--json` carries `notServerReason: "dynamic"`.
 
+**An `npm:` or `pypi:` ref is scored at repository granularity.** The package resolves to the
+repository that hosts it, and everything below — the tool count, every finding, every piece of
+evidence — describes that whole repository. For a monorepo, two different packages therefore
+score identically, and a finding can cite a file belonging to a sibling package. When that is
+the case the card says so in `Notes`, naming the repository and the package.
+
 `--json` carries the same information as structured fields (`overall`, `grade`,
 `dimensions[].confidence`, `insufficientData`, `notServer`, `unresolved`) instead of prose — see
 [`src/types.ts`](src/types.ts) for the full `Scorecard` shape.

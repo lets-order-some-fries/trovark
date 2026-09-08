@@ -55,6 +55,12 @@ export interface IntegrityHit {
 }
 
 export interface Signals {
+  // True when a package ref (npm:/pypi:) resolved to a repository that hosts
+  // OTHER packages too. The scan is repository-wide, so the tool count and
+  // every finding then describe the whole monorepo rather than the package the
+  // user named — evidence on an @modelcontextprotocol/server-filesystem card
+  // pointing at src/memory/index.ts is the observable symptom.
+  repoHostsOtherPackages?: boolean
   // health
   daysSinceLastCommit?: number
   daysSinceLastRelease?: number

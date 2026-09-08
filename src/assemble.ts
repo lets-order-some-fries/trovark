@@ -36,6 +36,15 @@ export async function assemble(
       s.stars = snap.stars
       s.archived = snap.archived
       if (snap.treePaths) {
+        // A package ref is always scanned at repository granularity. That is
+        // only misleading when the repository holds more than the one package,
+        // which nested manifests reveal without another request.
+        if (identity.npmPackage !== undefined || identity.pypiPackage !== undefined) {
+          const nestedManifests = snap.treePaths.filter(
+            p => p.includes('/') && /(^|\/)(package\.json|pyproject\.toml|setup\.py)$/.test(p),
+          ).length
+          if (nestedManifests >= 2) s.repoHostsOtherPackages = true
+        }
         Object.assign(s, repoChecks(snap.treePaths))
         s.specEra = specEra(snap.files)
         // W6 (Task W6): STATIC-only extraction first (manifest/js/py/go/spec
