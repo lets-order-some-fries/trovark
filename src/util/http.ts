@@ -55,8 +55,29 @@ export class RateLimitError extends HttpError {
 }
 
 /**
+ * GitHub rejected the caller's GITHUB_TOKEN: HTTP 401 on a request that
+ * carried it. Deliberately narrow — a 401 on a request that sent no token,
+ * or from any host the token is never attached to, stays an ordinary
+ * HttpError, because there is no credential of ours to blame for it.
+ *
+ * Like RateLimitError this is a fact about the machine running trovark, not
+ * about the ref. Measured before it existed: GITHUB_TOKEN=ghp_definitelybogus
+ * scanned modelcontextprotocol/servers (A- with a working token) into exit 2,
+ * "insufficient data to score this ref", four "not measured" dimensions and
+ * a note reading "github: HTTP 401 for <url>" as the only clue.
+ */
+export class AuthError extends HttpError {
+  constructor(status: number, url: string) {
+    super(status, url)
+    this.name = 'AuthError'
+  }
+}
+
+/**
  * Re-throws an error that describes the machine running trovark rather than
- * the ref being scanned, so a fail-soft catch cannot absorb it.
+ * the ref being scanned, so a fail-soft catch cannot absorb it. Two such
+ * errors exist: an exhausted API budget (RateLimitError) and a rejected
+ * credential (AuthError).
  *
  * The collectors deliberately swallow most failures — one flaky call should
  * cost one signal, not the whole scan. An exhausted budget is not a flaky
@@ -70,7 +91,7 @@ export class RateLimitError extends HttpError {
  * fail-soft behaviour untouched.
  */
 export function rethrowIfCallerSide(err: unknown): void {
-  if (err instanceof RateLimitError) throw err
+  if (err instanceof RateLimitError || err instanceof AuthError) throw err
 }
 
 interface RequestInitExtra {
@@ -135,6 +156,9 @@ export function createHttp(opts: HttpOptions = {}): Http {
       }
       if (res) {
         if (res.ok) return res
+        // A 401 on a request that carried our token is the token being
+        // rejected; retrying it cannot help and the caller must be told.
+        if (res.status === 401 && headers.authorization !== undefined) throw new AuthError(res.status, url)
         // An exhausted budget cannot be waited out in 250ms, so it is thrown
         // immediately rather than retried, whatever the status carrying it.
         if ((res.status === 403 || res.status === 429) &&

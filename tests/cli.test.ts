@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { main } from '../src/cli.js'
-import { HttpError, RateLimitError } from '../src/util/http.js'
+import { AuthError, HttpError, RateLimitError } from '../src/util/http.js'
 import type { Http } from '../src/util/http.js'
 
 // Minimal fake: a healthy-enough GitHub-only server.
@@ -321,6 +321,39 @@ describe('cli main — a rate limit that bites mid-scan is still a rate limit', 
     expect(code).toBe(2)
     expect(errs.join('\n')).toMatch(/rate limit/i)
     expect(errs.join('\n')).toMatch(/GITHUB_TOKEN/)
+    expect(logs.join('\n')).not.toMatch(/INSUFFICIENT DATA/)
+    expect(logs.join('\n')).not.toMatch(/Trust Score: \d/)
+  })
+})
+
+// Measured live at f7f4f34 with GITHUB_TOKEN=ghp_definitelybogus: exit 2,
+// "trovark: insufficient data to score this ref", a card of four "not
+// measured" dimensions, and the only clue a note reading "github: HTTP 401
+// for <url>". The ref was modelcontextprotocol/servers, which grades A- with
+// a working token. A rejected credential is the caller's problem and must be
+// named as such.
+describe('cli main — a rejected GITHUB_TOKEN is reported as the caller\'s credential, not as the ref', () => {
+  const rejectedOn = (dies: (url: string) => boolean): Http => ({
+    ...fake,
+    async json<T>(url: string): Promise<T> {
+      if (dies(url)) throw new AuthError(401, url)
+      return fake.json<T>(url)
+    },
+    async jsonWithHeaders<T>(url: string): Promise<{ data: T; headers: Headers }> {
+      if (dies(url)) throw new AuthError(401, url)
+      return fake.jsonWithHeaders<T>(url)
+    },
+  })
+  it.each([
+    ['the first call (repo metadata)', (u: string) => u === 'https://api.github.com/repos/acme/foo'],
+    ['a later call (the commits page)', (u: string) => u.includes('/commits')],
+  ])('rejected on %s → exit 2, names GITHUB_TOKEN as rejected, prints no card', async (_label, dies) => {
+    const logs: string[] = [], errs: string[] = []
+    const code = await main(['acme/foo'], { http: rejectedOn(dies), now: NOW, log: s => logs.push(s), err: s => errs.push(s) })
+    expect(code).toBe(2)
+    expect(errs.join('\n')).toMatch(/GITHUB_TOKEN/)
+    expect(errs.join('\n')).toMatch(/rejected/i)
+    expect(errs.join('\n')).not.toMatch(/insufficient data/i)
     expect(logs.join('\n')).not.toMatch(/INSUFFICIENT DATA/)
     expect(logs.join('\n')).not.toMatch(/Trust Score: \d/)
   })

@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest'
-import { createHttp, HttpError, RateLimitError } from '../src/util/http.js'
+import { AuthError, createHttp, HttpError, RateLimitError } from '../src/util/http.js'
 
 const ok = (body: unknown) => new Response(JSON.stringify(body), { status: 200 })
 
@@ -106,5 +106,36 @@ describe('createHttp', () => {
     const err = await http.json('https://api.github.com/repos/a/b').catch(e => e as Error)
     expect(err).toBeInstanceOf(HttpError)
     expect(err).not.toBeInstanceOf(RateLimitError)
+  })
+})
+
+// A 401 on a request that carried the caller's token means GitHub rejected
+// THAT TOKEN. It is a fact about this machine's credential, not the ref, so
+// it is typed — like RateLimitError — instead of degrading into a collector
+// error that the CLI reports as INSUFFICIENT DATA about the repository.
+describe('createHttp — a rejected token is typed, not folded into the scan', () => {
+  it('types a 401 on a token-bearing GitHub request as AuthError and does not retry it', async () => {
+    const fetchImpl = vi.fn(async () => new Response('{"message":"Bad credentials"}', { status: 401 }))
+    const http = createHttp({ fetchImpl: fetchImpl as unknown as typeof fetch, githubToken: 'ghp_definitelybogus', retries: 2 })
+    await expect(http.json('https://api.github.com/repos/a/b')).rejects.toBeInstanceOf(AuthError)
+    expect(fetchImpl).toHaveBeenCalledTimes(1)
+  })
+  it('leaves a 401 on a request that carried no token as an ordinary HttpError', async () => {
+    // Without a token there is no credential to blame; whatever a registry
+    // means by 401 here, it is not "your GITHUB_TOKEN was rejected".
+    const fetchImpl = vi.fn(async () => new Response('', { status: 401 }))
+    const http = createHttp({ fetchImpl: fetchImpl as unknown as typeof fetch, retries: 0 })
+    const err = await http.json('https://api.github.com/repos/a/b').catch(e => e as Error)
+    expect(err).toBeInstanceOf(HttpError)
+    expect(err).not.toBeInstanceOf(AuthError)
+  })
+  it('leaves a 401 from a non-GitHub host as an ordinary HttpError even when a token is configured', async () => {
+    // The token is only ever attached to api.github.com, so a 401 elsewhere
+    // cannot be about it.
+    const fetchImpl = vi.fn(async () => new Response('', { status: 401 }))
+    const http = createHttp({ fetchImpl: fetchImpl as unknown as typeof fetch, githubToken: 'T', retries: 0 })
+    const err = await http.json('https://registry.npmjs.org/x').catch(e => e as Error)
+    expect(err).toBeInstanceOf(HttpError)
+    expect(err).not.toBeInstanceOf(AuthError)
   })
 })

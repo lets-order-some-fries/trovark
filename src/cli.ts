@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 import { readFileSync } from 'node:fs'
-import { createHttp, RateLimitError, type Http } from './util/http.js'
+import { AuthError, createHttp, RateLimitError, type Http } from './util/http.js'
 import { ResolveError, resolve } from './resolver.js'
 import { assemble } from './assemble.js'
 import { score } from './scoring/score.js'
@@ -148,6 +148,17 @@ export async function main(argv: string[], deps: CliDeps): Promise<number> {
       deps.err('This is your request budget, not a property of the ref — a scan costs about 30 requests, '
         + 'against 60/hour unauthenticated.')
       deps.err('Set a token for 5,000/hour:  export GITHUB_TOKEN=$(gh auth token)')
+      return 2
+    }
+    if (err instanceof AuthError) {
+      // The credential in the environment, not the ref. Leading/trailing
+      // whitespace (a trailing newline from a file) is NOT a cause: fetch
+      // strips it from header values — measured live, a valid token with a
+      // trailing newline scans fine. Expired, revoked, mistyped or placeholder
+      // tokens are.
+      deps.err('trovark: GitHub rejected the token in GITHUB_TOKEN (HTTP 401).')
+      deps.err('This is your credential, not a property of the ref. Check that the token is current and pasted whole '
+        + '(gh auth status; export GITHUB_TOKEN=$(gh auth token)), or unset GITHUB_TOKEN to scan unauthenticated.')
       return 2
     }
     if (err instanceof ResolveError) { deps.err(err.message); return 2 }
