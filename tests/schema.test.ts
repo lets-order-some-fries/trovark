@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { extractSchema, tokenFootprint, hasPythonToolRegistrationSurface } from '../src/derive/schema.js'
+import { extractSchema, fromJsSource, tokenFootprint, hasPythonToolRegistrationSurface } from '../src/derive/schema.js'
 
 describe('extractSchema ladder', () => {
   it('level 1: reads tools from mcp.json manifest', () => {
@@ -1829,5 +1829,27 @@ describe('extractSchema (D1 integrity-v1, trap #6): evidence is retained on retu
     }])
     expect(r.extracted).toBe(true)
     expect(r.schemaTokenEstimate).toBeUndefined()
+  })
+})
+
+// fromJsSource's `name:` fallback loop asked enclosingObjectSpan for each
+// candidate, and enclosingObjectSpan re-lexed the file from offset 0 every
+// time: O(matches × length). Measured on the built module at a57e7e6 with
+// a file of `{ name: "tool_N", description: "d" }` literals: 59 ms at 25 KB,
+// 167 ms at 50 KB, 642 ms at 100 KB, 2.5 s at 200 KB, 5.7 s at 300 KB —
+// the collector's SIZE_CAP, so a single committed file can cost a scan
+// (or the 400-repo index run) that much per file, 24 files per repo. The
+// bound here is ~40x the post-fix time and ~3x under the measured red on
+// this machine, so it cannot pass by accident on a slow runner either.
+describe('fromJsSource — the name: fallback scan is linear in file size', () => {
+  it('a 300 KB catalog of name: literals extracts in bounded time', () => {
+    let content = 'import { Server } from "@modelcontextprotocol/sdk/server/index.js";\nserver.tool("seed", "seed");\nconst tools = [\n'
+    for (let i = 0; content.length < 300 * 1024; i++) content += `  { name: "tool_${i}", description: "d" },\n`
+    content += '];\n'
+    const t0 = performance.now()
+    const tools = fromJsSource({ path: 'src/index.ts', content })
+    const ms = performance.now() - t0
+    expect(tools.length).toBeGreaterThan(0)
+    expect(ms).toBeLessThan(2000)
   })
 })

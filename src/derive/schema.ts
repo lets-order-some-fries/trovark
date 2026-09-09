@@ -434,36 +434,61 @@ export function captureBalanced(text: string, openIdx: number, openCh: string, c
   return text.slice(openIdx, end)
 }
 
-// Finds the smallest `{...}` object literal that encloses `pos` (e.g. the
-// position of a `name:` match), by walking forward from the start of the
-// file maintaining a stack of unmatched `{` positions (equivalent to, but
-// lexically safe unlike, a naive backward scan — string/comment state is
-// only well-defined scanning forward) then forward again from the top of
-// that stack to the matching `}`. Both passes skip brackets inside strings
-// and comments via `lexSpans`.
-function enclosingObjectSpan(text: string, pos: number, lang: Lang = 'js'): [number, number] | undefined {
+// Brace index: ONE lexical pass over the file records, for every `{` in
+// code (brackets inside strings and comments are skipped via `lexSpans`,
+// which is why this must scan forward — string/comment state is only
+// well-defined that way), its matching `}` if it has one and its parent
+// `{`. enclosingObjectSpan below answers "the smallest `{...}` enclosing
+// pos" from it with a binary search and a parent walk.
+//
+// This used to be recomputed per query: a forward pass from offset 0 to
+// pos to rebuild the open-brace stack, then a second pass from the top of
+// that stack to its `}`. Called once per `name:` match by fromJsSource's
+// fallback loop, that made extraction quadratic in file size — measured on
+// the built module with a file of `{ name: "tool_N", description: "d" }`
+// literals: 59 ms at 25 KB, 642 ms at 100 KB, 5.7 s at 300 KB (the
+// collector's SIZE_CAP), 95% of it in lexSpans/enclosingObjectSpan. One
+// committed file could cost a scan — or the 400-repo index run — seconds
+// per file, 24 files per repo.
+interface BraceIndex { opens: number[]; closeOf: Map<number, number>; parentOf: Map<number, number | undefined> }
+function buildBraceIndex(text: string, lang: Lang = 'js'): BraceIndex {
+  const opens: number[] = []
+  const closeOf = new Map<number, number>()
+  const parentOf = new Map<number, number | undefined>()
   const stack: number[] = []
-  for (const [s, e, kind] of lexSpans(text, 0, pos, lang)) {
+  for (const [s, e, kind] of lexSpans(text, 0, text.length, lang)) {
     if (kind !== 'code') continue
     for (let i = s; i < e; i++) {
       const ch = text[i]
-      if (ch === '{') stack.push(i)
-      else if (ch === '}') stack.pop()
-    }
-  }
-  const start = stack.length > 0 ? stack[stack.length - 1] : undefined
-  if (start === undefined) return undefined
-  let depth = 0
-  for (const [s, e, kind] of lexSpans(text, start, text.length, lang)) {
-    if (kind !== 'code') continue
-    for (let i = s; i < e; i++) {
-      const ch = text[i]
-      if (ch === '{') depth++
-      else if (ch === '}') {
-        depth--
-        if (depth === 0) return [start, i]
+      if (ch === '{') {
+        parentOf.set(i, stack[stack.length - 1])
+        stack.push(i)
+        opens.push(i)
+      } else if (ch === '}') {
+        const open = stack.pop()
+        if (open !== undefined) closeOf.set(open, i)
       }
     }
+  }
+  return { opens, closeOf, parentOf }
+}
+
+// The stack of unmatched `{` at `pos` is exactly the ancestor chain of the
+// last `{` before `pos` that is still open there — so: find the last `{`
+// before pos, then walk up parents past any that closed before pos. A `{`
+// with no matching `}` yields undefined, as the two-pass version did.
+function enclosingObjectSpan(index: BraceIndex, pos: number): [number, number] | undefined {
+  let lo = 0, hi = index.opens.length
+  while (lo < hi) {
+    const mid = (lo + hi) >> 1
+    if (index.opens[mid] < pos) lo = mid + 1; else hi = mid
+  }
+  let open: number | undefined = lo > 0 ? index.opens[lo - 1] : undefined
+  while (open !== undefined) {
+    const close = index.closeOf.get(open)
+    if (close === undefined) return undefined
+    if (close > pos) return [open, close]
+    open = index.parentOf.get(open)
   }
   return undefined
 }
@@ -800,9 +825,9 @@ function isAtSpanOwnToolLevel(content: string, objSpan: [number, number], floor:
 // identifier loop can reuse the exact same acceptance logic instead of a
 // second, drifting copy.
 function acceptedCandidateObjectText(
-  content: string, matchIndex: number, acceptedSpans: Array<[number, number]>
+  content: string, matchIndex: number, acceptedSpans: Array<[number, number]>, braces: BraceIndex,
 ): string | undefined {
-  const span = enclosingObjectSpan(content, matchIndex)
+  const span = enclosingObjectSpan(braces, matchIndex)
   if (!span) return undefined
   const objText = content.slice(span[0], span[1] + 1)
   if (!SIBLING_RE.test(objText)) return undefined
@@ -1031,9 +1056,12 @@ export function fromJsSource(f: RepoFile): ToolInfo[] {
     content.includes('defineTool(') ||
     acceptedSpans.length > 0
   ) {
+    // Built once per file, shared by both candidate loops below — see
+    // buildBraceIndex for why this is not recomputed per match.
+    const braces = buildBraceIndex(content)
     for (const m of content.matchAll(/name:\s*["'`]([\w-]+)["'`]/g)) {
       if (tools.some(t => t.name === m[1])) continue
-      const objText = acceptedCandidateObjectText(content, m.index, acceptedSpans)
+      const objText = acceptedCandidateObjectText(content, m.index, acceptedSpans, braces)
       if (objText === undefined) continue
       tools.push({ name: m[1], schemaText: objText })
     }
@@ -1047,7 +1075,7 @@ export function fromJsSource(f: RepoFile): ToolInfo[] {
       const resolved = resolveScalarConst(content, m[1])
       if (resolved === undefined) continue
       if (tools.some(t => t.name === resolved)) continue
-      const objText = acceptedCandidateObjectText(content, m.index, acceptedSpans)
+      const objText = acceptedCandidateObjectText(content, m.index, acceptedSpans, braces)
       if (objText === undefined) continue
       tools.push({ name: resolved, schemaText: objText })
     }

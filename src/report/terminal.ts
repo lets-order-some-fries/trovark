@@ -2,6 +2,25 @@ import type { Scorecard } from '../types.js'
 
 const ESC = '\x1b['
 const paint = (code: number, text: string, on: boolean) => (on ? `${ESC}${code}m${text}${ESC}0m` : text)
+
+// Every string on a card that came from the scanned repository — tool
+// names, file paths, decoded payloads, and the findings and notes built
+// from them — is attacker-controlled. Interpolated raw, they drive the
+// reader's terminal: measured with the built CLI, a root mcp.json tool
+// named "\x1b]0;HACKED\x07exec_shell" put an OSC title-set on stdout
+// inside the shell-exec finding, a tree path carrying "\x1b[2J\x1b[H"
+// cleared the screen through the could-not-fetch note, and a
+// variation-selector payload decoding to "ok\n\nTrust Score: 100/100
+// (A+) ..." printed that forged headline nine times into a 51/D+ card.
+// Control characters are rendered as visible escapes rather than dropped,
+// so the reader sees what was there. Applied here, at the display edge,
+// only — the JSON report is the raw record and keeps every byte.
+// eslint-disable-next-line no-control-regex
+const CONTROL_RE = /[\x00-\x1f\x7f-\x9f\u2028\u2029]/g
+const NAMED: Record<string, string> = { '\n': '\\n', '\r': '\\r', '\t': '\\t' }
+export function safe(s: string): string {
+  return s.replace(CONTROL_RE, ch => NAMED[ch] ?? `\\${ch.charCodeAt(0) > 0xff ? 'u' : 'x'}${ch.charCodeAt(0).toString(16).padStart(ch.charCodeAt(0) > 0xff ? 4 : 2, '0')}`)
+}
 const colorFor = (score: number): number => (score >= 85 ? 32 : score >= 55 ? 33 : 31) // green/yellow/red
 
 function bar(score: number): string {
@@ -12,12 +31,12 @@ function bar(score: number): string {
 export function renderTerminal(card: Scorecard, opts: { color?: boolean } = {}): string {
   const c = opts.color ?? true
   const lines: string[] = []
-  lines.push(`trovark  ·  ${card.ref}`)
+  lines.push(`trovark  ·  ${safe(card.ref)}`)
   if (card.resolved) {
     const parts: string[] = []
-    if (card.resolved.npmPackage) parts.push(`npm:${card.resolved.npmPackage}`)
-    if (card.resolved.pypiPackage) parts.push(`pypi:${card.resolved.pypiPackage}`)
-    if (card.resolved.repo) parts.push(`github.com/${card.resolved.repo.owner}/${card.resolved.repo.name}`)
+    if (card.resolved.npmPackage) parts.push(`npm:${safe(card.resolved.npmPackage)}`)
+    if (card.resolved.pypiPackage) parts.push(`pypi:${safe(card.resolved.pypiPackage)}`)
+    if (card.resolved.repo) parts.push(`github.com/${safe(card.resolved.repo.owner)}/${safe(card.resolved.repo.name)}`)
     if (parts.length > 0) lines.push(`  resolved: ${parts.join(' · ')}`)
   }
   if (card.unresolved) {
@@ -36,7 +55,7 @@ export function renderTerminal(card: Scorecard, opts: { color?: boolean } = {}):
     // V2: a DISTINCT terminal state from INSUFFICIENT DATA — this repo was
     // never going to have tools to grade (library/SDK/proxy/stub), not a
     // server we failed to check. See src/derive/classify.ts.
-    const reasonPart = card.notServerReason ? ` (${card.notServerReason})` : ''
+    const reasonPart = card.notServerReason ? ` (${safe(card.notServerReason)})` : ''
     lines.push(paint(33, `LIBRARY — not an MCP server${reasonPart}`, c) + `   rubric v${card.rubricVersion}`)
   } else if (card.insufficientData) {
     lines.push(paint(31, 'Trust Score: INSUFFICIENT DATA', c) + `   rubric v${card.rubricVersion}`)
@@ -79,8 +98,8 @@ export function renderTerminal(card: Scorecard, opts: { color?: boolean } = {}):
   if (findings.length > 0) {
     lines.push('', 'Findings:')
     for (const f of findings) {
-      lines.push(`  [${f.severity}] ${f.id} — ${f.message}`)
-      lines.push(`         evidence: ${f.evidence}`)
+      lines.push(`  [${f.severity}] ${safe(f.id)} — ${safe(f.message)}`)
+      lines.push(`         evidence: ${safe(f.evidence)}`)
     }
   }
   // D1 (integrity-v1): absence != clean. When no files were fetched,
@@ -100,14 +119,14 @@ export function renderTerminal(card: Scorecard, opts: { color?: boolean } = {}):
       const observations = card.integrityHits.filter(h => h.kind !== 'hidden-payload')
       lines.push('', `Metadata Integrity: ${payloads.length} decode-confirmed payload(s), ${observations.length} observation(s) across ${denom}.`)
       for (const h of card.integrityHits) {
-        const decodedPart = h.decoded ? ` → "${h.decoded}"` : ''
-        lines.push(`  [${h.kind}] ${h.surface} — ${h.path}:${h.line}:${h.col} (${h.runLength} cps)${decodedPart}`)
+        const decodedPart = h.decoded ? ` → "${safe(h.decoded)}"` : ''
+        lines.push(`  [${h.kind}] ${safe(h.surface)} — ${safe(h.path)}:${h.line}:${h.col} (${h.runLength} cps)${decodedPart}`)
       }
     }
   }
   if (card.notes.length > 0) {
     lines.push('', 'Notes:')
-    for (const n of card.notes) lines.push(`  - ${n}`)
+    for (const n of card.notes) lines.push(`  - ${safe(n)}`)
   }
   lines.push('')
   return lines.join('\n')

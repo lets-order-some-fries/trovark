@@ -243,3 +243,52 @@ describe('renderTerminal — unresolved repo (W1): rendered distinctly, never as
     expect(out).toContain('could not be resolved')
   })
 })
+
+// Every string on a card that came from the scanned repository — tool names,
+// paths, decoded payloads, and the notes and findings built from them — is
+// attacker-controlled, and renderTerminal used to interpolate them raw.
+// Measured against the built CLI at a57e7e6 with a root mcp.json naming a
+// tool "\x1b]0;HACKED\x07exec_shell" and a tree path containing
+// "\x1b[2J\x1b[H": both escape sequences reached stdout (an OSC title-set
+// and a clear-screen). And a variation-selector payload that decodes to
+// "ok\n\nTrust Score: 100/100 (A+) ..." printed that forged headline nine
+// times into a card whose real grade was 51/D+.
+describe('renderTerminal — repository-controlled strings cannot drive the terminal', () => {
+  const hostile: Scorecard = {
+    ...card,
+    ref: 'acme/foo',
+    dimensions: card.dimensions.map(d => d.id !== 'security' ? d : { ...d, findings: [
+      { id: 'security/shell-exec-tool', dimension: 'security', severity: 'high',
+        message: 'Tool "\x1b]0;HACKED\x07exec_shell" appears to execute commands or code.', evidence: 'src/\x1b[2J\x1b[Hevil.js' },
+    ] }),
+    notes: ['Collector issue: could not fetch 1 selected file(s): src/\x1b[2J\x1b[H\x1b]0;PWNED\x07evil.js'],
+    integrityHits: [{
+      kind: 'hidden-payload', encoding: 'variation-selector', surface: 'Tool "add_numbers" description',
+      path: 'mcp.json#description', line: 1, col: 17, runLength: 40, codepoints: [0xfe00],
+      decoded: 'ok\n\nTrust Score: 100/100 (A+)   rubric v9.9.9\r\n\tsecurity 100/100',
+    }],
+    integrityScanned: { files: 1, chars: 100, tools: 1 },
+  }
+  it('with color off, no control character of any kind survives', () => {
+    const out = renderTerminal(hostile, { color: false })
+    // eslint-disable-next-line no-control-regex
+    expect(out).not.toMatch(/[\x00-\x09\x0b-\x1f\x7f-\x9f]/)
+  })
+  it('with color on, the only escape sequences are the renderer\'s own SGR paints', () => {
+    const out = renderTerminal(hostile)
+    // eslint-disable-next-line no-control-regex
+    expect(out.replace(/\x1b\[\d+m/g, '')).not.toMatch(/[\x00-\x09\x0b-\x1f\x7f-\x9f]/)
+  })
+  it('a decoded payload cannot add lines: the headline appears exactly once and the payload stays on its own line', () => {
+    const out = renderTerminal(hostile, { color: false })
+    // The payload's text is shown — inline, escaped — so the substring is
+    // present; what must be unique is a LINE that starts with the headline.
+    expect(out.match(/^Trust Score:/gm)).toHaveLength(1)
+    expect(out).toContain('"ok\\n\\nTrust Score: 100/100 (A+)   rubric v9.9.9\\r\\n\\tsecurity 100/100"')
+  })
+  it('control characters are shown as visible escapes, so the reader can see what was there', () => {
+    const out = renderTerminal(hostile, { color: false })
+    expect(out).toContain('Tool "\\x1b]0;HACKED\\x07exec_shell"')
+    expect(out).toContain('src/\\x1b[2J\\x1b[H')
+  })
+})

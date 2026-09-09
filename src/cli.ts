@@ -4,7 +4,7 @@ import { AuthError, createHttp, RateLimitError, type Http } from './util/http.js
 import { RegistryUnreachableError, ResolveError, resolve } from './resolver.js'
 import { assemble } from './assemble.js'
 import { gradeFloor, score } from './scoring/score.js'
-import { renderTerminal } from './report/terminal.js'
+import { renderTerminal, safe } from './report/terminal.js'
 import { renderJson } from './report/json.js'
 
 const KNOWN_FLAGS = ['--help', '--version', '--json', '--no-color', '--fail-under'] as const
@@ -128,7 +128,7 @@ export async function main(argv: string[], deps: CliDeps): Promise<number> {
     }
     if (card.insufficientData) {
       deps.err('trovark: insufficient data to score this ref')
-      for (const e of signals.errors) deps.err(`  - ${e}`)
+      for (const e of signals.errors) deps.err(`  - ${safe(e)}`) // collector text can carry repository paths
       return 2
     }
     // Fault hunt 2026-08-08 (IMPORTANT): --fail-under used to be a silent

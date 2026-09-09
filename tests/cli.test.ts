@@ -416,3 +416,70 @@ describe('cli main — --fail-under honours +/- modifiers from the grade() band 
     expect(r.err).toMatch(/Invalid --fail-under/)
   })
 })
+
+// Measured against the built CLI at a57e7e6: a root mcp.json naming a tool
+// "\x1b]0;HACKED\x07exec_shell" put that OSC title-set on stdout inside the
+// shell-exec finding, and a tree path carrying "\x1b[2J\x1b[H" (clear
+// screen) reached stdout through the could-not-fetch note. A
+// variation-selector payload decoding to "ok\n\nTrust Score: 100/100 (A+)
+// ..." forged that headline nine times into a 51/D+ card. The terminal
+// report sanitises; --json is the raw record and must keep the raw bytes.
+describe('cli main — repository content cannot forge or drive the terminal report', () => {
+  const EVIL_NAME = '\x1b]0;HACKED\x07exec_shell'
+  const EVIL_PATH = 'src/\x1b[2J\x1b[H\x1b]0;PWNED\x07evil.js'
+  // Variation-selector byte encoding (see src/derive/integrity.ts): b<16 →
+  // U+FE00+b, else U+E0100+(b-16). All-ASCII so the decoder confirms it.
+  const vs = (b: number) => String.fromCodePoint(b < 16 ? 0xfe00 + b : 0xe0100 + (b - 16))
+  const FORGED = 'ok\n\nTrust Score: 100/100 (A+)   rubric v9.9.9\n'
+  const encoded = [...Buffer.from(FORGED, 'latin1')].map(vs).join('')
+  const hostileRoutes: Record<string, unknown> = {
+    ...routes,
+    'https://api.github.com/repos/acme/foo/git/trees/main?recursive=1': { tree: [
+      { path: 'package.json', type: 'blob', size: 100 },
+      { path: 'mcp.json', type: 'blob', size: 200 },
+      { path: EVIL_PATH, type: 'blob', size: 200 },
+    ] },
+  }
+  const hostile: Http = {
+    ...fake,
+    async json<T>(url: string): Promise<T> {
+      for (const [p, b] of Object.entries(hostileRoutes)) if (url.startsWith(p)) return b as T
+      throw new HttpError(404, url)
+    },
+    async text(url: string): Promise<string> {
+      if (url.endsWith('package.json')) return JSON.stringify({ dependencies: { '@modelcontextprotocol/sdk': '^1.0.0' } })
+      if (url.endsWith('mcp.json')) {
+        return JSON.stringify({ tools: [
+          { name: EVIL_NAME, description: 'Execute a shell command', inputSchema: { type: 'object' } },
+          { name: 'add_numbers', description: 'Adds two numbers' + encoded, inputSchema: { type: 'object' } },
+        ] })
+      }
+      throw new HttpError(404, url) // the evil path is unfetchable → named in a note
+    },
+  }
+  const runHostile = async (argv: string[]) => {
+    const logs: string[] = [], errs: string[] = []
+    const code = await main(argv, { http: hostile, now: NOW, log: s => logs.push(s), err: s => errs.push(s) })
+    return { code, out: logs.join('\n'), err: errs.join('\n') }
+  }
+  it('--no-color output carries no control character at all', async () => {
+    const r = await runHostile(['acme/foo', '--no-color'])
+    // eslint-disable-next-line no-control-regex
+    expect(r.out).not.toMatch(/[\x00-\x09\x0b-\x1f\x7f-\x9f]/)
+    expect(r.out).toContain('\\x1b]0;HACKED\\x07exec_shell')
+    expect(r.out).toContain('src/\\x1b[2J\\x1b[H')
+  })
+  it('the headline appears once; the decoded payload cannot add a second one', async () => {
+    const r = await runHostile(['acme/foo', '--no-color'])
+    expect(r.out.match(/^Trust Score:/gm)).toHaveLength(1)
+    expect(r.out).toMatch(/^Trust Score: \d+\/100 \([A-DF][+-]?\)   rubric v1\.7\.0$/m)
+    expect(r.out).toContain('decode-confirmed payload')
+  })
+  it('--json is the raw record: the name, path and decoded payload keep their bytes', async () => {
+    const r = await runHostile(['acme/foo', '--json'])
+    const card = JSON.parse(r.out)
+    expect(JSON.stringify(card)).toContain(JSON.stringify(EVIL_NAME).slice(1, -1))
+    expect(card.integrityHits.some((h: { decoded?: string }) => h.decoded?.includes('\nTrust Score: 100/100'))).toBe(true)
+    expect(card.notes.some((n: string) => n.includes(EVIL_PATH))).toBe(true)
+  })
+})
