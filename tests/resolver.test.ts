@@ -1,11 +1,15 @@
 import { describe, expect, it } from 'vitest'
-import { ResolveError, resolve } from '../src/resolver.js'
+import { RegistryUnreachableError, ResolveError, resolve } from '../src/resolver.js'
+import { HttpError } from '../src/util/http.js'
 import type { Http } from '../src/util/http.js'
 
+// A route that is not in the table is a package the registry does not have:
+// the real http layer throws a typed 404 for that (see createHttp), and the
+// resolver now tells a 404 apart from a registry it could not reach.
 const httpOf = (routes: Record<string, unknown>): Http => ({
   async json<T>(url: string): Promise<T> {
     for (const [prefix, body] of Object.entries(routes)) if (url.startsWith(prefix)) return body as T
-    throw new Error(`HTTP 404 for ${url}`)
+    throw new HttpError(404, url)
   },
   async jsonWithHeaders() { throw new Error('unused') },
   async text() { throw new Error('unused') },
@@ -76,5 +80,78 @@ describe('resolve()', () => {
     expect(id.pypiPackage).toBe('dual-pkg')
     expect(id.npmPackage).toBeUndefined()
     expect(id.ref).toBe('pypi:dual-pkg')
+  })
+})
+
+// Every failure to look a ref up used to be reported as "Could not resolve
+// <ref>. Accepted forms: ..." — a lecture on ref syntax for what was
+// actually a registry outage or no network. Measured at f7f4f34 with the
+// fake-fetch harness: fetch throwing ECONNREFUSED for "@scope/pkg" and for a
+// bare name, and a 503 from the npm registry for "npm:name", all produced
+// that message. Only a typed 404 means "no such package".
+describe('resolve() — a registry it could not reach is not a malformed ref', () => {
+  const networkDown = (): Http => ({
+    async json(): Promise<never> {
+      const e = new TypeError('fetch failed') as TypeError & { cause?: unknown }
+      e.cause = Object.assign(new Error('connect ECONNREFUSED 127.0.0.1:443'), { code: 'ECONNREFUSED' })
+      throw e
+    },
+    async jsonWithHeaders() { throw new Error('unused') },
+    async text() { throw new Error('unused') },
+    async postJson() { throw new Error('unused') },
+  })
+  const statusFor = (status: number, hostFilter?: (url: string) => boolean): Http => ({
+    async json(url: string): Promise<never> {
+      throw new HttpError(hostFilter === undefined || hostFilter(url) ? status : 404, url)
+    },
+    async jsonWithHeaders() { throw new Error('unused') },
+    async text() { throw new Error('unused') },
+    async postJson() { throw new Error('unused') },
+  })
+  const rejection = (p: Promise<unknown>) => p.then(() => { throw new Error('resolved') }, (e: Error) => e)
+
+  it('network down, scoped npm name → RegistryUnreachableError naming npm and the cause, no syntax lecture', async () => {
+    const err = await rejection(resolve('@scope/pkg', networkDown()))
+    expect(err).toBeInstanceOf(RegistryUnreachableError)
+    expect(err.message).toMatch(/npm/)
+    expect(err.message).toMatch(/ECONNREFUSED/)
+    expect(err.message).not.toMatch(/Accepted forms/)
+  })
+  it('network down, bare name → names both registries it tried', async () => {
+    const err = await rejection(resolve('some-name', networkDown()))
+    expect(err).toBeInstanceOf(RegistryUnreachableError)
+    expect(err.message).toMatch(/npm/)
+    expect(err.message).toMatch(/PyPI/)
+    expect(err.message).not.toMatch(/Accepted forms/)
+  })
+  it('npm registry 503 for an npm: ref → unreachable, carrying the status', async () => {
+    const err = await rejection(resolve('npm:name', statusFor(503)))
+    expect(err).toBeInstanceOf(RegistryUnreachableError)
+    expect(err.message).toMatch(/503/)
+    expect(err.message).not.toMatch(/Accepted forms/)
+  })
+  it('PyPI 502 for a pypi: ref → unreachable', async () => {
+    const err = await rejection(resolve('pypi:name', statusFor(502)))
+    expect(err).toBeInstanceOf(RegistryUnreachableError)
+    expect(err.message).toMatch(/PyPI/)
+    expect(err.message).not.toMatch(/Accepted forms/)
+  })
+  it('bare name: npm says 404 but PyPI is down → unreachable, not "not found" (absence was never established)', async () => {
+    const err = await rejection(resolve('some-name', statusFor(503, u => u.includes('pypi.org'))))
+    expect(err).toBeInstanceOf(RegistryUnreachableError)
+    expect(err.message).toMatch(/PyPI/)
+    expect(err.message).toMatch(/npm/)
+    expect(err.message).not.toMatch(/Accepted forms/)
+  })
+  it('a typed 404 from both registries is still "could not resolve" with the accepted forms', async () => {
+    const err = await rejection(resolve('definitely-not-a-thing', httpOf({})))
+    expect(err).toBeInstanceOf(ResolveError)
+    expect(err).not.toBeInstanceOf(RegistryUnreachableError)
+    expect(err.message).toMatch(/Accepted forms/)
+  })
+  it('a typed 404 for an npm: ref is "could not resolve", not unreachable', async () => {
+    const err = await rejection(resolve('npm:nope', httpOf({})))
+    expect(err).not.toBeInstanceOf(RegistryUnreachableError)
+    expect(err.message).toMatch(/Accepted forms/)
   })
 })

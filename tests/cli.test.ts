@@ -24,7 +24,7 @@ const routes: Record<string, unknown> = {
 const fake: Http = {
   async json<T>(url: string): Promise<T> {
     for (const [p, b] of Object.entries(routes)) if (url.startsWith(p)) return b as T
-    throw new Error(`HTTP 404 for ${url}`)
+    throw new HttpError(404, url) // what the real http layer throws for a missing route
   },
   // Real (not a stub): collectGithub paginates commits through this method;
   // this fixture's single page has no Link header → one page, as before.
@@ -356,5 +356,31 @@ describe('cli main — a rejected GITHUB_TOKEN is reported as the caller\'s cred
     expect(errs.join('\n')).not.toMatch(/insufficient data/i)
     expect(logs.join('\n')).not.toMatch(/INSUFFICIENT DATA/)
     expect(logs.join('\n')).not.toMatch(/Trust Score: \d/)
+  })
+})
+
+// Measured at f7f4f34 with the fake-fetch harness: with no network at all,
+// `trovark @scope/pkg` printed "Could not resolve "@scope/pkg". Accepted
+// forms: GitHub URL, owner/repo, npm package name, PyPI package name." —
+// a syntax lecture for an infrastructure failure.
+describe('cli main — a registry that could not be reached is reported as such', () => {
+  const networkDown: Http = {
+    async json(): Promise<never> {
+      const e = new TypeError('fetch failed') as TypeError & { cause?: unknown }
+      e.cause = Object.assign(new Error('connect ECONNREFUSED 127.0.0.1:443'), { code: 'ECONNREFUSED' })
+      throw e
+    },
+    async jsonWithHeaders() { throw new Error('unused') },
+    async text() { throw new Error('unused') },
+    async postJson() { throw new Error('unused') },
+  }
+  it.each(['@scope/pkg', 'bare-name', 'npm:bare-name'])('%s with no network → exit 2, no "Accepted forms"', async (ref) => {
+    const logs: string[] = [], errs: string[] = []
+    const code = await main([ref], { http: networkDown, now: NOW, log: s => logs.push(s), err: s => errs.push(s) })
+    expect(code).toBe(2)
+    expect(errs.join('\n')).not.toMatch(/Accepted forms/)
+    expect(errs.join('\n')).toMatch(/could not (be )?reach/i)
+    expect(errs.join('\n')).toMatch(/ECONNREFUSED/)
+    expect(logs.join('\n')).toBe('')
   })
 })

@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 import { readFileSync } from 'node:fs'
 import { AuthError, createHttp, RateLimitError, type Http } from './util/http.js'
-import { ResolveError, resolve } from './resolver.js'
+import { RegistryUnreachableError, ResolveError, resolve } from './resolver.js'
 import { assemble } from './assemble.js'
 import { score } from './scoring/score.js'
 import { renderTerminal } from './report/terminal.js'
@@ -161,7 +161,7 @@ export async function main(argv: string[], deps: CliDeps): Promise<number> {
         + '(gh auth status; export GITHUB_TOKEN=$(gh auth token)), or unset GITHUB_TOKEN to scan unauthenticated.')
       return 2
     }
-    if (err instanceof ResolveError) { deps.err(err.message); return 2 }
+    if (err instanceof ResolveError || err instanceof RegistryUnreachableError) { deps.err(err.message); return 2 }
     deps.err(`trovark failed: ${(err as Error).message}`)
     return 2
   }
