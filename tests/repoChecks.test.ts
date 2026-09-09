@@ -25,3 +25,26 @@ describe('repoChecks', () => {
     }
   })
 })
+
+// Measured at f7f4f34: bun.lock, deno.lock, packages.lock.json and pdm.lock
+// all returned hasLockfile=false while bun.lockb, pnpm-lock.yaml and
+// yarn.lock returned true. Each is the dependency lockfile its tool commits
+// — Bun's text lockfile (the default since 1.2, replacing bun.lockb), Deno's,
+// NuGet's, PDM's — and npm-shrinkwrap.json is npm's publishable lockfile.
+// The signal is "a lockfile is committed"; it does not care which tool.
+describe('repoChecks — lockfiles the signal did not recognise', () => {
+  it.each(['bun.lock', 'deno.lock', 'packages.lock.json', 'pdm.lock', 'npm-shrinkwrap.json'])('%s counts as a committed lockfile', (lock) => {
+    expect(repoChecks([lock, 'src/index.ts']).hasLockfile).toBe(true)
+  })
+  it('still recognises every lockfile it already did', () => {
+    for (const lock of ['package-lock.json', 'pnpm-lock.yaml', 'yarn.lock', 'bun.lockb', 'uv.lock', 'poetry.lock', 'Pipfile.lock',
+      'go.sum', 'Cargo.lock', 'Gemfile.lock', 'composer.lock', 'gradle.lockfile']) {
+      expect(repoChecks([lock]).hasLockfile).toBe(true)
+    }
+  })
+  it('a lockfile-shaped name that is not one is still not one', () => {
+    for (const notLock of ['lock.json', 'package.json', 'deno.json', 'bun.lockb.bak', 'flake.lock']) {
+      expect(repoChecks([notLock]).hasLockfile).toBe(false)
+    }
+  })
+})
