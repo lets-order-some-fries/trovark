@@ -54,6 +54,25 @@ export class RateLimitError extends HttpError {
   }
 }
 
+/**
+ * Re-throws an error that describes the machine running trovark rather than
+ * the ref being scanned, so a fail-soft catch cannot absorb it.
+ *
+ * The collectors deliberately swallow most failures — one flaky call should
+ * cost one signal, not the whole scan. An exhausted budget is not a flaky
+ * call: every later request fails the same way, and each swallowed one
+ * leaves a signal undefined that then gets scored as a partial card ABOUT
+ * THE REPO. Measured before this helper existed: a rate limit on the second
+ * API call (the commits page) published a confident A- with health 100/100;
+ * on the last call (the tree) it published INSUFFICIENT DATA blaming the
+ * ref. Only the very first call was reported honestly. Every catch that
+ * wraps a request goes through here first; anything else keeps its
+ * fail-soft behaviour untouched.
+ */
+export function rethrowIfCallerSide(err: unknown): void {
+  if (err instanceof RateLimitError) throw err
+}
+
 interface RequestInitExtra {
   method?: string
   body?: string

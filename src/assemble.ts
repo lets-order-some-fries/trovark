@@ -1,4 +1,4 @@
-import { RateLimitError, type Http } from './util/http.js'
+import { rethrowIfCallerSide, type Http } from './util/http.js'
 import type { ServerIdentity } from './resolver.js'
 import type { Signals } from './types.js'
 import { collectGithub, RepoNotFoundError, type RepoFile } from './collectors/github.js'
@@ -327,7 +327,7 @@ export async function assemble(
       // repository, so it must not be folded into the scorecard as a
       // collector hiccup and published as INSUFFICIENT DATA. Let it out to
       // the CLI, which can tell the user what actually happened.
-      if (err instanceof RateLimitError) throw err
+      rethrowIfCallerSide(err)
       if (err instanceof RepoNotFoundError) s.unresolved = true
       s.errors.push(`github: ${(err as Error).message}`)
     }
@@ -348,6 +348,7 @@ export async function assemble(
       }
       deps.push(...depsFromManifest(npm.dependencies, 'npm'))
     } catch (err) {
+      rethrowIfCallerSide(err)
       s.errors.push(`npm: ${(err as Error).message}`)
     }
   }
@@ -360,6 +361,7 @@ export async function assemble(
         if (m) deps.push({ name: m[1], version: m[2], ecosystem: 'PyPI' })
       }
     } catch (err) {
+      rethrowIfCallerSide(err)
       s.errors.push(`pypi: ${(err as Error).message}`)
     }
   }
@@ -388,6 +390,7 @@ export async function assemble(
     s.cveWorst = osv.cveWorst
     s.findings.push(...osv.findings)
   } catch (err) {
+    rethrowIfCallerSide(err)
     s.errors.push(`osv: ${(err as Error).message}`)
   }
 

@@ -282,3 +282,46 @@ describe('cli main — unknown flags are rejected, not ignored', () => {
     expect(logs.join('\n')).not.toMatch(/INSUFFICIENT DATA/)
   })
 })
+
+// A rate limit that bites AFTER the first call used to be swallowed by the
+// collector's fail-soft catches and published as a scorecard. Measured at
+// f7f4f34 with this same fixture: the budget dying on the commits page (the
+// second API call) exited 0 with a confident "Trust Score: 86/100 (A-)" and
+// health 100/100; dying on the tree fetch (the last API call) exited 2 with
+// INSUFFICIENT DATA — blaming the ref. Only a rate limit on the very first
+// call was reported honestly. A partial card is never the honest outcome for
+// an exhausted budget: every swallow site must let a RateLimitError out.
+describe('cli main — a rate limit that bites mid-scan is still a rate limit', () => {
+  const reset = Math.floor(Date.UTC(2026, 6, 31, 1, 30, 0) / 1000)
+  // The fixture's happy path, except that the call matching `dies` is the
+  // one on which the budget runs out.
+  const limitedAfter = (dies: (url: string) => boolean): Http => ({
+    async json<T>(url: string): Promise<T> {
+      if (dies(url)) throw new RateLimitError(403, url, reset)
+      return fake.json<T>(url)
+    },
+    async jsonWithHeaders<T>(url: string): Promise<{ data: T; headers: Headers }> {
+      if (dies(url)) throw new RateLimitError(403, url, reset)
+      return fake.jsonWithHeaders<T>(url)
+    },
+    async postJson<T>(url: string, body: unknown): Promise<T> { return fake.postJson<T>(url, body) },
+    async text(url: string): Promise<string> {
+      if (dies(url)) throw new RateLimitError(429, url, reset)
+      return fake.text(url)
+    },
+  })
+  it.each([
+    ['the commits page (second API call)', (u: string) => u.includes('/commits')],
+    ['releases/latest', (u: string) => u.includes('/releases/latest')],
+    ['the tree fetch (last API call)', (u: string) => u.includes('/git/trees/')],
+    ['a selected blob fetch', (u: string) => u.endsWith('/src/server.js')],
+  ])('budget dies on %s → exit 2 naming the rate limit, and no card is printed', async (_label, dies) => {
+    const logs: string[] = [], errs: string[] = []
+    const code = await main(['acme/foo'], { http: limitedAfter(dies), now: NOW, log: s => logs.push(s), err: s => errs.push(s) })
+    expect(code).toBe(2)
+    expect(errs.join('\n')).toMatch(/rate limit/i)
+    expect(errs.join('\n')).toMatch(/GITHUB_TOKEN/)
+    expect(logs.join('\n')).not.toMatch(/INSUFFICIENT DATA/)
+    expect(logs.join('\n')).not.toMatch(/Trust Score: \d/)
+  })
+})

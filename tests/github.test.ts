@@ -2,7 +2,7 @@ import { readFileSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
 import { describe, expect, it } from 'vitest'
 import { collectGithub, RepoNotFoundError, selectRepoFiles } from '../src/collectors/github.js'
-import { HttpError } from '../src/util/http.js'
+import { HttpError, RateLimitError } from '../src/util/http.js'
 import type { Http } from '../src/util/http.js'
 
 const NOW = new Date('2026-07-31T00:00:00Z')
@@ -1360,5 +1360,36 @@ describe('collectGithub', () => {
       expect(post).toContain('internal/modules/create.go')
       expect(post.filter(p => p.startsWith('internal/modules/')).length).toBeGreaterThanOrEqual(6)
     })
+  })
+})
+
+// The collector's fail-soft catches exist so one flaky call degrades one
+// signal instead of the whole scan. An exhausted API budget is not a flaky
+// call: every later request will fail the same way, and "signal undefined"
+// then gets scored as a partial card about the repo. RateLimitError must
+// escape from every catch in this file, not only from the metadata call.
+describe('collectGithub — RateLimitError escapes every fail-soft catch', () => {
+  const identity = { ref: 'acme/foo', repo: { owner: 'acme', name: 'foo' } }
+  const limitOn = (dies: (url: string) => boolean): Http => {
+    const base = fakeHttp()
+    return {
+      ...base,
+      async json<T>(url: string): Promise<T> {
+        if (dies(url)) throw new RateLimitError(403, url, undefined)
+        return base.json<T>(url)
+      },
+      async text(url: string): Promise<string> {
+        if (dies(url)) throw new RateLimitError(403, url, undefined)
+        return base.text(url)
+      },
+    }
+  }
+  it('on the token-gated issues fetch, instead of leaving issue responsiveness undefined', async () => {
+    await expect(collectGithub(identity, limitOn(u => u.includes('/issues')), NOW, { hasToken: true }))
+      .rejects.toBeInstanceOf(RateLimitError)
+  })
+  it('on the root package.json fetch, instead of treating the manifest as "no signal"', async () => {
+    await expect(collectGithub(identity, limitOn(u => u.endsWith('/package.json')), NOW))
+      .rejects.toBeInstanceOf(RateLimitError)
   })
 })

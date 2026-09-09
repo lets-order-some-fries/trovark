@@ -1,4 +1,4 @@
-import { HttpError, type Http } from '../util/http.js'
+import { HttpError, rethrowIfCallerSide, type Http } from '../util/http.js'
 import type { ServerIdentity } from '../resolver.js'
 
 export interface RepoFile { path: string; content: string }
@@ -602,7 +602,8 @@ export async function collectGithub(
       url = parseNextLink(headers)
     }
     commits = acc
-  } catch {
+  } catch (err) {
+    rethrowIfCallerSide(err)
     commits = undefined
   }
   const cutoff90 = now.getTime() - 90 * 86_400_000
@@ -623,7 +624,7 @@ export async function collectGithub(
   const latestReleaseAt = await http
     .json<{ published_at?: string }>(`${api}/releases/latest`)
     .then(r => r.published_at)
-    .catch(() => undefined)
+    .catch((err: unknown) => { rethrowIfCallerSide(err); return undefined })
 
   // Issue responsiveness needs per-issue comment fetches — only with a token, cap 10 issues.
   let medianIssueResponseDays: number | undefined
@@ -647,13 +648,15 @@ export async function collectGithub(
           ? deltas[(n - 1) / 2]
           : (deltas[n / 2 - 1] + deltas[n / 2]) / 2
       }
-    } catch { /* leave undefined */ }
+    } catch (err) {
+      rethrowIfCallerSide(err) // otherwise leave undefined
+    }
   }
 
   interface GhTree { tree: Array<{ path: string; type: string; size?: number }> }
   const tree = await http
     .json<GhTree>(`${api}/git/trees/${meta.default_branch}?recursive=1`)
-    .catch(() => undefined)
+    .catch((err: unknown) => { rethrowIfCallerSide(err); return undefined })
   const blobs = tree?.tree.filter(t => t.type === 'blob') ?? []
   const treePaths = tree ? blobs.map(b => b.path) : undefined
   // Cleanup (dedup full-tree scan): computed ONCE here, over the full tree,
@@ -682,7 +685,9 @@ export async function collectGithub(
       const parsed = JSON.parse(rootPkgContent) as { name?: string; workspaces?: unknown }
       rootPkgName = parsed.name
       hasWorkspaces = Array.isArray(parsed.workspaces) ? parsed.workspaces.length > 0 : Boolean(parsed.workspaces)
-    } catch { /* malformed/unfetchable root package.json — treat as no signal */ }
+    } catch (err) {
+      rethrowIfCallerSide(err) // malformed/unfetchable root package.json — treat as no signal
+    }
   }
 
   const selectedPaths = selectRepoFiles(blobs, rootPkgName, hasWorkspaces, toolFanoutCount)
@@ -704,7 +709,8 @@ export async function collectGithub(
       const file: RepoFile = { path, content: content.length > SIZE_CAP ? content.slice(0, SIZE_CAP) : content }
       if (isRootReadme(path)) readme = file
       else files.push(file)
-    } catch {
+    } catch (err) {
+      rethrowIfCallerSide(err)
       // C5: a file the tree told us exists could not be read. The sample is
       // now incomplete — record WHICH path so the caller can say so, instead
       // of silently grading a smaller repo than the one that exists.

@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest'
 import { assemble } from '../src/assemble.js'
 import { collectGithub } from '../src/collectors/github.js'
 import { score } from '../src/scoring/score.js'
-import { HttpError } from '../src/util/http.js'
+import { HttpError, RateLimitError } from '../src/util/http.js'
 import type { Http } from '../src/util/http.js'
 
 const NOW = new Date('2026-07-31T00:00:00Z')
@@ -640,5 +640,37 @@ describe('cost/token-footprint is published as an informational finding, not sco
     const withoutFact = score('acme/manifest', { ...s, findings: s.findings.filter(f => f.id !== 'cost/token-footprint') }, NOW.toISOString())
     expect(withoutFact.dimensions.find(d => d.id === 'cost')!.score).toBe(cost.score)
     expect(withoutFact.overall).toBe(card.overall)
+  })
+})
+
+// assemble()'s per-collector catches record a failure in errors[] so one
+// registry outage lowers confidence instead of aborting the scan. A
+// RateLimitError is about this machine's budget, not the ref, and the GitHub
+// branch already lets it out — the npm and OSV branches must too, or the
+// same exhausted budget is reported two different ways depending on which
+// collector happened to see it first.
+describe('assemble — RateLimitError escapes the npm and OSV catches too', () => {
+  it('from the npm collector', async () => {
+    const base = fullFake()
+    const http: Http = {
+      ...base,
+      async json<T>(url: string): Promise<T> {
+        if (url.startsWith('https://registry.npmjs.org/')) throw new RateLimitError(429, url, undefined)
+        return base.json<T>(url)
+      },
+    }
+    await expect(assemble({ ref: 'foo-mcp', npmPackage: 'foo-mcp', repo: { owner: 'acme', name: 'foo' } }, http, NOW))
+      .rejects.toBeInstanceOf(RateLimitError)
+  })
+  it('from the OSV batch query', async () => {
+    const base = fullFake()
+    const http: Http = {
+      ...base,
+      async postJson<T>(url: string): Promise<T> { throw new RateLimitError(429, url, undefined) },
+    }
+    // The npm identity is what gives OSV something to query (collectOsv
+    // short-circuits on zero deps); the fixture's manifest declares zod.
+    await expect(assemble({ ref: 'foo-mcp', npmPackage: 'foo-mcp', repo: { owner: 'acme', name: 'foo' } }, http, NOW))
+      .rejects.toBeInstanceOf(RateLimitError)
   })
 })
