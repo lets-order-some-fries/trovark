@@ -384,3 +384,35 @@ describe('cli main — a registry that could not be reached is reported as such'
     expect(logs.join('\n')).toBe('')
   })
 })
+
+// Measured at f7f4f34: the fixture grades 77/B, and `--fail-under B+`
+// exited 0. cli.ts stripped the modifier — GRADE_FLOOR[raw.replace(/[+-]$/,
+// '')] — so B+ gated at B's band floor (70), and A- at 85 was the only
+// modifier that happened to be right. A CI gate demanding B+ passed every
+// B- in the corpus.
+describe('cli main — --fail-under honours +/- modifiers from the grade() band table', () => {
+  it('the fixture scores 77 (B) — the premise every row below relies on', async () => {
+    const card = JSON.parse((await run(['acme/foo', '--json'])).out)
+    expect(card.overall).toBe(77)
+    expect(card.grade).toBe('B')
+  })
+  // Bare letters keep their published meaning — the whole band, so `B`
+  // accepts B-, B and B+, exactly as `--fail-under B` in the README always
+  // has. A modifier narrows it to the floor of that label.
+  it.each([
+    ['A+', 1], ['A', 1], ['A-', 1],
+    ['B+', 1], ['B', 0], ['B-', 0],
+    ['C+', 0], ['C', 0], ['C-', 0],
+    ['D+', 0], ['D', 0], ['D-', 0],
+  ])('--fail-under %s on a 77/B card exits %i', async (label, expected) => {
+    expect((await run(['acme/foo', '--fail-under', label])).code).toBe(expected)
+  })
+  it('is case-insensitive: b+ gates like B+', async () => {
+    expect((await run(['acme/foo', '--fail-under', 'b+'])).code).toBe(1)
+  })
+  it.each(['B*', 'B++', '+B', 'F', 'E+', 'A+ '])('rejects "%s" as an invalid threshold rather than guessing, exit 2', async (label) => {
+    const r = await run(['acme/foo', '--fail-under', label])
+    expect(r.code).toBe(2)
+    expect(r.err).toMatch(/Invalid --fail-under/)
+  })
+})

@@ -14,6 +14,27 @@ export function grade(score: number): string {
   return 'F'
 }
 
+/**
+ * The lowest score grade() maps to `label` — the threshold `--fail-under`
+ * gates on. Derived by asking grade() itself, so it can never disagree with
+ * the band table above: the CLI used to keep its own {A:85,B:70,C:55,D:40}
+ * and strip the modifier, which gated `--fail-under B+` at 70.
+ *
+ * A bare letter keeps its published meaning — the whole band, so `B`
+ * accepts B-, B and B+ (the README's `--fail-under B` has always passed a
+ * B-). That is the same threshold as `<letter>-`; a modifier narrows the
+ * gate to that label's floor. Anything else (F, a doubled or leading
+ * modifier, stray whitespace) is undefined: the caller rejects it rather
+ * than guessing.
+ */
+export function gradeFloor(label: string): number | undefined {
+  const m = /^([A-D])([+-]?)$/.exec(label.toUpperCase())
+  if (!m) return undefined
+  const wanted = `${m[1]}${m[2] === '' ? '-' : m[2]}`
+  for (let v = 0; v <= 100; v++) if (grade(v) === wanted) return v
+  return undefined
+}
+
 import { DIMENSION_WEIGHTS, RUBRIC_VERSION, SIGNALS } from './rubric.js'
 import type { Confidence, DimensionId, DimensionScore, Scorecard, Signals } from '../types.js'
 

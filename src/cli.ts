@@ -3,11 +3,10 @@ import { readFileSync } from 'node:fs'
 import { AuthError, createHttp, RateLimitError, type Http } from './util/http.js'
 import { RegistryUnreachableError, ResolveError, resolve } from './resolver.js'
 import { assemble } from './assemble.js'
-import { score } from './scoring/score.js'
+import { gradeFloor, score } from './scoring/score.js'
 import { renderTerminal } from './report/terminal.js'
 import { renderJson } from './report/json.js'
 
-const GRADE_FLOOR: Record<string, number> = { A: 85, B: 70, C: 55, D: 40 }
 const KNOWN_FLAGS = ['--help', '--version', '--json', '--no-color', '--fail-under'] as const
 
 /** Levenshtein distance, capped at 3 — only used to suggest a near-miss flag. */
@@ -72,7 +71,7 @@ export async function main(argv: string[], deps: CliDeps): Promise<number> {
   const failUnderPresent = args.includes('--fail-under')
   const failUnderRaw = valueOf('--fail-under')
   if (failUnderPresent && (failUnderRaw === undefined || failUnderRaw.trim() === '')) {
-    deps.err('--fail-under requires a value: A, B, C, D, or a number.')
+    deps.err('--fail-under requires a value: a grade (A+ … D-, or a bare letter for the whole band) or a number.')
     return 2
   }
   // Everything the known-flag readers above did not consume must be a ref.
@@ -98,8 +97,14 @@ export async function main(argv: string[], deps: CliDeps): Promise<number> {
   let threshold: number | undefined
   if (failUnderRaw !== undefined) {
     const n = Number(failUnderRaw)
-    threshold = Number.isFinite(n) ? n : GRADE_FLOOR[failUnderRaw.toUpperCase().replace(/[+-]$/, '')]
-    if (threshold === undefined) { deps.err(`Invalid --fail-under "${failUnderRaw}". Use A/B/C/D or a number.`); return 2 }
+    // Grade thresholds come from the same band table grade() uses (see
+    // gradeFloor) — this file used to keep its own copy and strip the
+    // modifier, so `--fail-under B+` gated at B's band floor.
+    threshold = Number.isFinite(n) ? n : gradeFloor(failUnderRaw)
+    if (threshold === undefined) {
+      deps.err(`Invalid --fail-under "${failUnderRaw}". Use a grade (A+ … D-, or a bare letter for the whole band) or a number.`)
+      return 2
+    }
   }
 
   try {
