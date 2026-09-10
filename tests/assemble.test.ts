@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { assemble } from '../src/assemble.js'
+import { collectNpm } from '../src/collectors/npm.js'
 import { collectGithub } from '../src/collectors/github.js'
 import { score } from '../src/scoring/score.js'
 import { HttpError, RateLimitError } from '../src/util/http.js'
@@ -661,6 +662,21 @@ describe('assemble — RateLimitError escapes the npm and OSV catches too', () =
     }
     await expect(assemble({ ref: 'foo-mcp', npmPackage: 'foo-mcp', repo: { owner: 'acme', name: 'foo' } }, http, NOW))
       .rejects.toBeInstanceOf(RateLimitError)
+  })
+  it('from the npm weekly-downloads call, whose catch used to swallow everything', async () => {
+    // The registry document call was covered above; the api.npmjs.org
+    // downloads call had its own `.catch(() => undefined)` that ate a
+    // RateLimitError too — the one catch that wraps a request and was not
+    // routed through rethrowIfCallerSide.
+    const base = fullFake()
+    const http: Http = {
+      ...base,
+      async json<T>(url: string): Promise<T> {
+        if (url.startsWith('https://api.npmjs.org/')) throw new RateLimitError(429, url, undefined)
+        return base.json<T>(url)
+      },
+    }
+    await expect(collectNpm('foo-mcp', http)).rejects.toBeInstanceOf(RateLimitError)
   })
   it('from the OSV batch query', async () => {
     const base = fullFake()

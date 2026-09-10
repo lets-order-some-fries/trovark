@@ -1,4 +1,4 @@
-import type { Http } from '../util/http.js'
+import { rethrowIfCallerSide, type Http } from '../util/http.js'
 
 export interface NpmInfo {
   weeklyDownloads?: number
@@ -14,7 +14,10 @@ export async function collectNpm(pkg: string, http: Http): Promise<NpmInfo> {
   const weeklyDownloads = await http
     .json<{ downloads?: number }>(`https://api.npmjs.org/downloads/point/last-week/${encodeURIComponent(pkg)}`)
     .then(d => d.downloads)
-    .catch(() => undefined)
+    // Downloads are a nice-to-have, so any failure here leaves them undefined
+    // — except an exhausted budget, which is the caller's problem and must
+    // escape like it does from every other catch that wraps a request.
+    .catch((err: unknown) => { rethrowIfCallerSide(err); return undefined })
   return {
     weeklyDownloads,
     deprecated: v ? Boolean(v.deprecated) : undefined,
