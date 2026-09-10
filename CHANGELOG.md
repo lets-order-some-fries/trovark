@@ -3,7 +3,10 @@
 All notable changes to this project are documented in this file, reconstructed
 from git history. Format loosely follows [Keep a Changelog](https://keepachangelog.com/).
 
-## [Unreleased]
+## [0.1.9] - 2026-09-10
+
+An adversarial pass over everything the CLI says when something goes wrong, and
+over what a scanned repository can make it print.
 
 - `--fail-under` honours `+`/`-` modifiers. `B+` now gates at 80 (it gated at 70, the
   bare-B floor, because the modifier was stripped before lookup); `A+` at 96 (was 85),
