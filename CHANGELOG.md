@@ -3,6 +3,23 @@
 All notable changes to this project are documented in this file, reconstructed
 from git history. Format loosely follows [Keep a Changelog](https://keepachangelog.com/).
 
+## [Unreleased]
+
+- `--fail-under` honours `+`/`-` modifiers. `B+` now gates at 80 (it gated at 70, the
+  bare-B floor, because the modifier was stripped before lookup); `A+` at 96 (was 85),
+  `C+` at 65 (was 55), `D+` at 50 (was 40). Bare letters and minus forms are unchanged,
+  so `--fail-under B` still passes a B-. If a CI gate used a plus form, it was weaker than
+  it read and will now enforce what it says.
+- An exhausted GitHub rate limit, a rejected `GITHUB_TOKEN`, or an unreachable registry is
+  reported as that — the caller's budget, credential, or network — instead of as
+  `INSUFFICIENT DATA` about the ref or as a malformed reference.
+- Repository content can no longer drive the terminal (control characters in tool names,
+  paths and decoded payloads are rendered as visible escapes; `--json` is untouched), forge
+  report lines, or make extraction quadratic.
+- `bun.lock`, `deno.lock`, `packages.lock.json`, `pdm.lock` and `npm-shrinkwrap.json` count
+  as lockfiles. Four indexed repositories gain the signal on the next rescan.
+- A package ref that resolves into a monorepo says so on the card; `--help` exits 0.
+
 ## [0.1.8] - 2026-08-15
 
 Rubric 1.7.0, the tool-surface observatory, and the fixes an adversarial fault

@@ -31,7 +31,7 @@ function nearestFlag(unknown: string): string | undefined {
   }
   return best
 }
-const USAGE = `Usage: trovark <ref> [--json] [--fail-under <grade|number>] [--no-color]
+const USAGE = `Usage: trovark <ref> [--json] [--fail-under <A+..D-|number>] [--no-color]
 
 <ref>: GitHub URL, owner/repo, npm package, or PyPI package name.
 Set GITHUB_TOKEN for higher rate limits and issue-responsiveness signals.

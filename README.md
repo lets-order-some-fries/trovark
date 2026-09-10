@@ -38,6 +38,10 @@ A bare package name that exists on both npm and PyPI is rejected as ambiguous â€
 `--fail-under` turns a scan into a pass/fail gate: exit 0 when the grade meets the
 threshold, exit 1 when it doesn't, exit 2 on a resolution or network error.
 
+The threshold is a number or a grade. A grade with a modifier gates at that label's
+floor (`B+` = 80, `A-` = 85); a bare letter gates at the whole band (`B` = 70, the same
+as `B-`), so `--fail-under B` passes a B-.
+
 The [ungradeable states](#reading-a-scorecard) do not all fail the gate the same way,
 so a workflow that branches on the exit code needs the distinction:
 
