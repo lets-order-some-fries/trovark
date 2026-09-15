@@ -1863,6 +1863,8 @@ describe('fromJsSource — the name: fallback scan is linear in file size', () =
 // tools from, whatever they are called — and, just as importantly, pin the
 // cases that must NOT flip.
 describe('extractSchema — surfacePartial from under-read tool directories (issue #22)', () => {
+  const pyTool = (name: string) =>
+    `@mcp.tool()\ndef ${name}(x: str) -> str:\n    """does ${name}."""\n    ...\n`
   const goTool = (name: string) => `
 func ${name}Fn() (mcp.Tool, server.ToolHandlerFunc) {
 	return mcp.Tool{
@@ -1891,6 +1893,44 @@ func ${name}Fn() (mcp.Tool, server.ToolHandlerFunc) {
     const r = extractSchema(files, treePaths)
     expect(r.tools.map(t => t.name).sort()).toEqual(['get_me', 'get_teams', 'ui_get'])
     expect(r.surfacePartial).toBe(true)
+  })
+
+  it('an unread package __init__.py is not evidence of an under-read (the measured false positive)', () => {
+    // daedalusdevelopmentgroup/ddg-agent-payable-services, measured over the
+    // real 400-server corpus. Its package directory holds 4 .py files; 3 were
+    // fetched and all 43 tools come from 2 of them. The one unread file is a
+    // 25-line __init__.py — docstring, __version__, a lazy __getattr__ — with
+    // zero tool declarations. The surface was complete, yet the rule called it
+    // partial, and the punishment was a REWARD: withholding a below-average
+    // cost score raises the weighted mean of what remains, so the card moved
+    // B 79 to A- 86. A false positive here is worse than the bug it fixes.
+    const files = [
+      { path: 'src/pkg/server.py', content: pyTool('ddg_site_audit') },
+      { path: 'src/pkg/tools.py', content: pyTool('ddg_browser_proof') },
+      { path: 'src/pkg/__main__.py', content: 'from . import main\n' },
+    ]
+    const treePaths = [...files.map(f => f.path), 'src/pkg/__init__.py', 'pyproject.toml']
+    const r = extractSchema(files, treePaths)
+    expect(r.tools.map(t => t.name).sort()).toEqual(['ddg_browser_proof', 'ddg_site_audit'])
+    expect(r.surfacePartial).toBe(false)
+  })
+
+  it('an unread index.ts is excluded too — the deliberate cost of that exclusion', () => {
+    // The exclusion runs both ways: a barrel file that genuinely holds
+    // registrations no longer counts as evidence of an under-read. Accepted
+    // because entrypoints get fetch priority and are almost always read; the
+    // alternative was calling every complete read partial.
+    //
+    // Deliberately NOT under a tools/ directory: there the W5 fan-out guard
+    // fires on its own — correctly — and would mask what this test is about.
+    const files = [
+      { path: 'src/handlers/alpha.ts', content: 'server.tool("alpha", "a")' },
+      { path: 'src/handlers/beta.ts', content: 'server.tool("beta", "b")' },
+    ]
+    const treePaths = [...files.map(f => f.path), 'src/handlers/index.ts', 'package.json']
+    const r = extractSchema(files, treePaths)
+    expect(r.tools.map(t => t.name).sort()).toEqual(['alpha', 'beta'])
+    expect(r.surfacePartial).toBe(false)
   })
 
   it('every candidate file in the tool-bearing directory was fetched -> NOT partial (a complete read must never flip)', () => {

@@ -1478,6 +1478,30 @@ function detectSurfacePartial(
 // It is an OR with the W5 check, never a replacement: every repo that trips
 // the tools?/ comparison today still trips it.
 const TOOL_SOURCE_EXT_RE = /\.(ts|js|mjs|py|go)$/
+/**
+ * Files that cannot themselves declare a tool surface, so an unread one is no
+ * evidence that the read was incomplete.
+ *
+ * Measured: `daedalusdevelopmentgroup/ddg-agent-payable-services` was called
+ * under-read because a 25-line package `__init__.py` — a docstring, a version
+ * and a lazy-import `__getattr__`, zero tool declarations — went unfetched
+ * beside the two files that declare all 43 of its tools. Its surface was
+ * complete. Worse, the punishment was a REWARD: withholding a below-average
+ * cost score raises the weighted mean of the dimensions that remain, so the
+ * card moved B 79 to A- 86. A false positive here is worse than the bug.
+ *
+ * The cost runs the other way too, and is accepted deliberately: an unread
+ * `src/tools/index.ts` that genuinely holds registrations no longer counts as
+ * evidence of an under-read. Entrypoints get ENTRYPOINT_FETCH_CAP priority in
+ * selectRepoFiles and are almost always fetched, so this is rarely the file
+ * that went unread.
+ *
+ * This narrows only the candidate universe of THIS check. isNonServerPath is
+ * left alone on purpose — widening it would change what extraction itself
+ * reads, moving grades in ways this change has not measured.
+ */
+const NON_DECLARING_RE = /(^|\/)(__init__\.py|index\.(ts|js|mjs)|mod\.rs|conftest\.py)$/
+const NON_SERVER_DIR_RE = /(^|\/)(test|spec)\//
 function dirOf(path: string): string {
   const i = path.lastIndexOf('/')
   return i < 0 ? '' : path.slice(0, i)
@@ -1504,7 +1528,9 @@ function detectUnderReadToolDirs(
   for (const [key, evidenceFiles] of evidenceByDir) {
     if (evidenceFiles.size < 2) continue
     const [dir, ext] = key.split('\u0000')
-    const isCandidate = (p: string): boolean => dirOf(p) === dir && p.endsWith(ext) && !isNonServerPath(p)
+    const isCandidate = (p: string): boolean =>
+      dirOf(p) === dir && p.endsWith(ext) && !isNonServerPath(p) &&
+      !NON_DECLARING_RE.test(p) && !NON_SERVER_DIR_RE.test(p)
     const inTree = treePaths.filter(isCandidate).length
     const sampled = files.filter(f => isCandidate(f.path)).length
     if (inTree > sampled) return true
