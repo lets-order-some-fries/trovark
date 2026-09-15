@@ -1445,6 +1445,73 @@ function detectSurfacePartial(
   return detected > sampled
 }
 
+// Issue #22 (tool-surface under-read is invisible outside tools/): the W5
+// check above can only see fan-out that is NAMED like fan-out. It asks
+// "does the tree hold more `tools?/`-shaped files than the sample read",
+// so a repo that keeps one-tool-per-file source under any other directory
+// (github/github-mcp-server: 56 non-test `pkg/github/*.go`) compares 0 > 0,
+// stays non-partial, and publishes a 4-of-125 sample as a complete surface
+// — toolCount 4, risk `low` off four read-only getters, cost 100/100, A+ 96.
+//
+// This second check drops the naming assumption and keys off the thing the
+// W5 check was actually trying to measure: a directory where extraction
+// PROVED tools are declared per-file, and whose siblings we never read. For
+// each directory that produced extracted tools, in the extension it produced
+// them in, it compares the candidate source files the full tree holds there
+// against the ones the sampler actually fetched.
+//
+// Three deliberate narrowings, because a false positive here is worse than
+// the bug it fixes — wrongly calling a complete read partial withholds a
+// correct grade (cost, and via assemble.ts's `'none'` rule the whole card):
+//   - >= 2 distinct evidence FILES in the directory. One file declaring the
+//     whole surface says nothing about its unread siblings; two files each
+//     declaring tools is the repo telling us its surface is spread out, and
+//     that is the only case where an unread sibling is evidence of anything.
+//   - the evidence file's OWN EXTENSION. The extractor ladder is per-
+//     language, so a Go tool directory's unread `.go` files are the relevant
+//     universe and its `.ts` bindings are not. This also makes a
+//     manifest/spec/README-sourced surface (evidence `.json`/`.md`, never in
+//     TOOL_SOURCE_EXT_RE) structurally unable to trip the check — such a
+//     surface is declared in one place and is complete by construction.
+//   - the directory ITSELF, not its subtree, and never test/example paths
+//     (isNonServerPath), which are not tool-surface candidates.
+// It is an OR with the W5 check, never a replacement: every repo that trips
+// the tools?/ comparison today still trips it.
+const TOOL_SOURCE_EXT_RE = /\.(ts|js|mjs|py|go)$/
+function dirOf(path: string): string {
+  const i = path.lastIndexOf('/')
+  return i < 0 ? '' : path.slice(0, i)
+}
+function extOf(path: string): string {
+  const base = path.slice(path.lastIndexOf('/') + 1)
+  const i = base.lastIndexOf('.')
+  return i < 0 ? '' : base.slice(i)
+}
+function detectUnderReadToolDirs(
+  tools: Array<{ evidence: string }>, files: RepoFile[], treePaths: string[] | undefined,
+): boolean {
+  // No tree (the fetch failed) means nothing to compare the sample against —
+  // same contract as detectSurfacePartial above: absence is never partiality.
+  if (!treePaths) return false
+  const evidenceByDir = new Map<string, Set<string>>()
+  for (const t of tools) {
+    if (!TOOL_SOURCE_EXT_RE.test(t.evidence)) continue
+    const key = `${dirOf(t.evidence)}\u0000${extOf(t.evidence)}`
+    const set = evidenceByDir.get(key) ?? new Set<string>()
+    set.add(t.evidence)
+    evidenceByDir.set(key, set)
+  }
+  for (const [key, evidenceFiles] of evidenceByDir) {
+    if (evidenceFiles.size < 2) continue
+    const [dir, ext] = key.split('\u0000')
+    const isCandidate = (p: string): boolean => dirOf(p) === dir && p.endsWith(ext) && !isNonServerPath(p)
+    const inTree = treePaths.filter(isCandidate).length
+    const sampled = files.filter(f => isCandidate(f.path)).length
+    if (inTree > sampled) return true
+  }
+  return false
+}
+
 export function extractSchema(
   files: RepoFile[], treePaths?: string[], toolFanoutCount?: number,
   // W6 (Task W6 Part A): the repo's root README, when the caller has already
@@ -1465,7 +1532,7 @@ export function extractSchema(
   // W5 §2.3: computed once, up front, and threaded into every return branch
   // below — a partial sample is still partial whether extraction ultimately
   // found zero tools, a shell-import risk floor, or a real tool list.
-  const surfacePartial = detectSurfacePartial(files, treePaths, toolFanoutCount)
+  const fanoutPartial = detectSurfacePartial(files, treePaths, toolFanoutCount)
   const serverFiles = files.filter(f => !isNonServerPath(f.path))
   // Fix (review, Critical): re-scoped from ANY fetched .json file back to a
   // known manifest/spec basename allowlist. The any-.json bucket let an
@@ -1524,6 +1591,13 @@ export function extractSchema(
     seenNames.add(t.name)
     return true
   })
+
+  // Issue #22: the surface is partial if EITHER check says so — the W5
+  // tools?/ fan-out comparison (computed up front, and the only one that can
+  // fire when extraction found nothing) or the directory-coverage check on
+  // the files extraction actually read tools from. Computed here, after
+  // dedup, because the second one needs the final tool list's `evidence`.
+  const surfacePartial = fanoutPartial || detectUnderReadToolDirs(tools, files, treePaths)
 
   // I1 (W6 review, IMPORTANT): the shell-import floor is a STRUCTURAL signal
   // (does a fetched source file import a shell/process-execution API) and
