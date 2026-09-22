@@ -35,6 +35,15 @@ function parsePackageLockJson(content: string): Dep[] {
     // path as a "package name" to OSV is bogus; skip anything that isn't
     // actually under node_modules/.
     if (!key.includes('node_modules/')) continue
+    // DF-1 (2026-09-22): `dev: true` marks an entry that only a `npm install`
+    // of the repo itself pulls in (vitest, esbuild, tsx...) — nobody who
+    // installs the package receives it. The manifest path already scopes
+    // OSV to the registry's runtime `dependencies`; the lockfile path must
+    // not widen that into accusing a server of shipping its own test
+    // runner's CVEs. Measured on loreweave: 302 entries, 161 dev-only, and
+    // 4 of the first 8 lockfile-resolved findings were against dev-only
+    // packages. `optional` and `peer` entries stay: they can be installed.
+    if ((value as { dev?: unknown } | null)?.dev === true) continue
     const version = (value as { version?: unknown } | null)?.version
     if (typeof version !== 'string' || version === '') continue
     const segments = key.split('node_modules/')

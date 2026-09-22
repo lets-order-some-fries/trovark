@@ -189,8 +189,11 @@ for transparency only, exactly as in v1's findings-only integration.
   could not be read. A dimension (or headline grade) resting on an unmeasured
   primary is still withheld rather than renormalized, for security
   (tool-surface risk) and reliability (spec era) alike.
-- CVE resolution covers `package-lock.json`/`uv.lock`/`poetry.lock`; other
-  lockfiles (pnpm, yarn, Pipfile) still fall back to declared floors.
+- CVE resolution covers `package-lock.json`/`uv.lock`/`poetry.lock` (up to two
+  per repo, root first, each under the 300KB fetch cap); other lockfiles
+  (pnpm, yarn, Pipfile) still fall back to declared floors. Whenever any queried
+  version is a declared floor rather than a resolved one, the card carries a
+  note saying so — a floor can cite advisories already patched within the range.
 - Monorepos are scored at repository granularity.
 - Every ref is graded at the repository's **default branch**, as of
   `generatedAt`, and the card records which revision that was

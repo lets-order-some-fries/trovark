@@ -3,6 +3,25 @@
 All notable changes to this project are documented in this file, reconstructed
 from git history. Format loosely follows [Keep a Changelog](https://keepachangelog.com/).
 
+## [Unreleased]
+
+- A committed `package-lock.json` / `uv.lock` / `poetry.lock` is now actually read.
+  It ranked last inside the shared file budget, so any repository with a dozen or
+  more source files never had its lockfile fetched and the CVE check ran at the
+  manifest's declared floor (`^1.12.0` → `1.12.0`). Measured on `npm:loreweave`:
+  three `security/dependency-cve` findings against `@modelcontextprotocol/sdk@1.12.0`
+  that do not apply to the pinned `1.30.0`; the bare `lets-order-some-fries/loreweave`
+  ref had no dependency check at all (security 2/3 signals, medium confidence).
+  Lockfiles now get a dedicated fetch slot, as the README already did, so no source
+  file is displaced. Dev-only lockfile entries (`dev: true`) are skipped — the
+  registry path never counted devDependencies either. Cards can change: fewer
+  false findings, and `dependency-cves` becomes measurable on repository refs.
+  This is a correction to what was read, not a rubric change; the rubric version
+  is unchanged.
+- When no supported lockfile was read, the card now says the dependency versions
+  are declared floors, so a `dependency-cve` finding can be checked against what
+  is actually installed.
+
 ## [0.1.9] - 2026-09-10
 
 An adversarial pass over everything the CLI says when something goes wrong, and

@@ -280,6 +280,18 @@ export function score(
         + 'The repository has moved on since that release; findings below may not describe the package you would install.')
     }
   }
+  // DF-1 (2026-09-22). When no supported lockfile was read, every version
+  // OSV was asked about is the manifest's DECLARED FLOOR (^1.0.0 → 1.0.0),
+  // not what an install resolves to. A floor over-reports: it cites GHSAs
+  // already patched within the range. Same register as the two scope notes
+  // above — this says what the dependency-cve findings are about and moves
+  // no score. Silent when the versions were resolved (true) or OSV was never
+  // queried (undefined).
+  if (signals.depsResolvedFromLockfile === false) {
+    notes.push('Dependency versions are declared floors: no supported lockfile (package-lock.json, uv.lock, poetry.lock) '
+      + 'was read, so the CVE check ran at the lowest version each declared range allows. '
+      + 'An installed version may already be patched; verify dependency-cve findings against your own lockfile.')
+  }
   for (const e of signals.errors) notes.push(`Collector issue: ${e}`)
   // W6 (coverage-v1.5, Task W6 Part B): 'dynamic' reuses the notServer
   // plumbing (overall/grade null, same as every other notServer reason —

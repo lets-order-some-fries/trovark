@@ -134,10 +134,22 @@ const WELL_KNOWN_MANIFEST_PATH_RE = /(^|\/)\.well-known\/(mcp|server)\.json$/
 // lockfiles in the SAME first-priority tier as source-critical manifests, so
 // under FILE_CAP=12 a repo with a big lockfile plus many source files could
 // have the lockfile crowd out source needed for the gate (tool extraction).
-// Lockfiles now rank in their own LAST bucket — fetched only if budget
-// remains after PRIMARY manifests and SOURCE files. SIZE_CAP below still
-// skips oversized blobs either way.
+// That fix moved lockfiles into a LAST bucket inside the SHARED budget —
+// which made src/derive/lockfile.ts dead code for any ordinary repo. DF-1
+// (2026-09-22): a repo with >= FILE_CAP source files never had its lockfile
+// fetched at all, so OSV was queried at the manifest floor and the card
+// accused packages of GHSAs that do not apply to the resolved version
+// (loreweave: @modelcontextprotocol/sdk pinned to 1.30.0 by a 144KB
+// lockfileVersion-3 package-lock.json, three findings reported against the
+// ^1.12.0 floor; OSV at 1.30.0 returns nothing). Lockfiles now get a
+// DEDICATED slot outside the shared budget, exactly as the README does (C4):
+// LOCKFILE_FETCH_CAP widens the final cap by the number of lockfile
+// candidates, so a lockfile is a genuine EXTRA fetch and can never displace
+// a source file. SIZE_CAP still skips oversized blobs either way (a lockfile
+// over 300KB is not read, and assemble()/score.ts then say the versions are
+// declared floors rather than pretending they were resolved).
 const LOCKFILES = new Set(['package-lock.json', 'uv.lock', 'poetry.lock'])
+const LOCKFILE_FETCH_CAP = 2 // root first; a second one covers a nested npm+python or workspace-member lockfile
 // V5 (coverage-spec §3.5): a small spec-fetch allowance for generated JSON
 // tool catalogs — notion's openapi.json / a generic swagger.json / sentry's
 // toolDefinitions.json — parsed by src/derive/openapi.ts. Basename match,
@@ -478,6 +490,14 @@ export function selectRepoFiles(
     .filter(b => fetchable(b) && isRootReadme(b.path))
     .sort(byPriority)
     .slice(0, README_FETCH_CAP)
+  // DF-1: dedicated lockfile bucket (see LOCKFILE_FETCH_CAP). Shallowest
+  // first so the root lockfile always wins the first slot. Like the README,
+  // it is EXCLUDED from availableSourceSlots below and ADDED to finalCap, so
+  // it costs nothing from the shared FILE_CAP budget.
+  const lockfileCandidates = blobs
+    .filter(b => fetchable(b) && isLockfile(b.path))
+    .sort(byPriority)
+    .slice(0, LOCKFILE_FETCH_CAP)
   // Regression fix: guaranteed entrypoint bucket, computed BEFORE rankedSource
   // (and excluded from it below) so the two buckets never double-count the
   // same path against the budget. Prioritized root/shallow-first then
@@ -550,21 +570,27 @@ export function selectRepoFiles(
   }
 
   // Fix (final review): priority buckets, in order — (1) PRIMARY manifests +
-  // .env matches, (2) up to SPEC_FETCH_CAP spec files (V5, §3.5), (3) up to
-  // ENTRYPOINT_FETCH_CAP guaranteed entrypoint files (regression fix, see
-  // ENTRYPOINT_FETCH_CAP above), (4) ranked SOURCE files, (5) LOCKFILES last
-  // — so lockfiles (CVE-lookup data only) never outrank source (needed for
-  // tool extraction → gate) under a tight FILE_CAP, and the spec/entrypoint
-  // buckets sit right after primary manifests per the spec's selection order
-  // (§3.3b).
+  // .env matches, (2) up to SPEC_FETCH_CAP spec files (V5, §3.5), (3) the
+  // README and lockfile buckets, each in its OWN slot outside the shared
+  // budget (C4 / DF-1), (4) up to ENTRYPOINT_FETCH_CAP guaranteed entrypoint
+  // files (regression fix, see ENTRYPOINT_FETCH_CAP above), (5) ranked
+  // SOURCE files. The spec/entrypoint buckets sit right after primary
+  // manifests per the spec's selection order (§3.3b).
+  //
+  // DF-1: the lockfile bucket used to be LAST here, inside the shared cap —
+  // the intent was "never outrank source", but the selection loop below
+  // breaks at finalCap, so once rankedSource alone filled the budget the
+  // lockfile was never even reached. A dedicated slot achieves the original
+  // intent (source is never displaced) AND actually fetches the file; it
+  // has to sit BEFORE rankedSource so the loop reaches it.
   const wanted = [
     ...envBlobs,
     ...manifestsSelected,
     ...specCandidates,
     ...readmeCandidates,
+    ...lockfileCandidates,
     ...entrypointCandidates,
     ...rankedSource,
-    ...blobs.filter(b => fetchable(b) && isLockfile(b.path)),
   ]
   const selected: string[] = []
   const seen = new Set<string>()
@@ -574,7 +600,9 @@ export function selectRepoFiles(
   // rather than displacing a ranked-source (or any other) candidate that
   // would otherwise fit under FILE_CAP. One extra fetched file per repo is
   // an acceptable cost; silently dropping a tool-bearing source file is not.
-  const finalCap = FILE_CAP + readmeCandidates.length
+  // DF-1: the lockfile bucket (0-2 files, see LOCKFILE_FETCH_CAP) widens it
+  // the same way, for the same reason.
+  const finalCap = FILE_CAP + readmeCandidates.length + lockfileCandidates.length
   for (const b of wanted) {
     if (selected.length >= finalCap) break
     if (seen.has(b.path)) continue

@@ -147,6 +147,94 @@ describe('assemble', () => {
     expect(s.errors).toContain('github: file tree unavailable; repo-content signals skipped')
     expect(s.daysSinceLastCommit).toBe(2) // metadata signals still intact
   })
+  // DF-1: the two tests above only prove assemble PREFERS a lockfile it was
+  // handed. The bug was upstream — collectGithub never handed one over for any
+  // repo with >= FILE_CAP source files, so OSV saw the manifest floor and the
+  // card accused packages of CVEs already patched at the resolved version
+  // (loreweave: @modelcontextprotocol/sdk pinned to 1.30.0, three GHSAs
+  // reported against the ^1.12.0 floor). This fixture saturates the budget.
+  function saturatedRepoHttp(opts: { lockfile: boolean }): { http: Http; queried: () => Array<{ name: string; version: string }> } {
+    const sourceFiles = Array.from({ length: 20 }, (_, i) => ({ path: `src/file${i}.ts`, type: 'blob', size: 100 }))
+    const tree = [
+      { path: 'package.json', type: 'blob', size: 300 },
+      { path: 'src/index.ts', type: 'blob', size: 500 },
+      ...sourceFiles,
+      ...(opts.lockfile ? [{ path: 'package-lock.json', type: 'blob', size: 144_062 }] : []),
+    ]
+    const routes: Record<string, unknown> = {
+      'https://api.github.com/repos/acme/foo/commits?since': [
+        { sha: '1', commit: { author: { date: iso(2) } }, author: { login: 'a' } },
+      ],
+      'https://api.github.com/repos/acme/foo/releases/latest': { published_at: iso(10) },
+      'https://api.github.com/repos/acme/foo/git/trees/main?recursive=1': { tree },
+      'https://api.github.com/repos/acme/foo': {
+        stargazers_count: 300, archived: false, pushed_at: iso(2), default_branch: 'main',
+      },
+      'https://registry.npmjs.org/foo-mcp': {
+        'dist-tags': { latest: '1.0.0' },
+        versions: { '1.0.0': { dependencies: { '@modelcontextprotocol/sdk': '^1.0.0' } } },
+      },
+      'https://api.npmjs.org/downloads/point/last-week/foo-mcp': { downloads: 2000 },
+    }
+    let queried: Array<{ name: string; version: string }> = []
+    const http = makeRoutedHttp(routes, (url) => {
+      if (url.endsWith('package.json')) return JSON.stringify({ name: 'foo-mcp', dependencies: { '@modelcontextprotocol/sdk': '^1.0.0' } })
+      if (url.endsWith('package-lock.json')) {
+        return JSON.stringify({
+          lockfileVersion: 3,
+          packages: {
+            '': { name: 'foo-mcp', version: '1.0.0' },
+            'node_modules/@modelcontextprotocol/sdk': { version: '1.4.2' },
+          },
+        })
+      }
+      if (url.endsWith('src/index.ts')) return `server.tool('greet', 'Say hello', {}, h)`
+      if (/src\/file\d+\.ts$/.test(url)) return 'export {}'
+      throw new Error(`HTTP 404 for ${url}`)
+    })
+    http.postJson = async <T,>(url: string, body: unknown): Promise<T> => {
+      if (url.includes('osv.dev')) {
+        queried = (body as { queries: Array<{ package: { name: string }; version: string }> }).queries
+          .map(q => ({ name: q.package.name, version: q.version }))
+        return { results: queried.map(() => ({})) } as T
+      }
+      throw new Error(`HTTP 404 for ${url}`)
+    }
+    return { http, queried: () => queried }
+  }
+
+  it('DF-1: with a committed package-lock.json in a budget-saturated tree, OSV is queried at the RESOLVED version (1.4.2), not the ^1.0.0 floor', async () => {
+    const { http, queried } = saturatedRepoHttp({ lockfile: true })
+    const s = await assemble(
+      { ref: 'foo-mcp', repo: { owner: 'acme', name: 'foo' }, npmPackage: 'foo-mcp' },
+      http, NOW,
+    )
+    expect(queried()).toEqual([{ name: '@modelcontextprotocol/sdk', version: '1.4.2' }])
+    expect(s.depsResolvedFromLockfile).toBe(true)
+    expect(s.cveWorst).toBe('none')
+    // the source sample is unchanged by the extra lockfile fetch
+    expect(s.toolCount).toBe(1)
+  })
+
+  it('DF-1: with NO lockfile, OSV is queried at the declared floor and the signals say so (depsResolvedFromLockfile=false) so the card can carry the caveat', async () => {
+    const { http, queried } = saturatedRepoHttp({ lockfile: false })
+    const s = await assemble(
+      { ref: 'foo-mcp', repo: { owner: 'acme', name: 'foo' }, npmPackage: 'foo-mcp' },
+      http, NOW,
+    )
+    expect(queried()).toEqual([{ name: '@modelcontextprotocol/sdk', version: '1.0.0' }])
+    expect(s.depsResolvedFromLockfile).toBe(false)
+    const card = score('foo-mcp', s, NOW.toISOString())
+    expect(card.notes.some(n => /declared floor/i.test(n))).toBe(true)
+  })
+
+  it('DF-1: when OSV was never queried (no deps at all), depsResolvedFromLockfile stays undefined — absence is not a value', async () => {
+    const { http } = saturatedRepoHttp({ lockfile: false })
+    const s = await assemble({ ref: 'acme/foo', repo: { owner: 'acme', name: 'foo' } }, http, NOW)
+    expect(s.cveWorst).toBeUndefined()
+    expect(s.depsResolvedFromLockfile).toBeUndefined()
+  })
+
   it('prefers resolved lockfile versions over manifest floors for the OSV query', async () => {
     const http = fullFake()
     const origText = http.text.bind(http)

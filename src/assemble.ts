@@ -391,14 +391,22 @@ export async function assemble(
   // floor, per ecosystem: this catches transitive deps and versions already
   // patched within the declared range, avoiding both over- and under-reporting
   // CVEs (see src/derive/lockfile.ts). Falls back to floors when no supported
-  // lockfile was fetched (labelled approximate — no code change needed here,
-  // that's simply the pre-existing `deps` array being left untouched).
+  // lockfile was fetched.
+  //
+  // DF-1 (2026-09-22): the comment that used to sit here claimed the floor
+  // fallback was "labelled approximate — no code change needed". It was not
+  // labelled anywhere a reader could see, and until collectGithub gave
+  // lockfiles a dedicated fetch slot this branch was the ONLY one that ever
+  // ran for an ordinary repo. Now the fact is recorded on Signals
+  // (depsResolvedFromLockfile) and score.ts says it on the card.
   const lockDeps = repoFiles ? parseLockfile(repoFiles) : []
+  let floorDepsQueried = deps.length
   if (lockDeps.length > 0) {
     const lockEcosystems = new Set(lockDeps.map(d => d.ecosystem))
     const floorDeps = deps.filter(d => !lockEcosystems.has(d.ecosystem))
     deps.length = 0
     deps.push(...floorDeps, ...lockDeps)
+    floorDepsQueried = floorDeps.length
   }
 
   // A large monorepo lockfile can resolve into many hundreds/thousands of
@@ -410,6 +418,9 @@ export async function assemble(
     const osv = await collectOsv(cappedDeps, http)
     s.cveWorst = osv.cveWorst
     s.findings.push(...osv.findings)
+    // DF-1: only set when OSV was actually asked something (cveWorst is
+    // undefined for an empty query, and so must this be).
+    if (cappedDeps.length > 0) s.depsResolvedFromLockfile = floorDepsQueried === 0
   } catch (err) {
     rethrowIfCallerSide(err)
     s.errors.push(`osv: ${(err as Error).message}`)
