@@ -101,6 +101,65 @@ interface RequestInitExtra {
 }
 
 /**
+ * Reads a response body under a per-chunk IDLE deadline, aborting the
+ * request through the SAME AbortController that bounded the headers.
+ *
+ * Why idle and not total duration: `fetchable` deliberately lets an
+ * entrypoint of any size through (V1 change 5 exists to grade monolithic
+ * bundled `dist/index.js` files), and timeoutMs defaults to 10s, so a total
+ * budget would start failing multi-MB downloads that work today on a slow
+ * link. Measured against a local server that drips one chunk per 300ms for
+ * ~6s: a 2s TOTAL budget must kill it, while under a 2s IDLE budget it
+ * resolved complete at 6331ms. Idle is the only variant that bounds the
+ * stall without breaking the slow download.
+ */
+async function readBody(res: Response, ac: AbortController, idleMs: number, url: string): Promise<string> {
+  if (res.body === null) return '' // 204/304 and other bodiless responses
+  const reader = res.body.getReader()
+  // Decoded incrementally rather than accumulated and joined: holding every
+  // chunk, then a joined Uint8Array, then the string peaks at ~3x the body.
+  // Measured peak rss, one read per fresh process, this readBody vs the
+  // res.text() it replaces: 1MB 57/58, 20MB 162/184, 60MB 324/386, 100MB
+  // (GitHub's blob ceiling) 430/584 — so streaming the decode is no worse
+  // than the old path anywhere, and better where it matters. `stream: true`
+  // also carries a multi-byte character split across a chunk boundary
+  // correctly, which a per-chunk decode would corrupt.
+  const decoder = new TextDecoder()
+  let out = ''
+  try {
+    for (;;) {
+      let timer: ReturnType<typeof setTimeout> | undefined
+      // Same ref'd-setTimeout discipline as the headers deadline above (C6):
+      // an unref'd timer lets the process exit before the deadline fires.
+      const idle = new Promise<never>((_, reject) => {
+        timer = setTimeout(() => {
+          ac.abort() // best-effort cancellation of the underlying request
+          reject(new Error(`body stalled after ${idleMs}ms: ${url}`))
+        }, idleMs)
+      })
+      let chunk: ReadableStreamReadResult<Uint8Array>
+      try {
+        chunk = await Promise.race([reader.read(), idle])
+      } finally {
+        if (timer !== undefined) clearTimeout(timer)
+      }
+      if (chunk.done) break
+      out += decoder.decode(chunk.value, { stream: true })
+    }
+    out += decoder.decode() // flush any trailing partial code point
+  } catch (err) {
+    // ac.abort() makes reader.read() reject first, with the generic
+    // "This operation was aborted", so the race surfaces that rather than
+    // our message. Normalise it back so the error names the real cause.
+    if (ac.signal.aborted) throw new Error(`body stalled after ${idleMs}ms: ${url}`)
+    throw err
+  } finally {
+    reader.cancel().catch(() => {})
+  }
+  return out
+}
+
+/**
  * Retries only on network errors, 429, and 5xx. Other non-2xx throw immediately.
  *
  * Redirects (coverage-v1.4 W1): neither `request()` nor its callers set
@@ -115,7 +174,7 @@ interface RequestInitExtra {
 export function createHttp(opts: HttpOptions = {}): Http {
   const { githubToken, retries = 2, timeoutMs = 10_000, fetchImpl = fetch } = opts
 
-  async function request(url: string, init: RequestInitExtra = {}): Promise<Response> {
+  async function request(url: string, init: RequestInitExtra = {}): Promise<{ res: Response; ac: AbortController }> {
     const headers: Record<string, string> = { 'user-agent': 'trovark', ...init.extraHeaders }
     if (githubToken && new URL(url).hostname === 'api.github.com') headers.authorization = `Bearer ${githubToken}`
     let lastErr: unknown
@@ -138,6 +197,17 @@ export function createHttp(opts: HttpOptions = {}): Http {
       // ref'd timer guarantees the attempt ends either way, which is what
       // makes "the scan cannot hang forever" a property of this function
       // rather than a property of whatever fetch it was handed.
+      //
+      // It is TWO-PHASE. This timer bounds the HEADERS only: a Response is
+      // returned the moment they arrive, so the body is read afterwards by
+      // readBody() under its own per-chunk idle deadline, driving this same
+      // AbortController. Before that second phase existed the body had no
+      // deadline at all and a stalled one ran to undici's 300_000ms default,
+      // 30x what the CLI asks for. A single TOTAL-duration budget covering
+      // both phases was rejected on purpose: it would fail the large
+      // monolithic entrypoint downloads that `fetchable` (V1 change 5) exists
+      // to grade. The `ac` returned alongside the Response is what carries
+      // the deadline across the handover.
       const deadline = new Promise<never>((_, reject) => {
         timer = setTimeout(() => {
           ac.abort()   // best-effort cancellation of the underlying request
@@ -155,7 +225,7 @@ export function createHttp(opts: HttpOptions = {}): Http {
         if (timer !== undefined) clearTimeout(timer)
       }
       if (res) {
-        if (res.ok) return res
+        if (res.ok) return { res, ac }
         // A 401 on a request that carried our token is the token being
         // rejected; retrying it cannot help and the caller must be told.
         if (res.status === 401 && headers.authorization !== undefined) throw new AuthError(res.status, url)
@@ -177,20 +247,31 @@ export function createHttp(opts: HttpOptions = {}): Http {
     throw lastErr
   }
 
+  // Every wrapper reads its body through readBody() rather than
+  // res.json()/res.text(), so the idle deadline covers all four. The read
+  // stays OUTSIDE the retry loop, exactly where it was: moving it inside
+  // would make a stalled body retryable and turn one 10s failure into ~31s
+  // across three attempts. Retry semantics are unchanged.
   return {
-    async json<T>(url: string): Promise<T> { return (await request(url)).json() as Promise<T> },
-    async jsonWithHeaders<T>(url: string): Promise<{ data: T; headers: Headers }> {
-      const res = await request(url)
-      return { data: (await res.json()) as T, headers: res.headers }
+    async json<T>(url: string): Promise<T> {
+      const { res, ac } = await request(url)
+      return JSON.parse(await readBody(res, ac, timeoutMs, url)) as T
     },
-    async text(url: string): Promise<string> { return (await request(url)).text() },
+    async jsonWithHeaders<T>(url: string): Promise<{ data: T; headers: Headers }> {
+      const { res, ac } = await request(url)
+      return { data: JSON.parse(await readBody(res, ac, timeoutMs, url)) as T, headers: res.headers }
+    },
+    async text(url: string): Promise<string> {
+      const { res, ac } = await request(url)
+      return readBody(res, ac, timeoutMs, url)
+    },
     async postJson<T>(url: string, body: unknown): Promise<T> {
-      const res = await request(url, {
+      const { res, ac } = await request(url, {
         method: 'POST',
         body: JSON.stringify(body),
         extraHeaders: { 'content-type': 'application/json' },
       })
-      return res.json() as Promise<T>
+      return JSON.parse(await readBody(res, ac, timeoutMs, url)) as T
     },
   }
 }

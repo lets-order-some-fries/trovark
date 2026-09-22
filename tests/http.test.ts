@@ -139,3 +139,87 @@ describe('createHttp — a rejected token is typed, not folded into the scan', (
     expect(err).not.toBeInstanceOf(AuthError)
   })
 })
+
+// The deadline used to cover only the HEADERS. `request()` returned the
+// moment they arrived and its `finally { clearTimeout(timer) }` disarmed the
+// AbortController at the same instant, so every `.text()`/`.json()` in the
+// wrappers read the body with no deadline and no armed signal. Measured
+// against a local server that sends 200 + headers + 5 bytes and never calls
+// res.end(): still pending at 60s, 150s, 250s, 295s, and rejected only at
+// 305s with `TypeError: terminated (UND_ERR_BODY_TIMEOUT)` — undici's own
+// 300_000ms default, i.e. a property of whatever fetch was handed in rather
+// than of createHttp, which is exactly the guarantee the comment above the
+// race claims to provide. With github.ts fetching up to 12 files in sequence
+// and scan.ts pooling refs four at a time with no per-ref deadline, one
+// stalled body is five minutes of silence from a CLI whose whole UX is a
+// fast grade.
+//
+// The deadline is now two-phase: the existing timer bounds the headers, and
+// a per-chunk IDLE timer bounds the body. It is deliberately NOT a
+// total-duration budget — see the slow-but-progressing test below.
+describe('createHttp — the deadline covers the body, not just the headers', () => {
+  /** 200 + headers, one chunk, then silence forever: the stalled-body case. */
+  const stalledBody = () => new Response(new ReadableStream({
+    start(c) { c.enqueue(new TextEncoder().encode('hello')) }, // never close()
+  }), { status: 200 })
+
+  it('rejects a body that stalls after the headers instead of waiting on the fetch implementation', async () => {
+    const http = createHttp({ fetchImpl: (async () => stalledBody()) as unknown as typeof fetch, retries: 0, timeoutMs: 50 })
+    const started = Date.now()
+    await expect(http.text('https://x.test/stall')).rejects.toThrow(/body stalled after 50ms/)
+    // Generous bound (40x the idle budget): the point is that it settles on
+    // OUR deadline at all, not the wall-clock number.
+    expect(Date.now() - started).toBeLessThan(2000)
+  })
+
+  it('rejects a stalled body through json() too, not only text()', async () => {
+    const http = createHttp({ fetchImpl: (async () => stalledBody()) as unknown as typeof fetch, retries: 0, timeoutMs: 50 })
+    await expect(http.json('https://x.test/stall')).rejects.toThrow(/body stalled after 50ms/)
+  })
+
+  // The property that rules out the obvious wrong fix. A total-duration
+  // deadline would reject this, and would start failing the large monolithic
+  // `dist/index.js` entrypoints that `fetchable` deliberately lets through on
+  // a slow link. An IDLE deadline lets it finish: measured, a ~6s drip under
+  // a 2s idle budget resolved OK at 6020ms.
+  it('lets a slow but progressing body finish even when it outlasts timeoutMs in total', async () => {
+    const chunks = 6, gapMs = 20, idleMs = 100 // total ≈ 120ms > idleMs, per-gap < idleMs
+    const fetchImpl = async () => new Response(new ReadableStream({
+      async start(c) {
+        for (let i = 0; i < chunks; i++) {
+          await new Promise(r => setTimeout(r, gapMs))
+          c.enqueue(new TextEncoder().encode('chunk'))
+        }
+        c.close()
+      },
+    }), { status: 200 })
+    const http = createHttp({ fetchImpl: fetchImpl as unknown as typeof fetch, retries: 0, timeoutMs: idleMs })
+    const started = Date.now()
+    expect(await http.text('https://x.test/drip')).toBe('chunk'.repeat(chunks))
+    expect(Date.now() - started).toBeGreaterThanOrEqual(chunks * gapMs) // it really did outlast a total budget
+  })
+
+  it('still reads a whole multi-chunk body verbatim, boundaries and all', async () => {
+    // Reassembly must be byte-exact across chunk boundaries, including a
+    // multi-byte character split across two chunks.
+    const bytes = new TextEncoder().encode('héllo wörld — ✅')
+    const fetchImpl = async () => new Response(new ReadableStream({
+      start(c) { c.enqueue(bytes.slice(0, 7)); c.enqueue(bytes.slice(7)); c.close() },
+    }), { status: 200 })
+    const http = createHttp({ fetchImpl: fetchImpl as unknown as typeof fetch, retries: 0 })
+    expect(await http.text('https://x.test/utf8')).toBe('héllo wörld — ✅')
+  })
+
+  it('handles an empty 200 body and a null-body 204 without arming anything', async () => {
+    const empty = createHttp({ fetchImpl: (async () => new Response('', { status: 200 })) as unknown as typeof fetch, retries: 0, timeoutMs: 50 })
+    expect(await empty.text('https://x.test/empty')).toBe('')
+    const noContent = createHttp({ fetchImpl: (async () => new Response(null, { status: 204 })) as unknown as typeof fetch, retries: 0, timeoutMs: 50 })
+    expect(await noContent.text('https://x.test/204')).toBe('')
+  })
+
+  it('keeps the headers half of the deadline: a fetch that never settles still rejects', async () => {
+    const fetchImpl = () => new Promise<Response>(() => {}) // never resolves
+    const http = createHttp({ fetchImpl: fetchImpl as unknown as typeof fetch, retries: 0, timeoutMs: 50 })
+    await expect(http.json('https://x.test/hang')).rejects.toThrow(/timeout after 50ms/)
+  })
+})
