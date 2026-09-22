@@ -18,9 +18,25 @@ from git history. Format loosely follows [Keep a Changelog](https://keepachangel
   false findings, and `dependency-cves` becomes measurable on repository refs.
   This is a correction to what was read, not a rubric change; the rubric version
   is unchanged.
-- When no supported lockfile was read, the card now says the dependency versions
-  are declared floors, so a `dependency-cve` finding can be checked against what
-  is actually installed.
+- When a supported lockfile was not read but declared floors were queried anyway
+  — which happens for an `npm:`/`pypi:` ref, where the registry manifest supplies
+  them — the card now says the versions are floors, so a `dependency-cve` finding
+  can be checked against what is actually installed. This caveat is scoped to
+  registry refs on purpose. A bare `owner/repo` ref has no manifest to take
+  floors from, so an unsupported lockfile (pnpm, yarn, bun, Cargo, `go.sum`,
+  Pipfile, composer, or a lockfileVersion 1 `package-lock.json`) leaves it with
+  **no dependency check at all** rather than a floor-based one: `dependency-cves`
+  is reported unavailable and security scores on two signals. Every entry in the
+  published index is a bare repo ref, so that is the usual outcome there.
+- A committed lockfile that resolves to no runtime dependencies — every entry
+  `dev: true`, or none — now scores as the clean measurement it is (check
+  available, `cveWorst: none`) with a note saying so, instead of silently
+  removing the dependency check. It removed it before: `seleniumboot/selenium-mcp`
+  went C+/67 to C/62 with security 60 to 40 and zero findings on either side.
+- A committed lockfile that could not be downloaded no longer voids the whole
+  scorecard. It degrades to "no lockfile was read" and is named on the card;
+  previously it forced a partial tool surface and withheld the grade, which took
+  `TheLunarCompany/lunar` (A+/96) to `insufficient data` on one attempt in three.
 
 ## [0.1.9] - 2026-09-10
 

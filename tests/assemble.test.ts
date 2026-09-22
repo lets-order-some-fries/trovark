@@ -153,13 +153,14 @@ describe('assemble', () => {
   // card accused packages of CVEs already patched at the resolved version
   // (loreweave: @modelcontextprotocol/sdk pinned to 1.30.0, three GHSAs
   // reported against the ^1.12.0 floor). This fixture saturates the budget.
-  function saturatedRepoHttp(opts: { lockfile: boolean; lockPackages?: Record<string, unknown> }): { http: Http; queried: () => Array<{ name: string; version: string }> } {
+  function saturatedRepoHttp(opts: { lockfile: boolean; lockPackages?: Record<string, unknown>; extraTree?: Array<{ path: string; type: string; size: number }> }): { http: Http; queried: () => Array<{ name: string; version: string }> } {
     const sourceFiles = Array.from({ length: 20 }, (_, i) => ({ path: `src/file${i}.ts`, type: 'blob', size: 100 }))
     const tree = [
       { path: 'package.json', type: 'blob', size: 300 },
       { path: 'src/index.ts', type: 'blob', size: 500 },
       ...sourceFiles,
       ...(opts.lockfile ? [{ path: 'package-lock.json', type: 'blob', size: 144_062 }] : []),
+      ...(opts.extraTree ?? []),
     ]
     const routes: Record<string, unknown> = {
       'https://api.github.com/repos/acme/foo/commits?since': [
@@ -288,6 +289,44 @@ describe('assemble', () => {
     expect(queried()).toEqual([])
     expect(s.depsResolvedFromLockfile).toBe(true)
     expect(s.cveWorst).toBe('none')
+  })
+
+  // DF-1 round 4, census defect 3. The branch's own prose said pnpm/yarn/bun
+  // repositories "still fall back to floors, and now say so on the card". They
+  // do not fall back to floors. `depsFromManifest` runs only for an npm/PyPI
+  // REGISTRY identity; for a bare `owner/repo` reference there is no manifest
+  // to take floors from, so `deps` stays empty, OSV is never called, and
+  // score.ts is silent BY DESIGN. Measured: the declared-floor note rendered
+  // 0 times across all 191 movable references and the 18-reference control —
+  // including every one of the unsupported-lockfile-only refs it was written
+  // for — and rendered correctly on `npm:pluggedin-mcp-proxy`. The code is
+  // right; the sentence was wrong. These two tests are what the corrected
+  // sentence now asserts, so it can never drift back.
+  it('DF-1 r4: a bare owner/repo ref with only an UNSUPPORTED lockfile gets no dependency check — and no floor caveat', async () => {
+    const { http } = saturatedRepoHttp({
+      lockfile: false,
+      extraTree: [{ path: 'pnpm-lock.yaml', type: 'blob', size: 90_000 }],
+    })
+    const s = await assemble({ ref: 'acme/foo', repo: { owner: 'acme', name: 'foo' } }, http, NOW)
+    expect(s.cveWorst).toBeUndefined()                  // OSV was never asked anything
+    expect(s.depsResolvedFromLockfile).toBeUndefined()  // ... so there is no floor to caveat
+    const card = score('acme/foo', s, NOW.toISOString())
+    expect(card.notes.some(n => /declared floor/i.test(n))).toBe(false)
+    expect(card.dimensions.find(d => d.id === 'security')?.available).toBe(2)
+  })
+
+  it('DF-1 r4: the same tree under a REGISTRY identity does get floors, and does carry the caveat', async () => {
+    const { http, queried } = saturatedRepoHttp({
+      lockfile: false,
+      extraTree: [{ path: 'pnpm-lock.yaml', type: 'blob', size: 90_000 }],
+    })
+    const s = await assemble(
+      { ref: 'foo-mcp', repo: { owner: 'acme', name: 'foo' }, npmPackage: 'foo-mcp' },
+      http, NOW,
+    )
+    expect(queried()).toEqual([{ name: '@modelcontextprotocol/sdk', version: '1.0.0' }])
+    expect(s.depsResolvedFromLockfile).toBe(false)
+    expect(score('foo-mcp', s, NOW.toISOString()).notes.some(n => /declared floor/i.test(n))).toBe(true)
   })
 
   it('DF-1 r4: a lockfile trovark cannot actually parse (v1, no `packages` map) degrades to no-lockfile, never to "clean"', async () => {
@@ -745,6 +784,31 @@ describe('C5: failed blob fetches are recorded and force a partial surface', () 
     )
     expect(s.toolSurfaceRisk).toBeUndefined()
     expect(score('acme/foo', s, NOW.toISOString()).insufficientData).toBe(true)
+  })
+})
+
+// DF-1 round 4, census defect 3 — the prose half. The two tests above pin what
+// the code ACTUALLY does with an unsupported lockfile on a bare `owner/repo`
+// reference: nothing, silently and correctly. The shipped documentation claimed
+// the opposite — that such repositories "still fall back to declared floors" and
+// "now say so on the card" — and a reader acting on that sentence would look for
+// a caveat that provably cannot render on 400 of 400 indexed entries. Absence of
+// a dependency check is not a floor-based check, and the difference matters to
+// anyone deciding whether trovark has vetted a server's dependencies. These
+// assertions make the corrected sentences load-bearing so they cannot drift back.
+describe('DF-1 r4: the docs say where the declared-floor caveat actually applies', () => {
+  const read = async (p: string) => (await import('node:fs')).readFileSync(p, 'utf8')
+
+  it('docs/methodology.md does not claim an unsupported lockfile falls back to floors, and states the real outcome', async () => {
+    const src = await read('docs/methodology.md')
+    expect(/(?:pnpm|yarn|bun)[^.]*fall back to declared floors/i.test(src)).toBe(false)
+    expect(/no dependency check at all/i.test(src)).toBe(true)
+  })
+
+  it('CHANGELOG.md scopes the declared-floor caveat to a registry identity', async () => {
+    const src = await read('CHANGELOG.md')
+    expect(/When no supported lockfile was read, the card now says/i.test(src)).toBe(false)
+    expect(/no dependency check at all/i.test(src)).toBe(true)
   })
 })
 
