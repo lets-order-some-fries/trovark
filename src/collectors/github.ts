@@ -36,6 +36,29 @@ export interface RepoSnapshot {
   busFactor?: number
   medianIssueResponseDays?: number
   treePaths?: string[]
+  // DF-4 (artifact identity): WHICH revision produced everything above.
+  // `headCommitSha` is the default branch's tip; `treeRefSha` is the sha
+  // GitHub resolved our `git/trees/<default_branch>` request to. Both come out
+  // of responses this collector already fetches; neither adds a request.
+  //
+  // `treeRefSha` is named for what it is and nothing more. Measured against
+  // modelcontextprotocol/servers on 2026-09-22, `git/trees/main?recursive=1`
+  // answered with sha d73f99ef… — the same sha `/commits/main` reports, NOT
+  // the underlying tree object (6bb03dec…). GitHub resolves a ref-name tree
+  // request and echoes what it resolved. Since the KIND of that sha is not
+  // contractual, it is carried as an opaque revision identifier and never
+  // presented as a commit.
+  //
+  // Both are optional and both must STAY optional. `treeRefSha` is undefined
+  // whenever the tree fetch failed (mirroring treePaths), and `headCommitSha`
+  // is undefined whenever the commit listing came back empty — it is fetched
+  // with since=<365 days>, so a repo dormant for over a year legitimately
+  // yields []. That asymmetry is exactly why treeRefSha is captured too: it is
+  // the fallback identity for precisely those abandoned servers. Absence is
+  // rendered as absence; `graded at main@undefined` would be worse than
+  // saying nothing at all.
+  treeRefSha?: string
+  headCommitSha?: string
   // Cleanup (dedup full-tree scan): the count of isToolFanoutPath matches
   // across the FULL tree (treePaths), computed once here in collectGithub —
   // the same value selectRepoFiles already needs for its FILE_CAP decision.
@@ -336,7 +359,7 @@ function manifestPriority(path: string): [number, number] {
   return [path.split('/').length, path.length]
 }
 
-interface GhCommit { commit: { author?: { date?: string } }; author?: { login?: string } | null }
+interface GhCommit { sha?: string; commit: { author?: { date?: string } }; author?: { login?: string } | null }
 
 const COMMIT_PAGE_CAP = 10 // safety net against runaway pagination on huge repos
 
@@ -653,7 +676,7 @@ export async function collectGithub(
     }
   }
 
-  interface GhTree { tree: Array<{ path: string; type: string; size?: number }> }
+  interface GhTree { sha?: string; tree: Array<{ path: string; type: string; size?: number }> }
   const tree = await http
     .json<GhTree>(`${api}/git/trees/${meta.default_branch}?recursive=1`)
     .catch((err: unknown) => { rethrowIfCallerSide(err); return undefined })
@@ -725,5 +748,9 @@ export async function collectGithub(
     pushedAt: meta.pushed_at,
     latestReleaseAt, commitsLast90Days, busFactor, medianIssueResponseDays,
     treePaths, toolFanoutCount, files, readme, fetchFailures,
+    // DF-4: the /commits endpoint defaults to the default branch, so page 1
+    // entry 0 is that branch's HEAD — the same listing busFactor and
+    // commitsLast90Days are already derived from.
+    treeRefSha: tree?.sha, headCommitSha: commits?.[0]?.sha,
   }
 }

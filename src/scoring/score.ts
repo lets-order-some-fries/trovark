@@ -251,6 +251,35 @@ export function score(
         + 'so the tool count and every finding below cover the whole repository, not this package alone.')
     }
   }
+  // DF-4. Every ref is graded at the repository's DEFAULT BRANCH as of
+  // generatedAt. For an npm:/pypi: ref that is deliberately NOT the published
+  // version — and usually not even close: across the top 40 npm "mcp server"
+  // packages, 15 of the 21 with a comparable gitHead had moved on, median ~7
+  // commits, up to 744. Without this line a user vetting a package before
+  // install read a grade of the maintainer's working branch: the one artifact
+  // they are specifically not going to run.
+  //
+  // Sibling of the repository-granularity note above, same register: this is
+  // SCOPE — what the findings below describe — not a finding against the
+  // server, and it moves no score.
+  //
+  // Fires only when BOTH shas are known AND differ. When the package
+  // publishes no gitHead, or the commit window was empty, nothing extra is
+  // said: the resolved: line already states which branch and sha were read,
+  // and manufacturing a divergence claim out of a missing field is the same
+  // fabrication the coverage gate exists to prevent.
+  const graded = signals.graded
+  if (graded?.publishedGitHead !== undefined && graded.headCommitSha !== undefined
+      && graded.publishedGitHead !== graded.headCommitSha) {
+    const pkg = resolved?.npmPackage ?? resolved?.pypiPackage
+    const version = graded.npmVersion !== undefined ? `@${graded.npmVersion}` : ''
+    const short = (sha: string) => sha.slice(0, 7)
+    if (pkg !== undefined) {
+      notes.push(`Graded at ${graded.branch ?? 'the default branch'}@${short(graded.headCommitSha)}, `
+        + `not the published ${pkg}${version} (${short(graded.publishedGitHead)}). `
+        + 'The repository has moved on since that release; findings below may not describe the package you would install.')
+    }
+  }
   for (const e of signals.errors) notes.push(`Collector issue: ${e}`)
   // W6 (coverage-v1.5, Task W6 Part B): 'dynamic' reuses the notServer
   // plumbing (overall/grade null, same as every other notServer reason —

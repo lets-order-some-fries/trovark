@@ -35,6 +35,15 @@ export async function assemble(
       s.medianIssueResponseDays = snap.medianIssueResponseDays
       s.stars = snap.stars
       s.archived = snap.archived
+      // DF-4: record WHICH revision this snapshot came from, as an artifact
+      // (never a signal — see the Signals.graded comment in types.ts). Each
+      // field is set only when the collector actually has it, so a missing
+      // sha stays missing rather than becoming a rendered `undefined`.
+      s.graded = {
+        branch: snap.defaultBranch,
+        ...(snap.headCommitSha !== undefined ? { headCommitSha: snap.headCommitSha } : {}),
+        ...(snap.treeRefSha !== undefined ? { treeRefSha: snap.treeRefSha } : {}),
+      }
       if (snap.treePaths) {
         // A package ref is always scanned at repository granularity. That is
         // only misleading when the repository holds more than the one package,
@@ -339,6 +348,18 @@ export async function assemble(
     try {
       const npm = await collectNpm(identity.npmPackage, http)
       s.weeklyDownloads = npm.weeklyDownloads
+      // DF-4: the published artifact's identity, merged onto the same
+      // `graded` object the GitHub rung populated. Kept separate from the
+      // repository revision on purpose: `npmVersion` is what a user would
+      // install, `headCommitSha` is what trovark actually read, and score.ts
+      // says so out loud when they are known to differ.
+      if (npm.latestVersion !== undefined || npm.publishedGitHead !== undefined) {
+        s.graded = {
+          ...s.graded,
+          ...(npm.latestVersion !== undefined ? { npmVersion: npm.latestVersion } : {}),
+          ...(npm.publishedGitHead !== undefined ? { publishedGitHead: npm.publishedGitHead } : {}),
+        }
+      }
       if (npm.deprecated) {
         s.findings.push({
           id: 'health/deprecated-package', dimension: 'health', severity: 'high',

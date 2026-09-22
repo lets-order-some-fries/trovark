@@ -134,6 +134,25 @@ export interface Signals {
   // produced >=1 tool; absence != an empty surface.
   tools?: ToolInfo[]
   toolSource?: 'code' | 'readme-catalog'
+  // DF-4 (artifact identity): WHICH revision these signals were read from.
+  // Follows the tools/toolSource precedent exactly — an artifact, never a
+  // signal. No SIGNALS[].evaluate may read it (asserted by
+  // tests/graded.test.ts, the same mechanical guard tests/assemble.test.ts
+  // applies to the tool surface): a scorecard's revision describes WHAT was
+  // graded and must never move the score.
+  //
+  // Every field is independently optional because each can be genuinely
+  // unknown: `headCommitSha` on a repo with no commits inside the collector's
+  // 365-day window, `treeRefSha` when the tree fetch failed, `publishedGitHead`
+  // for the ~37% of npm packages that publish none. Absence != a default —
+  // consumers omit the segment rather than print a placeholder.
+  graded?: {
+    branch?: string
+    headCommitSha?: string
+    treeRefSha?: string
+    npmVersion?: string
+    publishedGitHead?: string
+  }
 }
 
 export interface DimensionScore {
@@ -183,7 +202,27 @@ export interface Scorecard {
   notes: string[]
   generatedAt: string   // ISO string, passed in by caller (determinism)
   insufficientData: boolean
-  resolved?: { npmPackage?: string; pypiPackage?: string; repo?: { owner: string; name: string } }
+  // DF-4: `npmPackage`/`pypiPackage`/`repo` say WHAT was graded; `npmVersion`,
+  // `branch`, `commit` and `treeRefSha` say WHICH REVISION of it, so the
+  // number can be re-derived by a skeptic months later. `treeRefSha` is the
+  // sha GitHub resolved the tree request to — see the RepoSnapshot comment in
+  // collectors/github.ts for why it is not called a tree sha or a commit.
+  // IMPORTANT: `branch`/`commit`/`treeRefSha` describe the repository
+  // revision that was actually READ, which
+  // for an npm:/pypi: ref is the repository's DEFAULT BRANCH as of
+  // generatedAt — deliberately NOT the published version named by
+  // `npmVersion`. See the divergence note score.ts emits when the two are
+  // known to differ, and docs/methodology.md. Each field is absent when not
+  // collected; absence is never a default and must never be rendered as one.
+  resolved?: {
+    npmPackage?: string
+    npmVersion?: string
+    pypiPackage?: string
+    repo?: { owner: string; name: string }
+    branch?: string
+    commit?: string
+    treeRefSha?: string
+  }
   // V2: a distinct terminal state — NOT the same as insufficientData. Set
   // when classifyLibrary (src/derive/classify.ts) identified the repo as a
   // library/SDK/proxy/stub rather than a genuinely un-parseable server.

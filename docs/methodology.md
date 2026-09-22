@@ -192,6 +192,19 @@ for transparency only, exactly as in v1's findings-only integration.
 - CVE resolution covers `package-lock.json`/`uv.lock`/`poetry.lock`; other
   lockfiles (pnpm, yarn, Pipfile) still fall back to declared floors.
 - Monorepos are scored at repository granularity.
+- Every ref is graded at the repository's **default branch**, as of
+  `generatedAt`, and the card records which revision that was
+  (`resolved.branch` / `resolved.commit` / `resolved.treeRefSha`) so a score is
+  re-derivable rather than merely re-runnable. For an `npm:`/`pypi:` ref this
+  is deliberately **not** the published version: the package name is used to
+  resolve the repository, and the files are then read from that repository's
+  default branch. `resolved.npmVersion` records the release a user would
+  actually install; when npm publishes a `gitHead` for it that differs from
+  the branch tip, the card says so in `Notes`. No divergence is asserted when
+  the `gitHead` is absent (about a third of packages publish none) or when the
+  branch tip could not be determined — the stated branch and sha stand on
+  their own. Repointing the scan at the published commit is a separate design
+  change, not implied by this record.
 - The committed-secret heuristic is a candidate signal, not a real secret scan.
 - Bare package names found on both npm and PyPI are rejected as ambiguous rather
   than guessed — use the `npm:`/`pypi:` prefix.
