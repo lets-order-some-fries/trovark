@@ -78,6 +78,17 @@ export async function assemble(
         if (fetchesFailed) {
           s.errors.push(`could not fetch ${snap.fetchFailures.length} selected file(s): ${snap.fetchFailures.slice(0, 5).join(', ')}${snap.fetchFailures.length > 5 ? ', …' : ''}`)
         }
+        // DF-1 round 4 (census defect 2): a lockfile that could not be
+        // fetched is NOT part of `fetchesFailed` above, and deliberately does
+        // not force surfacePartial. It is an extra fetch feeding one check;
+        // losing it degrades that check to "no lockfile was read", which is a
+        // state the card already knows how to describe. It must not erase a
+        // tool-surface verdict derived from ranked source that all arrived.
+        // The caveat still gets said — silently dropping it would be the
+        // 2026-08-08 C5 bug in miniature, one check smaller.
+        if (snap.lockfileFetchFailures.length > 0) {
+          s.errors.push(`could not fetch ${snap.lockfileFetchFailures.length} committed lockfile(s): ${snap.lockfileFetchFailures.slice(0, 5).join(', ')}${snap.lockfileFetchFailures.length > 5 ? ', …' : ''} — dependency versions were not resolved from a lockfile on this run`)
+        }
         const extractedSchema = extractSchema(snap.files, snap.treePaths, snap.toolFanoutCount)
         const staticSchema = fetchesFailed && !extractedSchema.surfacePartial
           ? { ...extractedSchema, surfacePartial: true }

@@ -706,6 +706,46 @@ describe('C5: failed blob fetches are recorded and force a partial surface', () 
     expect(s.errors).toEqual([])
     expect(s.toolCount).toBe(1)
   })
+
+  // DF-1 round 4, census defect 2. A lockfile is an EXTRA fetch this branch
+  // introduced: it widens finalCap, displaces no ranked source, and feeds
+  // nothing but the dependency-CVE check. Losing it therefore cannot make the
+  // TOOL SURFACE partial — yet it went into the same fetchFailures list as a
+  // source file, forced surfacePartial, erased a 'none' tool-surface verdict,
+  // tripped securityPrimaryAbsent and voided the whole scorecard. Measured on
+  // the census: TheLunarCompany/lunar (published A+ / 96) came back `exit 2,
+  // insufficient data - could not fetch 1 selected file(s):
+  // mcpx/mcpx-e2e-tests/package-lock.json` on the first of three attempts and
+  // graded fine on the other two. One in 191 references on first attempt,
+  // turning an A+ entry into NO entry — and this branch raises the number of
+  // fetches per reference by one or two.
+  it('DF-1 r4: an unfetchable LOCKFILE degrades the dependency check and carries a caveat — it does not void the card', async () => {
+    const s = await assemble(
+      { ref: 'foo-mcp', repo: { owner: 'acme', name: 'foo' } },
+      flakyHttp('package-lock.json'), NOW,
+    )
+    // the ranked source all arrived, so the surface is whole and stays scored
+    expect(s.toolSurfaceRisk).toBe('none')
+    expect(s.toolCount).toBe(1)
+    const card = score('acme/foo', s, NOW.toISOString())
+    expect(card.insufficientData).toBe(false)
+    expect(card.grade).not.toBeNull()
+    // but the reader is told the lockfile is missing from THIS read
+    expect(s.errors.some(e => /package-lock\.json/.test(e))).toBe(true)
+    expect(s.errors.some(e => /lockfile/i.test(e))).toBe(true)
+    // ... and it degrades to exactly "no lockfile read": no dependency check
+    expect(s.cveWorst).toBeUndefined()
+    expect(s.lockfileDeclaredNoRuntimeDeps).toBeUndefined()
+  })
+
+  it('DF-1 r4: an unfetchable SOURCE file is still fatal — the fix must not weaken C5', async () => {
+    const s = await assemble(
+      { ref: 'foo-mcp', repo: { owner: 'acme', name: 'foo' } },
+      flakyHttp('src/index.ts'), NOW,
+    )
+    expect(s.toolSurfaceRisk).toBeUndefined()
+    expect(score('acme/foo', s, NOW.toISOString()).insufficientData).toBe(true)
+  })
 })
 
 // Rubric 1.7.0 (2026-08-15): the serialized token footprint stops being a

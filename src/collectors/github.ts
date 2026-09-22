@@ -90,6 +90,18 @@ export interface RepoSnapshot {
   // existing partial-read honesty rule (no clean risk verdict, no counts,
   // no dynamic).
   fetchFailures: string[]
+  // DF-1 round 4 (2026-09-22): lockfile fetch failures, kept OUT of
+  // fetchFailures above. A lockfile is a pure EXTRA fetch — its own bucket,
+  // its own widening of finalCap, no ranked source displaced — and it feeds
+  // exactly one consumer, the dependency-CVE check. So losing it cannot make
+  // the TOOL SURFACE partial, and must not. Folded into fetchFailures it did:
+  // surfacePartial erased a 'none' tool-surface verdict, securityPrimaryAbsent
+  // tripped, and the whole scorecard was voided. TheLunarCompany/lunar
+  // (published A+ / 96) went to `exit 2, insufficient data` on one of three
+  // attempts for exactly this, over a lockfile in a nested e2e-tests
+  // directory. The right degradation is "no lockfile was read", with the
+  // caveat said out loud — which is what assemble.ts does with this list.
+  lockfileFetchFailures: string[]
 }
 
 // v1.3 (V1 — monorepo sampling overhaul, coverage-spec §3.3 + §4): FILE_CAP is
@@ -752,6 +764,7 @@ export async function collectGithub(
   // only ever receives `files` provably cannot see it.
   let readme: RepoFile | undefined
   const fetchFailures: string[] = []
+  const lockfileFetchFailures: string[] = []
   for (const path of selectedPaths) {
     try {
       const content = path === 'package.json' && rootPkgContent !== undefined
@@ -765,7 +778,10 @@ export async function collectGithub(
       // C5: a file the tree told us exists could not be read. The sample is
       // now incomplete — record WHICH path so the caller can say so, instead
       // of silently grading a smaller repo than the one that exists.
-      fetchFailures.push(path)
+      // DF-1 round 4: unless it is a lockfile, which contributes nothing to
+      // the sampled surface — see lockfileFetchFailures on RepoSnapshot.
+      if (LOCKFILES.has(path.split('/').pop() ?? '')) lockfileFetchFailures.push(path)
+      else fetchFailures.push(path)
     }
   }
 
@@ -775,7 +791,7 @@ export async function collectGithub(
     description: meta.description ?? undefined, topics: meta.topics ?? [],
     pushedAt: meta.pushed_at,
     latestReleaseAt, commitsLast90Days, busFactor, medianIssueResponseDays,
-    treePaths, toolFanoutCount, files, readme, fetchFailures,
+    treePaths, toolFanoutCount, files, readme, fetchFailures, lockfileFetchFailures,
     // DF-4: the /commits endpoint defaults to the default branch, so page 1
     // entry 0 is that branch's HEAD — the same listing busFactor and
     // commitsLast90Days are already derived from.
