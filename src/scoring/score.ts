@@ -292,6 +292,17 @@ export function score(
       + 'was read, so the CVE check ran at the lowest version each declared range allows. '
       + 'An installed version may already be patched; verify dependency-cve findings against your own lockfile.')
   }
+  // DF-1 round 4 (2026-09-22). The other end of the same fact: the lockfile
+  // was read and it resolves to NO runtime dependencies. Without saying so,
+  // "0 dependency findings" here looks identical to "0 dependency findings"
+  // on a server with forty clean dependencies, and identical again to a check
+  // that never ran. Publish which one it is. Moves no score — the score
+  // already moved, by the dependency-cves signal being AVAILABLE and clean.
+  if (signals.lockfileDeclaredNoRuntimeDeps === true) {
+    notes.push('The committed lockfile resolves no runtime dependencies at all — every entry in it is dev-only, '
+      + 'or it has none. The dependency-CVE check therefore ran and came back clean against an empty '
+      + 'runtime dependency set: a measurement, not a skipped check.')
+  }
   for (const e of signals.errors) notes.push(`Collector issue: ${e}`)
   // W6 (coverage-v1.5, Task W6 Part B): 'dynamic' reuses the notServer
   // plumbing (overall/grade null, same as every other notServer reason —

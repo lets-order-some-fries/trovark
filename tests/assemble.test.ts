@@ -153,7 +153,7 @@ describe('assemble', () => {
   // card accused packages of CVEs already patched at the resolved version
   // (loreweave: @modelcontextprotocol/sdk pinned to 1.30.0, three GHSAs
   // reported against the ^1.12.0 floor). This fixture saturates the budget.
-  function saturatedRepoHttp(opts: { lockfile: boolean }): { http: Http; queried: () => Array<{ name: string; version: string }> } {
+  function saturatedRepoHttp(opts: { lockfile: boolean; lockPackages?: Record<string, unknown> }): { http: Http; queried: () => Array<{ name: string; version: string }> } {
     const sourceFiles = Array.from({ length: 20 }, (_, i) => ({ path: `src/file${i}.ts`, type: 'blob', size: 100 }))
     const tree = [
       { path: 'package.json', type: 'blob', size: 300 },
@@ -182,7 +182,7 @@ describe('assemble', () => {
       if (url.endsWith('package-lock.json')) {
         return JSON.stringify({
           lockfileVersion: 3,
-          packages: {
+          packages: opts.lockPackages ?? {
             '': { name: 'foo-mcp', version: '1.0.0' },
             'node_modules/@modelcontextprotocol/sdk': { version: '1.4.2' },
           },
@@ -233,6 +233,73 @@ describe('assemble', () => {
     const s = await assemble({ ref: 'acme/foo', repo: { owner: 'acme', name: 'foo' } }, http, NOW)
     expect(s.cveWorst).toBeUndefined()
     expect(s.depsResolvedFromLockfile).toBeUndefined()
+  })
+
+  // DF-1 round 4, census defect 1. Measured on the published 400-entry index:
+  // `seleniumboot/selenium-mcp` went C+/67 -> C/62 and security 60 -> 40 with
+  // ZERO dependency findings on either side, and `agentbodegastore/agentbodega`
+  // moved the same mechanism the other way (B+/81 -> B+/83). Both repos commit
+  // a package-lock.json whose entries are ALL `dev: true`, so the new dev-skip
+  // empties the parsed dep list; assemble() then could not tell "a lockfile was
+  // read and declares no runtime dependencies" from "no lockfile was ever read",
+  // and the dependency-CVE check silently VANISHED (3/3 signals -> 2/3). A
+  // package that ships no runtime dependencies genuinely has no dependency
+  // CVEs. That is a clean, AVAILABLE measurement.
+  const devOnlyLock = {
+    '': { name: 'foo-mcp', version: '1.0.0' },
+    'node_modules/vitest': { version: '3.2.7', dev: true },
+    'node_modules/esbuild': { version: '0.27.7', dev: true },
+  }
+
+  it('DF-1 r4: a lockfile whose entries are all dev-only is a CLEAN dependency measurement, not a missing one', async () => {
+    const { http, queried } = saturatedRepoHttp({ lockfile: true, lockPackages: devOnlyLock })
+    const s = await assemble({ ref: 'acme/foo', repo: { owner: 'acme', name: 'foo' } }, http, NOW)
+    expect(queried()).toEqual([])                       // nothing runtime to ask OSV about
+    expect(s.cveWorst).toBe('none')                     // ... and that IS the answer
+    expect(s.depsResolvedFromLockfile).toBe(true)
+    expect(s.lockfileDeclaredNoRuntimeDeps).toBe(true)
+    expect(s.findings.filter(f => f.id === 'security/dependency-cve')).toHaveLength(0)
+    // the check stays AVAILABLE: security keeps all three of its signals
+    const card = score('acme/foo', s, NOW.toISOString())
+    const sec = card.dimensions.find(d => d.id === 'security')
+    expect(sec?.available).toBe(3)
+    expect(card.notes.some(n => /no runtime dependencies/i.test(n))).toBe(true)
+    // and it must NOT be mistaken for the declared-floor case
+    expect(card.notes.some(n => /declared floor/i.test(n))).toBe(false)
+  })
+
+  it('DF-1 r4: no lockfile at all is still UNAVAILABLE — the two cases stay distinguishable', async () => {
+    const { http } = saturatedRepoHttp({ lockfile: false })
+    const s = await assemble({ ref: 'acme/foo', repo: { owner: 'acme', name: 'foo' } }, http, NOW)
+    expect(s.cveWorst).toBeUndefined()
+    expect(s.lockfileDeclaredNoRuntimeDeps).toBeUndefined()
+    const card = score('acme/foo', s, NOW.toISOString())
+    expect(card.dimensions.find(d => d.id === 'security')?.available).toBe(2)
+  })
+
+  it('DF-1 r4: an all-dev lockfile also evicts the manifest floors for its ecosystem (the agentbodega shape, inverted)', async () => {
+    const { http, queried } = saturatedRepoHttp({ lockfile: true, lockPackages: devOnlyLock })
+    const s = await assemble(
+      { ref: 'foo-mcp', repo: { owner: 'acme', name: 'foo' }, npmPackage: 'foo-mcp' },
+      http, NOW,
+    )
+    // the repo's own lockfile says there are no runtime npm deps; the
+    // registry manifest's ^1.0.0 floor must not be queried behind its back
+    expect(queried()).toEqual([])
+    expect(s.depsResolvedFromLockfile).toBe(true)
+    expect(s.cveWorst).toBe('none')
+  })
+
+  it('DF-1 r4: a lockfile trovark cannot actually parse (v1, no `packages` map) degrades to no-lockfile, never to "clean"', async () => {
+    const { http } = saturatedRepoHttp({ lockfile: true })
+    const origText = http.text.bind(http)
+    http.text = async (url: string): Promise<string> => {
+      if (url.endsWith('package-lock.json')) return JSON.stringify({ lockfileVersion: 1, dependencies: { zod: { version: '3.22.5' } } })
+      return origText(url)
+    }
+    const s = await assemble({ ref: 'acme/foo', repo: { owner: 'acme', name: 'foo' } }, http, NOW)
+    expect(s.cveWorst).toBeUndefined()
+    expect(s.lockfileDeclaredNoRuntimeDeps).toBeUndefined()
   })
 
   it('prefers resolved lockfile versions over manifest floors for the OSV query', async () => {

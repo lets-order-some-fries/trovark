@@ -12,7 +12,7 @@ import { classifyLibrary } from './derive/classify.js'
 import { detectDynamic } from './derive/dynamic.js'
 import { scanSecrets } from './derive/secrets.js'
 import { scanIntegrity } from './derive/integrity.js'
-import { parseLockfile } from './derive/lockfile.js'
+import { scanLockfiles } from './derive/lockfile.js'
 
 const days = (fromIso: string, now: Date) =>
   Math.max(0, Math.floor((now.getTime() - new Date(fromIso).getTime()) / 86_400_000))
@@ -399,10 +399,20 @@ export async function assemble(
   // lockfiles a dedicated fetch slot this branch was the ONLY one that ever
   // ran for an ordinary repo. Now the fact is recorded on Signals
   // (depsResolvedFromLockfile) and score.ts says it on the card.
-  const lockDeps = repoFiles ? parseLockfile(repoFiles) : []
+  //
+  // DF-1 round 4 (census defect 1): the eviction below is driven by which
+  // ecosystems a lockfile was READ for, not by which ecosystems the parsed
+  // deps happen to cover. Those were the same thing until the dev-skip
+  // landed; they are not any more, because an all-`dev: true` lockfile parses
+  // fine and yields nothing. Keying off `lockDeps` meant such a repo fell
+  // back to floors it had just been told were superseded, and — when there
+  // were no floors either, i.e. every bare `owner/repo` ref — lost its
+  // dependency check outright.
+  const lock = repoFiles ? scanLockfiles(repoFiles) : { deps: [], ecosystems: [] }
+  const lockDeps = lock.deps
   let floorDepsQueried = deps.length
-  if (lockDeps.length > 0) {
-    const lockEcosystems = new Set(lockDeps.map(d => d.ecosystem))
+  if (lock.ecosystems.length > 0) {
+    const lockEcosystems = new Set(lock.ecosystems)
     const floorDeps = deps.filter(d => !lockEcosystems.has(d.ecosystem))
     deps.length = 0
     deps.push(...floorDeps, ...lockDeps)
@@ -420,7 +430,24 @@ export async function assemble(
     s.findings.push(...osv.findings)
     // DF-1: only set when OSV was actually asked something (cveWorst is
     // undefined for an empty query, and so must this be).
-    if (cappedDeps.length > 0) s.depsResolvedFromLockfile = floorDepsQueried === 0
+    if (cappedDeps.length > 0) {
+      s.depsResolvedFromLockfile = floorDepsQueried === 0
+    } else if (lock.ecosystems.length > 0) {
+      // DF-1 round 4: nothing to ask OSV about, but only because a lockfile
+      // we READ says this package installs no runtime dependencies. That is
+      // an answer, not a gap — "no runtime deps" means "no dependency CVEs",
+      // which is exactly what `cveWorst: 'none'` states. Leaving it undefined
+      // dropped the weight-2 dependency-cves signal out of security's
+      // denominator and renormalized the dimension onto the remaining two,
+      // which is how selenium-mcp lost 5 points and 20 points of security
+      // while gaining and losing precisely zero findings. Requires
+      // `lock.ecosystems` (a lockfile understood), never merely
+      // `lockDeps.length === 0`, so an unreadable or unsupported lockfile
+      // still degrades to "no dependency check" rather than to "clean".
+      s.cveWorst = 'none'
+      s.depsResolvedFromLockfile = true
+      s.lockfileDeclaredNoRuntimeDeps = true
+    }
   } catch (err) {
     rethrowIfCallerSide(err)
     s.errors.push(`osv: ${(err as Error).message}`)
