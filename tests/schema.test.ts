@@ -1854,6 +1854,141 @@ describe('fromJsSource — the name: fallback scan is linear in file size', () =
   })
 })
 
+// Issue #22: the W5 guard above measures partiality with `isToolFanoutPath`,
+// which only recognises a `tools?/` directory or a `*.tools.ts` basename. A
+// repo that keeps one-tool-per-file source anywhere else (github/github-mcp-
+// server: 56 non-test `pkg/github/*.go`) has a fan-out count of 0, so the
+// comparison is `0 > 0` and a 4-of-125 read publishes as a complete surface.
+// These tests pin partiality to the directories extraction ACTUALLY read
+// tools from, whatever they are called — and, just as importantly, pin the
+// cases that must NOT flip.
+describe('extractSchema — surfacePartial from under-read tool directories (issue #22)', () => {
+  const pyTool = (name: string) =>
+    `@mcp.tool()\ndef ${name}(x: str) -> str:\n    """does ${name}."""\n    ...\n`
+  const goTool = (name: string) => `
+func ${name}Fn() (mcp.Tool, server.ToolHandlerFunc) {
+	return mcp.Tool{
+		Name: "${name}",
+		Description: "does ${name}",
+	}, nil
+}
+`
+  const jsTool = (name: string) => `server.tool('${name}', 'does ${name}', {}, handler)\n`
+
+  it('github/github-mcp-server shape: 3 tools read from 2 of pkg/github\'s 56 candidate .go files -> surfacePartial', () => {
+    const files = [
+      { path: 'pkg/github/context_tools.go', content: goTool('get_me') + goTool('get_teams') },
+      { path: 'pkg/github/ui_tools.go', content: goTool('ui_get') },
+      { path: 'pkg/github/server.go', content: 'package github\n' },
+      { path: 'pkg/github/tools.go', content: 'package github\n' },
+    ]
+    // The full tree holds 56 non-test .go files in that one directory; the
+    // sampler reached 4 of them. Nothing here is under a tools/ directory,
+    // so the W5 fan-out count is 0 and the W5 comparison cannot fire.
+    const treePaths = [
+      ...files.map(f => f.path),
+      ...Array.from({ length: 52 }, (_, i) => `pkg/github/resource${i}.go`),
+      'README.md', 'go.mod',
+    ]
+    const r = extractSchema(files, treePaths)
+    expect(r.tools.map(t => t.name).sort()).toEqual(['get_me', 'get_teams', 'ui_get'])
+    expect(r.surfacePartial).toBe(true)
+  })
+
+  it('an unread package __init__.py is not evidence of an under-read (the measured false positive)', () => {
+    // daedalusdevelopmentgroup/ddg-agent-payable-services, measured over the
+    // real 400-server corpus. Its package directory holds 4 .py files; 3 were
+    // fetched and all 43 tools come from 2 of them. The one unread file is a
+    // 25-line __init__.py — docstring, __version__, a lazy __getattr__ — with
+    // zero tool declarations. The surface was complete, yet the rule called it
+    // partial, and the punishment was a REWARD: withholding a below-average
+    // cost score raises the weighted mean of what remains, so the card moved
+    // B 79 to A- 86. A false positive here is worse than the bug it fixes.
+    const files = [
+      { path: 'src/pkg/server.py', content: pyTool('ddg_site_audit') },
+      { path: 'src/pkg/tools.py', content: pyTool('ddg_browser_proof') },
+      { path: 'src/pkg/__main__.py', content: 'from . import main\n' },
+    ]
+    const treePaths = [...files.map(f => f.path), 'src/pkg/__init__.py', 'pyproject.toml']
+    const r = extractSchema(files, treePaths)
+    expect(r.tools.map(t => t.name).sort()).toEqual(['ddg_browser_proof', 'ddg_site_audit'])
+    expect(r.surfacePartial).toBe(false)
+  })
+
+  it('an unread index.ts is excluded too — the deliberate cost of that exclusion', () => {
+    // The exclusion runs both ways: a barrel file that genuinely holds
+    // registrations no longer counts as evidence of an under-read. Accepted
+    // because entrypoints get fetch priority and are almost always read; the
+    // alternative was calling every complete read partial.
+    //
+    // Deliberately NOT under a tools/ directory: there the W5 fan-out guard
+    // fires on its own — correctly — and would mask what this test is about.
+    const files = [
+      { path: 'src/handlers/alpha.ts', content: 'server.tool("alpha", "a")' },
+      { path: 'src/handlers/beta.ts', content: 'server.tool("beta", "b")' },
+    ]
+    const treePaths = [...files.map(f => f.path), 'src/handlers/index.ts', 'package.json']
+    const r = extractSchema(files, treePaths)
+    expect(r.tools.map(t => t.name).sort()).toEqual(['alpha', 'beta'])
+    expect(r.surfacePartial).toBe(false)
+  })
+
+  it('every candidate file in the tool-bearing directory was fetched -> NOT partial (a complete read must never flip)', () => {
+    const files = [
+      { path: 'pkg/github/context_tools.go', content: goTool('get_me') },
+      { path: 'pkg/github/ui_tools.go', content: goTool('ui_get') },
+      { path: 'pkg/github/server.go', content: 'package github\n' },
+    ]
+    const treePaths = [
+      ...files.map(f => f.path),
+      'pkg/github/context_tools_test.go', // tests are not a tool-surface candidate
+      'docs/guide.md', 'go.mod', 'README.md',
+    ]
+    expect(extractSchema(files, treePaths).surfacePartial).toBe(false)
+  })
+
+  it('one file declares the whole surface and its directory holds unread siblings -> NOT partial (no fan-out was observed)', () => {
+    // src/index.ts registers every tool itself. 30 unread siblings prove
+    // nothing about the tool surface: nothing says this repo spreads tool
+    // declarations across files.
+    const files = [{ path: 'src/index.ts', content: jsTool('alpha') + jsTool('beta') + jsTool('gamma') }]
+    const treePaths = [
+      'src/index.ts',
+      ...Array.from({ length: 30 }, (_, i) => `src/helper${i}.ts`),
+    ]
+    expect(extractSchema(files, treePaths).surfacePartial).toBe(false)
+  })
+
+  it('a manifest-declared surface is complete by construction -> NOT partial however many source files went unread', () => {
+    const files = [{
+      path: 'mcp.json',
+      content: JSON.stringify({ tools: [{ name: 'search_docs' }, { name: 'get_doc' }, { name: 'list_docs' }] }),
+    }]
+    const treePaths = ['mcp.json', ...Array.from({ length: 40 }, (_, i) => `src/mod${i}.ts`)]
+    expect(extractSchema(files, treePaths).surfacePartial).toBe(false)
+  })
+
+  it('unread siblings in a language this directory did not declare tools in do not count', () => {
+    const files = [
+      { path: 'pkg/github/context_tools.go', content: goTool('get_me') },
+      { path: 'pkg/github/ui_tools.go', content: goTool('ui_get') },
+    ]
+    const treePaths = [
+      ...files.map(f => f.path),
+      ...Array.from({ length: 20 }, (_, i) => `pkg/github/binding${i}.ts`),
+    ]
+    expect(extractSchema(files, treePaths).surfacePartial).toBe(false)
+  })
+
+  it('the W5 tools/-directory guard still fires where it fires today (grafana/mcp-grafana control)', () => {
+    // Zero tools extracted, so the issue-#22 rule cannot fire at all: this is
+    // the pre-existing guard, and it must keep working unchanged.
+    const files = [{ path: 'tools/alerting.go', content: 'package tools\n' }]
+    const treePaths = ['tools/alerting.go', 'tools/loki.go', 'tools/sift.go']
+    expect(extractSchema(files, treePaths).surfacePartial).toBe(true)
+  })
+})
+
 // DF-3: destructive-tool detection recalled only 2 of loreweave's 6
 // state-mutating tools (33%), and both hits came from English prose in a
 // description (`append` in "Append a timestamped line", `write` in "the
