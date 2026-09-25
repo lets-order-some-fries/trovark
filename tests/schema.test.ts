@@ -1988,3 +1988,92 @@ func ${name}Fn() (mcp.Tool, server.ToolHandlerFunc) {
     expect(extractSchema(files, treePaths).surfacePartial).toBe(true)
   })
 })
+
+// DF-3: destructive-tool detection recalled only 2 of loreweave's 6
+// state-mutating tools (33%), and both hits came from English prose in a
+// description (`append` in "Append a timestamped line", `write` in "the
+// lore_* write tools") rather than from any tool NAME. Rewording those two
+// sentences took the destructive count to zero and dropped toolSurfaceRisk
+// medium -> low for a server whose write surface had not changed.
+//
+// The fix adds MEDIUM_NAME_ONLY_TOKENS, consulted ONLY by the name channel.
+// These words are unambiguous mutation verbs in a tool NAME but have benign
+// noun/adjective readings in prose ("the fact store", "the set of values",
+// "call lore_mark_used"), so putting them in the shared MEDIUM_TOKENS —
+// which riskFromText also consults — false-positives on pure read tools.
+describe('DF-3: MEDIUM_NAME_ONLY_TOKENS — mutation verbs that only count in the tool NAME', () => {
+  const named = (name: string, description: string) => extractSchema([{
+    path: 'mcp.json',
+    content: JSON.stringify({ tools: [{ name, description }] }),
+  }])
+
+  // Each name carries the new token; each description is deliberately benign
+  // (no existing MEDIUM_TOKENS member), so only the name channel can fire.
+  const positives: Array<[string, string]> = [
+    ['invalidate_cache', 'Marks an entry as no longer current'],
+    ['revoke_token', 'Ends a session for the given principal'],
+    ['insert_row', 'Adds a row to the table'],
+    ['upsert_document', 'Idempotent document operation by id'],
+    ['save_draft', 'Persists the current draft'],
+    ['purge_queue', 'Empties the queue'],
+    ['clear_cache', 'Empties the cache'],
+    ['reset_counters', 'Returns counters to zero'],
+    ['expire_session', 'Ends the session early'],
+    ['assert_fact', 'Records a fact in the bitemporal fact store'],
+    ['mark_used', 'Notes that the note was referenced'],
+    ['archive_thread', 'Files a thread out of the inbox'],
+    ['restore_snapshot', 'Brings a snapshot back into scope'],
+    ['set_label', 'Assigns a label to an item'],
+  ]
+  for (const [name, description] of positives) {
+    it(`${name} → medium (name-channel mutation verb)`, () => {
+      expect(named(name, description).toolSurfaceRisk).toBe('medium')
+    })
+  }
+
+  // The loreweave tools DF-3 was diagnosed against, with the corroborating
+  // prose stripped out of their descriptions entirely.
+  it('loreweave lore_assert_fact / lore_invalidate_fact / lore_mark_used all fire on the name alone', () => {
+    for (const name of ['lore_assert_fact', 'lore_invalidate_fact', 'lore_mark_used']) {
+      expect(named(name, 'Operates on the bitemporal fact store.').toolSurfaceRisk).toBe('medium')
+    }
+  })
+
+  // Exclusions pinned deliberately: `store`, `record`, `sync`, `close`,
+  // `index` and `add` are NOT in the set, because each is a common noun in
+  // read-only tool names.
+  const excluded = ['vector_store_search', 'search_vector_store', 'get_record', 'list_records', 'get_close_price']
+  for (const name of excluded) {
+    it(`${name} is NOT medium — excluded noun token`, () => {
+      expect(named(name, 'Returns matching rows.').toolSurfaceRisk).not.toBe('medium')
+    })
+  }
+  it('sync_status / refresh_index / add_numbers stay none', () => {
+    for (const name of ['sync_status', 'refresh_index', 'add_numbers']) {
+      expect(named(name, 'Reports current condition.').toolSurfaceRisk).toBe('none')
+    }
+  })
+
+  // THE regression that rules out the naive fix (extending MEDIUM_TOKENS):
+  // MEDIUM_TOKENS is shared with riskFromText, so adding `store`/`mark`/`set`
+  // there flags pure read tools whose DESCRIPTION happens to contain the noun.
+  it('a DESCRIPTION containing "store" does not tier a read tool medium', () => {
+    const r = named('lore_timeline', 'Returns events from the bitemporal fact store')
+    expect(r.toolSurfaceRisk).not.toBe('medium')
+    expect(r.toolSurfaceRisk).toBe('none') // no risk token anywhere; `store` must stay inert
+  })
+  it('a DESCRIPTION cross-referencing another tool by name ("call lore_mark_used") does not tier medium', () => {
+    const r = named('lore_read_note', 'Read a note; call lore_mark_used afterwards')
+    expect(r.toolSurfaceRisk).not.toBe('medium')
+    expect(r.toolSurfaceRisk).toBe('low')
+  })
+  it('a DESCRIPTION containing "set" as a noun does not tier medium', () => {
+    const r = named('get_config', 'Returns the set of configured values')
+    expect(r.toolSurfaceRisk).not.toBe('medium')
+    expect(r.toolSurfaceRisk).toBe('low')
+  })
+  it('a DESCRIPTION containing "save" / "archive" as nouns does not tier medium', () => {
+    const r = named('list_backups', 'Lists each archive and the save it belongs to')
+    expect(r.toolSurfaceRisk).not.toBe('medium')
+  })
+})

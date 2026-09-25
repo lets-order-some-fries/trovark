@@ -265,7 +265,7 @@ describe('collectGithub', () => {
     expect(paths).toContain('mcp_server.ts')
     expect(paths).not.toContain('src/utils.py')
   })
-  it('final review fix: lockfiles rank LAST — under a full FILE_CAP=12 budget of source files, package-lock.json is starved out', async () => {
+  it('DF-1: a committed package-lock.json is fetched as a dedicated EXTRA slot even when a full FILE_CAP=12 budget of source files saturates the shared budget', async () => {
     const http = fakeHttp()
     const origJson = http.json.bind(http)
     const sourceFiles = Array.from({ length: 12 }, (_, i) => ({ path: `src/tool${i + 1}.ts`, type: 'blob', size: 200 }))
@@ -281,9 +281,45 @@ describe('collectGithub', () => {
     }
     const snap = await collectGithub({ ref: 'acme/foo', repo: { owner: 'acme', name: 'foo' } }, http, NOW)
     const paths = snap.files.map(f => f.path)
-    expect(paths).toHaveLength(12)
-    for (const f of sourceFiles) expect(paths).toContain(f.path)
-    expect(paths).not.toContain('package-lock.json') // budget fully consumed by source before lockfiles are considered
+    // DF-1: pre-fix this was `toHaveLength(12)` + `not.toContain('package-lock.json')`
+    // — the lockfile ranked last inside the SHARED budget, so any repo with
+    // >= 12 source files never had its lockfile read and OSV was queried at
+    // the manifest floor instead (src/derive/lockfile.ts was dead code for
+    // ordinary repos). The lockfile now gets its own slot, like the README.
+    expect(paths).toHaveLength(13)
+    for (const f of sourceFiles) expect(paths).toContain(f.path) // source budget untouched
+    expect(paths).toContain('package-lock.json')
+  })
+
+  it('DF-1: the lockfile slot never displaces ranked source — the source COUNT is identical with and without a lockfile in a saturated tree', () => {
+    const baseBlobs = [
+      { path: 'package.json', size: 500 },
+      ...Array.from({ length: 20 }, (_, i) => ({ path: `src/file${i}.ts`, size: 100 })),
+    ]
+    const withLock = [...baseBlobs, { path: 'package-lock.json', size: 144_062 }]
+    const selectedNoLock = selectRepoFiles(baseBlobs, 'foo', false)
+    const selectedWithLock = selectRepoFiles(withLock, 'foo', false)
+    const srcNoLock = selectedNoLock.filter(p => p.startsWith('src/file'))
+    const srcWithLock = selectedWithLock.filter(p => p.startsWith('src/file'))
+    expect(srcWithLock).toEqual(srcNoLock)
+    expect(selectedNoLock.length).toBe(12)
+    expect(selectedWithLock).toContain('package-lock.json')
+    expect(selectedWithLock.length).toBe(13)
+  })
+
+  it('DF-1: lockfile slots are capped at LOCKFILE_FETCH_CAP=2, shallowest first, and an oversized lockfile (> SIZE_CAP) is still skipped', () => {
+    const blobs = [
+      { path: 'package.json', size: 500 },
+      { path: 'src/index.ts', size: 100 },
+      { path: 'packages/c/package-lock.json', size: 500 },
+      { path: 'package-lock.json', size: 500 },
+      { path: 'packages/b/package-lock.json', size: 500 },
+    ]
+    const selected = selectRepoFiles(blobs, 'foo', false)
+    expect(selected).toContain('package-lock.json')
+    expect(selected.filter(p => p.endsWith('package-lock.json')).length).toBe(2)
+    const huge = [{ path: 'package.json', size: 500 }, { path: 'package-lock.json', size: 900_000 }]
+    expect(selectRepoFiles(huge, 'foo', false)).not.toContain('package-lock.json')
   })
 
   // I8: envBlobs had no cap and was never evicted — 10 .env.example files

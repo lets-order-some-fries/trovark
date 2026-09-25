@@ -45,7 +45,11 @@ D ≥ 40, F < 40 (+/- at the top/bottom 5 points of each band).
   read, risk is floored to medium rather than assumed clean. Known CVEs in
   dependencies via OSV.dev, queried at **resolved lockfile versions**
   (`package-lock.json` incl. transitive, `uv.lock`, `poetry.lock`) when a
-  lockfile is committed, falling back to declared floors otherwise.
+  lockfile is committed. Without one, the versions queried are whatever the
+  ref's own identity supplies: an `npm:`/`pypi:` ref falls back to the
+  registry manifest's declared floors, and a bare `owner/repo` ref has
+  **no dependency check at all** — there is no manifest to take floors from,
+  so the signal is reported as unavailable rather than guessed at.
   Committed-secret patterns are a **low-confidence candidate** heuristic over
   sampled files (not full git history), reported by path with match text never
   shown; ~13% true-positive rate in testing, so it carries a low rubric weight
@@ -189,9 +193,43 @@ for transparency only, exactly as in v1's findings-only integration.
   could not be read. A dimension (or headline grade) resting on an unmeasured
   primary is still withheld rather than renormalized, for security
   (tool-surface risk) and reliability (spec era) alike.
-- CVE resolution covers `package-lock.json`/`uv.lock`/`poetry.lock`; other
-  lockfiles (pnpm, yarn, Pipfile) still fall back to declared floors.
+- CVE resolution covers `package-lock.json`/`uv.lock`/`poetry.lock` (up to two
+  per repo, root first, each under the 300KB fetch cap). Other lockfiles (pnpm,
+  yarn, bun, Cargo, `go.sum`, Pipfile, composer) are not parsed, and neither is
+  a `package-lock.json` at lockfileVersion 1. What happens next depends on the
+  ref, not on the lockfile: for an `npm:`/`pypi:` ref the check falls back to
+  the registry manifest's **declared floors**, and the card carries a note
+  saying the versions are floors — a floor can cite advisories already patched
+  within the range. For a bare `owner/repo` ref there is no manifest and so no
+  floor: such a repository gets **no dependency check at all**, the
+  `dependency-cves` signal is reported unavailable, and security scores on its
+  two remaining signals at reduced confidence. It does not get a floor-based
+  check, and no floor caveat appears, because no version was ever queried.
+  All 400 entries of the published index are bare `owner/repo` refs, so this
+  is the common case, not the edge one.
+- A committed lockfile that resolves to **no runtime dependencies** — every
+  entry `dev: true`, or none at all — is the opposite case and is scored as
+  what it is: a clean dependency measurement. The check is available, `cveWorst`
+  is `none`, and the card says the lockfile declares no runtime dependencies,
+  so a clean result is not mistaken for a skipped one.
+- A lockfile that was selected but could not be **downloaded** degrades to "no
+  lockfile was read", named on the card as a collector issue. It does not make
+  the tool-surface sample partial and does not withhold the grade; an
+  unfetchable ranked-source file still does both.
 - Monorepos are scored at repository granularity.
+- Every ref is graded at the repository's **default branch**, as of
+  `generatedAt`, and the card records which revision that was
+  (`resolved.branch` / `resolved.commit` / `resolved.treeRefSha`) so a score is
+  re-derivable rather than merely re-runnable. For an `npm:`/`pypi:` ref this
+  is deliberately **not** the published version: the package name is used to
+  resolve the repository, and the files are then read from that repository's
+  default branch. `resolved.npmVersion` records the release a user would
+  actually install; when npm publishes a `gitHead` for it that differs from
+  the branch tip, the card says so in `Notes`. No divergence is asserted when
+  the `gitHead` is absent (about a third of packages publish none) or when the
+  branch tip could not be determined — the stated branch and sha stand on
+  their own. Repointing the scan at the published commit is a separate design
+  change, not implied by this record.
 - The committed-secret heuristic is a candidate signal, not a real secret scan.
 - Bare package names found on both npm and PyPI are rejected as ambiguous rather
   than guessed — use the `npm:`/`pypi:` prefix.

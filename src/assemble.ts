@@ -12,7 +12,7 @@ import { classifyLibrary } from './derive/classify.js'
 import { detectDynamic } from './derive/dynamic.js'
 import { scanSecrets } from './derive/secrets.js'
 import { scanIntegrity } from './derive/integrity.js'
-import { parseLockfile } from './derive/lockfile.js'
+import { scanLockfiles } from './derive/lockfile.js'
 
 const days = (fromIso: string, now: Date) =>
   Math.max(0, Math.floor((now.getTime() - new Date(fromIso).getTime()) / 86_400_000))
@@ -35,6 +35,15 @@ export async function assemble(
       s.medianIssueResponseDays = snap.medianIssueResponseDays
       s.stars = snap.stars
       s.archived = snap.archived
+      // DF-4: record WHICH revision this snapshot came from, as an artifact
+      // (never a signal — see the Signals.graded comment in types.ts). Each
+      // field is set only when the collector actually has it, so a missing
+      // sha stays missing rather than becoming a rendered `undefined`.
+      s.graded = {
+        branch: snap.defaultBranch,
+        ...(snap.headCommitSha !== undefined ? { headCommitSha: snap.headCommitSha } : {}),
+        ...(snap.treeRefSha !== undefined ? { treeRefSha: snap.treeRefSha } : {}),
+      }
       if (snap.treePaths) {
         // A package ref is always scanned at repository granularity. That is
         // only misleading when the repository holds more than the one package,
@@ -68,6 +77,17 @@ export async function assemble(
         const fetchesFailed = snap.fetchFailures.length > 0
         if (fetchesFailed) {
           s.errors.push(`could not fetch ${snap.fetchFailures.length} selected file(s): ${snap.fetchFailures.slice(0, 5).join(', ')}${snap.fetchFailures.length > 5 ? ', …' : ''}`)
+        }
+        // DF-1 round 4 (census defect 2): a lockfile that could not be
+        // fetched is NOT part of `fetchesFailed` above, and deliberately does
+        // not force surfacePartial. It is an extra fetch feeding one check;
+        // losing it degrades that check to "no lockfile was read", which is a
+        // state the card already knows how to describe. It must not erase a
+        // tool-surface verdict derived from ranked source that all arrived.
+        // The caveat still gets said — silently dropping it would be the
+        // 2026-08-08 C5 bug in miniature, one check smaller.
+        if (snap.lockfileFetchFailures.length > 0) {
+          s.errors.push(`could not fetch ${snap.lockfileFetchFailures.length} committed lockfile(s): ${snap.lockfileFetchFailures.slice(0, 5).join(', ')}${snap.lockfileFetchFailures.length > 5 ? ', …' : ''} — dependency versions were not resolved from a lockfile on this run`)
         }
         const extractedSchema = extractSchema(snap.files, snap.treePaths, snap.toolFanoutCount)
         const staticSchema = fetchesFailed && !extractedSchema.surfacePartial
@@ -339,6 +359,18 @@ export async function assemble(
     try {
       const npm = await collectNpm(identity.npmPackage, http)
       s.weeklyDownloads = npm.weeklyDownloads
+      // DF-4: the published artifact's identity, merged onto the same
+      // `graded` object the GitHub rung populated. Kept separate from the
+      // repository revision on purpose: `npmVersion` is what a user would
+      // install, `headCommitSha` is what trovark actually read, and score.ts
+      // says so out loud when they are known to differ.
+      if (npm.latestVersion !== undefined || npm.publishedGitHead !== undefined) {
+        s.graded = {
+          ...s.graded,
+          ...(npm.latestVersion !== undefined ? { npmVersion: npm.latestVersion } : {}),
+          ...(npm.publishedGitHead !== undefined ? { publishedGitHead: npm.publishedGitHead } : {}),
+        }
+      }
       if (npm.deprecated) {
         s.findings.push({
           id: 'health/deprecated-package', dimension: 'health', severity: 'high',
@@ -370,14 +402,32 @@ export async function assemble(
   // floor, per ecosystem: this catches transitive deps and versions already
   // patched within the declared range, avoiding both over- and under-reporting
   // CVEs (see src/derive/lockfile.ts). Falls back to floors when no supported
-  // lockfile was fetched (labelled approximate — no code change needed here,
-  // that's simply the pre-existing `deps` array being left untouched).
-  const lockDeps = repoFiles ? parseLockfile(repoFiles) : []
-  if (lockDeps.length > 0) {
-    const lockEcosystems = new Set(lockDeps.map(d => d.ecosystem))
+  // lockfile was fetched.
+  //
+  // DF-1 (2026-09-22): the comment that used to sit here claimed the floor
+  // fallback was "labelled approximate — no code change needed". It was not
+  // labelled anywhere a reader could see, and until collectGithub gave
+  // lockfiles a dedicated fetch slot this branch was the ONLY one that ever
+  // ran for an ordinary repo. Now the fact is recorded on Signals
+  // (depsResolvedFromLockfile) and score.ts says it on the card.
+  //
+  // DF-1 round 4 (census defect 1): the eviction below is driven by which
+  // ecosystems a lockfile was READ for, not by which ecosystems the parsed
+  // deps happen to cover. Those were the same thing until the dev-skip
+  // landed; they are not any more, because an all-`dev: true` lockfile parses
+  // fine and yields nothing. Keying off `lockDeps` meant such a repo fell
+  // back to floors it had just been told were superseded, and — when there
+  // were no floors either, i.e. every bare `owner/repo` ref — lost its
+  // dependency check outright.
+  const lock = repoFiles ? scanLockfiles(repoFiles) : { deps: [], ecosystems: [] }
+  const lockDeps = lock.deps
+  let floorDepsQueried = deps.length
+  if (lock.ecosystems.length > 0) {
+    const lockEcosystems = new Set(lock.ecosystems)
     const floorDeps = deps.filter(d => !lockEcosystems.has(d.ecosystem))
     deps.length = 0
     deps.push(...floorDeps, ...lockDeps)
+    floorDepsQueried = floorDeps.length
   }
 
   // A large monorepo lockfile can resolve into many hundreds/thousands of
@@ -389,6 +439,26 @@ export async function assemble(
     const osv = await collectOsv(cappedDeps, http)
     s.cveWorst = osv.cveWorst
     s.findings.push(...osv.findings)
+    // DF-1: only set when OSV was actually asked something (cveWorst is
+    // undefined for an empty query, and so must this be).
+    if (cappedDeps.length > 0) {
+      s.depsResolvedFromLockfile = floorDepsQueried === 0
+    } else if (lock.ecosystems.length > 0) {
+      // DF-1 round 4: nothing to ask OSV about, but only because a lockfile
+      // we READ says this package installs no runtime dependencies. That is
+      // an answer, not a gap — "no runtime deps" means "no dependency CVEs",
+      // which is exactly what `cveWorst: 'none'` states. Leaving it undefined
+      // dropped the weight-2 dependency-cves signal out of security's
+      // denominator and renormalized the dimension onto the remaining two,
+      // which is how selenium-mcp lost 5 points and 20 points of security
+      // while gaining and losing precisely zero findings. Requires
+      // `lock.ecosystems` (a lockfile understood), never merely
+      // `lockDeps.length === 0`, so an unreadable or unsupported lockfile
+      // still degrades to "no dependency check" rather than to "clean".
+      s.cveWorst = 'none'
+      s.depsResolvedFromLockfile = true
+      s.lockfileDeclaredNoRuntimeDeps = true
+    }
   } catch (err) {
     rethrowIfCallerSide(err)
     s.errors.push(`osv: ${(err as Error).message}`)

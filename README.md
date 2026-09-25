@@ -97,7 +97,7 @@ impact. Details and honest scope limits:
     npx trovark acme/weather-mcp
 
     trovark  ·  acme/weather-mcp
-      resolved: github.com/acme/weather-mcp
+      resolved: github.com/acme/weather-mcp · graded at main@3f9c1ab
     Trust Score: 74/100 (B-)   rubric v1.7.0
 
       health         75/100  ████████░░  high confidence
@@ -150,6 +150,17 @@ evidence — describes that whole repository. For a monorepo, two different pack
 score identically, and a finding can cite a file belonging to a sibling package. When that is
 the case the card says so in `Notes`, naming the repository and the package.
 
+**Every ref is graded at the repository's default branch, as of `generatedAt`.** The card names
+the revision it read — `resolved.branch`, `resolved.commit` and `resolved.treeRefSha` in `--json`,
+and a `graded at <branch>@<sha>` segment on the terminal header — so the score can be
+re-derived later rather than merely re-run. For an `npm:` or `pypi:` ref this is deliberately
+**not the published version**: the package name resolves the repository, and the files are then
+read from that repository's default branch, which for most packages has moved past the commit
+the release was cut from. `resolved.npmVersion` records the version that *would* be installed,
+and when npm publishes a `gitHead` for it and that commit differs from the branch tip, the card
+says so in `Notes`. When npm publishes no `gitHead`, no divergence is claimed either way — the
+`resolved:` line still states exactly which branch and sha were read.
+
 `--json` carries the same information as structured fields (`overall`, `grade`,
 `dimensions[].confidence`, `insufficientData`, `notServer`, `unresolved`) instead of prose — see
 [`src/types.ts`](src/types.ts) for the full `Scorecard` shape.
@@ -158,6 +169,8 @@ Abridged, from a real run of `npx trovark github/github-mcp-server --json`:
 
     {
       "ref": "github/github-mcp-server",
+      "resolved": { "repo": { "owner": "github", "name": "github-mcp-server" },
+                    "branch": "main", "commit": "3f9c1ab…", "treeRefSha": "3f9c1ab…" },
       "rubricVersion": "1.7.0",
       "checksVersion": "1.0.0",
       "overall": 96,

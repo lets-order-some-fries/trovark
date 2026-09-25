@@ -81,6 +81,28 @@ const LOW_TOKENS = new Set([
   'fetch', 'http', 'request', 'url', 'download', 'get', 'read', 'list',
   'search', 'query',
 ])
+
+// DF-3: mutation verbs consulted ONLY by the NAME channel (riskFromName).
+// As a tool-NAME token each of these is an unambiguous mutation verb —
+// invalidate_fact, revoke_token, purge_queue, mark_used all change state —
+// but as a word in human prose each has a benign noun/adjective reading
+// ("the bitemporal fact store", "the set of configured values", "call
+// lore_mark_used", "a saved search"). MEDIUM_TOKENS is shared by
+// riskFromName AND riskFromText, so putting them there false-positives on
+// pure read tools: measured against loreweave itself, adding `store`/`set`/
+// `mark`/`record` to MEDIUM_TOKENS flagged lore_timeline and lore_query_facts
+// (both pure reads) as "appears to write or delete data", because both
+// descriptions contain the phrase "the bitemporal fact store". Hence a
+// separate, name-only set.
+//
+// Deliberately EXCLUDED, and why — each is a common noun inside a read-only
+// tool name: `store` (vector_store_search, search_vector_store), `record`
+// (get_record, list_records), `sync` (sync_status), `close`
+// (get_close_price), `index`, `add` (add_numbers).
+const MEDIUM_NAME_ONLY_TOKENS = new Set([
+  'invalidate', 'revoke', 'insert', 'upsert', 'save', 'purge', 'clear',
+  'reset', 'expire', 'assert', 'mark', 'archive', 'restore', 'set',
+])
 // child_process/subprocess are identifiers (module names), not English
 // words a tool-namer would choose — checked directly against the free text
 // rather than folded into HIGH_TOKENS, per the plan's "(+ child_process/
@@ -186,8 +208,20 @@ function riskFromTokens(tokens: string[]): Risk {
   return worst
 }
 
+// DF-3: the name channel additionally consults MEDIUM_NAME_ONLY_TOKENS. The
+// shared tiering runs first and wins outright when it reaches 'high'; the
+// name-only tokens can then raise 'none'/'low' to 'medium', never lower
+// anything. riskFromText, riskFromSchemaText, classify, the co-occurrence
+// rule and the LOW tier are untouched, so this is monotone: a tool's risk
+// can only stay the same or rise.
 function riskFromName(name: string): Risk {
-  return riskFromTokens(tokenize(name))
+  const tokens = tokenize(name)
+  const base = riskFromTokens(tokens)
+  if (base === 'high') return base
+  for (const tok of tokens) {
+    if (MEDIUM_NAME_ONLY_TOKENS.has(tok)) return 'medium'
+  }
+  return base
 }
 
 // Fix (P4 review): the previous `\b`-anchored word-regex match on the raw

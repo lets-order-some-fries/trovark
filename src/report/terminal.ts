@@ -28,15 +28,39 @@ function bar(score: number): string {
   return '█'.repeat(full) + '░'.repeat(10 - full)
 }
 
+/**
+ * DF-4: the human-readable identity of the revision that was graded, or
+ * undefined when none was collected. Never emits a placeholder.
+ */
+function revisionLabel(r: NonNullable<Scorecard['resolved']>): string | undefined {
+  const branch = r.branch ? safe(r.branch) : undefined
+  if (r.commit) return `${branch ?? 'the default branch'}@${safe(r.commit).slice(0, 7)}`
+  if (r.treeRefSha) return `${branch ?? 'the default branch'} (tree ref ${safe(r.treeRefSha).slice(0, 7)})`
+  return branch
+}
+
 export function renderTerminal(card: Scorecard, opts: { color?: boolean } = {}): string {
   const c = opts.color ?? true
   const lines: string[] = []
   lines.push(`trovark  ·  ${safe(card.ref)}`)
   if (card.resolved) {
     const parts: string[] = []
-    if (card.resolved.npmPackage) parts.push(`npm:${safe(card.resolved.npmPackage)}`)
+    // DF-4: the version is APPENDED to the package segment and the revision
+    // APPENDED after the repo segment — never inserted before either. The
+    // existing header assertions use toContain('resolved: github.com/acme/foo'),
+    // so order is load-bearing.
+    const ver = card.resolved.npmVersion ? `@${safe(card.resolved.npmVersion)}` : ''
+    if (card.resolved.npmPackage) parts.push(`npm:${safe(card.resolved.npmPackage)}${ver}`)
     if (card.resolved.pypiPackage) parts.push(`pypi:${safe(card.resolved.pypiPackage)}`)
     if (card.resolved.repo) parts.push(`github.com/${safe(card.resolved.repo.owner)}/${safe(card.resolved.repo.name)}`)
+    // Which revision was actually read. A commit sha is the precise answer; a
+    // tree-ref sha is the fallback and is LABELLED as a tree ref rather than
+    // dressed up as a commit, because GitHub does not contract what kind of
+    // sha it answers a ref-name tree request with (see collectors/github.ts).
+    // When neither is known the segment is omitted entirely —
+    // `graded at main@undefined` would be a worse bug than printing nothing.
+    const gradedAt = revisionLabel(card.resolved)
+    if (gradedAt) parts.push(`graded at ${gradedAt}`)
     if (parts.length > 0) lines.push(`  resolved: ${parts.join(' · ')}`)
   }
   if (card.unresolved) {

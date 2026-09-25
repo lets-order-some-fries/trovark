@@ -110,10 +110,19 @@ export async function main(argv: string[], deps: CliDeps): Promise<number> {
   try {
     const identity = await resolve(ref, deps.http)
     const signals = await assemble(identity, deps.http, deps.now, { hasToken: Boolean(process.env.GITHUB_TOKEN) })
+    // DF-4: WHAT was graded, and WHICH revision of it. The revision fields
+    // come off signals.graded (an artifact, never a signal) and are each
+    // included only when actually collected — a card that could not determine
+    // a sha says nothing about one rather than carrying an empty field.
+    const g = signals.graded
     const resolved = {
       ...(identity.npmPackage ? { npmPackage: identity.npmPackage } : {}),
+      ...(g?.npmVersion ? { npmVersion: g.npmVersion } : {}),
       ...(identity.pypiPackage ? { pypiPackage: identity.pypiPackage } : {}),
       ...(identity.repo ? { repo: identity.repo } : {}),
+      ...(g?.branch ? { branch: g.branch } : {}),
+      ...(g?.headCommitSha ? { commit: g.headCommitSha } : {}),
+      ...(g?.treeRefSha ? { treeRefSha: g.treeRefSha } : {}),
     }
     const card = score(ref, signals, deps.now.toISOString(), Object.keys(resolved).length > 0 ? resolved : undefined)
     deps.log(json ? renderJson(card) : renderTerminal(card, { color: !noColor }))

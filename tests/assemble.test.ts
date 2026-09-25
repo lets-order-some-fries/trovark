@@ -147,6 +147,200 @@ describe('assemble', () => {
     expect(s.errors).toContain('github: file tree unavailable; repo-content signals skipped')
     expect(s.daysSinceLastCommit).toBe(2) // metadata signals still intact
   })
+  // DF-1: the two tests above only prove assemble PREFERS a lockfile it was
+  // handed. The bug was upstream — collectGithub never handed one over for any
+  // repo with >= FILE_CAP source files, so OSV saw the manifest floor and the
+  // card accused packages of CVEs already patched at the resolved version
+  // (loreweave: @modelcontextprotocol/sdk pinned to 1.30.0, three GHSAs
+  // reported against the ^1.12.0 floor). This fixture saturates the budget.
+  function saturatedRepoHttp(opts: { lockfile: boolean; lockPackages?: Record<string, unknown>; extraTree?: Array<{ path: string; type: string; size: number }> }): { http: Http; queried: () => Array<{ name: string; version: string }> } {
+    const sourceFiles = Array.from({ length: 20 }, (_, i) => ({ path: `src/file${i}.ts`, type: 'blob', size: 100 }))
+    const tree = [
+      { path: 'package.json', type: 'blob', size: 300 },
+      { path: 'src/index.ts', type: 'blob', size: 500 },
+      ...sourceFiles,
+      ...(opts.lockfile ? [{ path: 'package-lock.json', type: 'blob', size: 144_062 }] : []),
+      ...(opts.extraTree ?? []),
+    ]
+    const routes: Record<string, unknown> = {
+      'https://api.github.com/repos/acme/foo/commits?since': [
+        { sha: '1', commit: { author: { date: iso(2) } }, author: { login: 'a' } },
+      ],
+      'https://api.github.com/repos/acme/foo/releases/latest': { published_at: iso(10) },
+      'https://api.github.com/repos/acme/foo/git/trees/main?recursive=1': { tree },
+      'https://api.github.com/repos/acme/foo': {
+        stargazers_count: 300, archived: false, pushed_at: iso(2), default_branch: 'main',
+      },
+      'https://registry.npmjs.org/foo-mcp': {
+        'dist-tags': { latest: '1.0.0' },
+        versions: { '1.0.0': { dependencies: { '@modelcontextprotocol/sdk': '^1.0.0' } } },
+      },
+      'https://api.npmjs.org/downloads/point/last-week/foo-mcp': { downloads: 2000 },
+    }
+    let queried: Array<{ name: string; version: string }> = []
+    const http = makeRoutedHttp(routes, (url) => {
+      if (url.endsWith('package.json')) return JSON.stringify({ name: 'foo-mcp', dependencies: { '@modelcontextprotocol/sdk': '^1.0.0' } })
+      if (url.endsWith('package-lock.json')) {
+        return JSON.stringify({
+          lockfileVersion: 3,
+          packages: opts.lockPackages ?? {
+            '': { name: 'foo-mcp', version: '1.0.0' },
+            'node_modules/@modelcontextprotocol/sdk': { version: '1.4.2' },
+          },
+        })
+      }
+      if (url.endsWith('src/index.ts')) return `server.tool('greet', 'Say hello', {}, h)`
+      if (/src\/file\d+\.ts$/.test(url)) return 'export {}'
+      throw new Error(`HTTP 404 for ${url}`)
+    })
+    http.postJson = async <T,>(url: string, body: unknown): Promise<T> => {
+      if (url.includes('osv.dev')) {
+        queried = (body as { queries: Array<{ package: { name: string }; version: string }> }).queries
+          .map(q => ({ name: q.package.name, version: q.version }))
+        return { results: queried.map(() => ({})) } as T
+      }
+      throw new Error(`HTTP 404 for ${url}`)
+    }
+    return { http, queried: () => queried }
+  }
+
+  it('DF-1: with a committed package-lock.json in a budget-saturated tree, OSV is queried at the RESOLVED version (1.4.2), not the ^1.0.0 floor', async () => {
+    const { http, queried } = saturatedRepoHttp({ lockfile: true })
+    const s = await assemble(
+      { ref: 'foo-mcp', repo: { owner: 'acme', name: 'foo' }, npmPackage: 'foo-mcp' },
+      http, NOW,
+    )
+    expect(queried()).toEqual([{ name: '@modelcontextprotocol/sdk', version: '1.4.2' }])
+    expect(s.depsResolvedFromLockfile).toBe(true)
+    expect(s.cveWorst).toBe('none')
+    // the source sample is unchanged by the extra lockfile fetch
+    expect(s.toolCount).toBe(1)
+  })
+
+  it('DF-1: with NO lockfile, OSV is queried at the declared floor and the signals say so (depsResolvedFromLockfile=false) so the card can carry the caveat', async () => {
+    const { http, queried } = saturatedRepoHttp({ lockfile: false })
+    const s = await assemble(
+      { ref: 'foo-mcp', repo: { owner: 'acme', name: 'foo' }, npmPackage: 'foo-mcp' },
+      http, NOW,
+    )
+    expect(queried()).toEqual([{ name: '@modelcontextprotocol/sdk', version: '1.0.0' }])
+    expect(s.depsResolvedFromLockfile).toBe(false)
+    const card = score('foo-mcp', s, NOW.toISOString())
+    expect(card.notes.some(n => /declared floor/i.test(n))).toBe(true)
+  })
+
+  it('DF-1: when OSV was never queried (no deps at all), depsResolvedFromLockfile stays undefined — absence is not a value', async () => {
+    const { http } = saturatedRepoHttp({ lockfile: false })
+    const s = await assemble({ ref: 'acme/foo', repo: { owner: 'acme', name: 'foo' } }, http, NOW)
+    expect(s.cveWorst).toBeUndefined()
+    expect(s.depsResolvedFromLockfile).toBeUndefined()
+  })
+
+  // DF-1 round 4, census defect 1. Measured on the published 400-entry index:
+  // `seleniumboot/selenium-mcp` went C+/67 -> C/62 and security 60 -> 40 with
+  // ZERO dependency findings on either side, and `agentbodegastore/agentbodega`
+  // moved the same mechanism the other way (B+/81 -> B+/83). Both repos commit
+  // a package-lock.json whose entries are ALL `dev: true`, so the new dev-skip
+  // empties the parsed dep list; assemble() then could not tell "a lockfile was
+  // read and declares no runtime dependencies" from "no lockfile was ever read",
+  // and the dependency-CVE check silently VANISHED (3/3 signals -> 2/3). A
+  // package that ships no runtime dependencies genuinely has no dependency
+  // CVEs. That is a clean, AVAILABLE measurement.
+  const devOnlyLock = {
+    '': { name: 'foo-mcp', version: '1.0.0' },
+    'node_modules/vitest': { version: '3.2.7', dev: true },
+    'node_modules/esbuild': { version: '0.27.7', dev: true },
+  }
+
+  it('DF-1 r4: a lockfile whose entries are all dev-only is a CLEAN dependency measurement, not a missing one', async () => {
+    const { http, queried } = saturatedRepoHttp({ lockfile: true, lockPackages: devOnlyLock })
+    const s = await assemble({ ref: 'acme/foo', repo: { owner: 'acme', name: 'foo' } }, http, NOW)
+    expect(queried()).toEqual([])                       // nothing runtime to ask OSV about
+    expect(s.cveWorst).toBe('none')                     // ... and that IS the answer
+    expect(s.depsResolvedFromLockfile).toBe(true)
+    expect(s.lockfileDeclaredNoRuntimeDeps).toBe(true)
+    expect(s.findings.filter(f => f.id === 'security/dependency-cve')).toHaveLength(0)
+    // the check stays AVAILABLE: security keeps all three of its signals
+    const card = score('acme/foo', s, NOW.toISOString())
+    const sec = card.dimensions.find(d => d.id === 'security')
+    expect(sec?.available).toBe(3)
+    expect(card.notes.some(n => /no runtime dependencies/i.test(n))).toBe(true)
+    // and it must NOT be mistaken for the declared-floor case
+    expect(card.notes.some(n => /declared floor/i.test(n))).toBe(false)
+  })
+
+  it('DF-1 r4: no lockfile at all is still UNAVAILABLE — the two cases stay distinguishable', async () => {
+    const { http } = saturatedRepoHttp({ lockfile: false })
+    const s = await assemble({ ref: 'acme/foo', repo: { owner: 'acme', name: 'foo' } }, http, NOW)
+    expect(s.cveWorst).toBeUndefined()
+    expect(s.lockfileDeclaredNoRuntimeDeps).toBeUndefined()
+    const card = score('acme/foo', s, NOW.toISOString())
+    expect(card.dimensions.find(d => d.id === 'security')?.available).toBe(2)
+  })
+
+  it('DF-1 r4: an all-dev lockfile also evicts the manifest floors for its ecosystem (the agentbodega shape, inverted)', async () => {
+    const { http, queried } = saturatedRepoHttp({ lockfile: true, lockPackages: devOnlyLock })
+    const s = await assemble(
+      { ref: 'foo-mcp', repo: { owner: 'acme', name: 'foo' }, npmPackage: 'foo-mcp' },
+      http, NOW,
+    )
+    // the repo's own lockfile says there are no runtime npm deps; the
+    // registry manifest's ^1.0.0 floor must not be queried behind its back
+    expect(queried()).toEqual([])
+    expect(s.depsResolvedFromLockfile).toBe(true)
+    expect(s.cveWorst).toBe('none')
+  })
+
+  // DF-1 round 4, census defect 3. The branch's own prose said pnpm/yarn/bun
+  // repositories "still fall back to floors, and now say so on the card". They
+  // do not fall back to floors. `depsFromManifest` runs only for an npm/PyPI
+  // REGISTRY identity; for a bare `owner/repo` reference there is no manifest
+  // to take floors from, so `deps` stays empty, OSV is never called, and
+  // score.ts is silent BY DESIGN. Measured: the declared-floor note rendered
+  // 0 times across all 191 movable references and the 18-reference control —
+  // including every one of the unsupported-lockfile-only refs it was written
+  // for — and rendered correctly on `npm:pluggedin-mcp-proxy`. The code is
+  // right; the sentence was wrong. These two tests are what the corrected
+  // sentence now asserts, so it can never drift back.
+  it('DF-1 r4: a bare owner/repo ref with only an UNSUPPORTED lockfile gets no dependency check — and no floor caveat', async () => {
+    const { http } = saturatedRepoHttp({
+      lockfile: false,
+      extraTree: [{ path: 'pnpm-lock.yaml', type: 'blob', size: 90_000 }],
+    })
+    const s = await assemble({ ref: 'acme/foo', repo: { owner: 'acme', name: 'foo' } }, http, NOW)
+    expect(s.cveWorst).toBeUndefined()                  // OSV was never asked anything
+    expect(s.depsResolvedFromLockfile).toBeUndefined()  // ... so there is no floor to caveat
+    const card = score('acme/foo', s, NOW.toISOString())
+    expect(card.notes.some(n => /declared floor/i.test(n))).toBe(false)
+    expect(card.dimensions.find(d => d.id === 'security')?.available).toBe(2)
+  })
+
+  it('DF-1 r4: the same tree under a REGISTRY identity does get floors, and does carry the caveat', async () => {
+    const { http, queried } = saturatedRepoHttp({
+      lockfile: false,
+      extraTree: [{ path: 'pnpm-lock.yaml', type: 'blob', size: 90_000 }],
+    })
+    const s = await assemble(
+      { ref: 'foo-mcp', repo: { owner: 'acme', name: 'foo' }, npmPackage: 'foo-mcp' },
+      http, NOW,
+    )
+    expect(queried()).toEqual([{ name: '@modelcontextprotocol/sdk', version: '1.0.0' }])
+    expect(s.depsResolvedFromLockfile).toBe(false)
+    expect(score('foo-mcp', s, NOW.toISOString()).notes.some(n => /declared floor/i.test(n))).toBe(true)
+  })
+
+  it('DF-1 r4: a lockfile trovark cannot actually parse (v1, no `packages` map) degrades to no-lockfile, never to "clean"', async () => {
+    const { http } = saturatedRepoHttp({ lockfile: true })
+    const origText = http.text.bind(http)
+    http.text = async (url: string): Promise<string> => {
+      if (url.endsWith('package-lock.json')) return JSON.stringify({ lockfileVersion: 1, dependencies: { zod: { version: '3.22.5' } } })
+      return origText(url)
+    }
+    const s = await assemble({ ref: 'acme/foo', repo: { owner: 'acme', name: 'foo' } }, http, NOW)
+    expect(s.cveWorst).toBeUndefined()
+    expect(s.lockfileDeclaredNoRuntimeDeps).toBeUndefined()
+  })
+
   it('prefers resolved lockfile versions over manifest floors for the OSV query', async () => {
     const http = fullFake()
     const origText = http.text.bind(http)
@@ -550,6 +744,71 @@ describe('C5: failed blob fetches are recorded and force a partial surface', () 
     )
     expect(s.errors).toEqual([])
     expect(s.toolCount).toBe(1)
+  })
+
+  // DF-1 round 4, census defect 2. A lockfile is an EXTRA fetch this branch
+  // introduced: it widens finalCap, displaces no ranked source, and feeds
+  // nothing but the dependency-CVE check. Losing it therefore cannot make the
+  // TOOL SURFACE partial — yet it went into the same fetchFailures list as a
+  // source file, forced surfacePartial, erased a 'none' tool-surface verdict,
+  // tripped securityPrimaryAbsent and voided the whole scorecard. Measured on
+  // the census: TheLunarCompany/lunar (published A+ / 96) came back `exit 2,
+  // insufficient data - could not fetch 1 selected file(s):
+  // mcpx/mcpx-e2e-tests/package-lock.json` on the first of three attempts and
+  // graded fine on the other two. One in 191 references on first attempt,
+  // turning an A+ entry into NO entry — and this branch raises the number of
+  // fetches per reference by one or two.
+  it('DF-1 r4: an unfetchable LOCKFILE degrades the dependency check and carries a caveat — it does not void the card', async () => {
+    const s = await assemble(
+      { ref: 'foo-mcp', repo: { owner: 'acme', name: 'foo' } },
+      flakyHttp('package-lock.json'), NOW,
+    )
+    // the ranked source all arrived, so the surface is whole and stays scored
+    expect(s.toolSurfaceRisk).toBe('none')
+    expect(s.toolCount).toBe(1)
+    const card = score('acme/foo', s, NOW.toISOString())
+    expect(card.insufficientData).toBe(false)
+    expect(card.grade).not.toBeNull()
+    // but the reader is told the lockfile is missing from THIS read
+    expect(s.errors.some(e => /package-lock\.json/.test(e))).toBe(true)
+    expect(s.errors.some(e => /lockfile/i.test(e))).toBe(true)
+    // ... and it degrades to exactly "no lockfile read": no dependency check
+    expect(s.cveWorst).toBeUndefined()
+    expect(s.lockfileDeclaredNoRuntimeDeps).toBeUndefined()
+  })
+
+  it('DF-1 r4: an unfetchable SOURCE file is still fatal — the fix must not weaken C5', async () => {
+    const s = await assemble(
+      { ref: 'foo-mcp', repo: { owner: 'acme', name: 'foo' } },
+      flakyHttp('src/index.ts'), NOW,
+    )
+    expect(s.toolSurfaceRisk).toBeUndefined()
+    expect(score('acme/foo', s, NOW.toISOString()).insufficientData).toBe(true)
+  })
+})
+
+// DF-1 round 4, census defect 3 — the prose half. The two tests above pin what
+// the code ACTUALLY does with an unsupported lockfile on a bare `owner/repo`
+// reference: nothing, silently and correctly. The shipped documentation claimed
+// the opposite — that such repositories "still fall back to declared floors" and
+// "now say so on the card" — and a reader acting on that sentence would look for
+// a caveat that provably cannot render on 400 of 400 indexed entries. Absence of
+// a dependency check is not a floor-based check, and the difference matters to
+// anyone deciding whether trovark has vetted a server's dependencies. These
+// assertions make the corrected sentences load-bearing so they cannot drift back.
+describe('DF-1 r4: the docs say where the declared-floor caveat actually applies', () => {
+  const read = async (p: string) => (await import('node:fs')).readFileSync(p, 'utf8')
+
+  it('docs/methodology.md does not claim an unsupported lockfile falls back to floors, and states the real outcome', async () => {
+    const src = await read('docs/methodology.md')
+    expect(/(?:pnpm|yarn|bun)[^.]*fall back to declared floors/i.test(src)).toBe(false)
+    expect(/no dependency check at all/i.test(src)).toBe(true)
+  })
+
+  it('CHANGELOG.md scopes the declared-floor caveat to a registry identity', async () => {
+    const src = await read('CHANGELOG.md')
+    expect(/When no supported lockfile was read, the card now says/i.test(src)).toBe(false)
+    expect(/no dependency check at all/i.test(src)).toBe(true)
   })
 })
 

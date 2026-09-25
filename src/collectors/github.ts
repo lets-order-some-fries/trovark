@@ -36,6 +36,29 @@ export interface RepoSnapshot {
   busFactor?: number
   medianIssueResponseDays?: number
   treePaths?: string[]
+  // DF-4 (artifact identity): WHICH revision produced everything above.
+  // `headCommitSha` is the default branch's tip; `treeRefSha` is the sha
+  // GitHub resolved our `git/trees/<default_branch>` request to. Both come out
+  // of responses this collector already fetches; neither adds a request.
+  //
+  // `treeRefSha` is named for what it is and nothing more. Measured against
+  // modelcontextprotocol/servers on 2026-09-22, `git/trees/main?recursive=1`
+  // answered with sha d73f99ef… — the same sha `/commits/main` reports, NOT
+  // the underlying tree object (6bb03dec…). GitHub resolves a ref-name tree
+  // request and echoes what it resolved. Since the KIND of that sha is not
+  // contractual, it is carried as an opaque revision identifier and never
+  // presented as a commit.
+  //
+  // Both are optional and both must STAY optional. `treeRefSha` is undefined
+  // whenever the tree fetch failed (mirroring treePaths), and `headCommitSha`
+  // is undefined whenever the commit listing came back empty — it is fetched
+  // with since=<365 days>, so a repo dormant for over a year legitimately
+  // yields []. That asymmetry is exactly why treeRefSha is captured too: it is
+  // the fallback identity for precisely those abandoned servers. Absence is
+  // rendered as absence; `graded at main@undefined` would be worse than
+  // saying nothing at all.
+  treeRefSha?: string
+  headCommitSha?: string
   // Cleanup (dedup full-tree scan): the count of isToolFanoutPath matches
   // across the FULL tree (treePaths), computed once here in collectGithub —
   // the same value selectRepoFiles already needs for its FILE_CAP decision.
@@ -67,6 +90,18 @@ export interface RepoSnapshot {
   // existing partial-read honesty rule (no clean risk verdict, no counts,
   // no dynamic).
   fetchFailures: string[]
+  // DF-1 round 4 (2026-09-22): lockfile fetch failures, kept OUT of
+  // fetchFailures above. A lockfile is a pure EXTRA fetch — its own bucket,
+  // its own widening of finalCap, no ranked source displaced — and it feeds
+  // exactly one consumer, the dependency-CVE check. So losing it cannot make
+  // the TOOL SURFACE partial, and must not. Folded into fetchFailures it did:
+  // surfacePartial erased a 'none' tool-surface verdict, securityPrimaryAbsent
+  // tripped, and the whole scorecard was voided. TheLunarCompany/lunar
+  // (published A+ / 96) went to `exit 2, insufficient data` on one of three
+  // attempts for exactly this, over a lockfile in a nested e2e-tests
+  // directory. The right degradation is "no lockfile was read", with the
+  // caveat said out loud — which is what assemble.ts does with this list.
+  lockfileFetchFailures: string[]
 }
 
 // v1.3 (V1 — monorepo sampling overhaul, coverage-spec §3.3 + §4): FILE_CAP is
@@ -111,10 +146,22 @@ const WELL_KNOWN_MANIFEST_PATH_RE = /(^|\/)\.well-known\/(mcp|server)\.json$/
 // lockfiles in the SAME first-priority tier as source-critical manifests, so
 // under FILE_CAP=12 a repo with a big lockfile plus many source files could
 // have the lockfile crowd out source needed for the gate (tool extraction).
-// Lockfiles now rank in their own LAST bucket — fetched only if budget
-// remains after PRIMARY manifests and SOURCE files. SIZE_CAP below still
-// skips oversized blobs either way.
+// That fix moved lockfiles into a LAST bucket inside the SHARED budget —
+// which made src/derive/lockfile.ts dead code for any ordinary repo. DF-1
+// (2026-09-22): a repo with >= FILE_CAP source files never had its lockfile
+// fetched at all, so OSV was queried at the manifest floor and the card
+// accused packages of GHSAs that do not apply to the resolved version
+// (loreweave: @modelcontextprotocol/sdk pinned to 1.30.0 by a 144KB
+// lockfileVersion-3 package-lock.json, three findings reported against the
+// ^1.12.0 floor; OSV at 1.30.0 returns nothing). Lockfiles now get a
+// DEDICATED slot outside the shared budget, exactly as the README does (C4):
+// LOCKFILE_FETCH_CAP widens the final cap by the number of lockfile
+// candidates, so a lockfile is a genuine EXTRA fetch and can never displace
+// a source file. SIZE_CAP still skips oversized blobs either way (a lockfile
+// over 300KB is not read, and assemble()/score.ts then say the versions are
+// declared floors rather than pretending they were resolved).
 const LOCKFILES = new Set(['package-lock.json', 'uv.lock', 'poetry.lock'])
+const LOCKFILE_FETCH_CAP = 2 // root first; a second one covers a nested npm+python or workspace-member lockfile
 // V5 (coverage-spec §3.5): a small spec-fetch allowance for generated JSON
 // tool catalogs — notion's openapi.json / a generic swagger.json / sentry's
 // toolDefinitions.json — parsed by src/derive/openapi.ts. Basename match,
@@ -336,7 +383,7 @@ function manifestPriority(path: string): [number, number] {
   return [path.split('/').length, path.length]
 }
 
-interface GhCommit { commit: { author?: { date?: string } }; author?: { login?: string } | null }
+interface GhCommit { sha?: string; commit: { author?: { date?: string } }; author?: { login?: string } | null }
 
 const COMMIT_PAGE_CAP = 10 // safety net against runaway pagination on huge repos
 
@@ -455,6 +502,14 @@ export function selectRepoFiles(
     .filter(b => fetchable(b) && isRootReadme(b.path))
     .sort(byPriority)
     .slice(0, README_FETCH_CAP)
+  // DF-1: dedicated lockfile bucket (see LOCKFILE_FETCH_CAP). Shallowest
+  // first so the root lockfile always wins the first slot. Like the README,
+  // it is EXCLUDED from availableSourceSlots below and ADDED to finalCap, so
+  // it costs nothing from the shared FILE_CAP budget.
+  const lockfileCandidates = blobs
+    .filter(b => fetchable(b) && isLockfile(b.path))
+    .sort(byPriority)
+    .slice(0, LOCKFILE_FETCH_CAP)
   // Regression fix: guaranteed entrypoint bucket, computed BEFORE rankedSource
   // (and excluded from it below) so the two buckets never double-count the
   // same path against the budget. Prioritized root/shallow-first then
@@ -527,21 +582,27 @@ export function selectRepoFiles(
   }
 
   // Fix (final review): priority buckets, in order — (1) PRIMARY manifests +
-  // .env matches, (2) up to SPEC_FETCH_CAP spec files (V5, §3.5), (3) up to
-  // ENTRYPOINT_FETCH_CAP guaranteed entrypoint files (regression fix, see
-  // ENTRYPOINT_FETCH_CAP above), (4) ranked SOURCE files, (5) LOCKFILES last
-  // — so lockfiles (CVE-lookup data only) never outrank source (needed for
-  // tool extraction → gate) under a tight FILE_CAP, and the spec/entrypoint
-  // buckets sit right after primary manifests per the spec's selection order
-  // (§3.3b).
+  // .env matches, (2) up to SPEC_FETCH_CAP spec files (V5, §3.5), (3) the
+  // README and lockfile buckets, each in its OWN slot outside the shared
+  // budget (C4 / DF-1), (4) up to ENTRYPOINT_FETCH_CAP guaranteed entrypoint
+  // files (regression fix, see ENTRYPOINT_FETCH_CAP above), (5) ranked
+  // SOURCE files. The spec/entrypoint buckets sit right after primary
+  // manifests per the spec's selection order (§3.3b).
+  //
+  // DF-1: the lockfile bucket used to be LAST here, inside the shared cap —
+  // the intent was "never outrank source", but the selection loop below
+  // breaks at finalCap, so once rankedSource alone filled the budget the
+  // lockfile was never even reached. A dedicated slot achieves the original
+  // intent (source is never displaced) AND actually fetches the file; it
+  // has to sit BEFORE rankedSource so the loop reaches it.
   const wanted = [
     ...envBlobs,
     ...manifestsSelected,
     ...specCandidates,
     ...readmeCandidates,
+    ...lockfileCandidates,
     ...entrypointCandidates,
     ...rankedSource,
-    ...blobs.filter(b => fetchable(b) && isLockfile(b.path)),
   ]
   const selected: string[] = []
   const seen = new Set<string>()
@@ -551,7 +612,9 @@ export function selectRepoFiles(
   // rather than displacing a ranked-source (or any other) candidate that
   // would otherwise fit under FILE_CAP. One extra fetched file per repo is
   // an acceptable cost; silently dropping a tool-bearing source file is not.
-  const finalCap = FILE_CAP + readmeCandidates.length
+  // DF-1: the lockfile bucket (0-2 files, see LOCKFILE_FETCH_CAP) widens it
+  // the same way, for the same reason.
+  const finalCap = FILE_CAP + readmeCandidates.length + lockfileCandidates.length
   for (const b of wanted) {
     if (selected.length >= finalCap) break
     if (seen.has(b.path)) continue
@@ -653,7 +716,7 @@ export async function collectGithub(
     }
   }
 
-  interface GhTree { tree: Array<{ path: string; type: string; size?: number }> }
+  interface GhTree { sha?: string; tree: Array<{ path: string; type: string; size?: number }> }
   const tree = await http
     .json<GhTree>(`${api}/git/trees/${meta.default_branch}?recursive=1`)
     .catch((err: unknown) => { rethrowIfCallerSide(err); return undefined })
@@ -701,6 +764,7 @@ export async function collectGithub(
   // only ever receives `files` provably cannot see it.
   let readme: RepoFile | undefined
   const fetchFailures: string[] = []
+  const lockfileFetchFailures: string[] = []
   for (const path of selectedPaths) {
     try {
       const content = path === 'package.json' && rootPkgContent !== undefined
@@ -714,7 +778,10 @@ export async function collectGithub(
       // C5: a file the tree told us exists could not be read. The sample is
       // now incomplete — record WHICH path so the caller can say so, instead
       // of silently grading a smaller repo than the one that exists.
-      fetchFailures.push(path)
+      // DF-1 round 4: unless it is a lockfile, which contributes nothing to
+      // the sampled surface — see lockfileFetchFailures on RepoSnapshot.
+      if (LOCKFILES.has(path.split('/').pop() ?? '')) lockfileFetchFailures.push(path)
+      else fetchFailures.push(path)
     }
   }
 
@@ -724,6 +791,10 @@ export async function collectGithub(
     description: meta.description ?? undefined, topics: meta.topics ?? [],
     pushedAt: meta.pushed_at,
     latestReleaseAt, commitsLast90Days, busFactor, medianIssueResponseDays,
-    treePaths, toolFanoutCount, files, readme, fetchFailures,
+    treePaths, toolFanoutCount, files, readme, fetchFailures, lockfileFetchFailures,
+    // DF-4: the /commits endpoint defaults to the default branch, so page 1
+    // entry 0 is that branch's HEAD — the same listing busFactor and
+    // commitsLast90Days are already derived from.
+    treeRefSha: tree?.sha, headCommitSha: commits?.[0]?.sha,
   }
 }
