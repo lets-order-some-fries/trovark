@@ -859,3 +859,28 @@ describe('a package ref scored at repository granularity says so', () => {
     expect(flagged.grade).toBe(plain.grade)
   })
 })
+
+// DF-1: when no supported lockfile was read, every dependency version OSV saw
+// was the manifest's declared floor. The card must say so — a reader who can
+// check the evidence would otherwise find GHSAs that do not apply to the
+// version actually installed.
+describe('DF-1: declared-floor caveat', () => {
+  it('emits a declared-floor note when depsResolvedFromLockfile is false', () => {
+    const s = healthy(); s.depsResolvedFromLockfile = false
+    const card = score('x', s, '2026-07-31T00:00:00Z')
+    const note = card.notes.find(n => /declared floor/i.test(n))
+    expect(note).toBeDefined()
+    expect(note).toMatch(/lockfile/i)
+  })
+  it('emits no such note when versions came from a lockfile, or when OSV was never queried', () => {
+    const a = healthy(); a.depsResolvedFromLockfile = true
+    expect(score('x', a, '2026-07-31T00:00:00Z').notes.some(n => /declared floor/i.test(n))).toBe(false)
+    const b = healthy(); b.depsResolvedFromLockfile = undefined
+    expect(score('x', b, '2026-07-31T00:00:00Z').notes.some(n => /declared floor/i.test(n))).toBe(false)
+  })
+  it('the caveat moves no score — it is scope, not a finding', () => {
+    const a = healthy(); a.depsResolvedFromLockfile = false
+    const b = healthy(); b.depsResolvedFromLockfile = true
+    expect(score('x', a, '2026-07-31T00:00:00Z').overall).toBe(score('x', b, '2026-07-31T00:00:00Z').overall)
+  })
+})

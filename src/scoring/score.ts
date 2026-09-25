@@ -280,6 +280,29 @@ export function score(
         + 'The repository has moved on since that release; findings below may not describe the package you would install.')
     }
   }
+  // DF-1 (2026-09-22). When no supported lockfile was read, every version
+  // OSV was asked about is the manifest's DECLARED FLOOR (^1.0.0 → 1.0.0),
+  // not what an install resolves to. A floor over-reports: it cites GHSAs
+  // already patched within the range. Same register as the two scope notes
+  // above — this says what the dependency-cve findings are about and moves
+  // no score. Silent when the versions were resolved (true) or OSV was never
+  // queried (undefined).
+  if (signals.depsResolvedFromLockfile === false) {
+    notes.push('Dependency versions are declared floors: no supported lockfile (package-lock.json, uv.lock, poetry.lock) '
+      + 'was read, so the CVE check ran at the lowest version each declared range allows. '
+      + 'An installed version may already be patched; verify dependency-cve findings against your own lockfile.')
+  }
+  // DF-1 round 4 (2026-09-22). The other end of the same fact: the lockfile
+  // was read and it resolves to NO runtime dependencies. Without saying so,
+  // "0 dependency findings" here looks identical to "0 dependency findings"
+  // on a server with forty clean dependencies, and identical again to a check
+  // that never ran. Publish which one it is. Moves no score — the score
+  // already moved, by the dependency-cves signal being AVAILABLE and clean.
+  if (signals.lockfileDeclaredNoRuntimeDeps === true) {
+    notes.push('The committed lockfile resolves no runtime dependencies at all — every entry in it is dev-only, '
+      + 'or it has none. The dependency-CVE check therefore ran and came back clean against an empty '
+      + 'runtime dependency set: a measurement, not a skipped check.')
+  }
   for (const e of signals.errors) notes.push(`Collector issue: ${e}`)
   // W6 (coverage-v1.5, Task W6 Part B): 'dynamic' reuses the notServer
   // plumbing (overall/grade null, same as every other notServer reason —

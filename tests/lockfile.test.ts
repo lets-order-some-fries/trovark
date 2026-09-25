@@ -101,3 +101,28 @@ describe('parseLockfile', () => {
     expect(deps).toHaveLength(1)
   })
 })
+
+// DF-1 follow-through, measured live on lets-order-some-fries/loreweave the
+// moment the lockfile was actually fetched: 302 installed entries, 161 of
+// them `dev: true`. Querying all of them turned three false accusations
+// (sdk@1.12.0 floor) into five equally unfalsifiable ones — vitest,
+// @vitest/mocker, esbuild, nanoid are dev-only and never reach anyone who
+// installs the package. The manifest path (depsFromManifest on the registry's
+// `dependencies`) already scopes to runtime deps; the lockfile path must too.
+describe('DF-1: package-lock dev-only entries', () => {
+  const lock = JSON.stringify({
+    lockfileVersion: 3,
+    packages: {
+      '': { name: 'foo', version: '1.0.0' },
+      'node_modules/hono': { version: '4.13.0' }, // runtime transitive — kept
+      'node_modules/vitest': { version: '3.2.7', dev: true }, // dev-only — skipped
+      'node_modules/vitest/node_modules/esbuild': { version: '0.27.7', dev: true }, // nested dev-only — skipped
+      'node_modules/fsevents': { version: '2.3.3', optional: true }, // optional runtime — kept
+      'node_modules/zod': { version: '3.24.0', peer: true }, // peer — kept
+    },
+  })
+  it('skips `dev: true` entries and keeps runtime, optional and peer ones', () => {
+    const names = parseLockfile([{ path: 'package-lock.json', content: lock }]).map(d => d.name).sort()
+    expect(names).toEqual(['fsevents', 'hono', 'zod'])
+  })
+})

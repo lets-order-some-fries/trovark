@@ -92,6 +92,26 @@ export interface Signals {
   toolSurfaceRisk?: 'none' | 'low' | 'medium' | 'high'
   secretsFound?: number
   cveWorst?: 'none' | 'low' | 'medium' | 'high' | 'critical'
+  // DF-1 (2026-09-22): what version OSV was asked about. true — every
+  // dependency queried came from a committed lockfile (exact resolved
+  // versions, transitive included). false — at least one queried dependency
+  // was a manifest's DECLARED FLOOR (^1.0.0 → 1.0.0), because no supported
+  // lockfile was read for that ecosystem; a floor over-reports CVEs already
+  // patched within the range, so score.ts puts a caveat on the card.
+  // undefined — OSV was never queried (no dependencies known at all); absence
+  // is not a value, same discipline as every other field here.
+  depsResolvedFromLockfile?: boolean
+  // DF-1 round 4 (2026-09-22): true — a committed lockfile WAS read and
+  // understood, and it resolves to zero runtime dependencies (every entry
+  // dev-only, or none at all). That is a clean dependency-CVE measurement,
+  // not a skipped one: a package that installs nothing cannot carry a
+  // dependency CVE. Without this field an emptied lockfile was
+  // indistinguishable from an absent one and the whole check vanished from
+  // the card (measured: seleniumboot/selenium-mcp C+/67 -> C/62, security
+  // 60 -> 40, zero findings either way). Stays undefined whenever any
+  // dependency was actually queried, or no lockfile was read. An artifact
+  // for the card's wording only — rubric.ts never reads it.
+  lockfileDeclaredNoRuntimeDeps?: boolean
   // D2 (integrity-phase2, docs/superpowers/plans/2026-08-04-integrity-v1.md
   // "Phase 2"): count of DECODE-CONFIRMED 'hidden-payload' hits only — never
   // 'invisible-chars-observed' or 'bidi-override-observed' observations,
