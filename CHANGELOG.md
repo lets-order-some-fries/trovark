@@ -5,6 +5,8 @@ from git history. Format loosely follows [Keep a Changelog](https://keepachangel
 
 ## [Unreleased]
 
+## [0.1.10] - 2026-09-25
+
 - A committed `package-lock.json` / `uv.lock` / `poetry.lock` is now actually read.
   It ranked last inside the shared file budget, so any repository with a dozen or
   more source files never had its lockfile fetched and the CVE check ran at the
@@ -37,6 +39,24 @@ from git history. Format loosely follows [Keep a Changelog](https://keepachangel
   scorecard. It degrades to "no lockfile was read" and is named on the card;
   previously it forced a partial tool surface and withheld the grade, which took
   `TheLunarCompany/lunar` (A+/96) to `insufficient data` on one attempt in three.
+- Tool-surface partiality is now measured against the directories extraction actually
+  read tools from, not a hardcoded `tools/` convention. The old guard only recognised a
+  `tools/` directory or a `*.tools.ts` basename, so a repository that keeps one tool per
+  file anywhere else had a fan-out count of 0 and the `0 > 0` comparison never fired — a
+  4-of-125 read published as a complete surface (`github/github-mcp-server`: 56 non-test
+  `pkg/github/*.go` files, a handful read, graded as if the whole surface had been seen).
+  Two guards keep it honest: an unread `__init__.py` or barrel `index.ts` is not evidence
+  of an under-read (the false positive that otherwise *raised* a grade B79 → A-86 by
+  withholding a below-average cost score), and the pre-existing `tools/` fan-out guard
+  still fires where it did. (#22)
+- A tool named like `invalidate_fact` now reads as "appears to write data": mutation verbs
+  that are unambiguous in a tool NAME but have benign noun readings in prose are consulted
+  on the name channel only, so a write surface is no longer undercounted when its intent
+  lives in the name rather than the description.
+- The HTTP request deadline now covers the response body, not just the headers. A stalled
+  body could run to the full 300s because the deadline stopped once headers arrived.
+- A scorecard now records which revision it graded, and an `npm:`/registry ref no longer
+  silently grades the default branch when a specific version was asked for.
 
 ## [0.1.9] - 2026-09-10
 
