@@ -3,6 +3,11 @@
 All notable changes to this project are documented in this file, reconstructed
 from git history. Format loosely follows [Keep a Changelog](https://keepachangelog.com/).
 
+Versions 0.1.0 and 0.1.6 onward are the npm releases, dated by their npm publish
+date. Versions 0.1.1 to 0.1.5 were package.json bumps only and were never published
+to npm. The `v0.1.7` and `v0.1.8` git tags point at later commits than the npm
+builds of those versions (`dfadf18` and `09b3d2b`).
+
 ## [Unreleased]
 
 ## [0.1.10] - 2026-09-25
@@ -78,40 +83,43 @@ over what a scanned repository can make it print.
   as lockfiles. Four indexed repositories gain the signal on the next rescan.
 - A package ref that resolves into a monorepo says so on the card; `--help` exits 0.
 
-## [0.1.8] - 2026-08-15
+## [0.1.8] - 2026-09-06
 
-Rubric 1.7.0, the tool-surface observatory, and the fixes an adversarial fault
-hunt found in everything above.
+Rubric 1.6.0 and 1.7.0, the tool-surface observatory, and the fixes an adversarial
+fault hunt found in everything above.
 
 - **The observatory (D2):** every scan records a hash-based snapshot of each server's tool surface; the git history of `index/surfaces/` is the dataset. Drift between scans is published as a neutral feed — counts and dates, never a characterization of intent. Baseline: 268 surfaces. First measured drift: 2 of 250 re-snapshotted servers in ~21h.
 - **Rubric 1.7.0 — cost scores tool-surface size.** `token-footprint` is computable for ~5% of servers, and through the 3-of-4 coverage gate it was silently keeping 22% of the corpus from being graded at all. It is now published as a fact (`cost/token-footprint`) and informs confidence, but does not score. Cost confidence reflects the quality of the count: high when every schema was readable, medium when counted from code, low when read from a README.
 - **Stopped publishing "not an MCP server" about real MCP servers** — including Microsoft's `Azure/azure-mcp`. An absence claim now requires a non-empty sample, no self-identification as a server, and a language the detector can read (9 of 20 such verdicts were false).
 - **A headline grade requires 3 of 4 measured dimensions.** 42 servers had been publishing letters computed from half the rubric.
-- **Withheld grades are withheld in the DATA**, not just the display: 29 of 29 insufficient-data servers had been publishing letter grades, several "A".
-- **Dimensions with no measurement report `null`**, never a fabricated 100 or 0; a partial tool surface can no longer publish a clean risk verdict.
 - **Scanner honesty:** a scan now either writes an index or says why it did not — completeness gate, outage gate that counts gracefully-degraded entries, a deadline that actually fires, and failed blob fetches recorded rather than swallowed.
 - `--fail-under` no longer exits 0 on an ungraded card; `--version` no longer reports 0.1.0.
 
-## [0.1.7] - 2026-08-07
-
-Rubric 1.6.0: a number is measured or it is withheld.
+Rubric 1.6.0 (in the `v0.1.7` git tag, but first published to npm in this release):
+a number is measured or it is withheld.
 
 - Token footprint is now measured from real tool schemas or withheld entirely, rather than scored from an estimate (`dfc1d19`).
 - Classifying a repo as "not an MCP server" requires evidence the scanner actually looked, not mere absence of a signal (`1d92dac`).
 - Covered the CLI's `--fail-under` exit-code contract with tests, including that no threshold can turn INSUFFICIENT DATA into a pass (`a46c7f8`, #12).
 - Re-scanned all 400 servers under rubric 1.6.0 and published the index (`982a42b`).
 
-## [0.1.6] - 2026-08-06
+## [0.1.7] - 2026-08-07
 
-Hidden-payload override (rubric 1.5.0) + the W6 coverage wave: six published falsehoods removed.
+The W6 coverage wave: six published falsehoods removed (rubric 1.5.0).
 
-- Integrity phase 2: a decode-confirmed hidden-payload finding now disqualifies the grade outright, instead of the planned weight-3 signal — a check that fires for 0% or 100% of a corpus carries no information (`5f4deaf`).
 - A partial tool surface may no longer publish a clean risk verdict (`e0c807e`).
-- Withheld grades are withheld in the data itself, not just the display (`95c0e16`).
+- A dimension with no measurement reports `null`, never a fabricated 100 or 0 (`51e11fe`).
+- Withheld grades are withheld in the data itself, not just the display; 29 of 29 insufficient-data servers had been publishing letter grades, several "A" (`95c0e16`).
 - Secrets scanning skips all documentation extensions, not only `.md` (`b390dce`).
 - Shell-import risk floor scoped to README-sourced tool lists (`3814b38`).
 - README catalogs and dynamic tool surfaces recognised by extraction; corpus re-scanned (`a86adaf`, `677b40c`).
 - Added a README section on reading a scorecard (`eafc3df`, #11).
+
+## [0.1.6] - 2026-08-04
+
+Hidden-payload override (rubric 1.5.0).
+
+- Integrity phase 2: a decode-confirmed hidden-payload finding now disqualifies the grade outright, instead of the planned weight-3 signal — a check that fires for 0% or 100% of a corpus carries no information (`5f4deaf`).
 
 ## [0.1.5] - 2026-08-04
 
@@ -164,15 +172,15 @@ Precision overhaul from a 23-defect empirical audit (rubric v1.2.0, `feat/precis
 
 Phase 2 Trust Index + secret-detection precision fix (`feat/trust-index`).
 
-- Rebranded the project from `mcpscore` to Trovark (`56db3f4`).
 - Added the Trust Index pipeline: server discovery (`dbecec4`), concurrency-limited batch scanner (`ab95b97`), and a self-contained static site generator (`bb0563f`).
 - Published the first live Trust Index: 400 servers scored under rubric v1.1.0 (`7e60780`).
 - Demoted committed-secret findings to low-confidence candidates and hardened the secret detector to reject env-var references, identifiers, placeholders, and comments (`ea5bcb7`, `d13cf6f`).
 
 ## [0.1.0] - 2026-08-01
 
-First published release: `mcpscore` CLI for MCP server trust scoring (`feat/v1`).
+First npm release, published as `trovark` (developed as the `mcpscore` CLI on `feat/v1`).
 
+- Renamed from `mcpscore` to Trovark before the first npm publish (`56db3f4`).
 - Rubric v1.0.0 and a pure `score()`/`grade()` function with a confidence model (`3517617`, `81364cc`).
 - Ref resolver for GitHub URLs, owner/repo shorthand, npm, and PyPI packages (`6677ac0`, `67664c4`).
 - Collectors for GitHub metadata, npm downloads/deprecation, PyPI deps, and OSV CVE lookups (`f040d20`, `ae2d377`).
@@ -181,9 +189,14 @@ First published release: `mcpscore` CLI for MCP server trust scoring (`feat/v1`)
 - Terminal report renderer (ANSI, bars, findings) and stable JSON output (`491dbe3`).
 - `mcpscore` CLI command with exit codes and `--fail-under` gate; initial README and methodology docs (`ad68a3b`).
 
+[0.1.10]: https://github.com/lets-order-some-fries/trovark/compare/0550768...7e771af
+[0.1.9]: https://github.com/lets-order-some-fries/trovark/compare/09b3d2b...0550768
+[0.1.8]: https://github.com/lets-order-some-fries/trovark/compare/dfadf18...09b3d2b
+[0.1.7]: https://github.com/lets-order-some-fries/trovark/compare/8ed94f7...dfadf18
+[0.1.6]: https://github.com/lets-order-some-fries/trovark/compare/8956f57...8ed94f7
 [0.1.5]: https://github.com/lets-order-some-fries/trovark/compare/1aad802...8956f57
 [0.1.4]: https://github.com/lets-order-some-fries/trovark/compare/a5f0a06...640b982
 [0.1.3]: https://github.com/lets-order-some-fries/trovark/compare/3f37d2b...a099acc
 [0.1.2]: https://github.com/lets-order-some-fries/trovark/compare/5c4bde8...3f37d2b
-[0.1.1]: https://github.com/lets-order-some-fries/trovark/compare/6506373...7cbbc4d
-[0.1.0]: https://github.com/lets-order-some-fries/trovark/commits/6506373
+[0.1.1]: https://github.com/lets-order-some-fries/trovark/compare/56db3f4...7cbbc4d
+[0.1.0]: https://github.com/lets-order-some-fries/trovark/commits/56db3f4

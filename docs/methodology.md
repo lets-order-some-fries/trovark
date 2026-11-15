@@ -11,7 +11,8 @@ D ≥ 40, F < 40 (+/- at the top/bottom 5 points of each band).
    CVE URL) a skeptic can check.
 3. **Absence ≠ zero.** A signal we can't collect lowers confidence; it does not
    lower the score. Each dimension reports high/medium/low confidence
-   (≥75% / ≥40% / <40% of its signals available).
+   (≥75% / ≥40% / <40% of its signal weight measured; for cost, confidence
+   reflects how the tool count was obtained).
 4. **Coverage gate — no confident grade without the security tool surface.**
    If a server's tools can't be statically determined (so tool-surface risk is
    unknown), or two or more whole dimensions can't be collected, we withhold the
@@ -181,7 +182,7 @@ dimension denominators elsewhere in the rubric are untouched.
 never affect scoring**, at any weight, in any dimension — they are reported
 for transparency only, exactly as in v1's findings-only integration.
 
-## Known limitations (v1.3)
+## Known limitations
 
 - Tool-schema extraction is best-effort static parsing across languages/idioms;
   it does not cover every framework, and a miss triggers the coverage gate
