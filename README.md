@@ -10,10 +10,10 @@ server's code. Every finding links to its evidence.
     npx trovark github/github-mcp-server
 
 [The index](https://lets-order-some-fries.github.io/trovark/) applies it to 400
-public MCP servers. Its latest scan, from 2026-08-15 (trovark 0.1.8, rubric
-1.7.0), graded 310 of them; 55 were withheld for insufficient data, 16 were
-classified as libraries rather than servers, 1 has a dynamic tool surface, and
-18 repositories were unavailable.
+public repositories listed as MCP servers. Its latest scan, from 2026-08-15
+(trovark 0.1.8, rubric 1.7.0), graded 310 of them; 55 were withheld for
+insufficient data, 16 were classified as libraries rather than servers, 1 has a
+dynamic tool surface, and 18 repositories were unavailable.
 
 ## Usage
 
@@ -78,8 +78,9 @@ Full methodology: [docs/methodology.md](docs/methodology.md). Rubric is versione
 
 Each index scan also stores a hash-based snapshot of every tool surface it could
 read (268 servers in the 2026-08-15 scan, under `index/surfaces/`) and lists
-changes between scans as a drift feed. Snapshots store hashes, not content;
-drift events carry no findings and do not affect scores. Details and limits:
+changes between scans as a drift feed. Snapshots store tool names and hashes,
+not descriptions or schemas; drift events carry no findings and do not affect
+scores. Details and limits:
 [Tool-surface observatory](docs/methodology.md#tool-surface-observatory-d2).
 
 ## Reading a scorecard

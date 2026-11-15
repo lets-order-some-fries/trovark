@@ -90,7 +90,7 @@ fault hunt found in everything above.
 
 - **The observatory (D2):** every scan records a hash-based snapshot of each server's tool surface; the git history of `index/surfaces/` is the dataset. Drift between scans is published as a neutral feed — counts and dates, never a characterization of intent. Baseline: 268 surfaces. First measured drift: 2 of 250 re-snapshotted servers in ~21h.
 - **Rubric 1.7.0 — cost scores tool-surface size.** `token-footprint` is computable for ~5% of servers, and through the 3-of-4 coverage gate it was silently keeping 22% of the corpus from being graded at all. It is now published as a fact (`cost/token-footprint`) and informs confidence, but does not score. Cost confidence reflects the quality of the count: high when every schema was readable, medium when counted from code, low when read from a README.
-- **Stopped publishing "not an MCP server" about real MCP servers** — including Microsoft's `Azure/azure-mcp`. An absence claim now requires a non-empty sample, no self-identification as a server, and a language the detector can read (9 of 20 such verdicts were false).
+- **Stopped publishing "not an MCP server" about real MCP servers** — including Microsoft's `Azure/azure-mcp`. An absence claim now requires a non-empty sample, no self-identification as a server, and a language the detector can read (9 of 20 such verdicts were false; `1d92dac`).
 - **A headline grade requires 3 of 4 measured dimensions.** 42 servers had been publishing letters computed from half the rubric.
 - **Scanner honesty:** a scan now either writes an index or says why it did not — completeness gate, outage gate that counts gracefully-degraded entries, a deadline that actually fires, and failed blob fetches recorded rather than swallowed.
 - `--fail-under` no longer exits 0 on an ungraded card; `--version` no longer reports 0.1.0.
@@ -99,7 +99,6 @@ Rubric 1.6.0 (in the `v0.1.7` git tag, but first published to npm in this releas
 a number is measured or it is withheld.
 
 - Token footprint is now measured from real tool schemas or withheld entirely, rather than scored from an estimate (`dfc1d19`).
-- Classifying a repo as "not an MCP server" requires evidence the scanner actually looked, not mere absence of a signal (`1d92dac`).
 - Covered the CLI's `--fail-under` exit-code contract with tests, including that no threshold can turn INSUFFICIENT DATA into a pass (`a46c7f8`, #12).
 - Re-scanned all 400 servers under rubric 1.6.0 and published the index (`982a42b`).
 
