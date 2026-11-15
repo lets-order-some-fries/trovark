@@ -107,11 +107,11 @@ export function score(
     // reads as a clean bill of health for a server we just said we cannot
     // analyze (measured live: security 100/100 from 1 of 3 signals on a
     // gateway whose tool surface is explicitly unreadable). This is the v1.2
-    // bug reappearing at dimension level — see
-    // docs/superpowers/plans/2026-08-01-precision-v1.2.md ("when schema
+    // bug reappearing at dimension level — see the v1.2 precision plan
+    // ("when schema
     // extraction fails, security renormalizes onto the lone weight-1
-    // no-secrets candidate → security=100, confident A+") — and
-    // docs/superpowers/plans/2026-08-03-coverage-v1.4.md forbids exactly this
+    // no-secrets candidate → security=100, confident A+") — and the v1.4
+    // coverage plan forbids exactly this
     // for the dynamic path: "Do NOT renormalize security onto the remaining
     // signals — a gateway with unknown tools is the highest-risk shape in the
     // corpus, not a neutral one."
@@ -154,7 +154,7 @@ export function score(
     }
   })
 
-  // D2 (integrity-phase2, docs/superpowers/plans/2026-08-04-integrity-v1.md
+  // D2 (integrity-phase2, docs/integrity-preregistration.md
   // "Phase 2"): a decode-confirmed hidden payload in tool metadata is
   // implemented as a DISQUALIFYING OVERRIDE on the security dimension, not
   // as an additional weighted SIGNALS entry. Why: the 400-server audit

@@ -150,9 +150,10 @@ technique documented in the wild against the OpenVSX/npm ecosystem (GlassWorm,
 **decode-confirmed hidden payload** if it decodes entirely to printable ASCII
 (≥2 characters); anything else — a qualifying run that doesn't decode, or a
 bidi override — is reported as an **observation**, never a payload. See
-`docs/superpowers/plans/2026-08-04-integrity-v1.md` for the full threshold
-derivation and false-positive measurement (0.00% at run-length ≥ 4 across a
-2,133-file / 27.5M-character corpus).
+`docs/integrity-preregistration.md` (pre-registered in `4b35f66` and `d75864d`,
+before the corpus audit ran) for the full threshold derivation and
+false-positive measurement (0.00% at run-length ≥ 4 across a 2,133-file /
+27.5M-character corpus).
 
 A decode-confirmed hit forces the **security dimension score to 0** — a
 disqualifying override, not a weighted rubric signal. This is a deliberate

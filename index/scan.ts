@@ -174,7 +174,7 @@ export function toEntry(ref: string, card: Scorecard, daysSinceLastCommit?: numb
   }
 }
 
-// D2 (observatory, docs/superpowers/plans/2026-08-05-observatory-d2.md):
+// D2 (observatory, docs/methodology.md "Tool-surface observatory"):
 // pure-ish helper (all I/O confined to dir) so it is testable without a
 // network scan. Called once per run, after the pool completes AND after the
 // coverage/outage gates pass — a refused scan never writes snapshots either.

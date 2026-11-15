@@ -96,8 +96,8 @@ function row(e: IndexEntry): string {
     `<td>${e.overall}</td>${dim('health')}${dim('reliability')}${dim('security')}${dim('cost')}</tr>`
 }
 
-// D2 (observatory, docs/superpowers/plans/2026-08-05-observatory-d2.md
-// Task 6): the drift feed. An artifact, not a detector — facts only (counts,
+// D2 (observatory, docs/methodology.md "Tool-surface observatory"):
+// the drift feed. An artifact, not a detector — facts only (counts,
 // names, dates), never characterizations. The postmark-mcp scope note is
 // mandated verbatim wherever the feed is published and is the ONLY sanctioned
 // use of the word "malicious" on the page (tests/site.test.ts lints the rest

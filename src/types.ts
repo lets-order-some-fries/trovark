@@ -34,7 +34,7 @@ export interface ToolInfo {
   schemaText: string    // raw extracted source/manifest slice for this tool
 }
 
-// D1 (integrity-v1, docs/superpowers/plans/2026-08-04-integrity-v1.md): a
+// D1 (integrity-v1, docs/integrity-preregistration.md): a
 // decode-confirmed invisible-payload hit, or a lower-severity observation (a
 // qualifying run that didn't decode, or a bidi override — never called a
 // payload). Every field exists so a third party can independently re-derive
@@ -112,7 +112,7 @@ export interface Signals {
   // dependency was actually queried, or no lockfile was read. An artifact
   // for the card's wording only — rubric.ts never reads it.
   lockfileDeclaredNoRuntimeDeps?: boolean
-  // D2 (integrity-phase2, docs/superpowers/plans/2026-08-04-integrity-v1.md
+  // D2 (integrity-phase2, docs/integrity-preregistration.md
   // "Phase 2"): count of DECODE-CONFIRMED 'hidden-payload' hits only — never
   // 'invisible-chars-observed' or 'bidi-override-observed' observations,
   // which must never influence scoring. Absence != zero: this stays
@@ -147,7 +147,7 @@ export interface Signals {
   // A real scan, even a clean one, always sets integrityScanned too.
   integrityHits?: IntegrityHit[]
   integrityScanned?: { files: number; chars: number; tools: number }
-  // D2 (observatory, docs/superpowers/plans/2026-08-05-observatory-d2.md):
+  // D2 (observatory, docs/methodology.md "Tool-surface observatory"):
   // the extracted tool surface, threaded through for SNAPSHOTTING only —
   // an artifact, never a signal. No SIGNALS[].evaluate may read these
   // (asserted by tests/assemble.test.ts). Both undefined unless extraction
