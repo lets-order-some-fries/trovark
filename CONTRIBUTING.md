@@ -13,11 +13,16 @@ Node >= 20 required.
 
 ## Workflow
 
-All changes land through pull requests — including from the maintainer:
+Outside contributions land through pull requests:
 
 1. Branch from `main` (`feat/...`, `fix/...`, `chore/...`).
 2. Keep commits scoped; use conventional prefixes (`feat:`, `fix:`, `docs:`, `chore:`, `data:`).
-3. Open a PR against `main`; CI must be green (build + tests) before merge.
+3. Open a PR against `main`. CI runs the build and tests on every pull request and every push to `main`.
+
+## Repository layout
+
+- `index/` builds the public index: `discover.ts` writes `servers.json` from `seed.txt` and linked lists, `scan.ts` grades those servers into `results.json` and records tool-surface snapshots (`surfaces/`, `drift.json`), and `site.ts` renders `docs/index.html`. `audit.ts` (`npm run audit`) is the metadata-integrity measurement.
+- `smoke/` is a short list of servers for manual calibration runs (`npx tsx smoke/run.ts`, with `GITHUB_TOKEN` set).
 
 ## Reporting issues
 

@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest'
 import { scanIntegrity, assertNoVerdictLanguage } from '../src/derive/integrity.js'
 import type { ToolInfo } from '../src/types.js'
 
-// Pre-registered thresholds under test (docs/superpowers/plans/2026-08-04-integrity-v1.md):
+// Pre-registered thresholds under test (docs/integrity-preregistration.md):
 // MIN_VS_RUN = 4, MIN_DECODED = 2, printable = 0x09 | 0x0A | 0x20-0x7E.
 // These fixtures build codepoints from scratch (never copy-pasted invisible
 // text) so every payload is round-trip-verifiable by inspection of the

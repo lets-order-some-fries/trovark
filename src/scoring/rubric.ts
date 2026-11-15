@@ -100,7 +100,7 @@ export const SIGNALS: SignalDef[] = [
   // with the footprint and 100 without it — so failing to read the schema is
   // worth +33, and absence renders as a favourable measurement. That is the
   // single fault this codebase has fixed most often (see score.ts's Rule
-  // A/B/D comments and docs/superpowers/plans/2026-08-01-precision-v1.2.md).
+  // A/B/D comments).
   // score.ts's Rule C papered over it by withholding the dimension whenever
   // the footprint was missing, which is what produced the 96%.
   //

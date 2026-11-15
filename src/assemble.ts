@@ -279,8 +279,8 @@ export async function assemble(
             })
           }
         }
-        // D2 (observatory, docs/superpowers/plans/2026-08-05-observatory-d2.md
-        // Task 3): thread the resolved rung's tool surface through Signals for
+        // D2 (observatory, docs/methodology.md "Tool-surface observatory"):
+        // thread the resolved rung's tool surface through Signals for
         // SNAPSHOTTING only — an artifact, never a signal (rubric.ts provably
         // never reads these fields; tests/assemble.test.ts asserts it). Set
         // together iff extraction produced >=1 tool; both stay undefined
@@ -311,7 +311,7 @@ export async function assemble(
         // branch didn't run, integrityHits/hiddenPayloadDecoded stay
         // undefined and report/terminal.ts prints "not checked" rather than
         // a false "clean".
-        // D2 (integrity-phase2, docs/superpowers/plans/2026-08-04-integrity-v1.md
+        // D2 (integrity-phase2, docs/integrity-preregistration.md
         // "Phase 2"): hiddenPayloadDecoded counts ONLY decode-confirmed
         // 'hidden-payload' hits — never 'invisible-chars-observed' or
         // 'bidi-override-observed', which are observations, not evidence of

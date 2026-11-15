@@ -1,7 +1,7 @@
 // index/audit.ts — corpus-wide MEASUREMENT harness for the D1 metadata-
 // integrity detector (src/derive/integrity.ts). NO SCORING: this tool only
 // measures and records; ship gates (G1/G3/G5) are evaluated by a human from
-// its output. See docs/superpowers/plans/2026-08-04-integrity-v1.md and
+// its output. See docs/integrity-preregistration.md and
 // .superpowers/sdd/threat-spec.md §4 (measurement plan).
 //
 // Pipeline per ref (mirrors index/scan.ts's pool()/ref-loading, minus

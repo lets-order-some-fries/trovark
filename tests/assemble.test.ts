@@ -680,8 +680,8 @@ function riskForPartial(
 }
 
 // ---------------------------------------------------------------------------
-// D2 (observatory, docs/superpowers/plans/2026-08-05-observatory-d2.md
-// Task 3): the extracted tool surface is threaded through Signals for
+// D2 (observatory, docs/methodology.md "Tool-surface observatory"):
+// the extracted tool surface is threaded through Signals for
 // SNAPSHOTTING only — an artifact, never a signal. The second test is the
 // load-bearing one: rubric.ts must never mention the new fields.
 // ---------------------------------------------------------------------------

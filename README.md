@@ -1,14 +1,19 @@
 # trovark
 
-[![CI](https://github.com/lets-order-some-fries/trovark/actions/workflows/ci.yml/badge.svg)](https://github.com/lets-order-some-fries/trovark/actions/workflows/ci.yml) [![npm](https://img.shields.io/npm/v/trovark)](https://www.npmjs.com/package/trovark) [![license](https://img.shields.io/badge/license-Apache--2.0-blue)](LICENSE) ![node](https://img.shields.io/badge/node-%3E%3D20-brightgreen)
+[![CI](https://github.com/lets-order-some-fries/trovark/actions/workflows/ci.yml/badge.svg)](https://github.com/lets-order-some-fries/trovark/actions/workflows/ci.yml) [![npm](https://img.shields.io/npm/v/trovark)](https://www.npmjs.com/package/trovark)
 
-**Trust score for MCP servers.** One command answers: *should I adopt this server?*
+trovark gives an MCP server a 0–100 score and a letter grade (A–F), to help you
+decide whether to adopt it. It reads only static, public signals (maintenance
+health, reliability, security hygiene and tool-surface size) and never runs the
+server's code. Every finding links to its evidence.
 
     npx trovark github/github-mcp-server
 
-trovark grades any MCP server 0–100 (A–F) from **static, public signals only** —
-maintenance health, spec conformance, security hygiene, and tool-surface size.
-It never executes the server's code. Every finding links to its evidence.
+[The index](https://lets-order-some-fries.github.io/trovark/) applies it to 400
+public repositories listed as MCP servers. Its latest scan, from 2026-08-15
+(trovark 0.1.8, rubric 1.7.0), graded 310 of them; 55 were withheld for
+insufficient data, 16 were classified as libraries rather than servers, 1 has a
+dynamic tool surface, and 18 repositories were unavailable.
 
 ## Usage
 
@@ -18,20 +23,6 @@ It never executes the server's code. Every finding links to its evidence.
     GITHUB_TOKEN=... npx trovark <ref>   # higher rate limits + responsiveness signals
 
 A bare package name that exists on both npm and PyPI is rejected as ambiguous — disambiguate with the `npm:<name>` or `pypi:<name>` prefix (e.g. `npx trovark pypi:mcp-server-fetch`).
-
-### About `GITHUB_TOKEN`
-
-- **Scopes needed: none.** trovark only calls public read endpoints
-  (`GET /repos/...`, `/commits`, `/releases`, `/issues`, `/issues/{n}/comments`)
-  against `api.github.com`. A classic PAT with zero scopes checked, or a
-  fine-grained PAT with "Public Repositories (read-only)" access, is enough.
-- **Without a token:** everything except median issue time-to-first-response
-  is still collected, at GitHub's unauthenticated rate limit (60 requests/hour).
-- **With a token:** the same signals, plus median issue time-to-first-response
-  (Health dimension), at the authenticated rate limit (5,000 requests/hour).
-- **Security note:** the token is sent as a `Bearer` header on `api.github.com`
-  requests only, and only ever used for `GET` reads — trovark never writes to
-  GitHub.
 
 ## CI usage
 
@@ -85,14 +76,16 @@ Full methodology: [docs/methodology.md](docs/methodology.md). Rubric is versione
 
 ### The observatory
 
-The index also snapshots every scanned server's extracted tool surface on each
-scan and publishes changes as a neutral drift feed — the only public index that
-remembers what every server's tool surface looked like last month. Snapshots
-store hashes, not content; drift events carry zero findings and zero score
-impact. Details and honest scope limits:
+Each index scan also stores a hash-based snapshot of every tool surface it could
+read (268 servers in the 2026-08-15 scan, under `index/surfaces/`) and lists
+changes between scans as a drift feed. Snapshots store tool names and hashes,
+not descriptions or schemas; drift events carry no findings and do not affect
+scores. Details and limits:
 [Tool-surface observatory](docs/methodology.md#tool-surface-observatory-d2).
 
 ## Reading a scorecard
+
+An illustrative card (`acme/weather-mcp` is a made-up repository):
 
     npx trovark acme/weather-mcp
 
@@ -105,15 +98,15 @@ impact. Details and honest scope limits:
       security       85/100  █████████░  medium confidence
       cost          100/100  ██████████  high confidence
 
-    Metadata Integrity: 0 findings across 2 files / 239 characters / 1 tool descriptions.
+    Metadata Integrity: 0 findings across 2 files / 239 characters / 3 tool descriptions.
 
 - **`Trust Score: 74/100 (B-)`** — the overall 0–100 score and letter grade, the weighted sum
   of the four dimensions above. `rubric v1.7.0` is the rubric version that produced this
   scorecard; scorecards from different rubric versions aren't directly comparable.
 - **Dimension rows** (`health 75/100 ... high confidence`) — each dimension's own 0–100 score
-  plus a confidence level (`high` ≥75%, `medium` ≥40%, `low` <40% of that dimension's signals
-  were collectible). Low confidence means the score rests on fewer inputs, not that the server
-  scored badly.
+  plus a confidence level (`high` ≥75%, `medium` ≥40%, `low` <40% of that dimension's signal
+  weight was measured; for cost it reflects how the tool count was obtained). Low confidence
+  means the score rests on fewer inputs, not that the server scored badly.
 - **Findings** (printed only when a dimension surfaces one), e.g. for a server exposing a
   `run_bash_command` tool:
 
@@ -165,29 +158,52 @@ says so in `Notes`. When npm publishes no `gitHead`, no divergence is claimed ei
 `dimensions[].confidence`, `insufficientData`, `notServer`, `unresolved`) instead of prose — see
 [`src/types.ts`](src/types.ts) for the full `Scorecard` shape.
 
-Abridged, from a real run of `npx trovark github/github-mcp-server --json`:
+Abridged, from `npx trovark@0.1.10 github/github-mcp-server --json`, run on 2026-11-15
+without a token:
 
     {
       "ref": "github/github-mcp-server",
-      "resolved": { "repo": { "owner": "github", "name": "github-mcp-server" },
-                    "branch": "main", "commit": "3f9c1ab…", "treeRefSha": "3f9c1ab…" },
       "rubricVersion": "1.7.0",
       "checksVersion": "1.0.0",
-      "overall": 96,
-      "grade": "A+",
+      "overall": 93,
+      "grade": "A",
       "dimensions": [
-        { "id": "health",   "score": 100, "confidence": "high",   "available": 7, "total": 7, "findings": [] },
-        { "id": "security", "score": 85,  "confidence": "medium", "available": 2, "total": 3, "findings": [] }
-      ]
+        { "id": "health",      "score": 100,  "confidence": "high", "available": 6, "total": 7, "findings": [] },
+        { "id": "reliability", "score": 100,  "confidence": "high", "available": 5, "total": 5, "findings": [] },
+        { "id": "security",    "score": 77,   "confidence": "high", "available": 3, "total": 3, "findings": [ … ] },
+        { "id": "cost",        "score": null, "confidence": "low",  "available": 0, "total": 1, "findings": [] }
+      ],
+      "notes": [ "No cost signals could be collected; cost is excluded from the overall score." ],
+      …
+      "resolved": {
+        "repo": { "owner": "github", "name": "github-mcp-server" },
+        "branch": "main",
+        "commit": "0663b830582af923e30fb14cb2e10dd3248baa86",
+        "treeRefSha": "0663b830582af923e30fb14cb2e10dd3248baa86"
+      }
     }
 
-`available` and `total` are why each dimension reports its own confidence: a security score
-computed from two of three signals is a weaker claim than a health score computed from all
-seven, and the JSON says so rather than leaving the consumer to infer it.
+`available` and `total` show how much of each dimension was measured. Health is 6 of 7 here
+because the run had no `GITHUB_TOKEN`, so issue responsiveness was not collected. Cost is
+`null` rather than a guessed number, and `notes` says it was left out of the overall score.
+
+## About `GITHUB_TOKEN`
+
+- **Scopes needed: none.** trovark only calls public read endpoints
+  (`GET /repos/...`, `/commits`, `/releases`, `/issues`, `/issues/{n}/comments`)
+  against `api.github.com`. A classic PAT with zero scopes checked, or a
+  fine-grained PAT with "Public Repositories (read-only)" access, is enough.
+- **Without a token:** everything except median issue time-to-first-response
+  is still collected, at GitHub's unauthenticated rate limit (60 requests/hour).
+- **With a token:** the same signals, plus median issue time-to-first-response
+  (Health dimension), at the authenticated rate limit (5,000 requests/hour).
+- **Security note:** the token is sent as a `Bearer` header on `api.github.com`
+  requests only, and only ever used for `GET` reads — trovark never writes to
+  GitHub.
 
 ## What trovark is not
 
-- It does not run or sandbox servers (static analysis only — v1).
+- It does not run or sandbox servers; the analysis is static only.
 - Findings are *surfaces and heuristics with evidence links*, not claimed exploits.
 
 Apache-2.0.

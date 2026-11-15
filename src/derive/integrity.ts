@@ -1,5 +1,5 @@
 // D1 — Metadata Integrity: decode-confirmed invisible-payload detector.
-// Pre-registered plan: docs/superpowers/plans/2026-08-04-integrity-v1.md
+// Pre-registered plan: docs/integrity-preregistration.md
 // Exact algorithms: .superpowers/sdd/threat-spec.md §2 (D1)
 //
 // PRECISION DISCIPLINE: every finding here is a FACT ("these N codepoints at

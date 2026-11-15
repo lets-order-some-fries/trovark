@@ -12,13 +12,20 @@
     "type": "git",
     "url": "git+https://github.com/lets-order-some-fries/trovark.git"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": [
+    "cli",
+    "mcp",
+    "model-context-protocol",
+    "security",
+    "supply-chain",
+    "trust"
+  ],
+  "author": "Ambuj Upadhyay",
   "license": "Apache-2.0",
   "bugs": {
     "url": "https://github.com/lets-order-some-fries/trovark/issues"
   },
-  "homepage": "https://github.com/lets-order-some-fries/trovark#readme",
+  "homepage": "https://lets-order-some-fries.github.io/trovark/",
   "description": "Trust score for MCP servers, from static public signals",
   "type": "module",
   "bin": {

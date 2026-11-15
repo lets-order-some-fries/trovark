@@ -533,7 +533,7 @@ describe('score() — unresolved (W1): a repo GitHub 404s must never get a numer
   })
 })
 
-// D2 (integrity-phase2, 2026-08-04-integrity-v1.md "Phase 2"): a decode-
+// D2 (integrity-phase2, docs/integrity-preregistration.md "Phase 2"): a decode-
 // confirmed hidden payload is a DISQUALIFYING OVERRIDE on the security
 // dimension, not a weighted rubric signal — see the rationale comment in
 // src/scoring/score.ts. These tests pin: (a) zero effect when absent —

@@ -1,8 +1,10 @@
 # Trovark "Metadata Integrity" v1 — PRE-REGISTERED plan
 
+Pre-registered in commits `4b35f66` and `d75864d` (2026-08-03, 18:37 and 19:01 UTC), before the corpus audit ran (`index/audit/integrity-2026-08-03.json`, generated 2026-08-03T19:30Z). This copy, made on 2026-11-15, differs from those commits in two places: the citation of two unpublished review files is replaced by a description of them, and a competitor-positioning section is removed. Thresholds, gates and clarifications are unchanged. Phase 2 later shipped differently, as a disqualifying override in 0.1.6 (rubric 1.5.0); see `docs/methodology.md`.
+
 > **This document fixes every threshold and ship gate BEFORE any corpus run.** Post-hoc threshold tuning against observed hits is how a "0% false-positive" claim becomes a lie. If the audit fails a gate, we change the plan *in a new commit with a stated reason* — we do not quietly move a number.
 
-**Research basis:** `.superpowers/sdd/threat-spec.md` (spec) + `.superpowers/sdd/threat-refutation.md` (skeptic). Of ~58 statically-detectable threat classes surveyed, the skeptic REJECTED nearly all of them for a public index, on one principle:
+**Research basis:** an internal threat review (not published): a spec and a skeptic's refutation of it. Of ~58 statically-detectable threat classes surveyed, the skeptic REJECTED nearly all of them for a public index, on one principle:
 
 > **Trovark may only ship checks where a false positive is impossible-by-construction, because the finding is a *fact*, not a *verdict*.**
 
@@ -66,11 +68,6 @@ Findings are display-only (`score.ts` attaches them for rendering; the numeric s
 A zero is a legitimate, novel, honest, publishable finding — and it is simultaneously the false-positive measurement:
 
 > *"Trovark scanned 400 public MCP servers — N tool definitions, M files, C characters — for invisible-payload encodings (variation-selector, tag-block, bidi). Result: K decode-confirmed payloads. Method, thresholds and machine-readable results published; every finding is a fact with an evidence link. We deliberately do not classify intent."*
-
-## Positioning claim this earns (the only one we can win)
-Canopii indexes 38× more servers; Snyk has a cloud LLM backend and 93.2% claimed precision. Trovark cannot win on coverage or on semantic cleverness. It can win on exactly one axis:
-
-> **Every rule is published, deterministic, offline and reproducible; every finding is a fact with an evidence link; we deliberately do not classify intent.**
 
 ## Explicitly NOT building (skeptic's rejections, recorded so we don't relitigate)
 Tool-poisoning *classification* from description text; homoglyph/confusable detection (fires on legitimate non-Latin names); token-passthrough detection (needs interprocedural taint analysis; absence of visible validation ≠ anti-pattern); command-injection SAST (fires on every server that legitimately shells out); rug-pull-as-security-finding (a description change is overwhelmingly a docs fix — publishing it as a security finding accuses every maintainer who fixes a typo); blanket Cf/Cc unicode flagging (fires on Microsoft's own TypeScript stdlib).

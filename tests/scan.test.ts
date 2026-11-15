@@ -329,7 +329,7 @@ function coverageOf(attempted: number, entries: Array<{ ok: boolean }>) {
   return { attempted, completed: entries.length, collectorFailures, complete: entries.length === attempted }
 }
 
-// D2 (observatory, docs/superpowers/plans/2026-08-05-observatory-d2.md):
+// D2 (observatory, docs/methodology.md "Tool-surface observatory"):
 // recordSurfaces is the scan-side wiring — snapshot every extracted surface,
 // diff against the previous snapshot, append real events to the drift log.
 // First run is the baseline by construction; a server absent from a run is

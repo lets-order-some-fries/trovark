@@ -274,8 +274,8 @@ describe('renderSite', () => {
     // the honesty requirement is that no CELL renders NaN as content.
     expect(out).not.toMatch(/>NaN</)
   })
-  // D2 (observatory, docs/superpowers/plans/2026-08-05-observatory-d2.md
-  // Task 6): the drift feed renders facts only. The mandated postmark-mcp
+  // D2 (observatory, docs/methodology.md "Tool-surface observatory"):
+  // the drift feed renders facts only. The mandated postmark-mcp
   // scope note is the single sanctioned use of the word "malicious" on the
   // page — the banned-language lint below removes that one verbatim sentence
   // first, then asserts nothing else on the page uses verdict language.
