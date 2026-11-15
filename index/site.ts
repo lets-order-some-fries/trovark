@@ -113,11 +113,21 @@ ${body}
 <p class="muted">Scope note: The one confirmed in-the-wild malicious MCP server (postmark-mcp v1.0.16) added a BCC line in implementation code. Tool-surface diffing would not have caught it.</p>`
 }
 
+// results.json does not record which trovark version produced it. The
+// committed scan (2026-08-15) ran at 0.1.8, and 0.1.9 and 0.1.10 changed how
+// some repositories are read (CHANGELOG.md). Update both on the next rescan.
+const SCAN_TROVARK_VERSION = '0.1.8'
+const SCAN_CAVEAT = 'Releases 0.1.9 and 0.1.10 changed how some repositories are read, so a card here can differ from a fresh <code>npx trovark &lt;server&gt;</code>.'
+
 export function renderSite(r: Results, drift: DriftLog = { events: [] }): string {
   const s = r.stats
   const stat = (n: string | number, label: string) => `<div class="stat"><b>${n}</b><span>${label}</span></div>`
+  const graded = s.scored - s.insufficient - (s.notServer ?? 0) - (s.dynamic ?? 0) - (s.unresolved ?? 0)
+  const scanDate = r.generatedAt.slice(0, 10)
+  const description = `Trust scores for public MCP servers from static, public signals: ${s.total} scanned, ${graded} graded (scan of ${scanDate}, rubric v${r.rubricVersion}).`
   return `<!doctype html><html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="${esc(description)}">
 <title>Trovark — MCP Server Trust Index</title>
 <style>
 :root{color-scheme:dark light}
@@ -130,6 +140,7 @@ code{background:#161b22;padding:2px 8px;border-radius:6px}
 .stat{background:#161b22;border:1px solid #21262d;border-radius:10px;padding:12px 18px;min-width:110px}
 .stat b{display:block;font-size:22px}.stat span{color:#8b949e;font-size:12px}
 table{width:100%;border-collapse:collapse;margin-top:16px}
+.scroll{overflow-x:auto}td:first-child{overflow-wrap:anywhere;min-width:10em}
 th,td{text-align:left;padding:8px 10px;border-bottom:1px solid #21262d}
 th{cursor:pointer;color:#8b949e;user-select:none;white-space:nowrap}
 a{color:#58a6ff;text-decoration:none}
@@ -145,14 +156,15 @@ footer{margin:28px 0;color:#8b949e;font-size:13px}
 </style></head><body><main>
 <h1>Trovark</h1>
 <p class="tag">Trust scores for MCP servers — evidence-linked grades from static public signals. <code>npx trovark &lt;server&gt;</code></p>
+<p class="muted">Scan of ${esc(scanDate)} with trovark ${SCAN_TROVARK_VERSION} (rubric v${esc(r.rubricVersion)}). ${SCAN_CAVEAT}</p>
 <div class="stats">
-${stat(s.total, 'servers scanned')}${stat(s.scored - s.insufficient - (s.notServer ?? 0) - (s.dynamic ?? 0) - (s.unresolved ?? 0), 'graded')}${stat(s.avgOverall, 'avg score')}${stat(s.gradeDist['A'] ?? 0, 'A grades')}${stat(s.staleOver180, 'stale / abandoned')}${stat(s.shellExecTools, 'expose exec/shell tools')}${stat(s.insufficient, 'insufficient data')}${stat(s.notServer ?? 0, 'library / not a server')}${stat(s.dynamic ?? 0, 'dynamic tool surface')}${stat(s.unresolved ?? 0, 'repo unavailable')}${stat(s.failed, 'failed / unreachable')}
+${stat(s.total, 'servers scanned')}${stat(graded, 'graded')}${stat(s.avgOverall, 'avg score')}${stat(s.gradeDist['A'] ?? 0, 'A grades')}${stat(s.staleOver180, 'stale / abandoned')}${stat(s.shellExecTools, 'expose exec/shell tools')}${stat(s.insufficient, 'insufficient data')}${stat(s.notServer ?? 0, 'library / not a server')}${stat(s.dynamic ?? 0, 'dynamic tool surface')}${stat(s.unresolved ?? 0, 'repo unavailable')}${stat(s.failed, 'failed / unreachable')}
 </div>
-<table id="t"><thead><tr>
+<div class="scroll"><table id="t"><thead><tr>
 <th data-k="0">server</th><th data-k="1">grade</th><th data-k="2">score</th><th data-k="3">health</th><th data-k="4">reliability</th><th data-k="5">security</th><th data-k="6">cost</th>
 </tr></thead><tbody>
 ${r.entries.map(row).join('\n')}
-</tbody></table>
+</tbody></table></div>
 ${driftSection(r, drift)}
 <footer>generated ${esc(r.generatedAt)} · rubric v${esc(r.rubricVersion)} ·
 <a href="https://github.com/lets-order-some-fries/trovark">github</a> ·
